@@ -1,0 +1,26 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+[WebServer] 10:10:01 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 10:10:01 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓  1 [chromium] › qa/tds-baseline.spec.ts:67:1 › synthetic site, Studio, package and frozen editor baseline (28.8s)
+
+  1 passed (37.0s)

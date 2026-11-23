@@ -1,0 +1,18 @@
+{
+  "title": "BMS: The Most Quizzical Quiz EVER!",
+  "version": "1.1.0",
+  "gameContent": "Original BMS reunion questions and answers remain owner-supplied. This theme changes presentation only.",
+  "presentation": {
+    "stage": "React Bits LightRays, incorporated into the BMS game. See third-party-notices.json for exact source revision and full MIT + Commons Clause notice.",
+    "attendance": "Rough Notation 0.5.1, MIT. Connected names use its existing highlight implementation.",
+    "typography": "Barlow and Barlow Condensed by the Barlow Project Authors, SIL Open Font License 1.1. Self-hosted via Fontsource 5.3.0.",
+    "artwork": "Stage poster and fallback backdrop are screenshots of the actual incorporated stage, not generated illustrations."
+  },
+  "audio": {
+    "mode": "Platform defaults",
+    "library": "Creating Worlds",
+    "bundledCustomTracks": false
+  },
+  "redistribution": "LightRays source/CSS and derived game stage artwork are marked non-exportable in the package inventory. No standalone component or theme distribution is granted. Other third-party materials retain their notices.",
+  "notices": "third-party-notices.json"
+}

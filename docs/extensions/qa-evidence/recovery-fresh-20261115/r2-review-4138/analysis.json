@@ -1,0 +1,427 @@
+{
+  "root": "docs/extensions/qa-evidence/recovery-fresh-20261115/r2-review-4138/review-before",
+  "count": 13,
+  "receipts": [
+    {
+      "file": "ambiguous-7.json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 122,
+          "processPid": 122,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/Y3zfveuGqug5Ug06ROTSg.json"
+          ]
+        },
+        {
+          "pid": 136,
+          "processPid": 136,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/Y3zfveuGqug5Ug06ROTSg.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-false.json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 150,
+          "processPid": 150,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/7lgLCA-3dP5eiqtLK2_ny.json"
+          ]
+        },
+        {
+          "pid": 164,
+          "processPid": 164,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/7lgLCA-3dP5eiqtLK2_ny.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-null.json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 94,
+          "processPid": 94,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/13e0aQoNIoB6Xrem1J-VF.json"
+          ]
+        },
+        {
+          "pid": 108,
+          "processPid": 108,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/13e0aQoNIoB6Xrem1J-VF.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-[].json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 205,
+          "processPid": 205,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/aLwHQp3L4PicgyarZLNN_.json"
+          ]
+        },
+        {
+          "pid": 219,
+          "processPid": 219,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/aLwHQp3L4PicgyarZLNN_.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-{}.json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 178,
+          "processPid": 178,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/PALOvFRZ6P1mda8HqZBFK.json"
+          ]
+        },
+        {
+          "pid": 191,
+          "processPid": 191,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/PALOvFRZ6P1mda8HqZBFK.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "default-wrapper-positive.json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 289,
+          "processPid": 289,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "failed"
+        },
+        {
+          "pid": 303,
+          "processPid": 303,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "failed"
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "missing-nonnull-sidecar.json",
+      "state": "FAIL",
+      "runs": [
+        {
+          "pid": 66,
+          "processPid": 66,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "status": "recovered",
+          "changedFiles": [
+            "quizz/native-r1-uNmw8oIq.json",
+            "extensions/quizzes/.journal/bi2OziC6SsdTXdLLEvWUD.journal.json",
+            "extensions/quizzes/bi2OziC6SsdTXdLLEvWUD.json"
+          ]
+        },
+        {
+          "pid": 80,
+          "processPid": 80,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean",
+          "changedFiles": [
+            "quizz/native-r1-uNmw8oIq.json",
+            "extensions/quizzes/.journal/bi2OziC6SsdTXdLLEvWUD.journal.json",
+            "extensions/quizzes/bi2OziC6SsdTXdLLEvWUD.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "null-sidecar-backup-positive.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 261,
+          "processPid": 261,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "status": "recovered"
+        },
+        {
+          "pid": 275,
+          "processPid": 275,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean"
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-immediate-corrupt.json",
+      "state": "FAIL",
+      "faultActivations": 1,
+      "immediateChangedFiles": [
+        "quizz/native-r1--S0OS78u.json",
+        "extensions/quizzes/.journal/.bindings/b9732f15-d624-4c5a-8c85-e9843c63afd0.record"
+      ],
+      "runs": [
+        {
+          "pid": 345,
+          "processPid": 345,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1--S0OS78u.json",
+            "extensions/quizzes/.journal/.bindings/b9732f15-d624-4c5a-8c85-e9843c63afd0.record"
+          ]
+        },
+        {
+          "pid": 359,
+          "processPid": 359,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1--S0OS78u.json",
+            "extensions/quizzes/.journal/.bindings/b9732f15-d624-4c5a-8c85-e9843c63afd0.record"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-immediate-missing.json",
+      "state": "FAIL",
+      "faultActivations": 1,
+      "immediateChangedFiles": [
+        "quizz/native-r1-s8ai-J2i.json",
+        "extensions/quizzes/.journal/.bindings/035458f8-268b-40f3-9a6f-4a7eade4b151.record"
+      ],
+      "runs": [
+        {
+          "pid": 317,
+          "processPid": 317,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1-s8ai-J2i.json",
+            "extensions/quizzes/.journal/.bindings/035458f8-268b-40f3-9a6f-4a7eade4b151.record"
+          ]
+        },
+        {
+          "pid": 331,
+          "processPid": 331,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1-s8ai-J2i.json",
+            "extensions/quizzes/.journal/.bindings/035458f8-268b-40f3-9a6f-4a7eade4b151.record"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-startup-corrupt.json",
+      "state": "FAIL",
+      "faultActivations": 1,
+      "immediateChangedFiles": [],
+      "runs": [
+        {
+          "pid": 401,
+          "processPid": 401,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1-JcLrRr69.json",
+            "extensions/quizzes/.journal/.bindings/95924189-0a39-4f83-828c-0e171dba44f3.record"
+          ]
+        },
+        {
+          "pid": 415,
+          "processPid": 415,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1-JcLrRr69.json",
+            "extensions/quizzes/.journal/.bindings/95924189-0a39-4f83-828c-0e171dba44f3.record"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-startup-missing.json",
+      "state": "FAIL",
+      "faultActivations": 1,
+      "immediateChangedFiles": [],
+      "runs": [
+        {
+          "pid": 373,
+          "processPid": 373,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1-VKeIuh2w.json",
+            "extensions/quizzes/.journal/.bindings/e386a700-c789-4cca-9375-71e04e18e74a.record"
+          ]
+        },
+        {
+          "pid": 387,
+          "processPid": 387,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": [
+            "quizz/native-r1-VKeIuh2w.json",
+            "extensions/quizzes/.journal/.bindings/e386a700-c789-4cca-9375-71e04e18e74a.record"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "string-foreign-positive.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 233,
+          "processPid": 233,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "status": "recovered",
+          "changedFiles": [
+            "quizz/native-r1-tMXm4zSe.json",
+            "extensions/quizzes/.journal/PRjZW_IhIhfgql8oezNUu.journal.json",
+            "extensions/quizzes/PRjZW_IhIhfgql8oezNUu.json"
+          ]
+        },
+        {
+          "pid": 247,
+          "processPid": 247,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean",
+          "changedFiles": [
+            "quizz/native-r1-tMXm4zSe.json",
+            "extensions/quizzes/.journal/PRjZW_IhIhfgql8oezNUu.journal.json",
+            "extensions/quizzes/PRjZW_IhIhfgql8oezNUu.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    }
+  ]
+}

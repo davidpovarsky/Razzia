@@ -1,0 +1,9 @@
+{
+  "sha": "21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d",
+  "producer_sha": "902412c347d39f38290fde2ef1307240cee7dc07",
+  "files": 54,
+  "archive_bytes": 409600,
+  "archive_sha256": "7ec7ba108b2598b638b67fc101f0f41d976a7c85a4c514ee2ca3fd478dde6888",
+  "manifest_sha256": "89902e33be901241fe9293d95da07c19985a368f7c08a485c698e17a71fd2097",
+  "extractor_sha256": "7d144aced19491e6ae914700acd961d4f288c8d1f225bb623b54c4b6d77766a6"
+}

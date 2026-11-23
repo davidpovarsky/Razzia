@@ -1,0 +1,42 @@
+{
+  "utc": "2026-11-15T20:23:52.647737+00:00",
+  "checks": [
+    {
+      "label": "types",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\native-operation-20261115\\affected.tsconfig.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "format",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/server/storage/creation-reservation.ts",
+        "extensions/src/server/storage/creation-operation-record.ts",
+        "extensions/src/server/storage/creation-operation-store.ts",
+        "extensions/src/server/storage/creation-operation-types.ts",
+        "extensions/src/server/index.ts"
+      ],
+      "exit": 0,
+      "stdoutSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "unchangedSourceHashes": {
+    "extensions/src/server/storage/creation-reservation.ts": "58d38c6cccbf2dc7a1d7d65ea7263d7f1b1d16ddb32ddb05c1f1565d573ca8e1",
+    "extensions/src/server/storage/creation-operation-record.ts": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c",
+    "extensions/src/server/storage/creation-operation-store.ts": "e850e4c1f4482cea1d54a7d7340af81d9e14e0e06577e2ac316054e0c687c51e",
+    "extensions/src/server/storage/creation-operation-types.ts": "c40464a399fe5a54bd867765cdc5eb8c18741fd61c9abf60be09100808eeffee",
+    "docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts": "d731d21b93cc46c3b07753fd104767f8e843fe269e56f402e6ba03507f676510"
+  },
+  "pinnedLinux24NotRunYet": true
+}

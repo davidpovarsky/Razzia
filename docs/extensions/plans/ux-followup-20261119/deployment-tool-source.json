@@ -1,0 +1,21 @@
+{
+  "kind": "deployment-verifier-only",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "applicationImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "toolSourceSha": "3a3c1d148bb49849080366d59f233e573549394f",
+  "deployScriptSha256": "6897dee11b1535172fd297c04c870449d361a25fc58b9a2764d39504b453a9f1",
+  "changedPaths": [
+    "extensions/deployment/deploy-mcp-site.py"
+  ],
+  "qualifiedApplicationChanged": false,
+  "coordinatorPath": "work/ux-followup-20261119/release-plan/deploy_current_candidate_with_tool.py",
+  "coordinatorSha256": "4700e9ca1e0f0b9ff830e54cb1893bdc67d30403091ef338a845abb8f45e2c99",
+  "focusedVerification": "billing-deployment-verifier-fix.json",
+  "independentReviewAccepted": true,
+  "reviewReceipt": "deployment-verifier-independent-review.json",
+  "pushed": true,
+  "committedAt": "2026-11-19T15:33:02.523231+00:00",
+  "reviewReceiptSha256": "8d29769acfc19f1ba0d79f01363ed3e712a58f42d6179a0cb2abfdadcce5e2fd",
+  "remoteVerified": true,
+  "pushedAt": "2026-11-19T15:34:08.351016+00:00"
+}

@@ -1,0 +1,984 @@
+/* oxlint-disable no-await-in-loop -- Browser actions and assertions intentionally follow the authoritative game sequentially. */
+import {
+  test,
+  expect,
+  type Page,
+  type APIRequestContext,
+} from "@playwright/test"
+import {
+  computeCanonicalBaseDigest,
+  createDefaultQuizExtrasV2,
+  quizExtrasV2Schema,
+  PLATFORM_CUE_URLS,
+  showThemeRegistry,
+} from "../../../extensions/src/core"
+import { join } from "node:path"
+import { skipPlatformOpening } from "@razzia/e2e/utils/manager"
+import {
+  endRecordedVote,
+  latestState,
+  observeLiveFlow,
+  setManualProgression,
+} from "@razzia/e2e/utils/extension-manager"
+
+async function seed(
+  request: APIRequestContext,
+  page: Page,
+  options: { legacy?: boolean; detailed?: boolean; unknown?: boolean } = {},
+) {
+  const { legacy = false, detailed = false } = options
+  const login = await request.post("/api/auth/manager", {
+    data: { password: "e2e-password" },
+  })
+  expect(login.ok()).toBe(true)
+  const { token } = (await login.json()) as { token: string }
+  const questionId = crypto.randomUUID()
+  const quizz = {
+    subject: `Isolated cleanup ${crypto.randomUUID()}`,
+    gameMode: "quiz",
+    questions: [
+      {
+        type: "single",
+        question: "Which city is in France?",
+        answers: ["Paris", "London"],
+        solutions: [0],
+        time: 30,
+        cooldown: 3,
+      },
+    ],
+  }
+  const extras = createDefaultQuizExtrasV2(
+    "draft",
+    [questionId],
+    computeCanonicalBaseDigest(quizz),
+  )
+
+  if (detailed) {
+    extras.scenes = {}
+    quizz.questions = [2, 3, 4, 5].map((count, i) => ({
+      type: "single",
+      question: `Theme question ${i + 1}`,
+      answers: Array.from({ length: count }, (_, j) => `Choice ${j + 1}`),
+      solutions: [0],
+      time: 400,
+      cooldown: 3,
+    }))
+    extras.questionIds = quizz.questions.map(() => crypto.randomUUID())
+    extras.timeline = extras.questionIds.map((stableQuestionId) => ({
+      id: crypto.randomUUID(),
+      kind: "question",
+      questionId: stableQuestionId,
+    }))
+    extras.perQuestion = Object.fromEntries(
+      extras.questionIds.map((id, i) => [
+        id,
+        {
+          answerVisuals: quizz.questions[i].answers.map((_, answerIndex) => ({
+            answerIndex,
+            url: "/media/theme-answer.png",
+            display: "both",
+            alt: `Choice ${answerIndex + 1}`,
+          })),
+        },
+      ]),
+    )
+    extras.baseDigest = computeCanonicalBaseDigest(quizz)
+  }
+
+  if (legacy) {
+    extras.defaults.motionKit = "legacy"
+    delete extras.defaults.showTheme
+  }
+
+  const sceneId = crypto.randomUUID()
+  extras.scenes[sceneId] = {
+    id: sceneId,
+    kind: "transition",
+    title: "Isolated scene",
+    durationMs: 5000,
+    advance: "manual",
+  }
+
+  if (!detailed) {
+    extras.timeline.unshift({
+      id: crypto.randomUUID(),
+      kind: "transition",
+      sceneId,
+    })
+  }
+
+  if (options.unknown) {
+    extras.defaults.showTheme = {
+      id: "uninstalled-client",
+      version: "9.0.0",
+      overrides: {},
+    }
+  }
+
+  const headers = { Authorization: `Bearer ${token}` }
+  const saved = await request.post("/api/extensions/quizzes", {
+    headers,
+    data: { quizz, extras },
+  })
+  expect(saved.ok(), await saved.text()).toBe(true)
+  const { quizId } = (await saved.json()) as { quizId: string }
+  const created = await request.post("/api/games", {
+    headers,
+    data: { quizzId: quizId },
+  })
+  expect(created.ok(), await created.text()).toBe(true)
+  const game = (await created.json()) as { gameId: string; inviteCode: string }
+  await page.addInitScript(
+    (tokenValue) => localStorage.setItem("token", tokenValue),
+    token,
+  )
+  const hostWire = observeLiveFlow(page)
+  await page.goto(`/party/manager/${game.gameId}`)
+  await skipPlatformOpening(page)
+  await expect(page.getByTestId("tadazz-show")).toBeVisible()
+  await setManualProgression(page)
+  await page.evaluate(() => {
+    const target = window as unknown as {
+      __socket?: {
+        on(
+          event: string,
+          callback: (value: {
+            phase: string
+            epoch: number
+            questionId?: string
+            extras: { voteCompletionReason?: unknown }
+          }) => void,
+        ): void
+      }
+      __themeProbe?: { states?: unknown[] }
+    }
+
+    if (target.__themeProbe) {
+      const states: unknown[] = []
+      target.__themeProbe.states = states
+      target.__socket?.on("extensions:state", (value) =>
+        states.push({
+          phase: value.phase,
+          epoch: value.epoch,
+          questionId: value.questionId,
+          completion: value.extras.voteCompletionReason,
+        }),
+      )
+    }
+  })
+
+  return { ...game, quizId, token, extras, quizz, hostWire }
+}
+
+test("Classic host, player and display keep the current lobby and authoritative pause/roster", async ({
+  page,
+  browser,
+  request,
+}, testInfo) => {
+  const game = await seed(request, page)
+  const hostStage = page.getByTestId("tadazz-show")
+  await expect(hostStage).toHaveCount(1)
+  await expect(hostStage).toHaveAttribute("data-role", "manager")
+  await expect(hostStage).toHaveAttribute("data-show-theme", "tadazz-classic")
+  await expect(hostStage.getByTestId("tadazz-stage")).toHaveCount(1)
+  await expect(hostStage.getByTestId("tadazz-stage")).toBeVisible()
+  await expect(page.getByText(game.inviteCode, { exact: true })).toBeVisible()
+  const playerContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+  })
+  const player = await playerContext.newPage()
+  await player.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
+  await player.getByPlaceholder("Username here").fill("Cleanup Alice")
+  await player.getByRole("button", { name: "Submit", exact: true }).click()
+  await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
+  // Model the audience as an independent browser/device on the ARM64 QA host.
+  const displayBrowser = await browser.browserType().launch()
+
+  try {
+    const displayContext = await displayBrowser.newContext({
+      viewport: { width: 800, height: 600 },
+    })
+    const display = await displayContext.newPage()
+    await display.goto(new URL(`/display/${game.gameId}`, page.url()).href)
+    await expect(display.getByTestId("tadazz-lobby-pin")).toHaveText(
+      game.inviteCode,
+    )
+    await expect(display.getByTestId("manager-control-toolbar")).toHaveCount(0)
+    await expect(display.locator('img[alt="background"], iframe')).toHaveCount(
+      0,
+    )
+    // Focus the host after opening the separate audience page. WebKit throttles
+    // background-page animation frames used by normal click actionability checks.
+    await page.bringToFront()
+    await page.getByRole("button", { name: "Start", exact: true }).click()
+    await expect(
+      hostStage
+        .getByTestId("tadazz-screen-interlude")
+        .getByText("Isolated scene", { exact: true }),
+    ).toBeVisible()
+    await page.getByTestId("host-next-screen-btn").click()
+    await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-voting-open",
+      "true",
+    )
+    await expect(page.getByTestId("host-pause-resume-btn")).toBeVisible()
+    await page.getByTestId("host-pause-resume-btn").click()
+    await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-game-paused",
+      "true",
+    )
+    await page.getByTestId("host-pause-resume-btn").click()
+    await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-game-paused",
+      "false",
+    )
+    await page.screenshot({
+      path: join(testInfo.outputDir, "classic-host.png"),
+    })
+    await display.screenshot({
+      path: join(testInfo.outputDir, "classic-display.png"),
+    })
+  } finally {
+    await displayBrowser.close()
+    await playerContext.close()
+  }
+})
+
+test("explicit rollback uses extracted scene presenter and original Studio controls", async ({
+  page,
+  request,
+  browser,
+}, testInfo) => {
+  const game = await seed(request, page, { legacy: true })
+  await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
+  const participantContext = await browser.newContext()
+  const participant = await participantContext.newPage()
+  await participant.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
+  await participant.getByPlaceholder("Username here").fill("Rollback Alice")
+  await participant.getByRole("button", { name: "Submit", exact: true }).click()
+  await expect(
+    page.getByText("Rollback Alice", { exact: true }).first(),
+  ).toBeVisible()
+  await page.evaluate(
+    (id) =>
+      (
+        window as unknown as {
+          __socket: { emit(event: string, data: unknown): void }
+        }
+      ).__socket.emit("manager:startGame", { gameId: id }),
+    game.gameId,
+  )
+  await expect(page.getByTestId("studio-scene-presenter")).toBeVisible()
+  await expect(page.getByText("Isolated scene", { exact: true })).toBeVisible()
+  await page.screenshot({
+    path: join(testInfo.outputDir, "rollback-scene.png"),
+  })
+  await page.goto(`/manager/quizz/${game.quizId}`)
+  let kinds = page.locator(
+    '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+  )
+
+  if (!(await kinds.isVisible())) {
+    const editPanel = page.getByTestId("editor-panel-edit")
+
+    if (!(await editPanel.isVisible())) {
+      await page.getByTestId("editor-panel-toggle-edit").click()
+    }
+
+    await expect(editPanel).toBeVisible()
+    kinds = editPanel.locator(
+      '[data-testid="studio-card-type-bar"][data-embedded="true"]',
+    )
+  }
+
+  await expect(kinds).toHaveCount(1)
+  await expect(kinds).toBeVisible()
+  await expect(kinds.getByRole("radio", { name: /Transition/u })).toBeChecked()
+  const editPanel = page.getByTestId("editor-panel-edit")
+
+  if (!(await editPanel.isVisible())) {
+    await page.getByTestId("editor-panel-toggle-edit").click()
+  }
+
+  await expect(editPanel.getByTestId("scene-title-input")).toBeVisible()
+  await expect(editPanel.getByTestId("scene-title-input")).toHaveValue(
+    "Isolated scene",
+  )
+  await page.getByTestId("editor-save-btn").click()
+  await expect(page).toHaveURL(/\/manager\/config$/u)
+  await participantContext.close()
+})
+
+async function installProbes(page: Page) {
+  await page.addInitScript(() => {
+    const state = {
+      plays: [] as Array<{ url: string; time: number }>,
+      resets: [] as string[],
+      cues: [] as Array<{ name: string; identity: string }>,
+      frames: 0,
+      legacy: 0,
+      wrongBackground: 0,
+    }
+    Object.assign(window, { __themeProbe: state })
+    // oxlint-disable-next-line typescript/unbound-method -- Invoke with the actual element as this below.
+    const { play } = HTMLMediaElement.prototype
+    HTMLMediaElement.prototype.play = function tracePlay(
+      this: HTMLMediaElement,
+    ) {
+      state.plays.push({ url: this.src, time: this.currentTime })
+
+      return play.call(this)
+    }
+    const time = Object.getOwnPropertyDescriptor(
+      HTMLMediaElement.prototype,
+      "currentTime",
+    )
+    // oxlint-disable-next-line typescript/unbound-method -- Rebound with call to the inspected media element below.
+    const setTime = time?.set as
+      ((this: HTMLMediaElement, value: number) => void) | undefined
+
+    if (!setTime) {
+      throw new Error("Media time setter unavailable")
+    }
+
+    Object.defineProperty(HTMLMediaElement.prototype, "currentTime", {
+      ...time,
+      set(this: HTMLMediaElement, value: number) {
+        if (value === 0) {
+          state.resets.push(this.src)
+        }
+
+        setTime.call(this, value)
+      },
+    })
+    window.addEventListener("tadazz:sfx", (event) => {
+      const { detail } = event as CustomEvent<{
+        name: string
+        identity: string
+      }>
+      state.cues.push({ name: detail.name, identity: detail.identity })
+    })
+    const sample = () => {
+      state.frames += 1
+
+      if (
+        location.pathname.startsWith("/display") &&
+        document.querySelector('img[alt="background"], iframe')
+      ) {
+        state.legacy += 1
+      }
+
+      if (
+        location.pathname.startsWith("/display") &&
+        getComputedStyle(document.documentElement).backgroundColor !==
+          "rgb(8, 1, 26)"
+      ) {
+        state.wrongBackground += 1
+      }
+
+      requestAnimationFrame(sample)
+    }
+    requestAnimationFrame(sample)
+  })
+}
+function probe(page: Page) {
+  return page.evaluate(
+    () =>
+      (
+        window as unknown as {
+          __themeProbe: {
+            plays: Array<{ url: string; time: number }>
+            resets: string[]
+            cues: Array<{ name: string; identity: string }>
+            frames: number
+            legacy: number
+            wrongBackground: number
+          }
+        }
+      ).__themeProbe,
+  )
+}
+
+function cardOpacity(surface: Page, index: number) {
+  return surface.getByTestId(`tadazz-card-${index}`).evaluate((element) => {
+    let opacity = 1
+    for (let node: Element | null = element; node; node = node.parentElement) {
+      opacity *= Number(getComputedStyle(node).opacity)
+    }
+
+    return opacity
+  })
+}
+
+test.afterEach(async ({ page }, info) => {
+  if (info.status !== info.expectedStatus) {
+    await info.attach("theme-failure-probe.json", {
+      body: JSON.stringify(await probe(page).catch(() => null), null, 2),
+      contentType: "application/json",
+    })
+  }
+})
+test("unknown versions preserve stored identity and warn only the manager", async ({
+  page,
+  browser,
+  request,
+}) => {
+  const game = await seed(request, page, { unknown: true })
+  await expect(page.getByTestId("show-theme-warning")).toBeVisible()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-theme-fallback",
+    "true",
+  )
+  const context = await browser.newContext()
+  const display = await context.newPage()
+  await display.goto(new URL(`/display/${game.gameId}`, page.url()).href)
+  await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-theme",
+    "tadazz-classic",
+  )
+  await expect(display.getByTestId("show-theme-warning")).toHaveCount(0)
+  const saved = await request.get(`/api/extensions/quizzes/${game.quizId}`, {
+    headers: { Authorization: `Bearer ${game.token}` },
+  })
+  const stored = (await saved.json()) as { extras: unknown }
+  expect(quizExtrasV2Schema.parse(stored.extras).defaults.showTheme?.id).toBe(
+    "uninstalled-client",
+  )
+  await context.close()
+})
+
+test("blocked audio waits for a user gesture without retrying on ticks", async ({
+  page,
+  request,
+  browser,
+}, testInfo) => {
+  await installProbes(page)
+  await page.addInitScript(() => {
+    Object.assign(window, {
+      __permitThemeAudio: false,
+      __blockedThemeAttempts: 0,
+    })
+    // oxlint-disable-next-line typescript/unbound-method -- Invoke with the actual element as this below.
+    const { play } = HTMLMediaElement.prototype
+    HTMLMediaElement.prototype.play = function gestureGatedPlay(
+      this: HTMLMediaElement,
+    ) {
+      const state = window as unknown as {
+        __permitThemeAudio: boolean
+        __blockedThemeAttempts: number
+      }
+
+      if (!state.__permitThemeAudio) {
+        state.__blockedThemeAttempts += 1
+
+        return Promise.reject(
+          new DOMException("Test gesture required", "NotAllowedError"),
+        )
+      }
+
+      return play.call(this)
+    }
+  })
+  const game = await seed(request, page, { detailed: true })
+  const context = await browser.newContext()
+  const player = await context.newPage()
+  await player.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
+  await player.getByPlaceholder("Username here").fill("Gesture Alice")
+  await player.getByRole("button", { name: "Submit", exact: true }).click()
+  await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
+  await page.bringToFront()
+  await page.getByRole("button", { name: "Start", exact: true }).click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-voting-open",
+    "true",
+    { timeout: 30_000 },
+  )
+  await expect(page.getByTestId("host-enable-audio")).toBeVisible()
+  const attempts = () =>
+    page.evaluate(
+      () =>
+        (window as unknown as { __blockedThemeAttempts: number })
+          .__blockedThemeAttempts,
+    )
+  await page.waitForTimeout(200)
+  const before = await attempts()
+  await page.waitForTimeout(1200)
+  expect(await attempts()).toBe(before)
+  await page.evaluate(() => {
+    Object.assign(window, { __permitThemeAudio: true })
+  })
+  await page.getByTestId("host-enable-audio").click()
+  await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
+    "data-audio-blocked",
+    "false",
+  )
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.endsWith(PLATFORM_CUE_URLS.answersMusic),
+    ),
+  ).toHaveLength(1)
+  await testInfo.attach("autoplay-recovery.json", {
+    body: JSON.stringify({
+      blockedAttemptsBeforeGesture: before,
+      probe: await probe(page),
+    }),
+    contentType: "application/json",
+  })
+  await context.close()
+})
+
+test("Studio shows only registered built-in choices, previews locally, and persists explicit mute", async ({
+  page,
+  request,
+}, testInfo) => {
+  await installProbes(page)
+  const game = await seed(request, page, { detailed: true })
+  await page.goto(`/manager/quizz/${game.quizId}`)
+  await page.getByTestId("studio-tab-settings").click()
+  const settings = page.getByTestId("show-theme-settings")
+  await expect(settings.getByTestId("show-theme-tadazz-classic")).toBeVisible()
+  await expect(settings.getByTestId("show-theme-razzia-original")).toBeVisible()
+  const registeredThemeIds = showThemeRegistry
+    .list()
+    .map((definition) => `show-theme-${definition.id}`)
+    .sort()
+  const themeChoices = settings.locator('[data-testid^="show-theme-"]')
+  await expect(themeChoices).toHaveCount(registeredThemeIds.length)
+  expect(
+    await themeChoices.evaluateAll((choices) =>
+      choices.map((choice) => choice.getAttribute("data-testid") ?? "").sort(),
+    ),
+  ).toEqual(registeredThemeIds)
+  await page.screenshot({
+    path: join(testInfo.outputDir, "studio-theme-family-picker.png"),
+  })
+  await settings.getByRole("button", { name: "Preview", exact: true }).click()
+  await expect(
+    page.getByTestId("show-theme-preview").getByTestId("tadazz-stage"),
+  ).toBeVisible()
+  await page
+    .getByTestId("show-theme-preview")
+    .getByRole("button", { name: "Results", exact: true })
+    .click()
+  await expect(
+    page.getByTestId("show-theme-preview").getByTestId("tadazz-stage"),
+  ).toHaveAttribute("data-v4-scene", "survey-results")
+  expect((await probe(page)).plays).toEqual([])
+  await settings.locator("summary").filter({ hasText: "Audio" }).click()
+  const audio = settings.getByTestId("theme-audio-answersMusic")
+  const playsBeforeMute = (await probe(page)).plays.length
+  await audio.getByRole("combobox").click()
+  await page.getByRole("option", { name: "Silent", exact: true }).click()
+  await expect(
+    audio.getByRole("button", { name: "Preview", exact: true }),
+  ).toHaveCount(0)
+  expect((await probe(page)).plays).toHaveLength(playsBeforeMute)
+  await page.screenshot({
+    path: join(testInfo.outputDir, "studio-theme-settings.png"),
+  })
+  await page.getByTestId("editor-save-btn").click()
+  await expect(page).toHaveURL(/\/manager\/config$/u)
+  const saved = await request.get(`/api/extensions/quizzes/${game.quizId}`, {
+    headers: { Authorization: `Bearer ${game.token}` },
+  })
+  const data = (await saved.json()) as { extras: unknown }
+  expect(
+    quizExtrasV2Schema.parse(data.extras).defaults.showTheme?.overrides.audio
+      ?.answersMusic?.variantId,
+  ).toBe("tadazz-classic.audio.answersMusic.silent")
+  await page.goto(`/manager/quizz/${game.quizId}`)
+  await page.getByTestId("studio-tab-settings").click()
+  await page
+    .getByTestId("show-theme-settings")
+    .locator("summary")
+    .filter({ hasText: "Audio" })
+    .click()
+  await expect(
+    page.getByTestId("theme-audio-answersMusic").getByRole("combobox"),
+  ).toHaveText("Silent")
+  await expect(
+    page
+      .getByTestId("theme-audio-answersMusic")
+      .getByRole("button", { name: "Preview", exact: true }),
+  ).toHaveCount(0)
+})
+
+test("live theme shares all roles, fits five viewports, and restarts voting music only for a new question", async ({
+  page,
+  browser,
+  request,
+}, testInfo) => {
+  test.setTimeout(150_000)
+  await installProbes(page)
+  const game = await seed(request, page, { detailed: true })
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+  })
+  const player = await context.newPage()
+  await installProbes(player)
+  await player.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
+  await player.getByPlaceholder("Username here").fill("Theme Alice")
+  await player.getByRole("button", { name: "Submit", exact: true }).click()
+  const displayContext = await browser.newContext({
+    viewport: { width: 1920, height: 1080 },
+  })
+  const display = await displayContext.newPage()
+  await installProbes(display)
+  await display.goto(new URL(`/display/${game.gameId}`, page.url()).href)
+  for (const surface of [page, player, display]) {
+    await expect(surface.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-show-theme",
+      "tadazz-classic",
+    )
+  }
+  for (const cinematic of [page, display]) {
+    const stage = cinematic.getByTestId("tadazz-show")
+    await expect(stage).toHaveCount(1)
+    await expect(stage.getByTestId("tadazz-stage")).toHaveCount(1)
+    await expect(stage.getByTestId("tadazz-stage")).toBeVisible()
+  }
+  await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-native-layout",
+    "true",
+  )
+  await page.bringToFront()
+  await page.getByRole("button", { name: "Start", exact: true }).click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-voting-open",
+    "true",
+    { timeout: 30_000 },
+  )
+  await expect(
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+  ).toHaveCount(2)
+  await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
+    "data-audio-url",
+    PLATFORM_CUE_URLS.answersMusic,
+  )
+  const enable = page.getByTestId("host-enable-audio")
+
+  if (await enable.isVisible()) {
+    await enable.click()
+  }
+
+  const musicBefore = (await probe(page)).plays.filter(
+    (item) =>
+      item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
+  ).length
+  const hostCards = page
+    .getByTestId("tadazz-show")
+    .locator('.choice-slot[data-testid^="tadazz-card-"]')
+  await expect(hostCards).toHaveCount(2)
+
+  for (const index of [0, 1]) {
+    const card = page
+      .getByTestId("tadazz-show")
+      .getByTestId(`tadazz-card-${index}`)
+    await expect(card).toBeVisible()
+    await expect(card).toBeDisabled()
+    await expect(
+      card.getByRole("img", { name: `Choice ${index + 1}`, exact: true }),
+    ).toBeVisible()
+  }
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "true",
+  )
+  for (const [width, height] of [
+    [1920, 1080],
+    [1366, 768],
+    [800, 600],
+    [390, 844],
+    [320, 568],
+  ]) {
+    await page.setViewportSize({ width, height })
+    await display.setViewportSize({ width, height })
+    const dimensions = await page.evaluate(() => ({
+      width: innerWidth,
+      height: innerHeight,
+      scrollW: document.documentElement.scrollWidth,
+      scrollH: document.documentElement.scrollHeight,
+    }))
+    expect(dimensions.scrollW).toBeLessThanOrEqual(dimensions.width)
+    expect(dimensions.scrollH).toBeLessThanOrEqual(dimensions.height)
+    const photo = display
+      .getByTestId("tadazz-card-0")
+      .locator(".tz-photo-frame")
+    const shape = await photo.evaluate((element) => {
+      const style = getComputedStyle(element)
+
+      return {
+        width: parseFloat(style.width),
+        height: parseFloat(style.height),
+      }
+    })
+    expect(Math.abs(shape.width - shape.height)).toBeLessThan(1)
+    await display.screenshot({
+      path: join(testInfo.outputDir, `question-2-cards-${width}.png`),
+    })
+  }
+  await page.setViewportSize({ width: 1366, height: 768 })
+  await display.setViewportSize({ width: 1920, height: 1080 })
+  await page.bringToFront()
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "false",
+  )
+  await player.bringToFront()
+  const answer = player.getByRole("button", { name: /Choice 1/u })
+  await expect(answer).toBeEnabled()
+  await answer.click()
+  await expect
+    .poll(
+      async () =>
+        (await probe(player)).cues.filter(
+          (cue) => cue.name === "answer-submitted",
+        ).length,
+    )
+    .toBe(1)
+  await page.waitForTimeout(1200)
+  expect(
+    (await probe(page)).plays.filter(
+      (item) =>
+        item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
+    ),
+  ).toHaveLength(musicBefore)
+  expect(
+    (await probe(player)).cues.filter((cue) => cue.name === "answer-submitted"),
+  ).toHaveLength(1)
+  await page.bringToFront()
+  await endRecordedVote(page, game.hostWire, {
+    questionId: game.extras.questionIds[0],
+    count: 1,
+  })
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-scene",
+    "results",
+  )
+  await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[0],
+      extras: { voteCompletionReason: "manual" },
+    })
+  expect(
+    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
+  ).toHaveLength(0)
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
+          .length,
+    )
+    .toBe(1)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(1)
+  await page.getByTestId("host-next-screen-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-voting-open",
+    "true",
+    { timeout: 30_000 },
+  )
+  await expect(
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+  ).toHaveCount(3)
+  const musicAfter = (await probe(page)).plays.filter(
+    (item) =>
+      item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
+  ).length
+  await testInfo.attach("audio-question-transitions.json", {
+    body: JSON.stringify(await probe(page), null, 2),
+    contentType: "application/json",
+  })
+  expect(musicAfter).toBe(musicBefore + 1)
+  await display.reload()
+  await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-theme",
+    "tadazz-classic",
+  )
+  await expect(
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+  ).toHaveCount(3)
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-scene",
+    "results",
+    { timeout: 30_000 },
+  )
+  await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[1],
+      extras: { voteCompletionReason: "elapsed" },
+    })
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
+          .length,
+    )
+    .toBe(2)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(2)
+  for (const surface of [page, player, display]) {
+    const evidence = await probe(surface)
+    expect(evidence.frames).toBeGreaterThan(0)
+    expect(evidence.legacy).toBe(0)
+    expect(evidence.wrongBackground).toBe(0)
+  }
+  await page.screenshot({
+    path: join(testInfo.outputDir, "question-3-cards-zero-results.png"),
+  })
+  await page.getByTestId("host-next-screen-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-voting-open",
+    "true",
+    { timeout: 30_000 },
+  )
+  await expect(
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+  ).toHaveCount(4)
+  const identityBeforePause = await page
+    .getByTestId("audio-cue-player-state")
+    .getAttribute("data-audio-identity")
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
+    "data-audio-paused",
+    "true",
+  )
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
+    "data-audio-paused",
+    "false",
+  )
+  expect(
+    await page
+      .getByTestId("audio-cue-player-state")
+      .getAttribute("data-audio-identity"),
+  ).toBe(identityBeforePause)
+  await page.getByTestId("host-restart-question-btn").click()
+  await page.getByTestId("confirm-restart-question-btn").click()
+  await expect(page.getByTestId("audio-cue-player-state")).not.toHaveAttribute(
+    "data-audio-identity",
+    identityBeforePause ?? "missing-identity",
+  )
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-voting-open",
+    "true",
+    { timeout: 30_000 },
+  )
+  await expect(
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+  ).toHaveCount(4)
+  await page.getByTestId("host-skip-question-btn").click()
+  await page
+    .getByRole("alertdialog")
+    .getByRole("button", { name: "Skip Question", exact: true })
+    .click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-voting-open",
+    "true",
+    { timeout: 30_000 },
+  )
+  await expect(
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+  ).toHaveCount(5)
+  await expect.poll(() => cardOpacity(display, 4)).toBeGreaterThan(0.98)
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "true",
+  )
+  await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "true",
+  )
+  for (const [width, height] of [
+    [1920, 1080],
+    [1366, 768],
+    [800, 600],
+    [390, 844],
+    [320, 568],
+  ]) {
+    await display.setViewportSize({ width, height })
+    await expect(
+      display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+    ).toHaveCount(5)
+    await expect(display.getByTestId("tadazz-question-panel")).toContainText(
+      "Theme question 4",
+    )
+    await expect.poll(() => cardOpacity(display, 4)).toBeGreaterThan(0.98)
+    await display.screenshot({
+      path: join(testInfo.outputDir, `question-5-cards-${width}.png`),
+    })
+    expect(
+      await display.evaluate(
+        () =>
+          document.documentElement.scrollWidth <= innerWidth &&
+          document.documentElement.scrollHeight <= innerHeight,
+      ),
+    ).toBe(true)
+  }
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
+          .length,
+    )
+    .toBe(2)
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "false",
+  )
+  await page.getByTestId("host-end-timer-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-scene",
+    "results",
+  )
+  await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[3],
+      extras: { voteCompletionReason: "manual" },
+    })
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
+          .length,
+    )
+    .toBe(3)
+  expect(
+    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
+  ).toHaveLength(0)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(3)
+  await testInfo.attach("complete-audio-trace.json", {
+    body: JSON.stringify(
+      {
+        host: await probe(page),
+        player: await probe(player),
+        display: await probe(display),
+      },
+      null,
+      2,
+    ),
+    contentType: "application/json",
+  })
+  await context.close()
+  await displayContext.close()
+})

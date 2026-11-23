@@ -1,0 +1,452 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import NativeButton from "@razzia/web/components/Button"
+import {
+  isLegacyShowRollback,
+  type CardAudioCueOverride,
+  type CardAudioMode,
+  type CardAudioOverrides,
+  type QuestionAudioCueKey,
+  type SceneAudio,
+} from "@razzia/extensions/core"
+import { useStudioEditor } from "@razzia/web/features/quizz/components/studio/studio-editor-context"
+import { ThemeScopeControls } from "@razzia/web/features/quizz/components/studio/theme-scope-controls"
+import type { UploadedMedia } from "@razzia/common/types/game"
+import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
+import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
+import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
+import clsx from "clsx"
+import { Music, Play, Square, Trash2 } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+interface CardAudioConfigProps {
+  kind?: "question" | "scene"
+  sceneAudio?: SceneAudio
+  onSceneAudioChange?: (next: SceneAudio | undefined) => void
+}
+const QUESTION_SLOTS: Array<{
+  key: QuestionAudioCueKey
+  labelKey: string
+  fallback: string
+  defaultLoop: boolean
+}> = [
+  {
+    key: "showQuestion",
+    labelKey: "extensions:audio.cueShowQuestion",
+    fallback: "Show Question",
+    defaultLoop: false,
+  },
+  {
+    key: "answersMusic",
+    labelKey: "extensions:audio.cueAnswersMusic",
+    fallback: "Answering Music (Loop)",
+    defaultLoop: true,
+  },
+  {
+    key: "revealResults",
+    labelKey: "extensions:audio.cueRevealResults",
+    fallback: "Reveal Results",
+    defaultLoop: false,
+  },
+]
+const LegacyCardAudioConfig = ({
+  kind = "question",
+  sceneAudio,
+  onSceneAudioChange,
+}: CardAudioConfigProps = {}) => {
+  const { currentQuestionId, extras, setExtras } = useQuizzEditor()
+  const { t } = useTranslation()
+  const [pickingSlot, setPickingSlot] = useState<
+    QuestionAudioCueKey | "scene" | null
+  >(null)
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null)
+  const [playingSlot, setPlayingSlot] = useState<string | null>(null)
+  const releasePreview = useCallback(() => {
+    const player = previewAudioRef.current
+    // Relinquish ownership before stopping: already queued callbacks cannot
+    // reset a later preview or update an unmounted component.
+    previewAudioRef.current = null
+
+    if (player) {
+      player.onended = null
+      player.onerror = null
+      player.pause()
+      player.currentTime = 0
+    }
+  }, [])
+  const stopPreview = useCallback(() => {
+    releasePreview()
+    setPlayingSlot(null)
+  }, [releasePreview])
+  const togglePreview = (slotKey: string, url?: string, volume = 0.8) => {
+    if (playingSlot === slotKey) {
+      stopPreview()
+
+      return
+    }
+
+    stopPreview()
+
+    if (!url) {
+      return
+    }
+
+    try {
+      const audio = new Audio(url)
+      audio.volume = Math.max(0, Math.min(1, volume))
+      previewAudioRef.current = audio
+      setPlayingSlot(slotKey)
+      const finishPreview = () => {
+        if (previewAudioRef.current === audio) {
+          stopPreview()
+        }
+      }
+      audio.onended = finishPreview
+      audio.onerror = finishPreview
+      void audio.play().catch(finishPreview)
+    } catch {
+      stopPreview()
+    }
+  }
+  const currentPerQ =
+    currentQuestionId && extras?.perQuestion
+      ? extras.perQuestion[currentQuestionId]
+      : undefined
+  const activeCues: CardAudioOverrides = currentPerQ?.audioCues ?? {}
+  useEffect(() => {
+    releasePreview()
+    // oxlint-disable-next-line react/set-state-in-effect -- Synchronize the visible slot with an externally changed card or preview source.
+    setPlayingSlot(null)
+
+    return releasePreview
+  }, [
+    currentQuestionId,
+    kind,
+    sceneAudio?.mode,
+    sceneAudio?.url,
+    activeCues.showQuestion?.mode,
+    activeCues.showQuestion?.url,
+    activeCues.answersMusic?.mode,
+    activeCues.answersMusic?.url,
+    activeCues.revealResults?.mode,
+    activeCues.revealResults?.url,
+    releasePreview,
+  ])
+  const updateQuestionSlot = (
+    slot: QuestionAudioCueKey,
+    next: CardAudioCueOverride | undefined,
+  ) => {
+    if (!currentQuestionId) {
+      return
+    }
+
+    setExtras((prev) => {
+      if (!prev) {
+        return prev
+      }
+
+      const existingPerQ = prev.perQuestion ?? {}
+      const existingItem = {
+        ...(existingPerQ[currentQuestionId] ?? {}),
+      }
+      const nextCues: CardAudioOverrides = {
+        ...(existingItem.audioCues ?? {}),
+      }
+
+      if (!next || next.mode === "inherit") {
+        /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
+        delete nextCues[slot]
+        /* oxlint-enable typescript/no-dynamic-delete */
+      } else {
+        nextCues[slot] = next
+      }
+
+      if (Object.keys(nextCues).length === 0) {
+        delete existingItem.audioCues
+      } else {
+        existingItem.audioCues = nextCues
+      }
+
+      return {
+        ...prev,
+        perQuestion: {
+          ...existingPerQ,
+          [currentQuestionId]: existingItem,
+        },
+      }
+    })
+  }
+  const handleSelectAudio = (item: UploadedMedia) => {
+    if (!pickingSlot) {
+      return
+    }
+
+    if (pickingSlot === "scene") {
+      onSceneAudioChange?.({
+        mode: "custom",
+        url: item.url,
+        volume: sceneAudio?.volume ?? 0.8,
+        loop: sceneAudio?.loop ?? false,
+      })
+    } else {
+      const slotMeta = QUESTION_SLOTS.find((s) => s.key === pickingSlot)
+      const prev = activeCues[pickingSlot]
+      updateQuestionSlot(pickingSlot, {
+        mode: "custom",
+        url: item.url,
+        volume: prev?.volume ?? 0.8,
+        loop: prev?.loop ?? slotMeta?.defaultLoop ?? false,
+      })
+    }
+
+    setPickingSlot(null)
+  }
+  /* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
+  const renderSlotRow = (
+    slotId: QuestionAudioCueKey | "scene",
+    label: string,
+    override:
+      | {
+          mode?: CardAudioMode
+          url?: string
+          volume?: number
+          loop?: boolean
+        }
+      | undefined,
+    defaultLoop: boolean,
+    onChange: (next: CardAudioCueOverride | undefined) => void,
+  ) => {
+    const mode: CardAudioMode =
+      override?.mode ?? (override?.url ? "custom" : "inherit")
+    const url = override?.url
+    const volume = override?.volume ?? 0.8
+    const loop = override?.loop ?? defaultLoop
+
+    return (
+      <div
+        key={slotId}
+        data-testid={`card-audio-slot-${slotId}`}
+        className="border-accent/60 bg-muted/30 flex flex-col gap-2 rounded-xl border p-2.5"
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-foreground truncate text-xs font-bold">
+            {label}
+          </span>
+          <div
+            data-testid={`card-audio-mode-${slotId}`}
+            className="bg-muted flex items-center gap-0.5 rounded-lg p-0.5"
+          >
+            {(["inherit", "mute", "custom"] as const).map((m) => (
+              <NativeButton
+                size="sm"
+                key={m}
+                type="button"
+                data-testid={`card-audio-mode-${slotId}-${m}`}
+                aria-pressed={mode === m}
+                onClick={() => {
+                  stopPreview()
+
+                  if (m === "inherit") {
+                    onChange(undefined)
+                  } else if (m === "mute") {
+                    onChange({
+                      mode: "mute",
+                      volume: 0,
+                      loop: false,
+                    })
+                  } else if (url) {
+                    onChange({
+                      mode: "custom",
+                      url,
+                      volume,
+                      loop,
+                    })
+                  } else {
+                    setPickingSlot(slotId)
+                  }
+                }}
+                className={clsx(
+                  "rounded-md px-2 py-0.5 text-[11px] font-semibold transition",
+                  mode === m
+                    ? "bg-background text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {m === "inherit" &&
+                  t("extensions:cardAudio.modeInherit", "Inherit")}
+                {m === "mute" && t("extensions:cardAudio.modeMute", "Mute")}
+                {m === "custom" &&
+                  t("extensions:cardAudio.modeCustom", "Custom")}
+              </NativeButton>
+            ))}
+          </div>
+        </div>
+
+        {mode === "custom" && (
+          <div className="border-border/40 flex flex-col gap-2 border-t pt-2">
+            <div className="flex items-center justify-between gap-1.5">
+              <NativeButton
+                size="sm"
+                type="button"
+                data-testid={`card-audio-choose-${slotId}`}
+                onClick={() => setPickingSlot(slotId)}
+                className="bg-accent text-accent-foreground flex min-w-0 flex-1 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-start text-xs font-semibold"
+              >
+                <Music className="text-primary size-3.5 shrink-0" />
+                <span className="truncate">
+                  {url
+                    ? url.split("/").pop()
+                    : t("extensions:cardAudio.chooseAudio", "Choose Sound")}
+                </span>
+              </NativeButton>
+              {url && (
+                <>
+                  <NativeButton
+                    size="sm"
+                    type="button"
+                    data-testid={`card-audio-preview-${slotId}`}
+                    onClick={() => togglePreview(slotId, url, volume)}
+                    title={
+                      playingSlot === slotId
+                        ? t("extensions:cardAudio.previewStop", "Stop")
+                        : t("extensions:cardAudio.previewPlay", "Play")
+                    }
+                    className="bg-primary/15 text-primary hover:bg-primary/25 flex size-7 shrink-0 items-center justify-center rounded-lg"
+                  >
+                    {playingSlot === slotId ? (
+                      <Square className="size-3.5" />
+                    ) : (
+                      <Play className="size-3.5" />
+                    )}
+                  </NativeButton>
+                  <NativeButton
+                    size="sm"
+                    type="button"
+                    data-testid={`card-audio-remove-${slotId}`}
+                    onClick={() => {
+                      stopPreview()
+                      onChange(undefined)
+                    }}
+                    title={t(
+                      "extensions:cardAudio.removeFromCard",
+                      "Remove from Card",
+                    )}
+                    className="bg-accent text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-lg hover:text-red-500"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </NativeButton>
+                </>
+              )}
+            </div>
+
+            {url && (
+              <div className="flex items-center justify-between gap-3 text-[11px]">
+                <label className="text-muted-foreground flex items-center gap-1.5 font-semibold">
+                  <input
+                    type="checkbox"
+                    data-testid={`card-audio-loop-${slotId}`}
+                    checked={loop}
+                    onChange={(e) =>
+                      onChange({
+                        mode: "custom",
+                        url,
+                        volume,
+                        loop: e.target.checked,
+                      })
+                    }
+                    className="accent-primary rounded"
+                  />
+                  {t("extensions:cardAudio.loop", "Loop")}
+                </label>
+                <div className="flex flex-1 items-center gap-1.5">
+                  <span className="text-muted-foreground shrink-0 font-semibold">
+                    {Math.round(volume * 100)}%
+                  </span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    data-testid={`card-audio-volume-${slotId}`}
+                    value={volume}
+                    onChange={(e) =>
+                      onChange({
+                        mode: "custom",
+                        url,
+                        volume: Number(e.target.value),
+                        loop,
+                      })
+                    }
+                    className="accent-primary w-full cursor-pointer"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  /* oxlint-enable max-params */
+  return (
+    <ConfigSection
+      title={
+        kind === "scene"
+          ? t("extensions:cardAudio.sceneTitle", "Card Audio")
+          : t("extensions:cardAudio.title", "Card Audio Cues")
+      }
+    >
+      <div data-testid="card-audio-section" className="flex flex-col gap-2.5">
+        {kind === "scene"
+          ? renderSlotRow(
+              "scene",
+              t("extensions:cardAudio.sceneTitle", "Card Audio"),
+              sceneAudio,
+              false,
+              (next) =>
+                onSceneAudioChange?.(
+                  next
+                    ? {
+                        mode: next.mode,
+                        url: next.url,
+                        volume: next.volume,
+                        loop: next.loop ?? false,
+                      }
+                    : undefined,
+                ),
+            )
+          : QUESTION_SLOTS.map((slot) =>
+              renderSlotRow(
+                slot.key,
+                t(slot.labelKey, slot.fallback),
+                activeCues[slot.key],
+                slot.defaultLoop,
+                (next) => updateQuestionSlot(slot.key, next),
+              ),
+            )}
+      </div>
+
+      <MediaLibrary
+        open={pickingSlot !== null}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) {
+            setPickingSlot(null)
+          }
+        }}
+        onSelect={handleSelectAudio}
+        acceptType="audio"
+      />
+    </ConfigSection>
+  )
+}
+const CardAudioConfig = (props: CardAudioConfigProps = {}) => {
+  const { defaults } = useStudioEditor()
+
+  return isLegacyShowRollback(defaults) ? (
+    <LegacyCardAudioConfig {...props} />
+  ) : (
+    <ThemeScopeControls section="audio" kind={props.kind} />
+  )
+}
+
+export default CardAudioConfig

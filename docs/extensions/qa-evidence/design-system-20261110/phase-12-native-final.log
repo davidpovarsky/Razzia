@@ -1,0 +1,46 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 16 tests using 1 worker
+
+  ✓   1 [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium (1.4m)
+[WebServer] 2:45:57 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 2:45:57 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   2 [chromium] › qa/tds-native-game.spec.ts:96:1 › refuses players once the room is locked (2.3s)
+  ✓   3 [chromium] › qa/tds-native-game.spec.ts:111:1 › submits the PIN with the Enter key (2.2s)
+  ✓   4 [chromium] › qa/tds-native-game.spec.ts:126:1 › lets the manager kick a player (2.5s)
+  ✓   5 [chromium] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload (43.9s)
+  ✓   6 [chromium] › qa/tds-native-game.spec.ts:155:1 › sends players home when the manager exits the waiting room (2.6s)
+  ✓   7 [chromium] › qa/tds-native-game.spec.ts:173:1 › refuses to start a game without players (1.3s)
+[WebServer] 2:47:36 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 2:47:36 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   8 [chromium] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab (43.8s)
+  ✓   9 [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium (1.5m)
+  ✓  10 [webkit] › qa/tds-native-game.spec.ts:96:1 › refuses players once the room is locked (5.8s)
+  ✓  11 [webkit] › qa/tds-native-game.spec.ts:111:1 › submits the PIN with the Enter key (5.4s)
+  ✓  12 [webkit] › qa/tds-native-game.spec.ts:126:1 › lets the manager kick a player (7.0s)
+  ✓  13 [webkit] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload (48.4s)
+  ✓  14 [webkit] › qa/tds-native-game.spec.ts:155:1 › sends players home when the manager exits the waiting room (6.8s)
+  ✓  15 [webkit] › qa/tds-native-game.spec.ts:173:1 › refuses to start a game without players (4.4s)
+  ✓  16 [webkit] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab (48.2s)
+
+  16 passed (6.7m)

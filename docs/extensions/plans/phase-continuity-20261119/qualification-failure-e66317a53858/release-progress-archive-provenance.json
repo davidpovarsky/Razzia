@@ -1,0 +1,15 @@
+{
+  "kind": "failed-e663-release-progress-archive",
+  "createdUtc": "2026-11-19T20:04:45.890636+00:00",
+  "source": "docs/extensions/plans/phase-continuity-20261119/release-gates-progress.json",
+  "archive": "docs/extensions/plans/phase-continuity-20261119/qualification-failure-e66317a53858/release-gates-progress.json",
+  "bytes": 1127,
+  "sourceBeforeSha256": "dd3cf1d3c7ae50a94d02f32890f5a2fe3f4a53ab4cb0b187e23e04313f2cf6c9",
+  "copySha256": "dd3cf1d3c7ae50a94d02f32890f5a2fe3f4a53ab4cb0b187e23e04313f2cf6c9",
+  "sourceAfterSha256": "dd3cf1d3c7ae50a94d02f32890f5a2fe3f4a53ab4cb0b187e23e04313f2cf6c9",
+  "allEqual": true,
+  "sourceModified": false,
+  "alreadyExisted": false,
+  "observedStatus": "failed",
+  "sourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26"
+}

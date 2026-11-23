@@ -1,0 +1,20 @@
+{
+  "own_new_allocated_bytes_conservative": 36876288,
+  "limit_bytes": 67108864,
+  "reused_hardlink_file_bytes": 8684097,
+  "free_after_bytes": 2650857472,
+  "reserve_bytes": 2147483648,
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T08:34:58.113273427Z",
+    "FinishedAt": "2026-11-15T08:35:21.339768968Z"
+  }
+}

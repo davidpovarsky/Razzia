@@ -1,0 +1,18 @@
+Game cleanup task started
+New game created: 223252 subject: Diagnostic Royal paused late display
+Game 01a20443-7af4-7625-9606-912ac620b14b added. Total games: 1
+Game 01a20443-7af4-7625-9606-912ac620b14b marked as empty. Total empty games: 1
+A user connected: socketId: 1tIlnkd8tsO_LD0ZAAAA, clientId: 540ebca2-9574-42c5-aefb-afe514861763
+Game 01a20443-7af4-7625-9606-912ac620b14b reactivated. Remaining empty games: 0
+Manager reconnected to game 223252
+A user connected: socketId: _eDPkYALRGvyLNIvAAAB, clientId: 01a20443-87e0-7635-aab7-b0378438699e
+A user connected: socketId: t6Jbx3sXwM2FiDkiAAAC, clientId: 01a20443-9100-75c6-b06b-fa1ef542d483
+A user connected: socketId: V9vdnNY6awtr8ge_AAAD, clientId: 01a20443-ca8d-75fa-85e7-3d7656081612
+{"diagnostic":"paused-results-late-display","passed":true,"releaseQualified":false,"evidence":"/evidence/paused-display"}
+A user disconnected : V9vdnNY6awtr8ge_AAAD
+A user disconnected : t6Jbx3sXwM2FiDkiAAAC
+A user disconnected : _eDPkYALRGvyLNIvAAAB
+A user disconnected : 1tIlnkd8tsO_LD0ZAAAA
+Manager disconnected from game 223252
+Game 01a20443-7af4-7625-9606-912ac620b14b marked as empty. Total empty games: 1
+Game cleanup task stopped

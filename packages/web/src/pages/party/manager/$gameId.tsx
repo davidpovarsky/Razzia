@@ -1,6 +1,11 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type ExtensionStateEnvelope,
+} from "@razzia/extensions/core"
 import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
+import { isNewerEnvelope } from "@razzia/web/features/game/contexts/extension-state-context"
 import {
   socketClient,
   useEvent,
@@ -18,6 +23,7 @@ import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
 import { useEffect } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
+import { isManagedClientMode } from "@razzia/web/lib/managed-client-session"
 
 const ManagerGamePage = () => {
   const navigate = useNavigate()
@@ -26,12 +32,31 @@ const ManagerGamePage = () => {
   const { gameId, status, updateManager, resetManager } = useManagerStore()
   const { setQuestionStates } = useQuestionStore()
   const { t } = useTranslation()
+  const returnToLibrary = () => {
+    resetManager()
+    setQuestionStates(null)
+
+    if (isManagedClientMode()) {
+      // Stay inside the native router so onLeave sends the normal room exit.
+      void navigate({ href: "/client" })
+    } else {
+      void navigate({ to: "/manager/config" })
+    }
+  }
 
   useSocketConnection()
 
   useEvent(EVENTS.GAME.STATUS, ({ name, data }) => {
     if (name in GAME_STATE_COMPONENTS_MANAGER) {
       updateManager({ status: createStatus(name, data) })
+    }
+  })
+
+  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
+    const current = useManagerStore.getState().extensionState
+
+    if (isNewerEnvelope(payload, current)) {
+      updateManager({ extensionState: payload })
     }
   })
 
@@ -69,10 +94,17 @@ const ManagerGamePage = () => {
   })
 
   useEvent(EVENTS.GAME.RESET, (message) => {
-    navigate({ to: "/manager/config" })
-    resetManager()
-    setQuestionStates(null)
+    returnToLibrary()
     toast.error(t(message))
+  })
+
+  useEvent(EVENTS.GAME.ERROR_MESSAGE, (message) => {
+    if (
+      isManagedClientMode() &&
+      ["errors:auth.unauthorized", "errors:game.notFound"].includes(message)
+    ) {
+      returnToLibrary()
+    }
   })
 
   const handleSkip = () => {
@@ -81,9 +113,7 @@ const ManagerGamePage = () => {
     }
 
     if (status.name === STATUS.FINISHED || status.name === STATUS.SUMMARY) {
-      navigate({ to: "/manager/config" })
-      resetManager()
-      setQuestionStates(null)
+      returnToLibrary()
 
       return
     }
@@ -101,12 +131,6 @@ const ManagerGamePage = () => {
     socket.emit(EVENTS.MANAGER.ADVANCE, { gameId })
   }
 
-  const handleBack = () => {
-    navigate({ to: "/manager/config" })
-    resetManager()
-    setQuestionStates(null)
-  }
-
   const CurrentComponent =
     status && isKeyOf(GAME_STATE_COMPONENTS_MANAGER, status.name)
       ? GAME_STATE_COMPONENTS_MANAGER[status.name]
@@ -120,7 +144,7 @@ const ManagerGamePage = () => {
     <GameWrapper
       statusName={status.name}
       onNext={handleSkip}
-      onBack={status.name === STATUS.SHOW_ROOM ? handleBack : undefined}
+      onBack={returnToLibrary}
       manager
     >
       {CurrentComponent && <CurrentComponent data={status.data as never} />}

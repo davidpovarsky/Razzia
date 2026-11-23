@@ -1,0 +1,12 @@
+{"package":"@modelcontextprotocol/server","path":"/work/project/node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/package.json","version":"2.4.0"}
+{"package":"@modelcontextprotocol/client","path":"/work/project/node_modules/.pnpm/@modelcontextprotocol+client@2.4.0/node_modules/@modelcontextprotocol/client/package.json","version":"2.4.0"}
+{"package":"@modelcontextprotocol/core","path":"/work/project/node_modules/.pnpm/@modelcontextprotocol+core@2.4.0/node_modules/@modelcontextprotocol/core/package.json","version":"2.4.0"}
+{"package":"@modelcontextprotocol/ext-apps","path":"/work/project/node_modules/.pnpm/@modelcontextprotocol+ext-apps@2.1.0_@modelcontextprotocol+client@2.4.0_@modelcontextpr_a3a71b0a1bfc7f994bd03a92d4b4ed40/node_modules/@modelcontextprotocol/ext-apps/package.json","version":"2.1.0"}
+{"package":"@types/node","path":"/work/project/node_modules/.pnpm/@types+node@26.6.5/node_modules/@types/node/package.json","version":"26.6.5"}
+{"package":"typescript","path":"/work/project/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/package.json","version":"5.9.3"}
+{"package":"tsx","path":"/work/project/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/package.json","version":"4.21.0"}
+{"package":"hono","path":"/work/project/node_modules/.pnpm/hono@4.13.13/node_modules/hono/package.json","version":"4.13.13"}
+{"package":"http-status-codes","path":"/work/project/node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/package.json","version":"2.3.0"}
+{"package":"zod","path":"/work/project/node_modules/.pnpm/zod@4.6.6/node_modules/zod/package.json","version":"4.6.6"}
+{"package":"uuid","path":"/work/project/node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/package.json","version":"14.0.3"}
+{"package":"socket.io","path":"/work/project/node_modules/.pnpm/socket.io@4.8.4/node_modules/socket.io/package.json","version":"4.8.4"}

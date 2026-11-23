@@ -1,0 +1,9 @@
+{
+  "baseCommit": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "baselineReceiptSha256": "c0f20c53e56afc23f8181d7124aecf4f721835c03fc51a5d0c3c1c0bdf6f7ade",
+  "beforeSha256": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+  "appliedSha256": "5322d19385cc728a5b1b3efdb64661031fc61962f80f67c9fb31783acd52bfc2",
+  "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\src\\mcp-app\\widget\\full-show-entry.tsx",
+  "unifiedProductUnchanged": true,
+  "fixedBrowserAcceptance": "pending"
+}

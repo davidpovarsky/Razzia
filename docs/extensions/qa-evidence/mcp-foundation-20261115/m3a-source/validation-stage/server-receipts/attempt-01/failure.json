@@ -1,0 +1,4 @@
+{
+  "error": "Private validation failed; retain actual phase logs",
+  "traceback": "Traceback (most recent call last):\n  File \"/delivery/consumer.py\", line 156, in <module>\n    if code: raise RuntimeError(\"Private validation failed; retain actual phase logs\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Private validation failed; retain actual phase logs\n"
+}

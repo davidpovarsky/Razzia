@@ -1,0 +1,28 @@
+{
+  "command": [
+    "node",
+    "/cleanup/node_modules/prettier/bin/prettier.cjs",
+    "--config",
+    "/evidence/format-options.json",
+    "--check",
+    "first-party/README.md",
+    "first-party/bindings.ts",
+    "first-party/http.ts",
+    "first-party/ingress.ts",
+    "first-party/schema-manifest.ts",
+    "first-party/schema.ts",
+    "tests/first-party/abort.nodecheck.ts",
+    "tests/first-party/compatibility.observation.ts",
+    "tests/first-party/review-evidence.fixture.ts",
+    "tests/first-party/schema-ad895.fixture.ts",
+    "tests/first-party/schema.nodecheck.ts",
+    "tests/first-party/store.nodecheck.ts"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 5.307,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 66,
+  "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+}

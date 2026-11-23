@@ -1,0 +1,24 @@
+{
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "productSourceSha": "14b642e95d15fab3fd5b4577ca72e1aca568f283",
+  "branch": "codex/tadazz-ux-unified-20261119",
+  "nativeManifestSha256": "68430b4f7c2a4b04163810b6c22c556c69c486dce4ca284d2221621f9f47fe21",
+  "nativePinPreparation": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-14b642e95d15-bbcf426a/receipt.json",
+  "pushed": true,
+  "releaseQualified": true,
+  "deploymentAccepted": true,
+  "recordedAt": "2026-11-19T14:25:38.393833+00:00",
+  "preservedAncestors": [
+    "2c66bc94d220b04a7e080d9aafabf2850f328432",
+    "d30a6d55389a85780fcb51d8c28ae607a7fd481c"
+  ],
+  "remoteVerified": true,
+  "pushedAt": "2026-11-19T14:26:46.785009+00:00",
+  "qualifiedAt": "2026-11-19T15:07:05.443627+00:00",
+  "deploymentToolSourceSha": "3a3c1d148bb49849080366d59f233e573549394f",
+  "deployedImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "deployedContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+  "deployedAt": "2026-11-19T15:36:14.798763+00:00",
+  "postDeployObservationPassed": true,
+  "observedAt": "2026-11-19T15:37:40.963690+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.r1.json",
+  "include": [
+    "../../../../extensions/src/server/storage/**/*.ts",
+    "../../../../extensions/src/server/media-library-recovery.test.ts",
+    "../../../../extensions/src/server/media-library.test.ts",
+    "../../../../extensions/src/server/storage.test.ts"
+  ]
+}

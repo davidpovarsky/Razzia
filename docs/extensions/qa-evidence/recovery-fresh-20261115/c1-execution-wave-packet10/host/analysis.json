@@ -1,0 +1,10 @@
+{
+  "passed": 26,
+  "sourceNoWriteWitnesses": 3,
+  "closedWalWithoutSidecars": true,
+  "liveWalOwners": [
+    "00000000-0000-4000-8000-0000000000A1",
+    "00000000-0000-4000-8000-0000000000B2"
+  ],
+  "scope": "Synthetic canonical owner snapshot and explicit-root startup; no production or hardware claim"
+}

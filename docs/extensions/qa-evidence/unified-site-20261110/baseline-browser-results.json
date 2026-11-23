@@ -1,0 +1,345 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\extensions\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "extensions/site.baseline.playwright.config.ts",
+      "--grep",
+      "saves every question type and setting|current runtime preserves|current native host|keeps the site disabled"
+    ],
+    "configFile": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\extensions\\site.baseline.playwright.config.ts",
+    "rootDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-unified-site-20261110/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-unified-site-20261110/docs/extensions/qa-evidence/unified-site-20261110/traces/baseline",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "edge-chromium-feature-off",
+        "name": "edge-chromium-feature-off",
+        "testDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-unified-site-20261110/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "editor.spec.ts",
+          "game.spec.ts",
+          "host-presentation.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-unified-site-20261110/docs/extensions/qa-evidence/unified-site-20261110/traces/baseline",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "feature-off-boundary",
+        "name": "feature-off-boundary",
+        "testDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-unified-site-20261110/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "site-flag-off.spec.ts",
+          "site-runtime.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\docs\\extensions\\qa-evidence\\unified-site-20261110\\traces\\baseline",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "edge-chromium-feature-off",
+        "testDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\packages\\e2e\\tests",
+        "snapshotDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\packages\\e2e\\tests",
+        "testIgnore": [],
+        "testMatch": [
+          "editor.spec.ts",
+          "game.spec.ts",
+          "host-presentation.spec.ts"
+        ],
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4320",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "channel": "msedge"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "edge-chromium-feature-off"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\docs\\extensions\\qa-evidence\\unified-site-20261110\\traces\\baseline",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "feature-off-boundary",
+        "testDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\extensions\\qa",
+        "snapshotDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-unified-site-20261110\\extensions\\qa",
+        "testIgnore": [],
+        "testMatch": [
+          "site-flag-off.spec.ts",
+          "site-runtime.spec.ts"
+        ],
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4320",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "channel": "msedge"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "feature-off-boundary"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/extensions/qa-evidence/unified-site-20261110/baseline-browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "editor.spec.ts",
+      "file": "editor.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "saves every question type and setting",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "edge-chromium-feature-off",
+              "projectName": "edge-chromium-feature-off",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5018,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T13:05:40.978Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2f56d7d370f0ba02e91-20d6bd2bb9cb55eba96e",
+          "file": "editor.spec.ts",
+          "line": 33,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "..\\..\\..\\extensions\\qa\\site-flag-off.spec.ts",
+      "file": "../../../extensions/qa/site-flag-off.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "keeps the site disabled and preserves original authentication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "feature-off-boundary",
+              "projectName": "feature-off-boundary",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1371,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T13:05:47.239Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "041475bf738d7cbc8bfa-e774876d4bbc6b6e53ee",
+          "file": "../../../extensions/qa/site-flag-off.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "..\\..\\..\\extensions\\qa\\site-runtime.spec.ts",
+      "file": "../../../extensions/qa/site-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "current runtime preserves actual PIN joining, answers, ranking and podium",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "feature-off-boundary",
+              "projectName": "feature-off-boundary",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16459,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T13:05:49.763Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f0afc3b37997cf1280d8-226bdc680f8a425fcf54",
+          "file": "../../../extensions/qa/site-runtime.spec.ts",
+          "line": 10,
+          "column": 1
+        },
+        {
+          "title": "current native host and presenter preserve presentation and authoritative pause",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "feature-off-boundary",
+              "projectName": "feature-off-boundary",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12704,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T13:06:06.250Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f0afc3b37997cf1280d8-3aa9fc36f3abe553f661",
+          "file": "../../../extensions/qa/site-runtime.spec.ts",
+          "line": 59,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T13:05:33.007Z",
+    "duration": 47256.613999999994,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

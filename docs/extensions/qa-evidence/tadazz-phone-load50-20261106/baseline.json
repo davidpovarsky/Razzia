@@ -1,0 +1,11 @@
+{
+  "target_url": "http://127.0.0.1:3245",
+  "script": "load50_oci_isolated.py (baseline)",
+  "attempted": 50,
+  "connected": 50,
+  "failed": 0,
+  "duration_s": 3.31,
+  "p50_ms": 1085.8,
+  "p95_ms": 1183.8,
+  "error_samples": []
+}

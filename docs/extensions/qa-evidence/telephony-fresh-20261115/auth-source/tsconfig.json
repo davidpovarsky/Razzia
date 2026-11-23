@@ -1,0 +1,6 @@
+{
+  "extends":"/work/tsconfig.json",
+  "compilerOptions":{"noEmit":true,"target":"ESNext","module":"ESNext","moduleResolution":"bundler","jsx":"react-jsx","skipLibCheck":true,"allowImportingTsExtensions":true,"types":["node"],"typeRoots":["/work/packages/socket/node_modules/@types","/work/extensions/node_modules/@types"]},
+  "files":["authority-first-batch.node.ts","revoke-after-sql-wait.child.ts"],
+  "include":[]
+}

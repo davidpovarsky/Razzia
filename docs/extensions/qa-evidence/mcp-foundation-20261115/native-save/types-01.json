@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\native-save\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\typescript\\lib\\tsc.js",
+    "--noEmit",
+    "-p",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\native-save\\local-overlay-01\\native-focused.tsconfig.json"
+  ],
+  "exit": 0,
+  "signal": null,
+  "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sourceInputs": 212,
+  "BPin": "1909da2f653377c545923b2e91dd2f4b1a2cf802"
+}

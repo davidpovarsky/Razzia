@@ -1,0 +1,105 @@
+{
+  "format": "tadazz-package-production-deployment-summary",
+  "version": 1,
+  "deploymentCompletedAt": "2026-11-20T04:10:06.841977+00:00",
+  "finalStateCheckedAt": "2026-11-20T04:13:15.284127+00:00",
+  "core": {
+    "revision": "a4458b98999dc99cd29e8111bcd009560f0d5f6a",
+    "image": "sha256:7735d5c23cdcafde1081523463a695d77af17d83ee27a4aa251547688b68c53c",
+    "backendSha256": "fb3b06322d962db746f654f9f922e7dc58f11c9679bcfd1b9da4dc9e00189a99",
+    "stageManifestSha256": "6b3956fa446959ba5a197b4e4b2971065aafd03e6dfb354caf35d0f91c32af89",
+    "serverCatalogToolCount": 25,
+    "packageToolsAdded": 11
+  },
+  "worker": {
+    "revision": "c85690fffb0201ec09687f1ab0837c479853ec8e",
+    "image": "sha256:8295e3a3f00c78d0c5e0eb95679782d218db284e74dbff312d8607fb5b97140e",
+    "existingBuilderTimerRestoredActive": true
+  },
+  "runtime": {
+    "sourceRevision": "f276c9cbf86a72ab6fc689a113d7d33a1c0d21af",
+    "image": "sha256:56c4e4cffc30d77e1f9828078071880590a0bb9ecc1379f66020e842e1fa2819",
+    "bootstrapSha256": "c84d9df7702379667a2744d9447dc909ec8d063203eb7bd86169817e3bb0079b",
+    "origin": "https://www.tadazz.com",
+    "parentOrigin": "https://tadazz.com",
+    "enabledInLiveCore": true,
+    "readOnlyTopologyVerified": true,
+    "loopbackAndPublicHttpsProbesPassed": true
+  },
+  "operator": {
+    "sha256": "7026c5e0fb95d94f47062acf324745e5de7b96e672ea3e14c8193b27e0c8103e",
+    "originalInfrastructureCommit": "4c07100290e2883e65e09ec81723bba31f94cb6d"
+  },
+  "releaseQualification": {
+    "exactTrackedSourceFiles": 1988,
+    "nativeMatrixChecksPassed": 16,
+    "nativeHttpTestsPassed": 172,
+    "consentBrowserTestsPassed": 6,
+    "fullShowScenariosPassed": 40,
+    "nativeRendererFixturesPassed": 44,
+    "offlineProductionLauncherPassed": true,
+    "immutableProxyPassed": true,
+    "unchangedConsentRetryRequired": true,
+    "consentRetryExplanation": "Initial WebKit case reached the existing 120-second ceiling; one identical fresh retry passed all six without changing code, assertions, limits or timeout.",
+    "receiptSha256": {
+      "nativeHostAndWeb": "6e705554e710e874db940db42ec60e5038289cfe9f4d0e1c51a6fc3c6280f2d2",
+      "productionLauncher": "42167de1144ad6751e04a28f622540b877811795986de393ac1665554f715684",
+      "consentBrowsers": "79375cb105a5f13b56856b40947449569357a181b43bde38416d6266e4bcaaa0",
+      "fullShowBrowsers": "64a3529e90bb7c68c69eea876840413e3613b1e13cc28dfee2ec19c3bbb4b1b1",
+      "proxy": "22b41792caa81b9149894ed92b4f855ea965ba2af5be7a9463d327d60fe94ca4"
+    }
+  },
+  "backupAndCutover": {
+    "candidateBootedOnIsolatedRestoredData": true,
+    "qualificationReceiptSha256": "d9a42092be54bf7aa401c73e5abdcda8149c804da519e2603036b64136edba58",
+    "freshBackupBytes": 124017048,
+    "backedUpFiles": 344,
+    "sqliteDatabasesVerified": 3,
+    "originalCustomerMountsPreserved": true,
+    "oauthConfigurationPreserved": true,
+    "gatewayPreserved": true,
+    "otherContainersPreserved": true,
+    "previousCoreRetainedStopped": true,
+    "productionDataRestorePerformed": false,
+    "activeGameCountAtFinalGate": 0,
+    "activeRoomCheckStopRaceEliminated": false,
+    "historicalFixtureRestored": true
+  },
+  "postDeploy": {
+    "healthAndOauthProbesPassed": 15,
+    "observationReceiptSha256": "0c01eaac9b90da3de765752ea25ffd22acf554e2fa939b8d1ba2b314e1b7896f",
+    "restartsDuringObservation": 0,
+    "errorKeywordLogLines": 0,
+    "http5xxLogLines": 0,
+    "authenticatedExistingMcpReadPassed": true,
+    "longTermReliabilityClaimed": false
+  },
+  "bmsPackage": {
+    "sourceDigest": "041e64a214f6121b3492b736956884495147be061988ed9285b3f179b89204b0",
+    "questionCount": 23,
+    "bundledAudioTracks": 4,
+    "realWorkerBuildValidated": true,
+    "validRuntimeTicketValidatedInSyntheticStore": true,
+    "uploadedToProductionAccountInThisSession": false,
+    "installedOrSavedToUserAccount": false
+  },
+  "clientAcceptance": {
+    "conversationToolCountAfterDeploy": 14,
+    "serverCodeCatalogToolCount": 25,
+    "metadataRefreshRequired": true,
+    "documentedRefresh": "Refresh the existing Tadazz Gameshow Manual connection in ChatGPT Plugins, then start a new conversation.",
+    "refreshDocumentation": "https://developers.openai.com/plugins/deploy/connect-chatgpt",
+    "newPackageToolsEndToEndThroughChatGptVerified": false
+  },
+  "integration": {
+    "pullRequests": [5, 6],
+    "repositoryWideCiGreen": false,
+    "scope": "The passing release gates above do not claim that unrelated repository-wide workflows or unresolved unit-test baseline comparisons passed."
+  },
+  "privacy": {
+    "customerContentIncluded": false,
+    "credentialsIncluded": false,
+    "rawLogsIncluded": false,
+    "privateBackupPathsIncluded": false
+  }
+}

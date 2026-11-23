@@ -1,0 +1,15 @@
+{
+  "origin": "http://127.0.0.1:4412",
+  "startedUtc": "2026-11-19T17:20:43.475Z",
+  "status": "PASS",
+  "requestFailures": [],
+  "httpErrors": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "headerReadyMs": 6612,
+  "fontsReadyMs": 6697,
+  "elapsedMs": 6697,
+  "activeRequests": [],
+  "pageUrl": "http://127.0.0.1:4412/",
+  "pageTitle": "Tadazz"
+}

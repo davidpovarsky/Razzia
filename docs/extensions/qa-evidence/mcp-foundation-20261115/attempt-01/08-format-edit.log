@@ -1,0 +1,21 @@
+../../../../fixtures/format-work/extensions/src/mcp-app/contracts/canonical.ts 695ms
+../../../../fixtures/format-work/extensions/src/mcp-app/contracts/index.ts 4ms (unchanged)
+../../../../fixtures/format-work/extensions/src/mcp-app/contracts/schemas.ts 301ms
+../../../../fixtures/format-work/extensions/src/mcp-app/contracts/tools.ts 206ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/authoring.ts 200ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/authorization.ts 107ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/dependencies.ts 104ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/dispatch.ts 206ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/errors.ts 7ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/factory.ts 96ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/preview.ts 106ms
+../../../../fixtures/format-work/extensions/src/mcp-app/tests/server/authorization.test.ts 103ms
+../../../../fixtures/format-work/extensions/src/mcp-app/tests/server/boundaries.test.ts 96ms
+../../../../fixtures/format-work/extensions/src/mcp-app/tests/server/canonical.test.ts 111ms
+../../../../fixtures/format-work/extensions/src/mcp-app/tests/server/drafts.test.ts 112ms
+../../../../fixtures/format-work/extensions/src/mcp-app/tests/server/fixtures.ts 302ms
+../../../../fixtures/format-work/extensions/src/mcp-app/tests/server/protocol.test.ts 93ms
+../../../../fixtures/format-work/extensions/src/mcp-app/package.json 99ms (unchanged)
+../../../../fixtures/format-work/extensions/src/mcp-app/tsconfig.json 85ms
+../../../../fixtures/format-work/extensions/src/mcp-app/server/README.md 305ms
+../../../../fixtures/format-work/docs/extensions/plans/MCP_APP_ADOPTION_20261115.md 401ms

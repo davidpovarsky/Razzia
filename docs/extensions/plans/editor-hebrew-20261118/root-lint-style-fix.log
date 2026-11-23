@@ -1,0 +1,30 @@
+
+  x typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx:91:32]
+ 90 |         <Select
+ 91 |           value={acceptType && isTypeLocked ? acceptType : filter}
+    :                                ^^^^^^^^^^^^
+ 92 |           onValueChange={handleFilterChange}
+    `----
+  help: The checked value has type `false`.
+
+  x typescript(no-unnecessary-condition): Unnecessary conditional, value is always truthy.
+     ,-[packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx:103:30]
+ 102 |             {FILTERS.filter(
+ 103 |               ({ value }) => !isTypeLocked || value === acceptType,
+     :                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 104 |             ).map(({ value, labelKey }) => (
+     `----
+  help: The callback returns type `true`.
+
+  x typescript(no-unnecessary-condition): Unnecessary conditional, value is always truthy.
+     ,-[packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx:103:30]
+ 102 |             {FILTERS.filter(
+ 103 |               ({ value }) => !isTypeLocked || value === acceptType,
+     :                              ^^^^^^^^^^^^^
+ 104 |             ).map(({ value, labelKey }) => (
+     `----
+  help: The checked value has type `false`.
+
+Found 0 warnings and 3 errors.
+Finished in 3.6s on 31 files with 233 rules using 12 threads.

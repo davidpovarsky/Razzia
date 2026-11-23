@@ -1,0 +1,42 @@
+{
+  "phase": "P3_NEXT preparation only",
+  "backend_execution": "NOT RUN; QA owns remote runner",
+  "checks": [
+    {
+      "exit_code": 0,
+      "command": "node --check phone-gateway-qa-child.cjs"
+    },
+    {
+      "exit_code": 0,
+      "command": "node --check prepare-phone-api-package.mjs"
+    },
+    {
+      "exit_code": 0,
+      "command": "node --check verify-phone-api-source.mjs"
+    },
+    {
+      "warnings": 0,
+      "command": "esbuild TypeScript transform only",
+      "execution": false
+    },
+    {
+      "exit_code": 0,
+      "command": "Git Bash -n run-phone-api-qa.sh"
+    },
+    {
+      "exit_code": 0,
+      "command": "Python AST syntax only"
+    },
+    {
+      "exit_code": 0,
+      "command": "node extensions/qa/tds-boundary.mjs --files-only"
+    },
+    {
+      "command": "py -3 -B phone-safe-extract.test.py",
+      "tests": 8,
+      "passed": 8,
+      "exit_code": 0,
+      "backend_execution": false
+    }
+  ]
+}

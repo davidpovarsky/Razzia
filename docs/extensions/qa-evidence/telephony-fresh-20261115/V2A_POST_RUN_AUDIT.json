@@ -1,0 +1,29 @@
+{
+  "tested_sha": "0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",
+  "final_observation_records": 20,
+  "type_exit": 0,
+  "test_exit": 0,
+  "all_allocations": "RELEASED",
+  "all_three_containers_exited_pid_zero": true,
+  "final_archive_sha256": "cd37e0daebfac3f955f385e90ceec98d7caf8e8b22ede9f3a29120be14d97c38",
+  "final_archive_bytes": 61440,
+  "disk": {
+    "owned_trees_allocated_bytes": 6201344,
+    "container_metadata_allocated_bytes": 122880,
+    "container_reported_writable_bytes": 86016,
+    "total_measured_bytes": 6410240,
+    "budget_bytes": 67108864,
+    "available_bytes_at_final_audit": 2789228544,
+    "minimum_available_bytes_during_final_run": 2791653376
+  },
+  "capability_scan": {
+    "status": "NO_RAW_CAPABILITY_IN_SERVER_STORE_OR_PUBLIC_EVIDENCE",
+    "synthetic_capabilities_checked": 69,
+    "database_files_checked": 63,
+    "evidence_files_checked": 33,
+    "tokens_disclosed": false,
+    "private_fixture_journals_not_delivered_as_evidence": true
+  },
+  "legacy_api09_api10_api11": "retained S02 FAIL; no completion inferred",
+  "real_auth_provider_gateway_journal_capacity_or_rollout_proven": false
+}

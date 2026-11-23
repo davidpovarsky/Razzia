@@ -1,0 +1,63 @@
+{
+  "exit": 0,
+  "stdout": "{\"source\": \"/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-runtime-F-20261115-01a1dfaa\", \"files\": 14, \"freeBefore\": 2654523392}\n{\"launchExit\": 0, \"container\": \"tadazz-hq-mcp-runtime-F-20261115-01a1dfaa\", \"stdout\": \"27867587094fada483225a6f5f115a64b67eeaadaf234ce7adc0fceeb6a3ed67\\n\", \"stderr\": \"\", \"freshFreeBytes\": 2654339072, \"freshAvailableRamBytes\": 10691448832}\n\n\n",
+  "stderr": "",
+  "members": {
+    "consumer.py": {
+      "bytes": 17106,
+      "sha256": "621080768499f2b982c5110b1dfcc1da9ef9b941ef4dff96910a0a1c1a1bf617"
+    },
+    "format-and-compare.mjs": {
+      "bytes": 6173,
+      "sha256": "f5932899607153f7b6150afde0a92a7793a46a55f63bf5feba1a2b1acf710b8c"
+    },
+    "run-phase.py": {
+      "bytes": 2006,
+      "sha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    "launch.py": {
+      "bytes": 5338,
+      "sha256": "fd21e5231b272176cca50ec03ce490e7e3ceb761a449c26b684080e25261e616"
+    },
+    "activation.json": {
+      "bytes": 610,
+      "sha256": "91613b648e1114aa92e9a2224a359c73b1383253ac45fd7d68def7bf0dd0b7f7"
+    },
+    "remote-input-manifest.json": {
+      "bytes": 30834,
+      "sha256": "0e9246c607d94e0aa69f61e8e738e734992d8e71dfd716c5ea8dd9b1fff3925d"
+    },
+    "format-remote.mjs": {
+      "bytes": 5935,
+      "sha256": "8ee9f26bf29d1a963d26011b6b4a2a47ee4acf10879bb6e1ead1c6aac1ddb8df"
+    },
+    "app/extensions/src/mcp-app/package.json": {
+      "bytes": 1092,
+      "sha256": "e496aeb95f7b2ef6101038789bf56ed4e10c56b2a775b18019539833d0c56297"
+    },
+    "app/extensions/src/mcp-app/server/access-token.ts": {
+      "bytes": 6117,
+      "sha256": "1fda501aaa18483a076854fa63f74da7f0cffa16814ebe9bc437ce1cbe031d5c"
+    },
+    "app/extensions/src/mcp-app/server/factory.ts": {
+      "bytes": 6110,
+      "sha256": "fa4d8d154d9df8d8f25349de78860a4cb72c6a7bf6f8dd2140e5b51c3b412815"
+    },
+    "app/extensions/src/mcp-app/server/http.ts": {
+      "bytes": 11414,
+      "sha256": "76b92ce8f8e36971aefc829dc53cf7aa308eeea21613f7011d1de3cfc585ae95"
+    },
+    "app/extensions/src/mcp-app/server/REMOTE_SERVICE.md": {
+      "bytes": 4159,
+      "sha256": "6e34bb728fc29409f96e17a0fce0b58cdca1a3c93b9fe2f3613c550ea8501dd3"
+    },
+    "app/extensions/src/mcp-app/tests/server/access-token.nodecheck.ts": {
+      "bytes": 5479,
+      "sha256": "1d24f4e55c937e8544e764475df08f9b1d43b81bdbad50f0b21c2dafe7c36566"
+    },
+    "app/extensions/src/mcp-app/tests/server/http.nodecheck.ts": {
+      "bytes": 8289,
+      "sha256": "69a2412b296b37d91da42ae9e951e3489cf973348d04a02cbb68d6296562cb3f"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "check": "web-typecheck",
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "extensions-typecheck",
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "scoped-lint",
+      "code": 0,
+      "stdout": "Found 0 warnings and 0 errors.\nFinished in 2.5s on 11 files with 233 rules using 12 threads.\n",
+      "stderr": ""
+    },
+    {
+      "check": "diff-check",
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "themeLocaleKeys": [
+    "chooseDescription",
+    "catalogUnavailable",
+    "importTheme",
+    "chooseThemeFile",
+    "importHint",
+    "importUnavailable",
+    "importEmpty",
+    "imported",
+    "libraryTitle",
+    "libraryDescription",
+    "openEditor",
+    "noGames",
+    "newGame",
+    "advancedBuilder"
+  ],
+  "localeParity": {
+    "en": true,
+    "he": true,
+    "fr": true,
+    "de": true,
+    "es": true,
+    "it": true,
+    "ja": true,
+    "tr": true,
+    "vi": true
+  },
+  "sourceHashes": {
+    "packages/web/src/features/quizz/components/QuestionEditor/index.tsx": "b8f25e2aeff92bc41ebaa4790ace1a5d4642fcf18a4080f50ca34ea2804f9f58",
+    "packages/web/src/features/quizz/components/studio/show-theme-settings.tsx": "eca0f024c4d9d48c065dbc1c5e1ac7c52b15041cc4fbdb060791e88c54fac710",
+    "packages/web/src/features/quizz/components/studio/studio-scene-editor.tsx": "4521cecd88910128fcdb7779eef59ff5d970d9039c3e53a54c78ce86fbfbdb13",
+    "packages/web/src/features/quizz/components/studio/installed-theme-catalog.tsx": "833f3440abaa472bcb34904569e969f6d4a173e13f98c6635e9df367dc8e7c3d",
+    "packages/web/src/features/manager/components/packages/PackageManager.tsx": "ee4148bce99ea9d5c97033bd90e3397257a1a9c652d22521bee87c3548c56527",
+    "packages/web/src/features/manager/components/packages/PackageRuntimePreview.tsx": "d5ef362c79054c0aba4dd46a66aaf32923b541a17f8d478bfaa8320060df07bc",
+    "packages/web/src/features/manager/components/packages/package-api.ts": "f8e361bd0ba5504ae1c46e04fe95c17de5d413bf27041ebee693c6e8306dcae9",
+    "extensions/src/site/web/studio/StudioThemes.tsx": "98dd88bb879745110804b5e24da9bcec43a45a0e32b4943393d697095a639916",
+    "extensions/src/components/theme-builder/PublishedCompositionSelect.tsx": "c0af5c8ac571a2a65923946da903d8e168034fe2ffcd4120db4c05f06c873546",
+    "extensions/src/components/theme-builder/OpenThemeBuilderLink.tsx": "e60547ddfa16ed7a552f71a9019b69541bf2c24e325910a62fac4b8d5314eb6b",
+    "extensions/src/presentation/editor-workspace.tsx": "9a8cf8c25c0792150c21efada1990d79fd77f103d64add61084fcd1daccda147"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "existingWorkspaceDependenciesLinked": [
+    "packages\\e2e\\node_modules",
+    "packages\\socket\\node_modules"
+  ],
+  "packagesInstalled": false
+}

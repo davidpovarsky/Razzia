@@ -1,0 +1,15 @@
+{
+  "historicalCommit": "5d94754",
+  "historicalPath": "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx",
+  "beforeSourceSha256": "45573cefe07c1e9c7929bc344901739df754cc970dad0d16bb04be22bf94ff32",
+  "afterSourceSha256": "a20ae1d6cd158828df557c3e5cf493ddd5106cb28928943204310f6a9b5f50db",
+  "afterIdentityHookSha256": "aa8d1faa0dbe4cb9a2a3e016094291669f54704ad8b2bb4fe3f9c9ee08052aa6",
+  "compiler": "installed esbuild 0.28.2",
+  "dependencyURLs": {
+    "reactURL": "/node_modules/.vite/deps/react.js?v=a32b3bb0",
+    "domURL": "/node_modules/.vite/deps/react-dom.js?v=a32b3bb0",
+    "rhfURL": "/node_modules/.vite/deps/react-hook-form.js?v=85ebcb91",
+    "zodURL": "/node_modules/.vite/deps/@hookform_resolvers_zod.js?v=4d9871e2"
+  },
+  "method": "Verbatim historical provider transpiled without behavior edits; only normal import-URL/CJS interoperability binding. Same real React/RHF dependencies, same current enhancement panel, same assertions for before/current. Isolated fetch transport exercises actual CompositeApiClient JSON serialization; no production writes."
+}

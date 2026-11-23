@@ -1,0 +1,61 @@
+{
+  "prettier": "3.9.10",
+  "checks": [
+    {
+      "file": "extensions/src/mcp-app/package.json",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/COMPOSITION_PREVIEW_V2.md",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/dependencies.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/dispatch.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/factory.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/http.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/server/http.nodecheck.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/preview-candidate-v2.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/preview-candidate-v2.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/preview-resource.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/client/preview-candidate-v2.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/preview-candidate.nodecheck.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/PREVIEW_CANDIDATE_V2.md",
+      "pass": true
+    }
+  ]
+}

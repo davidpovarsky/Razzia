@@ -1,14 +1,63 @@
+import type { Page } from "@playwright/test"
 import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
+import { readQuizz, seedQuizz } from "@razzia/e2e/utils/editor"
 import { closePage, expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { answer, enterPin, joinGame, typePin } from "@razzia/e2e/utils/player"
 
+// Reconnection must occur during a finite accepting window, not a three-second
+// fixture deadline. Only these owned copies change; the shared base stays intact.
+const createReconnectGame = async (manager: Page) => {
+  const subject = `Reconnect quiz ${crypto.randomUUID()}`
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((item) => ({ ...item, time: 120 })),
+  })
+  const pin = await createGame(manager, subject)
+  await manager.getByRole("button", { name: t("game:settings.title") }).click()
+  const settings = manager.getByRole("dialog")
+  const completion = settings.getByTestId("settings-end-on-all-answered")
+
+  if ((await completion.getAttribute("aria-checked")) !== "true") {
+    await completion.click()
+  }
+
+  await expect(completion).toHaveAttribute("aria-checked", "true")
+  await settings
+    .getByRole("button", { name: t("common:save"), exact: true })
+    .click()
+  await expect(settings).toBeHidden()
+
+  return { pin, subject }
+}
+
 test("plays a full quiz from the lobby to the podium", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const subject = `Complete quiz ${crypto.randomUUID()}`
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((question) => ({ ...question, time: 120 })),
+    leaderboard: "upstream",
+  })
+  const pin = await createGame(manager, subject)
+  await manager.getByRole("button", { name: t("game:settings.title") }).click()
+  const settings = manager.getByRole("dialog")
+  const completion = settings.getByTestId("settings-end-on-all-answered")
+
+  if ((await completion.getAttribute("aria-checked")) !== "true") {
+    await completion.click()
+  }
+
+  await expect(completion).toHaveAttribute("aria-checked", "true")
+  await settings
+    .getByRole("button", { name: t("common:save"), exact: true })
+    .click()
+  await expect(settings).toBeHidden()
   const alice = await newPage()
   const bob = await newPage()
 
@@ -29,7 +78,9 @@ test("plays a full quiz from the lobby to the podium", async ({
   await expect(bob.getByText(t("game:wrong"))).toBeVisible()
 
   await next(manager)
-  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+  await expect(
+    manager.getByRole("heading", { name: t("game:leaderboard"), exact: true }),
+  ).toBeVisible()
   await next(manager)
 
   await answer(alice, "4")
@@ -95,13 +146,14 @@ test("brings a player back into the game after a reload", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const { pin, subject } = await createReconnectGame(manager)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(player.getByText(BASIC_QUIZZ)).toBeVisible()
+  await expect(player.getByText(subject)).toBeVisible()
+  await expect(player.getByRole("button", { name: /^1 Paris$/u })).toBeVisible()
 
   await player.reload()
 
@@ -141,19 +193,20 @@ test("lets a player rejoin from the home page after closing the tab", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const { pin, subject } = await createReconnectGame(manager)
   const player = await newPage()
   const context = player.context()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(player.getByText(BASIC_QUIZZ)).toBeVisible()
+  await expect(player.getByText(subject)).toBeVisible()
+  await expect(player.getByRole("button", { name: /^1 Paris$/u })).toBeVisible()
   await closePage(player)
 
   const home = await context.newPage()
 
-  await home.goto("/")
+  await home.goto("/game")
   await expect(home.getByText(t("game:reconnectTitle"))).toBeVisible()
   await home.getByRole("button", { name: t("game:reconnect") }).click()
 

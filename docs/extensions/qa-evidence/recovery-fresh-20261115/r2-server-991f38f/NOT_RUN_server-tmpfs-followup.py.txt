@@ -1,0 +1,64 @@
+import pathlib,json,subprocess,shutil,time,hashlib
+ROOT=pathlib.Path('/home/ubuntu/tadazz-hq-qa-20261115')
+SHA='991f38f216ad265e06aec53313db8928437da248'
+SRC=ROOT/'source'/('recovery-r2-'+SHA)
+FIX=ROOT/'fixtures'/('recovery-r2-'+SHA)/'followup-tmpfs'
+EVID=ROOT/'evidence'/('recovery-r2-'+SHA)/'followup-tmpfs'
+RUN='tadazz-hq-recovery-r2-20261115'
+D=['sudo','-n','docker']
+def docker(*args):return subprocess.check_output(D+list(args),text=True)
+def save(name,data):(EVID/name).write_text(json.dumps(data,indent=2)+'\n')
+def resources():
+    used=0
+    for sha in ['4138cccbb0f234fd4eb4a426c5d12413cddc6535','8b9593787e88ccad37e924a45b820e353074864a',SHA]:
+        for k in ['source','fixtures','evidence']:used+=int(subprocess.check_output(['du','-sb',str(ROOT/k/('recovery-r2-'+sha))],text=True).split()[0])
+    return {'time':time.time(),'freeBytes':shutil.disk_usage(ROOT).free,'newBytes':used+4*20480}
+def verify(label):
+    with (EVID/('merged-'+label+'.json')).open('w') as out:subprocess.run(D+['exec',RUN,'node','/inputs/verify-merged.cjs'],stdout=out,check=True)
+    prior=ROOT/'fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work'
+    m=json.loads((ROOT/'source/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/source-manifest.json').read_text())
+    bad=[f['path'] for f in m['files'] if hashlib.sha256((prior/f['path']).read_bytes()).hexdigest()!=f['sha256']]
+    save('base-'+label+'.json',{'priorCommit':'9593f24f287f2e404f387f6359e89453cd8a971e','verifiedFiles':len(m['files']),'mismatches':bad})
+    if bad:raise RuntimeError('retained prior input changed')
+if FIX.exists() or EVID.exists():raise RuntimeError('no tmpfs followup overwrite')
+if shutil.disk_usage(ROOT).free<2600*1024**2:raise RuntimeError('disk start gate; do not create runner')
+old=json.loads(docker('inspect',RUN))[0]
+if old['State']['Running'] or not old['HostConfig']['ReadonlyRootfs']:raise RuntimeError('expected stopped read-only followup runner')
+FIX.mkdir();EVID.mkdir()
+args=['create','--name',RUN,'--pull=never','--cpus=0.25','--memory=2g','--memory-swap=2g','--network=none','--read-only','--user','1001:1001','--tmpfs','/tmp:rw,nosuid,nodev,size=128m,mode=1777','--tmpfs','/fake:rw,nosuid,nodev,noexec,size=16m,mode=0700,uid=1001,gid=1001','--env','TSX_DISABLE_CACHE=1','--env','HOME=/tmp']
+for i,m in enumerate(old['Mounts']):
+    if m['Type']!='bind' or m['Destination']=='/fake':continue
+    source=m['Source']
+    if m['Destination']=='/qa':source=str(EVID)
+    elif m['RW']:
+        folder=FIX/('output-'+str(i));folder.mkdir();source=str(folder)
+    args+=['--mount','type=bind,src='+source+',dst='+m['Destination']+('' if m['RW'] else ',readonly')]
+args+=[old['Image'],'node','-e','setInterval(()=>{},3600000)']
+docker('rename',RUN,'tadazz-hq-recovery-r2-991-fakebind-20261115')
+docker(*args);docker('start',RUN)
+identity=json.loads(docker('inspect',RUN))[0]
+save('runner-identity.json',{k:identity[k] for k in ['Id','Image','State','Mounts','HostConfig','Config']})
+save('execution-correction.json',{'sourceCommit':SHA,'applicationChanges':False,'rootStillReadOnly':True,'tmpfsOnly':'/fake:16MiB:0700:uid1001:gid1001','noFakeHostOrSourceBind':not any(m['Type']=='bind' and m['Destination']=='/fake' for m in identity['Mounts']),'mapBaseDiskMirror':False,'user':'1001:1001','priorHostBindDiagnosticRunnerId':old['Id']})
+code=None
+try:
+    verify('before')
+    r=resources()
+    if r['freeBytes']<2600*1024**2 or r['newBytes']>96*1024**2:raise RuntimeError('job start gate')
+    save('resources-before.json',r)
+    command=D+['exec','-w','/work/extensions',RUN,'node','node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','src/server/api/routes.test.ts','--maxWorkers=1','--no-file-parallelism','--reporter','verbose']
+    with (EVID/'api-routes.log').open('w') as out,(EVID/'api-routes-resources.jsonl').open('w') as rows:
+        p=subprocess.Popen(command,stdout=out,stderr=subprocess.STDOUT)
+        while True:
+            r=resources();rows.write(json.dumps(r)+'\n');rows.flush()
+            if r['freeBytes']<2*1024**3 or r['newBytes']>96*1024**2:
+                docker('stop','--time','10',RUN);raise RuntimeError('runtime resource hold')
+            try:code=p.wait(timeout=10);break
+            except subprocess.TimeoutExpired:pass
+    (EVID/'api-routes.exit').write_text(str(code)+'\n');print('tmpfs-api-routes',code,flush=True)
+    probe="const f=require('fs');const s=f.statSync('/fake');console.log(JSON.stringify({uid:s.uid,gid:s.gid,mode:s.mode&511,quizzDirectoryExists:f.existsSync('/fake/quizz'),entries:f.readdirSync('/fake',{recursive:true})}))"
+    with (EVID/'fixture-state.json').open('w') as out:subprocess.run(D+['exec',RUN,'node','-e',probe],stdout=out,check=True)
+    verify('after')
+finally:
+    save('resources-final.json',resources());docker('stop','--time','10',RUN)
+    x=json.loads(docker('inspect','--size',RUN))[0];save('runner-after-stop.json',{'id':x['Id'],'state':x['State'],'sizeRw':x.get('SizeRw',0)})
+if code!=0:raise RuntimeError('tmpfs API failure '+str(code))

@@ -1,15 +1,21 @@
+import { resolveQuestionPlayMode } from "@razzia/extensions/core"
+import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
+import { QuestionCardActions } from "./studio/QuestionCardActions"
 import { MEDIA_TYPES, QUESTION_TYPES } from "@razzia/common/constants"
 import type { Question, QuestionMedia } from "@razzia/common/types/game"
-import AlertDialog from "@razzia/web/components/AlertDialog"
 import clsx from "clsx"
-import { CircleAlert, Music, Trash2, Video } from "lucide-react"
+import { CircleAlert, Music, Video } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { twMerge } from "tailwind-merge"
 
 const SlideMedia = ({ media }: { media?: QuestionMedia }) => {
   if (media?.type === MEDIA_TYPES.IMAGE) {
     return (
-      <img src={media.url} className="mx-auto max-h-14 w-auto rounded-md" />
+      <img
+        alt=""
+        src={media.url}
+        className="mx-auto max-h-14 w-auto rounded-md"
+      />
     )
   }
 
@@ -32,6 +38,7 @@ interface Props {
   canDelete: boolean
   onClick: () => void
   onDelete: () => void
+  onDuplicate?: () => void
 }
 
 const QuizzEditorCard = ({
@@ -42,11 +49,14 @@ const QuizzEditorCard = ({
   canDelete,
   onClick,
   onDelete,
+  onDuplicate,
 }: Props) => {
   const { t } = useTranslation()
+  const { gameMode } = useQuizzEditor()
 
   return (
     <div
+      data-testid={`editor-question-card-${index}`}
       onClick={onClick}
       className={twMerge(
         clsx(
@@ -58,7 +68,7 @@ const QuizzEditorCard = ({
         ),
       )}
     >
-      <div className="absolute top-2 left-2 flex items-center gap-1">
+      <div className="absolute start-2 top-2 flex items-center gap-1">
         <span className="text-muted-foreground text-xs font-semibold">
           {index + 1}
         </span>
@@ -89,31 +99,21 @@ const QuizzEditorCard = ({
               key={i}
               className="border-accent flex h-4 flex-1 items-center rounded-md border px-0.5"
             >
-              {question.solutions?.includes(i) && (
-                <div className="bg-correct ml-auto size-1.5 rounded-full" />
-              )}
+              {resolveQuestionPlayMode(question, gameMode) !== "survey" &&
+                question.solutions?.includes(i) && (
+                  <div className="bg-correct ms-auto size-1.5 rounded-full" />
+                )}
             </div>
           ))}
         </div>
       )}
 
-      {canDelete && (
-        <AlertDialog
-          trigger={
-            <button
-              onClick={(e) => e.stopPropagation()}
-              aria-label={t("quizz:question.deleteQuestion")}
-              className="text-muted-foreground bg-background absolute top-1.5 right-1.5 hidden rounded-sm p-1 group-hover:block hover:bg-red-50 hover:text-red-500"
-            >
-              <Trash2 className="size-3.5" />
-            </button>
-          }
-          title={t("quizz:question.deleteQuestion")}
-          description={t("quizz:question.deleteQuestionConfirm")}
-          confirmLabel={t("common:delete")}
-          onConfirm={onDelete}
-        />
-      )}
+      <QuestionCardActions
+        canDelete={canDelete}
+        isActive={isActive}
+        onDelete={onDelete}
+        onDuplicate={onDuplicate}
+      />
     </div>
   )
 }

@@ -1,0 +1,278 @@
+{
+  "bytes": 29138376,
+  "candidateSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "excluded": [
+    ".config",
+    "auth state",
+    "trace.zip",
+    "video"
+  ],
+  "files": [
+    {
+      "bytes": 5029,
+      "path": "focused-p0-receipt.json",
+      "sha256": "907059e11e079e5d36011a54102ab34cf4b727557e04d424cb38697b17d76ce1"
+    },
+    {
+      "bytes": 13088,
+      "path": "results.json",
+      "sha256": "e396c3ca0d7cd92a3ab5ccfd8189f1ff1a8624db40d85f6f25672400f78abbbb"
+    },
+    {
+      "bytes": 7141,
+      "path": "listed-tests.json",
+      "sha256": "cdd38f985e8d3e78b666424c052ffc7e1aaee84f67b8082ef7ab6b7c6fedc77a"
+    },
+    {
+      "bytes": 445739,
+      "path": "source-before.json",
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    {
+      "bytes": 445739,
+      "path": "source-after.json",
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    {
+      "bytes": 15375,
+      "path": "exact-test-copy.json",
+      "sha256": "296e5c9444edb6826dbbecaaca90e263cebdb4befbc885a48f405c683bb8701b"
+    },
+    {
+      "bytes": 1732,
+      "path": "container-plan.json",
+      "sha256": "e242af27a7ec1d73551d55eb8bdfb66f9ef174a62860dce521f261583136125f"
+    },
+    {
+      "bytes": 1995,
+      "path": "execution-plan.json",
+      "sha256": "3daca5dbe00bca6799ec8d7e302a13ebeac878b9634c8580e81cad23abd9dc1b"
+    },
+    {
+      "bytes": 749,
+      "path": "listing.stdout.log",
+      "sha256": "d0a261dfd11455c33b8246b3b52a779f4a57db3e09c7ad4dbabb5b6e3d38e381"
+    },
+    {
+      "bytes": 0,
+      "path": "listing.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 3221,
+      "path": "browser.stdout.log",
+      "sha256": "34c068fb5b8c5e8c9e85dbeb520b8ca4debac68d645d0880c2d99c3de58fa7f6"
+    },
+    {
+      "bytes": 0,
+      "path": "browser.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1731,
+      "path": "ordinary-build-container-plan.json",
+      "sha256": "c0de02711ffc1c8d1d814a6d8020f3ac3699e83fd25ea7cc84f27d6dc4b61bba"
+    },
+    {
+      "bytes": 988,
+      "path": "ordinary-build-plan.json",
+      "sha256": "05c6967048d7d61b68d1443fde42f514145f32c3bcebe3a0effb39ce95915c4c"
+    },
+    {
+      "bytes": 2295,
+      "path": "ordinary-build.stdout.log",
+      "sha256": "c0ef40cba45ae66ae12589628eb03bbf9d922b6ceca3aeef58cbb9237cd2e8bb"
+    },
+    {
+      "bytes": 0,
+      "path": "ordinary-build.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 38840,
+      "path": "ordinary-artifact-before.json",
+      "sha256": "5ae2ae8fe406951037e8416e0010c2163624c591eac4f2f9f51bc4f83d4ac331"
+    },
+    {
+      "bytes": 38840,
+      "path": "ordinary-artifact-after.json",
+      "sha256": "5ae2ae8fe406951037e8416e0010c2163624c591eac4f2f9f51bc4f83d4ac331"
+    },
+    {
+      "bytes": 1298959,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/01_manager_voting_5_solid_photo_cards_1920.png",
+      "sha256": "8a41156ac10cb4ce3db1646088eb488ea35b86af66ecebd1c90c7f8af1a2307f"
+    },
+    {
+      "bytes": 2040701,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/02_spectator_voting_question_timer_1920.png",
+      "sha256": "89c8dbc968b2098f10282a27444729ec6353895e9911aa9424dffc742d52700b"
+    },
+    {
+      "bytes": 703607,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/03_spectator_voting_question_timer_1024.png",
+      "sha256": "7ad74abed118a0a64e0f65e265a69de23aa42c5a2a17ba67d0966b809a7d1ff4"
+    },
+    {
+      "bytes": 94490,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/04_player_answers_only_question_big_timer_375.png",
+      "sha256": "dfade9f72d29727679d48ec66644dfcd46a209733ad181b4dba188e76a445231"
+    },
+    {
+      "bytes": 673596,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/06_manager_results_hero_plus_ranked_1280.png",
+      "sha256": "98f2a115844120367ccc4a5abcf68c3654cbc8480ea3548d41aa788d5b078c14"
+    },
+    {
+      "bytes": 2012880,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/07_spectator_results_hero_plus_ranked_1920.png",
+      "sha256": "a0ba123baaf630691f64e9d257952657a902b6e4cac5b5a419c11c51055a758b"
+    },
+    {
+      "bytes": 991451,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/08_interim_results_hero_plus_ranked_1280.png",
+      "sha256": "13540fe58dfc7e284be39932b7ad48cb24dc58725114839162d209611d57a938"
+    },
+    {
+      "bytes": 979713,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/09_interim_results_first_place_tie_1280.png",
+      "sha256": "7cf8bf2162d63e9223ab3301504baaf19e16ba0a1fce0018c62414167493a90c"
+    },
+    {
+      "bytes": 1062285,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/10_zero_votes_no_winner_1280.png",
+      "sha256": "53567305637605958be6f6ec36848bb110eb56cc71adf53c2db2d118f2f552d6"
+    },
+    {
+      "bytes": 386170,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/responsive_player_results_hero_plus_ranked_1280.png",
+      "sha256": "c255ae2784d7ad27f8a6a115f92701ff4a482d6c686be4f9cc0575cfadfc709d"
+    },
+    {
+      "bytes": 12033,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/media-appearance-stage-acc-cf8ee--Single-Audio-Staged-Motion-chromium/error-context.md",
+      "sha256": "1917f37a3294cdc26b85959c8ff5bdef016adbac82063104e936f5be58cfddfc"
+    },
+    {
+      "bytes": 1087397,
+      "path": "runtime/packages/e2e/test-results/screenshots/media-appearance-stage/03_opening_scene_custom_bg_1080p.png",
+      "sha256": "bdac08f559a0f831d49ebd0ad270d7eeda8bea8ecf7ed6ede4ab9d0fc146dfee"
+    },
+    {
+      "bytes": 948540,
+      "path": "runtime/packages/e2e/test-results/screenshots/media-appearance-stage/04_q1_voting_1920x1080.png",
+      "sha256": "36ac91f8641a625dd889b13cadde3bffaf4909ce3893bc0848b57de16f26c44e"
+    },
+    {
+      "bytes": 57342,
+      "path": "runtime/packages/e2e/test-results/screenshots/media-appearance-stage/04_q1_voting_320x568.png",
+      "sha256": "f0f02095c83e8d276dc08c4dddb06cc6b09849d5e66cd0291198c5233f22a559"
+    },
+    {
+      "bytes": 77569,
+      "path": "runtime/packages/e2e/test-results/screenshots/media-appearance-stage/04_q1_voting_390x844.png",
+      "sha256": "9507bc8065efede66bb5b4009024ebd653283569af81145f321b5ea0daa976c5"
+    },
+    {
+      "bytes": 230809,
+      "path": "runtime/packages/e2e/test-results/screenshots/media-appearance-stage/04_q1_voting_800x600_4_3.png",
+      "sha256": "51d41012736866689818a5431986f0031c058fa0cab1e7496495b4ae7c805c88"
+    },
+    {
+      "bytes": 1413963,
+      "path": "runtime/packages/e2e/test-results/screenshots/media-appearance-stage/05_q1_reveal_1920x1080.png",
+      "sha256": "826ac37e7d394d5a95b4d825d55e73c5cdc809ca25aa3713a9bf4af70b8cce00"
+    },
+    {
+      "bytes": 426162,
+      "path": "runtime/packages/e2e/test-results/screenshots/tzila/10_host_toolbar_720.png",
+      "sha256": "955c5f0f1fa7daf4b5887279d556f1f3793379c09034b81e993daa623e1ceb57"
+    },
+    {
+      "bytes": 149213,
+      "path": "runtime/packages/e2e/test-results/screenshots/tzila/11_host_toolbar_375.png",
+      "sha256": "e45d50f10be033e1f4b693665c2dc0060df38a7035a649f7b7c65dbbede80742"
+    },
+    {
+      "bytes": 633725,
+      "path": "runtime/packages/e2e/test-results/screenshots/tzila/12_host_toolbar_1024.png",
+      "sha256": "3e2e6aa2db4cd1ef1f767b081c5e2682fe56d01aaca7dbb1c65c4432727ac42d"
+    },
+    {
+      "bytes": 692419,
+      "path": "runtime/packages/e2e/test-results/screenshots/tzila/13_host_toolbar_1280.png",
+      "sha256": "23d74323d4e60349f04cfdcb46255acb57cb78932c4a14bfc2b208a5ec5114cd"
+    },
+    {
+      "bytes": 1298967,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/01_manager_voting_5_solid_photo_cards_1920.png",
+      "sha256": "571feb7f6003dc741c383bfcf89882ca48065fc602cdf3d9c0f9b525a969fbc1"
+    },
+    {
+      "bytes": 2035083,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/02_spectator_voting_question_timer_1920.png",
+      "sha256": "054056d027a091cad5dee02598fa0b17db7d9edb1664111a1c22a69a7c5124b0"
+    },
+    {
+      "bytes": 703389,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/03_spectator_voting_question_timer_1024.png",
+      "sha256": "1ad9525c2d19958b3bca64eab075a58e90640e96b295767a4a28ebb088f6165a"
+    },
+    {
+      "bytes": 94490,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/04_player_answers_only_question_big_timer_375.png",
+      "sha256": "dfade9f72d29727679d48ec66644dfcd46a209733ad181b4dba188e76a445231"
+    },
+    {
+      "bytes": 674070,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/06_manager_results_hero_plus_ranked_1280.png",
+      "sha256": "b85feb4979c6a5444f57178e37514cca018dfc3460a3c9be671fdfc6c7a14c96"
+    },
+    {
+      "bytes": 2016838,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/07_spectator_results_hero_plus_ranked_1920.png",
+      "sha256": "3c50b4dfa7202dfd135fe596d165cd9a09ddf60aa7fadcfb0be587582eaf34d9"
+    },
+    {
+      "bytes": 990168,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/08_interim_results_hero_plus_ranked_1280.png",
+      "sha256": "683941cc363c1faaad895234af0547e458b9fdeacab936151ad5acddff2e7421"
+    },
+    {
+      "bytes": 979603,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/09_interim_results_first_place_tie_1280.png",
+      "sha256": "88196f011746ff481f0737fac41b47ae51e4a1321ac015a83f737fd4cad2f95c"
+    },
+    {
+      "bytes": 1063000,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/10_zero_votes_no_winner_1280.png",
+      "sha256": "77025be1411f15f935ae7a5478b4a36cc45ae4c4b50933c822e374120e73227e"
+    },
+    {
+      "bytes": 386170,
+      "path": "runtime/packages/e2e/test-results/tzila-four-visual-fixes/responsive_player_results_hero_plus_ranked_1280.png",
+      "sha256": "c255ae2784d7ad27f8a6a115f92701ff4a482d6c686be4f9cc0575cfadfc709d"
+    },
+    {
+      "bytes": 426121,
+      "path": "runtime/packages/e2e/test-results/tzila-p0-acceptance/10_host_toolbar_720.png",
+      "sha256": "8276e204dce2c70a90697e56176ea1a91dac681f64ba79227f2b7110f506be51"
+    },
+    {
+      "bytes": 149160,
+      "path": "runtime/packages/e2e/test-results/tzila-p0-acceptance/11_host_toolbar_375.png",
+      "sha256": "9eab06d711ba117e118d3e01c9b6f19ec9c291a54a02b0907718b4de09880b92"
+    },
+    {
+      "bytes": 633644,
+      "path": "runtime/packages/e2e/test-results/tzila-p0-acceptance/12_host_toolbar_1024.png",
+      "sha256": "5bbd5edf8c9f7982bb3035e81cfd6f0d07c64b37af70937db8f6081464378438"
+    },
+    {
+      "bytes": 692147,
+      "path": "runtime/packages/e2e/test-results/tzila-p0-acceptance/13_host_toolbar_1280.png",
+      "sha256": "746ee46874daf51917aeb1c5660e62196d21b4fc8e22c0552bf7d7728af123bf"
+    }
+  ],
+  "run": "p0-iteration8b-024444f1"
+}

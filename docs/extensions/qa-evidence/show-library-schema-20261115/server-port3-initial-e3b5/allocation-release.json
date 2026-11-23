@@ -1,0 +1,9 @@
+{
+  "utc": "2026-11-15T05:25:00.846526+00:00",
+  "nanoCpus": 250000000,
+  "memoryBytes": 2147483648,
+  "network": "none",
+  "ports": {},
+  "imageId": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "allocationReleased": true
+}

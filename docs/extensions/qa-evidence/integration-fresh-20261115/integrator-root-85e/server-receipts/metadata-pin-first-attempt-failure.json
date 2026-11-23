@@ -1,0 +1,7 @@
+{
+  "failure": "Reconstructed physical SQLite database hash differs from prior container tmpfs database; original body not retained for byte-level comparison",
+  "expected_prior": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+  "actual_pin": "5bc40fd7f9bd80f0594e69661a41ab64f1d3aa546824f1f5ea6d61313585c4ad",
+  "followup": "Failing physical equality claim abandoned; exact logical row+alias equality to original inputs and PRAGMA integrity_check now independently verified",
+  "unknown": "physical difference cause unproven"
+}

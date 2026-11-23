@@ -1,19 +1,23 @@
 import {
+  setup,
+  MANAGER,
+  TICK_MS,
+  FIRST_QUESTION_DELAY_MS,
+} from "@razzia/socket/test/game-setup"
+import {
   EVENTS,
   NO_TIME_LIMIT,
   QUESTION_TYPES,
+  QUESTION_LEAD_IN_MS,
   QUIZZ_MODES,
   SCORING_MODES,
 } from "@razzia/common/constants"
-import type { Question, Quizz } from "@razzia/common/types/game"
 import { STATUS } from "@razzia/common/types/game/status"
 import {
   getPath,
   getResultById,
   getResultsMeta,
 } from "@razzia/socket/services/config"
-import Game from "@razzia/socket/services/game"
-import { createFakeIo } from "@razzia/socket/test/fake-io"
 import {
   createEstimationQuestion,
   createQuestion,
@@ -21,46 +25,6 @@ import {
 } from "@razzia/socket/test/fixtures"
 import fs from "fs"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-
-const FIRST_QUESTION_DELAY_MS = 8000
-const NEXT_QUESTION_DELAY_MS = 2000
-const TICK_MS = 1000
-
-const MANAGER = "manager"
-
-const setup = (quizz: Quizz, players = ["Alice", "Bob"]) => {
-  const fake = createFakeIo()
-  const game = new Game(fake.io, MANAGER, quizz)
-  const manager = fake.createSocket(MANAGER)
-
-  game.reconnect(manager)
-
-  const sockets = players.map((username) => {
-    const socket = fake.createSocket(username.toLowerCase())
-
-    game.join(socket, username)
-
-    return socket
-  })
-
-  const status = (room: string) => fake.lastStatus(room)
-
-  const reachAnswers = async (question: Question, first = true) => {
-    await vi.advanceTimersByTimeAsync(
-      (first ? FIRST_QUESTION_DELAY_MS : NEXT_QUESTION_DELAY_MS) +
-        question.cooldown * 1000,
-    )
-
-    expect(status(game.gameId)?.name).toBe(STATUS.SELECT_ANSWER)
-  }
-
-  const start = async () => {
-    void game.start(manager)
-    await reachAnswers(quizz.questions[0])
-  }
-
-  return { ...fake, game, manager, sockets, status, start, reachAnswers }
-}
 
 beforeEach(() => {
   fs.rmSync(getPath("results"), { recursive: true, force: true })
@@ -182,6 +146,7 @@ describe("quiz flow", () => {
     )
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
 
     expect(game.updateSettings({ answersOnly: true })).toBe(false)
@@ -254,7 +219,7 @@ describe("quiz flow", () => {
     expect(status(game.gameId)?.name).toBe(STATUS.SHOW_QUESTION)
 
     game.selectAnswer(alice, [0])
-    await vi.advanceTimersByTimeAsync(3000)
+    await vi.advanceTimersByTimeAsync(QUESTION_LEAD_IN_MS)
 
     expect(status(game.gameId)?.name).toBe(STATUS.SELECT_ANSWER)
 
@@ -273,6 +238,7 @@ describe("quiz flow", () => {
     )
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
     game.setPlayerDisconnected(bob.id)
     game.selectAnswer(alice, [0])
@@ -287,6 +253,7 @@ describe("quiz flow", () => {
     )
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
     game.selectAnswer(alice, [0])
     await vi.advanceTimersByTimeAsync(TICK_MS)
@@ -463,6 +430,7 @@ describe("survey flow", () => {
     const { game, sockets, status, start } = setup(quizz)
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
     game.selectAnswer(alice, [2])
     game.selectAnswer(bob, [2])

@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "comparedAgainst": "8b9593787e88ccad37e924a45b820e353074864a",
+  "onlySingleFixtureWriteAdded": true,
+  "assertionsAndRestOfOriginalFileByteIdentical": true,
+  "gate3BeforeSha256": "dbebcb231693a785067438ef9fba4ae43f676fe29e4eee7ccce240e1f81191d3",
+  "gate3AfterSha256": "a1aa698dbf3db03886c730256853f25031fc44152b97037643d9f07b723b1055",
+  "originalLine": 1298,
+  "inserted": "writeSidecar(getPath, quizId, v2Extras)"
+}

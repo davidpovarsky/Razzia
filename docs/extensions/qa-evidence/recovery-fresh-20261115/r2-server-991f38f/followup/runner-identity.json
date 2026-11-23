@@ -1,0 +1,305 @@
+{
+  "Id": "36056bff45c25d5117ae2991487d139bb7c689b267c9741d3d1e90d7f0d37476",
+  "Image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 1152470,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T08:34:20.272295498Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-2",
+      "Destination": "/work/packages/socket/dist",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-3",
+      "Destination": "/work/extensions/node_modules/.vite",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-4",
+      "Destination": "/work/extensions/node_modules/.vite-temp",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
+      "Destination": "/work",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248",
+      "Destination": "/inputs",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage",
+      "Destination": "/work/extensions/src/server/storage",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-5",
+      "Destination": "/work/node_modules/.vite",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-6",
+      "Destination": "/work/node_modules/.vite-temp",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-7",
+      "Destination": "/work/docs/extensions/qa-evidence/tadazz-next-source-parity-20261106",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup",
+      "Destination": "/qa",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library-recovery.test.ts",
+      "Destination": "/work/extensions/src/server/media-library-recovery.test.ts",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/fake",
+      "Destination": "/fake",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library.test.ts",
+      "Destination": "/work/extensions/src/server/media-library.test.ts",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library.ts",
+      "Destination": "/work/extensions/src/server/media-library.ts",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    }
+  ],
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "NetworkMode": "none",
+    "PortBindings": {},
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": null,
+    "CgroupnsMode": "private",
+    "Dns": null,
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": true,
+    "SecurityOpt": null,
+    "Tmpfs": {
+      "/tmp": "rw,nosuid,nodev,size=128m"
+    },
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 2147483648,
+    "NanoCpus": 250000000,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 2147483648,
+    "MemorySwappiness": null,
+    "OomKillDisable": null,
+    "PidsLimit": null,
+    "Ulimits": [],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library.test.ts",
+        "Target": "/work/extensions/src/server/media-library.test.ts",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library.ts",
+        "Target": "/work/extensions/src/server/media-library.ts",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-2",
+        "Target": "/work/packages/socket/dist"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-3",
+        "Target": "/work/extensions/node_modules/.vite"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-4",
+        "Target": "/work/extensions/node_modules/.vite-temp"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-5",
+        "Target": "/work/node_modules/.vite"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-6",
+        "Target": "/work/node_modules/.vite-temp"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/output-7",
+        "Target": "/work/docs/extensions/qa-evidence/tadazz-next-source-parity-20261106"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
+        "Target": "/work",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup",
+        "Target": "/qa"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248",
+        "Target": "/inputs",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage",
+        "Target": "/work/extensions/src/server/storage",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library-recovery.test.ts",
+        "Target": "/work/extensions/src/server/media-library-recovery.test.ts",
+        "ReadOnly": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/fake",
+        "Target": "/fake"
+      }
+    ],
+    "MaskedPaths": [
+      "/proc/acpi",
+      "/proc/asound",
+      "/proc/interrupts",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/sys/devices/virtual/powercap",
+      "/sys/firmware"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "derivedIndexBeforeSha256": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+  "bodyFileSymlinks": 17412,
+  "copiedBodyBytes": 0,
+  "metadataFilesVerified": 459,
+  "metadataInventorySha256": "6f2126891ed74af76c8b6644a25e0faec29e438d248107010d808bbd49649c80",
+  "metadataExpandedBytesSharedOnce": 400260954,
+  "ownMetadataMirrors": [
+    "/ram/home/.cache/pnpm/v12/metadata-full",
+    "/ram/home/.cache/pnpm/v12/metadata"
+  ],
+  "sameGenuineBodiesNoTransform": true,
+  "resources": {
+    "newPhysicalBytes": 1449984,
+    "capBytes": 67108864,
+    "hostFreeBytes": 2886438912,
+    "dockerStateAndCappedLogAllowanceBytes": 2097152,
+    "newPhysicalUpperBoundBytes": 3547136,
+    "requiredRemainingReserveBytes": 2515132416,
+    "ownTmpfsUsedBytes": 75849728
+  }
+}

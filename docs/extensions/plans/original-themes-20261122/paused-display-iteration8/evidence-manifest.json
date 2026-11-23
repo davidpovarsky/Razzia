@@ -1,0 +1,62 @@
+{
+  "browser.stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "browser.stdout.log": {
+    "bytes": 1182,
+    "sha256": "0111ca434ce005d22e1ba7a7944fe12c7b6f60874d73aa5aa1acf034d71c8311"
+  },
+  "container-plan.json": {
+    "bytes": 1737,
+    "sha256": "b0d4e07dc0af6e9df7a11b085324fb68e486ada0b143b75f1ca76234cb674865"
+  },
+  "diagnostic-receipt.json": {
+    "bytes": 440719,
+    "sha256": "8a1eab8bad930776ecd3dc83932f8043cdbf880ca04cb892061c7f193924ae20"
+  },
+  "diagnostics/paused-results-late-display-diagnostic.mjs": {
+    "bytes": 24025,
+    "sha256": "1df95f92f8306864caf2fce99897b285c5a53471300738c97287a27a69ac36b8"
+  },
+  "execution-plan.json": {
+    "bytes": 1609,
+    "sha256": "de78f339ce6db380fedbab497e3616f69c3606c8e0950f907b192a4f3a7ff578"
+  },
+  "paused-display/diagnostic-source.json": {
+    "bytes": 760,
+    "sha256": "24d58599433befa359b2df0273c803172bab168a00c9f82a93f950ae1475b2dc"
+  },
+  "paused-display/paused-results-diagnostic.json": {
+    "bytes": 409266,
+    "sha256": "5560be9fd4b211ca84de2c27d9e1f3861313f8e4918faca85ced5e812a58827b"
+  },
+  "paused-display/paused-results-late-display.png": {
+    "bytes": 387857,
+    "sha256": "1041f3e74b1b3f935363dba9ea4a3b4546abf1bfaa0d0b31bd55a94823622cbb"
+  },
+  "paused-display/paused-results-resumed-question2.png": {
+    "bytes": 407944,
+    "sha256": "633f60972ea72dcdf4dfe225c0fa872441d85a10dba3acf45164523e15b661af"
+  },
+  "source-after.json": {
+    "bytes": 445739,
+    "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+  },
+  "source-before.json": {
+    "bytes": 445739,
+    "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+  },
+  "controller.stdout.log": {
+    "bytes": 1127,
+    "sha256": "9809a0d767bd2968a7983435138f86ffa66b17052d08d9b278b923fd2db08ce5"
+  },
+  "controller.stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "summary.json": {
+    "bytes": 1782,
+    "sha256": "e455be48bafe9c3d700c305b32444369069eff9ae9b3298b4b22c38ac1d8e1d7"
+  }
+}

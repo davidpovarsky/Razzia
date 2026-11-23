@@ -1,0 +1,59 @@
+{
+  "utc": "2026-11-15T18:36:36.526796+00:00",
+  "source": "9e3085075adef9d1f5e16bbf9a9a7c2c43f9c534",
+  "checks": [
+    {
+      "label": "combined-real-client-types",
+      "command": [
+        "C:/Program Files/nodejs/node.exe",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\extensions\\src\\mcp-app\\node_modules\\typescript\\lib\\tsc.js",
+        "--noEmit",
+        "-p",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\consent-focused.tsconfig.json"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\extensions\\src\\mcp-app",
+      "exit": 2,
+      "streams": {
+        "stdout": {
+          "bytes": 150,
+          "sha256": "60d1b4f1d4fc3d3ca769ea4c571d2af59b1a30901f0ef769552db8aab97297ec"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "combined-real-client-issuer",
+      "command": [
+        "C:/Program Files/nodejs/node.exe",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs",
+        "--tsconfig",
+        "tsconfig.json",
+        "--test",
+        "--test-concurrency=1",
+        "tests/first-party/consent-client.nodecheck.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\extensions\\src\\mcp-app",
+      "exit": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 6504,
+          "sha256": "0838be809d6c45b9e89588276ec358bd5dde2780d6745812779b70cfc2dfb174"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "allInputBodiesUnchanged": true,
+  "inputCount": 228,
+  "sameDeclaredDependencyMetadata": true,
+  "environmentCorrection": "Missing real dependency resolution for sibling client and root type lookup. Added root/extensions workspace junctions to the exact existing genuine F QA npm dependency directory. No installer, dependency replacement, new type stub, source change or compiler weakening. Original failed TC/runtime setup logs retained in MANAGER_COMBINED_RESULT.json.",
+  "priorClientUnitAndReturnTarget14": "PASS on same unchanged source, not rerun",
+  "priorFormat": "exit0 on unchanged source, not rerun",
+  "notNormalRootPnpmGraph": true
+}

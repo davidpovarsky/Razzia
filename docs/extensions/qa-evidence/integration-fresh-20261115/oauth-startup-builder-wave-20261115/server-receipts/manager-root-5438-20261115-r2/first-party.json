@@ -1,0 +1,21 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/src/mcp-app/node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "--test",
+    "--test-concurrency=1",
+    "tests/first-party/abort.nodecheck.ts",
+    "tests/first-party/auth.nodecheck.ts",
+    "tests/first-party/filesystem.nodecheck.ts",
+    "tests/first-party/http.nodecheck.ts",
+    "tests/first-party/oauth.nodecheck.ts",
+    "tests/first-party/schema.nodecheck.ts",
+    "tests/first-party/store.nodecheck.ts"
+  ],
+  "cwd": "/work/project/extensions/src/mcp-app",
+  "exit": 0,
+  "log_sha256": "11f39a58d26b9c71aaf215091fa0f800710aff08eaeea3f3e317736ab4949bf1",
+  "seconds": 25.522
+}

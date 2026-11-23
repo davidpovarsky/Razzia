@@ -1,0 +1,23 @@
+{
+  "name": "phone-crash-66d794a-attempt01",
+  "id": "8ad80a9532afe5878c9d654d63728a7101ca12befb8fca5f289af93002e220b3",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T16:44:34.251492759Z",
+    "FinishedAt": "2026-11-15T16:45:36.428393466Z"
+  },
+  "size_rw": 32768,
+  "memory_bytes": 1073741824,
+  "nano_cpus": 250000000,
+  "network": "none",
+  "readonly_rootfs": true
+}

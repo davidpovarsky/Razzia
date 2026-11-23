@@ -1,0 +1,13 @@
+# English host guide on join screen
+
+User explicitly requested the previously supplied English host instructions beneath the telephone/QR area of the join screen. Added a static native React guide to `SeatingPlan`, using the established left-panel typography/colors. English is intentional per the user's instruction. It explains Present from Host, stage focus, all six shortcuts, the 500ms double-press window, single Esc and the keyboard-help icon.
+
+The left-panel logo/phone block is moved upward only on this guide layout, leaving the full phone number, QR/PIN, guide and connected-table count in separate vertical areas. The 31-table map is unchanged. No roster/account/backend/gateway changes belong to this addition. Customer roster revision11/38 participants/new group table28 must be preserved.
+
+Frontend release is hot-copied with a guarded atomic HTML bootstrap switch and unchanged main/gateway process identities plus both tenants' sidecar/base hashes. The immutable release image keeps the current navigation/participation backend. Visual verification and deployed entry are recorded below after completion.
+
+Follow-up explicitly authorized watermark removal and the latest roster/table changes in the test account too. The watermark is a stationary topmost precomposition in the owner's Jitter opening JSON, positioned at `[542,324]` on its 640×360 canvas. `stripOpeningExportWatermark` removes only that identified export-badge layer at load time, retaining all other layers, assets, timing and the unchanged original MP4. Unrelated animations remain intact. Two real-asset regression tests passed.
+
+Both production tenants now have 38 saved participants, revision11, including the corrected number and the new Fmaily Pshemish group at table28. Existing test-account participant IDs were preserved; its two open rooms were updated through the live roster endpoint without resetting scores or restarting the server. The customer account snapshot was verified unchanged during that sync. Private roster/phone data and backups are kept out of Git.
+
+Deployed after the user's explicit instruction to stop further testing and publish immediately. Live bootstrap `/assets/index-nOByuPxg.js`; restartable combined image `tadazz:host-guide-20261108-final`, `sha256:7c7bce92f65822967dcb960791f9a226e7d76b89ac850e9c9844c4370b05f2fb`. The concurrent QA release's newer runtime backend `04bb8ea5d713…` and gateway `db1888623e93…` were preserved. The frontend hot-copy did not restart Node/gateway or change either tenant's sidecar/base hashes. Real rendered host guide and clean opening frames are under `work/host-guide-proof/`; no roster screenshots are committed.

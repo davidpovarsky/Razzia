@@ -1,0 +1,268 @@
+{
+  "applicationSourcesEqualCandidate": true,
+  "browserReceipt": {
+    "customerMountUsed": false,
+    "diagnosticOnly": true,
+    "error": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 \u00d7 locator resolved to 0 elements\n       - unexpected value \"0\"\n\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toHaveCount (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1124:62)\n    at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1362:5)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)",
+    "isolatedNativeHost": true,
+    "manualListeningPerformed": false,
+    "passed": false,
+    "realEmailSent": false,
+    "releaseQualified": false,
+    "results": [
+      {
+        "anonymousInstallDenied": true,
+        "crossAccountReadDenied": true,
+        "diagnosticOnly": true,
+        "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+        "originals": 8,
+        "passed": true,
+        "releaseQualified": false,
+        "rounds": 32,
+        "runtimeQaSourceEqualsCandidate": false
+      }
+    ],
+    "runtimeQaSourceEqualsCandidate": false,
+    "sourceSha": "7c6057aeee58459787dc771fe1abbffd80819579"
+  },
+  "buildBaseSha": "916c332c210ab5956f9eb134e3df4ad2982eba37",
+  "buildReceipt": "/home/ubuntu/tadazz-original-themes-preflight-20261122/iteration8-receipt.json",
+  "buildReceiptSha256": "82dc3d76a5d3a5f600b1c234385976d2812623d6fdc5890efa41ed1447e8176e",
+  "candidateQaHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": "f55342b0eb6fef8af9621e35eac0fabcf0652fa5d69f16ac7f0b1623834f9ca7",
+    "extensions/qa/original-themes/audio-observer.mjs": "7815dc7945d6c1b11d57e555ee90ab11857abada98411580e9f305a72d0d7117",
+    "extensions/qa/original-themes/browser-verify.mjs": "6086b95f0f32b2e75f88fa941df7ad24d872fcb0a95782a6de162ad3067fb43d",
+    "extensions/qa/original-themes/contract.mjs": "ca76fa21f782b30f258297dfe4ff5e899b04298ba328b64e34c6560a29401ca0",
+    "extensions/qa/public-gallery/question-sequence-verify.mjs": "d8bbd906b1f5e05ebb68f3e0057ddeb2b2d326d2107639121506b93cab2e72e3",
+    "extensions/qa/public-gallery/viewer-controls-verify.mjs": "fd28f2fa6d9a10aef4e81ffbf6b7ef75d11a9a50a91568c4ec8651deab8a984b"
+  },
+  "candidateSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "containerBeforeStop": {
+    "exitCode": 0,
+    "oomKilled": false,
+    "status": "running"
+  },
+  "containerStopped": true,
+  "customerMountUsed": false,
+  "diagnosticOnly": true,
+  "exit": 1,
+  "layoutDiagnostic": {
+    "active": {
+      "choiceCount": 5,
+      "family": "royal-quiz",
+      "key": "choice-layout-royal-quiz-5-voting",
+      "kind": "choice-layout",
+      "phase": "voting",
+      "round": 4
+    },
+    "allFamiliesCompleted": false,
+    "checks": [
+      {
+        "choiceCount": 2,
+        "evidence": "choice-layout-royal-quiz-2-voting.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-2-voting",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "voting",
+        "round": 1,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 2,
+        "evidence": "choice-layout-royal-quiz-2-results.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-2-results",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "results",
+        "round": 1,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 2,
+        "evidence": "question-sequence-royal-quiz-2-results.json",
+        "family": "royal-quiz",
+        "key": "question-sequence-royal-quiz-2-results",
+        "kind": "question-sequence",
+        "passed": true,
+        "phase": "results",
+        "round": 1,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 3,
+        "evidence": "choice-layout-royal-quiz-3-voting.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-3-voting",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "voting",
+        "round": 2,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 3,
+        "evidence": "choice-layout-royal-quiz-3-results.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-3-results",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "results",
+        "round": 2,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 3,
+        "evidence": "question-sequence-royal-quiz-3-results.json",
+        "family": "royal-quiz",
+        "key": "question-sequence-royal-quiz-3-results",
+        "kind": "question-sequence",
+        "passed": true,
+        "phase": "results",
+        "round": 2,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 4,
+        "evidence": "choice-layout-royal-quiz-4-voting.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-4-voting",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "voting",
+        "round": 3,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 4,
+        "evidence": "choice-layout-royal-quiz-4-results.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-4-results",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "results",
+        "round": 3,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 4,
+        "evidence": "question-sequence-royal-quiz-4-results.json",
+        "family": "royal-quiz",
+        "key": "question-sequence-royal-quiz-4-results",
+        "kind": "question-sequence",
+        "passed": true,
+        "phase": "results",
+        "round": 3,
+        "screenshot": null
+      },
+      {
+        "choiceCount": 5,
+        "evidence": "choice-layout-royal-quiz-5-voting.json",
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-5-voting",
+        "kind": "choice-layout",
+        "passed": true,
+        "phase": "voting",
+        "round": 4,
+        "screenshot": null
+      }
+    ],
+    "completedFamilies": [],
+    "diagnosticOnly": true,
+    "expectedChoiceCounts": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "expectedFamilies": [
+      "royal-quiz",
+      "neon-arcade",
+      "retro-tv",
+      "magic-storybook",
+      "crystal-future",
+      "carnival-pop",
+      "sports-arena",
+      "mystery-noir"
+    ],
+    "failures": [],
+    "fatalFailure": {
+      "active": {
+        "choiceCount": 5,
+        "family": "royal-quiz",
+        "key": "choice-layout-royal-quiz-5-voting",
+        "kind": "choice-layout",
+        "phase": "voting",
+        "round": 4
+      },
+      "error": {
+        "code": null,
+        "matcherResult": {
+          "actual": 0,
+          "expected": 1,
+          "log": [
+            "  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms",
+            "  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')",
+            "    14 \u00d7 locator resolved to 0 elements",
+            "       - unexpected value \"0\""
+          ],
+          "message": "expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 \u00d7 locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+          "name": "toHaveCount",
+          "pass": false,
+          "timeout": 5000
+        },
+        "message": "expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 \u00d7 locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "name": "Error",
+        "operator": null,
+        "stack": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 \u00d7 locator resolved to 0 elements\n       - unexpected value \"0\"\n\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toHaveCount (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1124:62)\n    at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1362:5)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)"
+      }
+    },
+    "format": "tadazz-native-layout-diagnostic",
+    "passed": false,
+    "releaseQualified": false,
+    "runtimeQaSourceEqualsCandidate": false,
+    "version": 1
+  },
+  "network": "none",
+  "noOom": true,
+  "overlayHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": {
+      "bytes": 10148,
+      "sha256": "2f5210e1913e9de50841579d1060b14b5d6dca3673a3134ec651ed6d76451037"
+    },
+    "extensions/qa/original-themes/audio-observer.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/audio-observer.mjs"
+    },
+    "extensions/qa/original-themes/browser-verify.mjs": {
+      "bytes": 51348,
+      "sha256": "edb21f1729cb5bb53a32e836ad61be64cb7e93f20b46884bff14926d58579990"
+    },
+    "extensions/qa/original-themes/contract.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/contract.mjs"
+    },
+    "extensions/qa/phase3-native-consent": {
+      "symlink": "/source/extensions/qa/phase3-native-consent"
+    },
+    "extensions/qa/public-gallery": {
+      "symlink": "/source/extensions/qa/public-gallery"
+    },
+    "extensions/src": {
+      "symlink": "/source/extensions/src"
+    }
+  },
+  "overlayHashesVerifiedBeforeAfter": true,
+  "passed": false,
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "releaseQualified": false,
+  "run": "native-layout-iteration8-792342fb",
+  "runtimeQaSourceEqualsCandidate": false,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 80.08,
+  "sourceAfterSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceAndBuiltHashesVerifiedBeforeAfter": true,
+  "sourceBeforeSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceFileCount": 2678,
+  "sourceReadOnly": true
+}

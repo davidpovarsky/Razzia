@@ -1,0 +1,215 @@
+{
+  "status": "CONCRETE_AUTHORITY_SOURCE_AND_FIRST_BATCH_PREPARED_NOT_EXECUTED",
+  "phase_baseline": "72636aca2a998b88fed800505ac84bb3e53b80b5",
+  "changed_source": [
+    "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+    "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
+    "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+    "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+    "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+    "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts"
+  ],
+  "accepted_core_unchanged": [
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "accepted_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d",
+      "current_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "accepted_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9",
+      "current_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "accepted_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352",
+      "current_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "accepted_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8",
+      "current_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts",
+      "index_blob": "17ce9bd34f239aea828babe4629d24190ea88bbb",
+      "bytes": 14657,
+      "sha256": "2b78964bbbd53e6ac0dbee69ca2e195334fd2ef280f0a10a47084b14d7161ed2"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/package.json",
+      "index_blob": "f84528506796fb565716eaf2798e653919e3aa33",
+      "bytes": 33,
+      "sha256": "a90fc33418afa2b9cbf4768524b021135b965ecdf993457505bfae3ac44a8428"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/prepare-overlay.mjs",
+      "index_blob": "d02b473d009cd3c4ad886fc1f72b41b6eb6f4940",
+      "bytes": 2634,
+      "sha256": "830853269097fecf19c6186f551b455a0a797f12fd573dd65c2fca973940c0f1"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/revoke-after-sql-wait.child.ts",
+      "index_blob": "f6b96adf38cd9cb57ddf19f7ba3e6c6fc33298a2",
+      "bytes": 918,
+      "sha256": "a6de2f2cd12e280942abb9a21c69ce8d06057ad6ccbe0c78f3d902789beddc83"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/run-first-batch.sh",
+      "index_blob": "4a9d5e22a24dc54ca8323b9fa59d300b2b412137",
+      "bytes": 2651,
+      "sha256": "1a2eb5b57e87a813c4f3d3e3c365b6ddad5b3a86523847170f4215e5da094823"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/safe-extract.py",
+      "index_blob": "7b16b2a936fefc56be91026fe24e3d6020679181",
+      "bytes": 3162,
+      "sha256": "7d144aced19491e6ae914700acd961d4f288c8d1f225bb623b54c4b6d77766a6"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/tsconfig.json",
+      "index_blob": "6be525c91aed915628672448c7c0ae60c137ed7f",
+      "bytes": 420,
+      "sha256": "c1e3ea2e7425d694c706d134c48f6d7fb97d9fc8311f4ff3f9e553b79c9b218e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/typecheck.mjs",
+      "index_blob": "039b15cb9741430f862c258e06c93c317685ebcb",
+      "bytes": 785,
+      "sha256": "ced2bd2914118bd620d3c838b1989bfb9baa7b16dbe0169c2d421894f45bb1fe"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-overlay.mjs",
+      "index_blob": "4ef5500e5c3b65e0400285c3345fc775415afd9c",
+      "bytes": 962,
+      "sha256": "791fb333a18a2b7509282d3bb2a744ec3b2ceba795ed8d43a710538124e32c43"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "index_blob": "5308ae6472201a9eecf4d355e6fb23c566c0c543",
+      "bytes": 13132,
+      "sha256": "22186133c2af777367c37288d33f09acd53531bf54661bfa67d9cfd153cbd5b2"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
+      "index_blob": "561de7ef5365b8db7bfb61b19c306b05681270b2",
+      "bytes": 1408,
+      "sha256": "2d57f8ca1d51c125818b9940e1a78d4028dfb0c79410f4be89c54303fbd422ff"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "index_blob": "4b9382538aa91939382f99995bc8a490bfa13d45",
+      "bytes": 2612,
+      "sha256": "1705535650977ba5985e975810aff7f4ca82edf45e381b8f70fe4ba22cd24c5d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "index_blob": "fb2636925ffd0a0e9bbddc29cb1c86d5594a59ef",
+      "bytes": 7989,
+      "sha256": "85f3b0a03cd4ab96fb5b90a82ebf07ee7e21418937ff34df549d3825f03f7383"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "index_blob": "0ffcf7e363dc89baf881df98225e204801d121fc",
+      "bytes": 13746,
+      "sha256": "730ca12b792f6a4603b47e9563320cedc4f353e8b08f7dda60750467bc4b7259"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "index_blob": "dcd9b1878dbff0533a399b8c9c2f3efd08a9c3fc",
+      "bytes": 4124,
+      "sha256": "acb3c038caa5b1899020a00fca4f44d1f88344d3f390f330ef4d6ba9aaebaae0"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "index_blob": "d8866e1b8362760afbaea6d6f19a1e438cb72980",
+      "bytes": 7136,
+      "sha256": "7a67361869eb67d4d48438bc441f6af3d2b5418c2e74b728a9ae0434f1d6dc01"
+    }
+  ],
+  "syntax_checks": [
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/prepare-overlay.mjs",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/revoke-after-sql-wait.child.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/typecheck.mjs",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-overlay.mjs",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "exit": 0,
+      "kind": "syntax only; no module evaluation or typecheck"
+    }
+  ],
+  "existing_native_hooks_or_barrels_changed": false,
+  "existing_import_or_mount": false,
+  "scoped_types_run": false,
+  "runtime_run": false,
+  "heavy_or_server_run": false,
+  "new_live_credentials_or_customer_data": false,
+  "initialization_called": false,
+  "prettier_run": false,
+  "generic_guard": {
+    "exit": 1,
+    "prior_approved_mismatch": "packages/socket/src/api/extensions/game-routes.ts"
+  },
+  "proposed_batch": {
+    "cpu": 0.25,
+    "memory_bytes": 1073741824,
+    "max_new_physical_bytes": 8388608,
+    "fixture_tmpfs_bytes": 33554432,
+    "requires_new_fresh_root_budget": true,
+    "tests": 3,
+    "old20_or_scoped3_rerun": false
+  }
+}

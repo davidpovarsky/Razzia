@@ -1,0 +1,14 @@
+{
+  "commit": "29289933f9f71126d561507c9dd95a182737a2e8",
+  "overlay": "6ccf88854cd972e3cf575064fa4361a8edcc38ff87ebeffeafd3f4cd2fb7093d",
+  "verified_module_files": 22,
+  "changed": [],
+  "baseline_recheck": "producer receipt only, not independently rerun",
+  "container": "tadazz-hq-sb3-review-20261115",
+  "state": "exited 0",
+  "network": "none",
+  "cpu": 0.25,
+  "memory_bytes": 2147483648,
+  "status": "runner released",
+  "utc": "2026-11-15T05:44:03.145717+00:00"
+}

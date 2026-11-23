@@ -1,0 +1,112 @@
+✔ real signature and exact resource-bound grant produce an immutable principal (7.591915ms)
+✔ signed wrong issuer/audience, expiry, lifetime, nbf and scope are rejected (10.370102ms)
+✔ algorithm, kid, token key references and forged signature never reach grant storage (84.375387ms)
+✔ revocation and account disable are rechecked for every access, with no token cache (2.529505ms)
+✔ signed account/client/subject substitution and changed stored grant are denied (3.722877ms)
+✔ cancellation and private storage errors yield a fixed safe error (0.829688ms)
+✔ two real SDK sessions retain account isolation and revoked replay is denied (595.910598ms)
+✔ invalid principal fails before account store: issuer (3.358033ms)
+✔ invalid principal fails before account store: audience (2.620706ms)
+✔ invalid principal fails before account store: accountId (2.624585ms)
+✔ invalid principal fails before account store: active (2.104461ms)
+✔ invalid principal fails before account store: accountsEnabled (2.197501ms)
+✔ invalid principal fails before account store: expiresAt (2.202662ms)
+✔ invalid principal fails before account store: scopes (85.351676ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (113.612714ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (94.706127ms)
+✔ invalid authored/schema/settings/media rejected without mutation (316.045176ms)
+✔ scoped ordinary export delegates without adding a new consent stage (192.372885ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (5.452893ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (3.175551ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (686.316324ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (96.764028ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (105.253311ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ official HTTP client negotiates, discovers eight strict tools and reads the honest placeholder (1093.678675ms)
+✔ HTTP draft CAS preserves tenant boundaries, revoked token denial and safe missing preview (604.189279ms)
+✔ metadata advertises the exact protected resource and least initial scope without a private token (2.890428ms)
+✔ origin/host/TLS/query/proxy/session/body and method attacks fail before private tool dispatch (9.037688ms)
+✔ allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected (4.12724ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles (486.013202ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ legacy SSE retains all32 cancelled handler admissions until actual dependency work settles (493.682476ms)
+✔ HTTP deadline responds while shutdown still waits for actual legacy dependency settlement (103.351452ms)
+✔ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (1301.783394ms)
+✔ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (4.717767ms)
+✔ denied or missing ingress guard fails closed before token verification and schema work (85.923802ms)
+✔ inconsistent repository summary fails closed on read (506.452442ms)
+✔ inconsistent repository summary fails closed on create (89.78896ms)
+✔ inconsistent repository summary fails closed on replace (105.269072ms)
+✔ SDK cancellation during pending authorization restores capacity only after real work settles (505.897076ms)
+✔ cancelled unsettled admission stays bounded at32; another factory remains unaffected (96.96883ms)
+✔ normal SDK running-handler cancellation releases all32 slots after handlers settle (209.18233ms)
+✔ duplicate tool/public active IDs close only their owning connection (86.592408ms)
+✔ close while authorization is pending suppresses late rejection, dispatch and send (2.722826ms)
+✔ same wire ID reuse is independently authorized after a cancelled lifetime settles (4.925768ms)
+✔ supported SDK abort signal is preserved; cancellation does not roll back settled work (3.04427ms)
+✔ rejected send/close reports safe errors and makes the connection terminal (3.335753ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (315.658893ms)
+✔ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (790.219502ms)
+✔ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (203.447473ms)
+✔ new save still requires exact-revision consent; ordinary export does not (98.437444ms)
+✔ 32 cancelled response writes retain the budget until public send promises settle (597.970978ms)
+✔ a cancelled in-flight response reserves its wire ID before public send completion (89.946602ms)
+✔ overlapping response/related owner releases once after send settles and reuse reauthorizes (108.974948ms)
+✔ rejected delayed response write terminates only its connection with safe errors (97.230233ms)
+✔ pending related progress keeps its parent reserved: duplicate denied (4.671406ms)
+✔ pending related progress keeps its parent reserved: settled reuse reauthorizes (3.582235ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 55
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67420.460963

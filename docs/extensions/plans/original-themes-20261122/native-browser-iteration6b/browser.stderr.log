@@ -1,0 +1,64 @@
+ExpectError: All 2 image, label and result choices fit royal-quiz results
+
+All 2 image, label and result choices fit royal-quiz results
+
+expect(received).toEqual(expected) // deep equality
+
+- Expected  -  1
++ Received  + 14
+
+- Array []
++ Array [
++   Object {
++     "index": 0,
++     "problems": Array [
++       "result-percentage tz-result-number: text overflow",
++     ],
++   },
++   Object {
++     "index": 1,
++     "problems": Array [
++       "result-percentage tz-result-number: text overflow",
++     ],
++   },
++ ]
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+    at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+    at verifyChoiceLayout (/source/extensions/qa/original-themes/browser-verify.mjs:115:6)
+    at async verifyNative (/source/extensions/qa/original-themes/browser-verify.mjs:971:9)
+    at async verifyOriginalThemeBrowser (/source/extensions/qa/original-themes/browser-verify.mjs:1124:5)
+    at async <anonymous> (/source/extensions/qa/original-themes/account-verify.mjs:249:3) {
+  matcherResult: {
+    pass: false,
+    message: 'All 2 image, label and result choices fit royal-quiz results\n' +
+      '\n' +
+      'expect(received).toEqual(expected) // deep equality\n' +
+      '\n' +
+      '- Expected  -  1\n' +
+      '+ Received  + 14\n' +
+      '\n' +
+      '- Array []\n' +
+      '+ Array [\n' +
+      '+   Object {\n' +
+      '+     "index": 0,\n' +
+      '+     "problems": Array [\n' +
+      '+       "result-percentage tz-result-number: text overflow",\n' +
+      '+     ],\n' +
+      '+   },\n' +
+      '+   Object {\n' +
+      '+     "index": 1,\n' +
+      '+     "problems": Array [\n' +
+      '+       "result-percentage tz-result-number: text overflow",\n' +
+      '+     ],\n' +
+      '+   },\n' +
+      '+ ]\n' +
+      '\n' +
+      'Call Log:\n' +
+      '- Timeout 5000ms exceeded while waiting on the predicate',
+    name: 'toEqual'
+  }
+}

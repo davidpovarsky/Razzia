@@ -1,0 +1,30 @@
+{
+  "result": {
+    "quizId": "NPCxwcwdLVTUg_owhrOq5",
+    "revision": 1,
+    "baseDigest": "2a5eab272523e6c7f761a4d2682f9b8c65f23f7e821dc13e816f5afdd963f344"
+  },
+  "first": {
+    "pid": 434,
+    "status": 0,
+    "signal": null,
+    "stdout": "{\"pid\":434,\"report\":{\"recovered\":0,\"unresolved\":[],\"qualified\":true}}",
+    "stderr": ""
+  },
+  "second": {
+    "pid": 445,
+    "status": 0,
+    "signal": null,
+    "stdout": "{\"pid\":445,\"report\":{\"recovered\":0,\"unresolved\":[],\"qualified\":true}}",
+    "stderr": ""
+  },
+  "state": {
+    ".owner": "145afc4051c6cdd5cd0f48f068ef4ac7716cc599db6b56e86a543b0c547f1935",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/NPCxwcwdLVTUg_owhrOq5.json": "6c2159e8ec7001bd1070b551f87e654d376d3774ff833f938bf8b8296724f96a",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-x0Ssa_PA.json": "b037f6c1e367bf64a3afd4f4a4aa0d7530d6a531b105d0d8959ed7ce619e84ac",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098",
+    "tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098"
+  }
+}

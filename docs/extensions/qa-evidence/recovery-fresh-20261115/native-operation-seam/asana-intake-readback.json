@@ -1,0 +1,11 @@
+{
+  "gid": "1219882508725158",
+  "completed": false,
+  "oldNotesLength": 36199,
+  "newNotesLength": 37618,
+  "priorNotesPreservedExactly": true,
+  "exactAppendReadback": true,
+  "evidenceCommit": "d28789b3813d9a5235b6d9c145f84a7a693f8dc4",
+  "modifiedAt": "2026-11-15T20:23:31.502Z",
+  "append": "\n\n[2026-11-15 — C1 SOURCE INTAKE BOUNDARY RECORDED / STILL OPEN]\nEvidence-only checkpoint d28789b3813d9a5235b6d9c145f84a7a693f8dc4 adds native-operation-seam/INTAKE_INDEX.json under docs/extensions/qa-evidence/recovery-fresh-20261115. All five native-operation product files still exactly match1909da2f653377c545923b2e91dd2f4b1a2cf802; complete producer handoff30bd603d0555446b8760fb54406b724512ac254b and original15/15 local Node26/Linux-ext4,5SIGKILL/22children evidence are unchanged. No new runtime, source change or test rerun.\nThe separate roster/native admission boundary is manager-accepted atd2bd26815bfb7b9a306beb67288f2b775a6b3a30 with complete evidence51f36b3746ca86f4698c9751b35989854c396d6a (manager19PASS/types0/format0 and independent mixed C21f+B902 invitation2PASS). That acceptance does NOT approve this optional C1 operation seam or close this source task. Its real F consumer auth/session/grant/exact-consent and cross-ledger integration plus independent integrated/pinned-runtime qualification remain distinct. B/F1/hardware/storage-migration/production remain unleased separate gates. Pinned reference hashes and exact scope split are recorded in roster-native-admission/POST_ACCEPTANCE.md; historical LIVE c1ed and prior failures remain unchanged. No roster19/C consumer rerun, intake polling, Oracle job, new agent, customer/provider/production action or completed-task reopen. Task staysOPEN.\n"
+}

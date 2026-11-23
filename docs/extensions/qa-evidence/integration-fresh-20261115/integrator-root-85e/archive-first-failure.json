@@ -1,0 +1,9 @@
+{
+  "stage": "first_archive_export",
+  "exit": 1,
+  "observed_error": "TypeError: TarFile.__init__() got an unexpected keyword argument compresslevel; server Python3.11 tarfile streaming API",
+  "correction": "Use explicit gzip.GzipFile then uncompressed tar stream; no metadata changes or new network request",
+  "partial_private_path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\integrator-root-85e\\local-artifacts\\metadata-full-r2.tar.gz.partial",
+  "partial_bytes": 21,
+  "partial_sha256": "398b78f90f364ea0ea7057a87ab7e495b28bf673c8aeb4f14188787a03f3b7ce"
+}

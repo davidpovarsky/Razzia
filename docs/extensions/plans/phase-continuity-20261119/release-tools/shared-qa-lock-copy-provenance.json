@@ -1,0 +1,15 @@
+{
+  "kind": "exact shared QA lock helper copy; not executed by curator",
+  "createdUtc": "2026-11-19T20:48:53.162827+00:00",
+  "source": "work/phase-continuity-20261119/release-tools/with_shared_qa_lock.py",
+  "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/with_shared_qa_lock.py",
+  "bytes": 4181,
+  "sourceBeforeSha256": "b441d0f7a2e2f8886cc8bc3732dee06c7b85ce759797c8a474c66ee6f3378ecb",
+  "copiedSha256": "b441d0f7a2e2f8886cc8bc3732dee06c7b85ce759797c8a474c66ee6f3378ecb",
+  "sourceAfterSha256": "b441d0f7a2e2f8886cc8bc3732dee06c7b85ce759797c8a474c66ee6f3378ecb",
+  "sourceUnchanged": true,
+  "privateKeyContentsRead": false,
+  "helperExecutedByCurator": false,
+  "testsRunByCurator": false,
+  "productionChangedByCurator": false
+}

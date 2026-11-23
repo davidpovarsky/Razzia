@@ -1,0 +1,4 @@
+server/connection.ts(90,31): error TS2345: Argument of type 'string | number | undefined' is not assignable to parameter of type 'RequestId'.
+  Type 'undefined' is not assignable to type 'RequestId'.
+server/connection.ts(91,28): error TS2345: Argument of type 'string | number | undefined' is not assignable to parameter of type 'RequestId'.
+  Type 'undefined' is not assignable to type 'RequestId'.

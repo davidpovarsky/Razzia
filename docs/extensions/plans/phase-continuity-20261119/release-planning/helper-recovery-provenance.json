@@ -1,0 +1,27 @@
+{
+  "kind": "prepared-not-executed-exact-empty-cache-recovery",
+  "originalHelperSha256": "84c4eca17002a80f2eec4f0d13229f7edd7001880d2c5580c15edf99a9aeb316",
+  "failedReceipt": "qa-cache-preparation-283cba02.json",
+  "archive": "work\\phase-continuity-20261119\\release-tools\\prepare_qa_cache.v1-docker-cp.py",
+  "helpers": [
+    {
+      "path": "work\\phase-continuity-20261119\\release-tools\\prepare_qa_cache.py",
+      "sha256": "63ee368567611f36c971da4e8affa8e2302e69334825e2a4a19851cd5477eda7",
+      "bytes": 13083,
+      "outerCompiled": true,
+      "remoteCompiled": 1,
+      "insideFragmentsCompiled": 4
+    },
+    {
+      "path": "work\\phase-continuity-20261119\\release-tools\\recover_qa_cache_copy.py",
+      "sha256": "2f004caa7a0aa5661235d99140a30463f6f1101c02fdb78c066331a40776a16b",
+      "bytes": 13479,
+      "outerCompiled": true,
+      "remoteCompiled": 1,
+      "insideFragmentsCompiled": 4
+    }
+  ],
+  "serverMutationPerformed": false,
+  "gitMutationPerformed": false,
+  "heavyTestsRun": false
+}

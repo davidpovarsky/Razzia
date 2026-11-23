@@ -35,7 +35,7 @@ test("logs the manager out", async ({ page }) => {
 })
 
 test("switches the language and keeps it after a reload", async ({ page }) => {
-  await page.goto("/")
+  await page.goto("/game")
   await page.getByRole("combobox", { name: t("common:changeLanguage") }).click()
   await page.getByRole("option", { name: t("common:language.fr") }).click()
 

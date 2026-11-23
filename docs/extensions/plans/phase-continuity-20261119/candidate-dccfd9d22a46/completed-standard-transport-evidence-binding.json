@@ -1,0 +1,127 @@
+{
+  "kind": "curation binding of completed exact-source standard and separate transport receipts",
+  "createdUtc": "2026-11-19T21:19:49.785543+00:00",
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "receipts": [
+    {
+      "gate": "native",
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-dccfd9d22a46-5e75b0a8/receipt.json",
+      "sha256": "bd39353bbf5140c6e2e2b8b5a7971fb804fa22370f2162f823b1b77c45b92c62",
+      "bytes": 1149031
+    },
+    {
+      "gate": "launch",
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-dccfd9d22a46-5e928a51/receipt.json",
+      "sha256": "cf9849389f243c3a6cec738fe37de3fa3605ae9f8ee88bcf588418cd09d6ee5b",
+      "bytes": 196794
+    },
+    {
+      "gate": "consent",
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-dccfd9d22a46-bc4da0bb/receipt.json",
+      "sha256": "0b0597a81e5ca589fa83c5cb8b9e17cbfd835c908b1d85949cc1aa5737e7b632",
+      "bytes": 45590
+    },
+    {
+      "gate": "fullShow",
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/receipt.json",
+      "sha256": "3b98b04099062aaf8e41e5e99c17a8e81994267c845237d688003bc030f7fdc5",
+      "bytes": 2644117
+    },
+    {
+      "gate": "proxy",
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-dccfd9d22a46-73c7e019/receipt.json",
+      "sha256": "5e6b8d554daeff2b834679028d0b011fb0700626de890fb07ee0934d9f06e7d8",
+      "bytes": 478876
+    },
+    {
+      "gate": "transportRace",
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/receipt.json",
+      "sha256": "0676174b7b12524c5b43d385c149f40729eb824f3c8fd34198cea976ce816458",
+      "bytes": 155479
+    }
+  ],
+  "standard": {
+    "nativeChecks": 16,
+    "launchTestsPassed": 9,
+    "consentCasesPassed": 6,
+    "fullShowChecksPassed": 40,
+    "rendererFixturesPassed": 44,
+    "fullShowPageErrors": 0,
+    "fullShowRequestFailures": 0,
+    "immutableProxyExit": 0,
+    "finishedAt": "2026-11-19T21:09:50.572552+00:00"
+  },
+  "transport": {
+    "entryCasesPassed": 2,
+    "actionsPassed": 8,
+    "witnesses": [
+      {
+        "engine": "chromium",
+        "path": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-transport-race.json",
+        "sha256": "0c6dedf6adbe3a055e8c47ae53e7c49d84284d9c9243200dced2c48c235c736b",
+        "bytes": 14932,
+        "actions": [
+          "pause",
+          "replay",
+          "next",
+          "previous"
+        ],
+        "claimedAndFulfilledGates": 7
+      },
+      {
+        "engine": "webkit",
+        "path": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-transport-race.json",
+        "sha256": "c88cb3b6f5556245c7905a932d111c3d5740d9113edeca9d6fc47d98beca1088",
+        "bytes": 14747,
+        "actions": [
+          "pause",
+          "replay",
+          "next",
+          "previous"
+        ],
+        "claimedAndFulfilledGates": 7
+      }
+    ],
+    "sameWidgetManifest": true,
+    "sameWidgetHtml": true,
+    "finishedAt": "2026-11-19T21:12:13.886982+00:00",
+    "separateDiagnosticReceipt": true
+  },
+  "finalLockReceipts": [
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/shared-qa-lock-standard-dccfd9d22a46.json",
+      "sha256": "b06d7dcd4b7fc99a551b1e442d6f01367ea3a4d7159ea3b7b8b800689db6d62c"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/shared-qa-lock-transport-v2-dccfd9d22a46.json",
+      "sha256": "062237d957f1db9de1249232ca99a63e29254b17f818dc5b85d77cd0cd7f9601"
+    }
+  ],
+  "locksExplicitlyReleased": true,
+  "transportOwnedContainerCleanupVerified": true,
+  "sourceIntegrity": {
+    "files": 1873,
+    "beforeAfterUnchanged": true,
+    "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+    "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0"
+  },
+  "priorFailuresPreserved": true,
+  "noTestsRerunByCurator": true,
+  "noGitOrProductMutation": true,
+  "deploymentAccepted": false,
+  "rootReleaseDecisionPending": false,
+  "sourceQualificationAcceptedByRoot": true,
+  "rootAcceptanceNotMadeByCurator": true,
+  "updatedUtc": "2026-11-19T21:23:46.411002+00:00",
+  "rootAcceptance": {
+    "path": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/root-qualification-acceptance.json",
+    "sha256": "fe5eb66dfe04a93fea8a0361ded4d61bc30fcd67b6359621ca98bf223deedaec"
+  },
+  "independentJointReview": {
+    "path": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/joint-qualification-review.json",
+    "sha256": "9c5923e74204476492d406142f44a82f9fe2125de40a658a98e621ca422e42cb",
+    "checks": 31,
+    "review": "PASS"
+  }
+}

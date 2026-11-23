@@ -1,0 +1,34 @@
+✔ caller-built identity and missing actual ALS owner cannot access the store (876.638089ms)
+✔ accounts-off and persistent key/root drift deny before private store I/O (8.433403ms)
+✔ Context claims cannot substitute for the actual cryptographic verifier (1.273292ms)
+✔ actual player, malformed JWT, expired JWT and invalid sid are rejected (94.993248ms)
+✔ real session revoke and account disable/unverify deny previously issued capabilities (4.211842ms)
+✔ closed startup account handle fails GET without reinitializing account sidecars (4.268121ms)
+✔ symlink, hardlink and cross-owner DB substitutions cannot read borrowed private data (1100.810239ms)
+✔ an unsafe existing ancestor is denied without creating or repairing directories (88.871309ms)
+✔ missing manager credentials reject before consuming body or allocating a draft family (688.384928ms)
+✔ wrong Host/Origin, forwarded headers, routes, methods and body types are rejected before storage (8.008758ms)
+✔ malformed JSON and native/enhanced envelopes are rejected before private/native allocation (388.382036ms)
+✔ create/read/replace use actual auth and SQLite; pending save has no success/consent/native URL (309.05994ms)
+✔ actual streamed bytes override an underreported Content-Length and invalid UTF8 is rejected (4.688245ms)
+✔ revocation during the body await is reverified before parsing or store allocation (87.076131ms)
+✔ a public cancel promise that stalls keeps body work unresolved (1.629936ms)
+✔ 32 real authenticated body lifetimes exhaust anonymous admission until they finish (1111.08462ms)
+✔ absent GET does not create a private family (700.105323ms)
+✔ real create persists canonical content, outcome and audit; another owner cannot read it (501.169819ms)
+✔ durable create replay survives a fresh repository instance and rejects a reused key/digest (190.660344ms)
+✔ two competing expected revisions have exactly one CAS winner and one durable mutation (116.345537ms)
+✔ replace and pending save replay precede current revision; pending never contains a native target (376.617401ms)
+✔ SQLite audit failure rolls draft and operation back together (11.29343ms)
+✔ revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows (93.886998ms)
+✔ ordinary GET changes no private-family or native sentinel bytes/mtime/directory membership (94.082679ms)
+✔ real crashed hot journal is rejected without recovery or any private-family write (207.562548ms)
+✔ WAL-mode header, orphan SHM and corrupt private DB are preserved and denied (105.088787ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24717.389834

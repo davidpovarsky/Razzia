@@ -1,0 +1,9 @@
+{
+  "extensions/src/components/theme-builder/StudioThemeBuilder.tsx": "aee9b035995b49e46255e9d1efe986fbe48431c6eb58721a364569c748321feb",
+  "extensions/qa/theme-builder/account-boundary-fixture.tsx": "c005fc1891c7fce37cb7ff9bb1dbf5ebc8ebcf3e468cab107cc7f65ccf1f82a6",
+  "extensions/qa/theme-builder/account-boundary-playwright.config.ts": "d20125f70aa6661f6edefa6b32cea30d8ed5e57905dbb314708f601588c93339",
+  "extensions/qa/theme-builder/account-boundary-server.mjs": "ae64bcfc6b63378b31eeebff5b162f27806bdc1af5c7bc07de528fd94e964f97",
+  "extensions/qa/theme-builder/account-boundary.html": "1c195648d7b4f200a54010d3ef55befaf7b332d92b4e2fd5a2f12741b3f0dfad",
+  "extensions/qa/theme-builder/account-boundary.spec.ts": "b0af901fdc3a3e6b58bd0a94a743b0a3df13cfb42d2877dafe43d4b16d627ae7",
+  "extensions/qa/theme-builder/account-boundary.vite.config.ts": "a0a18feede4bcdcaab3f0a5dc214e07a5cf3b4ea8412473738116bea17d8b097"
+}

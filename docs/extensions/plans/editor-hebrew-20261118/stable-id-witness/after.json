@@ -1,0 +1,270 @@
+{
+  "checks": [
+    {
+      "name": "async saved sidecar load",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "11111111-1111-4111-8111-111111111111",
+      "persistedCurrent": "11111111-1111-4111-8111-111111111111",
+      "questionIds": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222"
+      ],
+      "persistedIds": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222"
+      ],
+      "orphanKeys": [],
+      "rendered": true
+    },
+    {
+      "name": "real page refresh retains UUID and saved visual",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "11111111-1111-4111-8111-111111111111",
+      "persistedCurrent": "11111111-1111-4111-8111-111111111111",
+      "questionIds": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222"
+      ],
+      "persistedIds": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222"
+      ],
+      "orphanKeys": [],
+      "rendered": true
+    },
+    {
+      "name": "add keeps new question identity aligned",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "01a1eefc-c70c-7633-b4fa-d21f47c626a8",
+      "persistedCurrent": "01a1eefc-c70c-7633-b4fa-d21f47c626a8",
+      "questionIds": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222",
+        "01a1eefc-c70c-7633-b4fa-d21f47c626a8"
+      ],
+      "persistedIds": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222",
+        "01a1eefc-c70c-7633-b4fa-d21f47c626a8"
+      ],
+      "orphanKeys": [],
+      "rendered": false
+    },
+    {
+      "name": "reorder follows saved visual UUID",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "11111111-1111-4111-8111-111111111111",
+      "persistedCurrent": "11111111-1111-4111-8111-111111111111",
+      "questionIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111",
+        "01a1eefc-c70c-7633-b4fa-d21f47c626a8"
+      ],
+      "persistedIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111",
+        "01a1eefc-c70c-7633-b4fa-d21f47c626a8"
+      ],
+      "orphanKeys": [],
+      "rendered": true
+    },
+    {
+      "name": "remove keeps remaining visual and interlude associations",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "11111111-1111-4111-8111-111111111111",
+      "persistedCurrent": "11111111-1111-4111-8111-111111111111",
+      "questionIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111"
+      ],
+      "persistedIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111"
+      ],
+      "orphanKeys": [],
+      "rendered": true
+    },
+    {
+      "name": "actual CompositeApiClient serialized save preserves metadata and reordered identities",
+      "ok": true,
+      "serialized": {
+        "expectedRevision": 1,
+        "quizz": {
+          "gameMode": "quiz",
+          "subject": "Stable UUID historical regression",
+          "questions": [
+            {
+              "type": "single",
+              "question": "Second saved question",
+              "answers": [
+                "Answer A",
+                "Answer B"
+              ],
+              "solutions": [
+                0
+              ],
+              "cooldown": 5,
+              "time": 20
+            },
+            {
+              "type": "single",
+              "question": "First saved question",
+              "answers": [
+                "Saved image answer",
+                "Second answer"
+              ],
+              "solutions": [
+                0
+              ],
+              "cooldown": 5,
+              "time": 20
+            }
+          ]
+        },
+        "extras": {
+          "schemaVersion": 1,
+          "revision": 1,
+          "quizId": "historical-stable-uuid-fixture",
+          "baseDigest": "8be3939f536bb8306fca8c26f515da4b7ac840879af50f42be705265abe815fc",
+          "questionIds": [
+            "22222222-2222-4222-8222-222222222222",
+            "11111111-1111-4111-8111-111111111111"
+          ],
+          "leaderboard": {
+            "mode": "upstream"
+          },
+          "teams": {
+            "enabled": false,
+            "teams": [],
+            "autoAssign": "roundRobin"
+          },
+          "audio": {
+            "cues": {
+              "start": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "showQuestion": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "answersMusic": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": true
+              },
+              "answerPressed": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "revealResults": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "leaderboard": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "podium1": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "podium2": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "podium3": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              }
+            }
+          },
+          "perQuestion": {
+            "11111111-1111-4111-8111-111111111111": {
+              "answerVisuals": [
+                {
+                  "answerIndex": 0,
+                  "display": "image",
+                  "url": "/media/uuid-witness-image.png",
+                  "alt": "Saved UUID visual"
+                }
+              ]
+            },
+            "22222222-2222-4222-8222-222222222222": {
+              "interlude": {
+                "kind": "title",
+                "title": "Saved UUID break",
+                "durationMs": 3000,
+                "advance": "manual"
+              }
+            }
+          },
+          "roster": {
+            "phoneInviteOnly": false,
+            "participants": []
+          }
+        }
+      }
+    },
+    {
+      "name": "saved reload binds interlude to first question",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "22222222-2222-4222-8222-222222222222",
+      "persistedCurrent": "22222222-2222-4222-8222-222222222222",
+      "questionIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111"
+      ],
+      "persistedIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111"
+      ],
+      "orphanKeys": [],
+      "rendered": true
+    },
+    {
+      "name": "saved reload binds visual to second question",
+      "ok": true,
+      "problems": [],
+      "currentQuestionId": "11111111-1111-4111-8111-111111111111",
+      "persistedCurrent": "11111111-1111-4111-8111-111111111111",
+      "questionIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111"
+      ],
+      "persistedIds": [
+        "22222222-2222-4222-8222-222222222222",
+        "11111111-1111-4111-8111-111111111111"
+      ],
+      "orphanKeys": [],
+      "rendered": true
+    }
+  ],
+  "errors": [],
+  "network": [],
+  "passes": 8,
+  "failures": 0
+}

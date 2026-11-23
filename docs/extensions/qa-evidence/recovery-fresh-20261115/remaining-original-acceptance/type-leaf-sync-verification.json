@@ -1,0 +1,17 @@
+{
+  "managerSource": "abd4dcb7573807cb2a15e75c2383be463b7cbace",
+  "managerEvidence": "c30c8dce8ef70b166a1800a09eda82177ff7dcde",
+  "pureLeafByteIdenticalToManager": true,
+  "allPriorManifestFieldsAndExportsUnchanged": true,
+  "originalAccountSuffixUnchanged": true,
+  "inheritedUntrackedPreserved": 16,
+  "sourceTestAssertionsChanged": false,
+  "runtimeTestsRerun": false,
+  "formatOnlyDifferenceFromManagerStartupRecovery": "One blank line before export type required by existing lint rule",
+  "checks": {
+    "scopedTypes": 0,
+    "scopedLint": 0,
+    "format": 0
+  },
+  "runtimeProof": "type-leaf-runtime-proof.json"
+}

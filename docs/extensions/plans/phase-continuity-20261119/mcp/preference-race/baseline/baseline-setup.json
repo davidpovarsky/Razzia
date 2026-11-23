@@ -1,0 +1,7 @@
+{
+  "at": "2026-11-19T19:09:17.026304+00:00",
+  "rootQaOriginalSha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+  "rootQaOverlaySha256": "4d0ec8faa4565d0091499acc72d1d809121ebe10e02b56e0fe94e668466be0a1",
+  "rootProductEntrySha256": "5065e92ac8b6f90be553478fec30f8f59f82598a6561b72b2e7b5955686c843d",
+  "appliedQaOnly": true
+}

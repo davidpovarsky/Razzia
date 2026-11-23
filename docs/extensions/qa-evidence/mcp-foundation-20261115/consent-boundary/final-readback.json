@@ -1,0 +1,74 @@
+{
+  "source": "63e1094",
+  "everyDeclaredPackageMatchesPrevious": true,
+  "packages": [
+    {
+      "name": "@modelcontextprotocol/server",
+      "version": "2.4.0",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "@modelcontextprotocol/client",
+      "version": "2.4.0",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "@modelcontextprotocol/core",
+      "version": "2.4.0",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "@modelcontextprotocol/ext-apps",
+      "version": "2.1.0",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "zod",
+      "version": "4.6.6",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "uuid",
+      "version": "14.0.3",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "socket.io",
+      "version": "4.8.4",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "hono",
+      "version": "4.13.13",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "http-status-codes",
+      "version": "2.3.0",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "@types/node",
+      "version": "26.6.5",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "tsx",
+      "version": "4.21.0",
+      "packageJsonMatchesPrevious": true
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "packageJsonMatchesPrevious": true
+    }
+  ],
+  "all172InputsMatchBeforeAndAfter": true,
+  "focusedTypesExit": 0,
+  "testsExit": 0,
+  "actualPass": 3,
+  "actualFail": 0,
+  "manifestSha256": "252591b485dd748100b26307c8ff95d1d29d176bac1540b23e2e26a04a3013f6",
+  "noOracleJob": true,
+  "notBrowserOrHostInstallation": true
+}

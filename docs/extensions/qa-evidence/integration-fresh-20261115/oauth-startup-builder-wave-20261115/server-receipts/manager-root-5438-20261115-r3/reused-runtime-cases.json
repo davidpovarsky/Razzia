@@ -1,0 +1,30 @@
+{
+  "allPriorLogsRehashed": true,
+  "counts": {
+    "builder-authoring": 25,
+    "composition-reset": 30,
+    "first-party": {
+      "cancelled": 0,
+      "fail": 0,
+      "pass": 43,
+      "skipped": 0,
+      "tests": 43,
+      "todo": 0
+    },
+    "sdk-server": {
+      "cancelled": 0,
+      "fail": 0,
+      "pass": 63,
+      "skipped": 0,
+      "tests": 63,
+      "todo": 0
+    },
+    "startup-owners": 26
+  },
+  "excludedOldHostCase": 1,
+  "newTypeLeafAndAdditivePackageExportOnly": true,
+  "otherSourceModesBlobsEqual": true,
+  "reusedCases": 186,
+  "runtimeModulesByteEqualAfterActualTypeErasure": true,
+  "source": "5438414 raw successful case receipts; original run overall FAIL from two compilers and count-parser bookkeeping retained"
+}

@@ -1,0 +1,45 @@
+{
+  "family": "media-delete",
+  "owner": "00000000-0000-4000-8000-0000000000A1",
+  "state": "MEASURED",
+  "root": "C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-37hWOx",
+  "tenantRoot": "C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-37hWOx\\tenants\\00000000-0000-4000-8000-0000000000A1",
+  "globalResult": {
+    "status": "clean",
+    "unresolvedCount": 0,
+    "quizRecovery": {
+      "recoveredCount": 0,
+      "recoveredQuizIds": [],
+      "unresolvedCount": 0,
+      "unresolvedQuizIds": []
+    },
+    "mediaRecovery": {
+      "recoveredCount": 0,
+      "recoveredQuizIds": [],
+      "restoredMediaNames": [],
+      "unresolvedCount": 0,
+      "unresolvedJournals": []
+    }
+  },
+  "tenantResult": {
+    "status": "failed",
+    "unresolvedCount": 1,
+    "quizRecovery": {
+      "recoveredCount": 0,
+      "recoveredQuizIds": [],
+      "unresolvedCount": 0,
+      "unresolvedQuizIds": []
+    },
+    "mediaRecovery": {
+      "recoveredCount": 0,
+      "recoveredQuizIds": [],
+      "restoredMediaNames": [],
+      "unresolvedCount": 1,
+      "unresolvedJournals": [
+        "synthetic-unresolved.journal.json"
+      ]
+    }
+  },
+  "preservedJournalSha256": "e1d2ee53dcbbd6a59d6f0c650bd59a9c2a8188a809a7a916fe6939f0868539c6",
+  "currentTenantScopePositiveControlPassed": true
+}

@@ -1,0 +1,12 @@
+{
+  "sourceSha": "8b063c17800dffe4f91a7f2c9ae6aa882389e614",
+  "previousSha": "d4f03cc8703115a2a869be050fc86e4b260dbda3",
+  "branch": "codex/tadazz-ux-unified-20261119",
+  "exit": 0,
+  "stdout": "",
+  "stderr": "To https://github.com/davidpovarsky/Razzia.git\n   d4f03cc..8b063c1  HEAD -> codex/tadazz-ux-unified-20261119\n",
+  "at": "2026-11-19T04:19:16.187638+00:00",
+  "productSourceSha": "8b063c17800dffe4f91a7f2c9ae6aa882389e614",
+  "behavioralProductSourceSha": "d4f03cc8703115a2a869be050fc86e4b260dbda3",
+  "generatedManifestSha256": "8d222b5bd76c0483c3b645b7f3df54064b9528548c71ae42af5e8722b53f9e9e"
+}

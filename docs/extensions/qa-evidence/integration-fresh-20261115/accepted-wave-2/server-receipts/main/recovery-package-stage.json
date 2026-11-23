@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/server/storage/package-stage-r2.test.ts",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/recovery-package-stage.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "a57dd1e85e3f50c8ee8bb7cf790eb50cf461fcc80182d8435e1ae573b5b086df",
+  "seconds": 3.691
+}

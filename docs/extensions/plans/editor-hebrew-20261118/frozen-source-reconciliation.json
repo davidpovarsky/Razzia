@@ -1,0 +1,29 @@
+{
+  "originalReceipt": "frozen-source-gates.json",
+  "applicationSourceUnchanged": true,
+  "onlyChangedDuringOriginalGates": [
+    "packages/e2e/editor-backdrop-propagation-audit.mjs"
+  ],
+  "explanation": "The backdrop browser harness corrected an invalid strict-schema fixture and a sibling locator while the unit suites ran. Application source remained unchanged. Root suite's384 assertions passed, but browser teardown exceeded10s under concurrent suite load; rerun below uses4 workers without changing assertions/timeouts. The original root solution tsconfig contains no files; this receipt explicitly checks tsconfig.app.json.",
+  "gates": [
+    {
+      "gate": "web-app-types",
+      "exit": 0,
+      "seconds": 4.55,
+      "summary": [],
+      "failureTail": ""
+    },
+    {
+      "gate": "root-unit",
+      "exit": 0,
+      "seconds": 31.58,
+      "summary": [
+        " Test Files  38 passed | 1 skipped (39)",
+        "      Tests  384 passed | 11 skipped (395)",
+        "   Start at  16:28:11",
+        "   Duration  28.92s (import 46%, tests 33%, transform 20%, setup 1%)"
+      ],
+      "failureTail": ""
+    }
+  ]
+}

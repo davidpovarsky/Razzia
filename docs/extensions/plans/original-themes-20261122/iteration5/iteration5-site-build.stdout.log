@@ -1,0 +1,108 @@
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 3536 modules transformed.
+rendering chunks...
+computing gzip size...
+packages/web/dist/index.html                                                3.75 kB │ gzip:   1.08 kB
+packages/web/dist/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2            9.34 kB
+packages/web/dist/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2     12.38 kB
+packages/web/dist/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2         15.11 kB
+packages/web/dist/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2        19.40 kB
+packages/web/dist/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2           32.46 kB
+packages/web/dist/assets/rubik-latin-wght-normal-CnQIisVs.woff2            35.34 kB
+packages/web/dist/assets/tadazz-question-background-BnsH8I8M.png        1,610.33 kB
+packages/web/dist/assets/background-CMjhDDHd.png                        2,777.38 kB
+packages/web/dist/assets/route-CH6-dgd6.css                                10.85 kB │ gzip:   2.46 kB
+packages/web/dist/assets/index-B8XIifXf.css                               123.88 kB │ gzip:  20.24 kB
+packages/web/dist/assets/native-question-BhUkaGG4.css                     186.89 kB │ gzip:  39.01 kB
+packages/web/dist/assets/createStatus-CIc0TTXH.js                           0.04 kB │ gzip:   0.06 kB
+packages/web/dist/assets/PackageManager--gJXPg9k.js                         0.06 kB │ gzip:   0.07 kB
+packages/web/dist/assets/plus-BqAYH3u1.js                                   0.18 kB │ gzip:   0.16 kB
+packages/web/dist/assets/useRouterState-B7B1B09D.js                         0.20 kB │ gzip:   0.17 kB
+packages/web/dist/assets/tv-Cxo6t5IJ.js                                     0.21 kB │ gzip:   0.19 kB
+packages/web/dist/assets/SiteButton-C_cY1N5X.js                             0.22 kB │ gzip:   0.18 kB
+packages/web/dist/assets/useParams-CQptvCRw.js                              0.25 kB │ gzip:   0.19 kB
+packages/web/dist/assets/log-out-DvvzoncW.js                                0.26 kB │ gzip:   0.21 kB
+packages/web/dist/assets/link-By-QTfux.js                                   0.28 kB │ gzip:   0.21 kB
+packages/web/dist/assets/status-DodRXIfn.js                                 0.30 kB │ gzip:   0.17 kB
+packages/web/dist/assets/pencil-BXsXKPUa.js                                 0.30 kB │ gzip:   0.24 kB
+packages/web/dist/assets/refresh-cw-BatwI4W7.js                             0.35 kB │ gzip:   0.24 kB
+packages/web/dist/assets/Card-Se-DydOM.js                                   0.36 kB │ gzip:   0.26 kB
+packages/web/dist/assets/clsx-DB0hHKMi.js                                   0.36 kB │ gzip:   0.23 kB
+packages/web/dist/assets/QueryClientProvider-SCaF6fvM.js                    0.42 kB │ gzip:   0.29 kB
+packages/web/dist/assets/LegacyTools-qJPuIWAx.js                            0.45 kB │ gzip:   0.31 kB
+packages/web/dist/assets/circle-x-C1Iyv0-9.js                               0.48 kB │ gzip:   0.33 kB
+packages/web/dist/assets/users-BSGjsZgH.js                                  0.48 kB │ gzip:   0.29 kB
+packages/web/dist/assets/SiteLink-ZbupnU6T.js                               0.50 kB │ gzip:   0.34 kB
+packages/web/dist/assets/palette-CbkdJeC0.js                                0.54 kB │ gzip:   0.29 kB
+packages/web/dist/assets/Dialog-ClBhsSrk.js                                 0.61 kB │ gzip:   0.37 kB
+packages/web/dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:   0.42 kB
+packages/web/dist/assets/settings-2-xBZ2rZRL.js                             0.82 kB │ gzip:   0.41 kB
+packages/web/dist/assets/MediaThumbnail-BbgD4DrP.js                         0.85 kB │ gzip:   0.50 kB
+packages/web/dist/assets/manager-Cuz8XWRe.js                                0.88 kB │ gzip:   0.53 kB
+packages/web/dist/assets/branding-DkbCKomo.js                               1.14 kB │ gzip:   0.61 kB
+packages/web/dist/assets/public-provider-B2K70zeW.js                        1.28 kB │ gzip:   0.67 kB
+packages/web/dist/assets/login-handoff-BWg7jZ9T.js                          1.42 kB │ gzip:   0.71 kB
+packages/web/dist/assets/useMatch-DCYGm8Md.js                               1.59 kB │ gzip:   0.83 kB
+packages/web/dist/assets/NativeGameLayout-CRKh1nBp.js                       1.65 kB │ gzip:   0.83 kB
+packages/web/dist/assets/EditorCanvasFrame-D4wPGjLx.js                      1.82 kB │ gzip:   0.88 kB
+packages/web/dist/assets/TadazzAnswerPad-Y87UpEPA.js                        2.43 kB │ gzip:   1.07 kB
+packages/web/dist/assets/useTadazzLabels-DMnABq8Z.js                        2.89 kB │ gzip:   1.07 kB
+packages/web/dist/assets/StudioPublicGallery-Bp6CBk0j.js                    3.12 kB │ gzip:   1.40 kB
+packages/web/dist/assets/StudioThemes-DZjuIp64.js                           3.28 kB │ gzip:   1.38 kB
+packages/web/dist/assets/managed-clients-Cri4l14M.js                        3.36 kB │ gzip:   0.98 kB
+packages/web/dist/assets/mutation-DAKY54v-.js                               3.44 kB │ gzip:   1.14 kB
+packages/web/dist/assets/ui-strings-ByPNdzrK.js                             4.03 kB │ gzip:   2.00 kB
+packages/web/dist/assets/Events-D7aF1LUQ.js                                 6.01 kB │ gzip:   2.32 kB
+packages/web/dist/assets/platform-TAL4qY8U.js                               6.25 kB │ gzip:   1.75 kB
+packages/web/dist/assets/ManagedClients-e0LAcsp-.js                         6.90 kB │ gzip:   2.53 kB
+packages/web/dist/assets/Catalogue-CbLGHV3M.js                              6.95 kB │ gzip:   3.06 kB
+packages/web/dist/assets/removable-DFuYGxq4.js                              7.15 kB │ gzip:   2.73 kB
+packages/web/dist/assets/account-provider-DVkgZn7l.js                       7.26 kB │ gzip:   2.68 kB
+packages/web/dist/assets/projection-BPTqNIDh.js                             7.41 kB │ gzip:   2.61 kB
+packages/web/dist/assets/query-fiE78FBu.js                                  7.61 kB │ gzip:   2.64 kB
+packages/web/dist/assets/StudioPackagePreview-CHkJoC1p.js                   8.01 kB │ gzip:   3.02 kB
+packages/web/dist/assets/useQuery-DgjUiNju.js                               8.08 kB │ gzip:   2.98 kB
+packages/web/dist/assets/ManagedClientPortal-BFmLO_hi.js                    8.68 kB │ gzip:   3.23 kB
+packages/web/dist/assets/QuestionLivePreview-lT8VnHhm.js                    9.04 kB │ gzip:   3.63 kB
+packages/web/dist/assets/catalogue-DuHkMD6C.js                              9.40 kB │ gzip:   2.54 kB
+packages/web/dist/assets/AccountGateway-4DWFcfRf.js                         9.76 kB │ gzip:   3.94 kB
+packages/web/dist/assets/ResultModal-_gH6aDB6.js                           10.63 kB │ gzip:   3.14 kB
+packages/web/dist/assets/api-P5NWbEa2.js                                   10.65 kB │ gzip:   4.25 kB
+packages/web/dist/assets/core-DDRQf67e.js                                  11.07 kB │ gzip:   4.01 kB
+packages/web/dist/assets/dist-C1baJLnQ.js                                  11.61 kB │ gzip:   4.66 kB
+packages/web/dist/assets/ShowImportModal-jBYe1AkP.js                       11.81 kB │ gzip:   3.64 kB
+packages/web/dist/assets/MyGames-fco1YHj5.js                               12.15 kB │ gzip:   4.37 kB
+packages/web/dist/assets/OAuthConsentPage-DDt4Ecmh.js                      12.36 kB │ gzip:   5.38 kB
+packages/web/dist/assets/__root-MkByAVjS.js                                17.19 kB │ gzip:   5.62 kB
+packages/web/dist/assets/ManagerAuthBackground-Cu-j5unB.js                 18.40 kB │ gzip:   5.99 kB
+packages/web/dist/assets/game-preview-surface-BBafid4m.js                  23.00 kB │ gzip:   7.36 kB
+packages/web/dist/assets/strings-B36qPB4a.js                               24.75 kB │ gzip:  11.08 kB
+packages/web/dist/assets/PackageManager-B-R5rMFx.js                        25.91 kB │ gzip:   9.73 kB
+packages/web/dist/assets/platform-controls-CeMYD-nl.js                     28.23 kB │ gzip:   9.09 kB
+packages/web/dist/assets/application-preview-stage-DPepl-pX.js             29.87 kB │ gzip:  10.05 kB
+packages/web/dist/assets/game-CVoFqKF0.js                                  33.57 kB │ gzip:  11.98 kB
+packages/web/dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:   9.60 kB
+packages/web/dist/assets/locales-DhXGalc9.js                               37.36 kB │ gzip:  13.26 kB
+packages/web/dist/assets/clients-C4s24ZOt.js                               41.30 kB │ gzip:  14.55 kB
+packages/web/dist/assets/i18next-CKBcTAyQ.js                               43.06 kB │ gzip:  13.66 kB
+packages/web/dist/assets/socket-context-B6BzRjWI.js                        43.37 kB │ gzip:  13.72 kB
+packages/web/dist/assets/StudioThemeBuilder-ENe5l2bD.js                    46.60 kB │ gzip:  14.37 kB
+packages/web/dist/assets/link-B-lBghjP.js                                  59.45 kB │ gzip:  21.42 kB
+packages/web/dist/assets/Studio-ChwYrPrx.js                                76.78 kB │ gzip:  20.65 kB
+packages/web/dist/assets/schemas-BJTHMcrP.js                               84.31 kB │ gzip:  23.46 kB
+packages/web/dist/assets/preload-helper-7oX73uZL.js                        87.73 kB │ gzip:  25.76 kB
+packages/web/dist/assets/ReferenceCanvas-CIoeKvct.js                       88.85 kB │ gzip:  14.43 kB
+packages/web/dist/assets/NativeSaveConsentPage-Bgi_mXUT.js                112.73 kB │ gzip:  34.17 kB
+packages/web/dist/assets/react-Cv3iAHro.js                                128.02 kB │ gzip:  41.99 kB
+packages/web/dist/assets/choice-results-view-CMx1WxDN.js                  141.93 kB │ gzip:  40.59 kB
+packages/web/dist/assets/application-session-XUwWoBlC.js                  172.50 kB │ gzip:  43.54 kB
+packages/web/dist/assets/index-BQ1ywYFL.js                                224.20 kB │ gzip:  71.91 kB
+packages/web/dist/assets/MarketingSite-0N3LNmdM.js                        225.92 kB │ gzip:  55.80 kB
+packages/web/dist/assets/client-Ctq-ofJL.js                               227.23 kB │ gzip:  75.63 kB
+packages/web/dist/assets/route.gen-BSpwgXYw.js                            317.21 kB │ gzip:  89.43 kB
+packages/web/dist/assets/locales-Bv5wji_D.js                              336.53 kB │ gzip:  86.56 kB
+packages/web/dist/assets/extensions-sdO9puIP.js                           400.01 kB │ gzip: 139.23 kB
+packages/web/dist/assets/native-question-BlW2WH_Y.js                    1,146.10 kB │ gzip: 228.87 kB
+
+✓ built in 5.34s

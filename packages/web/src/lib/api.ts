@@ -1,5 +1,10 @@
 import type { ApiType } from "@razzia/socket/api"
-import { clearToken, ensureSession } from "@razzia/web/lib/session"
+import { clearToken } from "@razzia/web/lib/session"
+import { requestAuthHeaders } from "./request-auth"
+import {
+  MANAGED_CLIENT_SESSION_HEADER,
+  notifyManagedClientExpired,
+} from "./managed-client-session"
 import { hc } from "hono/client"
 import { StatusCodes } from "http-status-codes"
 
@@ -15,16 +20,17 @@ export class ApiError extends Error {
 }
 
 const authFetch: typeof fetch = async (input, init) => {
-  const { token } = await ensureSession()
-  const headers = new Headers(init?.headers)
-
-  headers.set("Authorization", `Bearer ${token}`)
+  const headers = await requestAuthHeaders(init?.headers)
 
   const response = await fetch(input, { ...init, headers })
   const status: StatusCodes = response.status
 
   if (status === StatusCodes.UNAUTHORIZED) {
-    clearToken()
+    if (headers.has(MANAGED_CLIENT_SESSION_HEADER)) {
+      notifyManagedClientExpired()
+    } else {
+      clearToken()
+    }
 
     throw new ApiError(StatusCodes.UNAUTHORIZED, "errors:auth.unauthorized")
   }

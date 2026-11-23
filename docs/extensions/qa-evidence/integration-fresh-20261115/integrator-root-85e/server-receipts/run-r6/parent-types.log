@@ -1,0 +1,15 @@
+src/site/tests/browser/site.spec.ts(11,27): error TS2307: Cannot find module '../../../../qa/site-touch' or its corresponding type declarations.
+tds.acceptance.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.fixture.vite.config.ts(3,23): error TS2307: Cannot find module '../packages/web/vite.config' or its corresponding type declarations.
+tds.host.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.legacy-acceptance.playwright.config.ts(2,22): error TS2307: Cannot find module './site.baseline.playwright.config' or its corresponding type declarations.
+tds.live-acceptance.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.motion-site.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.native-acceptance.playwright.config.ts(2,22): error TS2307: Cannot find module './site.baseline.playwright.config' or its corresponding type declarations.
+tds.native-acceptance.playwright.config.ts(12,47): error TS7006: Parameter 'server' implicitly has an 'any' type.
+tds.package-admin.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.roster.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.site-regression.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.site.playwright.config.ts(2,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.
+tds.stage.playwright.config.ts(3,18): error TS2307: Cannot find module './site.playwright.config' or its corresponding type declarations.

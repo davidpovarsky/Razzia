@@ -1,0 +1,76 @@
+✔ real signature and exact resource-bound grant produce an immutable principal (9.079929ms)
+✔ signed wrong issuer/audience, expiry, lifetime, nbf and scope are rejected (90.388447ms)
+✔ algorithm, kid, token key references and forged signature never reach grant storage (4.848048ms)
+✔ revocation and account disable are rechecked for every access, with no token cache (2.716466ms)
+✔ signed account/client/subject substitution and changed stored grant are denied (3.877438ms)
+✔ cancellation and private storage errors yield a fixed safe error (0.867008ms)
+✔ two real SDK sessions retain account isolation and revoked replay is denied (497.982367ms)
+✔ invalid principal fails before account store: issuer (3.175272ms)
+✔ invalid principal fails before account store: audience (2.670826ms)
+✔ invalid principal fails before account store: accountId (86.482569ms)
+✔ invalid principal fails before account store: active (2.272343ms)
+✔ invalid principal fails before account store: accountsEnabled (2.270062ms)
+✔ invalid principal fails before account store: expiresAt (2.822507ms)
+✔ invalid principal fails before account store: scopes (3.350713ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (198.68871ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (87.197176ms)
+✔ invalid authored/schema/settings/media rejected without mutation (403.42436ms)
+✔ scoped ordinary export delegates without adding a new consent stage (203.034513ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (4.444364ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (1.261212ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (597.312702ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (104.90967ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (101.185913ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ official HTTP client negotiates, discovers eight strict tools and reads the honest placeholder (1094.30166ms)
+✔ HTTP draft CAS preserves tenant boundaries, revoked token denial and safe missing preview (605.716065ms)
+✔ metadata advertises the exact protected resource and least initial scope without a private token (1.599256ms)
+✔ origin/host/TLS/query/proxy/session/body and method attacks fail before private tool dispatch (4.248041ms)
+✔ allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected (1.154211ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles (483.160662ms)
+✔ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (1094.230219ms)
+✔ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (92.331666ms)
+✔ denied or missing ingress guard fails closed before token verification and schema work (5.06001ms)
+✔ inconsistent repository summary fails closed on read (503.40082ms)
+✔ inconsistent repository summary fails closed on create (96.762629ms)
+✔ inconsistent repository summary fails closed on replace (98.651928ms)
+✔ SDK cancellation during pending authorization restores capacity only after real work settles (494.412493ms)
+✔ cancelled unsettled admission stays bounded at32; another factory remains unaffected (103.714498ms)
+✔ normal SDK running-handler cancellation releases all32 slots after handlers settle (205.072012ms)
+✔ duplicate tool/public active IDs close only their owning connection (88.65671ms)
+✔ close while authorization is pending suppresses late rejection, dispatch and send (2.409424ms)
+✔ same wire ID reuse is independently authorized after a cancelled lifetime settles (4.773566ms)
+✔ supported SDK abort signal is preserved; cancellation does not roll back settled work (2.98699ms)
+✔ rejected send/close reports safe errors and makes the connection terminal (85.444518ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (399.37692ms)
+✔ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (611.578482ms)
+✔ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (194.839192ms)
+✔ new save still requires exact-revision consent; ordinary export does not (98.521726ms)
+✔ 32 cancelled response writes retain the budget until public send promises settle (511.779702ms)
+✔ a cancelled in-flight response reserves its wire ID before public send completion (88.305147ms)
+✔ overlapping response/related owner releases once after send settles and reuse reauthorizes (110.452924ms)
+✔ rejected delayed response write terminates only its connection with safe errors (97.232514ms)
+✔ pending related progress keeps its parent reserved: duplicate denied (4.711846ms)
+✔ pending related progress keeps its parent reserved: settled reuse reauthorizes (85.857002ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 53
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 68897.321113

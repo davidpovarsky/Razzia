@@ -1,0 +1,12 @@
+{
+  "role": "telephony",
+  "container": "tadazz-hq-phone-api-20261115",
+  "state": "RELEASED",
+  "pid": 0,
+  "exit_code": 1,
+  "oom_killed": false,
+  "cpu_cap": 0.25,
+  "memory_bytes": 1073741824,
+  "released_utc": "2026-11-15T05:12:49.069661+00:00",
+  "retained_prior_attempt": "tadazz-hq-phone-api-20261115-s01-first"
+}

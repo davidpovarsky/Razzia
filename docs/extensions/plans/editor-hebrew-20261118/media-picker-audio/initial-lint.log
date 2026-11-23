@@ -1,0 +1,11 @@
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[packages/web/src/features/quizz/components/studio/theme-audio-options.tsx:123:19]
+ 122 |                   setError(false)
+ 123 |                   try {
+     :                   ^^^^^
+ 124 |                     const player = new Audio(url)
+     `----
+
+Found 0 warnings and 1 error.
+Finished in 13.4s on 3 files with 233 rules using 12 threads.

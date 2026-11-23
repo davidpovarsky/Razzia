@@ -1,0 +1,10 @@
+{
+  "attempt": 1,
+  "result": "WAIT_CAPACITY_TIMEOUT",
+  "application_tests": 0,
+  "container_launched": false,
+  "packet5_transferred": false,
+  "claimed": false,
+  "note": "Bounded short-lock scheduler found no room within existing shared ceilings; no admission or remote fixture created",
+  "recorded_utc": "2026-11-15T15:09:31.5016552Z"
+}

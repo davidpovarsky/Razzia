@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "/evidence/format-corrected.mjs"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 7.102,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 158,
+  "logSha256": "2f2a764c2ee59b99f4aefbc972a140d52089d4dc245405e4bc46a8b4c978263b"
+}

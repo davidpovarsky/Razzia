@@ -1,0 +1,12 @@
+{
+  "checked_utc": "2026-11-15T10:34:43.583761+00:00",
+  "downloaded_raw_file_sha256_verified": 57,
+  "harness_syntax_valid": 4,
+  "target_head": "58cfb5c7a734518c715ae56d74666441f0743f5d",
+  "target_tree": "cfe5ea46c3f33194b86d416ff079e2228dc59e64",
+  "selected_cases_passed": 149,
+  "all_product_worktree_paths_clean": true,
+  "protected_packages_tree_unchanged": true,
+  "source_boundary_frozen_during_tests": true,
+  "old_full819_result_not_relabelled": true
+}

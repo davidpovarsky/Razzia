@@ -1,0 +1,17 @@
+{
+  "children": [
+    {
+      "name": "web",
+      "ownedPid": 32548,
+      "stopped": true,
+      "taskkillExit": 0
+    },
+    {
+      "name": "api",
+      "ownedPid": 35448,
+      "stopped": true,
+      "taskkillExit": 0
+    }
+  ],
+  "allStopped": true
+}

@@ -1,0 +1,989 @@
+{
+  "checks": [
+    {
+      "name": "razzia-original question question exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "question",
+      "original": true,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich color is the sky?\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original question answers exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "answerCards",
+      "original": true,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich color is the sky?\n1\n\nBlue\n\n2\n\nGreen\n\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original question results exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "resultsReveal",
+      "original": true,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich color is the sky?\n1\n\nBlue\n\n0%\n0\n2\n\nGreen\n\n0%\n0\nReplay animation\n\nPreview only — no responses have been collected.",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original unsaved question and answer text update",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "answerCards",
+      "original": true,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nLive edited without saving\n1\n\nAzure — edited\n\n2\n\nGreen\n\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original question aspect 4-3",
+      "rect": {
+        "width": 405.59375,
+        "height": 304.1875
+      }
+    },
+    {
+      "name": "razzia-original question aspect 16-9",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      }
+    },
+    {
+      "name": "razzia-original actual inner stage fills mobile 390",
+      "rect": {
+        "width": 340,
+        "height": 191.25
+      },
+      "innerRect": {
+        "width": 340,
+        "height": 191.25
+      }
+    },
+    {
+      "name": "razzia-original actual inner stage fills mobile 320",
+      "rect": {
+        "width": 270,
+        "height": 151.875
+      },
+      "innerRect": {
+        "width": 270,
+        "height": 151.875
+      }
+    },
+    {
+      "name": "razzia-original question hide show replay",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "answerCards",
+      "original": true,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nLive edited without saving\n1\n\nAzure — edited\n\n2\n\nGreen\n\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original transition exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "interlude",
+      "original": true,
+      "text": "Transition\nTransition live razzia-original\n5 sec\n100%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original transition aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original transition play scrub reset",
+      "playedTo": "1550",
+      "readout": "00:00.1 / 00:05.0"
+    },
+    {
+      "name": "razzia-original animation exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "interlude",
+      "original": true,
+      "text": "Animation\nAnimation live razzia-original\n3 sec\n100%\n\nAutomatic (on timer end)\n\n3 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original animation aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original animation play scrub reset",
+      "playedTo": "1400",
+      "readout": "00:00.0 / 00:03.0"
+    },
+    {
+      "name": "razzia-original media exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "interlude",
+      "original": true,
+      "text": "Media\nMedia live razzia-original\n\nNo media selected yet\n\n5 sec\n100%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original media aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original media play scrub reset",
+      "playedTo": "1600",
+      "readout": "00:00.0 / 00:05.0"
+    },
+    {
+      "name": "razzia-original opening exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "opening",
+      "original": true,
+      "text": "Opening\nOpening live razzia-original\n5 sec\n100%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original opening truthful native preset title controls"
+    },
+    {
+      "name": "razzia-original opening aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 308.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original opening play scrub reset",
+      "playedTo": "1550",
+      "readout": "00:00.0 / 00:05.0"
+    },
+    {
+      "name": "razzia-original opening real Lottie layer keyboard+drag updates unsaved position",
+      "id": "9775bd06-63bc-402e-add9-3970ace60a23",
+      "before": 50,
+      "after": "54"
+    },
+    {
+      "name": "razzia-original opening layer edit and native stage",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "opening",
+      "original": true,
+      "text": "Opening\nOpening live razzia-original\n4 sec\n76%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original closing exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "closing",
+      "original": true,
+      "text": "Closing\nClosing live razzia-original\n5 sec\n100%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original closing truthful native preset title controls"
+    },
+    {
+      "name": "razzia-original closing aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 308.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original closing play scrub reset",
+      "playedTo": "1450",
+      "readout": "00:00.0 / 00:05.0"
+    },
+    {
+      "name": "razzia-original closing layer edit and native stage",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "closing",
+      "original": true,
+      "text": "Closing\nClosing live razzia-original\n4 sec\n67%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original countdown exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "interlude",
+      "original": true,
+      "text": "Countdown\nCountdown live razzia-original\n10\n10 sec\n100%\n\nAutomatic (on timer end)\n\n10 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original countdown aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original countdown play scrub reset",
+      "playedTo": "1450",
+      "readout": "00:00.0 / 00:10.0"
+    },
+    {
+      "name": "razzia-original leaderboard exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "leaderboard",
+      "original": true,
+      "text": "Leaderboard\nLeaderboard live razzia-original\nNo player scores yet.\n5 sec\n100%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original leaderboard aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 325.5,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original leaderboard hides inapplicable transport"
+    },
+    {
+      "name": "razzia-original interimResults exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "resultsReveal",
+      "original": true,
+      "text": "Interim Results\nInterim Results live razzia-original\n\nLive edited without saving\n\nNO VOTES YET\n1\nAzure — edited\n0 votes\n(0%)\n2\nGreen\n0 votes\n(0%)\n0 votes\n5 sec\n100%\n\nAutomatic (on timer end)\n\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original interimResults aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 325.5,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original interimResults hides inapplicable transport"
+    },
+    {
+      "name": "razzia-original answerRecap exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "razzia-native-stage",
+      "theme": "razzia-original",
+      "slot": "resultsReveal",
+      "original": true,
+      "text": "Answer Recap\nAnswer Recap live razzia-original\nQuestion 1\nNO RESPONSES\n\nLive edited without saving\n\nNo responses recorded yet.\n8 sec\n100%\n\nAutomatic (on timer end)\n\n8 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "razzia-original answerRecap aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 325.5,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "razzia-original answerRecap hides inapplicable transport"
+    },
+    {
+      "name": "tadazz-classic question question exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "question",
+      "original": false,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 1\nNEXT QUESTION\nWhich color is the sky?\nFOCUS\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic question answers exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "answerCards",
+      "original": false,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 1\nNEXT QUESTION\nWhich color is the sky?\n1\nBlue\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\nVOTING OPEN\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic question results exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "resultsReveal",
+      "original": false,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 1\nAUDIENCE RESULTS\nWhich color is the sky?\n1\nBlue\n0%\nCORRECT ANSWER\n01\n2\nGreen\n0%\nAUDIENCE FAVOURITE\n02\nAUDIENCE RESULTS\nReplay animation\n\nPreview only — no responses have been collected.",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic unsaved question and answer text update",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "answerCards",
+      "original": false,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 1\nNEXT QUESTION\nLive edited without saving\n1\nAzure — edited\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\nVOTING OPEN\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic question aspect 4-3",
+      "rect": {
+        "width": 405.59375,
+        "height": 304.1875
+      }
+    },
+    {
+      "name": "tadazz-classic question aspect 16-9",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      }
+    },
+    {
+      "name": "tadazz-classic actual inner stage fills mobile 390",
+      "rect": {
+        "width": 340,
+        "height": 191.25
+      },
+      "innerRect": {
+        "width": 340,
+        "height": 191.25
+      }
+    },
+    {
+      "name": "tadazz-classic actual inner stage fills mobile 320",
+      "rect": {
+        "width": 270,
+        "height": 151.875
+      },
+      "innerRect": {
+        "width": 270,
+        "height": 151.875
+      }
+    },
+    {
+      "name": "tadazz-classic question hide show replay",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "answerCards",
+      "original": false,
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 1\nNEXT QUESTION\nLive edited without saving\n1\nAzure — edited\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\nVOTING OPEN\nReplay animation",
+      "rect": {
+        "width": 405.59375,
+        "height": 228.140625
+      },
+      "innerRect": {
+        "width": 405.59375,
+        "height": 228.146484375
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic transition exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "interlude",
+      "original": false,
+      "text": "UP NEXT\nTransition live tadazz-classic\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "Classic maximum120character transition remains inside native stage",
+      "title": {
+        "x": 409.6000061035156,
+        "y": 422.183349609375,
+        "right": 1094.4000549316406,
+        "bottom": 739.2203369140625,
+        "width": 684.800048828125,
+        "height": 317.0369873046875
+      },
+      "stage": {
+        "x": 371.5555725097656,
+        "y": 372.25,
+        "right": 1132.4444885253906,
+        "bottom": 800.25,
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "scrollWidth": 1728,
+      "clientWidth": 1728,
+      "fontSize": "100px"
+    },
+    {
+      "name": "tadazz-classic transition aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic transition play scrub reset",
+      "playedTo": "1550",
+      "readout": "00:00.1 / 00:05.0"
+    },
+    {
+      "name": "tadazz-classic animation exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "interlude",
+      "original": false,
+      "text": "ROUND 01 · QUESTION 01\nMOST CHOSEN ANSWER\nNO VOTES YET\n3 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic animation aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic animation play scrub reset",
+      "playedTo": "1400",
+      "readout": "00:00.1 / 00:03.0"
+    },
+    {
+      "name": "tadazz-classic media exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "interlude",
+      "original": false,
+      "text": "Media live tadazz-classic\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic media aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic media play scrub reset",
+      "playedTo": "1400",
+      "readout": "00:00.0 / 00:05.0"
+    },
+    {
+      "name": "tadazz-classic opening exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "opening",
+      "original": false,
+      "text": "THE AUDIENCE DECIDES\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic opening truthful native preset title controls"
+    },
+    {
+      "name": "tadazz-classic opening aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 308.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic opening play scrub reset",
+      "playedTo": "1450",
+      "readout": "00:00.0 / 00:05.0"
+    },
+    {
+      "name": "tadazz-classic opening real Lottie layer keyboard+drag updates unsaved position",
+      "id": "517fd783-0d4a-48f7-a36f-7a1c565f1d28",
+      "before": 50,
+      "after": "54"
+    },
+    {
+      "name": "tadazz-classic opening layer edit and native stage",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "opening",
+      "original": false,
+      "text": "Opening live tadazz-classic\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic closing exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "closing",
+      "original": false,
+      "text": "THANK YOU FOR PLAYING\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic closing truthful native preset title controls"
+    },
+    {
+      "name": "tadazz-classic closing aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 308.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic closing play scrub reset",
+      "playedTo": "1450",
+      "readout": "00:00.0 / 00:05.0"
+    },
+    {
+      "name": "tadazz-classic closing layer edit and native stage",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "closing",
+      "original": false,
+      "text": "THANK YOU FOR PLAYING\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic countdown exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "interlude",
+      "original": false,
+      "text": "COUNTDOWN LIVE TADAZZ-CLASSIC\n10\n10 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic countdown aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 302.25,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic countdown play scrub reset",
+      "playedTo": "1400",
+      "readout": "00:00.0 / 00:10.0"
+    },
+    {
+      "name": "tadazz-classic leaderboard exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "leaderboard",
+      "original": false,
+      "text": "ROUND 01 · QUESTION 01\nLIVE STANDINGS\nTEAM LEADERBOARD\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic leaderboard aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 325.5,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic leaderboard hides inapplicable transport"
+    },
+    {
+      "name": "tadazz-classic interimResults exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "resultsReveal",
+      "original": false,
+      "text": "Interim Results live tadazz-classic\nNO RESPONSES RECORDED YET.\n5 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic interimResults aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 325.5,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic interimResults hides inapplicable transport"
+    },
+    {
+      "name": "tadazz-classic answerRecap exact native",
+      "renderer": "application-native",
+      "fallback": false,
+      "engine": "tadazz-classic-stage",
+      "theme": "tadazz-classic",
+      "slot": "resultsReveal",
+      "original": false,
+      "text": "THE AUDIENCE HAS SPOKEN\nAnswer Recap live tadazz-classic\n1\nLive edited without saving\nNo responses recorded yet.\n8 sec\n•\nAutomatic (on timer end)",
+      "rect": null,
+      "innerRect": {
+        "width": 760.888916015625,
+        "height": 428
+      },
+      "media": []
+    },
+    {
+      "name": "tadazz-classic answerRecap aspect 4:3",
+      "rect": {
+        "x": 416,
+        "y": 325.5,
+        "width": 672,
+        "height": 504
+      }
+    },
+    {
+      "name": "tadazz-classic answerRecap hides inapplicable transport"
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "responses": [
+    {
+      "theme": "razzia-original",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/branding/theme.json"
+    },
+    {
+      "theme": "razzia-original",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/branding/theme.json"
+    },
+    {
+      "theme": "razzia-original",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/api/themes/catalog"
+    },
+    {
+      "theme": "razzia-original",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/api/themes/catalog"
+    },
+    {
+      "theme": "tadazz-classic",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/branding/theme.json"
+    },
+    {
+      "theme": "tadazz-classic",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/branding/theme.json"
+    },
+    {
+      "theme": "tadazz-classic",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/api/themes/catalog"
+    },
+    {
+      "theme": "tadazz-classic",
+      "status": 404,
+      "url": "http://127.0.0.1:3180/api/themes/catalog"
+    }
+  ],
+  "screenshots": [
+    "razzia-original-question-question.png",
+    "razzia-original-question-answers.png",
+    "razzia-original-question-results.png",
+    "razzia-original-question-aspect-4-3.png",
+    "razzia-original-question-aspect-16-9.png",
+    "razzia-original-mobile-390.png",
+    "razzia-original-mobile-320.png",
+    "razzia-original-transition.png",
+    "razzia-original-animation.png",
+    "razzia-original-media.png",
+    "razzia-original-opening.png",
+    "razzia-original-opening-layers.png",
+    "razzia-original-closing.png",
+    "razzia-original-closing-layers.png",
+    "razzia-original-countdown.png",
+    "razzia-original-countdown-scrub-seven-seconds.png",
+    "razzia-original-leaderboard.png",
+    "razzia-original-interimResults.png",
+    "razzia-original-answerRecap.png",
+    "tadazz-classic-question-question.png",
+    "tadazz-classic-question-answers.png",
+    "tadazz-classic-question-results.png",
+    "tadazz-classic-question-aspect-4-3.png",
+    "tadazz-classic-question-aspect-16-9.png",
+    "tadazz-classic-mobile-390.png",
+    "tadazz-classic-mobile-320.png",
+    "tadazz-classic-transition.png",
+    "tadazz-classic-transition-max120.png",
+    "tadazz-classic-animation.png",
+    "tadazz-classic-media.png",
+    "tadazz-classic-opening.png",
+    "tadazz-classic-opening-layers.png",
+    "tadazz-classic-closing.png",
+    "tadazz-classic-closing-layers.png",
+    "tadazz-classic-countdown.png",
+    "tadazz-classic-countdown-scrub-seven-seconds.png",
+    "tadazz-classic-leaderboard.png",
+    "tadazz-classic-interimResults.png",
+    "tadazz-classic-answerRecap.png"
+  ]
+}

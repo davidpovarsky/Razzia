@@ -1,0 +1,62 @@
+{
+  "kind": "prepared-not-executed-release-coordination",
+  "preparationBase": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "serverMutationPerformed": false,
+  "gitMutationPerformed": false,
+  "heavyTestsRun": false,
+  "helpers": [
+    {
+      "path": "work/phase-continuity-20261119/release-tools/qualify_current_candidate.py",
+      "sha256": "79fe3281270fdd53079267a24534a2967b0d60394b7e3e484c59dbd327fe3225",
+      "bytes": 2790,
+      "outerCompiled": true,
+      "remoteScriptsCompiled": 0
+    },
+    {
+      "path": "work/phase-continuity-20261119/release-tools/stage_current_candidate.py",
+      "sha256": "5550666638ac83cee42ceba84a4238938868c8e77e85101c62853f6ebe1f4cbf",
+      "bytes": 10876,
+      "outerCompiled": true,
+      "remoteScriptsCompiled": 1
+    },
+    {
+      "path": "work/phase-continuity-20261119/release-tools/observe_current_candidate.py",
+      "sha256": "2d3a47a6419bd62b1307bf3132242d1535e25361172239cf0fbf8355e16abe36",
+      "bytes": 5957,
+      "outerCompiled": true,
+      "remoteScriptsCompiled": 1
+    },
+    {
+      "path": "work/phase-continuity-20261119/release-tools/deploy_current_candidate.py",
+      "sha256": "5c5c7c5650e819747ba8f37ae57c8cd82f0a22e1e21096a24225a6e07b7bdf72",
+      "bytes": 7402,
+      "outerCompiled": true,
+      "remoteScriptsCompiled": 1
+    },
+    {
+      "path": "work/phase-continuity-20261119/release-tools/prepare_qa_cache.py",
+      "sha256": "84c4eca17002a80f2eec4f0d13229f7edd7001880d2c5580c15edf99a9aeb316",
+      "bytes": 11291,
+      "outerCompiled": true,
+      "remoteScriptsCompiled": 1
+    }
+  ],
+  "archivedOriginals": [
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/qualify_current_candidate.py",
+      "sha256": "5916506d58421fb1b21d8d373257593b0f6e9b68dfb01aba5b9763ed3d319352"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/stage_current_candidate.py",
+      "sha256": "819ed320b1c02ea0c297f826ef842b4c3cca043719ce20059c2d4a87a87bb48f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/observe_current_candidate.py",
+      "sha256": "1a4c772018039a0f648e37acb77e97f4fdb5e1c5d26cd4e2f12553c56e745492"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/deploy_current_candidate.py",
+      "sha256": "cf19dfabcee3657b60b10ae1cff1bc435ac07e6ec5758c0d58b42e50bff3a8ee"
+    }
+  ]
+}

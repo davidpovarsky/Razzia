@@ -1,0 +1,28 @@
+{
+  "applicationSourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "copiedByteForByte": true,
+  "deployerSha256": "3cf6acd277c9c9f7322c21c17ad27da8ee10a8ab2dd76594f81bc7d5f707cc35",
+  "files": [
+    {
+      "bytes": 4623,
+      "name": "verification.json",
+      "sha256": "d333c27e3b00d53a3bae29914d01781503829d55647c054a036d1ef79ac9b7fa",
+      "source": "work/ux-unified-20261119/deployment-host-config-check/verification.json"
+    },
+    {
+      "bytes": 3992,
+      "name": "windows-verification.json",
+      "sha256": "13429d4593213601d093143ff630f16a635ba23bf31e5a966c0f346cc5109c6b",
+      "source": "work/ux-unified-20261119/deployment-host-config-check/windows-verification.json"
+    },
+    {
+      "bytes": 8985,
+      "name": "deploy-mcp-site.py.diff",
+      "sha256": "a99365beaf47fb5d2cd4f13c26b25718f786e2fdd13fe904cc860aeb5093163d",
+      "source": "work/ux-unified-20261119/deployment-host-config-check/deploy-mcp-site.py.diff"
+    }
+  ],
+  "publicOnly": true,
+  "purpose": "docker-oom-kill-disable-default-comparison",
+  "version": 1
+}

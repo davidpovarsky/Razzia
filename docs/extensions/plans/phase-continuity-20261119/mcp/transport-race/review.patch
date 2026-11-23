@@ -1,0 +1,703 @@
+--- a/extensions/src/mcp-app/widget/full-show-entry.tsx
++++ b/extensions/src/mcp-app/widget/full-show-entry.tsx
+@@ -166,6 +166,33 @@
+     ...(chapterId ? { chapterId } : {}),
+   }
+ }
++function getTransportFrame(): FullShowFrameV3 | null {
++  const current = state
++
++  if (
++    closed ||
++    (current.status === "loading" && current.previewOrigin !== "automatic")
++  ) {
++    return null
++  }
++
++  return current.frame
++}
++async function previewCard(action: "previous" | "next" | "replay") {
++  const frame = getTransportFrame()
++
++  if (!frame || !app.getHostCapabilities()?.serverTools) {
++    return
++  }
++
++  // Read the visible logical card, not the pending automatic destination.
++  const navigation = fullShowCardNavigation(frame.inventory)
++  const chapter = navigation[action === "replay" ? "current" : action]
++
++  if (chapter) {
++    await preview(selection(frame, chapter.id), action === "replay")
++  }
++}
+ async function previewDisplayPreferences(patch: {
+   locale?: string
+   reducedMotion?: boolean
+@@ -407,7 +434,7 @@
+   const { frame } = current
+   const canCall = !closed && Boolean(app.getHostCapabilities()?.serverTools)
+   const busy = current.status === "loading"
+-  const displayBusy = busy && current.previewOrigin !== "automatic"
++  const manualBusy = busy && current.previewOrigin !== "automatic"
+   const canExpand =
+     !closed &&
+     Boolean(app.getHostContext()?.availableDisplayModes?.includes("fullscreen"))
+@@ -521,6 +548,19 @@
+       active = false
+     }
+   }, [frame?.inventory.draftId, frame?.inventory.revision, canCall])
++
++  function togglePlayback() {
++    if (!getTransportFrame()) {
++      return
++    }
++
++    const livePlayback = playbackOwner.snapshot()
++    setPlayback(
++      livePlayback.clock.paused
++        ? playbackOwner.resume()
++        : playbackOwner.pause(),
++    )
++  }
+ 
+   async function refresh() {
+     const { selected } = current
+@@ -673,7 +713,7 @@
+         {t("language")}
+         <select
+           data-testid="full-show-language"
+-          disabled={!canCall || displayBusy}
++          disabled={!canCall || manualBusy}
+           value={frame.inventory.context.locale}
+           onChange={(event) =>
+             void previewDisplayPreferences({ locale: event.target.value })
+@@ -689,7 +729,7 @@
+           data-testid="full-show-reduce-motion"
+           type="checkbox"
+           checked={frame.inventory.context.reducedMotion}
+-          disabled={!canCall || displayBusy}
++          disabled={!canCall || manualBusy}
+           onChange={(event) =>
+             void previewDisplayPreferences({
+               reducedMotion: event.target.checked,
+@@ -737,11 +777,8 @@
+           data-testid="full-show-previous"
+           aria-label={t("previousChapter")}
+           title={t("previousChapter")}
+-          disabled={!canCall || busy || !navigation.previous}
+-          onClick={() =>
+-            navigation.previous &&
+-            void preview(selection(frame, navigation.previous.id))
+-          }
++          disabled={!canCall || manualBusy || !navigation.previous}
++          onClick={() => void previewCard("previous")}
+         >
+           <ArrowLeft aria-hidden="true" />
+         </NativeButton>
+@@ -755,11 +792,8 @@
+           data-testid="full-show-next"
+           aria-label={t("nextChapter")}
+           title={t("nextChapter")}
+-          disabled={!canCall || busy || !navigation.next}
+-          onClick={() =>
+-            navigation.next &&
+-            void preview(selection(frame, navigation.next.id))
+-          }
++          disabled={!canCall || manualBusy || !navigation.next}
++          onClick={() => void previewCard("next")}
+         >
+           <ArrowRight aria-hidden="true" />
+         </NativeButton>
+@@ -770,14 +804,8 @@
+           data-testid="full-show-pause"
+           aria-label={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
+           title={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
+-          disabled={busy}
+-          onClick={() =>
+-            setPlayback(
+-              playback.clock.paused
+-                ? playbackOwner.resume()
+-                : playbackOwner.pause(),
+-            )
+-          }
++          disabled={manualBusy}
++          onClick={togglePlayback}
+         >
+           {playback.clock.paused ? (
+             <Play aria-hidden="true" />
+@@ -792,10 +820,8 @@
+           data-testid="full-show-replay"
+           aria-label={t("replay")}
+           title={t("replay")}
+-          disabled={!canCall || busy}
+-          onClick={() =>
+-            void preview(selection(frame, navigation.current?.id), true)
+-          }
++          disabled={!canCall || manualBusy}
++          onClick={() => void previewCard("replay")}
+         >
+           <RotateCcw aria-hidden="true" />
+         </NativeButton>
+--- a/extensions/qa/phase3-full-show/browser-verify.mjs
++++ b/extensions/qa/phase3-full-show/browser-verify.mjs
+@@ -7,6 +7,7 @@
+ } from "./workspace-controls.mjs"
+ import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
+ import { verifyPreferenceRace } from "./preference-race.mjs"
++import { verifyTransportRace } from "./transport-race.mjs"
+ import { verifyHostControls } from "./host-controls.mjs"
+ import {
+   installPhaseContinuityProbe,
+@@ -860,6 +861,37 @@
+         )
+       }
+ 
++      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "transport-race") {
++        await run(
++          `${engine} / ${
++            theme
++          } readonly transport supersedes automatic preview`,
++          async () => {
++            observations.push(
++              await verifyTransportRace({
++                page,
++                base,
++                scenario,
++                engine,
++                theme,
++                evidence,
++                readRecord: async () =>
++                  scenario.repository.get(
++                    await qaSession.principal(),
++                    scenario.record.draftId,
++                  ),
++              }),
++            )
++            assert.deepEqual(caseErrors, [])
++          },
++          60000,
++        )
++        await prepareHostNavigation(page, "close transport race context")
++        await context.close()
++
++        continue
++      }
++
+       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "preference-race") {
+         await run(
+           `${engine} / ${theme} preferences supersede automatic preview`,
+@@ -2028,12 +2060,72 @@
+               .first()
+               .elementHandle()
+             assert(node)
++            const target = scenario.chapters.find(
++              (chapter) =>
++                chapter.kind === kind && chapter.questionOrdinal === ordinal,
++            )
++            assert(target)
++            const replayDeadline = Date.now() + 10000
++            const acknowledged = page.waitForResponse(
++              (response) => {
++                if (
++                  response.url() !==
++                    `${base}/qa/call?scenario=${scenario.id}` ||
++                  response.request().method() !== "POST"
++                ) {
++                  return false
++                }
++
++                const call = response.request().postDataJSON()
++
++                return (
++                  call.name === "preview_show" &&
++                  call.arguments.draftId === scenario.record.draftId &&
++                  call.arguments.chapterId === target.id
++                )
++              },
++              { timeout: 10000 },
++            )
++            // Keep the original wait budget even when click or ACK fails.
++            void acknowledged.catch(() => undefined)
+             await iframe.getByTestId("full-show-replay").click()
+-            await iframe
+-              .locator(
+-                `[data-full-show-chapter]:not([data-playback-epoch="${beforeEpoch}"])`,
+-              )
+-              .waitFor()
++            const response = await acknowledged
++            assert.equal(response.status(), 200)
++            const acknowledgement = await response.json()
++            assert.equal(acknowledgement.structuredContent.ok, true)
++            assert.equal(
++              acknowledgement.structuredContent.data.selectedChapterId,
++              target.id,
++            )
++            const remainingMs = replayDeadline - Date.now()
++            assert(
++              remainingMs > 0,
++              "Replay acknowledgement and native remount must finish within 10 seconds",
++            )
++            const child = page
++              .frames()
++              .find((value) => value.url().endsWith("/widget"))
++            assert(child)
++            await child.waitForFunction(
++              ({ oldNode, targetId, oldEpoch }) => {
++                const native = document.querySelector(
++                  '[data-testid="full-show-native-surface"]',
++                )?.shadowRoot
++                const current = native?.querySelector(
++                  "[data-full-show-chapter]",
++                )
++
++                return (
++                  current?.getAttribute("data-full-show-chapter") ===
++                    targetId &&
++                  current.getAttribute("data-playback-epoch") !== oldEpoch &&
++                  !oldNode.isConnected &&
++                  Boolean(current.innerText.trim())
++                )
++              },
++              { oldNode: node, targetId: target.id, oldEpoch: beforeEpoch },
++              { timeout: remainingMs },
++            )
+             assert.equal(
+               await node.evaluate((element) => element.isConnected),
+               false,
+--- a/extensions/qa/phase3-full-show/preference-race.mjs
++++ b/extensions/qa/phase3-full-show/preference-race.mjs
+@@ -34,6 +34,87 @@
+     clearTimeout(timer)
+   }
+ }
++
++export async function installHeldPreviewResponses(page, base, scenario) {
++  const gates = []
++  const active = new Set()
++  const routeErrors = []
++  const pattern = `${base}/qa/call?scenario=${scenario.id}`
++  const arm = (label, matches) => {
++    const gate = {
++      label,
++      matches,
++      ready: deferred(),
++      release: deferred(),
++      done: deferred(),
++      claimed: false,
++      fulfilled: false,
++    }
++    gates.push(gate)
++
++    return gate
++  }
++  const handler = async (route) => {
++    const call = route.request().postDataJSON()
++    const gate =
++      call.name === "preview_show"
++        ? gates.find(
++            (candidate) =>
++              !candidate.claimed && candidate.matches(call.arguments),
++          )
++        : null
++
++    if (!gate) {
++      await route.continue()
++
++      return
++    }
++
++    gate.claimed = true
++    gate.input = structuredClone(call.arguments)
++    const operation = (async () => {
++      // The intercepted request reaches the real QA backend and official MCP client.
++      const response = await route.fetch()
++      assert.equal(response.status(), 200)
++      const packet = await response.json()
++      assert.equal(packet.structuredContent.ok, true)
++      assert.notEqual(packet.isError, true)
++      gate.result = packet.structuredContent.data
++      gate.ready.resolve()
++      await gate.release.promise
++      await route.fulfill({ response })
++      gate.fulfilled = true
++    })()
++    active.add(operation)
++
++    try {
++      await operation
++    } catch (error) {
++      gate.ready.reject(error)
++      routeErrors.push(String(error))
++      throw error
++    } finally {
++      active.delete(operation)
++      gate.done.resolve()
++    }
++  }
++  await page.route(pattern, handler)
++
++  return {
++    gates,
++    arm,
++    routeErrors,
++    async dispose() {
++      for (const gate of gates) {
++        gate.release.resolve()
++      }
++      await Promise.allSettled([...active])
++      await page.unroute(pattern, handler)
++    },
++  }
++}
++
++export { bounded as waitForHeldPreview }
+ 
+ /** Delay real loopback ACKs; preserve the issuer, SDK, AppBridge and native renderer. */
+ export async function verifyPreferenceRace({
+@@ -54,69 +135,8 @@
+     status: "RUNNING",
+   }
+   const before = await readRecord()
+-  const gates = []
+-  const active = new Set()
+-  const routeErrors = []
+-  const pattern = `${base}/qa/call?scenario=${scenario.id}`
+-  const arm = (label, matches) => {
+-    const gate = {
+-      label,
+-      matches,
+-      ready: deferred(),
+-      release: deferred(),
+-      done: deferred(),
+-      claimed: false,
+-      fulfilled: false,
+-    }
+-    gates.push(gate)
+-
+-    return gate
+-  }
+-  const handler = async (route) => {
+-    const call = route.request().postDataJSON()
+-    const gate =
+-      call.name === "preview_show"
+-        ? gates.find(
+-            (candidate) =>
+-              !candidate.claimed && candidate.matches(call.arguments),
+-          )
+-        : null
+-
+-    if (!gate) {
+-      await route.continue()
+-
+-      return
+-    }
+-
+-    gate.claimed = true
+-    gate.input = structuredClone(call.arguments)
+-    const operation = (async () => {
+-      // The intercepted request reaches the real QA backend and official MCP client.
+-      const response = await route.fetch()
+-      assert.equal(response.status(), 200)
+-      const packet = await response.json()
+-      assert.equal(packet.structuredContent.ok, true)
+-      assert.notEqual(packet.isError, true)
+-      gate.result = packet.structuredContent.data
+-      gate.ready.resolve()
+-      await gate.release.promise
+-      await route.fulfill({ response })
+-      gate.fulfilled = true
+-    })()
+-    active.add(operation)
+-
+-    try {
+-      await operation
+-    } catch (error) {
+-      gate.ready.reject(error)
+-      routeErrors.push(String(error))
+-      throw error
+-    } finally {
+-      active.delete(operation)
+-      gate.done.resolve()
+-    }
+-  }
+-  await page.route(pattern, handler)
++  const { gates, arm, routeErrors, dispose } =
++    await installHeldPreviewResponses(page, base, scenario)
+ 
+   try {
+     const question = scenario.chapters.find(
+@@ -347,11 +367,7 @@
+     witness.error = String(error)
+     throw error
+   } finally {
+-    for (const gate of gates) {
+-      gate.release.resolve()
+-    }
+-    await Promise.allSettled([...active])
+-    await page.unroute(pattern, handler)
++    await dispose()
+     witness.gates = gates.map(({ label, input, claimed, fulfilled }) => ({
+       label,
+       input,
+--- /dev/null
++++ b/extensions/qa/phase3-full-show/transport-race.mjs
+@@ -0,0 +1,258 @@
++import assert from "node:assert/strict"
++import fs from "node:fs"
++import path from "node:path"
++import { prepareHostNavigation } from "./workspace-controls.mjs"
++import {
++  installHeldPreviewResponses,
++  waitForHeldPreview,
++} from "./preference-race.mjs"
++
++export async function verifyTransportRace({
++  page,
++  base,
++  scenario,
++  engine,
++  theme,
++  evidence,
++  readRecord,
++}) {
++  const before = await readRecord()
++  const held = await installHeldPreviewResponses(page, base, scenario)
++  const witness = { engine, theme, status: "RUNNING", cases: [] }
++
++  try {
++    const chapter = (kind, ordinal) =>
++      scenario.chapters.find(
++        (candidate) =>
++          candidate.kind === kind && candidate.questionOrdinal === ordinal,
++      )
++    const question = chapter("question", 3)
++    const voting = chapter("voting", 3)
++    assert(question && voting)
++    for (const action of ["pause", "replay", "next", "previous"]) {
++      const result = { action, snapshots: [] }
++      witness.cases.push(result)
++      scenario.selection.chapterId = question.id
++      scenario.selection.context.locale = "en"
++      scenario.selection.context.reducedMotion = true
++      const automatic = held.arm(
++        `${action} automatic`,
++        (input) => input.chapterId === voting.id,
++      )
++      await prepareHostNavigation(page, `${action} automatic transport race`)
++      await page.goto(`${base}/host?scenario=${scenario.id}`)
++      await page.locator("html[data-host-ready=true]").waitFor()
++      const iframe = page.frameLocator("iframe")
++      const stage = iframe.locator("[data-full-show-chapter]")
++      await iframe
++        .locator(`[data-full-show-chapter="${question.id}"]`)
++        .waitFor()
++      const child = page
++        .frames()
++        .find((frame) => frame.url().endsWith("/widget"))
++      assert(child)
++      await child.evaluate(() => {
++        window.__transportEvents = []
++        for (const type of ["pointerdown", "pointerup", "click"]) {
++          document.addEventListener(
++            type,
++            (event) => {
++              const button = event.target?.closest?.("button[data-testid]")
++
++              if (
++                button &&
++                [
++                  "full-show-pause",
++                  "full-show-replay",
++                  "full-show-next",
++                  "full-show-previous",
++                ].includes(button.dataset.testid)
++              ) {
++                window.__transportEvents.push({
++                  type,
++                  id: button.dataset.testid,
++                  disabled: button.disabled,
++                  at: performance.now(),
++                })
++              }
++            },
++            true,
++          )
++        }
++      })
++      await waitForHeldPreview(automatic.ready.promise, "Automatic preview ACK")
++      const snapshot = async (step) => {
++        const disabled = {}
++        for (const control of ["pause", "replay", "next", "previous"]) {
++          disabled[control] = await iframe
++            .getByTestId(`full-show-${control}`)
++            .isDisabled()
++        }
++        const value = {
++          step,
++          disabled,
++          authoringDisabled: await iframe
++            .getByTestId("full-show-load-assets")
++            .isDisabled(),
++          chapter: await stage.getAttribute("data-full-show-chapter"),
++          epoch: Number(await stage.getAttribute("data-playback-epoch")),
++          paused: await stage.getAttribute("data-playback-paused"),
++        }
++        result.snapshots.push(value)
++
++        return value
++      }
++      const initial = await snapshot("automatic ACK held")
++      assert.equal(initial.authoringDisabled, true)
++      assert.equal(initial.chapter, question.id)
++      assert.equal(
++        initial.disabled[action],
++        false,
++        `Automatic loading must not disable ${action}`,
++      )
++      const oldNode = await stage
++        .locator(":scope > div")
++        .first()
++        .elementHandle()
++      assert(oldNode)
++
++      if (action === "pause") {
++        const callsBefore = await page.evaluate(() => window.__host.calls())
++        await iframe.getByTestId("full-show-pause").click()
++        await iframe.locator('[data-playback-paused="true"]').waitFor()
++        assert.deepEqual(
++          await page.evaluate(() => window.__host.calls()),
++          callsBefore,
++        )
++        await snapshot("paused while automatic ACK held")
++        automatic.release.resolve()
++        await waitForHeldPreview(
++          automatic.done.promise,
++          "Automatic ACK delivery",
++        )
++        await iframe
++          .locator(
++            `[data-full-show-chapter="${voting.id}"][data-playback-paused="true"]`,
++          )
++          .waitFor()
++        const applied = await snapshot("automatic ACK preserves user pause")
++        assert.equal(applied.paused, "true")
++        assert(applied.epoch > initial.epoch)
++        result.userPausePreserved = true
++      } else {
++        const target = chapter(
++          "question",
++          { next: 4, previous: 2, replay: 3 }[action],
++        )
++        assert(target)
++        const manual = held.arm(
++          `${action} manual`,
++          (input) => input.chapterId === target.id,
++        )
++        await iframe.getByTestId(`full-show-${action}`).click()
++        await waitForHeldPreview(manual.ready.promise, "Explicit transport ACK")
++        const waiting = await snapshot("explicit transport ACK held")
++        assert(Object.values(waiting.disabled).every(Boolean))
++        assert.equal(waiting.authoringDisabled, true)
++        assert.equal(manual.input.chapterId, target.id)
++        manual.release.resolve()
++        await child.waitForFunction(
++          ({ previousNode, targetId, previousEpoch }) => {
++            const native = document.querySelector(
++              '[data-testid="full-show-native-surface"]',
++            )?.shadowRoot
++            const current = native?.querySelector("[data-full-show-chapter]")
++
++            return (
++              current?.getAttribute("data-full-show-chapter") === targetId &&
++              Number(current.getAttribute("data-playback-epoch")) >
++                previousEpoch &&
++              !previousNode.isConnected &&
++              Boolean(current.innerText.trim())
++            )
++          },
++          {
++            previousNode: oldNode,
++            targetId: target.id,
++            previousEpoch: initial.epoch,
++          },
++        )
++        assert.equal(automatic.fulfilled, false)
++        await iframe.getByTestId("full-show-pause").click()
++        await iframe.locator('[data-playback-paused="true"]').waitFor()
++        await snapshot(
++          "explicit transport acknowledged, native remounted and paused",
++        )
++        automatic.release.resolve()
++        await waitForHeldPreview(
++          automatic.done.promise,
++          "Old automatic ACK delivery",
++        )
++        await page.waitForFunction(() => {
++          const pending = window.__host.lifecycle().remaining
++
++          return (
++            pending.http === 0 &&
++            pending.handlers === 0 &&
++            pending.replies === 0
++          )
++        })
++        await child.evaluate(async () => {
++          await new Promise(requestAnimationFrame)
++          await new Promise(requestAnimationFrame)
++        })
++        const final = await snapshot("old automatic ACK ignored")
++        assert.equal(final.chapter, target.id)
++        assert.equal(final.paused, "true")
++        assert.equal(
++          await oldNode.evaluate((element) => element.isConnected),
++          false,
++        )
++        assert.equal(final.authoringDisabled, false)
++        assert(Object.values(final.disabled).every((value) => !value))
++        result.explicitTarget = manual.input.chapterId
++        result.oldAutomaticTarget = automatic.input.chapterId
++      }
++
++      assert.equal(automatic.fulfilled, true)
++      result.events = await child.evaluate(() => window.__transportEvents)
++      assert(
++        result.events.some(
++          (event) =>
++            event.type === "click" &&
++            event.id === `full-show-${action}` &&
++            !event.disabled,
++        ),
++      )
++      result.status = "PASS"
++      await oldNode.dispose()
++      await page.screenshot({
++        path: path.join(
++          evidence,
++          `${engine}-${theme}-${action}-transport-race.png`,
++        ),
++      })
++    }
++    assert.deepEqual(await readRecord(), before)
++    assert.deepEqual(held.routeErrors, [])
++    witness.status = "PASS"
++
++    return witness
++  } catch (error) {
++    witness.status = "FAIL"
++    witness.error = String(error)
++    throw error
++  } finally {
++    await held.dispose()
++    witness.gates = held.gates.map(({ label, input, claimed, fulfilled }) => ({
++      label,
++      input,
++      claimed,
++      fulfilled,
++    }))
++    fs.writeFileSync(
++      path.join(evidence, `${engine}-${theme}-transport-race.json`),
++      `${JSON.stringify(witness, null, 2)}\n`,
++    )
++  }
++}

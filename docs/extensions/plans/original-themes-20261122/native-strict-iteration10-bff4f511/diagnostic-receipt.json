@@ -1,0 +1,276 @@
+{
+  "actualScenarioNames": [
+    "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+    "native-pause-replay-previous-and-confirmed-skip",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-neon-arcade",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-retro-tv",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-magic-storybook",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-crystal-future",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-carnival-pop",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-sports-arena",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-mystery-noir",
+    "original-browser-console-and-resource-integrity",
+    "immutable-public-masters-after-editor-and-live-games"
+  ],
+  "allBrowserHelperPrefixByteIdentical": true,
+  "allBrowserHelperPrefixSha256": "a9307ab3a54db2016e3856ce0b8d8885a20b724f7c711f00b2d0870bb9acb507",
+  "applicationSourcesEqualCandidate": true,
+  "browserReceipt": {
+    "customerMountUsed": false,
+    "diagnosticOnly": true,
+    "isolatedNativeHost": true,
+    "manualListeningPerformed": false,
+    "passed": true,
+    "platform": "linux",
+    "realEmailSent": false,
+    "releaseQualified": false,
+    "results": [
+      {
+        "anonymousInstallDenied": true,
+        "crossAccountReadDenied": true,
+        "diagnosticOnly": true,
+        "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+        "originals": 8,
+        "passed": true,
+        "releaseQualified": false,
+        "rounds": 32,
+        "runtimeQaSourceEqualsCandidate": false
+      },
+      {
+        "diagnosticOnly": true,
+        "name": "native-pause-replay-previous-and-confirmed-skip",
+        "passed": true,
+        "releaseQualified": false,
+        "replayDiscardsOldVotes": true,
+        "retainedPausedTimer": true,
+        "runtimeQaSourceEqualsCandidate": false
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-neon-arcade",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-retro-tv",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-magic-storybook",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-crystal-future",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-carnival-pop",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-sports-arena",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "answerImages": 14,
+        "diagnosticOnly": true,
+        "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-mystery-noir",
+        "passed": true,
+        "questionImages": 1,
+        "questions": 4,
+        "realPlayers": 2,
+        "releaseQualified": false,
+        "resultsLayoutChecks": 4,
+        "runtimeQaSourceEqualsCandidate": false,
+        "tie": true,
+        "votingLayoutChecks": 4,
+        "zeroVotes": true
+      },
+      {
+        "diagnosticOnly": true,
+        "name": "original-browser-console-and-resource-integrity",
+        "passed": true,
+        "releaseQualified": false,
+        "runtimeQaSourceEqualsCandidate": false
+      },
+      {
+        "diagnosticOnly": true,
+        "name": "immutable-public-masters-after-editor-and-live-games",
+        "passed": true,
+        "releaseQualified": false,
+        "runtimeQaSourceEqualsCandidate": false
+      }
+    ],
+    "runtimeQaSourceEqualsCandidate": false,
+    "sourceSha": "6a858c0256ae1f5fc98d67585b7d17ab3513eda0"
+  },
+  "buildBaseSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "buildReceipt": "/home/ubuntu/tadazz-original-themes-preflight-20261122/iteration10-receipt.json",
+  "buildReceiptSha256": "8867c6edf942ecdb45a9486288f8b692a7ad70bf42add176c9469be02009e80e",
+  "candidateQaHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": "f55342b0eb6fef8af9621e35eac0fabcf0652fa5d69f16ac7f0b1623834f9ca7",
+    "extensions/qa/original-themes/audio-observer.mjs": "7815dc7945d6c1b11d57e555ee90ab11857abada98411580e9f305a72d0d7117",
+    "extensions/qa/original-themes/browser-verify.mjs": "7a75d01de16cf03a4b495d5127f72503ad77751a55ac9d1231acc8b07c9b6545",
+    "extensions/qa/original-themes/contract.mjs": "ca76fa21f782b30f258297dfe4ff5e899b04298ba328b64e34c6560a29401ca0",
+    "extensions/qa/public-gallery/question-sequence-verify.mjs": "d8bbd906b1f5e05ebb68f3e0057ddeb2b2d326d2107639121506b93cab2e72e3",
+    "extensions/qa/public-gallery/viewer-controls-verify.mjs": "fd28f2fa6d9a10aef4e81ffbf6b7ef75d11a9a50a91568c4ec8651deab8a984b"
+  },
+  "candidateSha": "6a858c0256ae1f5fc98d67585b7d17ab3513eda0",
+  "completedFamilies": [
+    "royal-quiz",
+    "neon-arcade",
+    "retro-tv",
+    "magic-storybook",
+    "crystal-future",
+    "carnival-pop",
+    "sports-arena",
+    "mystery-noir"
+  ],
+  "containerBeforeStop": {
+    "exitCode": 0,
+    "oomKilled": false,
+    "status": "running"
+  },
+  "containerStopped": true,
+  "customerMountUsed": false,
+  "diagnosticOnly": true,
+  "exit": 0,
+  "expectedScenarioNames": [
+    "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+    "immutable-public-masters-after-editor-and-live-games",
+    "native-pause-replay-previous-and-confirmed-skip",
+    "original-browser-console-and-resource-integrity",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-carnival-pop",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-crystal-future",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-magic-storybook",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-mystery-noir",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-neon-arcade",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-retro-tv",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz",
+    "reduced-motion-native-two-to-five-choices-votes-images-and-audio-sports-arena"
+  ],
+  "nativeFunctionByteIdentical": true,
+  "nativeFunctionSha256": "1a2339e36ec799d759112234609dc88db208868284b73427302905ebfd73e67a",
+  "network": "none",
+  "noOom": true,
+  "overlayHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": {
+      "bytes": 10148,
+      "sha256": "2f5210e1913e9de50841579d1060b14b5d6dca3673a3134ec651ed6d76451037"
+    },
+    "extensions/qa/original-themes/audio-observer.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/audio-observer.mjs"
+    },
+    "extensions/qa/original-themes/browser-verify.mjs": {
+      "bytes": 42289,
+      "sha256": "3bc849269c4232e076b5a43a470385c28ad133ad814bc5e75d25b5655bf3239f"
+    },
+    "extensions/qa/original-themes/contract.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/contract.mjs"
+    },
+    "extensions/qa/phase3-native-consent": {
+      "symlink": "/source/extensions/qa/phase3-native-consent"
+    },
+    "extensions/qa/public-gallery": {
+      "symlink": "/source/extensions/qa/public-gallery"
+    },
+    "extensions/src": {
+      "symlink": "/source/extensions/src"
+    }
+  },
+  "overlayHashesVerifiedBeforeAfter": true,
+  "passed": true,
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "releaseQualified": false,
+  "run": "native-strict-iteration10-bff4f511",
+  "runtimeQaSourceEqualsCandidate": false,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 369.03,
+  "sourceAfterSha256": "ed5e68935b348086a4929bd8a1735f1777217341886dcbf885b45f6beef934ab",
+  "sourceAndBuiltHashesVerifiedBeforeAfter": true,
+  "sourceBeforeSha256": "ed5e68935b348086a4929bd8a1735f1777217341886dcbf885b45f6beef934ab",
+  "sourceFileCount": 2678,
+  "sourceReadOnly": true,
+  "strictNativeCoverageVerified": true
+}

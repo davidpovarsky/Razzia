@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "testedInputs": 129,
+  "gitIndexBytesMatchTestedManifest": true,
+  "narrowProductionFiles": [
+    "server/connection.ts",
+    "server/request-boundary.ts"
+  ],
+  "originalTestCases": 35,
+  "originalNineTestFileBytesUnchanged": true,
+  "parentVitestIntersection": 0,
+  "privateSuites": 10,
+  "unleasedPaths": [],
+  "priorFrozenEvidenceChanges": 0,
+  "sourceWhitespace": "PASS scoped git diff --cached --check",
+  "rawEvidence": "Original raw guard FAIL and all previous successful/failed receipts preserved"
+}

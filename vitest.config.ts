@@ -5,6 +5,9 @@ const alias = {
   "@razzia/common": fileURLToPath(
     new URL("./packages/common/src", import.meta.url),
   ),
+  "@razzia/extensions": fileURLToPath(
+    new URL("./extensions/src", import.meta.url),
+  ),
   "@razzia/socket": fileURLToPath(
     new URL("./packages/socket/src", import.meta.url),
   ),

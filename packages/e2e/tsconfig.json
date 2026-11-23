@@ -6,8 +6,10 @@
     "types": ["node"],
     "moduleResolution": "bundler",
     "strict": true,
+    "jsx": "react-jsx",
     "skipLibCheck": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true
   }
 }

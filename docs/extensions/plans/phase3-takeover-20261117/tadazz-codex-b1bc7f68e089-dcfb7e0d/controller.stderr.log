@@ -1,0 +1,8 @@
+time="2026-11-17T16:44:32Z" level=error msg="Can't add file /tmp/tadazz-codex-b1bc7f68e089-dcfb7e0d.tar.gz to tar: io: read/write on closed pipe"
+time="2026-11-17T16:44:32Z" level=error msg="Can't close tar writer: io: read/write on closed pipe"
+Error response from daemon: Could not find the file /tmp/tadazz-codex-b1bc7f68e089-dcfb7e0d in container tadazz-phase2-20261116
+Traceback (most recent call last):
+  File "<stdin>", line 37, in <module>
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'cp', '/tmp/tadazz-codex-b1bc7f68e089-dcfb7e0d.tar.gz', 'tadazz-phase2-20261116:/tmp/tadazz-codex-b1bc7f68e089-dcfb7e0d/source.tar.gz']' returned non-zero exit status 1.

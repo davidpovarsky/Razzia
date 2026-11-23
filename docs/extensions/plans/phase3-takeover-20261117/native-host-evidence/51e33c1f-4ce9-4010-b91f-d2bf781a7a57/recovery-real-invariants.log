@@ -1,0 +1,12 @@
+[StartupRecovery] Recovered 1 quiz journals and 0 media delete journals
+✔ saveCompositeQuiz persists schema defaults so raw V2 saves survive crash replay (186.5501ms)
+✔ detachMediaFromShowData updates V1/V2 baseDigest on question media detach and guards invariants (3.014ms)
+✔ executeMediaDeleteTransaction keeps V1 and V2 getCompositeQuiz().digestMatches === true after base detach (421.6132ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1923.5377

@@ -13,11 +13,12 @@ const MediaRow = ({ media, onSelect, onDelete }: Props) => {
   const { t } = useTranslation()
 
   return (
-    <div className="hover:bg-accent/50 flex items-center gap-2 rounded-lg pr-2 transition">
+    <div className="hover:bg-accent/50 flex items-center gap-2 rounded-lg pe-2 transition">
       <button
+        type="button"
         onClick={onSelect}
         title={media.name}
-        className="focus-visible:ring-primary flex min-w-0 flex-1 items-center gap-3 rounded-lg p-1.5 text-left ring-2 ring-transparent focus-visible:outline-none"
+        className="focus-visible:ring-primary flex min-w-0 flex-1 items-center gap-3 rounded-lg p-1.5 text-start ring-2 ring-transparent focus-visible:outline-none"
       >
         <div className="relative size-12 shrink-0 overflow-hidden rounded-md">
           <MediaThumbnail media={media} size="sm" />

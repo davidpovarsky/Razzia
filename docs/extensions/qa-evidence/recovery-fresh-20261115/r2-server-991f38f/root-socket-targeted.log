@@ -1,0 +1,29 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work[39m
+
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22minitConfig[2m > [22mcreates the example quizz on first launch[32m 93[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mquizz storage[2m > [22msaves, reads, updates and deletes a quizz[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mquizz storage[2m > [22mrejects an invalid quizz with the first error key[32m 82[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mquizz storage[2m > [22mlists quizz sorted by subject, numbers included[32m 2[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mquizz storage[2m > [22mskips invalid files and assigns an id to files without one[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mquizz storage[2m > [22mnever resolves an id to a file outside of the quizz folder[32m 1[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mresults storage[2m > [22mlists results from the most recent one[32m 1[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mresults storage[2m > [22mreads results saved before survey mode as quiz results[32m 1[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts[2m > [22mresults storage[2m > [22mdeletes a result[32m 2[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22msaveMedia[2m > [22mdetects the type from the content, not the file name[32m 90[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22msaveMedia[2m > [22mrejects files that are not an accepted media[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22mlistMedia[2m > [22monly lists accepted media files[32m 2[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22mdeleteMedia[2m > [22mdeletes an uploaded media[32m 1[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22mdeleteMedia[2m > [22mrejects the name ../secret.png[32m 1[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22mdeleteMedia[2m > [22mrejects the name image.exe[32m 0[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22mdeleteMedia[2m > [22mrejects the name image[32m 0[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts[2m > [22mdeleteMedia[2m > [22mfails on a missing media[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 08:31:14
+[2m   Duration [22m 3.61s[2m (import 47%, transform 33%, tests 12%, worker 4%, environment 3%, setup 1%)[22m
+
+[2m    Isolate [22m [33m2 workers spawned[39m[2m · ~556ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~556ms faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+

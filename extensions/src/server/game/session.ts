@@ -1,0 +1,1080 @@
+// oxlint-disable eslint/max-params -- Preserve the existing explicit identity, revision, role and abort arguments at this adapter boundary.
+import { buildLobbyDirectory } from "./public-directory"
+import {
+  extensionCommandSchema,
+  isQuizExtrasV2,
+  normalizeLegacyStageLook,
+  resolveStageLook,
+  type ActiveSceneData,
+  type AnyQuizExtras,
+  type ExtensionCommand,
+  type ExtensionPhase,
+  type ExtensionStateEnvelope,
+  type PublicAnswerRecap,
+  type PublicFullShowData,
+  type PublicInterimResults,
+  type PublicRankEntry,
+  type RevealDistributionSnapshot,
+  type SceneConfig,
+  createShowThemeRegistry,
+  type ShowThemeDefinition,
+} from "../../core/index"
+import {
+  assignManual,
+  assignRoundRobin,
+  projectTeamScores,
+  type PlayerScoreInfo,
+  type TeamScoreProjection,
+} from "../../gameplay/index"
+import type { StudioShowCoordinator } from "./studio-show-coordinator"
+import {
+  projectApplicationComposition,
+  publicApplicationCompositionMediaNames,
+  type ApplicationCompositionAppearance,
+} from "../../core/show-library/application-composition-pin"
+
+export interface ExtensionSessionDelegate {
+  getVoteCompletionReason?: () => "elapsed" | "manual" | "allAnswered" | null
+  getFullShowData?: () => PublicFullShowData
+  endAnswerTimer?: () => boolean
+  nextScreen?: () => boolean
+  previousScreen?: () => boolean
+  cancelActiveVote?: () => boolean
+  reopenQuestion?: (questionIndex: number) => boolean
+  skipQuestion?: (reason?: string) => boolean
+  replayFromCheckpoint?: (questionIndex: number) => boolean
+  endOrSkipInterlude?: (reason?: string) => boolean
+  getHistory?: (questionIndex?: number) => unknown
+  advanceTimelineScene?: (
+    sceneId?: string,
+    epoch?: number,
+    timelineStepIndex?: number,
+  ) => boolean
+  previousTimelineScene?: () => boolean
+  skipTimelineScene?: (
+    sceneId?: string,
+    epoch?: number,
+    timelineStepIndex?: number,
+  ) => boolean
+  getLeaderboard?: () => Array<{ displayName: string; points: number }>
+  getLastCompletedQuestionSummary?: () => PublicInterimResults | null
+  getAnswerRecapSummary?: (
+    scene: SceneConfig,
+    timelineStepIndex: number,
+  ) => PublicAnswerRecap | null
+  canPrevious?: () => {
+    can: boolean
+    reason?: string
+    willReopenQuestion?: boolean
+    answersReceived?: number
+  }
+  isAcceptingAnswers?: () => boolean
+  getAnswersCount?: () => number
+  getParticipation?: () => { connected: number; answered: number }
+  getPresentationLaunch?: () => {
+    stage: "standby" | "opening" | "lobby" | "running" | "closing" | "closed"
+    startedAt: number | null
+  } | null
+  pauseGame?: () => boolean
+  resumeGame?: () => boolean
+  getPauseSnapshot?: () => {
+    paused: boolean
+    remainingMs: number | null
+    deadline: number | null
+  }
+}
+
+export class ExtensionGameSession {
+  readonly gameId: string
+  readonly extras: AnyQuizExtras | null
+  readonly themeDefinition: ShowThemeDefinition | null
+  private readonly themeDefinitionJson: string | null
+  private readonly compositionDefinitionJson: string | null
+  private readonly publicCompositionDefinitionJson: string | null
+  private readonly compositionTitle: string
+  private readonly compositionMediaNames: ReadonlySet<string>
+
+  private seq = 0
+  private epoch = 0
+  private currentQuestionIndex = 0
+  private phase: ExtensionPhase = "lobby"
+  private startedAt = Date.now()
+  private teamAssignments = new Map<string, string>()
+  private readonly revealedMedia = new Set<string>()
+  private readonly processedRequestIds = new Set<string>()
+  private manualLeaderboardRequested = false
+  private latestRevealDistribution: RevealDistributionSnapshot | null = null
+  private viewingHistoryIndex: number | null = null
+  private readonly storyTieChoices = new Map<string, number>()
+  private delegate: ExtensionSessionDelegate | null = null
+  private showCoordinator: StudioShowCoordinator | null = null
+
+  constructor(
+    gameId: string,
+    extras: AnyQuizExtras | null,
+    themeDefinition: ShowThemeDefinition | null = null,
+    composition:
+      (ApplicationCompositionAppearance & { showTitle?: string }) | null = null,
+  ) {
+    this.gameId = gameId
+    const appearance = composition
+      ? { registry: composition.registry, document: composition.document }
+      : null
+    this.compositionDefinitionJson = appearance
+      ? JSON.stringify(appearance)
+      : null
+    this.publicCompositionDefinitionJson = appearance
+      ? JSON.stringify(projectApplicationComposition(appearance, false))
+      : null
+    this.compositionTitle = composition?.showTitle?.slice(0, 240) ?? ""
+    this.compositionMediaNames = new Set(
+      appearance ? publicApplicationCompositionMediaNames(appearance) : [],
+    )
+    this.extras =
+      extras && isQuizExtrasV2(extras)
+        ? normalizeLegacyStageLook(extras)
+        : extras
+    this.themeDefinition = themeDefinition
+      ? (createShowThemeRegistry([themeDefinition]).get(
+          themeDefinition.id,
+          themeDefinition.version,
+        ) ?? null)
+      : null
+    this.themeDefinitionJson = this.themeDefinition
+      ? JSON.stringify(this.themeDefinition)
+      : null
+  }
+
+  setDelegate(delegate: ExtensionSessionDelegate | null): void {
+    this.delegate = delegate
+  }
+
+  canViewCompositionMedia(name: string): boolean {
+    return this.compositionMediaNames.has(name)
+  }
+
+  setShowCoordinator(coordinator: StudioShowCoordinator | null): void {
+    this.showCoordinator = coordinator
+  }
+
+  get coordinator(): StudioShowCoordinator | null {
+    return this.showCoordinator
+  }
+
+  get isEnabled(): boolean {
+    return this.extras !== null
+  }
+
+  hasUnresolvedStoryTie(): boolean {
+    const summary = this.delegate?.getLastCompletedQuestionSummary?.()
+
+    return Boolean(summary?.isTie && (summary.winners?.length ?? 0) > 1)
+  }
+
+  get currentSeq(): number {
+    return this.seq + (this.showCoordinator?.currentSeq ?? 0)
+  }
+
+  get currentEpoch(): number {
+    if (this.showCoordinator) {
+      return this.showCoordinator.currentEpoch
+    }
+
+    return this.epoch
+  }
+
+  get currentPhase(): ExtensionPhase {
+    return this.phase
+  }
+
+  get isManualLeaderboardRequested(): boolean {
+    return this.manualLeaderboardRequested
+  }
+
+  consumeManualLeaderboardRequest(): boolean {
+    const was = this.manualLeaderboardRequested
+
+    this.manualLeaderboardRequested = false
+
+    return was
+  }
+
+  getCurrentQuestionId(): string | undefined {
+    if (!this.extras?.questionIds) {
+      return undefined
+    }
+
+    return this.extras.questionIds[this.currentQuestionIndex]
+  }
+
+  getQuestionId(questionIndex: number): string | undefined {
+    return this.extras?.questionIds[questionIndex]
+  }
+
+  hasInterlude(questionIndex: number): boolean {
+    if (!this.extras?.questionIds) {
+      return false
+    }
+
+    const qId = this.extras.questionIds[questionIndex]
+
+    if (!qId) {
+      return false
+    }
+
+    return Boolean(this.extras.perQuestion[qId]?.interlude)
+  }
+
+  getInterludeAdvance(questionIndex: number): "auto" | "manual" {
+    if (!this.extras?.questionIds) {
+      return "manual"
+    }
+
+    const qId = this.extras.questionIds[questionIndex]
+
+    if (!qId) {
+      return "manual"
+    }
+
+    return this.extras.perQuestion[qId]?.interlude?.advance ?? "manual"
+  }
+
+  getInterludeDuration(questionIndex: number): number {
+    if (!this.extras?.questionIds) {
+      return 5000
+    }
+
+    const qId = this.extras.questionIds[questionIndex]
+
+    if (!qId) {
+      return 5000
+    }
+
+    return this.extras.perQuestion[qId]?.interlude?.durationMs ?? 5000
+  }
+
+  onInterludeStart(questionIndex: number): void {
+    this.currentQuestionIndex = questionIndex
+    this.phase = "interlude"
+    this.seq += 1
+    this.startedAt = Date.now()
+  }
+
+  onPresenceChanged(): void {
+    this.seq += 1
+  }
+
+  onPlayerJoin(clientId: string): void {
+    if (!this.extras?.teams.enabled) {
+      return
+    }
+
+    // Auto-assign in lobby if not already assigned
+    if (this.phase === "lobby" && !this.teamAssignments.has(clientId)) {
+      const currentAssigned = Array.from(this.teamAssignments.keys())
+      const allPlayers = [...currentAssigned, clientId]
+      const newAssignments = assignRoundRobin(
+        this.extras.teams.teams,
+        allPlayers,
+      )
+
+      this.teamAssignments = newAssignments
+    }
+  }
+
+  onPlayerKicked(clientId: string): void {
+    this.teamAssignments.delete(clientId)
+  }
+
+  rebindPlayerClientId(oldClientId: string, newClientId: string): void {
+    if (oldClientId === newClientId) {
+      return
+    }
+
+    const assignedTeam = this.teamAssignments.get(oldClientId)
+
+    if (assignedTeam !== undefined) {
+      this.teamAssignments.delete(oldClientId)
+      this.teamAssignments.set(newClientId, assignedTeam)
+    }
+  }
+
+  onQuestionStart(questionIndex: number): void {
+    this.epoch += 1
+    this.currentQuestionIndex = questionIndex
+    this.phase = "question"
+    this.seq += 1
+    this.startedAt = Date.now()
+    this.manualLeaderboardRequested = false
+    this.viewingHistoryIndex = null
+  }
+
+  onReplayCheckpoint(questionIndex: number): void {
+    for (const questionId of this.extras?.questionIds.slice(questionIndex) ??
+      []) {
+      this.storyTieChoices.delete(questionId)
+    }
+    this.epoch += 1
+    this.seq += 1
+    this.currentQuestionIndex = questionIndex
+    this.phase = "prepared"
+    this.startedAt = Date.now()
+    this.manualLeaderboardRequested = false
+    this.latestRevealDistribution = null
+    this.viewingHistoryIndex = null
+  }
+
+  setRevealDistribution(dist: RevealDistributionSnapshot | null): void {
+    this.latestRevealDistribution = dist
+    this.seq += 1
+  }
+
+  setPhase(phase: ExtensionPhase): void {
+    if (this.phase === phase) {
+      return
+    }
+
+    this.phase = phase
+    this.seq += 1
+    this.startedAt = Date.now()
+  }
+
+  getTeamAssignments(): Map<string, string> {
+    return new Map(this.teamAssignments)
+  }
+
+  getTeamScores(players: PlayerScoreInfo[]): TeamScoreProjection[] {
+    if (!this.extras?.teams.enabled) {
+      return []
+    }
+
+    return projectTeamScores(
+      this.extras.teams.teams,
+      players,
+      this.teamAssignments,
+    )
+  }
+
+  /**
+   * Generates authoritative state snapshot for either 'manager' or 'player'.
+   * Never leaks solutions or answers to players during question phase.
+   */
+  getStateSnapshot(
+    forRole: "manager" | "player",
+    players: PlayerScoreInfo[],
+  ): ExtensionStateEnvelope {
+    const questionId = this.getCurrentQuestionId()
+    const questionExtras =
+      questionId && this.extras?.perQuestion
+        ? this.extras.perQuestion[questionId]
+        : undefined
+
+    const extrasPayload: Record<string, unknown> = {}
+
+    if (
+      this.extras &&
+      isQuizExtrasV2(this.extras) &&
+      resolveStageLook(this.extras.defaults) === "guess-off"
+    ) {
+      extrasPayload.stageLook = "guess-off"
+    }
+
+    if (this.themeDefinitionJson) {
+      extrasPayload.themeDefinitionJson = this.themeDefinitionJson
+    }
+
+    const compositionJson =
+      forRole === "manager"
+        ? this.compositionDefinitionJson
+        : this.publicCompositionDefinitionJson
+
+    if (compositionJson) {
+      extrasPayload.applicationCompositionJson = compositionJson
+      extrasPayload.applicationCompositionTitle = this.compositionTitle
+    } else if (
+      this.extras &&
+      isQuizExtrasV2(this.extras) &&
+      this.extras.defaults.showComposition
+    ) {
+      extrasPayload.applicationCompositionUnavailable = true
+    }
+
+    const launch = this.delegate?.getPresentationLaunch?.()
+
+    if (launch) {
+      extrasPayload.presentationLaunch = launch
+    }
+
+    // Public aggregate only; host roster identities/contacts remain private.
+    if (this.delegate?.getParticipation) {
+      extrasPayload.participation = this.delegate.getParticipation()
+    }
+
+    // Names/table assignments only; private contacts remain outside public snapshots.
+    const lobbyDirectory = buildLobbyDirectory(this.extras, () =>
+      this.delegate?.getFullShowData?.(),
+    )
+
+    if (lobbyDirectory) {
+      extrasPayload.lobbyFullShow = lobbyDirectory
+    }
+
+    // Team scores and assignments
+    if (this.extras?.teams.enabled) {
+      extrasPayload.teamScores = this.getTeamScores(players)
+      extrasPayload.teams = {
+        enabled: true,
+        teams: this.extras.teams.teams,
+        assignments: Object.fromEntries(this.teamAssignments),
+      }
+    }
+
+    // Audio cues
+    extrasPayload.voteCompletionReason =
+      this.delegate?.getVoteCompletionReason?.() ?? null
+
+    if (this.extras?.audio) {
+      extrasPayload.audio = this.extras.audio
+    }
+
+    // Current question visuals & reveal
+    if (questionExtras) {
+      const isMediaRevealed = questionId
+        ? this.revealedMedia.has(questionId)
+        : false
+
+      if (questionExtras.reveal) {
+        const canViewReveal =
+          forRole === "manager" || questionExtras.reveal.audience === "all"
+
+        if (canViewReveal) {
+          extrasPayload.reveal = {
+            ...questionExtras.reveal,
+            isRevealed: isMediaRevealed,
+          }
+        }
+      }
+
+      // Safe answer visuals (alt and URL; answers strings stay in base question)
+      if (questionExtras.answerVisuals) {
+        extrasPayload.answerVisuals = questionExtras.answerVisuals
+      }
+
+      // Question stage entrance animation & 4-slot stage animations
+      if (questionExtras.questionEntrance) {
+        extrasPayload.questionEntrance = questionExtras.questionEntrance
+      }
+
+      if (questionExtras.stageAnimations) {
+        extrasPayload.stageAnimations = questionExtras.stageAnimations
+      }
+
+      if (questionExtras.questionDecoration) {
+        extrasPayload.questionDecoration = questionExtras.questionDecoration
+      }
+
+      // Per-card background & audio cues
+      if (questionExtras.background) {
+        extrasPayload.cardBackground = questionExtras.background
+      }
+
+      if (questionExtras.audioCues) {
+        extrasPayload.cardAudioCues = questionExtras.audioCues
+      }
+
+      if (questionExtras.themeOverrides) {
+        extrasPayload.themeOverrides = questionExtras.themeOverrides
+      }
+
+      // Interlude
+      if (this.phase === "interlude" && questionExtras.interlude) {
+        extrasPayload.interlude = questionExtras.interlude
+      }
+    }
+
+    // Studio V2 timeline & scene payload
+    if (this.extras && isQuizExtrasV2(this.extras)) {
+      extrasPayload.defaults = this.extras.defaults
+
+      if (this.showCoordinator) {
+        const activeStepEnvelope =
+          this.showCoordinator.getAuthoritativeStepEnvelope(forRole)
+        extrasPayload.activeTimelineStep = activeStepEnvelope
+        extrasPayload.currentScene = this.showCoordinator.currentScene
+
+        if (this.showCoordinator.isSceneActive()) {
+          extrasPayload.sceneElapsedMs =
+            this.showCoordinator.getSceneElapsedMs()
+
+          if (activeStepEnvelope?.startedAt) {
+            this.startedAt = activeStepEnvelope.startedAt
+          }
+
+          const activeScene = this.showCoordinator.currentScene
+
+          if (activeScene) {
+            if (activeScene.themeOverrides) {
+              extrasPayload.themeOverrides = activeScene.themeOverrides
+            } else {
+              delete extrasPayload.themeOverrides
+            }
+
+            if ("background" in activeScene && activeScene.background) {
+              extrasPayload.cardBackground = activeScene.background
+            } else {
+              delete extrasPayload.cardBackground
+            }
+
+            if ("audio" in activeScene && activeScene.audio) {
+              extrasPayload.sceneAudio = activeScene.audio
+            }
+
+            if (
+              "stageAnimations" in activeScene &&
+              activeScene.stageAnimations
+            ) {
+              extrasPayload.stageAnimations = activeScene.stageAnimations
+            } else {
+              delete extrasPayload.stageAnimations
+              delete extrasPayload.questionEntrance
+            }
+          }
+
+          const { currentStep } = this.showCoordinator
+          const stepKind = currentStep?.item.kind
+
+          if (stepKind === "leaderboard") {
+            const rawEntries = this.delegate?.getLeaderboard?.() ?? []
+            const sorted = [...rawEntries].sort((a, b) => b.points - a.points)
+            const entries: PublicRankEntry[] = sorted
+              .slice(0, 10)
+              .map((e, idx) => ({
+                rank: idx + 1,
+                displayName: e.displayName,
+                points: e.points,
+              }))
+            const activeSceneData: ActiveSceneData = {
+              leaderboard: {
+                entries,
+                isFinal:
+                  currentStep !== null &&
+                  !this.extras.timeline
+                    .slice(currentStep.index + 1)
+                    .some((item) => item.kind === "leaderboard"),
+              },
+            }
+
+            extrasPayload.activeSceneData = activeSceneData
+          } else if (stepKind === "interimResults") {
+            const summary =
+              this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const candidates = summary?.isTie
+              ? summary.options.filter((option) =>
+                  (summary.winners ?? []).includes(option.answerIndex ?? -1),
+                )
+              : []
+            const chosen = summary?.sourceQuestionId
+              ? this.storyTieChoices.get(summary.sourceQuestionId)
+              : undefined
+            const activeSceneData: ActiveSceneData = {
+              interimResults: summary,
+              fullShow: {
+                isLive: true,
+                tieCandidates: candidates,
+                tieResolvedIndex:
+                  chosen === undefined
+                    ? null
+                    : candidates.findIndex(
+                        (option) => option.answerIndex === chosen,
+                      ),
+              },
+            }
+
+            extrasPayload.activeSceneData = activeSceneData
+          } else if (
+            (stepKind === "answerRecap" || stepKind === "animation") &&
+            activeScene
+          ) {
+            const recap =
+              this.delegate?.getAnswerRecapSummary?.(
+                activeScene,
+                currentStep?.index ?? 0,
+              ) ?? null
+
+            if (recap) {
+              for (const item of recap.items) {
+                const chosen = this.storyTieChoices.get(item.questionId)
+
+                if (chosen !== undefined) {
+                  item.winningOptions = item.winningOptions.filter(
+                    (option) => option.answerIndex === chosen,
+                  )
+                }
+              }
+            }
+
+            const summary =
+              this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const candidates = summary?.isTie
+              ? summary.options.filter((option) =>
+                  (summary.winners ?? []).includes(option.answerIndex ?? -1),
+                )
+              : []
+            const tieChoice = summary?.sourceQuestionId
+              ? this.storyTieChoices.get(summary.sourceQuestionId)
+              : undefined
+            const activeSceneData: ActiveSceneData = {
+              answerRecap: recap,
+              ...(stepKind === "animation"
+                ? {
+                    interimResults:
+                      this.delegate?.getLastCompletedQuestionSummary?.() ??
+                      null,
+                    fullShow: {
+                      ...this.delegate?.getFullShowData?.(),
+                      isLive: true,
+                      tieCandidates: candidates,
+                      tieResolvedIndex:
+                        tieChoice === undefined
+                          ? null
+                          : candidates.findIndex(
+                              (option) => option.answerIndex === tieChoice,
+                            ),
+                    },
+                  }
+                : {}),
+            }
+
+            extrasPayload.activeSceneData = activeSceneData
+          }
+        }
+      }
+
+      if (forRole === "manager") {
+        extrasPayload.timeline = this.extras.timeline
+        extrasPayload.scenes = this.extras.scenes
+        extrasPayload.defaults = this.extras.defaults
+      }
+    }
+
+    // Manager-only reveal distribution and history snapshot
+    if (forRole === "manager") {
+      if (this.latestRevealDistribution) {
+        extrasPayload.revealDistribution = this.latestRevealDistribution
+      }
+
+      if (this.viewingHistoryIndex !== null) {
+        extrasPayload.viewingHistory = {
+          index: this.viewingHistoryIndex,
+          data: this.delegate?.getHistory?.(this.viewingHistoryIndex) ?? null,
+        }
+      }
+
+      const prevCheck = this.delegate?.canPrevious?.() ??
+        this.showCoordinator?.canPrevious() ?? { can: false }
+
+      extrasPayload.canPrevious = prevCheck.can
+
+      if (prevCheck.reason) {
+        extrasPayload.previousReason = prevCheck.reason
+      }
+
+      if (typeof prevCheck.willReopenQuestion === "boolean") {
+        extrasPayload.willReopenQuestion = prevCheck.willReopenQuestion
+      }
+
+      if (typeof prevCheck.answersReceived === "number") {
+        extrasPayload.answersReceived = prevCheck.answersReceived
+      }
+    }
+
+    const effectivePhase = this.showCoordinator?.isSceneActive()
+      ? "scene"
+      : this.phase
+
+    const effectiveEpoch = this.showCoordinator
+      ? this.showCoordinator.currentEpoch
+      : this.epoch
+
+    const effectiveSeq = this.seq + (this.showCoordinator?.currentSeq ?? 0)
+    const pauseState = this.showCoordinator?.isSceneActive()
+      ? this.showCoordinator.getPauseSnapshot()
+      : (this.delegate?.getPauseSnapshot?.() ?? {
+          paused: false,
+          remainingMs: null,
+          deadline: null,
+        })
+
+    return {
+      v: 1,
+      gameId: this.gameId,
+      seq: effectiveSeq,
+      epoch: effectiveEpoch,
+      questionId: this.showCoordinator?.isSceneActive()
+        ? undefined
+        : questionId,
+      phase: effectivePhase,
+      startedAt: this.startedAt,
+      pause: {
+        ...pauseState,
+        phase: effectivePhase,
+        epoch: effectiveEpoch,
+      },
+      extras: extrasPayload,
+    }
+  }
+
+  /**
+   * Processes manager command with authentication, deduplication, and phase validation.
+   */
+  handleCommand(
+    rawCommand: unknown,
+    isManager: boolean,
+    isLobby = this.phase === "lobby",
+  ): {
+    success: boolean
+    deduplicated?: boolean
+    action?: string
+    history?: unknown
+  } {
+    if (!isManager) {
+      throw new Error("errors:auth.unauthorized")
+    }
+
+    const parsed = extensionCommandSchema.safeParse(rawCommand)
+
+    if (!parsed.success) {
+      throw new Error(
+        `errors:extensions.invalidCommand: ${JSON.stringify(parsed.error.issues)}`,
+      )
+    }
+
+    const command: ExtensionCommand = parsed.data
+
+    if (command.gameId !== this.gameId) {
+      throw new Error("errors:extensions.gameIdMismatch")
+    }
+
+    // Epoch validation if payload specifies epoch
+    const payloadEpoch = (command.payload as { epoch?: unknown }).epoch
+
+    if (
+      typeof payloadEpoch === "number" &&
+      payloadEpoch !== this.currentEpoch
+    ) {
+      throw new Error("errors:extensions.staleEpoch")
+    }
+
+    // Deduplication by requestId
+    if (this.processedRequestIds.has(command.requestId)) {
+      return { success: true, deduplicated: true, action: command.action }
+    }
+
+    const pauseState = this.showCoordinator?.isSceneActive()
+      ? this.showCoordinator.getPauseSnapshot()
+      : this.delegate?.getPauseSnapshot?.()
+
+    if (pauseState?.paused && command.action !== "RESUME_GAME") {
+      throw new Error("errors:extensions.gamePaused")
+    }
+
+    switch (command.action) {
+      case "PAUSE_GAME": {
+        const ok = this.delegate?.pauseGame?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.pauseFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "RESUME_GAME": {
+        const ok = this.delegate?.resumeGame?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.resumeFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "RESOLVE_STORY_TIE": {
+        const scene = this.showCoordinator?.currentScene
+        const summary = this.delegate?.getLastCompletedQuestionSummary?.()
+
+        if (
+          !(
+            scene?.kind === "interimResults" ||
+            (scene?.kind === "animation" && scene.preset === "tie-break")
+          ) ||
+          !summary?.isTie ||
+          !summary.sourceQuestionId ||
+          !(summary.winners ?? []).includes(command.payload.answerIndex)
+        ) {
+          throw new Error("errors:extensions.invalidCommand")
+        }
+
+        this.storyTieChoices.set(
+          summary.sourceQuestionId,
+          command.payload.answerIndex,
+        )
+        this.seq += 1
+
+        break
+      }
+
+      case "ASSIGN_TEAM": {
+        if (!isLobby) {
+          throw new Error("errors:extensions.teamAssignmentOnlyInLobby")
+        }
+
+        if (!this.extras?.teams.enabled) {
+          throw new Error("errors:extensions.teamsDisabled")
+        }
+
+        this.teamAssignments = assignManual({
+          teams: this.extras.teams.teams,
+          currentAssignments: this.teamAssignments,
+          clientId: command.payload.clientId,
+          teamId: command.payload.teamId,
+        })
+
+        this.seq += 1
+
+        break
+      }
+
+      case "REVEAL_MEDIA": {
+        const qId = command.payload.questionId ?? this.getCurrentQuestionId()
+
+        if (qId) {
+          this.revealedMedia.add(qId)
+          this.seq += 1
+        }
+
+        break
+      }
+
+      case "SHOW_LEADERBOARD": {
+        this.manualLeaderboardRequested = true
+
+        break
+      }
+
+      case "SKIP_INTERLUDE": {
+        if (this.phase === "interlude") {
+          this.delegate?.endOrSkipInterlude?.("manual")
+          this.seq += 1
+        }
+
+        break
+      }
+
+      case "END_OR_SKIP_INTERLUDE": {
+        if (this.phase !== "interlude") {
+          return { success: true, deduplicated: true, action: command.action }
+        }
+
+        const ok =
+          this.delegate?.endOrSkipInterlude?.(command.payload.reason) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.interludeAdvanceFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "END_ANSWER_TIMER": {
+        if (this.phase !== "question") {
+          throw new Error("errors:extensions.cannotEndTimerOutsideAnswerPhase")
+        }
+
+        const ok = this.delegate?.endAnswerTimer?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.endTimerFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "NEXT_SCREEN": {
+        const currentPhase = this.showCoordinator?.isSceneActive()
+          ? "scene"
+          : this.phase
+
+        if (currentPhase === "question") {
+          throw new Error("errors:extensions.cannotNextScreenDuringAnswers")
+        }
+
+        if (this.showCoordinator?.isSceneActive()) {
+          const ok = this.delegate?.advanceTimelineScene?.() ?? false
+
+          if (!ok) {
+            throw new Error("errors:extensions.sceneAdvanceFailed")
+          }
+
+          this.seq += 1
+
+          break
+        }
+
+        const ok = this.delegate?.nextScreen?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.nextScreenFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "PREVIOUS_SCREEN": {
+        const isAccepting = this.delegate?.isAcceptingAnswers?.() ?? false
+        const answersCount = this.delegate?.getAnswersCount?.() ?? 0
+        const confirmed = Boolean(
+          // oxlint-disable-next-line typescript/no-unnecessary-condition -- Preserve the runtime guard for absent legacy command payloads.
+          (command.payload as { confirmed?: boolean })?.confirmed,
+        )
+
+        if (isAccepting && answersCount > 0 && !confirmed) {
+          throw new Error(
+            "errors:extensions.previousScreenConfirmationRequired",
+          )
+        }
+
+        if (isAccepting) {
+          this.delegate?.cancelActiveVote?.()
+        }
+
+        if (this.showCoordinator?.isSceneActive()) {
+          const ok = this.delegate?.previousTimelineScene?.() ?? false
+
+          if (!ok) {
+            throw new Error("errors:extensions.scenePreviousFailed")
+          }
+
+          this.seq += 1
+
+          break
+        }
+
+        const ok = this.delegate?.previousScreen?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.previousScreenFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "ADVANCE_TIMELINE_SCENE": {
+        const ok =
+          this.delegate?.advanceTimelineScene?.(
+            command.payload.sceneId,
+            command.payload.epoch,
+            command.payload.timelineStepIndex,
+          ) ?? false
+
+        if (!ok) {
+          if (command.payload.reason === "mediaEnded") {
+            return { success: true, deduplicated: true, action: command.action }
+          }
+
+          throw new Error("errors:extensions.sceneAdvanceFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "SKIP_TIMELINE_SCENE": {
+        const ok =
+          this.delegate?.skipTimelineScene?.(
+            command.payload.sceneId,
+            command.payload.epoch,
+            command.payload.timelineStepIndex,
+          ) ?? false
+
+        if (!ok) {
+          if (command.payload.reason === "mediaEnded") {
+            return { success: true, deduplicated: true, action: command.action }
+          }
+
+          throw new Error("errors:extensions.sceneSkipFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "SKIP_QUESTION": {
+        if (this.phase === "responses" || this.phase === "leaderboard") {
+          throw new Error("errors:extensions.cannotSkipScoredQuestion")
+        }
+
+        const ok =
+          this.delegate?.skipQuestion?.(command.payload.reason) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.skipQuestionFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "VIEW_HISTORY": {
+        this.viewingHistoryIndex = command.payload.questionIndex ?? null
+        this.seq += 1
+
+        const historyData = this.delegate?.getHistory?.(
+          command.payload.questionIndex,
+        )
+
+        this.processedRequestIds.add(command.requestId)
+
+        return {
+          success: true,
+          action: command.action,
+          history: historyData,
+        }
+      }
+
+      case "REPLAY_FROM_CHECKPOINT": {
+        const ok =
+          this.delegate?.replayFromCheckpoint?.(
+            command.payload.questionIndex,
+          ) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.invalidCheckpoint")
+        }
+
+        this.seq += 1
+
+        break
+      }
+    }
+
+    this.processedRequestIds.add(command.requestId)
+
+    return { success: true, action: command.action }
+  }
+}

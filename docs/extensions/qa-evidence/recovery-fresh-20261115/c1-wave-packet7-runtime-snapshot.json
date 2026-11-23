@@ -1,0 +1,242 @@
+{
+  "updated_utc": "2026-11-15T15:18:32.0027281Z",
+  "cpu_ceiling": 1.5,
+  "memory_mib_ceiling": 8192,
+  "disk_floor_bytes": 2147483648,
+  "margin_mib": 64,
+  "shared_metadata_mib": 435,
+  "disk_budgets": {
+    "site": {
+      "ceiling_mib": 16,
+      "new_consumed_bytes": 4280320,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "recovery": {
+      "ceiling_mib": 64,
+      "new_consumed_bytes": 8400896,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "telephony": {
+      "ceiling_mib": 16,
+      "new_consumed_bytes": 151552,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "show_engine": {
+      "ceiling_mib": 8,
+      "new_consumed_bytes": 0,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "mcp_server": {
+      "ceiling_mib": 8,
+      "new_consumed_bytes": 3063808,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "qa": {
+      "ceiling_mib": 200,
+      "new_consumed_bytes": 0,
+      "note": "same existing200MiB phase, not extra"
+    },
+    "critical_review": {
+      "ceiling_mib": 0,
+      "new_consumed_bytes": 0,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "show_ui": {
+      "ceiling_mib": 64,
+      "new_consumed_bytes": 0,
+      "note": "new cumulative owner-reset growth only; prior allocations retained"
+    },
+    "integrator": {
+      "ceiling_mib": 0,
+      "new_consumed_bytes": 0,
+      "note": "Unused64MiB future growth reservation released by sole manager for active developers. No integration job active; all existing source/evidence/data/metadata retained. Manager may reserve future integration capacity at actual ready handoff without new user approval.",
+      "prior_ceiling_mib": 64,
+      "reservation_released_utc": "2026-11-15T14:55:42.2912049Z"
+    }
+  },
+  "active_claims": [
+    {
+      "role": "qa",
+      "thread_id": "01a1dfa9-3316-7a02-afef-3dccd5939e79",
+      "cpu": 0.5,
+      "memory_mib": 1984,
+      "job": "retained idle synthetic pair; exact rollback/game verified; proxy off; no action running",
+      "terminal": false,
+      "custody_status": "RETAINED_IDLE_ROLLBACK_VERIFIED",
+      "new_work_authorized": true,
+      "actual_running_ids": [
+        "505772e38a7c0ecd700f82d189219f0b951a7cc95eb933ea58372ccf72b1fab8",
+        "701c07ef1fab02d5772fb2af15b733f0fdd5383a170c46da69fb3a529f343757"
+      ],
+      "prior_owner_thread_id": "01a1dd1a-0c70-7b02-a179-c8c2b7c11755",
+      "custodian_lane": "A Site; historical role qa denotes retained fixture accounting, not another developer",
+      "authority_scope": "Existing synthetic-only same-fixture publish/rollback/browser continuity per owner wave restart; no production authority",
+      "measured_cumulative_phase_bytes": 160575488,
+      "final_export_allowance_bytes": 1048576
+    },
+    {
+      "role": "show_ui",
+      "thread_id": "01a1dfa9-d401-77f3-a539-82c918b393f4",
+      "cpu": 0.25,
+      "memory_mib": 2048,
+      "job": "show-ui-315d-diagnostics-wave-E",
+      "claim_id": "show-ui-E-315d-20261115",
+      "claimed_utc": "2026-11-15T14:45:51.4663901Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "terminal": false
+    },
+    {
+      "role": "telephony",
+      "thread_id": "01a1dfa9-87af-79f3-a855-8a93c517b4f5",
+      "cpu": 0.25,
+      "memory_mib": 1024,
+      "job": "phone-auth-wave-bec562f-attempt01",
+      "terminal": false,
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "issued_by": "01a1dfa9-87af-79f3-a855-8a93c517b4f5",
+      "reserved_utc": "2026-11-15T14:47:39.6447372Z"
+    },
+    {
+      "role": "recovery",
+      "thread_id": "01a1dfa9-5c5a-7723-8993-110f2dfe4892",
+      "cpu": 0.25,
+      "memory_mib": 2048,
+      "job": "C1 wave witness then native11; init initially OFF",
+      "terminal": true,
+      "claimed_utc": "2026-11-15T15:12:47.7082842Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "released_utc": "2026-11-15T15:17:13.7158552Z",
+      "terminal_evidence": "Packet6 stopped PID0; 134 downloaded files SHA-match and11 frozen packet input hashes unchanged; packet5 stopped too; native witness1/1 then native11/11; c1-execution-wave-packet6/readback-verified.json"
+    },
+    {
+      "role": "mcp_server",
+      "thread_id": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+      "cpu": 0.25,
+      "memory_mib": 1024,
+      "job": "mcp-runtime-F-20261115-01a1dfaa",
+      "claim_id": "mcp-runtime-F-20261115-01a1dfaa",
+      "claimed_utc": "2026-11-15T15:17:24.9986706Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "terminal": false
+    },
+    {
+      "role": "recovery",
+      "thread_id": "01a1dfa9-5c5a-7723-8993-110f2dfe4892",
+      "cpu": 0.25,
+      "memory_mib": 2048,
+      "job": "C1 wave witness then native11; init initially OFF",
+      "terminal": false,
+      "claimed_utc": "2026-11-15T15:18:31.9890929Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115"
+    }
+  ],
+  "pause_requested_utc": "2026-11-15T14:52:56.638357+02:00",
+  "released_claims": [
+    {
+      "role": "recovery",
+      "thread_id": "01a1dd18-8818-7573-b311-f54bbe0b811f",
+      "cpu": 0.25,
+      "memory_mib": 2048,
+      "job": "C1 owner-reset witness then native11; init initially OFF",
+      "claimed_utc": "2026-11-15T12:52:10.2615575Z",
+      "parent_authorization": "owner-urgent-management-correction-20261115",
+      "terminal": true,
+      "released_utc": "2026-11-15T13:05:17.1065806Z",
+      "release_reason": "Unused reservation; owner handoff plus independent server-final.json confirms no launched functional job"
+    },
+    {
+      "role": "telephony",
+      "thread_id": "01a1dd18-b62a-7321-88c2-6fafb71937cc",
+      "cpu": 0.25,
+      "memory_mib": 1024,
+      "job": "phone-auth-f541246-attempt01",
+      "parent_authorization": "owner-urgent-management-correction-20261115",
+      "issued_by": "01a1dd18-b62a-7321-88c2-6fafb71937cc",
+      "reserved_utc": "2026-11-15T12:52:14.2287229Z",
+      "terminal": true,
+      "released_utc": "2026-11-15T13:05:17.1107736Z",
+      "release_reason": "Unused reservation; owner handoff plus independent server-final.json confirms no launched functional job"
+    },
+    {
+      "role": "show_engine",
+      "thread_id": "01a1dd19-5220-70d3-8349-e9e135399b4d",
+      "cpu": 0.125,
+      "memory_mib": 512,
+      "job": "dd3 exact106 vendor leaves and license/CAFS read-only collection",
+      "issued_by": "show_engine",
+      "parent_authorization": "owner-urgent-management-correction-20261115",
+      "claim_id": "show-engine-vendor-dd3-20261115-r1",
+      "started_utc": "2026-11-15T12:52:20.6224761Z",
+      "terminal": true,
+      "released_utc": "2026-11-15T13:05:17.111525Z",
+      "release_reason": "Unused reservation; owner handoff plus independent server-final.json confirms no launched functional job"
+    },
+    {
+      "role": "site",
+      "thread_id": "01a1dd11-f85a-7981-baab-e227aac35520",
+      "cpu": 0.25,
+      "memory_mib": 2048,
+      "job": "public-title-baseline-20261115",
+      "terminal": true,
+      "released_utc": "2026-11-15T13:05:17.112285Z",
+      "release_reason": "Unused reservation; owner handoff plus independent server-final.json confirms no launched functional job"
+    },
+    {
+      "role": "show_engine",
+      "thread_id": "01a1dfa9-ad07-7df0-88dc-9c11a9e14fe9",
+      "cpu": 0.125,
+      "memory_mib": 512,
+      "job": "readonly dd3 SQLite five-package membership/license closure",
+      "claim_id": "lane-d-vendor-20261115",
+      "started_utc": "2026-11-15T14:45:39.2468951Z",
+      "terminal": true,
+      "released_utc": "2026-11-15T14:51:58.8143107Z",
+      "release_reason": "Synchronous read-only106+10 CAFS collection completed; no container/process/remote output created"
+    },
+    {
+      "role": "mcp_server",
+      "thread_id": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+      "cpu": 0.25,
+      "memory_mib": 512,
+      "job": "mcp-format-F-20261115-01a1dfaa",
+      "claim_id": "mcp-format-F-20261115-01a1dfaa",
+      "claimed_utc": "2026-11-15T14:53:54.4714541Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "terminal": true,
+      "released_utc": "2026-11-15T14:54:37.4101582Z",
+      "release_reason": "PROVISIONING_ERROR before creating remote source/evidence/container: actual disk below cumulative outstanding reservations; zero remote incremental bytes"
+    },
+    {
+      "role": "mcp_server",
+      "thread_id": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+      "cpu": 0.25,
+      "memory_mib": 512,
+      "job": "mcp-format-F-20261115-01a1dfaa",
+      "claim_id": "mcp-format-F-20261115-01a1dfaa",
+      "claimed_utc": "2026-11-15T14:55:59.5419363Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "terminal": true,
+      "released_utc": "2026-11-15T14:59:44.8490613Z",
+      "release_reason": "Terminal exit1: TC child OOM137; AST8/34tests/compat/format passed; retained all receipts",
+      "consumed_bytes_upper_bound": 3063808
+    },
+    {
+      "role": "site",
+      "thread_id": "01a1dfa9-3316-7a02-afef-3dccd5939e79",
+      "cpu": 0.5,
+      "memory_mib": 2048,
+      "job": "candidate immutable same-fixture metadata/game continuity A",
+      "terminal": true,
+      "claimed_utc": "2026-11-15T14:45:49.4136655Z",
+      "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "released_utc": "2026-11-15T15:12:40.0747513Z",
+      "release_reason": "All seven owned helper containers terminal; final metadata/rollback/game/public receipts retained"
+    }
+  ],
+  "new_claims_authorized": true,
+  "manager_reconciled_utc": "2026-11-15T13:05:17.1408099Z",
+  "active_functional_jobs": 0,
+  "custody_note": "QA pair and metadata keeper remain running; no service/process was stopped. Standby resources remain retained, not a new test authorization.",
+  "owner_activation": "SINGLE_MANAGER_WAVE_RESTART_20261115 explicit user launch; manager01a1dfa1-57d8-7223-a965-2f4f31fe8b23; continuous developer-owned scoped work",
+  "activation_record": "C:/Users/DAVID/Code/Codex-Agent-HQ/docs/tadazz/restart-20261115/OWNER_ACTIVATION.md"
+}

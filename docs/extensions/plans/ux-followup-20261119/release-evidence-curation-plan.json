@@ -1,0 +1,707 @@
+{
+  "format": "tadazz-release-evidence-curation-candidate",
+  "status": "CANDIDATE_NOT_FINAL",
+  "snapshotAt": "2026-11-19T15:59:26.068618+00:00",
+  "preparedAt": "2026-11-19T16:05:43.671Z",
+  "finalHashInventoryWritten": false,
+  "productSourceChanged": false,
+  "gitStagingOrCommitPerformed": false,
+  "baselines": {
+    "oldAllowlist": {
+      "path": "docs/extensions/plans/ux-unified-20261119/release-verification-allowlist.txt",
+      "entries": 162,
+      "missing": [],
+      "duplicateEntries": [],
+      "symlinks": [],
+      "pathTraversalEntries": [],
+      "policy": "Keep these exact162 entries and their historical meaning; generate a companion hash inventory only after freeze."
+    },
+    "initialFollowupAllowlist": {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt",
+      "entries": 77,
+      "missing": [],
+      "duplicateEntries": [],
+      "symlinks": [],
+      "pathTraversalEntries": []
+    },
+    "qualificationAllowlist": {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt",
+      "entries": 13,
+      "missing": [],
+      "duplicateEntries": [],
+      "symlinks": [],
+      "pathTraversalEntries": []
+    }
+  },
+  "counts": {
+    "followupFilesAtSnapshot": 199,
+    "existingInitialFollowupEntries": 77,
+    "excludedAutomaticBackups": 13,
+    "excludedRawLogs": 30,
+    "excludedObsoleteUnlinkedSiteScreenshots": 6,
+    "excludedIntermediateCacheStart": 1,
+    "candidateExistingFollowupDirectoryEntries": 149,
+    "externalQualificationEntries": 6,
+    "nativePinAdditions": 3,
+    "candidateExistingFollowupTargets": 158,
+    "proposedReleaseToolCopies": 10,
+    "proposedWorkerToolCopies": 39,
+    "proposedCopyTargets": 49,
+    "provisionalFollowupBeforePendingOutputsAndNewInventoryMetadata": 207,
+    "preservedOldEntries": 162
+  },
+  "candidateExistingFollowupTargets": [
+    "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-14b642e95d15-bbcf426a/input-manifest.json",
+    "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-14b642e95d15-bbcf426a/receipt.json",
+    "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d4f03cc87031-4fea2f00/input-manifest.json",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/input-manifest.json",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/receipt.json",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-34568c5c937a-01036285/receipt.json",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-34568c5c937a-0b72dd89/receipt.json",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-34568c5c937a-80c36b12/receipt.json",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-34568c5c937a-d751e9ca/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.link-check.json",
+    "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+    "docs/extensions/plans/ux-followup-20261119/asana-completion-checkpoint.json",
+    "docs/extensions/plans/ux-followup-20261119/backup-qualification-reference.json",
+    "docs/extensions/plans/ux-followup-20261119/billing-deployment-verifier-fix.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+    "docs/extensions/plans/ux-followup-20261119/billing/asana-readback.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/cleanup.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/disabled-desktop.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/error-retry.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/live-catalog-currency.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/live-catalog-hebrew.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/missing-token.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser-final/sandbox-mobile.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/cleanup.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/disabled-desktop-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/error-retry-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/live-catalog-currency-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/live-catalog-hebrew-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/missing-token-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/browser/sandbox-mobile-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/billing/evidence-allowlist.txt",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-source-checks.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-source-final.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-test-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-test-followup.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-typed-final.json",
+    "docs/extensions/plans/ux-followup-20261119/billing/harness/public-browser-check.mjs",
+    "docs/extensions/plans/ux-followup-20261119/billing/harness/run-public-browser.py",
+    "docs/extensions/plans/ux-followup-20261119/billing/source-allowlist.txt",
+    "docs/extensions/plans/ux-followup-20261119/billing/verification-manifest.json",
+    "docs/extensions/plans/ux-followup-20261119/candidate-files.json",
+    "docs/extensions/plans/ux-followup-20261119/contact-final-verification.json",
+    "docs/extensions/plans/ux-followup-20261119/contact-prepare-validation.json",
+    "docs/extensions/plans/ux-followup-20261119/current-release-source.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-baseline.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-deploy-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/backup-qualification-reference.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/current-release-source.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-deploy-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-preflight-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-qualify-backup-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/preservation.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-preflight-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-qualify-backup-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-tool-source.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-verifier-independent-review.json",
+    "docs/extensions/plans/ux-followup-20261119/deployment-verifier-independent-review.md",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/README.md",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/audience-directory.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/browser-proof.json",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/host-directory-controls.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/host-directory-fullscreen.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-checks.json",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-playwright.json",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/playwright.json",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/roster-1440x900.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/roster-320-hebrew.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/roster-320x640.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/roster-390x844.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/roster-768x1024.png",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/verification.json",
+    "docs/extensions/plans/ux-followup-20261119/installed-connector-smoke.json",
+    "docs/extensions/plans/ux-followup-20261119/post-deploy-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/post-deploy-observation.json",
+    "docs/extensions/plans/ux-followup-20261119/post-deploy-provider-public-readiness.json",
+    "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-observation.json",
+    "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/README.md",
+    "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/validation.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/execution.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/forgot-390.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/home-1440.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/home-390.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/diagnosis.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/helper.diff",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/original-production-public-smoke.mjs",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/policy-self-test.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/root-review.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/validation.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke/execution.json",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke/forgot-1440-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke/forgot-390-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke/home-1440-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke/home-390-failure.png",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/provider-readiness.json",
+    "docs/extensions/plans/ux-followup-20261119/qa-cache-diagnosis.json",
+    "docs/extensions/plans/ux-followup-20261119/qa-cache-restoration.json",
+    "docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt",
+    "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json",
+    "docs/extensions/plans/ux-followup-20261119/qualification-retry.json",
+    "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/input-manifest.json",
+    "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/release-gates-progress.json",
+    "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt",
+    "docs/extensions/plans/ux-followup-20261119/release-evidence-inventory.json",
+    "docs/extensions/plans/ux-followup-20261119/release-gates-progress-34568c5c937a.json",
+    "docs/extensions/plans/ux-followup-20261119/release-gates-progress.json",
+    "docs/extensions/plans/ux-followup-20261119/release-helper-review.json",
+    "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-1440.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-320.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-390.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-he-390.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/prepare-retry.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/site-qa-cleanup.json",
+    "docs/extensions/plans/ux-followup-20261119/site-smoke-style-validation.json",
+    "docs/extensions/plans/ux-followup-20261119/source-commit.json",
+    "docs/extensions/plans/ux-followup-20261119/source-push-final.json",
+    "docs/extensions/plans/ux-followup-20261119/stage-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/image-build-receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-phase12-acceptance.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-replacement-review.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-replacement-review.md",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-smoke-review.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-smoke-review.md",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-2-transfer-receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-build-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-provenance-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-provenance-receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase2-compile-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase2-compile-receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-execution.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-independent-review.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-retained-owned-result.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-timer-receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-transfer-receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/store-binding-readiness.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/worker-image-readiness.json",
+    "docs/extensions/plans/ux-followup-20261119/themes/README.md",
+    "docs/extensions/plans/ux-followup-20261119/themes/qa-cleanup.json",
+    "docs/extensions/plans/ux-followup-20261119/themes/receipt.json",
+    "docs/extensions/plans/ux-followup-20261119/themes/source-validation.json",
+    "docs/extensions/plans/ux-followup-20261119/themes/studio-theme-entry.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-1024.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-1440.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-320.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-390.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-hebrew-390.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-imported-poster.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-scene-drawer.png",
+    "docs/extensions/plans/ux-followup-20261119/themes/theme-selected-desktop.png",
+    "docs/extensions/plans/ux-followup-20261119/worker-recovery-observer-output-only.diff"
+  ],
+  "explicitCopyMappings": [
+    {
+      "source": "work/ux-followup-20261119/release-plan/qualify_current_candidate.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/qualify_current_candidate.py",
+      "scope": "executed operational helper",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/stage_current_candidate.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/stage_current_candidate.py",
+      "scope": "executed operational helper",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/deploy_current_candidate.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/deploy_current_candidate.py",
+      "scope": "historical failed deployment coordinator",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/deploy_current_candidate_with_tool.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/deploy_current_candidate_with_tool.py",
+      "scope": "executed operational helper",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/observe_current_candidate.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/observe_current_candidate.py",
+      "scope": "executed operational helper",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/observe_worker_recovery.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/observe_worker_recovery.py",
+      "scope": "executed operational helper",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/production-public-smoke.mjs",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke.mjs",
+      "scope": "executed operational helper",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/run-production-public-smoke.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/run-production-public-smoke.py",
+      "scope": "executed operational helper",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/review-input.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/review-input.json",
+      "scope": "original four-helper diff and hash review",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/release-plan/production-public-smoke-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke-review.json",
+      "scope": "historical preparation review",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/build_replacement_image.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/build_replacement_image.py",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/run_replacement_smoke.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/run_replacement_smoke.py",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/activate_and_verify_timer.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/activate_and_verify_timer.py",
+      "scope": "preserved first attempt",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/activate_and_verify_timer_r2.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/activate_and_verify_timer_r2.py",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/check_phase3_admission.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_phase3_admission.py",
+      "scope": "preserved first attempt",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/check_phase3_admission_r2.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_phase3_admission_r2.py",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/check_systemd_monotonic_r2.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_systemd_monotonic_r2.py",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/validate-cleanup-target.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/validate-cleanup-target.py",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/prepare-source-pins.mjs",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context-manifest.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context/Dockerfile",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/Dockerfile",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context/provenance/worker-source-pins.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/worker-source-pins.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context/provenance/verify-and-build.mjs",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/cleanup-target-check.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/cleanup-target-check.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/replacement-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/replacement-review.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-input-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-input-manifest.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-input-manifest-r2.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-input-manifest-r2.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-admission.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-admission.json",
+      "scope": "preserved first attempt",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-admission-r2.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-admission-r2.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-unit-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-unit-review.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-unit.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-unit.diff",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-offline-guards.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-offline-guards.json",
+      "scope": "preserved first attempt",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-offline-guards-r2.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-offline-guards-r2.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-parser-tests.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-r2-parser-tests.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-retained-owned-result.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-retained-owned-result.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-helper-review.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-review.diff",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-helper-final-review.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-final-review.diff",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-helper-final-health.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-final-health.diff",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-helper.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-r2-helper.diff",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture/request.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture/request.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture/fixture-summary.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture/fixture-summary.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture-r2/request.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture-r2/request.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture-r2/fixture-summary.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture-r2/fixture-summary.json",
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata",
+      "freezeRequired": true,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/run_worker_smoke.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/run_worker_smoke.py",
+      "scope": "named historical preparation or transfer proof",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/input-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/input-manifest.json",
+      "scope": "named historical preparation or transfer proof",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/fixture-summary.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/fixture-summary.json",
+      "scope": "named historical preparation or transfer proof",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/preparation-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/preparation-review.json",
+      "scope": "named historical preparation or transfer proof",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/phase1-2-transfer-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase1-2-transfer-manifest.json",
+      "scope": "named historical preparation or transfer proof",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/phase3-transfer-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase3-transfer-manifest.json",
+      "scope": "named historical preparation or transfer proof",
+      "freezeRequired": false,
+      "sourceExistsAtPreparation": true
+    }
+  ],
+  "plannedCopyManifests": [
+    "docs/extensions/plans/ux-followup-20261119/release-tools/source-copy-manifest.json",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/source-copy-manifest.json"
+  ],
+  "excludedAtSnapshot": [
+    "docs/extensions/plans/ux-followup-20261119/billing/README.md.bak.20261119-155808-469566",
+    "docs/extensions/plans/ux-followup-20261119/billing/README.md.bak.20261119-160233-330665",
+    "docs/extensions/plans/ux-followup-20261119/billing/README.md.bak.20261119-160237-784347",
+    "docs/extensions/plans/ux-followup-20261119/billing/asana-readback.json.bak.20261119-160424-555871",
+    "docs/extensions/plans/ux-followup-20261119/billing/billing-http-followup.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/billing-http-typed-final.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/billing-http.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/billing-units.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-format.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-lint-typed-final.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/focused-lint.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/format-followup.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/format-qa.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/format-typed-final.log",
+    "docs/extensions/plans/ux-followup-20261119/billing/qa-lint-fix.log",
+    "docs/extensions/plans/ux-followup-20261119/contact-final-verification.json.bak.20261119-162150-356654",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/audio-public-units.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/browser.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-browser.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-extension-types.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-lint.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-web-types.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/product-lint.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/public-lobby-unit.log",
+    "docs/extensions/plans/ux-followup-20261119/host-controls/test-lint.log",
+    "docs/extensions/plans/ux-followup-20261119/linux-full-show-34568c5c937a.log",
+    "docs/extensions/plans/ux-followup-20261119/linux-native-consent-34568c5c937a.log",
+    "docs/extensions/plans/ux-followup-20261119/linux-native-launch-34568c5c937a.log",
+    "docs/extensions/plans/ux-followup-20261119/linux-proxy-34568c5c937a.log",
+    "docs/extensions/plans/ux-followup-20261119/linux-sdk-cache-diagnosis.json.bak.20261119-163727-908325",
+    "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/api-tests.log",
+    "docs/extensions/plans/ux-followup-20261119/provider-readiness.json.bak.20261119-154739-531192",
+    "docs/extensions/plans/ux-followup-20261119/qa-cache-start.json",
+    "docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt.bak.20261119-171234-893393",
+    "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json.bak.20261119-171307-534252",
+    "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/controller.stderr.log",
+    "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/controller.stdout.log",
+    "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/linux-native-launch-34568c5c937a.log",
+    "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt.bak.20261119-162249-642403",
+    "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt.bak.20261119-162424-265624",
+    "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt.bak.20261119-162605-760834",
+    "docs/extensions/plans/ux-followup-20261119/release-evidence-inventory.json.bak.20261119-162613-458655",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/contact-1440.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/contact-320.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/contact-390.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/contact-he-390.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/failure.png",
+    "docs/extensions/plans/ux-followup-20261119/site-browser/prepare-retry.png",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-helper.stderr.log",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-helper.stdout.log"
+  ],
+  "existingEquivalentArtifacts": [
+    {
+      "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+      "path": "extensions/fixtures/packages/complete-arcade.tadazz",
+      "bytes": 520223,
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+      "verifiedFrom": "git show exact candidate:path without checkout/write",
+      "copy": false
+    },
+    {
+      "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+      "path": "extensions/fixtures/packages/generated-video.mp4",
+      "bytes": 1736,
+      "sha256": "8e94de92d8154dc3d1daff31048698dfde212ff42eb2ce2c6ea2e76bc1f5e295",
+      "verifiedFrom": "git show exact candidate:path without checkout/write",
+      "copy": false
+    },
+    {
+      "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+      "path": "scripts/qa/package-build-worker.py",
+      "sha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+      "copy": false
+    },
+    {
+      "scope": "82 pinned worker source/config files",
+      "reference": "worker context/source manifests plus exact Git candidate",
+      "copy": false
+    },
+    {
+      "scope": "four first-attempt admission records",
+      "reference": "existing canonical stage/deploy/post-deploy JSON receipts, byte equality already verified",
+      "copy": false
+    },
+    {
+      "scope": "recovery admission records",
+      "reference": "canonical stage/deploy plus post-deploy-worker-recovery receipts; verify exact byte equality after freeze",
+      "copy": false
+    }
+  ],
+  "pendingScopes": [
+    {
+      "scope": "phase3 worker retry",
+      "expectedFiles": [
+        "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-execution.json",
+        "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json",
+        "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-review.json"
+      ],
+      "note": "Names are provisional until the actual review/execution outputs exist. Preserve original phase3 failure and original helper/admission."
+    },
+    {
+      "scope": "worker transfer and final acceptance",
+      "note": "Include only final named transfer/cleanup/readiness receipts and exact new r2 helper proof artifacts; no raw helper stdout/stderr logs."
+    },
+    {
+      "scope": "public browser final retry",
+      "namespace": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session",
+      "note": "Use the final actual receipt and its exact produced screenshots; do not invent missing images or claim incomplete output is final."
+    },
+    {
+      "scope": "release narrative, link checks and Asana closeout",
+      "files": [
+        "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.link-check.json",
+        "docs/extensions/plans/ux-followup-20261119/asana-completion-checkpoint.json"
+      ],
+      "note": "Wait for root freeze."
+    },
+    {
+      "scope": "final inventories and allowlists",
+      "note": "Do not update the initial final-named inventory yet. Refresh exact files/hashes after root freeze, with self-hash exclusions explicit."
+    }
+  ],
+  "exclusionRules": [
+    "No automatic .bak files.",
+    "No arbitrary work tree, context source tree, process state, controller/helper/test raw logs, credentials, runtime config content, or private service backup.",
+    "No customer archive, live database, tenant/job enumeration, or package-store data.",
+    "No synthetic transfer tarballs or duplicated archive/bundle payloads when exact tracked fixture and audited digests suffice.",
+    "Existing old162 explicitly curated named synthetic log proofs remain unchanged; the new followup list uses sanitized receipt summaries."
+  ],
+  "riskNotes": [
+    "Backup-qualified JSON receipts contain verification metadata and private archive path references, not the backup bytes; retain the receipts, never collect the archives.",
+    "The historical prepare-timer-fixture.mts describes an unused declarative fixture and must not be copied as the actual Complete timer recipe.",
+    "Tracked fixture blobs exist in the exact Git candidate even though those files are absent in this working tree; no checkout or Git mutation is required for the source references.",
+    "Public-browser helpers and worker-r2 artifacts are still changing; their copy hashes must be captured only after freeze.",
+    "Original PASS/FAIL receipts and historical source hashes must remain unchanged; later success belongs in distinct receipts."
+  ],
+  "remainingValidationAfterFreeze": [
+    "Re-enumerate only named output namespaces; inspect any new path before adding it.",
+    "Verify all explicit paths, copied bytes/source hashes, canonical admission equivalents, and no symlinks/traversal.",
+    "Scan curated text receipts/helpers for credential/private-data payloads without printing secrets.",
+    "Write final old162 hash inventory and expanded followup allowlist/hash inventory; verify all final report links.",
+    "Provide exact paths to root for explicit Git staging; never git add dot."
+  ]
+}

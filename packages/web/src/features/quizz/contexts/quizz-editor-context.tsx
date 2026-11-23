@@ -1,5 +1,10 @@
+import { useQuizzExtras } from "./extensions/use-quizz-extras"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
+import {
+  QUESTION_LEAD_IN_SECONDS,
+  QUESTION_TYPES,
+  QUIZZ_MODES,
+} from "@razzia/common/constants"
 import type {
   Question,
   QuizzMode,
@@ -9,6 +14,7 @@ import {
   quizzValidator,
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
+import type { AnyQuizExtras } from "@razzia/extensions/core"
 import {
   createContext,
   useContext,
@@ -16,6 +22,7 @@ import {
   type PropsWithChildren,
 } from "react"
 import { flushSync } from "react-dom"
+import { useTranslation } from "react-i18next"
 import {
   FormProvider,
   useFieldArray,
@@ -39,10 +46,30 @@ interface QuizzEditorContextType {
   currentQuestion: Question
   currentQuestionId: string
   isRemoving: boolean
+  extras: AnyQuizExtras | null
+  isExtrasDirty: boolean
+  extrasStatus: "loading" | "ready" | "error"
+  retryExtras: () => void
+  acceptExtrasBaseline: (value: AnyQuizExtras | null) => void
+  conflict: {
+    serverRevision?: number
+    expectedRevision?: number | null
+  } | null
+  setExtras: React.Dispatch<React.SetStateAction<AnyQuizExtras | null>>
+  setConflict: React.Dispatch<
+    React.SetStateAction<{
+      serverRevision?: number
+      expectedRevision?: number | null
+    } | null>
+  >
+  setQuestionIds?: React.Dispatch<React.SetStateAction<string[]>>
+  replaceQuestions?: (_newQuestions: Question[], _newIds: string[]) => void
+  hasCurrentQuestion?: boolean
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
   removeQuestion: (_index: number) => void
   reorderQuestions: (_from: number, _to: number) => void
+  duplicateQuestion?: (_index: number) => void
   updateQuestion: (_index: number, _updates: Partial<Question>) => void
   questionPath: <K extends FieldPath<Question>>(
     _field: K,
@@ -56,7 +83,7 @@ const defaultQuestion = (): Question => ({
   question: "",
   answers: ["", ""],
   solutions: [0],
-  cooldown: 5,
+  cooldown: QUESTION_LEAD_IN_SECONDS,
   time: 20,
 })
 
@@ -71,39 +98,83 @@ export const QuizzEditorProvider = ({
   children,
   initialData,
 }: QuizzEditorProviderProps) => {
+  const { t } = useTranslation()
   const form = useForm<QuizzFormValues, unknown, QuizzValidated>({
     resolver: zodResolver(quizzValidator),
     defaultValues: {
       gameMode: initialData?.gameMode ?? QUIZZ_MODES.QUIZ,
-      subject: initialData?.subject ?? "Untitled Quizz",
+      subject: initialData?.subject ?? t("common:untitledQuiz"),
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
   })
 
   const { control, getValues, setValue, formState } = form
-  const { fields, append, remove, move } = useFieldArray({
+  const { append, remove, move, insert, replace } = useFieldArray({
     control,
     name: "questions",
   })
   const [currentIndex, setCurrentIndex] = useState(0)
   const [removingFrom, setRemovingFrom] = useState<Question[] | null>(null)
+  const {
+    extras,
+    setExtras,
+    isExtrasDirty,
+    extrasStatus,
+    retryExtras,
+    acceptExtrasBaseline,
+    conflict,
+    setConflict,
+    questionIds,
+    setQuestionIds,
+    appendQuestionIdentity,
+    removeQuestionIdentity,
+    reorderQuestionIdentity,
+    duplicateQuestionIdentity,
+  } = useQuizzExtras(initialData)
 
   const questions = useWatch({ control, name: "questions" })
   const gameMode = useWatch({ control, name: "gameMode" })
-  const safeIndex = clampIndex(currentIndex, questions.length)
-  const currentQuestion = questions[safeIndex]
-  const questionIds = fields.map((field) => field.id)
+  const hasCurrentQuestion =
+    Array.isArray(questions) &&
+    questions.length > 0 &&
+    currentIndex >= 0 &&
+    currentIndex < questions.length
+  const safeIndex =
+    Array.isArray(questions) && questions.length > 0
+      ? clampIndex(currentIndex, questions.length)
+      : 0
+  const currentQuestion =
+    Array.isArray(questions) && questions.length > 0
+      ? (questions[safeIndex] ?? defaultQuestion())
+      : defaultQuestion()
+
+  const replaceQuestions = (newQuestions: Question[], newIds: string[]) => {
+    const snapshot = structuredClone(newQuestions)
+
+    // Unmount indexed controllers before their question paths shift.
+    flushSync(() => setRemovingFrom(questions))
+    replace(snapshot)
+    setQuestionIds(newIds)
+  }
+
+  // Derive stable questionIds: priority to extras.questionIds when matching questions length, otherwise state
+  const effectiveQuestionIds =
+    extras?.questionIds && extras.questionIds.length === questions.length
+      ? extras.questionIds
+      : questionIds
 
   const addQuestion = () => {
     const category = questions.at(-1)?.category
-
     append({ ...defaultQuestion(), ...(category ? { category } : {}) })
+    appendQuestionIdentity()
     setCurrentIndex(questions.length)
   }
 
   const removeQuestion = (index: number) => {
     flushSync(() => setRemovingFrom(questions))
     remove(index)
+
+    removeQuestionIdentity(index, effectiveQuestionIds)
 
     setCurrentIndex((current) => {
       if (current < index) {
@@ -121,6 +192,17 @@ export const QuizzEditorProvider = ({
   const reorderQuestions = (from: number, to: number) => {
     move(from, to)
     setCurrentIndex(to)
+
+    reorderQuestionIdentity(from, to, effectiveQuestionIds)
+  }
+
+  const duplicateQuestion = (index: number) => {
+    const questionToClone = questions[index]
+    const cloned: Question = structuredClone(questionToClone)
+    insert(index + 1, cloned)
+    setCurrentIndex(index + 1)
+
+    duplicateQuestionIdentity(index, effectiveQuestionIds)
   }
 
   const questionPath = <K extends FieldPath<Question>>(field: K) =>
@@ -141,15 +223,27 @@ export const QuizzEditorProvider = ({
           quizzId: initialData?.id ?? null,
           gameMode,
           questions,
-          questionIds,
+          questionIds: effectiveQuestionIds,
           currentIndex,
           currentQuestion,
-          currentQuestionId: questionIds[safeIndex],
+          currentQuestionId: effectiveQuestionIds[safeIndex] ?? "",
           isRemoving: removingFrom === questions,
+          extras,
+          isExtrasDirty,
+          extrasStatus,
+          retryExtras,
+          acceptExtrasBaseline,
+          conflict,
+          setExtras,
+          setConflict,
+          setQuestionIds,
+          replaceQuestions,
+          hasCurrentQuestion,
           setCurrentIndex,
           addQuestion,
           removeQuestion,
           reorderQuestions,
+          duplicateQuestion,
           updateQuestion,
           questionPath,
         }}

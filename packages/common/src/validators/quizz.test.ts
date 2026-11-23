@@ -1,5 +1,6 @@
 import {
   ESTIMATION_INPUT_MODES,
+  QUESTION_LEAD_IN_SECONDS,
   QUESTION_TYPES,
   QUIZZ_MODES,
   SCORING_MODES,
@@ -75,12 +76,17 @@ describe("quizzValidator", () => {
     expect(issues(quizz([question], QUIZZ_MODES.SURVEY))).toEqual([])
   })
 
-  it("limits choice questions to 2-4 answers", () => {
+  it("limits choice questions to 2-5 answers", () => {
     expect(issues(quizz([choiceQuestion({ answers: ["A"] })]))).toContain(
       "errors:quizz.tooFewAnswers",
     )
     expect(
       issues(quizz([choiceQuestion({ answers: ["A", "B", "C", "D", "E"] })])),
+    ).toEqual([])
+    expect(
+      issues(
+        quizz([choiceQuestion({ answers: ["A", "B", "C", "D", "E", "F"] })]),
+      ),
     ).toContain("errors:quizz.tooManyAnswers")
   })
 
@@ -94,10 +100,16 @@ describe("quizzValidator", () => {
     )
   })
 
-  it("bounds the cooldown between 3 and 15 seconds", () => {
-    expect(issues(quizz([choiceQuestion({ cooldown: 2 })]))).toContain(
-      "errors:quizz.cooldownTooShort",
-    )
+  it("bounds the cooldown between the shared question lead-in and 15 seconds", () => {
+    expect(
+      issues(
+        quizz([choiceQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS - 1 })]),
+      ),
+    ).toContain("errors:quizz.cooldownTooShort")
+    expect(
+      issues(quizz([choiceQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS })])),
+    ).toEqual([])
+    expect(issues(quizz([choiceQuestion({ cooldown: 15 })]))).toEqual([])
     expect(issues(quizz([choiceQuestion({ cooldown: 16 })]))).toContain(
       "errors:quizz.cooldownTooLong",
     )
@@ -188,5 +200,40 @@ describe("normalizeLegacyQuizz", () => {
 
   it("returns unknown data as is", () => {
     expect(normalizeLegacyQuizz("not a quizz")).toBe("not a quizz")
+  })
+
+  describe("per-question playMode refinement", () => {
+    it("allows a question with playMode='survey' without solutions in a quiz", () => {
+      const q = choiceQuestion()
+      delete q.solutions
+      q.playMode = "survey"
+      const result = quizzValidator.safeParse(quizz([q]))
+      expect(result.success).toBe(true)
+    })
+
+    it("rejects a question with playMode='quiz' without solutions even if quizz.gameMode='survey'", () => {
+      const q = choiceQuestion()
+      delete q.solutions
+      q.playMode = "quiz"
+      const surveyQuizz = {
+        ...quizz([q]),
+        gameMode: QUIZZ_MODES.SURVEY,
+      }
+      const result = quizzValidator.safeParse(surveyQuizz)
+      expect(result.success).toBe(false)
+      expect(result.error?.issues[0].message).toBe("errors:quizz.noSolution")
+    })
+
+    it("falls back to quizz.gameMode when question.playMode is undefined", () => {
+      const q = choiceQuestion()
+      delete q.solutions
+      expect(quizzValidator.safeParse(quizz([q])).success).toBe(false)
+      expect(
+        quizzValidator.safeParse({
+          ...quizz([q]),
+          gameMode: QUIZZ_MODES.SURVEY,
+        }).success,
+      ).toBe(true)
+    })
   })
 })

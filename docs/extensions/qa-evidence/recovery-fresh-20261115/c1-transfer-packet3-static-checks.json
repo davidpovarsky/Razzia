@@ -1,0 +1,15 @@
+{
+  "hashReadbackVerified": 11,
+  "sourceArchiveRegularFilesVerified": 20,
+  "sourceArchiveDirectoryEntries": 9,
+  "nonObserverAppAndTestFilesIdentical": 18,
+  "frozenTestFilesVerified": 5,
+  "pythonAst": "5 PASS",
+  "javascriptSyntax": "2 PASS",
+  "remoteFilesMode": "0400",
+  "remoteDirectoryMode": "0700",
+  "freeBytesAfter": 2687533056,
+  "oldProfileEvidenceHashesVerified": 3,
+  "runtimeExecuted": false,
+  "fixtureOrContainerCreated": false
+}

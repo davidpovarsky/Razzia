@@ -1,0 +1,112 @@
+@modelcontextprotocol/server@2.4.0
+{
+  "dist": {
+    "shasum": "282a61ccbdc531361f03525a33e33283534d6fc7",
+    "tarball": "https://registry.npmjs.org/@modelcontextprotocol/server/-/server-2.4.0.tgz",
+    "fileCount": 117,
+    "integrity": "sha512-rgR9yxSaAJ+bcsi/XroT/S2AfPiIWloXAnrdfYSCms9ivVju0ishu/wW0J21Ho6+ZOR1r7RyeRbjiRuF87ix5Q==",
+    "signatures": [
+      {
+        "sig": "MEUCIHV7JC6K1/umJ387KnjsmV36fJBsORxaoWQOwTCOy4haAiEAlDF4+Waoc1H64Hblmd5tlpQPxWxAIjU/wyWaCsGy5nw=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQCD4vYp594mclgDJWtAkuo33r4dfo9AvoPNW3JHnHFDjQIhAN12PELc9cEzjuBFXfwvHGDeOCKzlCOWT/HZhhK0XALe"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@modelcontextprotocol%2fserver@2.4.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 7023377
+  }
+}
+@modelcontextprotocol/client@2.4.0
+{
+  "dist": {
+    "shasum": "855e4dacf19c2a9db49bf55d332628c08d068b6d",
+    "tarball": "https://registry.npmjs.org/@modelcontextprotocol/client/-/client-2.4.0.tgz",
+    "fileCount": 101,
+    "integrity": "sha512-LgrD2OphHuG12vfKFKz6SOnq7bKHQmhGJIAYdD+MZBn2npHEyry6uD8zvktodtl5CQM85MO0anUyD9JwmUmxww==",
+    "signatures": [
+      {
+        "sig": "MEYCIQCHFSFSkPZJ3TZCy4HapjlDvTAfpvk1u9O8cFgfyqr/FAIhAM6RS0AWMsz23jFEwpI7VqXDsFg+2yQ7TE3SNXyZZJgA",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQDB16GTfrRiem+SIbcSatA1eT3GWByFSrtPgGnASbtLFAIgJgRaibbC6oVFGiQ6FCxzkhlVSAKcpeB31ajdW0ZSmLs="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@modelcontextprotocol%2fclient@2.4.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 7311863
+  }
+}
+@modelcontextprotocol/core@2.4.0
+{
+  "dist": {
+    "shasum": "c7f1a505452c3a0ad666d9a6e78a5804d8d8d0d9",
+    "tarball": "https://registry.npmjs.org/@modelcontextprotocol/core/-/core-2.4.0.tgz",
+    "fileCount": 37,
+    "integrity": "sha512-z8QBKqdfXLPzkLQuG4xp8hrVEMm1PZ1IgxMN2sMbJiFiAKOWXnAzogXn2W4aqIBlP1ea6U5yiqVquvUNM1Cj6Q==",
+    "signatures": [
+      {
+        "sig": "MEYCIQCCp7UHChL164KKWiET9kXCSFomNwweQNWYzuSnLl/sswIhAOWKg3iGAiQWiPngdneaG/u5rei9toluUQan/MD2/Q9R",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQCgrMzKPiL/5XevZgJ0qEiycf9icFhdP1uV1epGEQFWNQIgYGyy9BQmo4BBqTedlTIpRnn+cxq2Su8lBreStOlcJa8="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@modelcontextprotocol%2fcore@2.4.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 1370840
+  }
+}
+@modelcontextprotocol/ext-apps@2.1.0
+{
+  "dist": {
+    "shasum": "6b303674551886429e8c389e4709466d99a83621",
+    "tarball": "https://registry.npmjs.org/@modelcontextprotocol/ext-apps/-/ext-apps-2.1.0.tgz",
+    "fileCount": 50,
+    "integrity": "sha512-clOFd1i/9GfSacMDrmLZDWcFnQpIgUutCqwOx14j5dWq/UpaeIPrctHfG3rDBpSsuB6+1X0oszMG1/0Sc0GccA==",
+    "signatures": [
+      {
+        "sig": "MEYCIQDySMlHVKSlLnqCMNyxu4ROEU3PrzS93w1iEZk4ovqLqAIhAMECgXhIt7GRiHGS+z+edWZEvsHTb8a35+ImC7UNlX0P",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEUCIBeN63+VXuasABP+YKY6+GoAjByCgwtXc5XMYCR9987hAiEA10VCpUA1CHtJYK/8XluONUXx9Pyp09jOvsRuFKEo0HA=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@modelcontextprotocol%2fext-apps@2.1.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 1759025
+  },
+  "peerDependencies": {
+    "zod": "^4.2.0",
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "@modelcontextprotocol/core": "^2.0.0",
+    "@modelcontextprotocol/client": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.0.0"
+  }
+}

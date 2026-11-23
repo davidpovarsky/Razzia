@@ -1,0 +1,190 @@
+{
+  "base": "470804357c7e65b3ebe1d60cc6850ab164d8147a",
+  "head": "470804357c7e65b3ebe1d60cc6850ab164d8147a",
+  "taskLeaseDelta": "PASS",
+  "denied": [],
+  "changedPaths": [
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/CONTRACT.md",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/RESULTS.md",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/RUNNER.md",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/audit-format.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/format-check.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/format-check.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/format-final-write.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/format-locales.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/format-write.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-final.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-final.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-fix.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-run1.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-run1.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-run2.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/lint-run2.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/source-audit.json",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/source-audit.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/typecheck-final.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/typecheck-final.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/typecheck-run1.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/typecheck-run1.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/typecheck-with-locales.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/typecheck-with-locales.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-final.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-final.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-run2.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-run2.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-run3.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-run3.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-run4.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-run4.log",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-with-locales.exit",
+    "docs/extensions/qa-evidence/inline-game-preview-20261115/g1-pure-contracts/vitest-with-locales.log",
+    "extensions/qa/inline-game-preview/.gitignore",
+    "extensions/qa/inline-game-preview/source-audit.cjs",
+    "extensions/qa/inline-game-preview/tsconfig.json",
+    "extensions/qa/inline-game-preview/vitest.config.ts",
+    "extensions/src/site/components/game-preview/activation.ts",
+    "extensions/src/site/components/game-preview/contracts.ts",
+    "extensions/src/site/components/game-preview/coordinator.ts",
+    "extensions/src/site/components/game-preview/request-owner.ts",
+    "extensions/src/site/components/game-preview/resources.ts",
+    "extensions/src/site/components/game-preview/timeline-input.ts",
+    "extensions/src/site/tests/inline-game-preview-activation.test.ts",
+    "extensions/src/site/tests/inline-game-preview-contracts.test.ts",
+    "extensions/src/site/tests/inline-game-preview-locales.test.ts",
+    "extensions/src/site/tests/inline-game-preview-ownership.test.ts",
+    "extensions/src/site/tests/inline-game-preview-timeline-input.test.ts"
+  ],
+  "files": {
+    "extensions/qa/inline-game-preview/source-audit.cjs": {
+      "bytes": 3277,
+      "sha256": "ca8247f7f9d7187a7182cc845bbc3c08dc5d03c6c55421f083740f5eacb82979"
+    },
+    "extensions/qa/inline-game-preview/tsconfig.json": {
+      "bytes": 196,
+      "sha256": "1c6a31bac6ed319bf8a6d98a3dff60f2303a5ae24afbb79352ff81a67d6e259a"
+    },
+    "extensions/qa/inline-game-preview/vitest.config.ts": {
+      "bytes": 427,
+      "sha256": "4d7c8c940fb961489c0d6da63b8af056866193ec67a97b9d56dbad5ee1407a9f"
+    },
+    "extensions/src/site/components/game-preview/activation.ts": {
+      "bytes": 1986,
+      "sha256": "443428f2ac9cbdd33e7be6a476ac3574cbcee0916729261d580a41ef0abf9af6"
+    },
+    "extensions/src/site/components/game-preview/contracts.ts": {
+      "bytes": 5529,
+      "sha256": "0ddafb8d66a372d782346865cee7bef7c2b1871680e34c4abfb3ac86fc281e3c"
+    },
+    "extensions/src/site/components/game-preview/coordinator.ts": {
+      "bytes": 1463,
+      "sha256": "34e00b4a67e18e4c66a6bf88c6f676e681ad7681024c24e6ee70a4c41b9e9369"
+    },
+    "extensions/src/site/components/game-preview/request-owner.ts": {
+      "bytes": 1194,
+      "sha256": "92e1c974aa435e528bb4cf389660da90e86a689fbb0a322c6c154523ba62a0ca"
+    },
+    "extensions/src/site/components/game-preview/resources.ts": {
+      "bytes": 8407,
+      "sha256": "8abbf92c9ce3d14b182ca277f7669b606a1c20122b956e460a34693717f39381"
+    },
+    "extensions/src/site/components/game-preview/timeline-input.ts": {
+      "bytes": 1456,
+      "sha256": "0f92871120e4916346023c858c738939a1be4e58213f0b8a10e7b7858ab9c3ba"
+    },
+    "extensions/src/site/tests/inline-game-preview-activation.test.ts": {
+      "bytes": 3557,
+      "sha256": "e52d3d9aacde920d93be86c9f74a5d40d41324246361012cb9bed9f917752f7d"
+    },
+    "extensions/src/site/tests/inline-game-preview-contracts.test.ts": {
+      "bytes": 3157,
+      "sha256": "52c6ae3dfe88a294b41647b611f2ea4b1eec62f1c996b53f2dabde8c5ce8735a"
+    },
+    "extensions/src/site/tests/inline-game-preview-locales.test.ts": {
+      "bytes": 1330,
+      "sha256": "f9c3afaea06dfb007ce842b235bb1e17cf0990588c70d822ca2c314da6f44a28"
+    },
+    "extensions/src/site/tests/inline-game-preview-ownership.test.ts": {
+      "bytes": 3805,
+      "sha256": "590d3db43d13cc47410c8a3523b365e456ad30c64f74149e652aadcca3048a90"
+    },
+    "extensions/src/site/tests/inline-game-preview-timeline-input.test.ts": {
+      "bytes": 2068,
+      "sha256": "b33d8f6a8fbf9cf9c00b514ba10c033ab4341218d3e3336f4c46c684ab7f6926"
+    }
+  },
+  "inheritedProtectedDifferences": [
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "currentSha256": "7ea07761f84468820e0eb1679ab0d36601e4fe5671f528ae4190c0c2f14caf1a",
+      "baseSha256": "7ea07761f84468820e0eb1679ab0d36601e4fe5671f528ae4190c0c2f14caf1a",
+      "historicalFreezeSha256": "68b8a9a5340ff759281193372d5bc356eb6b1ed417da50d64c43b8767a3a35f0"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/theme-routes.ts",
+      "currentSha256": "6dbfffffc46f338dd0f02816dc384748ab9b6ec4134fcfac5bc56afd4f679fcd",
+      "baseSha256": "6dbfffffc46f338dd0f02816dc384748ab9b6ec4134fcfac5bc56afd4f679fcd",
+      "historicalFreezeSha256": "03a9da13f487181cafb46c8e828b4ef2517dfacb13e063eb10959812b2b5bc25"
+    },
+    {
+      "path": "packages/socket/src/api/index.ts",
+      "currentSha256": "5cc5edff0c9d03063b21f738de6ef069285c3e5fb11601297169c1ff624c1e19",
+      "baseSha256": "5cc5edff0c9d03063b21f738de6ef069285c3e5fb11601297169c1ff624c1e19",
+      "historicalFreezeSha256": "898d4df334dde0ad187c994dc21c95178912bc4403f686c5727542ca5188e1d2"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "currentSha256": "eac9cb37379a15c562d89aca4813350f3139aef90dcc6902eb124f06759ef411",
+      "baseSha256": "eac9cb37379a15c562d89aca4813350f3139aef90dcc6902eb124f06759ef411",
+      "historicalFreezeSha256": "ad8cf13ac31800447a076a2582748eee47cbd756f9b54d0fcc66a9d11b7dae3d"
+    },
+    {
+      "path": "packages/socket/src/index.ts",
+      "currentSha256": "bfd412dffec5bd5c335a084ce5f42ed16321269eae91628a5aec6acdc569385d",
+      "baseSha256": "bfd412dffec5bd5c335a084ce5f42ed16321269eae91628a5aec6acdc569385d",
+      "historicalFreezeSha256": "64751acb3f9ebc1b6baf44885a0a8006eb48653eb4ed2e712facdaab95b9a824"
+    },
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "currentSha256": "5c7ebb622d80da07a6dcfa6d536669a32f19879208a5b1a0d5f2758e71491ec8",
+      "baseSha256": "5c7ebb622d80da07a6dcfa6d536669a32f19879208a5b1a0d5f2758e71491ec8",
+      "historicalFreezeSha256": "b2ab65884b7097a11250e453ac0feb940e7976eeb82f696c35fbc8f4b66587a2"
+    },
+    {
+      "path": "packages/socket/src/services/config.ts",
+      "currentSha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f",
+      "baseSha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f",
+      "historicalFreezeSha256": "1d892a5a40f099681b0557f55d4ab4951a902cffce35e4a99e64ebbb206b0cec"
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "currentSha256": "ef9f3b5e3c9dd810ea878b25f6eea089d11f8c2b3d0e28a897f82a101164ff07",
+      "baseSha256": "ef9f3b5e3c9dd810ea878b25f6eea089d11f8c2b3d0e28a897f82a101164ff07",
+      "historicalFreezeSha256": "81995753aa63ecc4ffb6c3304db8657e2026b860cec2efbbfd01e87c6f93540e"
+    },
+    {
+      "path": "packages/socket/src/services/game/player-manager.ts",
+      "currentSha256": "3790f2d512a533bcd2059560779a353fd955a16818497611a537590889343d7f",
+      "baseSha256": "3790f2d512a533bcd2059560779a353fd955a16818497611a537590889343d7f",
+      "historicalFreezeSha256": "ffead1639365e71fd9033d2bda97bcfc65224ad181a635cb5b4ba7a4830e095c"
+    },
+    {
+      "path": "packages/web/index.html",
+      "currentSha256": "9f3f2952feb779859faed515cef30bfbab1801d54f6c336b7eb0ecf33b61d37f",
+      "baseSha256": "9f3f2952feb779859faed515cef30bfbab1801d54f6c336b7eb0ecf33b61d37f",
+      "historicalFreezeSha256": "ef8842953517bf7aa9db285f02ba245c90910bc254ee0b52b65de70e1a23b5aa"
+    },
+    {
+      "path": "packages/web/src/features/game/components/AnswerButton.tsx",
+      "currentSha256": "5472a32090c3cdfdc5b3a247f83096247b1b8b3cf2ffedc8f50d56945ff93bce",
+      "baseSha256": "5472a32090c3cdfdc5b3a247f83096247b1b8b3cf2ffedc8f50d56945ff93bce",
+      "historicalFreezeSha256": "663a15935c1fb41f164f68091ae10edf6ff2d9b5fe04c2638ea16dd034a79f4a"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/show-theme-settings.tsx",
+      "currentSha256": "65e5273eb5ce94b75d2a31055c74ae380620106c913352478a318d51c7050aa7",
+      "baseSha256": "65e5273eb5ce94b75d2a31055c74ae380620106c913352478a318d51c7050aa7",
+      "historicalFreezeSha256": "ffec2b8d9a5d1c18d74c31ccf0e5d1b5686387dee87fc5b22a8a3feeb22321ec"
+    }
+  ],
+  "historicalTdsGuard": "FAIL on supplied base; not replaced, reset or claimed green by this task-only audit"
+}

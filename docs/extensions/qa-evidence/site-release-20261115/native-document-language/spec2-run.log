@@ -1,0 +1,9 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › ../evidence/src/site/tests/browser/native-document-language.spec.ts:5:3 › ja native game document follows the translated title (2.7s)
+  ✓  2 [chromium] › ../evidence/src/site/tests/browser/native-document-language.spec.ts:5:3 › tr native game document follows the translated title (2.2s)
+  ✓  3 [webkit] › ../evidence/src/site/tests/browser/native-document-language.spec.ts:5:3 › ja native game document follows the translated title (3.9s)
+  ✓  4 [webkit] › ../evidence/src/site/tests/browser/native-document-language.spec.ts:5:3 › tr native game document follows the translated title (6.6s)
+
+  4 passed (28.1s)

@@ -1,0 +1,338 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.host.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.host.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-08-host-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-host.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-08-host-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-host.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-08-host.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-host.spec.ts",
+      "file": "tds-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 33965,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('host-bottom-players-btn')\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByTestId('host-bottom-players-btn') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('host-bottom-players-btn')\u001b[22m\n\u001b[2m    34 × locator resolved to <button type=\"button\" data-state=\"closed\" data-testid=\"host-bottom-players-btn\" class=\"hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('host-bottom-players-btn')\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByTestId('host-bottom-players-btn') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('host-bottom-players-btn')\u001b[22m\n\u001b[2m    34 × locator resolved to <button type=\"button\" data-state=\"closed\" data-testid=\"host-bottom-players-btn\" class=\"hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at /cleanup/extensions/qa/tds-host.spec.ts:217:27",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-host.spec.ts",
+                      "column": 27,
+                      "line": 217
+                    },
+                    "snippet": "  215 |     await page.keyboard.press(\"Escape\")\n  216 |     await expect(dialog).toHaveCount(0)\n> 217 |     await expect(trigger).toBeFocused()\n      |                           ^\n  218 |   }\n  219 |   await fullscreen(page)\n  220 |   const trigger = page.getByRole(\"button\", {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-host.spec.ts",
+                        "column": 27,
+                        "line": 217
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('host-bottom-players-btn')\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByTestId('host-bottom-players-btn') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('host-bottom-players-btn')\u001b[22m\n\u001b[2m    34 × locator resolved to <button type=\"button\" data-state=\"closed\" data-testid=\"host-bottom-players-btn\" class=\"hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  215 |     await page.keyboard.press(\"Escape\")\n  216 |     await expect(dialog).toHaveCount(0)\n> 217 |     await expect(trigger).toBeFocused()\n      |                           ^\n  218 |   }\n  219 |   await fullscreen(page)\n  220 |   const trigger = page.getByRole(\"button\", {\n    at /cleanup/extensions/qa/tds-host.spec.ts:217:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:47:33.866Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-08-host-traces/tds-host-display-modes-sta-6109f--and-fullscreen-modal-focus-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-08-host-traces/tds-host-display-modes-sta-6109f--and-fullscreen-modal-focus-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-host.spec.ts",
+                    "column": 27,
+                    "line": 217
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-620fc10431e286bba2fb",
+          "file": "tds-host.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 28811,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Confirm' })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Confirm' })\u001b[22m\n\n    at confirm (/cleanup/packages/e2e/utils/player.ts:32:63)\n    at /cleanup/extensions/qa/tds-host.spec.ts:289:9",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/utils/player.ts",
+                      "column": 63,
+                      "line": 32
+                    },
+                    "snippet": "   at ../../packages/e2e/utils/player.ts:32\n\n  30 |\n  31 | export const confirm = async (page: Page) => {\n> 32 |   await page.getByRole(\"button\", { name: t(\"game:confirm\") }).click()\n     |                                                               ^\n  33 | }\n  34 |\n  35 | export const expectPoints = async (page: Page, points: number) => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/utils/player.ts",
+                        "column": 63,
+                        "line": 32
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Confirm' })\u001b[22m\n\n\n   at ../../packages/e2e/utils/player.ts:32\n\n  30 |\n  31 | export const confirm = async (page: Page) => {\n> 32 |   await page.getByRole(\"button\", { name: t(\"game:confirm\") }).click()\n     |                                                               ^\n  33 | }\n  34 |\n  35 | export const expectPoints = async (page: Page, points: number) => {\n    at confirm (/cleanup/packages/e2e/utils/player.ts:32:63)\n    at /cleanup/extensions/qa/tds-host.spec.ts:289:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:48:09.880Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-08-host-traces/tds-host-real-game-pause-a-a658c-istory-replay-confirms-once-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-08-host-traces/tds-host-real-game-pause-a-a658c-istory-replay-confirms-once-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/utils/player.ts",
+                    "column": 63,
+                    "line": 32
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-39f4ba31adb6916f14c2",
+          "file": "tds-host.spec.ts",
+          "line": 248,
+          "column": 1
+        },
+        {
+          "title": "restart and skip keep original confirmations and one command per explicit confirmation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11028,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:48:41.554Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-3d7f3a699da736ca12e7",
+          "file": "tds-host.spec.ts",
+          "line": 328,
+          "column": 1
+        },
+        {
+          "title": "touch host controls and compact landscape dialogs keep named reachable close actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5192,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:48:52.748Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-1ed4c49941e5a27c1a17",
+          "file": "tds-host.spec.ts",
+          "line": 368,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T23:47:26.939Z",
+    "duration": 91139.323,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

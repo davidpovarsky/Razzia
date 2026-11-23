@@ -1,0 +1,10 @@
+{
+  "restored": true,
+  "sdk": "2.4.0",
+  "files": 2042,
+  "manifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "source": "/evidence/tadazz-codex-browser-c4125d58a746-8e0c29d3/mcp-deps",
+  "target": "/tmp/phase3-999ed90c/deps",
+  "productionTouched": false,
+  "provenance": "Previously qualified2042-file SDK2.4.0 manifest from committed phase3 browser receipts, restored after isolated QA cache tmpfs restart; no dependency version or gate changed."
+}

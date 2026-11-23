@@ -1,0 +1,88 @@
+TAP version 13
+# (node:22864) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: discovery and JWKS expose public configuration without creating a tenant grant store
+ok 1 - discovery and JWKS expose public configuration without creating a tenant grant store
+  ---
+  duration_ms: 355.744
+  type: 'test'
+  ...
+# Subtest: exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests
+ok 2 - exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests
+  ---
+  duration_ms: 14.8318
+  type: 'test'
+  ...
+# Subtest: consent requires real manager identity, same origin and the exact account/session/ticket proof
+ok 3 - consent requires real manager identity, same origin and the exact account/session/ticket proof
+  ---
+  duration_ms: 37.3361
+  type: 'test'
+  ...
+# Subtest: real account PKCE flow stores only token digests and survives a fresh issuer instance
+not ok 4 - real account PKCE flow stores only token digests and survives a fresh issuer instance
+  ---
+  duration_ms: 90.2461
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app\\tests\\first-party\\oauth.nodecheck.ts:1:6070'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    438 !== 384
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 384
+  actual: 438
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-02\extensions\src\mcp-app\tests\first-party\oauth.nodecheck.ts:270:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant
+ok 5 - wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant
+  ---
+  duration_ms: 99.474
+  type: 'test'
+  ...
+# Subtest: refresh rotates once, and replay durably revokes both old and newly issued access
+ok 6 - refresh rotates once, and replay durably revokes both old and newly issued access
+  ---
+  duration_ms: 147.1212
+  type: 'test'
+  ...
+# Subtest: client revocation and actual native-session logout revoke OAuth access
+ok 7 - client revocation and actual native-session logout revoke OAuth access
+  ---
+  duration_ms: 146.2709
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes
+ok 8 - real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes
+  ---
+  duration_ms: 567.4511
+  type: 'test'
+  ...
+# Subtest: hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure
+ok 9 - hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure
+  ---
+  duration_ms: 53.3502
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 8
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3381.896

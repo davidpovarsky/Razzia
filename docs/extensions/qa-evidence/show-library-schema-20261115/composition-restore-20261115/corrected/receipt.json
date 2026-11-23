@@ -1,0 +1,122 @@
+{
+  "stage": "corrected",
+  "startedUtc": "2026-11-15T18:09:31.511044+00:00",
+  "sourceBaseCommit": "30d1ba883ca6a3b94f7324036ecf873e01645837",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "sourceBefore": {
+    "extensions/src/core/show-library/composition-repository-base.ts": "d576a35a42ad8dbe494c58878bc30e743bc8937f9a7bcd9e9b7d6cfb847eed30",
+    "extensions/src/core/show-library/composition-restore.test.ts": "fdd2afe0d73ede119a19c369c8398294de8921b75191e251f0f20580ed206cdb",
+    "extensions/src/core/show-library/composition-repository.ts": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+    "extensions/src/core/show-library/composition-repository-v2.ts": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057"
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/composition-restore.test.ts",
+        "src/core/show-library/composition-repository.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 241,
+          "sha256": "5984eb504857b6775d917055ad2c62dad8f15c150c561bcda603cf9b9528f567",
+          "rawBase64": "CiBSVU4gIHY1LjAuMyBDOi9Vc2Vycy9EQVZJRC9Db2RlL1JhenppYS13b3JrdHJlZXMvdGFkYXp6LWhxLXNob3ctbGlicmFyeS0yMDI2MTExNS9leHRlbnNpb25zCgoKIFRlc3QgRmlsZXMgIDIgcGFzc2VkICgyKQogICAgICBUZXN0cyAgMjUgcGFzc2VkICgyNSkKICAgU3RhcnQgYXQgIDIwOjA5OjMyCiAgIER1cmF0aW9uICAyLjE1cyAoaW1wb3J0IDU2JSwgdHJhbnNmb3JtIDM3JSwgdGVzdHMgNiUsIHdvcmtlciAxJSkKCg=="
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "types",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/composition-repository-base.ts",
+        "extensions/src/core/show-library/composition-restore.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 66,
+          "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+          "rawBase64": "Q2hlY2tpbmcgZm9ybWF0dGluZy4uLgpBbGwgbWF0Y2hlZCBmaWxlcyB1c2UgUHJldHRpZXIgY29kZSBzdHlsZSEK"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "lint",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/oxlint/bin/oxlint",
+        "--threads",
+        "1",
+        "--format",
+        "json",
+        "extensions/src/core/show-library/composition-repository-base.ts",
+        "extensions/src/core/show-library/composition-restore.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 202,
+          "sha256": "1859d4668cac5cbe8812abc4d7e56f33ae185c3c809bd85f41d21c093cad7663",
+          "rawBase64": "eyAiZGlhZ25vc3RpY3MiOiBbXSwKICAgICAgICAgICAgICAibnVtYmVyX29mX2ZpbGVzIjogMiwKICAgICAgICAgICAgICAibnVtYmVyX29mX3J1bGVzIjogMjMzLAogICAgICAgICAgICAgICJ0aHJlYWRzX2NvdW50IjogMSwKICAgICAgICAgICAgICAic3RhcnRfdGltZSI6IDEuNjg0NzIyOTAwMDAwMDAwMQogICAgICAgICAgICB9CiAgICAgICAgICAgIA=="
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/composition-repository-base.ts": "d576a35a42ad8dbe494c58878bc30e743bc8937f9a7bcd9e9b7d6cfb847eed30",
+    "extensions/src/core/show-library/composition-restore.test.ts": "fdd2afe0d73ede119a19c369c8398294de8921b75191e251f0f20580ed206cdb",
+    "extensions/src/core/show-library/composition-repository.ts": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+    "extensions/src/core/show-library/composition-repository-v2.ts": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057"
+  },
+  "sourceUnchangedDuringChecks": true,
+  "finishedUtc": "2026-11-15T18:09:37.761969+00:00"
+}

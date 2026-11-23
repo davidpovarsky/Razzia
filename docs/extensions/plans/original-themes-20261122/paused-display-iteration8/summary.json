@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "exit": 0,
+  "seconds": 68.75,
+  "sourceFileCount": 2678,
+  "sourceBeforeSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceAfterSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceHashesVerifiedBeforeAfter": true,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "probeHashesVerifiedBeforeAfter": true,
+  "readOnlyMountsVerified": true,
+  "containerStopped": true,
+  "checks": [
+    {
+      "name": "normal-motion-display-preference",
+      "passed": true
+    },
+    {
+      "name": "final-results-committed-and-observed-after-two-frames",
+      "passed": true
+    },
+    {
+      "name": "paused-final-results-and-finite-scene-time-stable",
+      "passed": true
+    },
+    {
+      "name": "resume-and-next-question-progress-with-normal-motion",
+      "passed": true
+    },
+    {
+      "name": "no-browser-errors",
+      "passed": true
+    }
+  ],
+  "contentAtCommit": {
+    "cards": [
+      {
+        "correct": false,
+        "index": "0",
+        "percentage": "100%",
+        "percentageVisible": true,
+        "target": "100",
+        "title": "Choice 1",
+        "titleVisible": true
+      },
+      {
+        "correct": true,
+        "index": "1",
+        "percentage": "0%",
+        "percentageVisible": true,
+        "target": "0",
+        "title": "Choice 2",
+        "titleVisible": true
+      }
+    ],
+    "heading": "Royal diagnostic question 1",
+    "headingVisible": true
+  },
+  "observedFrames": 51,
+  "observedWindowMs": 831,
+  "violations": [],
+  "resumeMotionCount": 105,
+  "browserErrors": [],
+  "archiveBytes": 1090704,
+  "archiveSha256": "949e94bad21cf4200577055a4415943501417a881fa8542c953bc2db7b6b0d73"
+}

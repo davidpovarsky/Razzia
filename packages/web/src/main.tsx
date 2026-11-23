@@ -1,3 +1,6 @@
+import { PlatformControlsProvider } from "@razzia/extensions/presentation/platform-controls"
+import Button from "@razzia/web/components/Button"
+import { ApplicationDirection } from "@razzia/web/components/ApplicationDirection"
 import "@fontsource-variable/rubik/wght.css"
 import { applyBranding, loadBranding } from "@razzia/web/branding"
 import Toaster from "@razzia/web/components/Toaster"
@@ -27,7 +30,11 @@ applyBranding(await loadBranding())
 
 createRoot(root).render(
   <StrictMode>
-    <RouterProvider router={router} />
-    <Toaster />
+    <ApplicationDirection>
+      <PlatformControlsProvider Button={Button}>
+        <RouterProvider router={router} />
+        <Toaster />
+      </PlatformControlsProvider>
+    </ApplicationDirection>
   </StrictMode>,
 )

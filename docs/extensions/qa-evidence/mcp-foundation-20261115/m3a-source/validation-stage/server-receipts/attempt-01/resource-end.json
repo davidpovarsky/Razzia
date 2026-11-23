@@ -1,0 +1,13 @@
+{
+  "newPhysicalBytes": 487424,
+  "capBytes": 67108864,
+  "hostFreeBytes": 2891206656,
+  "dockerStateAndCappedLogAllowanceBytes": 2097152,
+  "newPhysicalUpperBoundBytes": 2584576,
+  "requiredRemainingReserveBytes": 2516094976,
+  "ownTmpfsUsedBytes": 77598720,
+  "memoryPeak": "147546112",
+  "memoryEvents": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+  "monitorErrors": [],
+  "sharedMetadataTmpfsUsed": 435142656
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "path": "extensions/src/components/oauth-consent/login-handoff.ts",
+    "before": "debf0034b8e026565cc65043c3286d40c9626795913b3a56b5b123a55f77eebd",
+    "after": "55a8b35ef70b521995d29f7b75cfe73467ec5734385abb53a9e2dbb370f7b56a",
+    "sameAst": true
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/login-handoff.test.ts",
+    "before": "926d33f7fcae6352a247ee471d45d9e09cf89ae2ceba3251d28ad185eb73b096",
+    "after": "269443a193aa8c1b9bb209dba944007271278aab750642bea56da25980c3e644",
+    "sameAst": true
+  }
+]

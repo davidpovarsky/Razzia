@@ -1,0 +1,23 @@
+✔ admits actual catalog bytes for both bundled families without serializing authority (55.3838ms)
+✔ serialized lookalikes, foreign accounts and different grants cannot reuse a capability (3.9609ms)
+✔ rights and issuer denial occur before any filesystem inspection (2.3764ms)
+✔ rejects unknown hashes/families and arbitrary Lottie execution (0.9357ms)
+✔ same-length byte tampering and hard-linked files are refused (27.9743ms)
+✔ in-memory admitted snapshot stays immutable after its source changes (14.7929ms)
+✔ revocation after IO prevents publishing the admitted capability (2.1078ms)
+✔ midstream grant revocation releases no subsequent bytes (3.446ms)
+✔ four bounded streams apply backpressure and cancel releases a slot (2.2549ms)
+✔ expiry errors idle streams and renews only through fresh admission (4.6866ms)
+✔ canceled authorization work keeps its quota until the actual callback settles (2.7776ms)
+✔ close revokes active streams and disallows new admission (1.6643ms)
+✔ one account cannot consume the global asset count; only its owner can release a lease (23.3672ms)
+✔ mutating an accepted principal during asynchronous rights work cannot change lease ownership (3.3937ms)
+✔ a symbolic public-root alias cannot traverse to the declared asset (5.0011ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 725.5706

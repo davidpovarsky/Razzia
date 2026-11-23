@@ -1,0 +1,502 @@
+{
+  "created_utc": "2026-11-15T15:06:26.0818604Z",
+  "inputs": [
+    {
+      "path": "package.json",
+      "sha256": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd"
+    },
+    {
+      "path": "extensions\\package.json",
+      "sha256": "bc22399bfe10c8b6f892d715362b805c1fb7d3735e2e718b1fcecaf2fbf4c2cf"
+    },
+    {
+      "path": "packages\\common\\package.json",
+      "sha256": "8573c6e7985cad2d3ff9292588be16fcafa474ee144fd1fa27280b122cd45c53"
+    },
+    {
+      "path": "packages\\socket\\package.json",
+      "sha256": "adfc10bc038bc2dbb919f21576034d83e7d94559041f609e83b8b453d521aa0f"
+    },
+    {
+      "path": "packages\\web\\package.json",
+      "sha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02"
+    }
+  ],
+  "links": [
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\.pnpm",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\@stylistic\\eslint-plugin",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\@stylistic\\eslint-plugin"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\@vitest\\coverage-v8",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\@vitest\\coverage-v8"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\dotenv-cli",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\dotenv-cli"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\oxlint",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\oxlint"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\oxlint-tsgolint",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\oxlint-tsgolint"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\prettier",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\prettier"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\prettier-plugin-tailwindcss",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\prettier-plugin-tailwindcss"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\typescript",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\typescript"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\vitest",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\vitest"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\@razzia\\common",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\@razzia\\socket",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\@razzia\\web",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules\\@razzia\\extensions",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@babel\\parser",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@babel\\parser"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@fontsource-variable\\rubik",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@fontsource-variable\\rubik"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@hono\\node-server",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@hono\\node-server"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@hono\\zod-validator",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@hono\\zod-validator"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@lottiefiles\\dotlottie-react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@lottiefiles\\dotlottie-react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@playwright\\test",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@playwright\\test"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@tanstack\\react-query",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@tanstack\\react-query"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@tanstack\\react-router",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@tanstack\\react-router"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@types\\node",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@types\\node"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@types\\react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@types\\react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@types\\react-dom",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\@types\\react-dom"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\esbuild",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\esbuild"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\hono",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\hono"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\http-status-codes",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\http-status-codes"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\i18next",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\i18next"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\lucide-react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\lucide-react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\motion",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\motion"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\qrcode.react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\qrcode.react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\radix-ui",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\radix-ui"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\react-dom",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\react-dom"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\react-i18next",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\react-i18next"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\socket.io-client",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\socket.io-client"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\tailwindcss",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\tailwindcss"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\tsx",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\tsx"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\typescript",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\typescript"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\uuid",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\uuid"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\vite",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\vite"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\vitest",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\vitest"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\zod",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules\\zod"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@razzia\\common",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@razzia\\socket",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@razzia\\web",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@razzia\\extensions",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\@types\\node",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\common\\node_modules\\@types\\node"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\socket.io",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\common\\node_modules\\socket.io"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\typescript",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\common\\node_modules\\typescript"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\zod",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\common\\node_modules\\zod"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\@razzia\\common",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\@razzia\\socket",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\@razzia\\web",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules\\@razzia\\extensions",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@hono\\node-server",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\@hono\\node-server"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@hono\\zod-validator",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\@hono\\zod-validator"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@types\\node",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\@types\\node"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\dayjs",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\dayjs"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\file-type",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\file-type"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\hono",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\hono"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\http-status-codes",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\http-status-codes"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\nanoid",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\nanoid"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\rolldown",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\rolldown"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\socket.io",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\socket.io"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\socket.io-client",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\socket.io-client"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\tsx",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\tsx"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\typescript",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\typescript"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\uuid",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\uuid"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\zod",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules\\zod"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@razzia\\common",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@razzia\\socket",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@razzia\\web",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@razzia\\extensions",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@dnd-kit\\core",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@dnd-kit\\core"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@dnd-kit\\modifiers",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@dnd-kit\\modifiers"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@dnd-kit\\sortable",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@dnd-kit\\sortable"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@dnd-kit\\utilities",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@dnd-kit\\utilities"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@fontsource-variable\\rubik",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@fontsource-variable\\rubik"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@hookform\\resolvers",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@hookform\\resolvers"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@tailwindcss\\vite",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@tailwindcss\\vite"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@tanstack\\react-query",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@tanstack\\react-query"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@tanstack\\react-router",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@tanstack\\react-router"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@tanstack\\router-plugin",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@tanstack\\router-plugin"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@types\\node",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@types\\node"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@types\\react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@types\\react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@types\\react-dom",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@types\\react-dom"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@vitejs\\plugin-react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\@vitejs\\plugin-react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\clsx",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\clsx"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\hono",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\hono"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\http-status-codes",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\http-status-codes"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\i18next",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\i18next"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\i18next-browser-languagedetector",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\i18next-browser-languagedetector"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\lucide-react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\lucide-react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\motion",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\motion"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\qrcode.react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\qrcode.react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\radix-ui",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\radix-ui"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\react",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\react"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\react-confetti",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\react-confetti"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\react-dom",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\react-dom"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\react-hook-form",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\react-hook-form"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\react-hot-toast",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\react-hot-toast"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\react-i18next",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\react-i18next"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\socket.io-client",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\socket.io-client"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\tailwind-merge",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\tailwind-merge"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\tailwindcss",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\tailwindcss"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\tailwindcss-animated",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\tailwindcss-animated"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\typescript",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\typescript"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\use-sound",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\use-sound"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\uuid",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\uuid"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\vite",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\vite"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\zod",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\zod"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\zustand",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules\\zustand"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@razzia\\common",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@razzia\\socket",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@razzia\\web",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules\\@razzia\\extensions",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions"
+    }
+  ],
+  "workspace_source": "all @razzia links target integration checkout, never donor source",
+  "cache": "new local .vite/.vite-temp remain integration-owned",
+  "install_download_resolution": "NOT_RUN; reuse existing installed dependencies only"
+}

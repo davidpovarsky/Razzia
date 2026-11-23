@@ -1,0 +1,39 @@
+{
+  "source_sha": "7f53a23fad567c3e0e1ea3c5228694871e022958",
+  "phase": "call",
+  "container": "phone-call-7f53a23-attempt01",
+  "recorded_utc": "2026-11-15T20:41:53.374682+00:00",
+  "prior_cumulative_bytes": 14729216,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-call-receipts-call-7f53a23.tar",
+  "archive_sha256": "82ef79e5a51d5474a2758e76ed58ffcf8d28224984332e8a24b198f43d9e01d6",
+  "archive_bytes": 30720,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-call-7f53a23fad567c3e0e1ea3c5228694871e022958",
+      "allocated_bytes": 303104
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-7f53a23fad567c3e0e1ea3c5228694871e022958",
+      "allocated_bytes": 409600
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-call-7f53a23-attempt01",
+      "allocated_bytes": 65536
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-call-7f53a23",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-call-receipts-call-7f53a23.tar",
+      "allocated_bytes": 32768
+    },
+    {
+      "path": "/var/lib/docker/containers/648ea59ef79b2b614c59f9e589ca777bb445cc80c2e523957b234137b2ddd5d0",
+      "allocated_bytes": 40960
+    }
+  ],
+  "new_allocated_bytes": 864256,
+  "cumulative_allocated_bytes": 15593472
+}

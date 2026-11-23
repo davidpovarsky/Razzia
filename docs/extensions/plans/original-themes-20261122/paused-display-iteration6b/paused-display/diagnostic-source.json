@@ -1,0 +1,14 @@
+{
+  "preparationOnly": true,
+  "releaseQualified": false,
+  "productionChanged": false,
+  "sourceRoot": "/source",
+  "family": "royal-quiz",
+  "backendExecution": "source-native-host-via-tsx",
+  "sourceHashes": {
+    "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx": "7862994c61761a0c893a40581dc7971b4a3164a610341caa2621d39f52a4b725",
+    "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx": "d80e094946743d7f3c97bdf8242122703f8ec44bc898022b8dd355565a921b49",
+    "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx": "460d74ee0e0b696bb3780a76f2087e893e28099f3b360cb4efa54adcd0b8fe07",
+    "extensions/src/presentation/tadazz-v4/motion.ts": "be8883a469ffe661a67d22109f1f61800919dbeb623d4d41076c00fa01a0c511"
+  }
+}

@@ -1,0 +1,45 @@
+import { describe, expect, it } from "vitest"
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
+const read = (language: string) =>
+  JSON.parse(
+    readFileSync(
+      fileURLToPath(new URL(`../locales/${language}.json`, import.meta.url)),
+      "utf8",
+    ),
+  ) as Record<string, string>
+const variables = (value: string) =>
+  [...value.matchAll(/\{\{(\w+)\}\}/gu)].map((match) => match[1]).sort()
+describe("site locale contract", () => {
+  const en = read("en")
+  for (const language of [
+    "en",
+    "fr",
+    "de",
+    "es",
+    "it",
+    "ja",
+    "tr",
+    "vi",
+    "he",
+  ]) {
+    it(`${language} keeps ordinary platform branding title-case while retaining legacy translation keys`, () => {
+      const dictionary = read(language)
+      for (const value of Object.values(dictionary)) {
+        expect(value).not.toMatch(/TADAZZ|\bTada\b/u)
+      }
+      expect(dictionary["TADAZZ JSON"]).toContain("Tadazz")
+      expect(dictionary["Your TADAZZ Studio"]).toContain("Tadazz")
+    })
+  }
+  for (const language of ["fr", "de", "es", "it", "ja", "tr", "vi", "he"]) {
+    it(`${language} covers all site keys and preserves interpolation`, () => {
+      const dictionary = read(language)
+      expect(Object.keys(dictionary).sort()).toEqual(Object.keys(en).sort())
+      for (const [key, value] of Object.entries(dictionary)) {
+        expect(value.trim(), key).not.toBe("")
+        expect(variables(value), key).toEqual(variables(en[key]))
+      }
+    })
+  }
+})

@@ -1,0 +1,107 @@
+{
+  "checkedRefs": 25,
+  "branches": [
+    {
+      "ref": "refs/heads/agent/dana/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/eitan/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/maya/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/maya/wave2",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/noam/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/roni/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-accounts-20261104",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-full-show-20261105",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-motion-20261104",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-next-20261105",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-v4-design-kit-20261105",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-validated-20261104",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tomer/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tomer/wave2",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/tzila-seating-20261108",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/agent/yael/wave1",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-billing-20261108",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/codex/upstream-cleanup-theme-engine-20261108",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/feat/modular-extensions-planning",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/heads/main",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/agent/tadazz-full-show-20261105",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/agent/tadazz-next-20261105",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/agent/tadazz-v4-design-kit-20261105",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/upstream-cleanup-theme-engine-20261108",
+      "missingCommits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "missingCommits": 0
+    }
+  ],
+  "uncommittedOtherWorktrees": "not copied, stashed, reset or edited",
+  "upstreamRemote": "fetched for current visibility; automatic upstream version upgrade is outside this UI change"
+}

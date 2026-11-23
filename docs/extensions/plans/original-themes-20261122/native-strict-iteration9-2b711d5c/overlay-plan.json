@@ -1,0 +1,46 @@
+{
+  "allBrowserHelperPrefixByteIdentical": true,
+  "allBrowserHelperPrefixSha256": "f040c8d48a1e5f0b25af8fc01c59241712bc8eedfe6e349ef900ddce95f92167",
+  "applicationSourcesEqualCandidate": true,
+  "assertionPolicy": "All original native assertions are fail-fast and unchanged. No collection waiver, retry, fixture change or skipped native phase.",
+  "candidateQaHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": "f55342b0eb6fef8af9621e35eac0fabcf0652fa5d69f16ac7f0b1623834f9ca7",
+    "extensions/qa/original-themes/audio-observer.mjs": "7815dc7945d6c1b11d57e555ee90ab11857abada98411580e9f305a72d0d7117",
+    "extensions/qa/original-themes/browser-verify.mjs": "d8ad80310da211f0716a1b22d4108524720e5622eb9cadc75fbb09f1852b1210",
+    "extensions/qa/original-themes/contract.mjs": "ca76fa21f782b30f258297dfe4ff5e899b04298ba328b64e34c6560a29401ca0",
+    "extensions/qa/public-gallery/question-sequence-verify.mjs": "d8bbd906b1f5e05ebb68f3e0057ddeb2b2d326d2107639121506b93cab2e72e3",
+    "extensions/qa/public-gallery/viewer-controls-verify.mjs": "fd28f2fa6d9a10aef4e81ffbf6b7ef75d11a9a50a91568c4ec8651deab8a984b"
+  },
+  "diagnosticOnly": true,
+  "nativeFunctionByteIdentical": true,
+  "nativeFunctionSha256": "1a2339e36ec799d759112234609dc88db208868284b73427302905ebfd73e67a",
+  "overlayHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": {
+      "bytes": 10148,
+      "sha256": "2f5210e1913e9de50841579d1060b14b5d6dca3673a3134ec651ed6d76451037"
+    },
+    "extensions/qa/original-themes/audio-observer.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/audio-observer.mjs"
+    },
+    "extensions/qa/original-themes/browser-verify.mjs": {
+      "bytes": 40961,
+      "sha256": "0faad574c11c96f02721837941acc2de147ab4b980e829f9178b23af8dd0aa9c"
+    },
+    "extensions/qa/original-themes/contract.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/contract.mjs"
+    },
+    "extensions/qa/phase3-native-consent": {
+      "symlink": "/source/extensions/qa/phase3-native-consent"
+    },
+    "extensions/qa/public-gallery": {
+      "symlink": "/source/extensions/qa/public-gallery"
+    },
+    "extensions/src": {
+      "symlink": "/source/extensions/src"
+    }
+  },
+  "releaseQualified": false,
+  "runtimeQaSourceEqualsCandidate": false,
+  "scope": "strict native only; original 8 families, 32 real-vote fixtures, 2-5 choices, images, 64 choice-layout checks and 33 question/voting/results sequence checks",
+  "selectionOnly": true
+}

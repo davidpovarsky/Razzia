@@ -1,0 +1,117 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 8 tests using 1 worker
+
+  ✘  1 [chromium] › tests/package-runtime-load.spec.ts:164:1 › bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room (2.0m)
+  ✘  2 [chromium] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation (2.0m)
+  ✘  3 [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary (2.0m)
+  ✘  4 [chromium] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks (2.0m)
+  ✓  5 [webkit] › tests/package-runtime-load.spec.ts:164:1 › bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room (1.0m)
+  ✓  6 [webkit] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation (8.8s)
+  ✓  7 [webkit] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary (1.0m)
+  ✓  8 [webkit] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks (11.9s)
+
+
+  1) [chromium] › tests/package-runtime-load.spec.ts:164:1 › bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "preview-ready"
+    Received: "building"
+
+    Call Log:
+    - Timeout 120000ms exceeded while waiting on the predicate
+
+       at ../utils/package-install.ts:107
+
+      105 |       { timeout: 120_000 },
+      106 |     )
+    > 107 |     .toBe("preview-ready")
+          |      ^
+      108 |   const receipt = (await (await request.get(path, { headers })).json()) as {
+      109 |     revision: number
+      110 |     sourceDigest: string
+        at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)
+        at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21
+
+    Error Context: test-results/package-runtime/package-runtime-load-bound-f1ef9-ack-without-losing-the-room-chromium/error-context.md
+
+  2) [chromium] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "preview-ready"
+    Received: "building"
+
+    Call Log:
+    - Timeout 120000ms exceeded while waiting on the predicate
+
+      76 |       { timeout: 120_000 },
+      77 |     )
+    > 78 |     .toBe("preview-ready")
+         |      ^
+      79 |   expect(
+      80 |     (
+      81 |       await request.get(previewPath, {
+        at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6
+
+    Error Context: test-results/package-runtime/package-runtime-declarativ-89e86--assets-before-installation-chromium/error-context.md
+
+  3) [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('package-preflight')
+    Expected substring: "Ready for preview"
+    Received string:    "Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation."
+    Timeout: 120000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('package-preflight') with timeout 120000ms
+      - waiting for getByTestId('package-preflight')
+        - locator resolved to <div class="space-y-3" data-testid="package-preflight">…</div>
+        - unexpected value "Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBValidatedThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameBuild previewInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.Delete"
+        241 × locator resolved to <div class="space-y-3" data-testid="package-preflight">…</div>
+            - unexpected value "Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation."
+
+
+      174 |   )
+      175 |   await page.getByRole("button", { name: "Build preview", exact: true }).click()
+    > 176 |   await expect(page.getByTestId("package-preflight")).toContainText(
+          |                                                       ^
+      177 |     "Ready for preview",
+      178 |     { timeout: 120_000 },
+      179 |   )
+        at /cleanup/packages/e2e/tests/package-runtime.spec.ts:176:55
+
+    Error Context: test-results/package-runtime/package-runtime-one-file-c-20e4c-e-core-and-sandbox-boundary-chromium/error-context.md
+
+  4) [chromium] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "failed"
+    Received: "building"
+
+    Call Log:
+    - Timeout 120000ms exceeded while waiting on the predicate
+
+      623 |         { timeout: 120_000 },
+      624 |       )
+    > 625 |       .toBe("failed")
+          |        ^
+      626 |   }
+      627 | })
+      628 |
+        at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8
+
+    Error Context: test-results/package-runtime/package-runtime-networkles-daf19-nd-executable-import-tricks-chromium/error-context.md
+
+  4 failed
+    [chromium] › tests/package-runtime-load.spec.ts:164:1 › bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room
+    [chromium] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation
+    [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary
+    [chromium] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks
+  4 passed (10.6m)

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    <defs><linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#102e35"/><stop offset="1" stop-color="#27616a"/></linearGradient>
+    <radialGradient id="shade"><stop stop-color="#102e35" stop-opacity=".02"/><stop offset=".55" stop-color="#102e35" stop-opacity=".17"/><stop offset="1" stop-color="#102e35" stop-opacity=".52"/></radialGradient>
+    <radialGradient id="light" cx=".5" cy="0" r="1"><stop stop-color="#ffad98" stop-opacity=".07"/><stop offset=".7" stop-color="#ffad98" stop-opacity="0"/></radialGradient></defs>
+    <rect width="1600" height="900" fill="url(#base)"/><rect width="1600" height="900" fill="url(#light)"/>
+    <g stroke="#9bd9d5" opacity=".18" stroke-width="3" fill="none"><path d="M85 150l205 110-150 190m150-190 80-180M1475 710l-195-110 150-190m-150 190-85 180"/></g>
+        <rect x="25" y="90" width="120" height="120" rx="30" fill="#ffad98" opacity="0.22" transform="rotate(-7 85 150)"/><rect x="230" y="200" width="120" height="120" rx="30" fill="#9bd9d5" opacity="0.22" transform="rotate(8 290 260)"/><rect x="90" y="390" width="110" height="110" rx="28" fill="#ffad98" opacity="0.15" transform="rotate(-8 145 445)"/>
+        <rect x="1410" y="650" width="120" height="120" rx="30" fill="#9bd9d5" opacity="0.22" transform="rotate(8 1470 710)"/><rect x="1220" y="540" width="120" height="120" rx="30" fill="#ffad98" opacity="0.2" transform="rotate(-8 1280 600)"/><rect x="1380" y="345" width="110" height="110" rx="28" fill="#9bd9d5" opacity="0.15" transform="rotate(7 1435 400)"/>
+        <circle cx="1295" cy="125" r="35" fill="#ffad98" opacity="0.25"/><circle cx="345" cy="770" r="28" fill="#9bd9d5" opacity="0.25"/><rect width="1600" height="900" fill="url(#shade)"/>
+  </svg>

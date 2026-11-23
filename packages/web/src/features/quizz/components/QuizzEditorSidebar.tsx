@@ -1,6 +1,11 @@
 import {
+  useStudioTimelineSidebar,
+  type SortableItemProps,
+} from "./studio/use-studio-timeline-sidebar"
+import {
   DndContext,
   PointerSensor,
+  KeyboardSensor,
   closestCenter,
   useSensor,
   useSensors,
@@ -14,31 +19,18 @@ import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import Button from "@razzia/web/components/Button"
 import QuizzEditorCard from "@razzia/web/features/quizz/components/QuizzEditorCard"
-import type { Question } from "@razzia/common/types/game"
 import {
   useQuizzEditor,
   type QuizzFormValues,
 } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import clsx from "clsx"
-import { Plus } from "lucide-react"
 import { useRef } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-
-interface SortableItemProps {
-  id: string
-  question: Question
-  index: number
-  isActive: boolean
-  isInvalid: boolean
-  canDelete: boolean
-  onClick: () => void
-  onDelete: () => void
-}
 
 const SortableItem = ({
   id,
@@ -49,6 +41,7 @@ const SortableItem = ({
   canDelete,
   onClick,
   onDelete,
+  onDuplicate,
 }: SortableItemProps) => {
   const {
     attributes,
@@ -65,6 +58,18 @@ const SortableItem = ({
       style={{ transform: CSS.Transform.toString(transform), transition }}
       {...attributes}
       {...listeners}
+      onKeyDown={(event) => {
+        if (
+          event.target === event.currentTarget &&
+          event.key === "Enter" &&
+          !isDragging
+        ) {
+          event.preventDefault()
+          onClick()
+        } else {
+          listeners?.onKeyDown(event)
+        }
+      }}
       className={clsx(isDragging && "shadow-lg")}
     >
       <QuizzEditorCard
@@ -75,41 +80,40 @@ const SortableItem = ({
         canDelete={canDelete}
         onClick={onClick}
         onDelete={onDelete}
+        onDuplicate={onDuplicate}
       />
     </div>
   )
 }
 
 const QuizzEditorSidebar = () => {
+  const { t } = useTranslation()
   const {
     questions,
     questionIds,
     currentIndex,
     setCurrentIndex,
-    addQuestion,
     removeQuestion,
     reorderQuestions,
+    duplicateQuestion,
   } = useQuizzEditor()
+
   const {
     formState: { errors },
   } = useFormContext<QuizzFormValues>()
-  const { t } = useTranslation()
 
   const isDragging = useRef(false)
+  const timelineControls = useStudioTimelineSidebar({
+    isDragging,
+    QuestionItem: SortableItem,
+  })
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   )
-
-  const handleSlideClick = (index: number) => () => {
-    if (!isDragging.current) {
-      setCurrentIndex(index)
-    }
-  }
-
-  const handleDelete = (index: number) => () => {
-    removeQuestion(index)
-  }
 
   const handleDragEnd = (event: DragEndEvent) => {
     isDragging.current = false
@@ -119,14 +123,47 @@ const QuizzEditorSidebar = () => {
       return
     }
 
+    if (timelineControls.reorder(active.id, over.id)) {
+      return
+    }
+
     const from = questionIds.findIndex((id) => id === active.id)
     const to = questionIds.findIndex((id) => id === over.id)
     reorderQuestions(from, to)
   }
 
+  const sortableIds = timelineControls.ids ?? questionIds
+
   return (
-    <aside className="bg-background z-10 m-3 flex w-72 shrink-0 flex-col gap-2 overflow-auto rounded-xl p-3 shadow-sm">
+    <aside
+      data-testid="editor-timeline"
+      className="bg-background z-10 m-2 flex max-h-56 w-[calc(100%-1rem)] shrink-0 flex-col gap-2 overflow-y-auto rounded-xl p-2.5 shadow-sm lg:m-3 lg:max-h-none lg:w-64 lg:p-3 xl:w-72"
+    >
       <DndContext
+        accessibility={{
+          screenReaderInstructions: {
+            draggable: t("extensions:studio.accessibility.dragInstructions"),
+          },
+          announcements: {
+            onDragStart: ({ active }) =>
+              t("extensions:studio.accessibility.dragStart", {
+                position: sortableIds.indexOf(String(active.id)) + 1,
+              }),
+            onDragOver: ({ over }) =>
+              over
+                ? t("extensions:studio.accessibility.dragOver", {
+                    position: sortableIds.indexOf(String(over.id)) + 1,
+                  })
+                : undefined,
+            onDragEnd: ({ over }) =>
+              over
+                ? t("extensions:studio.accessibility.dragEnd", {
+                    position: sortableIds.indexOf(String(over.id)) + 1,
+                  })
+                : t("extensions:studio.accessibility.dragCancel"),
+            onDragCancel: () => t("extensions:studio.accessibility.dragCancel"),
+          },
+        }}
         sensors={sensors}
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}
@@ -134,36 +171,43 @@ const QuizzEditorSidebar = () => {
           isDragging.current = true
         }}
         onDragEnd={handleDragEnd}
+        onDragCancel={() => {
+          isDragging.current = false
+        }}
       >
         <SortableContext
-          items={questionIds}
+          items={sortableIds}
           strategy={verticalListSortingStrategy}
         >
           <div className="flex flex-col gap-2">
-            {questions.map((question, index) => (
-              <SortableItem
-                key={questionIds[index]}
-                id={questionIds[index]}
-                question={question}
-                index={index}
-                isActive={currentIndex === index}
-                isInvalid={Boolean(errors.questions?.[index])}
-                canDelete={questions.length > 1}
-                onClick={handleSlideClick(index)}
-                onDelete={handleDelete(index)}
-              />
-            ))}
+            {timelineControls.items ??
+              questions.map((question, index) => (
+                <SortableItem
+                  key={questionIds[index]}
+                  id={questionIds[index]}
+                  question={question}
+                  index={index}
+                  isActive={currentIndex === index}
+                  isInvalid={Boolean(errors.questions?.[index])}
+                  canDelete={questions.length > 1}
+                  onClick={() => {
+                    if (!isDragging.current) {
+                      setCurrentIndex(index)
+                    }
+                  }}
+                  onDelete={() => removeQuestion(index)}
+                  onDuplicate={
+                    duplicateQuestion
+                      ? () => duplicateQuestion(index)
+                      : undefined
+                  }
+                />
+              ))}
           </div>
         </SortableContext>
       </DndContext>
 
-      <Button
-        onClick={addQuestion}
-        className="bg text-md bg-accent text-accent-foreground mt-1 mb-8 flex items-center justify-center gap-1"
-      >
-        <Plus className="size-6" />
-        {t("quizz:addQuestion")}
-      </Button>
+      {timelineControls.addControls}
     </aside>
   )
 }

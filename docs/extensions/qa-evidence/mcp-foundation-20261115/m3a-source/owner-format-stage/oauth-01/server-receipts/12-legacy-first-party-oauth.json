@@ -1,0 +1,24 @@
+{
+  "command": [
+    "node",
+    "/ram/work-oauth-fixed/extensions/src/mcp-app/node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "--test",
+    "--test-concurrency=1",
+    "tests/first-party/abort.nodecheck.ts",
+    "tests/first-party/auth.nodecheck.ts",
+    "tests/first-party/filesystem.nodecheck.ts",
+    "tests/first-party/http.nodecheck.ts",
+    "tests/first-party/oauth.nodecheck.ts",
+    "tests/first-party/schema.nodecheck.ts",
+    "tests/first-party/store.nodecheck.ts"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 45.698,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 5501,
+  "logSha256": "0439a207a5762e128e5855ec636938688f58e90d63c1e04431d65cd61f3aa3ab"
+}

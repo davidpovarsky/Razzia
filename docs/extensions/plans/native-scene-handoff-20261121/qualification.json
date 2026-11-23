@@ -1,0 +1,118 @@
+{
+  "run": "tadazz-native-handoff-08eb998b",
+  "container": "f98efee6b15dfaf21908a81cd0371ed9273c74961e3618ba94c6ffdea622cc90",
+  "checks": [
+    {
+      "phase": "before",
+      "exit": 1,
+      "receipt": {
+        "fixture": "actual TadazzV4StageAdapter + show-director; no altered animation clock",
+        "source": "/src",
+        "adapterOverride": null,
+        "checks": [
+          {
+            "name": "chosen/correct results keep exactly one question",
+            "passed": true
+          },
+          {
+            "name": "prepared content remains painted through split socket handoff",
+            "passed": false,
+            "observed": {
+              "total": 8,
+              "empty": 8,
+              "changed": 8,
+              "mode": "custom",
+              "text": ""
+            }
+          },
+          {
+            "name": "next question replaces retained custom card once",
+            "passed": true,
+            "after": {
+              "text": "SECOND QUESTION",
+              "prepared": false,
+              "mode": "question",
+              "count": 1
+            }
+          },
+          {
+            "name": "direct native question handoff still completes",
+            "passed": true
+          },
+          {
+            "name": "new authored custom content replaces old retained content",
+            "passed": true
+          },
+          {
+            "name": "no browser runtime errors",
+            "passed": true,
+            "errors": []
+          }
+        ],
+        "customerData": false,
+        "network": "container loopback only",
+        "passed": false
+      },
+      "stderr": ""
+    },
+    {
+      "phase": "after",
+      "exit": 0,
+      "receipt": {
+        "fixture": "actual TadazzV4StageAdapter + show-director; no altered animation clock",
+        "source": "/src",
+        "adapterOverride": "/evidence/TadazzV4StageAdapter.candidate.tsx",
+        "checks": [
+          {
+            "name": "chosen/correct results keep exactly one question",
+            "passed": true
+          },
+          {
+            "name": "prepared content remains painted through split socket handoff",
+            "passed": true,
+            "observed": {
+              "total": 6,
+              "empty": 0,
+              "changed": 0,
+              "mode": "custom",
+              "text": "QUESTION 2"
+            }
+          },
+          {
+            "name": "next question replaces retained custom card once",
+            "passed": true,
+            "after": {
+              "text": "SECOND QUESTION",
+              "prepared": false,
+              "mode": "question",
+              "count": 1
+            }
+          },
+          {
+            "name": "direct native question handoff still completes",
+            "passed": true
+          },
+          {
+            "name": "new authored custom content replaces old retained content",
+            "passed": true
+          },
+          {
+            "name": "no browser runtime errors",
+            "passed": true,
+            "errors": []
+          }
+        ],
+        "customerData": false,
+        "network": "container loopback only",
+        "passed": true
+      },
+      "stderr": ""
+    }
+  ],
+  "evidence": "/home/ubuntu/tadazz-native-handoff-08eb998b",
+  "stopped": true,
+  "sourceRevision": "cd748b88d24816c8ad473215a621ed2f6f0019c5",
+  "candidateParent": "fe88fdc5eea9b3db2a3bc760dcddc8adfb91aeba",
+  "adapterSha256": "4e18f3ce406157eab7ffa2aa2c0f8a3eb8ea2d56604869b8e266c0a0890ba6e0",
+  "fixtureSha256": "5e633f398f98ad2cdf2c6939e5dd7c761726ed5069e0bb2d5474e5610858e17f"
+}

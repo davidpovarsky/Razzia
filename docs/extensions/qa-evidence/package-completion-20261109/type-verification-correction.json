@@ -1,0 +1,9 @@
+{
+  "priorCommand": "tsc -p packages/web/tsconfig.json --noEmit",
+  "issue": "The empty-files solution configuration does not traverse project references in -p mode.",
+  "actualAppProject": "packages/web/tsconfig.app.json",
+  "actualToolingProject": "packages/web/tsconfig.node.json",
+  "exposedDiagnostic": "FullShowScenes.tsx:231 TS6133 unused Value callback parameter",
+  "fix": "Rename unused parameter to _value; no generated behavior change.",
+  "finalEightProjectsPassed": true
+}

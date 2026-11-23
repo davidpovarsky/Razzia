@@ -1,0 +1,304 @@
+{
+  "startedUtc": "2026-11-15T16:23:50.383328+00:00",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "node": "v24.22.1",
+  "sourceBefore": {
+    "extensions/src/core/show-library/composition-document-v2.ts": {
+      "sha256": "3734d3332faf00e4f965c5f8197278261ffd0ddbcf83075854083df2c56e57ae",
+      "bytes": 1873
+    },
+    "extensions/src/core/show-library/composition-document.ts": {
+      "sha256": "bf40600a45fcfd97c75d5ed08cdfdd55c3166d9814f081dda6ecb36f70dba64b",
+      "bytes": 1926
+    },
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": {
+      "sha256": "b5b1ed25c9df36b9880c814b56e5628e91c4feec17302edf7fb2b70fef443c0c",
+      "bytes": 17166
+    },
+    "extensions/src/core/show-library/composition-preview-v2.ts": {
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730",
+      "bytes": 4803
+    },
+    "extensions/src/core/show-library/composition-repository-base.ts": {
+      "sha256": "4b23bc5287b701931e0b2ae65eac0a41ace1e142a128ad326ed9ddd3ff37d210",
+      "bytes": 7466
+    },
+    "extensions/src/core/show-library/composition-repository-v2.ts": {
+      "sha256": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057",
+      "bytes": 609
+    },
+    "extensions/src/core/show-library/composition-repository.test.ts": {
+      "sha256": "c82bfd7831ab8534670d8eb383e4f909808223713f6d64d33a0c52ce9a8ef2eb",
+      "bytes": 11343
+    },
+    "extensions/src/core/show-library/composition-repository.ts": {
+      "sha256": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+      "bytes": 783
+    },
+    "extensions/src/core/show-library/composition-validation.test.ts": {
+      "sha256": "49290e6ba6cc8c86c6cd19f6b57aa45ef0f3d9163afcfce654a4c927def6a827",
+      "bytes": 8863
+    },
+    "extensions/src/core/show-library/composition-validation.ts": {
+      "sha256": "e1fe367ca5d07b90bfa8f9a6daf4d7286b3a5403d5ead2c2604c7e97826ecbd1",
+      "bytes": 4465
+    },
+    "extensions/src/core/show-library/consumer-contract.test.ts": {
+      "sha256": "560bd688f968b094b58680fcd68dc539524a516967d4e0a00f031e71386f4825",
+      "bytes": 2325
+    },
+    "extensions/src/core/show-library/index.ts": {
+      "sha256": "17cab901e649f46e233b61458f1673077408a9339149feac1529a8c88638b19e",
+      "bytes": 670
+    },
+    "extensions/src/core/show-library/native-library.ts": {
+      "sha256": "1024c397a2928f067ba5159b28cf152459a2e675df3fc39a4c75bb5e48a61bae",
+      "bytes": 2198
+    },
+    "extensions/src/core/show-library/native-media-library.test.ts": {
+      "sha256": "89ce1409048199890f3eb78a850505c224e0f93a6d2e6a36d2618f0257cc714f",
+      "bytes": 5550
+    },
+    "extensions/src/core/show-library/native-media-library.ts": {
+      "sha256": "3301a3f1f8d1901d5ca2dc3a3f6148a8a02afe98f5ea59c265d9717e4e0fcf81",
+      "bytes": 5292
+    },
+    "extensions/src/core/show-library/native-motion-library.test.ts": {
+      "sha256": "c847c0b1e6606394bdfeb4f52ef38c2fad95c0cc6e3d008245237304f94f4274",
+      "bytes": 5656
+    },
+    "extensions/src/core/show-library/native-motion-library.ts": {
+      "sha256": "742517240e95902d9f2358eaedd29817f471f9c28feae6fbad548b9ff04ea5c7",
+      "bytes": 2827
+    },
+    "extensions/src/core/show-library/native-presentation-settings.ts": {
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603",
+      "bytes": 3222
+    },
+    "extensions/src/core/show-library/native-preview-frame-schema.ts": {
+      "sha256": "6a02749e4e75e5355bcaae386d188752af31a699e149cb3c3862bb843cf1ee63",
+      "bytes": 3298
+    },
+    "extensions/src/core/show-library/native-preview-frame.test.ts": {
+      "sha256": "706be5311d92e3f03e6d3307b61fcd3ae541f82da760c117caec8f8274e6180b",
+      "bytes": 11232
+    },
+    "extensions/src/core/show-library/native-preview-frame.ts": {
+      "sha256": "a9a35956e3842cdd578e5063d04fb832e98e461230b6b546fd04870421b484a2",
+      "bytes": 3225
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": {
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff",
+      "bytes": 3514
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2.ts": {
+      "sha256": "7d7a9c5cea787a29850d365e0017602fa5e52fd55eb6d9aed4c25692e4c1bb93",
+      "bytes": 8015
+    }
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/composition-repository.test.ts",
+        "src/core/show-library/composition-validation.test.ts",
+        "src/core/show-library/native-preview-frame.test.ts",
+        "src/core/show-library/native-media-library.test.ts",
+        "src/core/show-library/native-motion-library.test.ts",
+        "src/core/show-library/composition-preview-v2.test.ts",
+        "src/core/show-library/consumer-contract.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 536,
+      "stderrBytes": 0
+    },
+    {
+      "name": "types",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 0,
+      "stderrBytes": 0
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/composition-document-v2.ts",
+        "extensions/src/core/show-library/composition-document.ts",
+        "extensions/src/core/show-library/composition-preview-v2.test.ts",
+        "extensions/src/core/show-library/composition-preview-v2.ts",
+        "extensions/src/core/show-library/composition-repository-base.ts",
+        "extensions/src/core/show-library/composition-repository-v2.ts",
+        "extensions/src/core/show-library/composition-repository.test.ts",
+        "extensions/src/core/show-library/composition-repository.ts",
+        "extensions/src/core/show-library/composition-validation.test.ts",
+        "extensions/src/core/show-library/composition-validation.ts",
+        "extensions/src/core/show-library/consumer-contract.test.ts",
+        "extensions/src/core/show-library/index.ts",
+        "extensions/src/core/show-library/native-library.ts",
+        "extensions/src/core/show-library/native-media-library.test.ts",
+        "extensions/src/core/show-library/native-media-library.ts",
+        "extensions/src/core/show-library/native-motion-library.test.ts",
+        "extensions/src/core/show-library/native-motion-library.ts",
+        "extensions/src/core/show-library/native-presentation-settings.ts",
+        "extensions/src/core/show-library/native-preview-frame-schema.ts",
+        "extensions/src/core/show-library/native-preview-frame.test.ts",
+        "extensions/src/core/show-library/native-preview-frame.ts",
+        "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts",
+        "extensions/src/core/show-library/native-preview-renderer-v2.ts"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 66,
+      "stderrBytes": 0
+    },
+    {
+      "name": "lint",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/oxlint/bin/oxlint",
+        "--threads",
+        "1",
+        "--format",
+        "json",
+        "extensions/src/core/show-library/composition-document-v2.ts",
+        "extensions/src/core/show-library/composition-document.ts",
+        "extensions/src/core/show-library/composition-preview-v2.test.ts",
+        "extensions/src/core/show-library/composition-preview-v2.ts",
+        "extensions/src/core/show-library/composition-repository-base.ts",
+        "extensions/src/core/show-library/composition-repository-v2.ts",
+        "extensions/src/core/show-library/composition-repository.test.ts",
+        "extensions/src/core/show-library/composition-repository.ts",
+        "extensions/src/core/show-library/composition-validation.test.ts",
+        "extensions/src/core/show-library/composition-validation.ts",
+        "extensions/src/core/show-library/consumer-contract.test.ts",
+        "extensions/src/core/show-library/index.ts",
+        "extensions/src/core/show-library/native-library.ts",
+        "extensions/src/core/show-library/native-media-library.test.ts",
+        "extensions/src/core/show-library/native-media-library.ts",
+        "extensions/src/core/show-library/native-motion-library.test.ts",
+        "extensions/src/core/show-library/native-motion-library.ts",
+        "extensions/src/core/show-library/native-presentation-settings.ts",
+        "extensions/src/core/show-library/native-preview-frame-schema.ts",
+        "extensions/src/core/show-library/native-preview-frame.test.ts",
+        "extensions/src/core/show-library/native-preview-frame.ts",
+        "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts",
+        "extensions/src/core/show-library/native-preview-renderer-v2.ts"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 194,
+      "stderrBytes": 0
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/composition-document-v2.ts": {
+      "sha256": "3734d3332faf00e4f965c5f8197278261ffd0ddbcf83075854083df2c56e57ae",
+      "bytes": 1873
+    },
+    "extensions/src/core/show-library/composition-document.ts": {
+      "sha256": "bf40600a45fcfd97c75d5ed08cdfdd55c3166d9814f081dda6ecb36f70dba64b",
+      "bytes": 1926
+    },
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": {
+      "sha256": "b5b1ed25c9df36b9880c814b56e5628e91c4feec17302edf7fb2b70fef443c0c",
+      "bytes": 17166
+    },
+    "extensions/src/core/show-library/composition-preview-v2.ts": {
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730",
+      "bytes": 4803
+    },
+    "extensions/src/core/show-library/composition-repository-base.ts": {
+      "sha256": "4b23bc5287b701931e0b2ae65eac0a41ace1e142a128ad326ed9ddd3ff37d210",
+      "bytes": 7466
+    },
+    "extensions/src/core/show-library/composition-repository-v2.ts": {
+      "sha256": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057",
+      "bytes": 609
+    },
+    "extensions/src/core/show-library/composition-repository.test.ts": {
+      "sha256": "c82bfd7831ab8534670d8eb383e4f909808223713f6d64d33a0c52ce9a8ef2eb",
+      "bytes": 11343
+    },
+    "extensions/src/core/show-library/composition-repository.ts": {
+      "sha256": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+      "bytes": 783
+    },
+    "extensions/src/core/show-library/composition-validation.test.ts": {
+      "sha256": "49290e6ba6cc8c86c6cd19f6b57aa45ef0f3d9163afcfce654a4c927def6a827",
+      "bytes": 8863
+    },
+    "extensions/src/core/show-library/composition-validation.ts": {
+      "sha256": "e1fe367ca5d07b90bfa8f9a6daf4d7286b3a5403d5ead2c2604c7e97826ecbd1",
+      "bytes": 4465
+    },
+    "extensions/src/core/show-library/consumer-contract.test.ts": {
+      "sha256": "560bd688f968b094b58680fcd68dc539524a516967d4e0a00f031e71386f4825",
+      "bytes": 2325
+    },
+    "extensions/src/core/show-library/index.ts": {
+      "sha256": "17cab901e649f46e233b61458f1673077408a9339149feac1529a8c88638b19e",
+      "bytes": 670
+    },
+    "extensions/src/core/show-library/native-library.ts": {
+      "sha256": "1024c397a2928f067ba5159b28cf152459a2e675df3fc39a4c75bb5e48a61bae",
+      "bytes": 2198
+    },
+    "extensions/src/core/show-library/native-media-library.test.ts": {
+      "sha256": "89ce1409048199890f3eb78a850505c224e0f93a6d2e6a36d2618f0257cc714f",
+      "bytes": 5550
+    },
+    "extensions/src/core/show-library/native-media-library.ts": {
+      "sha256": "3301a3f1f8d1901d5ca2dc3a3f6148a8a02afe98f5ea59c265d9717e4e0fcf81",
+      "bytes": 5292
+    },
+    "extensions/src/core/show-library/native-motion-library.test.ts": {
+      "sha256": "c847c0b1e6606394bdfeb4f52ef38c2fad95c0cc6e3d008245237304f94f4274",
+      "bytes": 5656
+    },
+    "extensions/src/core/show-library/native-motion-library.ts": {
+      "sha256": "742517240e95902d9f2358eaedd29817f471f9c28feae6fbad548b9ff04ea5c7",
+      "bytes": 2827
+    },
+    "extensions/src/core/show-library/native-presentation-settings.ts": {
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603",
+      "bytes": 3222
+    },
+    "extensions/src/core/show-library/native-preview-frame-schema.ts": {
+      "sha256": "6a02749e4e75e5355bcaae386d188752af31a699e149cb3c3862bb843cf1ee63",
+      "bytes": 3298
+    },
+    "extensions/src/core/show-library/native-preview-frame.test.ts": {
+      "sha256": "706be5311d92e3f03e6d3307b61fcd3ae541f82da760c117caec8f8274e6180b",
+      "bytes": 11232
+    },
+    "extensions/src/core/show-library/native-preview-frame.ts": {
+      "sha256": "a9a35956e3842cdd578e5063d04fb832e98e461230b6b546fd04870421b484a2",
+      "bytes": 3225
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": {
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff",
+      "bytes": 3514
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2.ts": {
+      "sha256": "7d7a9c5cea787a29850d365e0017602fa5e52fd55eb6d9aed4c25692e4c1bb93",
+      "bytes": 8015
+    }
+  },
+  "sourceUnchanged": true,
+  "finishedUtc": "2026-11-15T16:24:00.992979+00:00"
+}

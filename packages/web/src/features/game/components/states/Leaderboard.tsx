@@ -1,3 +1,4 @@
+import { TeamLeaderboardAdapter } from "../tadazz-show/team-adapters"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
 import Fire from "@razzia/web/features/game/components/icons/Fire"
 import { AnimatePresence, motion, useSpring, useTransform } from "motion/react"
@@ -65,14 +66,12 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
     }
   }, [oldLeaderboard, leaderboard])
 
-  return (
-    <section className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-2">
-      <h2 className="mb-6 text-5xl font-bold text-white drop-shadow-md">
-        {t("game:leaderboard")}
-      </h2>
-      <div className="flex w-full flex-col gap-2">
-        <AnimatePresence mode="popLayout">
-          {displayedLeaderboard.map(({ id, username, points, streak }) => (
+  const individualLeaderboardView = (
+    <div className="flex min-h-0 w-full flex-col gap-1.5 overflow-hidden sm:gap-2">
+      <AnimatePresence mode="popLayout">
+        {displayedLeaderboard
+          .slice(0, 6)
+          .map(({ id, username, points, streak }) => (
             <motion.div
               key={id}
               layout
@@ -93,9 +92,9 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
                   damping: 25,
                 },
               }}
-              className="bg-primary flex w-full justify-between rounded-xl p-3 text-3xl font-bold text-white"
+              className="bg-primary flex w-full justify-between rounded-xl p-2 text-xl font-bold text-white sm:p-3 sm:text-2xl md:text-3xl"
             >
-              <span className="flex items-center gap-2 drop-shadow-md">
+              <span className="flex items-center gap-2 truncate drop-shadow-md">
                 {username}
                 <StreakBadge streak={streak} />
               </span>
@@ -109,8 +108,18 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
               )}
             </motion.div>
           ))}
-        </AnimatePresence>
-      </div>
+      </AnimatePresence>
+    </div>
+  )
+
+  return (
+    <section className="relative mx-auto flex h-full min-h-0 w-full max-w-4xl flex-1 flex-col items-center justify-center overflow-hidden px-2 py-2">
+      <h2 className="mb-3 text-3xl font-bold text-white drop-shadow-md sm:mb-6 sm:text-4xl md:text-5xl">
+        {t("game:leaderboard")}
+      </h2>
+      <TeamLeaderboardAdapter players={leaderboard}>
+        {individualLeaderboardView}
+      </TeamLeaderboardAdapter>
     </section>
   )
 }

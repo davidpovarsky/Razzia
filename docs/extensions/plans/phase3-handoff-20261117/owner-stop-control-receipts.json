@@ -1,0 +1,93 @@
+[
+  {
+    "id": "1e96bb6f-0451-4568-aeab-c14c0fb708cd",
+    "operation": "cancel per owner STOP; preserve worktree",
+    "response": {
+      "cancelled": false
+    }
+  },
+  {
+    "id": "fd341b34-dbd2-436d-a3fd-afe9e140fba3",
+    "operation": "cancel per owner STOP; preserve worktree",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "fd341b34-dbd2-436d-a3fd-afe9e140fba3",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "1e96bb6f-0451-4568-aeab-c14c0fb708cd",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "8de82781-9222-4ea0-8eea-0c61982b564a",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "482771e7-752c-4083-b823-703b5badc6a8",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "e17507c7-ed2a-47d6-9e89-4cd55a5277a3",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "44fdfcc0-aeb6-46d4-8707-b2f6e8a59d3a",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "17edc638-3eae-492f-adde-76373a73db3e",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "df544d57-2f58-4005-9b4d-328a7bfbd772",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "e0c87b17-8d33-415c-811a-1370aa05654a",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  },
+  {
+    "id": "999ed90c-ed4e-4af6-aa93-bbb250334c05",
+    "operation": "disable per-task auto-resume per owner STOP",
+    "response": {
+      "cancelled": true
+    }
+  }
+]

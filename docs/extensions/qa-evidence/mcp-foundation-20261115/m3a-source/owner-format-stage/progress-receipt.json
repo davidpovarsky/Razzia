@@ -1,0 +1,19 @@
+{
+  "threadId": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+  "branch": "codex/tadazz-hq-mcp-20261115",
+  "head": "656f2bcce13e56b04ce8bbeb9192c0a937255d72",
+  "productPredecessor": "bfb796c72495f0f9d99442066f825a74ebd054d4",
+  "formattedManifestSha256": "6d4183ad30bd8f1b1decf96cae47a487d6e126b134bf9e5ae31e5a691d06c76f",
+  "semanticAstFiles": 8,
+  "otherInputsUnchanged": 152,
+  "firstParty": "EXECUTED_PASS_34",
+  "producerCompatibility": "EXECUTED_PASS_separate_initialize_GET_PUT",
+  "format": "EXECUTED_PASS_12_paths",
+  "typecheck": "FAILED_137_OOM_at512MiB",
+  "sdk41": "REUSED_VERIFIED_MATCHING_INPUTS_NOT_RERUN",
+  "remoteService": "PREPARED_UNVALIDATED_165_input_candidate",
+  "oauthPkce": "NOT_IMPLEMENTED",
+  "hostInstallation": "NOT_RUN",
+  "preview": "UNAVAILABLE_zero_executable_pins",
+  "originalTasksComplete": false
+}

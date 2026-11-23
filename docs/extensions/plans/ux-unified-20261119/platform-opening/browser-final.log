@@ -1,0 +1,12 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../web/vite.config" without a file extension (../e2e/vite.platform-opening.config.ts:3:20). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 3 tests using 1 worker
+
+  ok 1 [chromium] › tests\platform-opening.spec.ts:87:1 › shared product curtain, video, pause and reconnect return to the selected theme (48.7s)
+  ok 2 [chromium] › tests\platform-opening.spec.ts:203:1 › original theme receives the same product opening and a failed video never traps its lobby (14.7s)
+  ok 3 [chromium] › tests\platform-opening.spec.ts:239:1 › legacy imports get an in-memory original-theme launch and reduced motion keeps a static ident (6.1s)
+
+  3 passed (1.3m)

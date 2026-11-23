@@ -1,0 +1,132 @@
+{
+  "format": "tadazz-theme-worker-phase3-r2-independent-static-review",
+  "status": "PASS_STATIC_REVIEW",
+  "reviewedAt": "2026-11-19T16:08:09.260Z",
+  "scope": "Read-only source/diff/AST, actual canonical record equality, preserved failure/result proof, and recorded offline-test recipe/results review. No activation helper import/execution, service operation, product mutation or Git operation by reviewer.",
+  "helper": {
+    "path": "work/ux-followup-20261119/theme-worker/replacement/activate_and_verify_timer_r2.py",
+    "sha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84",
+    "bytes": 32703
+  },
+  "admission": {
+    "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-admission-r2.json",
+    "sha256": "99f9145b6bbb190e71e4e8a6a005c890fb874368ff664b82ead77c53bb56372b",
+    "records": [
+      {
+        "name": "stage-execution.json",
+        "canonical": "docs/extensions/plans/ux-followup-20261119/stage-execution.json",
+        "sha256": "a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62",
+        "byteEqual": true
+      },
+      {
+        "name": "deployment-deploy-execution.json",
+        "canonical": "docs/extensions/plans/ux-followup-20261119/deployment-deploy-execution.json",
+        "sha256": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315",
+        "byteEqual": true
+      },
+      {
+        "name": "post-deploy-execution.json",
+        "canonical": "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-execution.json",
+        "sha256": "0443a5034a55cd3c30571aab2e7fb9b5dfa0cc9c184fedf35ae9489eb681486b",
+        "byteEqual": true
+      },
+      {
+        "name": "post-deploy-observation.json",
+        "canonical": "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-observation.json",
+        "sha256": "910132378a99c1891e5e2d8d4a2f9d08dbf1914ca01a5104ebbf79bce0950816",
+        "byteEqual": true
+      }
+    ]
+  },
+  "inheritedReview": {
+    "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-independent-review.json",
+    "sha256": "74772fce7e9e446c4466b89832b0298d1cf462d6719ff2444b52da7ed1328078",
+    "unchangedGates": "Exact app/worker/gateway/source/runtime/store/unit/broker pins; nested accepted release; freshness; image-only mutation; timer/service ownership; bounded drain; no customer queue inspection; strict owned cleanup; guarded rollback."
+  },
+  "originalAttempt": {
+    "helperSha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+    "admissionSha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+    "failureReceiptSha256": "d05873d0ad9c016e4e3e25f4e9787783ca04997b6a48c479c14f02b3aeeae6e4",
+    "retainedOwnedResultProofSha256": "9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e",
+    "originalFilesPreserved": true,
+    "rollbackRecorded": {
+      "unitRestored": true,
+      "timerInactiveEnabled": true,
+      "brokerInactive": true,
+      "runningBrokerKilled": false,
+      "customerJobsTouched": false
+    },
+    "cause": "systemctl rendered LastTriggerUSecMonotonic as a unit-formatted timespan; the original integer-only comparison failed after own result validation."
+  },
+  "parserReview": {
+    "result": "PASS",
+    "exactDecimalArithmetic": true,
+    "maximumFiniteMicroseconds": "18446744073709551614",
+    "uint64InfinitySentinelRejected": true,
+    "rawNumericOrCompleteFormattedTokensOnly": true,
+    "boundedInputLengthAndTokenCount": true,
+    "strictUnitOrderAndUniqueness": true,
+    "unknownNegativeSubmicrosecondOrMalformedValuesRejected": true,
+    "strictAfterGreaterThanBeforePreserved": true,
+    "observedBeforeMicroseconds": 1343948755471,
+    "observedAfterMicroseconds": 1343961755332,
+    "officialSources": [
+      "https://github.com/systemd/systemd/blob/main/src/basic/time-util.c",
+      "https://github.com/systemd/systemd/blob/main/src/basic/time-util.h"
+    ]
+  },
+  "recoveryReview": [
+    "Requires the exact first FAIL receipt, verified restored old unit and inactive/enabled timer, and the four exact retained synthetic file hashes.",
+    "Fresh recovery observer records have explicit canonical-source mappings; copied records equal canonical bytes and retain nested success/freshness/identity gates.",
+    "Uses a separate absent tenant/upload/evidence namespace, preserving first-attempt evidence.",
+    "Requires a new timer-driven build and completed inactive successful broker; the old result cannot substitute for new timer acceptance.",
+    "Cleans the new and retained old owned fixtures only after new successful result validation, while future timer triggers are paused and broker drained.",
+    "Pre-image-change failure retains the prior paused timer; it does not start the missing-image worker.",
+    "Rollback and final runtime/app/worker/timer checks from the reviewed original remain enforced."
+  ],
+  "finalStaticComparison": {
+    "finalDifferenceFromReviewedR2Draft": "Only monotonic_microseconds changed to reject the uint64 infinity sentinel.",
+    "allOtherFunctionsAndTopLevelNodesUnchanged": true,
+    "syntax": "PASS"
+  },
+  "recordedChecks": {
+    "parser": {
+      "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-parser-tests.json",
+      "sha256": "81b149af556be7302688caf4ac15b22eb18cc2f5269e220b426fcf7cc09758db",
+      "status": "PASS",
+      "validCases": 8,
+      "rejectedCases": 15
+    },
+    "admission": {
+      "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-offline-guards-r2.json",
+      "sha256": "f30fe7bd3ff38107e8e12f6aa51fe6deab9a0b454ad2771d4285a85a94679788",
+      "status": "PASS",
+      "cases": 11
+    },
+    "offlineRecipes": [
+      {
+        "path": "work/ux-followup-20261119/theme-worker/replacement/check_systemd_monotonic_r2.py",
+        "sha256": "8dd72a60f74d861f9d6101553329846d372cfaad218af45728535839d499c8a0"
+      },
+      {
+        "path": "work/ux-followup-20261119/theme-worker/replacement/check_phase3_admission_r2.py",
+        "sha256": "fc0fa824e3bf7d052457f04942467f7e7182caf9f78797bf55b6ae590aa2808e"
+      }
+    ],
+    "rerunByIndependentReviewer": false
+  },
+  "acceptedApp": {
+    "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "container": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "gateway": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "workerImage": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+    "observerFinishedAt": "2026-11-19T15:56:42.846956+00:00",
+    "observerAgeSecondsAtEvidenceRead": 595.7,
+    "expiresAt": "2026-11-19T16:16:42.846956+00:00"
+  },
+  "blockers": [],
+  "executionPerformed": false,
+  "productionWorkerAcceptance": "PENDING_ACTUAL_R2_EXECUTION_AND_RECEIPT",
+  "condition": "Execute only exact reviewed helper/admission bytes while every runtime gate still passes. Static acceptance does not claim service activation or fixture cleanup."
+}

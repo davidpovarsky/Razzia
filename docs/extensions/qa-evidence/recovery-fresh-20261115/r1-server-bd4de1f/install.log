@@ -1,0 +1,15 @@
+Scope: all 6 workspace projects
+[WARN] The store at /root/.local/share/pnpm/store/v11 is not used because packages cannot be hard linked from it into this project. Using the store at /work/node_modules/.pnpm-store/v11 instead. Set storeDir to choose the store.
+? Verifying lockfile against supply-chain policies (467 entries)...
+Progress: resolved 1, reused 0, downloaded 0, added 0
+✓ Lockfile passes supply-chain policies (467 entries in 4.2s)
+Lockfile is up to date, resolution step is skipped
+Error: ERR_PNPM_NO_OFFLINE_TARBALL
+
+  × installing dependencies
+  ╰─▶ Failed to fetch tarball for react-dom@19.3.0 from https://
+      registry.npmjs.org/react-dom/-/react-dom-19.3.0.tgz in offline mode:
+      snapshot not present in local store
+  help: Drop `--offline` (or `offline=true` in pnpm-workspace.yaml) or run an
+        online install first to populate the store.
+

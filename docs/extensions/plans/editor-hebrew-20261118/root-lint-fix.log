@@ -1,0 +1,1507 @@
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:14:1]
+ 13 | import { useTranslation } from "react-i18next"
+ 14 |
+    : ^
+ 15 | const QuizzEditorHeader = () => {
+ 16 |   const {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:27:1]
+ 26 |   const { t } = useTranslation()
+ 27 |
+    : ^
+ 28 |   return (
+ 29 |     <header className="bg-background border-border z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b shadow-sm">
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:60:1]
+ 59 |         </div>
+ 60 |
+    : ^
+ 61 |         {/* Center: Studio Screen Navigation Tabs */}
+ 62 |         <StudioHeaderNavigation />
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:63:1]
+ 62 |         <StudioHeaderNavigation />
+ 63 |
+    : ^
+ 64 |         {/* Right: Exit and Save Buttons */}
+ 65 |         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:86:1]
+ 85 |       </div>
+ 86 |
+    : ^
+ 87 |       {/* Row 2 / Directly below: contextual card-type ToggleGroup (Questions screen only) */}
+ 88 |       <StudioCardKindBar />
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:89:1]
+ 88 |       <StudioCardKindBar />
+ 89 |
+    : ^
+ 90 |       <ConflictDialog
+ 91 |         open={Boolean(conflict)}
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:98:1]
+  97 |       />
+  98 |
+     : ^
+  99 |       <StudioConversionDialog />
+ 100 |     </header>
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorHeader.tsx:103:1]
+ 102 | }
+ 103 |
+     : ^
+ 104 | export default QuizzEditorHeader
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:33:1]
+ 32 | import { useFormContext } from "react-hook-form"
+ 33 |
+    : ^
+ 34 | const SortableItem = ({
+ 35 |   id,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:53:1]
+ 52 |   } = useSortable({ id })
+ 53 |
+    : ^
+ 54 |   return (
+ 55 |     <div
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:83:1]
+ 82 | }
+ 83 |
+    : ^
+ 84 | const QuizzEditorSidebar = () => {
+ 85 |   const {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:94:1]
+ 93 |   } = useQuizzEditor()
+ 94 |
+    : ^
+ 95 |   const {
+ 96 |     formState: { errors },
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:98:1]
+  97 |   } = useFormContext<QuizzFormValues>()
+  98 |
+     : ^
+  99 |   const isDragging = useRef(false)
+ 100 |   const timelineControls = useStudioTimelineSidebar({
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:104:1]
+ 103 |   })
+ 104 |
+     : ^
+ 105 |   const sensors = useSensors(
+ 106 |     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:111:1]
+ 110 |   )
+ 111 |
+     : ^
+ 112 |   const handleDragEnd = (event: DragEndEvent) => {
+ 113 |     isDragging.current = false
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:115:1]
+ 114 |     const { active, over } = event
+ 115 |
+     : ^
+ 116 |     if (!over || active.id === over.id) {
+ 117 |       return
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:119:1]
+ 118 |     }
+ 119 |
+     : ^
+ 120 |     if (timelineControls.reorder(active.id, over.id)) {
+ 121 |       return
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:123:1]
+ 122 |     }
+ 123 |
+     : ^
+ 124 |     const from = questionIds.findIndex((id) => id === active.id)
+ 125 |     const to = questionIds.findIndex((id) => id === over.id)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:128:1]
+ 127 |   }
+ 128 |
+     : ^
+ 129 |   const sortableIds = timelineControls.ids ?? questionIds
+ 130 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:130:1]
+ 129 |   const sortableIds = timelineControls.ids ?? questionIds
+ 130 |
+     : ^
+ 131 |   return (
+ 132 |     <aside
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:176:1]
+ 175 |       </DndContext>
+ 176 |
+     : ^
+ 177 |       {timelineControls.addControls}
+ 178 |     </aside>
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:181:1]
+ 180 | }
+ 181 |
+     : ^
+ 182 | export default QuizzEditorSidebar
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+   ,-[packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx:7:1]
+ 6 | import { useTranslation } from "react-i18next"
+ 7 |
+   : ^
+ 8 | interface Props {
+ 9 |   i: number
+   `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx:16:1]
+ 15 | }
+ 16 |
+    : ^
+ 17 | export function AnswerVisualControls({
+ 18 |   i,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx:30:1]
+ 29 |   const hasImage = Boolean(visual?.url)
+ 30 |
+    : ^
+ 31 |   return (
+ 32 |     <div
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx:57:1]
+ 56 |       </div>
+ 57 |
+    : ^
+ 58 |       {usesImage && (
+ 59 |         <>
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:47:9]
+ 46 |         if (!previous?.perQuestion[currentQuestionId]) return previous
+ 47 |         const { answerVisuals: _answerVisuals, ...rest } =
+    :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 48 |           previous.perQuestion[currentQuestionId]
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:60:5]
+ 59 |     if (nextType === questionType) return
+ 60 |     const replacesAnswers =
+    :     ^^^^^^^^^^^^^^^^^^^^^^^
+ 61 |       nextType === "estimation" || questionType === "estimation"
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:29:1]
+ 28 | } from "react-hook-form"
+ 29 |
+    : ^
+ 30 | export interface QuizzFormValues {
+ 31 |   gameMode: QuizzMode
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:35:1]
+ 34 | }
+ 35 |
+    : ^
+ 36 | interface QuizzEditorContextType {
+ 37 |   quizzId: string | null
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:73:1]
+ 72 | }
+ 73 |
+    : ^
+ 74 | const QuizzEditorContext = createContext<QuizzEditorContextType | null>(null)
+ 75 |
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:75:1]
+ 74 | const QuizzEditorContext = createContext<QuizzEditorContextType | null>(null)
+ 75 |
+    : ^
+ 76 | const defaultQuestion = (): Question => ({
+ 77 |   type: QUESTION_TYPES.SINGLE,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:84:1]
+ 83 | })
+ 84 |
+    : ^
+ 85 | const clampIndex = (index: number, length: number) =>
+ 86 |   Math.max(0, Math.min(index, length - 1))
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:87:1]
+ 86 |   Math.max(0, Math.min(index, length - 1))
+ 87 |
+    : ^
+ 88 | type QuizzEditorProviderProps = PropsWithChildren<{
+ 89 |   initialData?: QuizzWithId
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:91:1]
+ 90 | }>
+ 91 |
+    : ^
+ 92 | export const QuizzEditorProvider = ({
+ 93 |   children,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:105:1]
+ 104 |   })
+ 105 |
+     : ^
+ 106 |   const { control, getValues, setValue, formState } = form
+ 107 |   const { append, remove, move, insert, replace } = useFieldArray({
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:128:1]
+ 127 |   } = useQuizzExtras(initialData)
+ 128 |
+     : ^
+ 129 |   const questions = useWatch({ control, name: "questions" })
+ 130 |   const gameMode = useWatch({ control, name: "gameMode" })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:144:1]
+ 143 |       : defaultQuestion()
+ 144 |
+     : ^
+ 145 |   const replaceQuestions = (newQuestions: Question[], newIds: string[]) => {
+ 146 |     replace(newQuestions)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:149:1]
+ 148 |   }
+ 149 |
+     : ^
+ 150 |   // Derive stable questionIds: priority to extras.questionIds when matching questions length, otherwise state
+ 151 |   const effectiveQuestionIds =
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:155:1]
+ 154 |       : questionIds
+ 155 |
+     : ^
+ 156 |   const addQuestion = () => {
+ 157 |     const category = questions.at(-1)?.category
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:162:1]
+ 161 |   }
+ 162 |
+     : ^
+ 163 |   const removeQuestion = (index: number) => {
+ 164 |     flushSync(() => setRemovingFrom(questions))
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:166:1]
+ 165 |     remove(index)
+ 166 |
+     : ^
+ 167 |     removeQuestionIdentity(index, effectiveQuestionIds)
+ 168 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:168:1]
+ 167 |     removeQuestionIdentity(index, effectiveQuestionIds)
+ 168 |
+     : ^
+ 169 |     setCurrentIndex((current) => {
+ 170 |       if (current < index) {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:173:1]
+ 172 |       }
+ 173 |
+     : ^
+ 174 |       if (current > index) {
+ 175 |         return current - 1
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:177:1]
+ 176 |       }
+ 177 |
+     : ^
+ 178 |       return clampIndex(current, questions.length - 1)
+ 179 |     })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:181:1]
+ 180 |   }
+ 181 |
+     : ^
+ 182 |   const reorderQuestions = (from: number, to: number) => {
+ 183 |     move(from, to)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:185:1]
+ 184 |     setCurrentIndex(to)
+ 185 |
+     : ^
+ 186 |     reorderQuestionIdentity(from, to, effectiveQuestionIds)
+ 187 |   }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:188:1]
+ 187 |   }
+ 188 |
+     : ^
+ 189 |   const duplicateQuestion = (index: number) => {
+ 190 |     const questionToClone = questions[index]
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:194:1]
+ 193 |     setCurrentIndex(index + 1)
+ 194 |
+     : ^
+ 195 |     duplicateQuestionIdentity(index, effectiveQuestionIds)
+ 196 |   }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:197:1]
+ 196 |   }
+ 197 |
+     : ^
+ 198 |   const questionPath = <K extends FieldPath<Question>>(field: K) =>
+ 199 |     `questions.${currentIndex}.${field}` as const
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:200:1]
+ 199 |     `questions.${currentIndex}.${field}` as const
+ 200 |
+     : ^
+ 201 |   const updateQuestion = (index: number, updates: Partial<Question>) => {
+ 202 |     setValue(
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:208:1]
+ 207 |   }
+ 208 |
+     : ^
+ 209 |   return (
+ 210 |     <FormProvider {...form}>
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:245:1]
+ 244 | }
+ 245 |
+     : ^
+ 246 | export const useQuizzEditor = () => {
+ 247 |   const ctx = useContext(QuizzEditorContext)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:248:1]
+ 247 |   const ctx = useContext(QuizzEditorContext)
+ 248 |
+     : ^
+ 249 |   if (!ctx) {
+ 250 |     throw new Error("useQuizzEditor must be used inside QuizzEditorProvider")
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/quizz-editor-context.tsx:252:1]
+ 251 |   }
+ 252 |
+     : ^
+ 253 |   return ctx
+ 254 | }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:23:1]
+ 22 | import { useTranslation } from "react-i18next"
+ 23 |
+    : ^
+ 24 | /** Composite persistence and conflict handling belong to the downstream editor. */
+ 25 | export function useCompositeQuizzSave() {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:45:1]
+ 44 |   const { t } = useTranslation()
+ 45 |
+    : ^
+ 46 |   const handleExit = () => {
+ 47 |     navigate({ to: "/manager/config" })
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:49:1]
+ 48 |   }
+ 49 |
+    : ^
+ 50 |   const onError = (error: Error) => {
+ 51 |     toast.error(
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:55:1]
+ 54 |   }
+ 55 |
+    : ^
+ 56 |   const onSaved = (messageKey: string) => {
+ 57 |     queryClient.invalidateQueries({ queryKey: quizzKeys.all })
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:61:1]
+ 60 |   }
+ 61 |
+    : ^
+ 62 |   const { mutate: create, isPending: isCreating } = useMutation({
+ 63 |     mutationFn: createQuizz,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:67:1]
+ 66 |   })
+ 67 |
+    : ^
+ 68 |   const { mutate: update, isPending: isUpdating } = useMutation({
+ 69 |     mutationFn: updateQuizz,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:73:1]
+ 72 |   })
+ 73 |
+    : ^
+ 74 |   const handleSave = handleSubmit(
+ 75 |     async (values) => {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:101:1]
+ 100 |           onSaved("quizz:quizzUpdated")
+ 101 |
+     : ^
+ 102 |           return
+ 103 |         } catch (err: unknown) {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:109:1]
+ 108 |             })
+ 109 |
+     : ^
+ 110 |             return
+ 111 |           }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:112:1]
+ 111 |           }
+ 112 |
+     : ^
+ 113 |           onError(err as Error)
+ 114 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:114:1]
+ 113 |           onError(err as Error)
+ 114 |
+     : ^
+ 115 |           return
+ 116 |         }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:118:1]
+ 117 |       }
+ 118 |
+     : ^
+ 119 |       if (extras && !quizzId) {
+ 120 |         try {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:145:1]
+ 144 |           onSaved("quizz:quizzSaved")
+ 145 |
+     : ^
+ 146 |           return
+ 147 |         } catch (err: unknown) {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:149:1]
+ 148 |           onError(err as Error)
+ 149 |
+     : ^
+ 150 |           return
+ 151 |         }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:153:1]
+ 152 |       }
+ 153 |
+     : ^
+ 154 |       if (quizzId) {
+ 155 |         update({ id: quizzId, json: values })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:156:1]
+ 155 |         update({ id: quizzId, json: values })
+ 156 |
+     : ^
+ 157 |         return
+ 158 |       }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:159:1]
+ 158 |       }
+ 159 |
+     : ^
+ 160 |       create(values)
+ 161 |     },
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:166:1]
+ 165 |       }
+ 166 |
+     : ^
+ 167 |       const index = invalid.questions.findIndex(Boolean)
+ 168 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:168:1]
+ 167 |       const index = invalid.questions.findIndex(Boolean)
+ 168 |
+     : ^
+ 169 |       if (index >= 0) {
+ 170 |         setActiveTab("questions")
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:171:1]
+ 170 |         setActiveTab("questions")
+ 171 |
+     : ^
+ 172 |         const item = timeline.find(
+ 173 |           (entry) =>
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:177:1]
+ 176 |         )
+ 177 |
+     : ^
+ 178 |         if (item) {
+ 179 |           selectTimelineItem(item.id)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:186:1]
+ 185 |   )
+ 186 |
+     : ^
+ 187 |   const handleReloadConflict = async () => {
+ 188 |     if (!quizzId) {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:191:1]
+ 190 |     }
+ 191 |
+     : ^
+ 192 |     try {
+ 193 |       const client = new CompositeApiClient()
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:198:1]
+ 197 |       )
+ 198 |
+     : ^
+ 199 |       queryClient.setQueryData(quizzKeys.detail(quizzId), latestQuizz)
+ 200 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:200:1]
+ 199 |       queryClient.setQueryData(quizzKeys.detail(quizzId), latestQuizz)
+ 200 |
+     : ^
+ 201 |       reset({
+ 202 |         gameMode: latestQuizz.gameMode,
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:206:1]
+ 205 |       })
+ 206 |
+     : ^
+ 207 |       if (res.exists && res.extras) {
+ 208 |         setExtras(res.extras)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:211:1]
+ 210 |       }
+ 211 |
+     : ^
+ 212 |       setConflict(null)
+ 213 |       toast.success(
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:225:1]
+ 224 |   }
+ 225 |
+     : ^
+ 226 |   const handleForceOverwriteConflict = async () => {
+ 227 |     if (!quizzId || !extras) {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:230:1]
+ 229 |     }
+ 230 |
+     : ^
+ 231 |     try {
+ 232 |       const currentValues = getValues()
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts:262:1]
+ 261 |   }
+ 262 |
+     : ^
+ 263 |   return {
+ 264 |     control,
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:25:1]
+ 24 | import { useInstalledThemeCatalog } from "./installed-theme-catalog"
+ 25 |
+    : ^
+ 26 | function omitKeys<T extends object>(value: T, keys: readonly string[]): T {
+ 27 |   return Object.fromEntries(
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:39:1]
+ 38 |   }
+ 39 |
+    : ^
+ 40 |   if (section === "background") {
+ 41 |     return { background: undefined }
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:43:1]
+ 42 |   }
+ 43 |
+    : ^
+ 44 |   if (section === "audio") {
+ 45 |     return scene ? { audio: undefined } : { audioCues: undefined }
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:47:1]
+ 46 |   }
+ 47 |
+    : ^
+ 48 |   if (scene) {
+ 49 |     return { stageAnimations: undefined }
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:51:1]
+ 50 |   }
+ 51 |
+    : ^
+ 52 |   return {
+ 53 |     stageAnimations: undefined,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:58:1]
+ 57 | }
+ 58 |
+    : ^
+ 59 | export function ThemeScopeControls({
+ 60 |   section,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:105:1]
+ 104 |     let themeOverrides: ScopedThemeOverrides | null = null
+ 105 |
+     : ^
+ 106 |     try {
+ 107 |       themeOverrides = updateScopedTheme(
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:114:1]
+ 113 |       setArchiveFull(true)
+ 114 |
+     : ^
+ 115 |       return
+ 116 |     }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:117:1]
+ 116 |     }
+ 117 |
+     : ^
+ 118 |     const cleared = legacyReset(section, Boolean(sceneId), reset)
+ 119 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:119:1]
+ 118 |     const cleared = legacyReset(section, Boolean(sceneId), reset)
+ 119 |
+     : ^
+ 120 |     if (sceneId) {
+ 121 |       updateSceneConfig(sceneId, { themeOverrides, ...cleared })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:122:1]
+ 121 |       updateSceneConfig(sceneId, { themeOverrides, ...cleared })
+ 122 |
+     : ^
+ 123 |       return
+ 124 |     }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:125:1]
+ 124 |     }
+ 125 |
+     : ^
+ 126 |     if (!currentQuestionId) {
+ 127 |       return
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:129:1]
+ 128 |     }
+ 129 |
+     : ^
+ 130 |     setExtras((previous) =>
+ 131 |       previous
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:170:1]
+ 169 |   }
+ 170 |
+     : ^
+ 171 |   const hasOverride =
+ 172 |     section === "audio"
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:174:72]
+ 173 |       ? audioEvents.some((event) => local.audio?.[event] !== undefined)
+ 174 |       : backgroundSlots.some((key) => local.slots?.[key] !== undefined)
+     :                                                                        ^
+ 175 |   if (section === "audio" && audioEvents.length === 0) return null
+ 176 |
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:175:67]
+ 174 |       : backgroundSlots.some((key) => local.slots?.[key] !== undefined)
+ 175 |   if (section === "audio" && audioEvents.length === 0) return null
+     :                                                                   ^
+ 176 |
+ 177 |   return (
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:201:1]
+ 200 |               const audio = { ...local.audio }
+ 201 |
+     : ^
+ 202 |               if (choice) {
+ 203 |                 audio[event] = choice
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:206:1]
+ 205 |                 change({ ...local, audio: omitKeys(audio, [event]) })
+ 206 |
+     : ^
+ 207 |                 return
+ 208 |               }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:209:1]
+ 208 |               }
+ 209 |
+     : ^
+ 210 |               change({ ...local, audio })
+ 211 |             }}
+     `----
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'questionIds', and 'acceptExtrasBaseline'
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:68:6]
+ 54 |           ? res.extras
+ 55 |           : createDefaultQuizExtrasV2(initialData.id, questionIds, res.baseDigest)
+    :                                                       ^^^^^^^^^^^
+ 56 |         acceptExtrasBaseline(loaded)
+    :         ^^^^^^^^^^^^^^^^^^^^
+ 57 |         setExtras((previous) => previous ?? loaded)
+ 58 |         if (loaded.questionIds.length > 0) {
+ 59 |           setQuestionIds(loaded.questionIds)
+ 60 |         }
+ 61 |         setExtrasStatus("ready")
+ 62 |       })
+ 63 |       .catch(() => { if (isSubscribed) setExtrasStatus("error") })
+ 64 |
+ 65 |     return () => {
+ 66 |       isSubscribed = false
+ 67 |     }
+ 68 |   }, [initialData?.id])
+    :      ^^^^^^^^^^^^^^^^^
+ 69 |
+    `----
+  help: Either include it or remove the dependency array.
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:16:1]
+ 15 | import { useCallback, useEffect, useMemo, useState } from "react"
+ 16 |
+    : ^
+ 17 | /** Stable identities and sidecar metadata; react-hook-form remains the form authority. */
+ 18 | export function useQuizzExtras(initialData?: QuizzWithId) {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:30:1]
+ 29 |   } | null>(null)
+ 30 |
+    : ^
+ 31 |   const [questionIds, setQuestionIds] = useState<string[]>(() => {
+ 32 |     const count = initialData?.questions.length ?? 1
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:33:1]
+ 32 |     const count = initialData?.questions.length ?? 1
+ 33 |
+    : ^
+ 34 |     return Array.from({ length: count }, () => generateQuestionId())
+ 35 |   })
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:36:1]
+ 35 |   })
+ 36 |
+    : ^
+ 37 |   useEffect(() => {
+ 38 |     if (!initialData?.id) {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:41:1]
+ 40 |     }
+ 41 |
+    : ^
+ 42 |     let isSubscribed = true
+ 43 |     const client = new CompositeApiClient({
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:52:1]
+ 51 |         }
+ 52 |
+    : ^
+ 53 |         const loaded = res.exists && res.extras
+ 54 |           ? res.extras
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:57:52]
+ 56 |         acceptExtrasBaseline(loaded)
+ 57 |         setExtras((previous) => previous ?? loaded)
+    :                                                    ^
+ 58 |         if (loaded.questionIds.length > 0) {
+ 59 |           setQuestionIds(loaded.questionIds)
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:60:10]
+ 59 |           setQuestionIds(loaded.questionIds)
+ 60 |         }
+    :          ^
+ 61 |         setExtrasStatus("ready")
+ 62 |       })
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:64:1]
+ 63 |       .catch(() => { if (isSubscribed) setExtrasStatus("error") })
+ 64 |
+    : ^
+ 65 |     return () => {
+ 66 |       isSubscribed = false
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:69:1]
+ 68 |   }, [initialData?.id])
+ 69 |
+    : ^
+ 70 |   const appendQuestionIdentity = () => {
+ 71 |     const newUuid = generateQuestionId()
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:73:1]
+ 72 |     setQuestionIds((prev) => [...prev, newUuid])
+ 73 |
+    : ^
+ 74 |     if (extras) {
+ 75 |       setExtras({ ...extras, questionIds: [...extras.questionIds, newUuid] })
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:83:1]
+ 82 |     setQuestionIds((prev) => prev.filter((_, i) => i !== index))
+ 83 |
+    : ^
+ 84 |     if (extras) {
+ 85 |       if (isQuizExtrasV2(extras)) {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:90:1]
+ 89 |           : {}
+ 90 |
+    : ^
+ 91 |         if (removedQId && removedQId in nextPerQuestion) {
+ 92 |           const { [removedQId]: _removed, ...remaining } = nextPerQuestion
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:95:1]
+ 94 |         }
+ 95 |
+    : ^
+ 96 |         setExtras({
+ 97 |           ...extras,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:114:1]
+ 113 |       const [moved] = next.splice(from, 1)
+ 114 |
+     : ^
+ 115 |       if (moved) {
+ 116 |         next.splice(to, 0, moved)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:118:1]
+ 117 |       }
+ 118 |
+     : ^
+ 119 |       return next
+ 120 |     })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:121:1]
+ 120 |     })
+ 121 |
+     : ^
+ 122 |     if (extras) {
+ 123 |       if (isQuizExtrasV2(extras)) {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:126:1]
+ 125 |         const [moved] = nextQIds.splice(from, 1)
+ 126 |
+     : ^
+ 127 |         if (moved) {
+ 128 |           nextQIds.splice(to, 0, moved)
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:130:1]
+ 129 |         }
+ 130 |
+     : ^
+ 131 |         setExtras({
+ 132 |           ...extras,
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:151:1]
+ 150 |           : {}
+ 151 |
+     : ^
+ 152 |         if (sourceQId && sourceQId in nextPerQuestion) {
+ 153 |           nextPerQuestion[newUuid] = structuredClone(nextPerQuestion[sourceQId])
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:155:1]
+ 154 |         }
+ 155 |
+     : ^
+ 156 |         setExtras({
+ 157 |           ...extras,
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:168:1]
+ 167 |           next.splice(index + 1, 0, newUuid)
+ 168 |
+     : ^
+ 169 |           return next
+ 170 |         })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:180:1]
+ 179 |           next.splice(index + 1, 0, newQuestionId)
+ 180 |
+     : ^
+ 181 |           return next
+ 182 |         })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:189:1]
+ 188 |         next.splice(index + 1, 0, newUuid)
+ 189 |
+     : ^
+ 190 |         return next
+ 191 |       })
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:194:1]
+ 193 |   }
+ 194 |
+     : ^
+ 195 |   return {
+ 196 |     extras,
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:23:1]
+ 22 | import { useStudioEditor } from "./studio-editor-context"
+ 23 |
+    : ^
+ 24 | export const StudioLaunchPage = () => {
+ 25 |   const { t } = useTranslation()
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:33:1]
+ 32 |   } = useFormContext()
+ 33 |
+    : ^
+ 34 |   const questionItems = timeline.filter((tlItem) => tlItem.kind === "question")
+ 35 |   const nonQuestionItems = timeline.filter(
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:38:1]
+ 37 |   )
+ 38 |
+    : ^
+ 39 |   const mediaItems = nonQuestionItems.filter(
+ 40 |     (tlItem) => tlItem.kind === "media",
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:44:1]
+ 43 |     const s = scenes[m.sceneId]
+ 44 |
+    : ^
+ 45 |     return !s || !("mediaUrl" in s) || !s.mediaUrl.trim()
+ 46 |   })
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:47:1]
+ 46 |   })
+ 47 |
+    : ^
+ 48 |   const hasQuestions = questionItems.length > 0
+ 49 |   const participantCount = extras?.roster
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:52:1]
+ 51 |     : 0
+ 52 |
+    : ^
+ 53 |   const hasUnsavedChanges = isDirty || isExtrasDirty
+ 54 |   const isNew = !quizzId
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:56:1]
+ 55 |   const isReadyToLaunch = !isNew && hasQuestions && !hasUnsavedChanges && !missingMedia && extrasStatus === "ready"
+ 56 |
+    : ^
+ 57 |   const { mutate: launch, isPending } = useMutation({
+ 58 |     mutationFn: createGame,
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:79:1]
+ 78 |   })
+ 79 |
+    : ^
+ 80 |   const handleLaunch = () => {
+ 81 |     if (extrasStatus !== "ready") {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:83:6]
+ 82 |       return
+ 83 |     }
+    :      ^
+ 84 |     if (!quizzId) {
+ 85 |       toast.error(
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:91:1]
+ 90 |       )
+ 91 |
+    : ^
+ 92 |       return
+ 93 |     }
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:94:1]
+ 93 |     }
+ 94 |
+    : ^
+ 95 |     if (hasUnsavedChanges) {
+ 96 |       toast.error(
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:102:1]
+ 101 |       )
+ 102 |
+     : ^
+ 103 |       return
+ 104 |     }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:105:1]
+ 104 |     }
+ 105 |
+     : ^
+ 106 |     if (missingMedia) {
+ 107 |       toast.error(
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:113:1]
+ 112 |       )
+ 113 |
+     : ^
+ 114 |       return
+ 115 |     }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:116:1]
+ 115 |     }
+ 116 |
+     : ^
+ 117 |     if (!hasQuestions) {
+ 118 |       toast.error(t("extensions:studio.launch.noQuestionsWarning"))
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:119:1]
+ 118 |       toast.error(t("extensions:studio.launch.noQuestionsWarning"))
+ 119 |
+     : ^
+ 120 |       return
+ 121 |     }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:122:1]
+ 121 |     }
+ 122 |
+     : ^
+ 123 |     launch(quizzId)
+ 124 |   }
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:125:1]
+ 124 |   }
+ 125 |
+     : ^
+ 126 |   return (
+ 127 |     <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:145:1]
+ 144 |         </div>
+ 145 |
+     : ^
+ 146 |         {/* Readiness Warnings */}
+ 147 |         {extrasStatus !== "ready" && <p role="status" className="text-muted-foreground text-sm">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:161:1]
+ 160 |         )}
+ 161 |
+     : ^
+ 162 |         {hasUnsavedChanges && !isNew && (
+ 163 |           <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:173:1]
+ 172 |         )}
+ 173 |
+     : ^
+ 174 |         {!hasQuestions && (
+ 175 |           <div className="flex items-center gap-3 rounded-lg border border-red-500/40 bg-red-500/10 p-4 text-sm font-semibold text-red-600">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:180:1]
+ 179 |         )}
+ 180 |
+     : ^
+ 181 |         {missingMedia && (
+ 182 |           <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:187:1]
+ 186 |         )}
+ 187 |
+     : ^
+ 188 |         {/* Summary Grid */}
+ 189 |         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:203:1]
+ 202 |           </Card>
+ 203 |
+     : ^
+ 204 |           <Card className="flex items-center gap-4 p-5">
+ 205 |             <div className="bg-primary/10 text-primary rounded-full p-3">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:220:1]
+ 219 |           </Card>
+ 220 |
+     : ^
+ 221 |           <Card className="flex items-center gap-4 p-5">
+ 222 |             <div className="bg-primary/10 text-primary rounded-full p-3">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:238:1]
+ 237 |         </div>
+ 238 |
+     : ^
+ 239 |         {/* Launch Action Card */}
+ 240 |         <Card className="flex flex-col items-center justify-center gap-4 p-8 text-center">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:275:1]
+ 274 |           </div>
+ 275 |
+     : ^
+ 276 |           <Button
+ 277 |             type="button"
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:10:1]
+  9 | import { useTranslation } from "react-i18next"
+ 10 |
+    : ^
+ 11 | export function StudioHeaderNavigation() {
+ 12 |   const { activeTab, setActiveTab } = useStudioEditor()
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:14:1]
+ 13 |   const { t } = useTranslation()
+ 14 |
+    : ^
+ 15 |   return (
+ 16 |     <div className="bg-accent/80 flex h-8 max-w-full shrink-0 scrollbar-none items-center overflow-x-auto rounded-lg p-0.5">
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:87:1]
+ 86 | }
+ 87 |
+    : ^
+ 88 | export function StudioCardKindBar() {
+ 89 |   const {
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+    ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:97:1]
+ 96 |   const timelineKinds = getTimelineKindOptions(t)
+ 97 |
+    : ^
+ 98 |   return (
+ 99 |     <>
+    `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:115:1]
+ 114 |           </div>
+ 115 |
+     : ^
+ 116 |           <div className="text-muted-foreground hidden shrink-0 items-center gap-1.5 ps-3 text-xs sm:flex">
+ 117 |             <span className="font-medium">
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:129:1]
+ 128 | }
+ 129 |
+     : ^
+ 130 | export function StudioConversionDialog() {
+ 131 |   const {
+     `----
+
+  x @stylistic(linebreak-style): Expected linebreaks to be 'LF' but found 'CRLF'.
+     ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:137:1]
+ 136 |   const { t } = useTranslation()
+ 137 |
+     : ^
+ 138 |   return (
+ 139 |     <AlertDialog
+     `----
+
+  x typescript(TS18048): 's.mediaUrl' is possibly 'undefined'.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:45:41]
+ 44 |
+ 45 |     return !s || !("mediaUrl" in s) || !s.mediaUrl.trim()
+    :                                         ^^^^^^^^^^
+ 46 |   })
+    `----
+
+  x typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy.
+    ,-[packages/web/src/features/quizz/components/studio/studio-launch-page.tsx:45:12]
+ 44 |
+ 45 |     return !s || !("mediaUrl" in s) || !s.mediaUrl.trim()
+    :            ^^
+ 46 |   })
+    `----
+  help: The checked value has type `{ background?: { url: string; fit: "contain" | "cover"; position: "bottom" | "center" | "left" | "right" | "top"; ove...`.
+
+Found 1 warning and 165 errors.
+Finished in 3.8s on 22 files with 233 rules using 12 threads.

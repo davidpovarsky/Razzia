@@ -1,0 +1,14 @@
+{
+  "executionAuthorized": false,
+  "issuerThreadId": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+  "sourceDisposition": "APPROVE_WITH_EXACT_GATES",
+  "packetDisposition": "RETURN_FOR_REVISION_UNTIL_PACKET_FOLLOWUP",
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "admittedAtEpochSeconds": 0,
+  "packetManifestSha256": "FILL_FROM_PACKET_HASHES_AFTER_INDEPENDENT_APPROVAL",
+  "packetHashesSha256": "FILL_FROM_FINAL_PACKET_HASH_FILE_AFTER_INDEPENDENT_APPROVAL",
+  "laneLedgerPath": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/ROOT_C1_PACKET2_LEDGER.actual.json",
+  "laneLedgerSha256": "ROOT_SUPPLIES_FRESH_EXACT_LEDGER_DIGEST",
+  "laneLedgerSnapshotId": "ROOT_SUPPLIES_FRESH_SNAPSHOT_ID",
+  "note": "Source accepted for A; packet and execution still pending. ROOT must supply actual current grants/consumption, aggregate caps, disk reserves and RAM gate in a fresh private host-only ledger. Historical 2568 MiB is not authority. This example never authorizes execution."
+}

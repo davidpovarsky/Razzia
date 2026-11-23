@@ -1,0 +1,80 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 3 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+[WebServer] 11:14:12 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:14:12 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:14:13 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+[WebServer] 11:14:13 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+  ✓  1 [chromium] › qa/tds-stage-integration.spec.ts:93:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions (21.5s)
+  ✘  2 [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (6.8s)
+  ✓  3 [chromium] › qa/tds-stage-integration.spec.ts:309:1 › a failed per-card image falls back to the selected full-window theme without classroom or duplicate media (9.7s)
+
+
+  1) [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data
+
+    Error: Command failed: zbarimg --quiet --raw /evidence/phase-07-seating-qr.png
+
+      270 |     .screenshot({ path: "/evidence/phase-07-seating-qr.png" })
+      271 |   expect(
+    > 272 |     execFileSync(
+          |     ^
+      273 |       "zbarimg",
+      274 |       ["--quiet", "--raw", "/evidence/phase-07-seating-qr.png"],
+      275 |       { encoding: "utf8" },
+        at /cleanup/extensions/qa/tds-stage-integration.spec.ts:272:5
+
+    Error Context: ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data
+  2 passed (47.6s)

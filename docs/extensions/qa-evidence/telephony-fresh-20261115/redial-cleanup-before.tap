@@ -1,0 +1,134 @@
+TAP version 13
+# Subtest: gateway maps 1..5 across two questions and rejects invalid, duplicate and closed-window input
+ok 1 - gateway maps 1..5 across two questions and rejects invalid, duplicate and closed-window input
+  ---
+  duration_ms: 29.0503
+  type: 'test'
+  ...
+# Subtest: A to B redial survives late A hangup and rejects closed/reused A callbacks
+ok 2 - A to B redial survives late A hangup and rejects closed/reused A callbacks
+  ---
+  duration_ms: 6.4343
+  type: 'test'
+  ...
+# Subtest: overlapping duplicate provider callbacks issue only one answer request
+ok 3 - overlapping duplicate provider callbacks issue only one answer request
+  ---
+  duration_ms: 9.3044
+  type: 'test'
+  ...
+# Subtest: superseded A cannot rebind after B disconnects, even without an A hangup
+not ok 4 - superseded A cannot rebind after B disconnects, even without an A hangup
+  ---
+  duration_ms: 7.5819
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:167:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 'read=f-/9/004=td2,,1,1,30,No,no,no,,,,Ok,None,,no'
+    - 'hangup'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'hangup'
+  actual: 'read=f-/9/004=td2,,1,1,30,No,no,no,,,,Ok,None,,no'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:174:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: delayed initial A join cannot arrive after the newer B rebind
+not ok 5 - delayed initial A join cannot arrive after the newer B rebind
+  ---
+  duration_ms: 7.0158
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:179:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 'c0a47bbdaf9493755ab55352'
+    - 'dd67ee5f6375749b04fe5ce3'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'dd67ee5f6375749b04fe5ce3'
+  actual: 'c0a47bbdaf9493755ab55352'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:194:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: failed hangup cleanup can be retried without reopening the call
+not ok 6 - failed hangup cleanup can be retried without reopening the call
+  ---
+  duration_ms: 6.492
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:197:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:206:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: hangup during an in-flight poll prevents a later answer and cleans the joined session
+ok 7 - hangup during an in-flight poll prevents a later answer and cleans the joined session
+  ---
+  duration_ms: 8.2383
+  type: 'test'
+  ...
+# Subtest: out-of-order poll delivery cannot roll the local epoch back
+ok 8 - out-of-order poll delivery cannot roll the local epoch back
+  ---
+  duration_ms: 5.9818
+  type: 'test'
+  ...
+# Subtest: epoch advance between poll and answer stays rejected without a guessed verdict
+ok 9 - epoch advance between poll and answer stays rejected without a guessed verdict
+  ---
+  duration_ms: 9.0273
+  type: 'test'
+  ...
+# Subtest: invitation-only rejection removes the local session without a join cue
+ok 10 - invitation-only rejection removes the local session without a join cue
+  ---
+  duration_ms: 5.4807
+  type: 'test'
+  ...
+# Subtest: failed backend fetch always disposes its deadline timer
+ok 11 - failed backend fetch always disposes its deadline timer
+  ---
+  duration_ms: 4.4896
+  type: 'test'
+  ...
+# Subtest: backend deadline covers a stalled response body, not just headers
+ok 12 - backend deadline covers a stalled response body, not just headers
+  ---
+  duration_ms: 3.8293
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 9
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 322.4795

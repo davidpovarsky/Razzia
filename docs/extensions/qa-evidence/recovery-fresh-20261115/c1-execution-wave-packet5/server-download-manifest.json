@@ -1,0 +1,133 @@
+{
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "files": [
+    {
+      "path": "host/before-stop-1.json",
+      "bytes": 1843,
+      "sha256": "53cbca97fe90f86eed54c16a21a2ba35c3b4b2ffc0cfdc0e39402b457d70c870"
+    },
+    {
+      "path": "host/driver-error.json",
+      "bytes": 123,
+      "sha256": "593a49ce51f11cb113e580d91b66825bdb2e39408219ee570e7acaf38d281246"
+    },
+    {
+      "path": "host/host-path-ownership.json",
+      "bytes": 3199,
+      "sha256": "85122dfd7158c17095449240a59298152e9cba7549d30f4f0e34a2ce9574531a"
+    },
+    {
+      "path": "host/root-admission.json",
+      "bytes": 3348,
+      "sha256": "d649c0f36eb43f043932f71f43defc2d62546b4929ab6fa8ee39056957e464f1"
+    },
+    {
+      "path": "host/runner-after-stop.json",
+      "bytes": 405,
+      "sha256": "ba2dea49caad6709dfd592e4f62603ba956d81e99874bdec1346d740438ab8e3"
+    },
+    {
+      "path": "host/runner-identity.json",
+      "bytes": 44010,
+      "sha256": "bf46596754e248482fddc6471d659b878cce8427cc2742f48f09eb2ebade2f49"
+    },
+    {
+      "path": "host/storage-profile.json",
+      "bytes": 67,
+      "sha256": "ba483e319f273fd9bbe07946dd3ec9401ff5b16918036c7db6a6267a82527807"
+    },
+    {
+      "path": "host/supervisor-baseline.jsonl",
+      "bytes": 48911,
+      "sha256": "604ef08eb78bfa4cbdd22d6cb73d67bdd70ba6e1446fd3dda2320527984b560f"
+    }
+  ],
+  "sourceInputsAfterRun": [
+    {
+      "path": "analyze-results.cjs",
+      "bytes": 3420,
+      "sha256": "dbd58d04ec3bc3cbba27f1c8fabdfcde56c725a90e540e691fae06d2938b2d2b",
+      "mode": "0o400"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 633277,
+      "sha256": "72010fa8bc87aaf112a61ed1e20947ae931e92aebdd3de869c4e747efb2f30da",
+      "mode": "0o400"
+    },
+    {
+      "path": "node-observer.delta.patch",
+      "bytes": 7005,
+      "sha256": "32345a2ae408198aa6120b6ade26a5bf2795937d198501242ba39b55414f6a68",
+      "mode": "0o400"
+    },
+    {
+      "path": "overlay.tar.gz",
+      "bytes": 35720,
+      "sha256": "c27c9a47466cec7fca74273319215e653306080c8e616c0ef8be1af491a2155f",
+      "mode": "0o400"
+    },
+    {
+      "path": "packet-hashes.json",
+      "bytes": 1910,
+      "sha256": "20878c42dec55e85b4c6757cff98ebc6837bbe709fa8ac0fcd64efe653ff5eb5",
+      "mode": "0o400"
+    },
+    {
+      "path": "pid_observer.py",
+      "bytes": 5507,
+      "sha256": "7f0b4c3d932d771d8c6ecbd72fda29e18fd9a58e58817d3808f4aebbd19b4745",
+      "mode": "0o400"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 29229,
+      "sha256": "d3d9fc312598106ce8310109b5c0e180423ca9778524db1b4eadd03bd7d8e6b1",
+      "mode": "0o400"
+    },
+    {
+      "path": "runner_base.py",
+      "bytes": 23795,
+      "sha256": "d6b908bb3ecb1b689cc46c0728f7c98c98d70d0e9752f867dc55aea76e7ca043",
+      "mode": "0o400"
+    },
+    {
+      "path": "runner_host.py",
+      "bytes": 9768,
+      "sha256": "cb9985c332e7c1baec9fcebf1bdacf3bade8d32b90c7fb816df1a38af96d3b97",
+      "mode": "0o400"
+    },
+    {
+      "path": "server-run.py",
+      "bytes": 1735,
+      "sha256": "95eccacf435c36737a9589c65a5bd15380fe76a5297963bc20b1970ce7a08548",
+      "mode": "0o400"
+    },
+    {
+      "path": "verify-merged.cjs",
+      "bytes": 6131,
+      "sha256": "ec57985aeefc4695cdb6d02e35fd31eae5627ab0b48b9c061a83c78a954c28e7",
+      "mode": "0o400"
+    }
+  ],
+  "runnerStopped": true,
+  "serverDataBytes": 101906,
+  "collectionReadOnly": true,
+  "accounting": {
+    "priorLeasePhysicalBytes": 782336,
+    "thisIterationPhysicalBytes": 3342336,
+    "cumulativeConsumedBytes": 4124672,
+    "controls": [
+      {
+        "path": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/recovery-wave-packet5-wave.admission.json",
+        "physicalBytes": 4096
+      },
+      {
+        "path": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/recovery-wave-packet5-wave.ledger.json",
+        "physicalBytes": 4096
+      }
+    ],
+    "containerMetadataReserveBytes": 2097152,
+    "stoppedContainerSizeRw": 32768
+  }
+}

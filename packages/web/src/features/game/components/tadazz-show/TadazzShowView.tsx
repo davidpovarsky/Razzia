@@ -1,0 +1,2011 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+// oxlint-disable no-await-in-loop -- Scene choreography and ordered stage operations must complete before the next step starts.
+import NativeButton from "@razzia/web/components/Button"
+import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
+import { HostControlBar } from "@razzia/extensions/platform-ui"
+import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
+import { STATUS, type Status } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  resolveThemeEffect,
+  isCreatingWorldsPreset,
+  isOriginalThemeId,
+  type CardAudioOverrides,
+  type CueId,
+  type ExtensionStateEnvelope,
+  type QuizExtrasV1,
+  type QuestionReveal,
+  type TeamDefinition,
+} from "@razzia/extensions/core"
+import {
+  useShowTheme,
+  showThemeStyle,
+  reconcileThemeScene,
+  themeSlotForScene,
+  CinematicLayerStack,
+  TadazzStage,
+  TadazzV4StageAdapter,
+  collapseForResume,
+  computeShowScene,
+  isShowSceneContentPending,
+  isTadazzV4Active,
+  planTransition,
+  usesSharedScenePresenter,
+  showSceneTransitionIdentity,
+  resolveStageBackdrop,
+  resolveTadazzAudioPolicy,
+  resolveNativePhaseAudioCue,
+  acceptsQuestionMilestone,
+  themeTimerTransition,
+  startCountdownCue,
+  usePackageRevealClock,
+  usePackageRevealAudio,
+  type ThemeTimerEndState,
+  runSteps,
+  NativeCompositionBoundary,
+  NativeQuestionMedia,
+  useNativeCompositionResolution,
+  type CinematicLayerStackProps,
+  type SceneDescriptor,
+  type ShowScene,
+  type StageStep,
+  type TadazzStageHandle,
+} from "@razzia/extensions/presentation"
+import Tooltip from "@razzia/web/components/Tooltip"
+import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
+import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
+import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
+import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
+import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
+import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
+import HostGuestJoinToggle from "@razzia/web/features/game/components/HostGuestJoinToggle"
+import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
+import {
+  useEvent,
+  useSocket,
+} from "@razzia/web/features/game/contexts/socket-context"
+import {
+  ViewRoleContext,
+  type ViewRole,
+} from "@razzia/web/features/game/contexts/view-role-context"
+import { useManagerStore } from "@razzia/web/features/game/stores/manager"
+import { usePlayerStore } from "@razzia/web/features/game/stores/player"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
+import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
+import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
+import {
+  CircleQuestionMark,
+  Image,
+  LogOut,
+  Maximize,
+  Minimize,
+  PhoneCall,
+  SkipForward,
+  Users,
+  Video,
+} from "lucide-react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
+import { useTranslation } from "react-i18next"
+import { PresentationLocale } from "./presentation-locale"
+import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
+import { useTimerBeeps } from "./use-timer-beeps"
+import { useTadazzRawStatus } from "./raw-status-context"
+import { TadazzAnswerPad } from "./TadazzAnswerPad"
+import { LiveParticipation } from "./LiveParticipation"
+import {
+  TadazzConnectingScreen,
+  TadazzCountdownScreen,
+  TadazzEstimationResultScreen,
+  TadazzInterludeScreen,
+  TadazzLobbyScreen,
+  TadazzMessageScreen,
+  TadazzPlayerFinishedScreen,
+  TadazzPlayerResultScreen,
+  TadazzPreparedScreen,
+  TadazzRecapScreen,
+  TadazzSceneTitleScreen,
+  TadazzStartScreen,
+  TadazzSummaryScreen,
+  TadazzWaitScreen,
+} from "./TadazzScreens"
+import {
+  useTadazzShellText,
+  useTadazzStageLabels,
+  useTadazzV4Labels,
+} from "./useTadazzLabels"
+import { PackageStage } from "./PackageStage"
+import { readPublicLobbyDirectory } from "./lobby-directory"
+
+export interface TadazzShowViewProps {
+  nativeContent?: React.ReactNode
+  manager: boolean
+  role: ViewRole
+  statusName: Status | undefined
+  extensionState: ExtensionStateEnvelope | null
+  onNext?: () => void
+  onBack?: () => void
+  countdown: {
+    seconds: number
+    total: number
+  } | null
+  totalPlayers: number | null
+  roomMediaReady: boolean
+  audioCueId?: CueId
+  hasCompetingMediaAudio: boolean
+  activeCardKey: string
+  sceneAudio?: unknown
+  isHostPresenting: boolean
+  onPresent: () => void
+  onExitPresentation: () => void
+  presentationRootRef: (_node: HTMLElement | null) => void
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches
+const CINEMATIC_SCENE_KINDS = new Set([
+  "opening",
+  "closing",
+  "media",
+  "animation",
+])
+function isCinematicScene(scene: SceneDescriptor): boolean {
+  if (!CINEMATIC_SCENE_KINDS.has(scene.kind)) {
+    return false
+  }
+
+  return Boolean(
+    scene.mediaUrl?.trim() ||
+    scene.lottieUrl ||
+    (scene.overlayAnimations?.length ?? 0) > 0,
+  )
+}
+
+/**
+ * The TADAZZ show shell. It owns the whole game screen when the show is active
+ * (Razzia's GameBackground and state components are never mounted), renders
+ * the ported Motion Kit stage for manager, player and projector from the same
+ * authoritative state, and keeps every host/player capability.
+ */
+export function TadazzShowView(props: TadazzShowViewProps) {
+  const defaults = props.extensionState?.extras.defaults as
+    { presentationLocale?: unknown } | undefined
+
+  return (
+    <PresentationLocale locale={defaults?.presentationLocale}>
+      <TadazzShowContent {...props} />
+    </PresentationLocale>
+  )
+}
+
+function TadazzShowContent(props: TadazzShowViewProps) {
+  const {
+    manager,
+    role,
+    extensionState,
+    onNext,
+    onBack,
+    countdown,
+    totalPlayers,
+    roomMediaReady,
+    isHostPresenting,
+    onPresent,
+    presentationRootRef,
+  } = props
+  const theme = useShowTheme(role)
+  const { t } = useTranslation()
+  const tx = useTadazzShellText()
+  const labels = useTadazzStageLabels()
+  const { socket, isConnected, clientId } = useSocket()
+  const rawStatus = useTadazzRawStatus()
+  const managerState = useManagerStore()
+  const {
+    player,
+    gameId: playerGameId,
+    gameMode,
+    updatePlayer,
+  } = usePlayerStore()
+  const playerStatus = usePlayerStore((s) => s.status)
+  const { questionStates } = useQuestionStore()
+  const currentQuestionNumber = questionStates?.current
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+  const [playersModalOpen, setPlayersModalOpen] = useState(false)
+  const tieRequestPendingRef = useRef(false)
+  const reduced = useMemo(prefersReducedMotion, [])
+  const [serverClockOffset, setServerClockOffset] = useState(0)
+  useEffect(() => {
+    if (!isConnected) {
+      return
+    }
+
+    let alive = true
+    let bestRtt = Infinity
+    const sample = () => {
+      const sent = Date.now()
+      socket.emit("extensions:clock", (serverNow) => {
+        const received = Date.now()
+        const rtt = received - sent
+
+        if (alive && Number.isFinite(serverNow) && rtt < bestRtt) {
+          bestRtt = rtt
+          setServerClockOffset(serverNow - (sent + received) / 2)
+        }
+      })
+    }
+    sample()
+    const second = setTimeout(sample, 250)
+    const third = setTimeout(sample, 750)
+
+    return () => {
+      alive = false
+      clearTimeout(second)
+      clearTimeout(third)
+    }
+  }, [isConnected, socket])
+  const status = useMemo(() => {
+    if (manager && managerState.status) {
+      return {
+        name: managerState.status.name,
+        data: managerState.status.data,
+      }
+    }
+
+    if (rawStatus) {
+      return rawStatus
+    }
+
+    if (playerStatus) {
+      return {
+        name: playerStatus.name,
+        data: playerStatus.data,
+      }
+    }
+
+    return null
+  }, [manager, managerState.status, rawStatus, playerStatus])
+  const questionReveal = extensionState?.extras.reveal as
+    (QuestionReveal & { isRevealed?: boolean }) | undefined
+  const scene = useMemo(() => {
+    const next = reconcileThemeScene(
+      computeShowScene({
+        role,
+        isConnected,
+        status,
+        envelope: extensionState,
+        questionStates,
+      }),
+      theme,
+    )
+
+    if (next.kind === "voting") {
+      if (next.votingStartsAt !== undefined) {
+        next.votingStartsAt -= serverClockOffset
+      }
+
+      if (next.votingEndsAt !== undefined) {
+        next.votingEndsAt -= serverClockOffset
+      }
+    }
+
+    // Configured image effects use the shared native media layer, including
+    // voting layouts whose original photo panel otherwise paints an unmasked image.
+    if (
+      (next.kind === "question" || next.kind === "voting") &&
+      questionReveal &&
+      questionReveal.effect !== "none"
+    ) {
+      const { questionImage: _questionImage, ...question } = next.question
+      next.question = question
+    }
+
+    if (next.kind === "scene" && next.startedAt !== undefined) {
+      next.startedAt -= serverClockOffset
+    }
+
+    return next
+  }, [
+    role,
+    isConnected,
+    status,
+    extensionState,
+    questionStates,
+    serverClockOffset,
+    theme,
+    questionReveal,
+  ])
+  const sceneIdentity = useMemo(
+    () => showSceneTransitionIdentity(scene),
+    [scene],
+  )
+  const waitingForFinale =
+    scene.kind === "wait" && scene.key === "wait:finale-content"
+  const showGameId =
+    managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
+  const composition = useNativeCompositionResolution(
+    extensionState,
+    role,
+    props.statusName,
+  )
+  const compositionRoot =
+    composition.kind === "ready"
+      ? composition.template.nodes.find(
+          (node) => node.nodeId === composition.template.rootNodeId,
+        )
+      : undefined
+  const authoredBackdrop = resolveStageBackdrop(extensionState)
+  const themeSlot = themeSlotForScene(scene)
+  const scopedBackground =
+    theme.scopeOverrides.roles?.[role]?.slots?.[themeSlot]?.mediaUrl ??
+    theme.scopeOverrides.slots?.[themeSlot]?.mediaUrl
+  const themeBackground = theme.slots[themeSlot]
+  let backdrop = authoredBackdrop
+
+  if ((!authoredBackdrop || scopedBackground) && themeBackground.mediaUrl) {
+    backdrop = {
+      url: themeBackground.mediaUrl,
+      fit: compositionRoot?.props.fit ?? themeBackground.fit ?? "cover",
+      position: "center",
+      overlayOpacity: 0,
+    }
+  } else if (authoredBackdrop) {
+    backdrop = {
+      ...authoredBackdrop,
+      fit: compositionRoot?.props.fit ?? authoredBackdrop.fit,
+    }
+  }
+
+  const originalFamily =
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+  // Compiled first-party families own their visual layout. Existing motion-kit
+  // rollback settings still apply to the other native themes.
+  const useV4 =
+    originalFamily ||
+    compositionRoot?.component.id === "native.cinematic-stage" ||
+    isTadazzV4Active(extensionState)
+  const v4Labels = useTadazzV4Labels()
+  const guessOffLook =
+    useV4 && !originalFamily && extensionState?.extras.stageLook === "guess-off"
+  const guessOffTextAnswers =
+    guessOffLook &&
+    (scene.kind === "question" ||
+      scene.kind === "voting" ||
+      scene.kind === "results") &&
+    !scene.question.questionImage &&
+    !scene.question.hasAnswerImages &&
+    scene.question.options.every((option) => !option.image)
+
+  const stageRef = useRef<TadazzStageHandle>(null)
+  const showRootRef = useRef<HTMLElement | null>(null)
+  const isPaused = Boolean(extensionState?.pause?.paused)
+  const resolveStoryTie = useCallback(
+    (contestantIndex: number) => {
+      if (
+        role !== "manager" ||
+        isPaused ||
+        !isConnected ||
+        !extensionState ||
+        tieRequestPendingRef.current
+      ) {
+        return
+      }
+
+      const fullShow = extensionState.extras.activeSceneData as
+        | {
+            fullShow?: {
+              tieCandidates?: Array<{
+                answerIndex: number
+              }>
+            }
+          }
+        | undefined
+      const candidate = fullShow?.fullShow?.tieCandidates?.[contestantIndex]
+
+      if (!candidate) {
+        return
+      }
+
+      tieRequestPendingRef.current = true
+      socket.emit(EXTENSION_EVENTS.COMMAND, {
+        v: 1,
+        gameId: extensionState.gameId,
+        requestId: crypto.randomUUID(),
+        action: "RESOLVE_STORY_TIE",
+        payload: {
+          answerIndex: candidate.answerIndex,
+          epoch: extensionState.epoch,
+        },
+      })
+      setTimeout(() => {
+        tieRequestPendingRef.current = false
+      }, 800)
+    },
+    [role, isPaused, isConnected, extensionState, socket],
+  )
+  const referenceStoryTrack = useMemo(() => {
+    if (scene.kind !== "scene" || scene.scene.kind !== "animation") {
+      return undefined
+    }
+
+    const { preset } = scene.scene as {
+      preset?: string
+    }
+
+    if (preset !== "story-assembly") {
+      return undefined
+    }
+
+    const track = resolveThemeEffect(theme, "story-mixer-track")
+
+    if (!track?.url) {
+      return null
+    }
+
+    return {
+      key: scene.key,
+      url: track.url,
+      startedAt: scene.startedAt,
+      elapsedMs: scene.elapsedMs,
+      durationMs: 60000,
+      volume: track.volume,
+    }
+  }, [scene, theme])
+  const votingStartsAt =
+    scene.kind === "voting" ? scene.votingStartsAt : undefined
+  const votingEndsAt = scene.kind === "voting" ? scene.votingEndsAt : undefined
+  const runtimeClockKey = `${scene.key}:${extensionState?.epoch ?? 0}`
+  const [runtimeTick, setRuntimeTick] = useState<{
+    key: string
+    deadline: number
+    sequence: number
+  } | null>(null)
+  let runtimeDeadline: number | null = votingEndsAt ?? null
+
+  if (
+    runtimeDeadline === null &&
+    runtimeTick?.key === runtimeClockKey &&
+    runtimeTick.sequence === (extensionState?.seq ?? 0)
+  ) {
+    runtimeDeadline = runtimeTick.deadline
+  }
+
+  const serverPauseDeadline = extensionState?.pause?.deadline
+
+  if (runtimeDeadline === null && typeof serverPauseDeadline === "number") {
+    runtimeDeadline = serverPauseDeadline - serverClockOffset
+  }
+
+  // Presentation uses the same server deadline and frozen pause remainder.
+  let runtimeRemainingMs = 0
+
+  if (isPaused) {
+    runtimeRemainingMs = extensionState?.pause?.remainingMs ?? 0
+  } else if (runtimeDeadline !== null) {
+    runtimeRemainingMs = Math.max(0, runtimeDeadline - Date.now())
+  } else if (scene.kind === "voting") {
+    runtimeRemainingMs = Math.max(
+      0,
+      (scene.remainingSeconds ?? scene.seconds ?? 0) * 1000,
+    )
+  }
+
+  const [votingOpen, setVotingOpen] = useState(false)
+  useEffect(() => {
+    const delay = Math.max(0, (votingStartsAt ?? 0) - Date.now())
+    setVotingOpen(scene.kind === "voting" && delay === 0)
+
+    if (scene.kind !== "voting" || delay === 0 || isPaused) {
+      return
+    }
+
+    const timer = setTimeout(() => setVotingOpen(true), delay)
+
+    return () => clearTimeout(timer)
+  }, [scene.kind, votingStartsAt, isPaused])
+  const pausedCountdownRemainingMs =
+    isPaused && scene.kind === "voting"
+      ? (extensionState?.pause?.remainingMs ?? undefined)
+      : undefined
+  useEffect(() => {
+    const stage = stageRef.current
+    const media = showRootRef.current?.querySelectorAll("video, audio") ?? []
+
+    if (isPaused) {
+      if (!useV4) {
+        stage?.pauseAnimations?.(pausedCountdownRemainingMs)
+      }
+
+      media.forEach((element) => {
+        ;(element as HTMLMediaElement).pause()
+      })
+
+      return
+    }
+
+    if (!useV4) {
+      stage?.resumeAnimations?.()
+    }
+
+    media.forEach((element) => {
+      const mediaElement = element as HTMLMediaElement
+
+      if (mediaElement.autoplay) {
+        void mediaElement.play().catch(() => undefined)
+      }
+    })
+  }, [isPaused, pausedCountdownRemainingMs, useV4])
+  // ── Director: authoritative scene → reference animation methods ────────
+  const prevSceneRef = useRef<ShowScene | null>(null)
+  const pendingRef = useRef<ShowScene | null>(null)
+  const busyRef = useRef(false)
+  const resumeRef = useRef(true)
+  const tokenRef = useRef(0)
+  const roleRef = useRef(role)
+  roleRef.current = role
+  const pump = useCallback(async () => {
+    if (busyRef.current) {
+      stageRef.current?.setReducedMotion(true)
+      stageRef.current?.finishAnimations()
+
+      return
+    }
+
+    busyRef.current = true
+
+    try {
+      while (pendingRef.current) {
+        const next = pendingRef.current
+        pendingRef.current = null
+        const handle = stageRef.current
+
+        if (!handle) {
+          break
+        }
+
+        handle.setReducedMotion(reduced)
+        let steps: StageStep[] = planTransition(prevSceneRef.current, next, {
+          questionKey: handle.questionKey,
+          mode: handle.mode,
+        })
+
+        if (next.kind === "results" && next.question.options.length === 0) {
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
+        }
+
+        if (next.kind === "finale" && roleRef.current === "player") {
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
+        }
+
+        if (next.kind === "results" && next.questionType === "estimation") {
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
+        }
+
+        if (next.kind === "scene" && isCinematicScene(next.scene)) {
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
+        }
+
+        const resume = resumeRef.current
+        resumeRef.current = false
+
+        if (resume) {
+          steps = collapseForResume(steps)
+          handle.setReducedMotion(true)
+        }
+
+        prevSceneRef.current = next
+        const token = tokenRef.current + 1
+        tokenRef.current = token
+
+        try {
+          await runSteps(
+            handle,
+            steps,
+            () => token === tokenRef.current && pendingRef.current === null,
+          )
+        } catch (error) {
+          console.warn("TADAZZ stage step failed", error)
+        }
+
+        handle.setReducedMotion(reduced)
+      }
+    } finally {
+      busyRef.current = false
+    }
+  }, [reduced])
+  useEffect(() => {
+    // Keep the painted scene and director history until status content and its
+    // separately delivered counter/extension envelope describe one question.
+    if (isShowSceneContentPending(scene)) {
+      return
+    }
+
+    pendingRef.current = scene
+    void pump()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sceneIdentity, pump])
+  useLayoutEffect(() => {
+    if (scene.kind !== "scene" || scene.scene.kind !== "animation") {
+      return
+    }
+
+    const step = planTransition(null, scene, {
+      questionKey: stageRef.current?.questionKey ?? null,
+      mode: stageRef.current?.mode ?? "idle",
+    }).find((stepValue) => stepValue.op === "showFullShowScene")
+
+    if (step?.op === "showFullShowScene") {
+      stageRef.current?.updateFullShowData?.(step.data)
+    }
+  }, [extensionState?.seq, scene])
+
+  // Server cooldown ticks patch the active voting clock. They never start the
+  // voting scene themselves, and delayed ticks can only shorten the deadline.
+  // This prevents a second entrance while the director is still opening cards.
+  const deadlineRef = useRef<number | null>(null)
+  useEvent(EVENTS.GAME.COOLDOWN, (sec: number) => {
+    if (scene.kind !== "voting" || typeof sec !== "number") {
+      return
+    }
+
+    const deadline = resolveMonotonicCooldownDeadline(
+      deadlineRef.current,
+      votingEndsAt ?? Date.now() + sec * 1000,
+    )
+    deadlineRef.current = deadline
+
+    if (theme.definition.sandbox && Number.isFinite(sec) && sec >= 0) {
+      setRuntimeTick({
+        key: runtimeClockKey,
+        deadline,
+        sequence: extensionState?.seq ?? 0,
+      })
+    }
+
+    const handle = stageRef.current
+
+    if (
+      handle?.mode === "voting" &&
+      (!useV4 || handle.questionKey === scene.question.key)
+    ) {
+      void handle.openVoting(
+        scene.seconds,
+        deadline,
+        useV4 ? scene.question : undefined,
+      )
+    }
+  })
+  useEffect(() => {
+    deadlineRef.current = null
+  }, [scene.key])
+  useEffect(() => {
+    if (isPaused) {
+      deadlineRef.current = null
+    }
+  }, [isPaused])
+  const votingSeconds = scene.kind === "voting" ? scene.seconds : 0
+  const votingQuestion =
+    useV4 && scene.kind === "voting" ? scene.question : undefined
+  useEffect(() => {
+    if (votingEndsAt === undefined && !votingQuestion) {
+      return
+    }
+
+    if (votingEndsAt !== undefined) {
+      deadlineRef.current = votingEndsAt
+    }
+
+    const handle = stageRef.current
+
+    if (
+      handle?.mode === "voting" &&
+      (!votingQuestion || handle.questionKey === votingQuestion.key)
+    ) {
+      // Status and answer media arrive separately. Patch the current native
+      // question even while paused, without starting another scene or clock.
+      void handle.openVoting(votingSeconds, votingEndsAt, votingQuestion)
+    }
+  }, [votingEndsAt, votingSeconds, votingQuestion])
+
+  // ── Player answering (same socket contract as the registry components) ──
+  const isPlayer = role === "player" && Boolean(player)
+  const [selected, setSelected] = useState<number[]>([])
+  const [submitted, setSubmitted] = useState(false)
+  const [answerPending, setAnswerPending] = useState(false)
+  const selectionSoundSequence = useRef(0)
+  const questionKey = "question" in scene ? scene.question.key : null
+  const packageRevealIdentity = `${showGameId}:${questionKey ?? extensionState?.questionId ?? scene.key}:${extensionState?.epoch ?? 0}:results`
+  const packageReveal = usePackageRevealClock({
+    active: Boolean(theme.definition.sandbox) && scene.kind === "results",
+    identity: packageRevealIdentity,
+    startedAt:
+      extensionState?.phase === "responses"
+        ? extensionState.startedAt - serverClockOffset
+        : undefined,
+    paused: isPaused,
+    hasCorrectAnswer:
+      scene.kind === "results" &&
+      scene.reveal.mode === "quiz" &&
+      (scene.reveal.solutions?.length ?? 0) > 0,
+    reducedMotion: reduced,
+  })
+  usePackageRevealAudio({
+    identity: packageRevealIdentity,
+    stage: packageReveal.stage,
+    elapsedMs: packageReveal.elapsedMs,
+    enabled: Boolean(theme.definition.sandbox) && role !== "player",
+    paused: isPaused,
+    reducedMotion: reduced,
+  })
+  const revealAttemptRef = useRef(0)
+
+  if (scene.kind === "voting") {
+    revealAttemptRef.current = extensionState?.epoch ?? 0
+  }
+
+  const timerEndRef = useRef<ThemeTimerEndState | null>(null)
+  useEffect(() => {
+    const next = themeTimerTransition(timerEndRef.current, {
+      enabled:
+        (useV4 || Boolean(theme.definition.sandbox)) && role !== "player",
+      gameId: showGameId,
+      questionId: extensionState?.questionId ?? questionKey,
+      epoch: extensionState?.epoch ?? 0,
+      voting: scene.kind === "voting",
+      awaitingCompletion:
+        extensionState?.phase === "question" && scene.kind !== "voting",
+      results: extensionState?.phase === "responses",
+      paused: isPaused,
+      deadline: votingEndsAt,
+      now: Date.now(),
+      reason: extensionState?.extras.voteCompletionReason as
+        "elapsed" | "manual" | "allAnswered" | null | undefined,
+    })
+    timerEndRef.current = next.state
+
+    if (next.cue) {
+      window.dispatchEvent(
+        new CustomEvent("tadazz:sfx", {
+          detail: {
+            name: next.event,
+            identity: next.cue,
+            volume: 0.8,
+          },
+        }),
+      )
+    }
+  }, [
+    useV4,
+    theme.definition.sandbox,
+    role,
+    showGameId,
+    extensionState?.questionId,
+    extensionState?.epoch,
+    extensionState?.phase,
+    extensionState?.extras.voteCompletionReason,
+    questionKey,
+    scene.kind,
+    isPaused,
+    votingEndsAt,
+  ])
+  useTimerBeeps({
+    enabled:
+      (useV4 || Boolean(theme.definition.sandbox)) &&
+      role !== "player" &&
+      scene.kind === "voting" &&
+      (votingStartsAt === undefined ||
+        extensionState?.startedAt === undefined ||
+        votingStartsAt >= extensionState.startedAt - serverClockOffset),
+    gameId: showGameId,
+    questionKey,
+    epoch: extensionState?.epoch ?? 0,
+    startsAt: votingStartsAt,
+    endsAt: votingEndsAt,
+    paused: isPaused,
+  })
+  useEffect(() => {
+    if (scene.kind === "wait") {
+      return
+    }
+
+    setSelected([])
+    setSubmitted(false)
+    setAnswerPending(false)
+    stageRef.current?.setSelectedOptions([])
+  }, [questionKey, scene.kind])
+  const submit = useCallback(
+    (answerKeys: number[]) => {
+      if (
+        !isPlayer ||
+        !playerGameId ||
+        submitted ||
+        answerPending ||
+        isPaused ||
+        !votingOpen ||
+        scene.kind !== "voting"
+      ) {
+        return
+      }
+
+      setAnswerPending(true)
+      socket.emit(
+        EVENTS.PLAYER.SELECTED_ANSWER,
+        {
+          gameId: playerGameId,
+          data: {
+            answerKeys,
+          },
+        },
+        (result) => {
+          setAnswerPending(false)
+
+          if (!result.accepted) {
+            return
+          }
+
+          window.dispatchEvent(
+            new CustomEvent("tadazz:sfx", {
+              detail: {
+                name: "answer-submitted",
+                identity: `${showGameId}:${extensionState?.epoch ?? 0}:${questionKey}:submitted`,
+                volume: 0.2,
+              },
+            }),
+          )
+          setSubmitted(true)
+          setSelected(answerKeys)
+          stageRef.current?.setSelectedOptions(answerKeys)
+
+          if (
+            role === "player" &&
+            scene.kind === "voting" &&
+            scene.questionType !== "estimation"
+          ) {
+            void stageRef.current?.showChosen?.(answerKeys)
+          }
+        },
+      )
+    },
+    [
+      answerPending,
+      isPaused,
+      votingOpen,
+      isPlayer,
+      playerGameId,
+      submitted,
+      scene,
+      socket,
+      showGameId,
+      extensionState?.epoch,
+      questionKey,
+      role,
+    ],
+  )
+  const toggle = useCallback(
+    (index: number) => {
+      selectionSoundSequence.current += 1
+      window.dispatchEvent(
+        new CustomEvent("tadazz:sfx", {
+          detail: {
+            name: "answer-selected",
+            identity: `${showGameId}:${extensionState?.epoch ?? 0}:${questionKey}:selected:${selectionSoundSequence.current}`,
+          },
+        }),
+      )
+      setSelected((prev) => {
+        const next = prev.includes(index)
+          ? prev.filter((i) => i !== index)
+          : [...prev, index]
+        stageRef.current?.setSelectedOptions(next)
+
+        return next
+      })
+    },
+    [showGameId, extensionState?.epoch, questionKey],
+  )
+  const onSelectOption = useCallback(
+    (index: number) => {
+      if (scene.kind !== "voting") {
+        return
+      }
+
+      if (scene.questionType === "multi") {
+        toggle(index)
+      } else {
+        submit([index])
+      }
+    },
+    [scene, submit, toggle],
+  )
+
+  // Personal scores update here; the presenter owns the shared reveal sound.
+  useEffect(() => {
+    if (scene.kind !== "player-result") {
+      return
+    }
+
+    updatePlayer(({ player: p }) => ({
+      player: p
+        ? {
+            ...p,
+            points: scene.myPoints,
+          }
+        : p,
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.key])
+
+  // ── Custom screen content per scene ─────────────────────────────────────
+  const isSurveyGame = gameMode === QUIZZ_MODES.SURVEY
+  const customScreen = (() => {
+    switch (scene.kind) {
+      case "connecting":
+        return <TadazzConnectingScreen />
+
+      case "lobby":
+        return (
+          <TadazzLobbyScreen
+            inviteCode={
+              scene.inviteCode ?? managerState.inviteCode ?? undefined
+            }
+            isManager={manager}
+            fullShowData={extensionState?.extras.lobbyFullShow}
+            text={scene.text}
+          />
+        )
+
+      case "wait":
+        if (
+          waitingForFinale ||
+          submitted ||
+          Boolean(stageRef.current?.questionKey)
+        ) {
+          return null
+        }
+
+        return (
+          <TadazzWaitScreen
+            text={scene.text}
+            playerName={role === "player" ? player?.username : undefined}
+          />
+        )
+
+      case "start":
+        return (
+          <TadazzStartScreen
+            subject={scene.subject}
+            time={scene.time}
+            onTick={(seconds) => {
+              const detail = startCountdownCue({
+                gameId: showGameId,
+                epoch: extensionState?.epoch ?? 0,
+                seconds,
+                role,
+                paused: isPaused,
+              })
+
+              if (detail) {
+                window.dispatchEvent(new CustomEvent("tadazz:sfx", { detail }))
+              }
+            }}
+          />
+        )
+
+      case "prepared":
+        return (
+          <TadazzPreparedScreen
+            questionNumber={scene.questionNumber}
+            total={questionStates?.total ?? null}
+          />
+        )
+
+      case "summary":
+        return (
+          <TadazzSummaryScreen
+            subject={scene.subject}
+            totalPlayers={scene.totalPlayers}
+            totalQuestions={scene.totalQuestions}
+          />
+        )
+
+      case "player-result":
+        return (
+          <TadazzPlayerResultScreen
+            correct={scene.correct}
+            message={scene.message}
+            points={scene.points}
+            rank={scene.rank}
+            aheadOfMe={scene.aheadOfMe}
+            survey={isSurveyGame}
+          />
+        )
+
+      case "finale":
+        return role === "player" ? (
+          <TadazzPlayerFinishedScreen
+            rank={scene.rank}
+            subject={scene.subject}
+            points={player?.points ?? 0}
+          />
+        ) : null
+
+      case "results":
+        return scene.questionType === "estimation" ? (
+          <TadazzEstimationResultScreen
+            question={scene.question.question}
+            estimation={scene.estimation}
+            note={scene.note}
+            isManager={role === "manager"}
+          />
+        ) : null
+
+      case "interlude":
+        return (
+          <TadazzInterludeScreen
+            interlude={scene.interlude}
+            startedAt={scene.startedAt}
+          />
+        )
+
+      case "scene": {
+        const s = scene.scene
+
+        if (usesSharedScenePresenter(s)) {
+          return props.nativeContent
+        }
+
+        if (
+          s.kind === "animation" &&
+          isCreatingWorldsPreset(
+            (
+              s as {
+                preset?: string
+              }
+            ).preset ?? "",
+          )
+        ) {
+          return null
+        }
+
+        if (s.kind === "countdown") {
+          return (
+            <TadazzCountdownScreen
+              title={s.title}
+              startedAt={scene.startedAt}
+              seconds={s.durationSeconds ?? 10}
+            />
+          )
+        }
+
+        if (s.kind === "answerRecap" && scene.activeSceneData?.answerRecap) {
+          return (
+            <TadazzRecapScreen
+              title={s.title}
+              recap={scene.activeSceneData.answerRecap}
+            />
+          )
+        }
+
+        if (
+          s.kind === "leaderboard" &&
+          (scene.activeSceneData?.leaderboard?.entries?.length ?? 0) > 0
+        ) {
+          return null
+        }
+
+        if (
+          s.kind === "interimResults" &&
+          (scene.activeSceneData?.interimResults?.options?.length ?? 0) > 0
+        ) {
+          return null
+        }
+
+        if (s.kind === "interimResults" || s.kind === "leaderboard") {
+          return (
+            <TadazzMessageScreen
+              headline={s.title}
+              sub={tx("noResponses", "No responses recorded yet.")}
+            />
+          )
+        }
+
+        return <TadazzSceneTitleScreen scene={s} />
+      }
+
+      default:
+        return null
+    }
+  })()
+
+  // ── Cinematic overlay: opening compositor, media/opening/closing scenes ──
+  const emitTimeline = useCallback(
+    (action: "ADVANCE_TIMELINE_SCENE", reason: string) => {
+      if (!manager || !extensionState?.gameId || scene.kind !== "scene") {
+        return
+      }
+
+      socket.emit(EXTENSION_EVENTS.COMMAND, {
+        v: 1,
+        gameId: extensionState.gameId,
+        action,
+        payload: {
+          epoch: extensionState.epoch,
+          sceneId: scene.scene.id,
+          timelineStepIndex: scene.stepIndex,
+          reason,
+        },
+        requestId: `tadazz-${reason}-${extensionState.epoch}-${scene.stepIndex ?? 0}`,
+      })
+    },
+    [manager, extensionState, scene, socket],
+  )
+  const handleStageCue = useCallback(
+    (cue: {
+      name: string
+      scene: string
+      questionKey?: string
+      questionNumber?: number
+    }) => {
+      if (theme.definition.sandbox) {
+        return
+      }
+
+      // The browser clock can finish during skips/fast-forward too. Only the
+      // authoritative result scene owns the audible end-of-question cue.
+      if (cue.name === "countdown-ended") {
+        return
+      }
+      // Finishing an old animation during restart/skip may emit its final cue.
+      // Only the authoritative results screen may make that reveal audible.
+
+      if (
+        !acceptsQuestionMilestone({
+          name: cue.name,
+          paintedScene: cue.scene,
+          paintedQuestion: cue.questionNumber,
+          currentQuestion: currentQuestionNumber,
+          currentKind: scene.kind,
+          currentPhase: extensionState?.phase,
+          paintedQuestionKey: cue.questionKey,
+          currentQuestionText: (() => {
+            if ("question" in scene) {
+              return scene.question.question
+            }
+
+            if (scene.kind === "scene") {
+              return scene.activeSceneData?.interimResults?.questionText
+            }
+
+            return undefined
+          })(),
+          currentPreset:
+            scene.kind === "scene" && "preset" in scene.scene
+              ? String(scene.scene.preset)
+              : undefined,
+          currentSceneKind:
+            scene.kind === "scene" ? scene.scene.kind : undefined,
+        })
+      ) {
+        return
+      }
+
+      window.dispatchEvent(
+        new CustomEvent("tadazz:sfx", {
+          detail: {
+            name: cue.name,
+            identity:
+              cue.name === "survey-reveal" || cue.name === "top-pick-reveal"
+                ? `${showGameId}:${cue.questionKey ?? extensionState?.questionId ?? questionKey ?? scene.key}:${revealAttemptRef.current}:${cue.name}`
+                : `${showGameId}:${extensionState?.epoch ?? 0}:${scene.key}:${cue.scene}:${cue.name}`,
+            volume: (() => {
+              if (cue.name === "survey-reveal") {
+                return 0.9
+              }
+
+              if (cue.name === "top-pick-reveal") {
+                return 0.7
+              }
+
+              return 0.55
+            })(),
+          },
+        }),
+      )
+    },
+    [
+      extensionState?.epoch,
+      extensionState?.phase,
+      extensionState?.questionId,
+      questionKey,
+      currentQuestionNumber,
+      scene,
+      showGameId,
+      theme.definition.sandbox,
+    ],
+  )
+  const audioPolicy = useMemo(() => {
+    const descriptor = scene.kind === "scene" ? scene.scene : null
+
+    return resolveTadazzAudioPolicy({
+      statusName: props.statusName,
+      presentationLaunch: extensionState?.extras.presentationLaunch,
+      activeTimelineStep: extensionState?.extras.activeTimelineStep,
+      extensionPhase: extensionState?.phase,
+      sceneKind: descriptor?.kind ?? scene.kind,
+      scenePreset:
+        descriptor &&
+        "preset" in descriptor &&
+        typeof descriptor.preset === "string"
+          ? descriptor.preset
+          : null,
+      openingActive: false,
+    })
+  }, [
+    extensionState?.phase,
+    extensionState?.extras.presentationLaunch,
+    extensionState?.extras.activeTimelineStep,
+    props.statusName,
+    scene,
+  ])
+  let overlay: React.ReactNode = null
+
+  if (
+    scene.kind === "scene" &&
+    !usesSharedScenePresenter(scene.scene) &&
+    isCinematicScene(scene.scene)
+  ) {
+    const s = scene.scene
+    const kind: CinematicLayerStackProps["sceneKind"] =
+      s.kind === "opening" || s.kind === "closing" ? s.kind : "media"
+    overlay = (
+      <div
+        className="tz-scene-media"
+        style={{
+          zIndex: 20,
+        }}
+        data-testid="tadazz-cinematic-scene"
+      >
+        <CinematicLayerStack
+          sceneId={s.id ?? s.kind}
+          sceneKind={kind}
+          titleSlot={customScreen}
+          titleSlotLayout="stage"
+          titleSlotVisible={s.textOverlay !== false}
+          epoch={extensionState?.epoch}
+          serverStartedAt={scene.startedAt}
+          mediaUrl={s.mediaUrl}
+          mediaType={s.mediaType}
+          mediaFit={s.mediaFit}
+          volume={s.volume}
+          loop={s.loop}
+          muted={s.muted}
+          endBehavior={s.endBehavior}
+          contrastOverlayOpacity={0}
+          lottieUrl={s.lottieUrl}
+          lottieFit={s.lottieFit}
+          lottieLoop={s.lottieLoop}
+          lottieSpeed={s.lottieSpeed}
+          overlayAnimations={
+            s.overlayAnimations as CinematicLayerStackProps["overlayAnimations"]
+          }
+          controlledPaused={isPaused}
+          showAutoplayControl={!isHostPresenting}
+          activateAudioLabel={tx("enableSound", "Enable sound")}
+          onForegroundMediaEnded={() =>
+            emitTimeline("ADVANCE_TIMELINE_SCENE", "mediaEnded")
+          }
+        />
+      </div>
+    )
+  } else if (
+    scene.kind === "interlude" &&
+    scene.interlude.url &&
+    (scene.interlude.kind === "image" || scene.interlude.kind === "video")
+  ) {
+    overlay = (
+      <div
+        className="tz-scene-media"
+        style={{
+          zIndex: 20,
+        }}
+        data-testid="tadazz-interlude-media"
+      >
+        <CinematicLayerStack
+          sceneId={`interlude-${extensionState?.epoch ?? 0}`}
+          sceneKind="media"
+          titleSlot={customScreen}
+          titleSlotLayout="stage"
+          epoch={extensionState?.epoch}
+          serverStartedAt={scene.startedAt}
+          mediaUrl={scene.interlude.url}
+          mediaType={scene.interlude.kind}
+          mediaFit="contain"
+          controlledPaused={isPaused}
+          contrastOverlayOpacity={0}
+        />
+      </div>
+    )
+  }
+
+  // The cinematic title layer owns this content. A truthy empty screen also
+  // clears the adapter's retained custom screen without mounting it twice.
+  const stageCustomScreen = overlay ? <></> : customScreen
+
+  // ── Layout ──────────────────────────────────────────────────────────────
+  const [viewportSize, setViewportSize] = useState(() => ({
+    w: typeof window !== "undefined" ? window.innerWidth : 1920,
+    h: typeof window !== "undefined" ? window.innerHeight : 1080,
+  }))
+  useEffect(() => {
+    const onResize = () =>
+      setViewportSize({
+        w: window.innerWidth,
+        h: window.innerHeight,
+      })
+    window.addEventListener("resize", onResize)
+
+    return () => window.removeEventListener("resize", onResize)
+  }, [])
+  const portrait = viewportSize.h > viewportSize.w
+  const isMobilePhone = viewportSize.w < 640
+  const showPad =
+    isPlayer &&
+    scene.kind === "voting" &&
+    (!theme.definition.sandbox || scene.questionType === "estimation") &&
+    (portrait || scene.questionType === "estimation")
+  const playerAnswersOnly = Boolean(
+    isPlayer && scene.kind === "voting" && scene.answersOnly,
+  )
+
+  // Question media (image/video) is shown inside the stage under the panel (except on mobile player popup / answersOnly).
+  const questionMedia =
+    (scene.kind === "question" || scene.kind === "voting") && scene.media
+      ? scene.media
+      : null
+  const isPopupMedia = Boolean(
+    questionMedia &&
+    (questionMedia.type === MEDIA_TYPES.IMAGE ||
+      questionMedia.type === MEDIA_TYPES.VIDEO),
+  )
+  const showMediaInPopup =
+    isPlayer && isMobilePhone && isPopupMedia && !playerAnswersOnly
+  // V4 question-image layout paints the question photo itself (left panel), so no full-stage underlay.
+  const v4PhotoQuestion =
+    useV4 &&
+    (scene.kind === "question" || scene.kind === "voting") &&
+    Boolean(scene.question.questionImage)
+  const statusCooldown = (status?.data as { cooldown?: unknown } | undefined)
+    ?.cooldown
+  let questionDurationMs: number | null = null
+
+  if (typeof statusCooldown === "number" && Number.isFinite(statusCooldown)) {
+    questionDurationMs = Math.max(0, statusCooldown * 1000)
+  } else if (props.countdown) {
+    questionDurationMs = props.countdown.total * 1000
+  }
+
+  const questionElapsed =
+    scene.kind === "question" &&
+    questionDurationMs !== null &&
+    (runtimeDeadline !== null ||
+      (isPaused && typeof extensionState?.pause?.remainingMs === "number"))
+      ? Math.max(0, questionDurationMs - runtimeRemainingMs)
+      : undefined
+  const questionStartedAt =
+    questionElapsed === undefined
+      ? extensionState?.startedAt
+      : Date.now() - questionElapsed
+  const underlay =
+    isPopupMedia &&
+    questionMedia &&
+    !playerAnswersOnly &&
+    !showMediaInPopup &&
+    !v4PhotoQuestion ? (
+      <NativeQuestionMedia
+        media={questionMedia}
+        alt={
+          scene.kind === "question" || scene.kind === "voting"
+            ? scene.question.question
+            : ""
+        }
+        muted={scene.kind === "voting"}
+        reveal={questionReveal}
+        serverStartedAt={questionStartedAt}
+        currentEpoch={extensionState?.epoch}
+        isManager={manager}
+        isManuallyRevealed={questionReveal?.isRevealed}
+        reducedMotion={prefersReducedMotion()}
+        controlledTimeMs={isPaused ? questionElapsed : undefined}
+      />
+    ) : null
+  const questionAudio =
+    questionMedia && questionMedia.type === MEDIA_TYPES.AUDIO
+      ? questionMedia.url
+      : null
+  const hostNextKey = props.statusName
+    ? MANAGER_SKIP_BTN[props.statusName]
+    : null
+  const teamsData = extensionState?.extras.teams as
+    | {
+        teams?: TeamDefinition[]
+        assignments?: Record<string, string>
+      }
+    | undefined
+  const assignedTeam = (() => {
+    const id =
+      (clientId ? teamsData?.assignments?.[clientId] : undefined) ??
+      teamsData?.assignments?.[
+        (
+          player as {
+            id?: string
+          } | null
+        )?.id ??
+          player?.username ??
+          ""
+      ]
+
+    return teamsData?.teams?.find((team) => team.id === id)
+  })()
+  const isEnhanced = Boolean(extensionState?.gameId)
+  const connectedCount =
+    managerState.hostPresence?.connectedNow ??
+    managerState.players.filter((p) => p.connected).length
+  const registeredCount =
+    managerState.hostPresence?.registeredTotal ??
+    totalPlayers ??
+    managerState.players.length
+  const participation = extensionState?.extras.participation as
+    | {
+        connected: number
+        answered: number
+      }
+    | undefined
+  const publicConnected =
+    participation?.connected ?? (manager ? connectedCount : 0)
+  const publicAnswered = participation?.answered ?? 0
+  const isStoryReading =
+    scene.kind === "scene" && scene.scene.preset === "story-live"
+
+  return (
+    <ExtensionStateProvider value={extensionState}>
+      <ViewRoleContext.Provider value={role}>
+        <section
+          ref={(node) => {
+            showRootRef.current = node
+            presentationRootRef(node)
+          }}
+          className="relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden"
+          style={{
+            ...showThemeStyle(theme),
+            width: "100vw",
+            maxWidth: "100vw",
+            height: "100dvh",
+            maxHeight: "100dvh",
+            overflow: "hidden",
+          }}
+          data-testid="tadazz-show"
+          data-show-theme={theme.definition.id}
+          data-show-theme-version={theme.definition.version}
+          data-theme-fallback={
+            theme.diagnostics.some(
+              (diagnostic) => diagnostic.code === "unknown-theme",
+            )
+              ? "true"
+              : "false"
+          }
+          data-show-scene={scene.kind}
+          data-guess-off-stage={guessOffLook || undefined}
+          data-guess-off-media={guessOffTextAnswers ? "text" : undefined}
+          data-role={role}
+          data-host-presenting={isHostPresenting ? "true" : "false"}
+          data-game-paused={isPaused ? "true" : "false"}
+          data-voting-open={votingOpen && !isPaused ? "true" : "false"}
+          data-voting-starts-at={votingStartsAt}
+          data-voting-ends-at={votingEndsAt}
+          aria-label={isHostPresenting ? "Public game presentation" : undefined}
+        >
+          {manager && !isHostPresenting && theme.diagnostics.length > 0 && (
+            <p
+              role="status"
+              data-testid="show-theme-warning"
+              className="relative z-50 rounded bg-black/80 px-4 py-2 text-sm text-white"
+            >
+              {t("extensions:themes.invalidChoice")}
+            </p>
+          )}
+          {manager &&
+            !isHostPresenting &&
+            (isEnhanced ? (
+              <ManagerControlToolbar
+                statusName={props.statusName ?? null}
+                extensionState={extensionState}
+                questionStates={questionStates}
+                onExit={onBack ?? (() => undefined)}
+                onStartGame={
+                  props.statusName === STATUS.SHOW_ROOM ? onNext : undefined
+                }
+                onAdvanceFallback={onNext}
+                onPresent={onPresent}
+                countdown={countdown}
+              />
+            ) : (
+              <div className="tz-player-bar" data-testid="tadazz-host-bar">
+                <NativeButton
+                  size="sm"
+                  type="button"
+                  className="hover:bg-accent font-display bg-white text-black"
+                  style={{
+                    fontSize: 14,
+                    padding: "6px 14px",
+                  }}
+                  onClick={onBack}
+                >
+                  <LogOut className="inline size-4" /> {t("common:exit")}
+                </NativeButton>
+                {questionStates && (
+                  <span>{`${questionStates.current} / ${questionStates.total ?? "?"}`}</span>
+                )}
+                {onNext && hostNextKey && (
+                  <NativeButton
+                    size="sm"
+                    type="button"
+                    className="font-display"
+                    style={{
+                      marginTop: 0,
+                      padding: "8px 18px",
+                    }}
+                    onClick={onNext}
+                    data-testid="tadazz-host-next"
+                  >
+                    <SkipForward className="inline size-4" /> {t(hostNextKey)}
+                  </NativeButton>
+                )}
+              </div>
+            ))}
+
+          <div
+            className="relative min-h-0 w-full min-w-0 flex-1 overflow-hidden"
+            style={{
+              position: "relative",
+              flex: "1 1 0%",
+              minWidth: 0,
+              minHeight: 0,
+              width: "100%",
+              overflow: "hidden",
+            }}
+          >
+            <NativeCompositionBoundary
+              envelope={extensionState}
+              role={role}
+              statusName={props.statusName}
+            >
+              <PackageStage
+                scene={scene}
+                lobbyData={readPublicLobbyDirectory(
+                  extensionState?.extras.lobbyFullShow,
+                )}
+                roomId={extensionState?.gameId ?? ""}
+                backgroundUrl={backdrop?.url}
+                trustedOverlay={overlay}
+                questionId={extensionState?.questionId ?? ""}
+                epoch={extensionState?.epoch ?? 0}
+                sequence={extensionState?.seq ?? 0}
+                role={role}
+                paused={isPaused}
+                canAnswer={
+                  isPlayer &&
+                  scene.kind === "voting" &&
+                  votingOpen &&
+                  !submitted &&
+                  !answerPending &&
+                  !isPaused
+                }
+                voteLocked={
+                  isPlayer &&
+                  (submitted ||
+                    (scene.kind === "wait" &&
+                      scene.key !== "wait:question-content" &&
+                      scene.text === "game:waitingForAnswers"))
+                }
+                phaseElapsedMs={packageReveal.elapsedMs}
+                revealStage={packageReveal.stage}
+                remainingMs={runtimeRemainingMs}
+                serverTime={Date.now() + serverClockOffset}
+                serverClockOffset={serverClockOffset}
+                deadline={
+                  isPaused || runtimeDeadline === null
+                    ? null
+                    : runtimeDeadline + serverClockOffset
+                }
+                onSubmit={submit}
+                onFallback={() => {
+                  prevSceneRef.current = null
+                  resumeRef.current = true
+                  pendingRef.current = scene
+                  void pump()
+                }}
+              >
+                {useV4 ? (
+                  <TadazzV4StageAdapter
+                    ref={stageRef}
+                    labels={labels}
+                    v4Labels={
+                      guessOffLook
+                        ? { ...v4Labels, teamLeaderboard: "LEADERBOARD" }
+                        : v4Labels
+                    }
+                    guessOffLook={guessOffLook}
+                    onCue={handleStageCue}
+                    onResolveStoryTie={
+                      role === "manager" ? resolveStoryTie : undefined
+                    }
+                    backdropUrl={backdrop?.url}
+                    backdropFit={compositionRoot?.props.fit ?? backdrop?.fit}
+                    backdropPosition={backdrop?.position}
+                    backdropOverlayOpacity={backdrop?.overlayOpacity}
+                    interactive={
+                      isPlayer &&
+                      scene.kind === "voting" &&
+                      !submitted &&
+                      !answerPending &&
+                      !isPaused &&
+                      !showPad
+                    }
+                    multiSelect={
+                      scene.kind === "voting" && scene.questionType === "multi"
+                    }
+                    onSelectOption={onSelectOption}
+                    customScreen={stageCustomScreen}
+                    underlay={underlay}
+                    overlay={overlay}
+                    reducedMotion={reduced}
+                    livePlayback={{
+                      paused: isPaused,
+                      countdownRemainingMs: pausedCountdownRemainingMs,
+                    }}
+                    fitRevision={isHostPresenting ? 1 : 0}
+                  />
+                ) : (
+                  <TadazzStage
+                    ref={stageRef}
+                    labels={labels}
+                    backdropUrl={backdrop?.url}
+                    backdropFit={compositionRoot?.props.fit ?? backdrop?.fit}
+                    backdropPosition={backdrop?.position}
+                    backdropOverlayOpacity={backdrop?.overlayOpacity}
+                    interactive={
+                      isPlayer &&
+                      scene.kind === "voting" &&
+                      !submitted &&
+                      !answerPending &&
+                      !isPaused &&
+                      !showPad
+                    }
+                    multiSelect={
+                      scene.kind === "voting" && scene.questionType === "multi"
+                    }
+                    onSelectOption={onSelectOption}
+                    customScreen={stageCustomScreen}
+                    underlay={underlay}
+                    overlay={overlay}
+                    reducedMotion={reduced}
+                  />
+                )}
+              </PackageStage>
+            </NativeCompositionBoundary>
+            {role !== "player" && (
+              <LiveParticipation
+                connected={publicConnected}
+                answered={publicAnswered}
+                voting={scene.kind === "voting" && votingOpen}
+              />
+            )}
+            {playerAnswersOnly && scene.kind === "voting" && (
+              <QuestionDialog
+                question={scene.fullQuestion ?? ""}
+                media={questionMedia as never}
+                showQuestion
+                label={t("game:question.show")}
+                className="tz-x-pill absolute top-3 right-3 z-30 flex items-center justify-center"
+              >
+                <CircleQuestionMark className="size-5" />
+              </QuestionDialog>
+            )}
+            {showMediaInPopup && scene.kind === "voting" && questionMedia && (
+              <QuestionDialog
+                question={scene.question.question}
+                media={questionMedia as never}
+                className="tz-x-pill absolute top-3 right-3 z-30 flex items-center gap-1.5"
+              >
+                {questionMedia.type === MEDIA_TYPES.VIDEO ? (
+                  <Video className="size-4" />
+                ) : (
+                  <Image className="size-4" />
+                )}
+                {t(
+                  questionMedia.type === MEDIA_TYPES.VIDEO
+                    ? "game:media.showVideo"
+                    : "game:media.showImage",
+                )}
+              </QuestionDialog>
+            )}
+            {questionAudio && (
+              <NativeQuestionMedia
+                media={{ type: "audio", url: questionAudio }}
+                alt=""
+                controls={!manager || !isHostPresenting}
+              />
+            )}
+          </div>
+
+          {showPad && scene.kind === "voting" && (
+            <TadazzAnswerPad
+              question={scene.question}
+              questionType={scene.questionType}
+              options={scene.options}
+              selected={selected}
+              submitted={submitted}
+              disabled={!isPlayer || isPaused || !votingOpen || answerPending}
+              onToggle={toggle}
+              onSubmit={submit}
+            />
+          )}
+          {!showPad &&
+            isPlayer &&
+            scene.kind === "voting" &&
+            scene.questionType === "multi" &&
+            !submitted && (
+              <div className="tz-pad">
+                <NativeButton
+                  size="sm"
+                  type="button"
+                  className="font-display"
+                  disabled={
+                    selected.length === 0 ||
+                    isPaused ||
+                    !votingOpen ||
+                    answerPending
+                  }
+                  onClick={() => submit([...selected].sort((a, b) => a - b))}
+                >
+                  {t("game:confirm")}
+                </NativeButton>
+              </div>
+            )}
+
+          {extensionState && (
+            <AudioCuePlayer
+              eventOnly={
+                role === "player" ||
+                (scene.kind === "wait" && !waitingForFinale)
+              }
+              showTrack={referenceStoryTrack}
+              stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
+              cueId={
+                waitingForFinale
+                  ? undefined
+                  : resolveNativePhaseAudioCue(scene.kind, props.audioCueId)
+              }
+              audioExtras={
+                extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
+              }
+              cardAudioCues={
+                extensionState.extras.cardAudioCues as
+                  CardAudioOverrides | undefined
+              }
+              sceneAudio={
+                (isStoryReading || waitingForFinale
+                  ? undefined
+                  : props.sceneAudio) as never
+              }
+              gameId={extensionState.gameId}
+              activeCardKey={extensionState.questionId ?? props.activeCardKey}
+              screenKey={
+                scene.kind === "scene" ? scene.scene.id : props.activeCardKey
+              }
+              phase={
+                extensionState.phase === "scene"
+                  ? "scene"
+                  : (props.statusName ?? extensionState.phase)
+              }
+              epoch={extensionState.epoch}
+              soundtrackSlot={audioPolicy.slot}
+              continuityKey={audioPolicy.continuityKey}
+              paused={isPaused}
+              autoPlay={!manager || roomMediaReady}
+              showControls={manager && !isHostPresenting}
+              controlLabels={{
+                enable: t("extensions:audio.enableSound", "Enable sound"),
+                volume: t("extensions:audio.volume", "Volume"),
+                mute: t("extensions:audio.mute", "Mute"),
+                unmute: t("extensions:audio.unmute", "Unmute"),
+                pause: t("extensions:audio.pauseAudio", "Pause audio"),
+                play: t("extensions:audio.playAudio", "Play audio"),
+                track: t("extensions:audio.track", "Track"),
+                followShow: t("extensions:audio.followShow", "Follow show"),
+              }}
+              soundtrackLabels={{
+                openingIntro: t(
+                  "extensions:audio.slotOpeningIntro",
+                  "Opening intro",
+                ),
+                lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
+                roundStart: t("extensions:audio.slotRoundStart", "Round start"),
+                question: t("extensions:audio.slotQuestion", "Question"),
+                voting: t("extensions:audio.slotVoting", "Voting"),
+                results: t("extensions:audio.slotResults", "Results"),
+                leaderboard: t(
+                  "extensions:audio.slotLeaderboard",
+                  "Leaderboard",
+                ),
+                recap: t("extensions:audio.slotRecap", "Recap"),
+                finale: t("extensions:audio.slotFinale", "Finale"),
+              }}
+              hasCompetingMedia={props.hasCompetingMediaAudio}
+            />
+          )}
+
+          {(() => {
+            if (manager) {
+              if (isHostPresenting) {
+                return (
+                  <div className="absolute top-3 right-3 z-40">
+                    <HostShortcutsDialog compact />
+                  </div>
+                )
+              }
+
+              return (
+                <HostControlBar
+                  className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
+                  data-testid="tadazz-host-controls"
+                >
+                  {managerState.inviteCode &&
+                    props.statusName !== STATUS.SHOW_ROOM && (
+                      <div
+                        className="tz-x-pill flex shrink-0 items-center gap-2"
+                        style={{
+                          fontSize: 16,
+                          padding: "6px 14px",
+                        }}
+                      >
+                        {!managerState.locked && (
+                          <>
+                            <span className="max-w-[160px] truncate sm:max-w-none">
+                              {window.location.host}
+                            </span>
+                            <span className="h-4 w-px bg-white/40" />
+                            <span>{managerState.inviteCode}</span>
+                          </>
+                        )}
+                        <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                      </div>
+                    )}
+                  {props.statusName === STATUS.SHOW_ROOM && (
+                    <RoomLockButton className="hover:bg-accent font-display bg-white text-black" />
+                  )}
+                  <HostGuestJoinToggle />
+                  <Tooltip
+                    content={t(
+                      "extensions:roster.liveModalTitle",
+                      "Players & Live Connection Status",
+                    )}
+                  >
+                    <NativeButton
+                      size="sm"
+                      type="button"
+                      onClick={() => setPlayersModalOpen(true)}
+                      data-testid="host-bottom-players-btn"
+                      className="tz-x-pill ml-auto flex shrink-0 items-center gap-1.5"
+                      style={{
+                        fontSize: 16,
+                        padding: "6px 14px",
+                        opacity: isConnected ? 1 : 0.6,
+                      }}
+                    >
+                      <Users className="size-5" />
+                      <span data-testid="host-connected-counter">
+                        {registeredCount > 0 &&
+                        (registeredCount !== connectedCount ||
+                          managerState.hostPresence)
+                          ? `${connectedCount} / ${registeredCount}`
+                          : String(totalPlayers ?? managerState.players.length)}
+                      </span>
+                      <PhoneCall className="size-3" />
+                    </NativeButton>
+                  </Tooltip>
+                  <GameSettingsModal
+                    onOpenRoster={() => setPlayersModalOpen(true)}
+                  />
+                  <HostPlayersModal
+                    open={playersModalOpen}
+                    onOpenChange={setPlayersModalOpen}
+                  />
+                  <Tooltip
+                    content={t(
+                      isFullscreen
+                        ? "common:exitFullscreen"
+                        : "common:fullscreen",
+                    )}
+                  >
+                    <NativeButton
+                      size="sm"
+                      type="button"
+                      onClick={toggleFullscreen}
+                      aria-label={t(
+                        isFullscreen
+                          ? "common:exitFullscreen"
+                          : "common:fullscreen",
+                      )}
+                      className="hover:bg-accent font-display flex items-center justify-center bg-white text-black"
+                      style={{
+                        padding: "6px 12px",
+                      }}
+                    >
+                      {isFullscreen ? (
+                        <Minimize className="size-5" />
+                      ) : (
+                        <Maximize className="size-5" />
+                      )}
+                    </NativeButton>
+                  </Tooltip>
+                </HostControlBar>
+              )
+            }
+
+            if (role === "spectator") {
+              return null
+            }
+
+            return (
+              <div className="tz-player-bar" data-testid="tadazz-player-bar">
+                <div className="flex items-center gap-2">
+                  <span>{player?.username}</span>
+                  {assignedTeam && (
+                    <span
+                      className="tz-player-team"
+                      style={{
+                        backgroundColor: assignedTeam.color,
+                      }}
+                    >
+                      {assignedTeam.name}
+                    </span>
+                  )}
+                </div>
+                {(gameMode !== QUIZZ_MODES.SURVEY ||
+                  (player?.points !== undefined && player.points > 0)) && (
+                  <span className="tz-player-score">{player?.points ?? 0}</span>
+                )}
+              </div>
+            )
+          })()}
+        </section>
+      </ViewRoleContext.Provider>
+    </ExtensionStateProvider>
+  )
+}
+
+export default TadazzShowView

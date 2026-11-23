@@ -1,0 +1,60 @@
+{
+  "base": "30bd603d0555446b8760fb54406b724512ac254b",
+  "playerCreationEventBodyByteIdentical": true,
+  "warmRebindBlockByteIdentical": true,
+  "ordinaryWebJoinAndBillingUnchanged": true,
+  "protected": [
+    {
+      "path": "packages/common/src/validators/auth.ts",
+      "sha256": "33b7ece505e0c4a675740489942762a23f2c272e394066c0e960923a9dd48411",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/src/server/game/roster/participants.ts",
+      "sha256": "766102734ea03471fa0bb12f0c3b801f46e62e19990158ff89406aa57b604f1f",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/src/server/game/roster/index.ts",
+      "sha256": "1e622714cd60bc65f8f4466b620cc985af26dcfc247d3e304ed64d05964507a5",
+      "unchanged": true
+    },
+    {
+      "path": "packages/socket/src/services/billing.ts",
+      "sha256": "a6a6f39179cc98a18208b0e13f9b59e15816465bd8ab02b557e2e195bf78e34b",
+      "unchanged": true
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "sha256": "81995753aa63ecc4ffb6c3304db8657e2026b860cec2efbbfd01e87c6f93540e",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/src/server/storage/startup-owner-snapshot.ts",
+      "sha256": "6033f9d4b29221d9a9917ca4f5a22a8ace8e7119f9852051fba7c5878804e98c",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/package.json",
+      "sha256": "ae478761963cb588287e488fc6c672d727e214b87a6916031ce6a150c08ab887",
+      "unchanged": true
+    }
+  ],
+  "baseline": {
+    "passed": 2,
+    "failed": 3,
+    "deselected": 11,
+    "namesFailed": [
+      25,
+      29,
+      40
+    ]
+  },
+  "final": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "testRuntime": "Actual local Node24.22.1 / Vitest5.0.3 on Windows; isolated in-memory fake SocketIO/admission ports with actual GameRoster and PlayerManager. No real billing database/provider/customer state",
+  "scope": "Only two approved production paths plus one focused test"
+}

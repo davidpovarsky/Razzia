@@ -1,0 +1,5 @@
+{
+  "actual_api": "15 executed,10pass/5assertionfail,0skip/cancel/timeout, no OOM",
+  "typecheck": "setup/compatibility failure: TS7 root export supplies version metadata rather than compiler API; no semantic verdict from this attempt",
+  "next": "native installed CLI checker on fresh immutable snapshot; route/original test bodies unchanged"
+}

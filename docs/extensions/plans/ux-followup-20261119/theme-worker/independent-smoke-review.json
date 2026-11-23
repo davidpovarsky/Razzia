@@ -1,0 +1,173 @@
+{
+  "format": "tadazz-theme-worker-independent-static-review-v1",
+  "reviewedAtUtc": "2026-11-19T14:47:32.899152+00:00",
+  "reviewer": "/root/host_controls_consistency",
+  "status": "STATIC_REVIEW_ACCEPTED_WITH_SCOPE_LIMITS",
+  "executionReadiness": "BLOCKED_BY_PREPARED_PINNED_IMAGE_PREREQUISITE",
+  "sourceCandidateRecordedByPreparation": "34568c5c937a51d236a440513adeb9bf93637525",
+  "reviewedFiles": {
+    "work/ux-followup-20261119/theme-worker/run_worker_smoke.py": "e656b7ea66bd6379829016b2426d8f206fdbf5ff6b66ecb0acb70bb79a5735a6",
+    "work/ux-followup-20261119/theme-worker/PLAN.md": "fcbcfa11828b977bcc9fecc2e661f22b3e491daa1ca1e738a5dfcf1eb8b8aafc",
+    "work/ux-followup-20261119/theme-worker/input-manifest.json": "60e57a577a69cd592c1fd2c81cbc902878206050126693fb27b06c94d2a54b09",
+    "work/ux-followup-20261119/theme-worker/preparation-review.json": "729c9bb7c721397aa8f9628bbbbbd954cbd555a7f7046d2ce260c70c73940b7b",
+    "work/ux-followup-20261119/theme-worker/image-readiness.json": "dfb8e4123dd55a0acc8a0d088d7c609ce34ff776b5b4fbe3a686678ebca1c94d",
+    "docs/extensions/plans/ux-followup-20261119/themes/receipt.json": "6a1d61741f9fcd49c5035dfd45edb4bf23bf3c7911900eb9148a029936691fa3",
+    "docs/extensions/plans/ux-followup-20261119/themes/README.md": "a8df8c6c29ad736cea098cf8f8632c37ca7f0a7ca152fbf93f6a4d433378a8a4"
+  },
+  "immutableImage": "sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5",
+  "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "syntheticOnly": true,
+  "inputChecks": [
+    {
+      "path": "fixture-generator.ts",
+      "sha256": "6aeebf36784ed24e3795168543c23baf81be560eb8e078b375a39c0b0c580db9",
+      "bytes": 15037,
+      "matches": true,
+      "symlink": false
+    },
+    {
+      "path": "fixture-summary.json",
+      "sha256": "3f86484d325a850dc1e30f46a81125cf1a9d859b5d46923ecfdbe3eb9d7f4b50",
+      "bytes": 1218,
+      "matches": true,
+      "symlink": false
+    },
+    {
+      "path": "generated-video.mp4",
+      "sha256": "8e94de92d8154dc3d1daff31048698dfde212ff42eb2ce2c6ea2e76bc1f5e295",
+      "bytes": 1736,
+      "matches": true,
+      "symlink": false
+    },
+    {
+      "path": "original-package-build-worker.py",
+      "sha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+      "bytes": 3325,
+      "matches": true,
+      "symlink": false
+    },
+    {
+      "path": "prepare-fixture.mts",
+      "sha256": "6215017213daa873392a94ba91a8ee1583816c49f5821153113f966320830ff9",
+      "bytes": 1911,
+      "matches": true,
+      "symlink": false
+    },
+    {
+      "path": "store/12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f/jobs/c4b4548a-b81f-4985-9b87-e5017e95439d/request.json",
+      "sha256": "ceb306b5f31639294e11804dea4a8ddd49ba12c2c28739fddc9c53e5ed72411b",
+      "bytes": 241,
+      "matches": true,
+      "symlink": false
+    },
+    {
+      "path": "store/12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f/jobs/c4b4548a-b81f-4985-9b87-e5017e95439d/source.tadazz",
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+      "bytes": 520223,
+      "matches": true,
+      "symlink": false
+    }
+  ],
+  "repositorySourceChecks": [
+    {
+      "path": "extensions/src/testkit/package-fixtures.ts",
+      "sha256": "01938ea00a01468faac446d68708e49e6bad4397da36fb3afba6b2fc0768ba94",
+      "matches": true
+    },
+    {
+      "path": "scripts/qa/package-build-worker.py",
+      "sha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+      "matches": true
+    },
+    {
+      "path": "extensions/qa/package-builder.ts",
+      "sha256": "c62db06ab3dd72d3f55367bc6cff333270f903428ed609ab6c3fb1b6c81c3848",
+      "matches": true
+    },
+    {
+      "path": "extensions/qa/package-media-probe.ts",
+      "sha256": "a72c916e9d8c12f1fa05f08fbbb9ab560da2898ff1ffc231e48b687426a0a100",
+      "matches": true
+    },
+    {
+      "path": "extensions/src/presentation/package-runtime/sdk.tsx",
+      "sha256": "81ce066754d5c8211fdc436f1d1782856f5a9f982357ac681ecf0df085804b62",
+      "matches": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952",
+      "matches": true
+    }
+  ],
+  "archiveInventory": {
+    "entries": 60,
+    "uncompressedBytes": 513103,
+    "unsafePaths": [],
+    "symlinkEntries": []
+  },
+  "generatorReview": "The diff contains only module-path and generated-video-path rebasing; generated theme source was read, not executed.",
+  "positiveFindings": [
+    "The preparation helper/manifest/plan hashes match the reviewed bytes; seven file size and SHA256 pins and six repository source pins match.",
+    "The synthetic store contains one request and one archive; the archive has one compiled fixture theme and two synthetic game descriptors.",
+    "Input path and symlink checks, exact namespace, fresh evidence directory and fresh container name fail closed.",
+    "No app API, account, credentials, production package store or network mount is used. Docker receives only the fresh read-only source bind and disposable output bind.",
+    "The container uses --pull=never, --network none, read-only root, UID/GID 65534, all capabilities dropped and no-new-privileges. The host controller is the Docker operator; the builder itself is non-root.",
+    "One CPU, 768 MiB memory with no additional swap, 48 PIDs, 45-second worker timeout, 8 MiB file limit and 64 MiB noexec/nosuid tmpfs are explicit.",
+    "Worker success requires exact output inventory, regular non-symlink bounded files, matching source and output SHA256, mediaValidated true, expected toolchain string and exactly the expected compiled theme with nonempty JavaScript.",
+    "Source is rehashed after execution. Cleanup inspects the exact container owner label before removal and verifies absence; any failed cleanup changes the receipt to FAIL.",
+    "The helper adds no image build/pull, persistent service or timer change. Retained files are scoped evidence, not customer installation."
+  ],
+  "findings": [
+    {
+      "id": "TW-01",
+      "level": "prerequisite",
+      "title": "Prepared immutable image is absent",
+      "detail": "The reviewed image-readiness.json records No such image for the exact sha256 image. This is an unresolved prerequisite, not a failed worker execution. The helper fails closed without pulling, building or substituting an image.",
+      "resolution": "Restore the exact trusted image separately, or revise and re-review the immutable replacement image, input manifest and helper pins. This review executed no Docker command."
+    },
+    {
+      "id": "TW-02",
+      "level": "evidence-boundary",
+      "title": "Repository hashes do not attest image contents",
+      "detail": "All six sourcePins match the repository, but the helper never compares those files inside the image. sourceCandidate in its output is supplied by the manifest. package-builder.ts enforces actual esbuild 0.28.2, while the React and ffmpeg labels in result.toolchain are literals.",
+      "resolution": "The separately reviewed image restoration must provide trustworthy image-to-code/toolchain provenance before describing the smoke as verification of the candidate compiler and exact React/ffmpeg versions. An immutable image ID alone identifies bytes but does not connect them to these source pins."
+    },
+    {
+      "id": "TW-03",
+      "level": "scope",
+      "title": "Complementary component evidence is not a production end-to-end install",
+      "detail": "Prior nine-group theme browser evidence uses actual upload/preflight/review/install APIs with independent synthetic reviewer identity and installedGames empty, but its declarative worker result is explicitly synthetic. This prepared smoke calls the real compiled-theme builder directly and does not run the broker scheduler or feed its real output through the API test.",
+      "resolution": "After a successful smoke with established image provenance, report both the editor/API import contract and real compiler/media worker as independently verified components. Do not claim an actual customer install, a single joined end-to-end run, scheduler health, independent human content review or production executable-runtime readiness."
+    },
+    {
+      "id": "TW-04",
+      "level": "scope",
+      "title": "Resource and media coverage has explicit limits",
+      "detail": "The controller bounds worker wall time, CPU, container memory/swap, PIDs, per-file size and tmpfs. The host capture_output buffers and aggregate bind-output disk usage have no separate quota. The fixed trusted fixture and builder output budgets make this acceptable for this one smoke; this is not a general untrusted-workload resource proof. The fixture exercises image, WAV and MP4 probes, carries Lottie, and includes no font.",
+      "resolution": "Keep the resource and media claims scoped to this pinned fixture. Do not claim font decoding or a global host-memory/disk bound."
+    }
+  ],
+  "priorApiEvidence": {
+    "groupsPassed": 9,
+    "pageErrors": [],
+    "packageInstallApi": "actual",
+    "packageWorker": "explicit synthetic declarative fixture receipt; Linux worker not rerun",
+    "syntheticAccountsOnly": true
+  },
+  "actionsPerformed": {
+    "readPreparedFiles": true,
+    "hashedPreparedAndRepositoryFiles": true,
+    "parsedPythonSyntaxOnly": true,
+    "readSyntheticArchiveOnly": true,
+    "wroteReviewArtifactsOnly": true,
+    "executedWorker": false,
+    "executedContainer": false,
+    "executedTests": false,
+    "ranDocker": false,
+    "inspectedCustomerData": false,
+    "changedProductSource": false,
+    "changedGit": false,
+    "changedProduction": false
+  }
+}

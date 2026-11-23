@@ -1,0 +1,30 @@
+{
+  "inputDigest": "7e8d01d4f3cdfd96ba502d5bb6dbd731fbb3d5d96d10d117c6c7449eab1fb762",
+  "normalizedLogicalDigest": "926c7ba25183c8a258ec2b85eb5d9dd5c7c72231c99b80febb4accbf31710fbd",
+  "storedRecordCanonicalDigest": "971616e56845d9dfe27e78b72e97d45c53edff57ef6c9a1edf35ec6536d2ea12",
+  "ownershipBytesSha256": "282a1a7d9b2630dee11ecd1ad00b442c8558c7302b31500f7151f57fd377e859",
+  "stored": {
+    "id": "JG23DnTZ4O8nk4CJRBzrH",
+    "gameMode": "quiz",
+    "subject": "Raw stripped witness",
+    "questions": [
+      {
+        "type": "single",
+        "question": "Synthetic native question",
+        "media": {
+          "type": "image",
+          "url": "/media/r1-native.png"
+        },
+        "answers": [
+          "A",
+          "B"
+        ],
+        "solutions": [
+          0
+        ],
+        "cooldown": 3,
+        "time": 20
+      }
+    ]
+  }
+}

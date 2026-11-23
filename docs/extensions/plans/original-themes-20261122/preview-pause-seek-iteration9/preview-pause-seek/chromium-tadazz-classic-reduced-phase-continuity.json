@@ -1,0 +1,39 @@
+{
+  "engine": "chromium",
+  "theme": "tadazz-classic",
+  "reducedMotion": true,
+  "proof": "real MCP SDK + AppBridge + unchanged native animations",
+  "snapshots": [
+    {
+      "step": "question"
+    }
+  ],
+  "status": "FAIL",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+  "failureState": {
+    "documentId": 1795369879397.4,
+    "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+    "epoch": 1,
+    "paused": "false",
+    "elapsed": 0,
+    "renderer": 2,
+    "nativeMode": "question",
+    "question": 1,
+    "textNode": 3,
+    "text": "SELECTED_QUESTION_2",
+    "cards": [],
+    "entrances": [
+      {
+        "sequence": 0,
+        "kind": "question",
+        "node": 1,
+        "testId": "tadazz-question-panel",
+        "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+        "at": 639.0999999046326,
+        "source": "WAAPI",
+        "duration": 1,
+        "delay": 0
+      }
+    ]
+  }
+}

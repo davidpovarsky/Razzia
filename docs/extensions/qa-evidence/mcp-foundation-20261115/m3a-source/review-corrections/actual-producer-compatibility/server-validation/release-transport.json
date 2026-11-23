@@ -1,0 +1,5 @@
+{
+  "exit": 0,
+  "stdout": "{\"kind\": \"BOUND_BFB160_ALLOCATION_RELEASE\", \"grant\": \"hq-mcp-bfb-87ffbfdbe45d43fdbe5e7f799c18036d\", \"ownContainerStoppedNaturally\": true, \"naturalExit\": 1, \"oomKilled\": false, \"exitReason\": \"Scoped format check failed; all functional phases passed; no retry/edit\", \"ownSourceEvidencePhysicalBytesBeforeReceipt\": 1093632, \"ownContainerDirectoryPhysicalBytes\": 49152, \"additionalLayerAllowanceBytes\": 2097152, \"receiptAllowanceBytes\": 65536, \"newPhysicalConservativeUpperBoundBytes\": 3305472, \"newPhysicalCapBytes\": 8388608, \"hostFreeAfterBytes\": 2688434176, \"requiredRemainingReserveBytes\": 2429390848, \"sharedMetadataKeeperLeftRunning\": true, \"sharedMetadataCopied\": false, \"validatedIndexSha256After\": \"ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89\", \"computeReturned\": true}\n",
+  "stderr": ""
+}

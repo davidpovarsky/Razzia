@@ -1,0 +1,20 @@
+[
+  {
+    "gid": "1220486196096692",
+    "evidenceCommit": "1fc5e6f6e54a4fd407d7e148482529387efdabd7",
+    "productSource": "ed0efade3d1eaf972475d3f5544f4c3ae10aa6eb",
+    "modifiedAt": "2026-11-15T18:26:45.227Z",
+    "completed": false,
+    "previousNotesPreserved": true,
+    "exactAppendMatch": true
+  },
+  {
+    "gid": "1220486252116561",
+    "evidenceCommit": "1fc5e6f6e54a4fd407d7e148482529387efdabd7",
+    "productSource": "ed0efade3d1eaf972475d3f5544f4c3ae10aa6eb",
+    "modifiedAt": "2026-11-15T18:26:45.216Z",
+    "completed": false,
+    "previousNotesPreserved": true,
+    "exactAppendMatch": true
+  }
+]

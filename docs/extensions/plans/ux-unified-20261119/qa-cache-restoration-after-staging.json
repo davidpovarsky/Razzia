@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "seconds": 2.49,
+  "stdout": "{\"passed\": true, \"cacheContainer\": \"07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872\", \"cacheRunning\": true, \"cacheConfigurationUnchanged\": true, \"readonlyRootfs\": false, \"sourceEntries\": 2042, \"targetEntries\": 2042, \"manifestSha256\": \"0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de\", \"sourceUnchanged\": true, \"productionUnchanged\": true, \"gatewayUnchanged\": true, \"customerDataRead\": false, \"finishedAt\": 1795064813.0001116}\n",
+  "stderr": ""
+}

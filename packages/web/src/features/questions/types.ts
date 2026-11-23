@@ -1,5 +1,9 @@
 import type { QuestionOptions } from "@razzia/common/types/game"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
+import type {
+  AnswerVisual,
+  ResolvedCardStageAnimations,
+} from "@razzia/extensions/core"
 
 export interface AnswerComponentProps {
   answers: string[]
@@ -7,6 +11,9 @@ export interface AnswerComponentProps {
   onSubmit: (_answerKeys: number[]) => void
   readOnly?: boolean
   fill?: boolean
+  visuals?: AnswerVisual[]
+  stageAnimations?: ResolvedCardStageAnimations
+  animationEpochKey?: string
 }
 
 export interface SolutionPickerProps {

@@ -1,0 +1,109 @@
+{
+  "previousCommit": "b7a8fd4eb16a5d1da1cee71ed148fd431dab7966",
+  "changedPreviousInputs": [
+    "extensions/src/site/components/game-preview/contracts.ts",
+    "extensions/src/site/components/game-preview/coordinator.ts",
+    "extensions/src/site/tests/inline-game-preview-ownership.test.ts"
+  ],
+  "files": {
+    "extensions/qa/inline-game-preview/source-audit.cjs": {
+      "previousSha256": "ca8247f7f9d7187a7182cc845bbc3c08dc5d03c6c55421f083740f5eacb82979",
+      "sha256": "ca8247f7f9d7187a7182cc845bbc3c08dc5d03c6c55421f083740f5eacb82979",
+      "bytes": 3277,
+      "unchanged": true
+    },
+    "extensions/qa/inline-game-preview/tsconfig.json": {
+      "previousSha256": "1c6a31bac6ed319bf8a6d98a3dff60f2303a5ae24afbb79352ff81a67d6e259a",
+      "sha256": "1c6a31bac6ed319bf8a6d98a3dff60f2303a5ae24afbb79352ff81a67d6e259a",
+      "bytes": 196,
+      "unchanged": true
+    },
+    "extensions/qa/inline-game-preview/vitest.config.ts": {
+      "previousSha256": "4d7c8c940fb961489c0d6da63b8af056866193ec67a97b9d56dbad5ee1407a9f",
+      "sha256": "4d7c8c940fb961489c0d6da63b8af056866193ec67a97b9d56dbad5ee1407a9f",
+      "bytes": 427,
+      "unchanged": true
+    },
+    "extensions/src/site/components/game-preview/activation.ts": {
+      "previousSha256": "443428f2ac9cbdd33e7be6a476ac3574cbcee0916729261d580a41ef0abf9af6",
+      "sha256": "443428f2ac9cbdd33e7be6a476ac3574cbcee0916729261d580a41ef0abf9af6",
+      "bytes": 1986,
+      "unchanged": true
+    },
+    "extensions/src/site/components/game-preview/contracts.ts": {
+      "previousSha256": "0ddafb8d66a372d782346865cee7bef7c2b1871680e34c4abfb3ac86fc281e3c",
+      "sha256": "a2ede7fe98f95b9eba95e7211aff164caba9f794ec84c65399fc08b748ff5d42",
+      "bytes": 5633,
+      "unchanged": false
+    },
+    "extensions/src/site/components/game-preview/coordinator.ts": {
+      "previousSha256": "34e00b4a67e18e4c66a6bf88c6f676e681ad7681024c24e6ee70a4c41b9e9369",
+      "sha256": "dd184fbddf5906645ba954109a90df2b5f6355b1ff0a0a86505ba5b2e4f31d29",
+      "bytes": 1798,
+      "unchanged": false
+    },
+    "extensions/src/site/components/game-preview/request-owner.ts": {
+      "previousSha256": "92e1c974aa435e528bb4cf389660da90e86a689fbb0a322c6c154523ba62a0ca",
+      "sha256": "92e1c974aa435e528bb4cf389660da90e86a689fbb0a322c6c154523ba62a0ca",
+      "bytes": 1194,
+      "unchanged": true
+    },
+    "extensions/src/site/components/game-preview/resources.ts": {
+      "previousSha256": "8abbf92c9ce3d14b182ca277f7669b606a1c20122b956e460a34693717f39381",
+      "sha256": "8abbf92c9ce3d14b182ca277f7669b606a1c20122b956e460a34693717f39381",
+      "bytes": 8407,
+      "unchanged": true
+    },
+    "extensions/src/site/components/game-preview/timeline-input.ts": {
+      "previousSha256": "0f92871120e4916346023c858c738939a1be4e58213f0b8a10e7b7858ab9c3ba",
+      "sha256": "0f92871120e4916346023c858c738939a1be4e58213f0b8a10e7b7858ab9c3ba",
+      "bytes": 1456,
+      "unchanged": true
+    },
+    "extensions/src/site/tests/inline-game-preview-activation.test.ts": {
+      "previousSha256": "e52d3d9aacde920d93be86c9f74a5d40d41324246361012cb9bed9f917752f7d",
+      "sha256": "e52d3d9aacde920d93be86c9f74a5d40d41324246361012cb9bed9f917752f7d",
+      "bytes": 3557,
+      "unchanged": true
+    },
+    "extensions/src/site/tests/inline-game-preview-contracts.test.ts": {
+      "previousSha256": "52c6ae3dfe88a294b41647b611f2ea4b1eec62f1c996b53f2dabde8c5ce8735a",
+      "sha256": "52c6ae3dfe88a294b41647b611f2ea4b1eec62f1c996b53f2dabde8c5ce8735a",
+      "bytes": 3157,
+      "unchanged": true
+    },
+    "extensions/src/site/tests/inline-game-preview-locales.test.ts": {
+      "previousSha256": "f9c3afaea06dfb007ce842b235bb1e17cf0990588c70d822ca2c314da6f44a28",
+      "sha256": "f9c3afaea06dfb007ce842b235bb1e17cf0990588c70d822ca2c314da6f44a28",
+      "bytes": 1330,
+      "unchanged": true
+    },
+    "extensions/src/site/tests/inline-game-preview-ownership.test.ts": {
+      "previousSha256": "590d3db43d13cc47410c8a3523b365e456ad30c64f74149e652aadcca3048a90",
+      "sha256": "74bece30caca34c2278c5c2c8bd732980e43d076cb82acc0b4afaa910d5d8423",
+      "bytes": 4682,
+      "unchanged": false
+    },
+    "extensions/src/site/tests/inline-game-preview-timeline-input.test.ts": {
+      "previousSha256": "b33d8f6a8fbf9cf9c00b514ba10c033ab4341218d3e3336f4c46c684ab7f6926",
+      "sha256": "b33d8f6a8fbf9cf9c00b514ba10c033ab4341218d3e3336f4c46c684ab7f6926",
+      "bytes": 2068,
+      "unchanged": true
+    },
+    "extensions/src/site/components/game-preview/session-owner.ts": {
+      "bytes": 6269,
+      "sha256": "961831a7188935534cd9d67f75ea9f3ae8d7d3433c08f40995c9940d80fc98c9",
+      "new": true
+    },
+    "extensions/src/site/tests/inline-game-preview-session-owner.test.ts": {
+      "bytes": 7593,
+      "sha256": "dd3a9f546adc07a3b050c551800fb1d3fb962a15f087aaf992fdfcf7e9d972db",
+      "new": true
+    },
+    "extensions/qa/inline-game-preview/reentrancy-baseline.mjs": {
+      "bytes": 1707,
+      "sha256": "e21b0b172a3a572ce837f66fd4d8a1705c20a51f014e9f116beab99068d33cd1",
+      "new": true
+    }
+  }
+}

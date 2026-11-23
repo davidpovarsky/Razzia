@@ -1,0 +1,5 @@
+[codex/tadazz-hq-mcp-widget-20261115 6fff256] docs(mcp): record source task and inbox delivery receipts
+ 3 files changed, 69 insertions(+)
+ create mode 100644 docs/extensions/qa-evidence/mcp-widget-20261115/ASANA_READBACK.json
+ create mode 100644 docs/extensions/qa-evidence/mcp-widget-20261115/RAW_EVIDENCE.md
+ create mode 100644 docs/extensions/qa-evidence/mcp-widget-20261115/source-diff-check.log

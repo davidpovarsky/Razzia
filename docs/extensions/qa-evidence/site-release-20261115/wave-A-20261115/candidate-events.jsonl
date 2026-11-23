@@ -1,0 +1,27 @@
+{"time":"2026-11-15T14:52:39.013Z","name":"FAILED","message":"browserType.launch: Executable doesn't exist at /tmp/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝","stack":"browserType.launch: Executable doesn't exist at /tmp/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n    at metadata (/evidence/candidate-continuity.cjs:27:34)\n    at main (/evidence/candidate-continuity.cjs:122:103)\n    at Object.<anonymous> (/evidence/candidate-continuity.cjs:123:1)"}
+{"time":"2026-11-15T14:53:22.615Z","name":"locale-pass","browser":"chromium","lang":"en"}
+{"time":"2026-11-15T14:53:27.515Z","name":"locale-pass","browser":"chromium","lang":"fr"}
+{"time":"2026-11-15T14:53:32.218Z","name":"locale-pass","browser":"chromium","lang":"de"}
+{"time":"2026-11-15T14:53:36.817Z","name":"locale-pass","browser":"chromium","lang":"es"}
+{"time":"2026-11-15T14:53:41.512Z","name":"locale-pass","browser":"chromium","lang":"it"}
+{"time":"2026-11-15T14:53:46.510Z","name":"locale-pass","browser":"chromium","lang":"ja"}
+{"time":"2026-11-15T14:53:51.317Z","name":"locale-pass","browser":"chromium","lang":"tr"}
+{"time":"2026-11-15T14:53:56.212Z","name":"locale-pass","browser":"chromium","lang":"vi"}
+{"time":"2026-11-15T14:54:54.727Z","name":"FAILED","message":"expect(page).toHaveTitle(expected) failed\n\nExpected: \"Manager | Tadazz\"\nReceived: \"My Games | Tadazz\"\nTimeout:  45000ms\n\nCall log:\n  - Expect \"toHaveTitle\" with timeout 45000ms\n    - waiting for \"http://127.0.0.1:3000/studio/games\" navigation to finish...\n    - navigated to \"http://127.0.0.1:3000/studio/games\"\n    89 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\n       - unexpected value \"My Games | Tadazz\"\n","stack":"Error: expect(page).toHaveTitle(expected) failed\n\nExpected: \"Manager | Tadazz\"\nReceived: \"My Games | Tadazz\"\nTimeout:  45000ms\n\nCall log:\n  - Expect \"toHaveTitle\" with timeout 45000ms\n    - waiting for \"http://127.0.0.1:3000/studio/games\" navigation to finish...\n    - navigated to \"http://127.0.0.1:3000/studio/games\"\n    89 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\n       - unexpected value \"My Games | Tadazz\"\n\n    at captureRawStack (/deps/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/deps/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toHaveTitle (/deps/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at head (/evidence/candidate-continuity.cjs:16:22)\n    at metadata (/evidence/candidate-continuity.cjs:63:92)\n    at async main (/evidence/candidate-continuity.cjs:122:97)"}
+{"time":"2026-11-15T14:56:12.044Z","name":"locale-pass","browser":"chromium","lang":"en"}
+{"time":"2026-11-15T14:56:16.739Z","name":"locale-pass","browser":"chromium","lang":"fr"}
+{"time":"2026-11-15T14:56:21.441Z","name":"locale-pass","browser":"chromium","lang":"de"}
+{"time":"2026-11-15T14:56:25.845Z","name":"locale-pass","browser":"chromium","lang":"es"}
+{"time":"2026-11-15T14:56:30.335Z","name":"locale-pass","browser":"chromium","lang":"it"}
+{"time":"2026-11-15T14:56:35.047Z","name":"locale-pass","browser":"chromium","lang":"ja"}
+{"time":"2026-11-15T14:56:39.834Z","name":"locale-pass","browser":"chromium","lang":"tr"}
+{"time":"2026-11-15T14:56:44.535Z","name":"locale-pass","browser":"chromium","lang":"vi"}
+{"time":"2026-11-15T14:58:12.335Z","name":"locale-pass","browser":"webkit","lang":"en"}
+{"time":"2026-11-15T14:58:43.841Z","name":"locale-pass","browser":"webkit","lang":"fr"}
+{"time":"2026-11-15T14:59:20.949Z","name":"locale-pass","browser":"webkit","lang":"de"}
+{"time":"2026-11-15T14:59:53.034Z","name":"locale-pass","browser":"webkit","lang":"es"}
+{"time":"2026-11-15T15:00:29.146Z","name":"locale-pass","browser":"webkit","lang":"it"}
+{"time":"2026-11-15T15:01:00.842Z","name":"locale-pass","browser":"webkit","lang":"ja"}
+{"time":"2026-11-15T15:01:38.145Z","name":"locale-pass","browser":"webkit","lang":"tr"}
+{"time":"2026-11-15T15:01:57.341Z","name":"locale-pass","browser":"webkit","lang":"vi"}
+{"time":"2026-11-15T15:04:33.440Z","name":"ready-rollback"}

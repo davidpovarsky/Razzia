@@ -1,0 +1,7 @@
+packages/socket/src/services/game/player-manager.ts:66:20: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/server/game/roster-native-admission.test.ts:88:20: error eslint(prefer-template): Unexpected string concatenation. help: Use template literals instead of string concatenation.
+extensions/src/server/game/roster-native-admission.test.ts:241:18: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/src/server/game/roster-native-admission.test.ts:79:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/game/roster-native-admission.test.ts:217:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/game/roster-native-admission.test.ts:272:24: error typescript(TS2502): 'socket' is referenced directly or indirectly in its own type annotation.
+extensions/src/server/game/roster-native-admission.test.ts:262:18: error typescript(unbound-method): Avoid referencing unbound methods which may cause unintentional scoping of `this`. help: If your function does not access `this`, you can annotate it with `this: void`, or consider using an arrow function instead.

@@ -1,0 +1,26 @@
+packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx 219ms
+[90mpackages/web/src/features/quizz/components/QuizzEditorCard.tsx[39m 42ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx[39m 48ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorMedia.tsx[39m 38ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx[39m 27ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/QuestionCardActions.tsx[39m 11ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/header-controls.tsx[39m 21ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/studio-shell.tsx[39m 11ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/theme-scope-controls.tsx[39m 48ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/theme-audio-options.tsx[39m 46ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig.tsx[39m 39ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx[39m 55ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx[39m 22ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx[39m 22ms (unchanged)
+[90mpackages/web/src/features/questions/estimation/components/EstimationConfig.tsx[39m 16ms (unchanged)
+[90mpackages/web/src/features/questions/estimation/components/EstimationEditor.tsx[39m 13ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuestionEditor/use-answer-visual-editor.ts[39m 29ms (unchanged)
+[90mpackages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts[39m 25ms (unchanged)
+[90mpackages/web/src/features/quizz/contexts/quizz-editor-context.tsx[39m 30ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/studio-launch-page.tsx[39m 32ms (unchanged)
+[90mpackages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts[39m 27ms (unchanged)
+[90mpackages/web/src/features/quizz/components/QuizzEditorHeader.tsx[39m 9ms (unchanged)
+packages/web/src/features/quizz/components/studio/use-studio-timeline-sidebar.tsx 34ms
+packages/web/src/features/quizz/components/studio/studio-settings-page.tsx 68ms
+[90mpackages/web/src/features/quizz/components/QuestionEditor/QuestionEditorTitle.tsx[39m 5ms (unchanged)
+packages/web/src/features/quizz/components/studio/studio-editor-context.tsx 123ms

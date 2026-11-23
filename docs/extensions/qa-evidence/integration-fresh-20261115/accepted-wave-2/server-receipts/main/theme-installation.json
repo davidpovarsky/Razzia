@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/server/show-themes/installation.test.ts",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/theme-installation.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "f20da7edb43560b3f43740f4bd3b9b834db878078cea2be3ed6a04a420c5bdd7",
+  "seconds": 3.404
+}

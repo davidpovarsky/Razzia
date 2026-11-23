@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "Sort aligns with toolbar actions, stays accessible and sorts the real cards",
+      "passed": true
+    },
+    {
+      "name": "Contact uses canonical accessible fields without claiming to send",
+      "passed": true
+    },
+    {
+      "name": "Account email submission retains the real forgot-to-reset UI flow",
+      "passed": true
+    },
+    {
+      "name": "Prepare follows browser Back/Forward and query-selected games",
+      "passed": true
+    },
+    {
+      "name": "Observed history pageshow events",
+      "events": [
+        {
+          "persisted": false,
+          "at": 1795045517804
+        },
+        {
+          "persisted": true,
+          "at": 1795045519629
+        },
+        {
+          "persisted": true,
+          "at": 1795045520069
+        }
+      ]
+    },
+    {
+      "name": "Successful room handoff returns from history without permanent busy state",
+      "passed": true
+    },
+    {
+      "name": "Restored page cancels pending creation, ignores stale response and never auto-reposts",
+      "passed": true
+    },
+    {
+      "name": "Missing game-list data exposes a working Retry action",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

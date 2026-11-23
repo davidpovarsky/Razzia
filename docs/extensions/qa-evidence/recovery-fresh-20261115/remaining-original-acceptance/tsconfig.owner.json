@@ -1,0 +1,15 @@
+{
+  "extends": "../../../../../packages/socket/tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": ["../../../../../packages/socket/node_modules/@types"],
+    "allowImportingTsExtensions": true
+  },
+  "files": [
+    "../../../../../packages/socket/src/services/account-db.ts",
+    "../../../../../packages/socket/src/index.ts",
+    "../../../../../extensions/src/server/index.ts",
+    "../../../../../extensions/src/server/storage/startup-recovery.ts",
+    "../../../../../extensions/src/server/storage/startup-recovery.test.ts"
+  ],
+  "include": []
+}

@@ -1,0 +1,273 @@
+{
+  "at": "2026-11-18T11:36:03.724126+00:00",
+  "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+  "files": [
+    {
+      "role": "stage",
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-result.json",
+      "sha256": "7b9695d8d2fb33765333b377271d75abb2fb5f4a9de85f68456ba0647930c244",
+      "bytes": 707,
+      "modifiedAt": "2026-11-18T11:16:28.519164+00:00",
+      "fields": {
+        "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+        "productionTouched": false,
+        "customerMountUsed": false,
+        "ok": true,
+        "releaseDir": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2",
+        "image": "tadazz:mcp-e30133c-20261118-a2",
+        "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "stageManifestSha256": "9a28980ba2084963b76b32294d7c759a590a7e43bbeb32f8fd57f3ae08063dc7",
+        "backendSha256": "f3ea059c7102dbf223b5b23c166f9623ea5064acc5c6c8fd223920956788c764",
+        "widgetManifestSha256": "1e013c6e35264adf944eae2d53f2314ebc7e2c631a81b05ceb653472911837bd",
+        "payloadFiles": 178,
+        "syntheticSmokePassed": true,
+        "runningContainersUnchanged": true
+      }
+    },
+    {
+      "role": "stage-manifest",
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-manifest.json",
+      "sha256": "9a28980ba2084963b76b32294d7c759a590a7e43bbeb32f8fd57f3ae08063dc7",
+      "bytes": 31883,
+      "modifiedAt": "2026-11-18T11:16:28.370157+00:00",
+      "fields": {
+        "format": "tadazz-mcp-stage",
+        "version": 2,
+        "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+        "sourceRun": "tadazz-codex-e30133c7dfb0-630fa724",
+        "webSourceRun": "tadazz-codex-e30133c7dfb0-630fa724",
+        "baseImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "image": "tadazz:mcp-e30133c-20261118-a2",
+        "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "backendSha256": "f3ea059c7102dbf223b5b23c166f9623ea5064acc5c6c8fd223920956788c764",
+        "widgetManifestSha256": "1e013c6e35264adf944eae2d53f2314ebc7e2c631a81b05ceb653472911837bd",
+        "widgetHtmlSha256": "b684c20fd8a501362fa80c10cf0eefc126d82f980585eb7b528bdada0547bb5c",
+        "rendererBuildId": "a2eef39dd1c5dcc3a938508ba0951ea777de5d2ec1a189a7cc3722af99c194c4",
+        "publicAssetCount": 77,
+        "syntheticSmokeSha256": "b23dedbe1273d93340e8adb59252b58268e59513d25b60104d9a85927db2dd1b",
+        "productionTouched": false,
+        "customerMountUsed": false,
+        "createdAt": "2026-11-18T11:16:28Z",
+        "nativeApplicationPreview.manifestSha256": "21b32662390df0c58d176076433682392cc9e274d4b74f184c8b35c61b599892",
+        "nativeApplicationPreview.artifactSha256": "2eaf0fb6f62fb16db066f6ce5e471d8d9b64bc9399e9c0968b9e9126d06051e0",
+        "nativeApplicationPreview.registrySha256": "344d166980eca13da285c9be74ff747ab7da1983a9b917545d3dda512f7c3777",
+        "nativeApplicationPreview.rendererBuildSha256": "efaaf6898a83c5ed0cb89aeb8fc4cb1d29c0974d26412b4adcd93986b7d414d5",
+        "nativeApplicationPreview.sourceFiles": 3583,
+        "nativeApplicationPreview.files[].name": [
+          "renderer.mjs",
+          "renderer.css"
+        ],
+        "nativeApplicationPreview.files[].sha256": [
+          "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+          "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+        ],
+        "nativeApplicationPreview.files[].bytes": [
+          2390392,
+          284338
+        ],
+        "receiptSha256.host": "6629d97011b8f4b807bd282cfdf004a726cd38cf3869c6abc7cef9e10be8aa76",
+        "receiptSha256.web": "6629d97011b8f4b807bd282cfdf004a726cd38cf3869c6abc7cef9e10be8aa76",
+        "receiptSha256.launch": "8ceb79c9ef419483967467620cd61d5943ac013feee0ebb9927aa5197d61ea5f",
+        "receiptSha256.browser": "391f29ff56db87263705b03fdea974e37812121e961cd779506f759e704159db",
+        "receiptSha256.full_show": "58d78b0d2d1e86b735992135d06c6d5f2d1d1887c95c2370101f885bff940b1f",
+        "receiptSha256.proxy": "8cc4640dc7d8e2f02a8b38d7435d1e7ff1ffe1f6472c1cea5e27ef872404231f"
+      }
+    },
+    {
+      "role": "smoke",
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/synthetic-smoke-result.json",
+      "sha256": "b23dedbe1273d93340e8adb59252b58268e59513d25b60104d9a85927db2dd1b",
+      "bytes": 7168,
+      "modifiedAt": "2026-11-18T11:16:28.235601+00:00",
+      "fields": {
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+        "productionTouched": false,
+        "customerMountUsed": false,
+        "network": "none",
+        "container": "d00844afef1be846fde22c75cc8d148ad7f3cf95fbb959a6638f7d576c199514",
+        "ok": true,
+        "engineIoOpenClose": true,
+        "indexAndEntryAssets": 30,
+        "retainedStopped": true,
+        "nativeApplicationPreview.files[].name": [
+          "renderer.mjs",
+          "renderer.css"
+        ],
+        "nativeApplicationPreview.files[].sha256": [
+          "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+          "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+        ],
+        "nativeApplicationPreview.files[].bytes": [
+          2390392,
+          284338
+        ],
+        "nativeApplicationPreview.inlinePreviewEnabled": true,
+        "nativeApplicationPreview.packagedHttpBytes": true,
+        "nativeApplicationPreview.privateRuntimeUnauthorized": true,
+        "nativeApplicationPreview.publicRuntimeDisabled": true,
+        "nativeApplicationPreview.authenticatedStudioRender": false
+      }
+    },
+    {
+      "role": "qualification",
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+      "sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3",
+      "bytes": 2635,
+      "modifiedAt": "2026-11-18T11:19:55.452597+00:00",
+      "fields": {
+        "kind": "backup-qualification",
+        "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "sourceContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "sourceImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "success": true,
+        "configSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+        "productionDataRestored": false,
+        "deploymentPerformed": false,
+        "phase": "qualified",
+        "oldApplicationResumed": true,
+        "stopToHealthySeconds": 8.469,
+        "oldContainerRetained": true,
+        "releaseEligible": true,
+        "finishedAt": "2026-11-18T11:19:55.452907+00:00",
+        "receiptPath": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+        "roomGate.count": 0,
+        "roomGate.source": "complete-retained-container-log-events",
+        "roomGate.lastCountAt": "2026-11-12T12:01:30.941422185Z",
+        "roomGate.observedAt": "2026-11-18T11:19:40.926371+00:00",
+        "roomGate.logBytes": 2042,
+        "roomGate.checkStopRaceEliminated": false,
+        "backup.sha256": "f44735f8c29b5039620e87ccddc3346c298bd9e75c9d755646bdd4537998138e",
+        "backup.treeSha256": "56dd656b77a82207b750dd19829cc524fc90fa38c4b33d0f500bd2773fb25354",
+        "backup.files": 344,
+        "backup.bytes": 125302944,
+        "backup.restoredBytesAndModesVerified": true,
+        "backup.consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+        "backup.productionRestorePerformed": false,
+        "backup.sqliteDatabasesVerified": 2,
+        "backup.restoreProof": "isolated extracted bytes/modes and SQLite backup/integrity",
+        "candidateCloneBoot.container": "89e53a3b72042bf414c13357eee560171efa2ea462eb85c6caf0f317ef217ad7",
+        "candidateCloneBoot.network": "none",
+        "candidateCloneBoot.publishedPorts": false,
+        "candidateCloneBoot.liveConfigMounted": false,
+        "candidateCloneBoot.retainedStopped": true,
+        "candidateCloneBoot.passed": true,
+        "candidateCloneBoot.nativeApplicationPreview.files[].name": [
+          "renderer.mjs",
+          "renderer.css"
+        ],
+        "candidateCloneBoot.nativeApplicationPreview.files[].sha256": [
+          "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+          "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+        ],
+        "candidateCloneBoot.nativeApplicationPreview.files[].bytes": [
+          2390392,
+          284338
+        ],
+        "candidateCloneBoot.nativeApplicationPreview.inlinePreviewEnabled": true,
+        "candidateCloneBoot.nativeApplicationPreview.packagedHttpBytes": true,
+        "candidateCloneBoot.nativeApplicationPreview.privateRuntimeUnauthorized": true,
+        "candidateCloneBoot.nativeApplicationPreview.publicRuntimeDisabled": true,
+        "candidateCloneBoot.nativeApplicationPreview.authenticatedStudioRender": false
+      }
+    },
+    {
+      "role": "deployment",
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112319Z-f5b3c25d/deployment-result.json",
+      "sha256": "5dc60033383b530511601e440b1481157b0ef7b250c0d4bdfa175aeab576b733",
+      "bytes": 3758,
+      "modifiedAt": "2026-11-18T11:23:31.116989+00:00",
+      "fields": {
+        "version": 1,
+        "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "previousImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "previousContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "rollbackContainer": "tadazz-pre-mcp-e30133c7dfb0-20261118T112319Z-f5b3c25d",
+        "success": true,
+        "customerContentPrinted": false,
+        "dataRestorePerformed": false,
+        "phase": "verified",
+        "replacementContainer": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+        "environmentPreservedExcept": [
+          "CONFIG_PATH",
+          "SOCKET_PORT",
+          "TADAZZ_INLINE_GAME_PREVIEW_ENABLED",
+          "TADAZZ_MCP_SERVICE_ENABLED"
+        ],
+        "hostConfigurationUnchanged": true,
+        "mountsUnchanged": true,
+        "otherContainersUnchanged": true,
+        "previousContainerRetainedStopped": true,
+        "installedChatGptVerified": false,
+        "installedClaudeVerified": false,
+        "finishedAt": "2026-11-18T11:23:31.116672+00:00",
+        "priorRestoreBootQualification.sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3",
+        "priorRestoreBootQualification.candidateCloneBootPassed": true,
+        "priorRestoreBootQualification.ageSeconds": 204,
+        "roomGate.count": 0,
+        "roomGate.source": "retained-startup-empty-registry-no-subsequent-game-events",
+        "roomGate.lastCountAt": "2026-11-18T11:20:53.610418457Z",
+        "roomGate.observedAt": "2026-11-18T11:23:19.953752+00:00",
+        "roomGate.logBytes": 1019,
+        "roomGate.checkStopRaceEliminated": false,
+        "backup.sha256": "d7d5db86330b1903d9be03c2f6637cfef693b05ad78c4016d3a0bf85baa2d2cb",
+        "backup.treeSha256": "755ea6b8ec9a0e1fc82b6f8636aa5243526cdc08b61d447322acc0ccade4d330",
+        "backup.files": 344,
+        "backup.bytes": 125302944,
+        "backup.restoredBytesAndModesVerified": true,
+        "backup.consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+        "backup.productionRestorePerformed": false,
+        "backup.sqliteDatabasesVerified": 2,
+        "backup.restoreProof": "isolated extracted bytes/modes and SQLite backup/integrity",
+        "loopback.oauthAndMcp": true,
+        "loopback.consentGetHead": true,
+        "loopback.indexAndEntryAssets": 30,
+        "loopback.engineIoOpenClose": true,
+        "loopback.installedHostTest": false,
+        "loopback.authenticatedGameplayTest": false,
+        "loopback.nativeApplicationPreview.files[].name": [
+          "renderer.mjs",
+          "renderer.css"
+        ],
+        "loopback.nativeApplicationPreview.files[].sha256": [
+          "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+          "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+        ],
+        "loopback.nativeApplicationPreview.files[].bytes": [
+          2390392,
+          284338
+        ],
+        "loopback.nativeApplicationPreview.inlinePreviewEnabled": true,
+        "loopback.nativeApplicationPreview.packagedHttpBytes": true,
+        "loopback.nativeApplicationPreview.privateRuntimeUnauthorized": true,
+        "loopback.nativeApplicationPreview.publicRuntimeDisabled": true,
+        "loopback.nativeApplicationPreview.authenticatedStudioRender": false,
+        "publicHttps.oauthAndMcp": true,
+        "publicHttps.consentGetHead": true,
+        "publicHttps.indexAndEntryAssets": 30,
+        "publicHttps.engineIoOpenClose": true,
+        "publicHttps.installedHostTest": false,
+        "publicHttps.authenticatedGameplayTest": false,
+        "publicHttps.nativeApplicationPreview.files[].name": [
+          "renderer.mjs",
+          "renderer.css"
+        ],
+        "publicHttps.nativeApplicationPreview.files[].sha256": [
+          "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+          "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+        ],
+        "publicHttps.nativeApplicationPreview.files[].bytes": [
+          2390392,
+          284338
+        ],
+        "publicHttps.nativeApplicationPreview.inlinePreviewEnabled": true,
+        "publicHttps.nativeApplicationPreview.packagedHttpBytes": true,
+        "publicHttps.nativeApplicationPreview.privateRuntimeUnauthorized": true,
+        "publicHttps.nativeApplicationPreview.publicRuntimeDisabled": true,
+        "publicHttps.nativeApplicationPreview.authenticatedStudioRender": false
+      }
+    }
+  ]
+}

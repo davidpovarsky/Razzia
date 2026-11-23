@@ -1,0 +1,103 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 16 tests using 1 worker
+
+  ✘   1 [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium (16.1s)
+  ✓   2 [chromium] › qa/tds-native-game.spec.ts:94:1 › refuses players once the room is locked (2.4s)
+  ✓   3 [chromium] › qa/tds-native-game.spec.ts:109:1 › submits the PIN with the Enter key (2.4s)
+  ✓   4 [chromium] › qa/tds-native-game.spec.ts:124:1 › lets the manager kick a player (2.6s)
+  ✓   5 [chromium] › qa/tds-native-game.spec.ts:135:1 › brings a player back into the game after a reload (8.0s)
+  ✓   6 [chromium] › qa/tds-native-game.spec.ts:153:1 › sends players home when the manager exits the waiting room (2.6s)
+  ✓   7 [chromium] › qa/tds-native-game.spec.ts:171:1 › refuses to start a game without players (1.4s)
+  ✓   8 [chromium] › qa/tds-native-game.spec.ts:181:1 › lets a player rejoin from the home page after closing the tab (8.2s)
+  ✘   9 [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium (1.0m)
+Testing stopped early after 2 maximum allowed failures.
+
+
+  1) [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ─
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Exit' })
+    Expected: visible
+    Error: strict mode violation: getByRole('button', { name: 'Exit' }) resolved to 2 elements:
+        1) <button class="rounded-lg font-semibold hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg hover:bg-accent bg-white px-4 text-black">…</button> aka getByRole('button', { name: 'Exit' }).first()
+        2) <button class="rounded-lg font-semibold hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg hover:bg-accent relative overflow-hidden bg-white px-4 text-black">…</button> aka getByRole('button', { name: 'Exit' }).nth(1)
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Exit' }) with timeout 20000ms
+      - waiting for getByRole('button', { name: 'Exit' })
+
+
+      83 |   await expect(
+      84 |     manager.getByRole("button", { name: t("common:exit") }),
+    > 85 |   ).toBeVisible()
+         |     ^
+      86 |   await expect(
+      87 |     alice.getByText(t("game:rank", { count: 1, ordinal: true })),
+      88 |   ).toBeVisible()
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:85:5
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ───
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('button', { name: '1 Lyon', exact: true }).or(getByRole('button', { name: '2 Lyon', exact: true })).or(getByRole('button', { name: '3 Lyon', exact: true })).or(getByRole('button', { name: '4 Lyon', exact: true })).or(getByRole('button', { name: '5 Lyon', exact: true }))
+        - locator resolved to <button class="relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4 bg-[var(--color-answer-2)] text-white">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+       at ../../packages/e2e/utils/player.ts:28
+
+      26 |     page.getByRole("button", { name: `${index + 1} ${label}`, exact: true }),
+      27 |   )
+    > 28 |   await choices.reduce((matches, choice) => matches.or(choice)).click()
+         |                                                                 ^
+      29 | }
+      30 |
+      31 | export const confirm = async (page: Page) => {
+        at answer (/cleanup/packages/e2e/utils/player.ts:28:65)
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:67:9
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ──
+    [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ────
+  7 did not run
+  7 passed (1.9m)
+  1 error was not a part of any test, see above for details

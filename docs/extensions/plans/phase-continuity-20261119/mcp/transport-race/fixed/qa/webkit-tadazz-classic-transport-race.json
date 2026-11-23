@@ -1,0 +1,105 @@
+{
+  "engine": "webkit",
+  "theme": "tadazz-classic",
+  "status": "FAIL",
+  "cases": [
+    {
+      "action": "pause",
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "paused while automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "true"
+        },
+        {
+          "step": "automatic ACK preserves user pause",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "epoch": 2,
+          "paused": "true"
+        }
+      ],
+      "userPausePreserved": true,
+      "events": [
+        {
+          "type": "pointerdown",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 15039
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 15218
+        },
+        {
+          "type": "click",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 15222
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "action": "replay",
+      "snapshots": []
+    }
+  ],
+  "error": "Error: frame.evaluate: Target page, context or browser has been closed",
+  "gates": [
+    {
+      "label": "pause automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "MMg7NZcbhvCL7-jEFYvJ5Kq3oEsG3pa4",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "replay automatic",
+      "claimed": false,
+      "fulfilled": false
+    }
+  ]
+}

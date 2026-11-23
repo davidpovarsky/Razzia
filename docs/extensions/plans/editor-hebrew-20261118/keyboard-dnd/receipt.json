@@ -1,0 +1,830 @@
+{
+  "receipts": [
+    {
+      "iteration": 1,
+      "states": [
+        {
+          "step": "before",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": null,
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform linear;",
+            "class": ""
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": null,
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 1",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": []
+        },
+        {
+          "step": "after-space",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, 0px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 1",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-space-settled",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, 0px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 1",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-immediate",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, -152px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 1",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-settled",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":243.4564971923828,\"width\":264,\"height\":143.99998474121094,\"top\":243.4564971923828,\"right\":288,\"bottom\":387.45648193359375,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, -152px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 1",
+              "rect": "{\"x\":24,\"y\":135.76385498046875,\"width\":264,\"height\":144,\"top\":135.76385498046875,\"right\":288,\"bottom\":279.76385498046875,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":243.4564971923828,\"width\":264,\"height\":143.99998474121094,\"top\":243.4564971923828,\"right\":288,\"bottom\":387.45648193359375,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "step": "after-enter",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": null,
+            "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform linear;",
+            "class": ""
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": null,
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 1",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "key",
+          "key": " ",
+          "code": "Space",
+          "at": 3045.5999999940395,
+          "target": "DIV",
+          "pressed": null
+        },
+        {
+          "type": "live",
+          "at": 3078.899999976158,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "type": "key",
+          "key": "ArrowUp",
+          "code": "ArrowUp",
+          "at": 3180.399999976158,
+          "target": "DIV",
+          "pressed": "true"
+        },
+        {
+          "type": "live",
+          "at": 3205.7999999821186,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "type": "key",
+          "key": "Enter",
+          "code": "Enter",
+          "at": 3230.5999999940395,
+          "target": "DIV",
+          "pressed": "true"
+        },
+        {
+          "type": "live",
+          "at": 3407.5999999940395,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "states": [
+        {
+          "step": "before",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": null,
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform linear;",
+            "class": ""
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": null,
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 2",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": []
+        },
+        {
+          "step": "after-space",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, 0px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 2",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-space-settled",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, 0px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 2",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-immediate",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, -152px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 2",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-settled",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":214.84934997558594,\"width\":264,\"height\":144.00001525878906,\"top\":214.84934997558594,\"right\":288,\"bottom\":358.849365234375,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, -152px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 2",
+              "rect": "{\"x\":24,\"y\":135.7292938232422,\"width\":264,\"height\":144.00001525878906,\"top\":135.7292938232422,\"right\":288,\"bottom\":279.72930908203125,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":214.84934997558594,\"width\":264,\"height\":144.00001525878906,\"top\":214.84934997558594,\"right\":288,\"bottom\":358.849365234375,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "step": "after-enter",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": null,
+            "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform linear;",
+            "class": ""
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": null,
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 2",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "key",
+          "key": " ",
+          "code": "Space",
+          "at": 3351.9000000059605,
+          "target": "DIV",
+          "pressed": null
+        },
+        {
+          "type": "live",
+          "at": 3393.800000011921,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "type": "key",
+          "key": "ArrowUp",
+          "code": "ArrowUp",
+          "at": 3475.2000000178814,
+          "target": "DIV",
+          "pressed": "true"
+        },
+        {
+          "type": "live",
+          "at": 3503.600000023842,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "type": "key",
+          "key": "Enter",
+          "code": "Enter",
+          "at": 3540.800000011921,
+          "target": "DIV",
+          "pressed": "true"
+        },
+        {
+          "type": "live",
+          "at": 3769.9000000059605,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "states": [
+        {
+          "step": "before",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": null,
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform linear;",
+            "class": ""
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": null,
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 3",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": []
+        },
+        {
+          "step": "after-space",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, 0px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 3",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-space-settled",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, 0px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 3",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-immediate",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, -152px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 3",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-settled",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": "true",
+            "rect": "{\"x\":24,\"y\":243.4564971923828,\"width\":264,\"height\":143.99998474121094,\"top\":243.4564971923828,\"right\":288,\"bottom\":387.45648193359375,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform 200ms; transform: translate3d(0px, -152px, 0px) scaleX(1) scaleY(1);",
+            "class": "shadow-lg"
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": "true",
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 3",
+              "rect": "{\"x\":24,\"y\":135.69479370117188,\"width\":264,\"height\":144,\"top\":135.69479370117188,\"right\":288,\"bottom\":279.6947937011719,\"left\":24}"
+            },
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":243.4564971923828,\"width\":264,\"height\":143.99998474121094,\"top\":243.4564971923828,\"right\":288,\"bottom\":387.45648193359375,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "step": "after-enter",
+          "wrapper": {
+            "role": "button",
+            "tabindex": "0",
+            "pressed": null,
+            "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}",
+            "describedBy": "DndDescribedBy-0",
+            "style": "transition: transform linear;",
+            "class": ""
+          },
+          "activeElement": {
+            "tag": "DIV",
+            "role": "button",
+            "pressed": null,
+            "isWrapper": true
+          },
+          "order": [
+            {
+              "kind": "transition",
+              "text": "TransitionTransition5 sec",
+              "rect": "{\"x\":24,\"y\":125,\"width\":264,\"height\":144,\"top\":125,\"right\":288,\"bottom\":269,\"left\":24}"
+            },
+            {
+              "kind": "question",
+              "text": "1Original DnD diagnostic 3",
+              "rect": "{\"x\":24,\"y\":277,\"width\":264,\"height\":144,\"top\":277,\"right\":288,\"bottom\":421,\"left\":24}"
+            }
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "key",
+          "key": " ",
+          "code": "Space",
+          "at": 3051.5999999940395,
+          "target": "DIV",
+          "pressed": null
+        },
+        {
+          "type": "live",
+          "at": 3065.7999999821186,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "type": "key",
+          "key": "ArrowUp",
+          "code": "ArrowUp",
+          "at": 3124.5999999940395,
+          "target": "DIV",
+          "pressed": "true"
+        },
+        {
+          "type": "live",
+          "at": 3154.5,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "type": "key",
+          "key": "Enter",
+          "code": "Enter",
+          "at": 3176.7999999821186,
+          "target": "DIV",
+          "pressed": "true"
+        },
+        {
+          "type": "live",
+          "at": 3360.4000000059605,
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "role": "status",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

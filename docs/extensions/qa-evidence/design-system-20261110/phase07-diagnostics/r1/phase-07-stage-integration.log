@@ -1,0 +1,87 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✘  1 [chromium] › qa/tds-stage-integration.spec.ts:84:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions (2.5m)
+  ✘  2 [chromium] › qa/tds-stage-integration.spec.ts:198:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (21.3s)
+
+
+  1) [chromium] › qa/tds-stage-integration.spec.ts:84:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions
+
+    Test timeout of 150000ms exceeded.
+
+    Error: locator.click: Test timeout of 150000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Lock room', exact: true }).first()
+
+
+      150 |     .getByRole("button", { name: "Lock room", exact: true })
+      151 |     .first()
+    > 152 |     .click()
+          |      ^
+      153 |   await expect(page.locator("svg[data-qr-url]")).toHaveCount(0)
+      154 |   await expect(audience.locator("svg[data-qr-url]")).toHaveCount(0, {
+      155 |     timeout: 7000,
+        at /cleanup/extensions/qa/tds-stage-integration.spec.ts:152:6
+
+    Error Context: ../../evidence/phase-07-traces/tds-stage-integration-actu-d735d-ct-and-audience-permissions-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-07-traces/tds-stage-integration-actu-d735d-ct-and-audience-permissions-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-07-traces/tds-stage-integration-actu-d735d-ct-and-audience-permissions-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-stage-integration.spec.ts:198:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Example representative 40', { exact: true })
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Example representative 40', { exact: true }) with timeout 15000ms
+      - waiting for getByText('Example representative 40', { exact: true })
+
+
+      213 |   await expect(
+      214 |     audience.getByText("Example representative 40", { exact: true }),
+    > 215 |   ).toBeVisible()
+          |     ^
+      216 |   await expect(audience.locator("svg[data-qr-url]")).toHaveAttribute(
+      217 |     "data-qr-url",
+      218 |     room.url,
+        at /cleanup/extensions/qa/tds-stage-integration.spec.ts:215:5
+
+    Error Context: ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › qa/tds-stage-integration.spec.ts:84:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions
+    [chromium] › qa/tds-stage-integration.spec.ts:198:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data

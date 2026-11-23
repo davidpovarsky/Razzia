@@ -1,0 +1,603 @@
+{
+  "format": "tadazz-package-worker-source-provenance-v1",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "baseImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "sourceSelection": "Static value import/export closure of builder, media probe and SDK, plus explicit runtime manifests/configuration and broker reference. No cache filesystem copied.",
+  "files": {
+    "extensions/package.json": {
+      "sha256": "d44bd3416954ee4526115929a0ad47285210b01fb9c377564c8d62ccae09a21e",
+      "bytes": 3967
+    },
+    "extensions/qa/package-builder.ts": {
+      "sha256": "c62db06ab3dd72d3f55367bc6cff333270f903428ed609ab6c3fb1b6c81c3848",
+      "bytes": 8471
+    },
+    "extensions/qa/package-media-probe.ts": {
+      "sha256": "a72c916e9d8c12f1fa05f08fbbb9ab560da2898ff1ffc231e48b687426a0a100",
+      "bytes": 3644
+    },
+    "extensions/src/core/audio-catalog.ts": {
+      "sha256": "676f3e7070845cd95c05540457eaa5be4f0d05b7cdad5d2f1aefbf38b4e19f51",
+      "bytes": 2711
+    },
+    "extensions/src/core/billing/contracts.ts": {
+      "sha256": "536ace72b0505366dd1169a9b0ba11a99a9af9b78d026ac88f9dc857578bdd45",
+      "bytes": 3560
+    },
+    "extensions/src/core/billing/index.ts": {
+      "sha256": "666a5d34ddac023960884c39a87373045a991c09e9796522637e8dffd0b725f0",
+      "bytes": 28
+    },
+    "extensions/src/core/bundle.ts": {
+      "sha256": "f94d0a9c5ad4634d99bab4c3b865d0c6e1663e6fb4b2ec825474a89b6ffd76be",
+      "bytes": 1022
+    },
+    "extensions/src/core/card-appearance.ts": {
+      "sha256": "1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744",
+      "bytes": 20335
+    },
+    "extensions/src/core/card-media-references.ts": {
+      "sha256": "b9ee916312498fc3e42032c27fbbe7bdc8c485a18c9695e3b7825bbb7ab69f92",
+      "bytes": 19531
+    },
+    "extensions/src/core/cinematic-overlays.ts": {
+      "sha256": "3799f40fd3fb9d5ca22bafdc3a71e93da4b144c6a60e3c6107497d5eab6e30a8",
+      "bytes": 10293
+    },
+    "extensions/src/core/commands.ts": {
+      "sha256": "e15614078494be232b1ae5c793350fecfe70c44b1e757fc0e0acf57e4ba58564",
+      "bytes": 7652
+    },
+    "extensions/src/core/constants.ts": {
+      "sha256": "bbeeb26c8d6f8a12da3621c9ab3cb5f7e2eadfd589471142918e2d1da3e7b721",
+      "bytes": 2748
+    },
+    "extensions/src/core/creating-worlds-show.ts": {
+      "sha256": "06aa99edae27e18d105e4c1dd4254cadc05ba8a2fba8123283cf261e74c416d0",
+      "bytes": 3485
+    },
+    "extensions/src/core/digest.ts": {
+      "sha256": "7f49ad1f3ee9eb3b13bb8064d11646a9120c32d925f396c87cc892d44df1df4d",
+      "bytes": 5232
+    },
+    "extensions/src/core/index.ts": {
+      "sha256": "826997714edad397b0870ec466f94a1eb0f0bc6d6727fb94153a23b7102e187f",
+      "bytes": 1124
+    },
+    "extensions/src/core/lottie.ts": {
+      "sha256": "69b3c742384732717b1679dcc488d1c4e77d8a8dccb7dbbed502388af51fe69d",
+      "bytes": 43171
+    },
+    "extensions/src/core/media-selection.ts": {
+      "sha256": "7d4855d2e44fe83f8fc3f401b1610f03c3938372d7d28bedf631d480d607bcc0",
+      "bytes": 1021
+    },
+    "extensions/src/core/media.ts": {
+      "sha256": "a328fc4168bed2a84e11350aca48905de1f301865c375367c671814f77924f18",
+      "bytes": 11212
+    },
+    "extensions/src/core/packages/index.ts": {
+      "sha256": "6e90c15cda228986114fb73c3397b5b0a3425c31b9a8b8cd3071966381a472b5",
+      "bytes": 80
+    },
+    "extensions/src/core/packages/manifest.ts": {
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a",
+      "bytes": 3577
+    },
+    "extensions/src/core/packages/paths.ts": {
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508",
+      "bytes": 1981
+    },
+    "extensions/src/core/packages/protocol.ts": {
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99",
+      "bytes": 5468
+    },
+    "extensions/src/core/packages/zip-detection.ts": {
+      "sha256": "4b954b8c577538d11a43271afc340f1f032ad00312df8aba2f6693ec25f7756e",
+      "bytes": 1311
+    },
+    "extensions/src/core/phone-roster.ts": {
+      "sha256": "438a39f8cd9848c6c517a91cdb3cc2e8dc8f8875c5216b318973baa7cafe75f8",
+      "bytes": 7405
+    },
+    "extensions/src/core/platform-opening.ts": {
+      "sha256": "2068150a7a99980764419324fb3502d9a82d6d09ef0100236291cfcae703524e",
+      "bytes": 2094
+    },
+    "extensions/src/core/product-branding.ts": {
+      "sha256": "f6a8447cd41a2d81b5d25968455dea9ad119b10dfa77ba38cbae87cd8110fad9",
+      "bytes": 258
+    },
+    "extensions/src/core/question-play-mode.ts": {
+      "sha256": "34602143c2dcd7f2c1b4c7c182a7b36a2b2cd43ebfae76004cc95d5c3586b793",
+      "bytes": 467
+    },
+    "extensions/src/core/questions.ts": {
+      "sha256": "dcf097bcdc2bd6329ae78a0a573f01856257881828097f530ee578422fc29c4f",
+      "bytes": 5124
+    },
+    "extensions/src/core/quiz-extras.ts": {
+      "sha256": "cff2c8bc7ec7f10f960a8b017f94e362c967de9c9f0646866f4353b471ce6e72",
+      "bytes": 8612
+    },
+    "extensions/src/core/reveal.ts": {
+      "sha256": "02127c9af9376025312c354e6dbea93d8079c178c95e83c1a0796c166990a683",
+      "bytes": 1572
+    },
+    "extensions/src/core/revisions.ts": {
+      "sha256": "76cb360eeaa7293348b3abff4597e30e406cf4b09835ff3704f0e59dca7197aa",
+      "bytes": 2383
+    },
+    "extensions/src/core/roster-import.ts": {
+      "sha256": "22b116ba7b8977ed5982d74643c427cc844c191abf57a50c5525c23710a65826",
+      "bytes": 36233
+    },
+    "extensions/src/core/show-authoring-convert.ts": {
+      "sha256": "a2b1b85bb8fbd7c28ee5d48f4749a3ba3dba8a1306214cd0ba6dc1e493404666",
+      "bytes": 41007
+    },
+    "extensions/src/core/show-authoring-schema.ts": {
+      "sha256": "04a193fce8b3a9a775f69d24ea255a0ad64e5a2e8b858e4e1e57b504190596df",
+      "bytes": 26630
+    },
+    "extensions/src/core/show-import-preflight.ts": {
+      "sha256": "9339ad52aefe61ae6c1bab9b303cfeccd03f56270316c8fe71722e3b6a769247",
+      "bytes": 16744
+    },
+    "extensions/src/core/show-library/application-composition-pin.ts": {
+      "sha256": "d84c926213ff38bc0b050923cc2989f389e9e1c14f35a3039329c9c7f6fc4ecb",
+      "bytes": 4779
+    },
+    "extensions/src/core/show-library/identity-rule.ts": {
+      "sha256": "2ff70d052ba199a44a9e7c2c1b2a04d7bdbcfa7193d597da14f14e3fcf6532f4",
+      "bytes": 824
+    },
+    "extensions/src/core/show-library/primitives.ts": {
+      "sha256": "60fcf76917d34f7e73257638fa7b1c33e2ec6c1e12bacc27c133ebe437fff5c5",
+      "bytes": 3649
+    },
+    "extensions/src/core/show-themes/audio.ts": {
+      "sha256": "e2a323bc42ea729cfd8669cc9dd2b2d7eedc240ed8bb420f7df5e33de78e6c9e",
+      "bytes": 6254
+    },
+    "extensions/src/core/show-themes/classic.manifest.json": {
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061",
+      "bytes": 41813
+    },
+    "extensions/src/core/show-themes/definition.ts": {
+      "sha256": "25b5d837febc0fbacd3df30df3701d194ebce59444fae4f5d8bebb6d33cbadc4",
+      "bytes": 13851
+    },
+    "extensions/src/core/show-themes/index.ts": {
+      "sha256": "909454f8f9fc4c7e4e2c7c17f8838c19b7334ca9060a7a4e6120cf2efbfceb09",
+      "bytes": 163
+    },
+    "extensions/src/core/show-themes/media.ts": {
+      "sha256": "0abb2c489cf8472b18980d4b1bb59ef7d85e84a3d30b4d16a878c566e8ff5295",
+      "bytes": 2893
+    },
+    "extensions/src/core/show-themes/razzia.manifest.json": {
+      "sha256": "a30a05dd4ac083665af25958724a6ac279d76a711405cbcd6072c33f6b13ea26",
+      "bytes": 45557
+    },
+    "extensions/src/core/show-themes/registry.ts": {
+      "sha256": "6f980606571688cb3e2fc653d77f047d7043ca1a06488edd0d3464afcd3e2e55",
+      "bytes": 2006
+    },
+    "extensions/src/core/show-themes/resolve.ts": {
+      "sha256": "867529ee357fffdf315bcfba570ebf50ce1ccf0178b9131ff69197f11243ece5",
+      "bytes": 7201
+    },
+    "extensions/src/core/show-themes/selection.ts": {
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723",
+      "bytes": 6727
+    },
+    "extensions/src/core/show-workbook.ts": {
+      "sha256": "1c2c342c7b4afba7003d3f659db39aa280ed06eb01f6f9300a880c7789a78aa7",
+      "bytes": 86000
+    },
+    "extensions/src/core/state.ts": {
+      "sha256": "a867f63167849ee012db75ba9dba802287caf2bf50b32fd0fea1291b069e37bb",
+      "bytes": 949
+    },
+    "extensions/src/core/studio-migrate.ts": {
+      "sha256": "a3bea50ed8642d4d098d6e2971122cb473a3e3d6ad028a96756d7e81b9730415",
+      "bytes": 4723
+    },
+    "extensions/src/core/studio-timeline-schema.ts": {
+      "sha256": "3212e7413b29497ff9d6853f5a38b99bea625f400dcf47b2616a3da97995bc24",
+      "bytes": 22066
+    },
+    "extensions/src/core/tadazz-appearance.ts": {
+      "sha256": "b3ab91f139bec8503a1720729e7ade6a836ec66ba05272f1c595739ae8cd3284",
+      "bytes": 3098
+    },
+    "extensions/src/presentation/package-runtime/sdk.tsx": {
+      "sha256": "81ce066754d5c8211fdc436f1d1782856f5a9f982357ac681ecf0df085804b62",
+      "bytes": 3769
+    },
+    "extensions/src/server/packages/archive.ts": {
+      "sha256": "8faf12897286353c8ab6c460eca236ffb76b35af79b05039ae8019a89202b31f",
+      "bytes": 7632
+    },
+    "extensions/src/server/packages/error.ts": {
+      "sha256": "68939526c109902e94e72256ec7394fb22d0ad5c0cb8960efb441edffdf56130",
+      "bytes": 267
+    },
+    "extensions/src/server/packages/game-stage.ts": {
+      "sha256": "877b529682e850df0cfa520b82661ada0abcc42c0a90f82546e9dd14c3fb2878",
+      "bytes": 1356
+    },
+    "extensions/src/server/packages/index.ts": {
+      "sha256": "43bfed5f361a1cec85d09f245d8e51524fd53f07d319c5e58e10231efa0a8a06",
+      "bytes": 144
+    },
+    "extensions/src/server/packages/preflight.ts": {
+      "sha256": "47d0d2a8928e8753463386508306374d4784babd3ae0d8454069e1920db4b079",
+      "bytes": 5821
+    },
+    "extensions/src/server/packages/references.ts": {
+      "sha256": "e823b770ab0e227242001f42671f8fac7a540521b95868d8f0d654d76cb9a53e",
+      "bytes": 2729
+    },
+    "extensions/src/server/packages/runtime-access.ts": {
+      "sha256": "f8c98e48d8c4d38c242e5b61e37c120795db052be62b6c2296c8c9db47c875a7",
+      "bytes": 4062
+    },
+    "extensions/src/server/packages/storage-budget.ts": {
+      "sha256": "daab5cae092f616f4904fa70885da5044b6e8d9a425ad93c9468a33b4851423f",
+      "bytes": 1045
+    },
+    "extensions/src/server/packages/store.ts": {
+      "sha256": "f836a8c6d92e1bebe2725ae74779fbcb535f5b526100abed52f45a59490b5a21",
+      "bytes": 24830
+    },
+    "extensions/src/server/show-themes/validate-package.ts": {
+      "sha256": "1ea9806673243691dad5f7171323835d7e5c82fda5d34d96f91526f36940b070",
+      "bytes": 13170
+    },
+    "extensions/src/server/storage/error.ts": {
+      "sha256": "22952ef1b3647771d391f79eca8f035576549c1e6594012ae17100bf878cb02b",
+      "bytes": 297
+    },
+    "extensions/src/server/storage/journal.ts": {
+      "sha256": "1f74a958ec4ca4d2c2633741bf3f8bb990ae33354f447017626ff8056985fbc8",
+      "bytes": 13633
+    },
+    "extensions/src/server/storage/recovery-state.ts": {
+      "sha256": "c130960d75da2fa2105b780e4e9e9cc71c6fb18efdb4eda26481269737a78438",
+      "bytes": 1411
+    },
+    "extensions/src/server/storage/service.ts": {
+      "sha256": "37d29e662c23e077776b158ac5180702dd9e42595c85b3a2e84d8626e87f091e",
+      "bytes": 20404
+    },
+    "extensions/src/server/storage/sidecar.ts": {
+      "sha256": "a8679e5e8afadbd882320555d9d94cbbebfee1bcef62f6461bdf1ceb4af6034a",
+      "bytes": 3394
+    },
+    "extensions/tsconfig.json": {
+      "sha256": "c966b1ce64de54a731ff593857364c4c9a5f7a1dfd89098629c8843137b1f4df",
+      "bytes": 371
+    },
+    "package.json": {
+      "sha256": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd",
+      "bytes": 1284
+    },
+    "packages/common/package.json": {
+      "sha256": "8573c6e7985cad2d3ff9292588be16fcafa474ee144fd1fa27280b122cd45c53",
+      "bytes": 215
+    },
+    "packages/common/src/constants.ts": {
+      "sha256": "efe3bce19f2b96e7cd9730735a341e4de64a10b6307f509f3e6f5f1de97a279f",
+      "bytes": 4231
+    },
+    "packages/common/src/questions/options.ts": {
+      "sha256": "5478f57ce25ca226751d46fb530fab9ccef5f109cbebf68b5a9a53063e25cede",
+      "bytes": 447
+    },
+    "packages/common/src/validators/questions/choice.ts": {
+      "sha256": "eacaa560ef536901de065be4355365578a4131797f5679b00b8f5bd48af8127e",
+      "bytes": 788
+    },
+    "packages/common/src/validators/questions/estimation.ts": {
+      "sha256": "0080ddfc62fdb7d4410b097b89d2c8b3534adcf6e4c31169ce13f40c7f5329d4",
+      "bytes": 1253
+    },
+    "packages/common/src/validators/questions/index.ts": {
+      "sha256": "4ef73f27053887f2d29c884fec0a053f059a6934d13b86de0fae306859be44b9",
+      "bytes": 713
+    },
+    "packages/common/src/validators/quizz.ts": {
+      "sha256": "8cd1ff3ce886aab0fabae58557f8053102b318fdbddfac37a4275487ac61ecbf",
+      "bytes": 3967
+    },
+    "packages/common/tsconfig.json": {
+      "sha256": "07f32074e067e6bbd1a30a56c063dcf9ec42cb9ad0a1809371811785c3675358",
+      "bytes": 249
+    },
+    "packages/web/package.json": {
+      "sha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02",
+      "bytes": 1718
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952",
+      "bytes": 238795
+    },
+    "scripts/qa/package-build-worker.py": {
+      "sha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+      "bytes": 3325
+    },
+    "tsconfig.json": {
+      "sha256": "d56ba48424503b6b02f99f8eb319e9ec7c1036c5cc0d31cc8a0795391937c474",
+      "bytes": 498
+    }
+  },
+  "packages": [
+    {
+      "origin": "extensions/qa/package-builder.ts",
+      "spec": "@babel/parser",
+      "resolution": "normal",
+      "name": "@babel/parser",
+      "version": "7.29.9"
+    },
+    {
+      "origin": "extensions/qa/package-builder.ts",
+      "spec": "tsx",
+      "resolution": "normal",
+      "name": "tsx",
+      "version": "4.23.15"
+    },
+    {
+      "origin": "extensions/src/core/billing/contracts.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/bundle.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/card-appearance.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/cinematic-overlays.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/commands.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/lottie.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/media.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/packages/manifest.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/packages/protocol.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/phone-roster.ts",
+      "spec": "uuid",
+      "resolution": "normal",
+      "name": "uuid",
+      "version": "14.0.3"
+    },
+    {
+      "origin": "extensions/src/core/phone-roster.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/questions.ts",
+      "spec": "uuid",
+      "resolution": "normal",
+      "name": "uuid",
+      "version": "14.0.3"
+    },
+    {
+      "origin": "extensions/src/core/quiz-extras.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/reveal.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/show-authoring-schema.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/show-library/application-composition-pin.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/show-library/primitives.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/show-themes/definition.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/show-themes/selection.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/state.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/studio-timeline-schema.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/core/tadazz-appearance.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/presentation/package-runtime/sdk.tsx",
+      "spec": "react",
+      "resolution": "normal",
+      "name": "react",
+      "version": "19.3.0"
+    },
+    {
+      "origin": "extensions/src/presentation/package-runtime/sdk.tsx",
+      "spec": "react-dom/client",
+      "resolution": "normal",
+      "name": "react-dom",
+      "version": "19.3.0"
+    },
+    {
+      "origin": "extensions/src/presentation/package-runtime/sdk.tsx",
+      "spec": "react-dom/client",
+      "resolution": "normal",
+      "name": "react-dom",
+      "version": "19.3.0"
+    },
+    {
+      "origin": "extensions/src/presentation/package-runtime/sdk.tsx",
+      "spec": "react/jsx-runtime",
+      "resolution": "normal",
+      "name": "react",
+      "version": "19.3.0"
+    },
+    {
+      "origin": "extensions/src/server/packages/store.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "extensions/src/server/storage/journal.ts",
+      "spec": "uuid",
+      "resolution": "normal",
+      "name": "uuid",
+      "version": "14.0.3"
+    },
+    {
+      "origin": "extensions/src/server/storage/service.ts",
+      "spec": "http-status-codes",
+      "resolution": "normal",
+      "name": "http-status-codes",
+      "version": "2.3.0"
+    },
+    {
+      "origin": "packages/common/src/validators/questions/choice.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "packages/common/src/validators/questions/estimation.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "packages/common/src/validators/quizz.ts",
+      "spec": "zod",
+      "resolution": "normal",
+      "name": "zod",
+      "version": "4.6.6"
+    },
+    {
+      "origin": "packages/web/package.json",
+      "spec": "esbuild",
+      "resolution": "vite-resolved",
+      "name": "esbuild",
+      "version": "0.28.2"
+    },
+    {
+      "origin": "packages/web/package.json",
+      "spec": "vite",
+      "resolution": "normal",
+      "name": "vite",
+      "version": "8.3.4"
+    }
+  ],
+  "executableVersions": {
+    "node": "24.22.2",
+    "ffmpeg": "5.1.9",
+    "ffprobe": "5.1.9",
+    "python": "3.11.2",
+    "esbuild": "0.28.2",
+    "freetype": "2.12.1"
+  },
+  "codeCopiedFromFrozenRepository": true,
+  "dependenciesCopiedFromCache": false,
+  "compilerOrImageBuilt": false,
+  "customerDataIncluded": false,
+  "asanaTaskId": "1220708526935641"
+}

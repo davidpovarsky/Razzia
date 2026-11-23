@@ -1,0 +1,58 @@
+{
+  "time": 1794743150.229687,
+  "readOnly": true,
+  "containerId": "77bf6b4467255991f45c3ec71ebcedde77838e5e87b91ab192d82bafb542c570",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-11-15T11:29:32.598079651Z",
+    "FinishedAt": "2026-11-15T11:34:21.394437118Z"
+  },
+  "hostConfig": {
+    "PidsLimit": 96,
+    "Init": null,
+    "Ulimits": [],
+    "Memory": 2147483648,
+    "MemorySwap": 2147483648,
+    "NanoCpus": 250000000,
+    "CgroupParent": "",
+    "PidMode": ""
+  },
+  "containerPath": "docker-entrypoint.sh",
+  "containerArgs": [
+    "node",
+    "-e",
+    "setInterval(()=>{},3600000)"
+  ],
+  "docker": {
+    "cgroupDriver": "systemd",
+    "cgroupVersion": "2",
+    "initBinary": "docker-init"
+  },
+  "existingInitPath": "/usr/bin/docker-init",
+  "existingInitRegularFile": true,
+  "stoppedCgroupScopes": [
+    {
+      "path": "/sys/fs/cgroup/system.slice/docker-77bf6b4467255991f45c3ec71ebcedde77838e5e87b91ab192d82bafb542c570.scope",
+      "existsAfterStop": false,
+      "files": {},
+      "ownedProcesses": []
+    },
+    {
+      "path": "/sys/fs/cgroup/docker/77bf6b4467255991f45c3ec71ebcedde77838e5e87b91ab192d82bafb542c570",
+      "existsAfterStop": false,
+      "files": {},
+      "ownedProcesses": []
+    }
+  ],
+  "historicalPidsCurrentMaxEventsCaptured": false,
+  "historicalZombieAndThreadCountsCaptured": false,
+  "startedOrChangedAnything": false
+}

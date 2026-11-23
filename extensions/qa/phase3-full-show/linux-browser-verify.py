@@ -1,0 +1,199 @@
+"""Run the exact built V3 widget in fresh bounded Chromium/WebKit QA.
+
+Reuses the existing local image and read-only source/dependency/browser caches.
+No network, published ports, customer mount, installs, old restart or deletion.
+The 1800s ceiling bounds all 40 checks and 44 renderer fixtures. The fresh
+offline browser container uses a two-CPU quota for its renderer and fixture host.
+Behavioral assertions and their individual timeouts remain unchanged.
+Linux Fullshow explicitly selects installed GTK WebKit under local Xvfb.
+The optional transport-race argument runs both browsers against the focused
+Classic transport proof in a separate diagnostic-only receipt namespace.
+"""
+import json
+import pathlib
+import re
+import subprocess
+import sys
+import uuid
+
+ROOT = pathlib.Path(__file__).resolve().parents[3]
+BASE = ROOT / "docs/extensions/plans/phase3-takeover-20261117"
+if len(sys.argv) not in (2, 3) or not re.fullmatch(r"tadazz-codex-[a-f0-9]{12}-[a-f0-9]{8}", sys.argv[1]):
+    raise SystemExit("Pass the qualified source run directory name and optional transport-race")
+if len(sys.argv) == 3 and sys.argv[2] != "transport-race":
+    raise SystemExit("The only optional mode is transport-race")
+mode = "transport-race" if len(sys.argv) == 3 else "full-show"
+source_run = sys.argv[1]
+inputs = json.loads((BASE / source_run / "input-manifest.json").read_text(encoding="utf8"))
+run_kind = "transport" if mode == "transport-race" else "fullshow"
+run = f"tadazz-codex-{run_kind}-{inputs['sha'][:12]}-{uuid.uuid4().hex[:8]}"
+evidence = BASE / run
+evidence.mkdir()
+config = {"sha": inputs["sha"], "manifest": inputs["files"], "sourceRun": source_run, "run": run, "mode": mode}
+REMOTE = r'''
+import hashlib,json,pathlib,shutil,subprocess,time
+c=CONFIG
+assert c["mode"] in ("full-show","transport-race")
+expected_prefix="tadazz-codex-"+("transport" if c["mode"]=="transport-race" else "fullshow")+"-"+c["sha"][:12]+"-"
+assert c["run"].startswith(expected_prefix),"QA_MODE_NAMESPACE_MISMATCH"
+old="tadazz-phase2-20261116"
+facts=json.loads(subprocess.check_output(["docker","inspect",old]))[0]
+assert facts["State"]["Running"] and facts["HostConfig"]["NetworkMode"]=="none"
+mount=next(m for m in facts["Mounts"] if m["Destination"]=="/evidence")
+assert mount["Type"]=="bind" and mount["RW"]
+host_evidence=pathlib.Path(mount["Source"])
+source=host_evidence/c["sourceRun"]/"source"
+assert source.is_dir() and not source.is_symlink()
+owned=host_evidence/c["run"]
+owned.mkdir(mode=0o700,exist_ok=False)
+pid=facts["State"]["Pid"]
+old_root=f"/proc/{pid}/root"
+assert (pathlib.Path(old_root)/"tmp/phase3-999ed90c/deps/node_modules/@modelcontextprotocol/server/package.json").is_file()
+rootfs=pathlib.Path("/var/lib/docker/rootfs/overlayfs")/facts["Id"]
+assert (rootfs/"cleanup").is_dir() and (rootfs/"root/.cache/ms-playwright").is_dir()
+# runc refuses magic /proc links as bind sources. Read the small SDK cache into
+# this run's owned evidence, and bind the real existing overlay root read-only.
+assert shutil.disk_usage(owned).free > 160*1024*1024
+original_deps=pathlib.Path(old_root)/"tmp/phase3-999ed90c/deps"
+def dependency_hashes(root):
+    return {p.relative_to(root).as_posix(): ('link:'+p.readlink().as_posix() if p.is_symlink() else hashlib.sha256(p.read_bytes()).hexdigest()) for p in root.rglob('*') if p.is_symlink() or p.is_file()}
+expected_deps=dependency_hashes(original_deps)
+deps=next((p for p in sorted(host_evidence.glob('tadazz-codex-browser-*/mcp-deps')) if p.is_dir() and not p.is_symlink() and dependency_hashes(p)==expected_deps),None)
+if deps is None:
+    deps=owned/"mcp-deps"
+    shutil.copytree(original_deps,deps,symlinks=True)
+assert dependency_hashes(deps)==expected_deps
+# The full real-media matrix and issuer/SDK harness share this bounded cgroup.
+# The 3 GiB run hit its cgroup limit during repeated native parity reloads.
+# Keep two GiB of currently available host memory outside this QA allocation.
+memory_limit_bytes=6*1024**3
+host_memory={line.split()[0].rstrip(":"):int(line.split()[1]) for line in pathlib.Path("/proc/meminfo").read_text().splitlines()}
+assert host_memory["MemAvailable"]*1024 >= memory_limit_bytes+2*1024**3,"INSUFFICIENT_QA_MEMORY_HEADROOM"
+command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","2","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
+for origin,target,readonly in [(str(source),"/source",True),(str(owned),"/evidence",False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True),(str(rootfs/"root/.cache/ms-playwright"),"/root/.cache/ms-playwright",True)]:
+    command += ["--mount",f"type=bind,source={origin},target={target}" + (",readonly" if readonly else "")]
+command += [facts["Image"],"sleep","infinity"]
+created=subprocess.run(command,capture_output=True,text=True)
+if created.returncode:
+    raise RuntimeError("Fresh QA start failed: "+created.stderr)
+container=c["run"]
+hash_code="import hashlib,json,pathlib,sys;root=pathlib.Path('/source');paths=json.load(sys.stdin);print(json.dumps({p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}))"
+def hashes():
+    result=subprocess.run(["docker","exec","-i",container,"python3","-c",hash_code],input=json.dumps(list(c["manifest"])),capture_output=True,text=True,check=True)
+    return json.loads(result.stdout)
+resource_code="""from pathlib import Path
+import json
+root=Path('/sys/fs/cgroup')
+print(json.dumps({
+ 'memoryLimitBytes':int((root/'memory.max').read_text()),
+ 'memoryCurrentBytes':int((root/'memory.current').read_text()),
+ 'memoryPeakBytes':int((root/'memory.peak').read_text()),
+ 'memorySwapLimitBytes':int((root/'memory.swap.max').read_text()),
+ 'memoryEvents':{key:int(value) for key,value in (line.split() for line in (root/'memory.events').read_text().splitlines())},
+ 'cpuMax':[int(value) for value in (root/'cpu.max').read_text().split()],
+}))
+"""
+def resources():
+    result=subprocess.run(["docker","exec",container,"python3","-c",resource_code],capture_output=True,text=True,check=True,timeout=15)
+    return json.loads(result.stdout)
+try:
+    display_tools=subprocess.run(["docker","exec",container,"python3","-c","import shutil,sys;sys.exit(0 if all(shutil.which(name) for name in ('xvfb-run','Xvfb','xauth')) else 1)"],capture_output=True,text=True,timeout=15)
+    assert display_tools.returncode==0,"FULLSHOW_GTK_XVFB_TOOLS_MISSING"
+    resources_before=resources()
+    assert resources_before["memoryLimitBytes"]==memory_limit_bytes and resources_before["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_MISMATCH"
+    assert resources_before["cpuMax"][0]==2*resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
+    before=hashes()
+    assert before==c["manifest"],"Fresh browser source differs from committed input"
+    widget=source/"extensions/src/mcp-app/widget/dist"
+    def widget_hashes():
+        return {p.relative_to(widget).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in widget.rglob("*") if p.is_file()}
+    widget_before=widget_hashes()
+    artifact=json.loads((widget/"full-show-artifact.json").read_text())
+    assert hashlib.sha256((widget/"full-show.html").read_bytes()).hexdigest()==artifact["sha256"]
+    for item in artifact["physicalSources"]+artifact["publicAssets"]:
+        assert item["path"] in c["manifest"] and c["manifest"][item["path"]]==item["sha256"]
+    # Keep nice 19 and allow both cores within the two-CPU QA quota.
+    # A CPU 0 pin starved native browser frames while CPU 1 was idle in QA.
+    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit","-e","TADAZZ_FULL_SHOW_WEBKIT_BACKEND=gtk-xvfb",container,"nice","-n","19","timeout","-k","5","1800","xvfb-run","-a","-s","-screen 0 1920x1600x24 -nolisten tcp","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
+    if c["mode"]=="transport-race":
+        position=argv.index(container)
+        argv[position:position]=["-e","TADAZZ_FULL_SHOW_DIAGNOSTIC=transport-race","-e","TADAZZ_FULL_SHOW_THEMES=tadazz-classic"]
+    started=time.time()
+    result=subprocess.run(argv,capture_output=True,text=True,timeout=1815)
+    # Preserve the primary browser failure even if a receipt gate rejects early.
+    (owned/"browser.stdout.log").write_text(result.stdout)
+    (owned/"browser.stderr.log").write_text(result.stderr)
+    resources_after=resources()
+    container_after=json.loads(subprocess.check_output(["docker","inspect",container]))[0]
+    resource_evidence={"before":resources_before,"after":resources_after,
+                       "configuredMemoryLimitBytes":memory_limit_bytes,
+                       "configuredNanoCpus":container_after["HostConfig"]["NanoCpus"],
+                       "dockerOOMKilled":container_after["State"]["OOMKilled"]}
+    (owned/"browser-resource-evidence.json").write_text(json.dumps(resource_evidence,indent=2)+"\n")
+    assert resources_after["memoryLimitBytes"]==memory_limit_bytes and resources_after["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_CHANGED"
+    assert resources_after["cpuMax"]==resources_before["cpuMax"] and resource_evidence["configuredNanoCpus"]==2000000000,"QA_CPU_LIMIT_CHANGED"
+    assert not resource_evidence["dockerOOMKilled"] and all(resources_after["memoryEvents"][key]==0 for key in ("oom","oom_kill","oom_group_kill")),"FULLSHOW_QA_OOM"
+    after=hashes()
+    widget_after=widget_hashes()
+    inner_path=owned/"full-show/receipt.json"
+    inner=json.loads(inner_path.read_text()) if inner_path.is_file() else None
+    assert inner is not None, "Full-show browser receipt missing"
+    webkit_engines=[engine for engine in inner.get("engines",[]) if engine.get("name")=="webkit"]
+    assert len(webkit_engines)==1 and webkit_engines[0].get("qaBackend")=="gtk-xvfb" and webkit_engines[0].get("headless") is False,"FULLSHOW_WEBKIT_BACKEND_MISMATCH"
+    assert inner["artifactSha256"]==artifact["sha256"]
+    assert inner["rendererBuildId"]==artifact["rendererBuildId"]
+    engines={entry["name"].split(" / ")[0] for entry in inner["entries"]}
+    assert engines=={"chromium","webkit"}, "Both browser engines are required"
+    assert inner["entries"] and all(entry["status"]=="PASS" for entry in inner["entries"]), "A full-show browser gate failed"
+    assert not inner["errors"]
+    assert result.returncode==0 and inner["failureCount"]==0,"BROWSER_EXECUTION_FAILED"
+    assert inner["sha"]==c["sha"] and inner["widgetManifestSha256"]==widget_before["full-show-artifact.json"] and inner["widgetHtmlSha256"]==artifact["sha256"],"BROWSER_RECEIPT_INPUT_MISMATCH"
+    assert inner["sourceHashesUnchanged"] is True and inner["network"]=="none" and inner["outboundDenied"]==[],"BROWSER_ISOLATION_FAILURE"
+    assert inner["productionChanged"] is False and inner["customerMountAccessed"] is False,"BROWSER_LIVE_DATA_ACCESSED"
+    transport_witnesses={}
+    if c["mode"]=="transport-race":
+        assert inner["diagnosticMode"]=="transport-race","TRANSPORT_MODE_MISSING"
+        expected_checks={engine+" / tadazz-classic readonly transport supersedes automatic preview" for engine in ("chromium","webkit")}
+        assert len(inner["entries"])==2 and {entry["name"] for entry in inner["entries"]}==expected_checks,"TRANSPORT_CHECKS_MISSING"
+        assert {engine["name"] for engine in inner["engines"]}=={"chromium","webkit"} and len(inner["engines"])==2,"TRANSPORT_ENGINES_MISSING"
+        expected_actions={"pause","replay","next","previous"}
+        expected_gates={"pause automatic","replay automatic","replay manual","next automatic","next manual","previous automatic","previous manual"}
+        for engine in ("chromium","webkit"):
+            witness_path=owned/"full-show"/(engine+"-tadazz-classic-transport-race.json")
+            witness_bytes=witness_path.read_bytes()
+            witness=json.loads(witness_bytes)
+            assert witness["engine"]==engine and witness["theme"]=="tadazz-classic" and witness["status"]=="PASS" and not witness.get("error"),"TRANSPORT_WITNESS_FAILED"
+            cases=witness["cases"]
+            assert len(cases)==4 and {case["action"] for case in cases}==expected_actions and all(case["status"]=="PASS" for case in cases),"TRANSPORT_ACTIONS_MISSING"
+            assert next(case for case in cases if case["action"]=="pause")["userPausePreserved"] is True,"TRANSPORT_PAUSE_NOT_PRESERVED"
+            gates=witness["gates"]
+            assert len(gates)==7 and {gate["label"] for gate in gates}==expected_gates and all(gate["claimed"] is True and gate["fulfilled"] is True for gate in gates),"TRANSPORT_REAL_ACKS_INCOMPLETE"
+            transport_witnesses[engine]={"path":witness_path.relative_to(owned).as_posix(),"sha256":hashlib.sha256(witness_bytes).hexdigest(),"witness":witness}
+    else:
+        assert inner["diagnosticMode"] is None,"FULL_SHOW_DIAGNOSTIC_MODE_FORBIDDEN"
+        assert len(inner["entries"])==40,"FULL_SHOW_40_CHECKS_REQUIRED"
+        assert len(inner["rendererFixtures"])==44 and all(fixture["observed"]["status"]=="PASS" for fixture in inner["rendererFixtures"]),"FULL_SHOW_44_FIXTURES_REQUIRED"
+    receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"widgetManifestSha256":widget_before["full-show-artifact.json"],"widgetHtmlSha256":artifact["sha256"],"widgetArtifacts":widget_before,"allWidgetHashesVerifiedBeforeAfter":widget_before==widget_after,"fullShow":inner,"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
+    receipt["resources"]=resource_evidence
+    receipt["sourceRun"]=c["sourceRun"]
+    if c["mode"]=="transport-race":
+        receipt["diagnosticOnly"]=True
+        receipt["diagnosticMode"]="transport-race"
+        receipt["releaseQualified"]=False
+        receipt["transportRace"]=receipt.pop("fullShow")
+        receipt["transportWitnesses"]=transport_witnesses
+    print(json.dumps(receipt,indent=2))
+finally:
+    subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)
+'''
+remote = REMOTE.replace("c=CONFIG", "c=" + repr(config))
+result = subprocess.run(["ssh", "-i", str(pathlib.Path.home()/".ssh/tadazz_oracle_2026"), "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "ubuntu@132.145.25.168", "sudo -n python3 -"], input=remote, capture_output=True, text=True, encoding="utf8", timeout=1860)
+(evidence / "controller.stdout.log").write_text(result.stdout, encoding="utf8", newline="\n")
+(evidence / "controller.stderr.log").write_text(result.stderr, encoding="utf8", newline="\n")
+if result.returncode:
+    print(result.stderr[-4000:])
+    raise SystemExit(result.returncode)
+receipt=json.loads(result.stdout)
+(evidence / "receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf8",newline="\n")
+print(json.dumps({"sha":receipt["sha"],"evidence":str(evidence),"exit":receipt["exit"],"seconds":receipt["seconds"],"allSourceHashesVerifiedBeforeAfter":receipt["allSourceHashesVerifiedBeforeAfter"]},indent=2))
+raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] and receipt["sdkCacheHashesVerifiedBeforeAfter"] and receipt["allWidgetHashesVerifiedBeforeAfter"] else 1)

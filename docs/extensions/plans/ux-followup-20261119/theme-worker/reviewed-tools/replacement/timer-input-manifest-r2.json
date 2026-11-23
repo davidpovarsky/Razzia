@@ -1,0 +1,40 @@
+{
+  "format": "tadazz-theme-worker-timer-inputs-r2",
+  "asanaTaskId": "1220708526935641",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "fixture": {
+    "format": "tadazz-theme-worker-timer-fixture",
+    "asanaTaskId": "1220708526935641",
+    "tenant": "452af5625f3f00dd05982533702d0a98746b2d50294b544854f69399d904fd5e",
+    "uploadId": "2692771b-32f8-445e-bf15-1947471fd6b3",
+    "kind": "complete",
+    "packageId": "fixture-complete-arcade",
+    "version": "1.0.0",
+    "themeId": "fixture-arcade",
+    "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+    "archiveBytes": 520223,
+    "expectedCompiledThemeIds": [
+      "fixture-arcade"
+    ],
+    "generatedOnly": true,
+    "customerData": false,
+    "sourceCodeExecutedDuringPreparation": false,
+    "archiveProvenance": "Same pinned generated Complete archive in a new, separately owned recovery timer job",
+    "attempt": "r2"
+  },
+  "files": {
+    "source.tadazz": {
+      "bytes": 520223,
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d"
+    },
+    "request.json": {
+      "bytes": 241,
+      "sha256": "10c147d291e67d70081577c3622b8d61e3cf78fc44186b95cf5ccad6ddf5307b"
+    },
+    "fixture-summary.json": {
+      "bytes": 739,
+      "sha256": "27cbebb9d82a38f917c88a8041c6818f335540544802d0a84f15588a49396ed6"
+    }
+  },
+  "priorFailedReceiptSha256": "d05873d0ad9c016e4e3e25f4e9787783ca04997b6a48c479c14f02b3aeeae6e4"
+}

@@ -1,0 +1,25 @@
+{
+  "format": "tadazz-host-connection-blocker",
+  "version": 1,
+  "observedDate": "2026-11-18",
+  "timezone": "Asia/Hebron",
+  "operation": "plugin_creator_create_plugin",
+  "scope": "PRIVATE",
+  "package": {
+    "name": "tadazz-private-0.1.0.zip",
+    "sha256": "1caf6917c3e30028d44378a6dd8673e6625a6066d5000985fb58e8aff9e8d3de"
+  },
+  "response": {
+    "errorCode": "FORBIDDEN",
+    "category": "permission_denied",
+    "message": "You do not have permission to use plugins with MCPs. Contact your workspace admin for access",
+    "retryable": false,
+    "upstream_status": 403
+  },
+  "pluginId": null,
+  "pluginCreated": false,
+  "installed": false,
+  "oauthConnected": false,
+  "nextRequiredAction": "Workspace administrator must enable permission to use plugins with MCPs before retrying the authorized creation flow.",
+  "alternateIdentityOrRouteAttempted": false
+}

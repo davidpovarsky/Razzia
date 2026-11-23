@@ -1,0 +1,16 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+ ❯ src/core/show-library/composition-reset.test.ts (10 tests | 6 failed) 21ms
+   ❯ composition section reset validates the runtime command (10)
+     × rejects registry without returning a corrupted composition 12ms
+     × rejects roles without returning a corrupted composition 1ms
+     × rejects id without returning a corrupted composition 1ms
+     × rejects unknown without returning a corrupted composition 1ms
+     × rejects __proto__ without returning a corrupted composition 1ms
+     × rejects constructor without returning a corrupted composition 1ms
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 4 passed (10)
+   Start at  18:41:53
+   Duration  724ms (import 64%, transform 29%, tests 5%, worker 2%)

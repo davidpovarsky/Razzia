@@ -1,0 +1,374 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 187195 subject: Synthetic phone API security QA
+# Game 01a1dfc8-7105-74d7-a9ec-41c2c07eea0c added. Total games: 1
+# Game 01a1dfc8-7105-74d7-a9ec-41c2c07eea0c marked as empty. Total empty games: 1
+# A user connected: socketId: 5-XFmF9Xoig82rhdAAAA, clientId: 01a1dfc8-709c-7659-b6d1-4a5241d45067
+# Game 01a1dfc8-7105-74d7-a9ec-41c2c07eea0c reactivated. Remaining empty games: 0
+# Manager reconnected to game 187195
+# Game 01a1dfc8-7105-74d7-a9ec-41c2c07eea0c removed. Total games: 0
+# Subtest: API01 configured route secret rejects missing/wrong credentials without roster mutation
+ok 1 - API01 configured route secret rejects missing/wrong credentials without roster mutation
+  ---
+  duration_ms: 996.3217
+  type: 'test'
+  ...
+# A user disconnected : 5-XFmF9Xoig82rhdAAAA
+# New game created: 064774 subject: Synthetic phone API security QA
+# Game 01a1dfc8-7290-7234-8279-518f2f9cb6c0 added. Total games: 1
+# Game 01a1dfc8-7290-7234-8279-518f2f9cb6c0 marked as empty. Total empty games: 1
+# A user connected: socketId: DLIz72fOIamGw24vAAAB, clientId: 01a1dfc8-7230-7653-9825-3e1fd8fc8d92
+# Game 01a1dfc8-7290-7234-8279-518f2f9cb6c0 reactivated. Remaining empty games: 0
+# Manager reconnected to game 064774
+# Game 01a1dfc8-7290-7234-8279-518f2f9cb6c0 removed. Total games: 0
+# Subtest: API02 absent route-secret configuration fails closed
+ok 2 - API02 absent route-secret configuration fails closed
+  ---
+  duration_ms: 206.635989
+  type: 'test'
+  ...
+# A user disconnected : DLIz72fOIamGw24vAAAB
+# New game created: 202866 subject: Synthetic phone API security QA
+# Game 01a1dfc8-735d-7198-9f2d-11e0e0ed7173 added. Total games: 1
+# Game 01a1dfc8-735d-7198-9f2d-11e0e0ed7173 marked as empty. Total empty games: 1
+# A user connected: socketId: Mp5SmkJXy5R5GXRvAAAC, clientId: 01a1dfc8-7356-737f-aa9b-5344118c077e
+# Game 01a1dfc8-735d-7198-9f2d-11e0e0ed7173 reactivated. Remaining empty games: 0
+# Manager reconnected to game 202866
+# Game 01a1dfc8-735d-7198-9f2d-11e0e0ed7173 removed. Total games: 0
+# Subtest: API03 stale A poll after B rebind is denied without returning B private roster state
+ok 3 - API03 stale A poll after B rebind is denied without returning B private roster state
+  ---
+  duration_ms: 301.47736
+  type: 'test'
+  ...
+# A user disconnected : Mp5SmkJXy5R5GXRvAAAC
+# New game created: 735177 subject: Synthetic phone API security QA
+# Game 01a1dfc8-7485-7139-9704-7fdad216e9e8 added. Total games: 1
+# Game 01a1dfc8-7485-7139-9704-7fdad216e9e8 marked as empty. Total empty games: 1
+# A user connected: socketId: _XMEiI3nx_Piyz2SAAAD, clientId: 01a1dfc8-7480-7387-b12d-8c33b32663c0
+# Game 01a1dfc8-7485-7139-9704-7fdad216e9e8 reactivated. Remaining empty games: 0
+# Manager reconnected to game 735177
+# Game 01a1dfc8-7485-7139-9704-7fdad216e9e8 removed. Total games: 0
+# Subtest: API04 late A answer/hangup preserve B binding and B earns authoritative score
+ok 4 - API04 late A answer/hangup preserve B binding and B earns authoritative score
+  ---
+  duration_ms: 12238.425143
+  type: 'test'
+  ...
+# A user disconnected : _XMEiI3nx_Piyz2SAAAD
+# New game created: 888343 subject: Synthetic phone API security QA
+# Game 01a1dfc8-a3fb-72ef-b1b7-60fa0a7fefdb added. Total games: 1
+# Game 01a1dfc8-a3fb-72ef-b1b7-60fa0a7fefdb marked as empty. Total empty games: 1
+# A user connected: socketId: Nsth3N9tCzZ73ZW4AAAE, clientId: 01a1dfc8-a3f7-70a2-9a3c-6833a65ea035
+# Game 01a1dfc8-a3fb-72ef-b1b7-60fa0a7fefdb reactivated. Remaining empty games: 0
+# Manager reconnected to game 888343
+# Game 01a1dfc8-a3fb-72ef-b1b7-60fa0a7fefdb removed. Total games: 0
+# Subtest: API05 stale epoch is rejected; current epoch key5 is accepted exactly once
+ok 5 - API05 stale epoch is rejected; current epoch key5 is accepted exactly once
+  ---
+  duration_ms: 17124.991473
+  type: 'test'
+  ...
+# A user disconnected : Nsth3N9tCzZ73ZW4AAAE
+# New game created: 176014 subject: Synthetic phone API security QA
+# Game 01a1dfc8-e6df-75d8-8e8e-c97aff66332f added. Total games: 1
+# Game 01a1dfc8-e6df-75d8-8e8e-c97aff66332f marked as empty. Total empty games: 1
+# A user connected: socketId: p0PMyiUGBL_-L9yOAAAF, clientId: 01a1dfc8-e6dc-7221-9190-7c6dd8076196
+# Game 01a1dfc8-e6df-75d8-8e8e-c97aff66332f reactivated. Remaining empty games: 0
+# Manager reconnected to game 176014
+# Game 01a1dfc8-e6df-75d8-8e8e-c97aff66332f removed. Total games: 0
+# Subtest: API06 unknown phone/call cannot poll a connected victim roster by supplied roster ID
+ok 6 - API06 unknown phone/call cannot poll a connected victim roster by supplied roster ID
+  ---
+  duration_ms: 28.476599
+  type: 'test'
+  ...
+# A user disconnected : p0PMyiUGBL_-L9yOAAAF
+# New game created: 983967 subject: Synthetic phone API security QA
+# Game 01a1dfc8-e700-7389-86e8-f094e0b732d6 added. Total games: 1
+# Game 01a1dfc8-e700-7389-86e8-f094e0b732d6 marked as empty. Total empty games: 1
+# A user connected: socketId: LaBLI51uYMuaWrxFAAAG, clientId: 01a1dfc8-e6f9-7206-b365-7050f8a0f2ea
+# Game 01a1dfc8-e700-7389-86e8-f094e0b732d6 reactivated. Remaining empty games: 0
+# Manager reconnected to game 983967
+# Game 01a1dfc8-e700-7389-86e8-f094e0b732d6 removed. Total games: 0
+# Subtest: API07 unknown phone cannot rebind a disconnected victim through its roster ID
+ok 7 - API07 unknown phone cannot rebind a disconnected victim through its roster ID
+  ---
+  duration_ms: 114.04712
+  type: 'test'
+  ...
+# A user disconnected : LaBLI51uYMuaWrxFAAAG
+# New game created: 992779 subject: Synthetic phone API security QA
+# Game 01a1dfc8-e7be-747f-801e-6cdf9aa5d4ed added. Total games: 1
+# Game 01a1dfc8-e7be-747f-801e-6cdf9aa5d4ed marked as empty. Total empty games: 1
+# A user connected: socketId: 4ONHP4mrSwWhNXMcAAAH, clientId: 01a1dfc8-e76a-758c-b744-a85e5f7e9f53
+# Game 01a1dfc8-e7be-747f-801e-6cdf9aa5d4ed reactivated. Remaining empty games: 0
+# Manager reconnected to game 992779
+# Game 01a1dfc8-e7be-747f-801e-6cdf9aa5d4ed removed. Total games: 0
+# Subtest: API08 phone mismatch plus copied roster/call IDs cannot submit a victim answer
+ok 8 - API08 phone mismatch plus copied roster/call IDs cannot submit a victim answer
+  ---
+  duration_ms: 11189.585205
+  type: 'test'
+  ...
+# A user disconnected : 4ONHP4mrSwWhNXMcAAAH
+# New game created: 255311 subject: Synthetic phone API security QA
+# Game 01a1dfc9-1327-703b-9b76-4d4abb35177c added. Total games: 1
+# Game 01a1dfc9-1327-703b-9b76-4d4abb35177c marked as empty. Total empty games: 1
+# A user connected: socketId: zkyhFI3iiZAZ1hDCAAAI, clientId: 01a1dfc9-1322-7725-9854-461122e4c7a7
+# Game 01a1dfc9-1327-703b-9b76-4d4abb35177c reactivated. Remaining empty games: 0
+# Manager reconnected to game 255311
+# Game 01a1dfc9-1327-703b-9b76-4d4abb35177c removed. Total games: 0
+# A user disconnected : zkyhFI3iiZAZ1hDCAAAI
+# Subtest: API09 failed cleanup followed by TTL expiry cannot let old A replace B
+not ok 9 - API09 failed cleanup followed by TTL expiry cannot let old A replace B
+  ---
+  duration_ms: 998.176119
+  type: 'test'
+  location: '/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:16964'
+  failureType: 'testCodeFailure'
+  error: |-
+    Retired ID after TTL must not rebind the actual roster
+    + actual - expected
+    
+      {
+    +   activeCallId: '04e1b4965fe7092d0691efb3',
+    -   activeCallId: '30aedafe02aad4e91b06fd42',
+        answered: false,
+        clientId: 'phone-client-01a1dfc9-151e-70fc-817a-9a320c4a552a',
+        connected: 1,
+        epoch: 0,
+        exists: true,
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    exists: true
+    activeCallId: '30aedafe02aad4e91b06fd42'
+    status: 'connected'
+    clientId: 'phone-client-01a1dfc9-151e-70fc-817a-9a320c4a552a'
+    points: 0
+    epoch: 0
+    answered: false
+    connected: 1
+    players: 1
+    registered: 1
+  actual:
+    exists: true
+    activeCallId: '04e1b4965fe7092d0691efb3'
+    status: 'connected'
+    clientId: 'phone-client-01a1dfc9-151e-70fc-817a-9a320c4a552a'
+    points: 0
+    epoch: 0
+    answered: false
+    connected: 1
+    players: 1
+    registered: 1
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:726:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# New game created: 350700 subject: Synthetic phone API security QA
+# Game 01a1dfc9-1768-7364-8a42-ec83d47b6a88 added. Total games: 1
+# Game 01a1dfc9-1768-7364-8a42-ec83d47b6a88 marked as empty. Total empty games: 1
+# A user connected: socketId: pW4qg_DQIacdTiCEAAAJ, clientId: 01a1dfc9-170d-75cc-8e16-06ba0ed5253e
+# Game 01a1dfc9-1768-7364-8a42-ec83d47b6a88 reactivated. Remaining empty games: 0
+# Manager reconnected to game 350700
+# Game 01a1dfc9-1768-7364-8a42-ec83d47b6a88 removed. Total games: 0
+# A user disconnected : pW4qg_DQIacdTiCEAAAJ
+# Subtest: API10 real gateway process restart cannot revive retired A and replace B
+not ok 10 - API10 real gateway process restart cannot revive retired A and replace B
+  ---
+  duration_ms: 1303.593797
+  type: 'test'
+  location: '/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:18027'
+  failureType: 'testCodeFailure'
+  error: |-
+    Process-local history loss must not authorize retired IDs
+    + actual - expected
+    
+      {
+    +   activeCallId: '3cd2960f3aa89decdf7ade80',
+    -   activeCallId: 'e2719f718e3649a980fa4f32',
+        answered: false,
+        clientId: 'phone-client-01a1dfc9-190a-7195-b9a3-9d0da6c10916',
+        connected: 1,
+        epoch: 0,
+        exists: true,
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    exists: true
+    activeCallId: 'e2719f718e3649a980fa4f32'
+    status: 'connected'
+    clientId: 'phone-client-01a1dfc9-190a-7195-b9a3-9d0da6c10916'
+    points: 0
+    epoch: 0
+    answered: false
+    connected: 1
+    players: 1
+    registered: 1
+  actual:
+    exists: true
+    activeCallId: '3cd2960f3aa89decdf7ade80'
+    status: 'connected'
+    clientId: 'phone-client-01a1dfc9-190a-7195-b9a3-9d0da6c10916'
+    points: 0
+    epoch: 0
+    answered: false
+    connected: 1
+    players: 1
+    registered: 1
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:757:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# New game created: 082315 subject: Synthetic phone API security QA
+# Game 01a1dfc9-1c22-74d1-9651-4cf1c31bcb38 added. Total games: 1
+# Game 01a1dfc9-1c22-74d1-9651-4cf1c31bcb38 marked as empty. Total empty games: 1
+# A user connected: socketId: btV5pAP9mIDUSE_aAAAK, clientId: 01a1dfc9-1c1f-774d-aa4f-980520dd8a22
+# Game 01a1dfc9-1c22-74d1-9651-4cf1c31bcb38 reactivated. Remaining empty games: 0
+# Manager reconnected to game 082315
+# Game 01a1dfc9-1c22-74d1-9651-4cf1c31bcb38 removed. Total games: 0
+# A user disconnected : btV5pAP9mIDUSE_aAAAK
+# Subtest: API11 documented national/international aliases cannot reorder A after B
+not ok 11 - API11 documented national/international aliases cannot reorder A after B
+  ---
+  duration_ms: 612.028648
+  type: 'test'
+  location: '/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:18861'
+  failureType: 'testCodeFailure'
+  error: |-
+    Earlier delayed alias join must not replace the newer call
+    + actual - expected
+    
+    + 'aef90ec10f44779186fa595c'
+    - '1a1c136966ad753bc282c474'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '1a1c136966ad753bc282c474'
+  actual: 'aef90ec10f44779186fa595c'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:803:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# New game created: 994191 subject: Synthetic phone API security QA
+# Game 01a1dfc9-1ed4-7799-bf72-8fe2bf66ebfa added. Total games: 1
+# Game 01a1dfc9-1ed4-7799-bf72-8fe2bf66ebfa marked as empty. Total empty games: 1
+# A user connected: socketId: eOZnWAguHqjitrCsAAAL, clientId: 01a1dfc9-1ed1-7139-a681-3d310c6cd882
+# Game 01a1dfc9-1ed4-7799-bf72-8fe2bf66ebfa reactivated. Remaining empty games: 0
+# Manager reconnected to game 994191
+# Game 01a1dfc9-1ed4-7799-bf72-8fe2bf66ebfa removed. Total games: 0
+# A user disconnected : eOZnWAguHqjitrCsAAAL
+# Subtest: API12 simultaneous duplicate callbacks through actual gateway count one answer
+ok 12 - API12 simultaneous duplicate callbacks through actual gateway count one answer
+  ---
+  duration_ms: 12732.51647
+  type: 'test'
+  ...
+# New game created: 850892 subject: Synthetic phone API security QA
+# Game 01a1dfc9-5070-73e4-9d93-46b9b78d4753 added. Total games: 1
+# Game 01a1dfc9-5070-73e4-9d93-46b9b78d4753 marked as empty. Total empty games: 1
+# A user connected: socketId: 3w-WyjaIUnmjd3NVAAAM, clientId: 01a1dfc9-5041-7595-9664-df378cbac7ff
+# Game 01a1dfc9-5070-73e4-9d93-46b9b78d4753 reactivated. Remaining empty games: 0
+# Manager reconnected to game 850892
+# Game 01a1dfc9-5070-73e4-9d93-46b9b78d4753 removed. Total games: 0
+# Subtest: API13 actual invitation-only policy rejects an unknown caller without adding roster state
+ok 13 - API13 actual invitation-only policy rejects an unknown caller without adding roster state
+  ---
+  duration_ms: 65.15372
+  type: 'test'
+  ...
+# A user disconnected : 3w-WyjaIUnmjd3NVAAAM
+# New game created: 808341 subject: Synthetic phone API security QA
+# Game 01a1dfc9-50d3-7547-b3e2-10660a473148 added. Total games: 1
+# Game 01a1dfc9-50d3-7547-b3e2-10660a473148 marked as empty. Total empty games: 1
+# A user connected: socketId: cR0gMdigxqFTtDIpAAAN, clientId: 01a1dfc9-5080-77db-aed1-22ba53bde290
+# Game 01a1dfc9-50d3-7547-b3e2-10660a473148 reactivated. Remaining empty games: 0
+# Manager reconnected to game 808341
+# Game 01a1dfc9-50d3-7547-b3e2-10660a473148 removed. Total games: 0
+# Subtest: S01-C1 configured current poll and fresh redial work; stale cached poll denies all private fields
+ok 14 - S01-C1 configured current poll and fresh redial work; stale cached poll denies all private fields
+  ---
+  duration_ms: 97.679199
+  type: 'test'
+  ...
+# A user disconnected : cR0gMdigxqFTtDIpAAAN
+# New game created: 078750 subject: Synthetic phone API security QA
+# Game 01a1dfc9-5136-716b-a1e3-f6e6e6093e7e added. Total games: 1
+# Game 01a1dfc9-5136-716b-a1e3-f6e6e6093e7e marked as empty. Total empty games: 1
+# A user connected: socketId: _IYEJAR0TtaV3661AAAO, clientId: 01a1dfc9-50e2-77ae-94c5-4a30e47cf544
+# Game 01a1dfc9-5136-716b-a1e3-f6e6e6093e7e reactivated. Remaining empty games: 0
+# Manager reconnected to game 078750
+# Game 01a1dfc9-5136-716b-a1e3-f6e6e6093e7e removed. Total games: 0
+# Subtest: S01-C2 legitimate disconnected rebind preserves roster identity and earned authoritative score
+ok 15 - S01-C2 legitimate disconnected rebind preserves roster identity and earned authoritative score
+  ---
+  duration_ms: 12132.401179
+  type: 'test'
+  ...
+# A user disconnected : _IYEJAR0TtaV3661AAAO
+# New game created: 967622 subject: Synthetic phone API security QA
+# Game 01a1dfc9-804b-702d-9e86-65a0e2934b91 added. Total games: 1
+# Game 01a1dfc9-804b-702d-9e86-65a0e2934b91 marked as empty. Total empty games: 1
+# A user connected: socketId: pFY-UiJ62vZzISSAAAAP, clientId: 01a1dfc9-8048-75d3-b2f7-b522441bc781
+# Game 01a1dfc9-804b-702d-9e86-65a0e2934b91 reactivated. Remaining empty games: 0
+# Manager reconnected to game 967622
+# Game 01a1dfc9-804b-702d-9e86-65a0e2934b91 removed. Total games: 0
+# Subtest: S02-C1 connected caller denies missing invalid mismatched and unknown roster across actions without victim mutation
+ok 16 - S02-C1 connected caller denies missing invalid mismatched and unknown roster across actions without victim mutation
+  ---
+  duration_ms: 17162.902359
+  type: 'test'
+  ...
+# A user disconnected : pFY-UiJ62vZzISSAAAAP
+# New game created: 881570 subject: Synthetic phone API security QA
+# Game 01a1dfc9-c354-733d-9aed-5f148b54cd0d added. Total games: 1
+# Game 01a1dfc9-c354-733d-9aed-5f148b54cd0d marked as empty. Total empty games: 1
+# A user connected: socketId: nLlU0ysOXL65-7i_AAAQ, clientId: 01a1dfc9-c352-713a-9230-a5a45d352b3f
+# Game 01a1dfc9-c354-733d-9aed-5f148b54cd0d reactivated. Remaining empty games: 0
+# Manager reconnected to game 881570
+# Game 01a1dfc9-c354-733d-9aed-5f148b54cd0d removed. Total games: 0
+# Subtest: S02-C2 disconnected correlation denies unsafe inputs and canonical aliases preserve legitimate score rebind poll and hangup
+ok 17 - S02-C2 disconnected correlation denies unsafe inputs and canonical aliases preserve legitimate score rebind poll and hangup
+  ---
+  duration_ms: 12192.455886
+  type: 'test'
+  ...
+# A user disconnected : nLlU0ysOXL65-7i_AAAQ
+# New game created: 698182 subject: Synthetic phone API security QA
+# Game 01a1dfc9-f2f8-7209-9265-8e141e567708 added. Total games: 1
+# Game 01a1dfc9-f2f8-7209-9265-8e141e567708 marked as empty. Total empty games: 1
+# A user connected: socketId: P9ov1_9O9G4qcD2OAAAR, clientId: 01a1dfc9-f2f6-71ff-8dcb-390b0b819470
+# Game 01a1dfc9-f2f8-7209-9265-8e141e567708 reactivated. Remaining empty games: 0
+# Manager reconnected to game 698182
+# Game 01a1dfc9-f2f8-7209-9265-8e141e567708 removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# A user disconnected : P9ov1_9O9G4qcD2OAAAR
+# Subtest: S02-C3 actual disconnected admission refusal is propagated without joined or private state
+ok 18 - S02-C3 actual disconnected admission refusal is propagated without joined or private state
+  ---
+  duration_ms: 12062.801053
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 15
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 122401.21933

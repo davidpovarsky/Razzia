@@ -1,0 +1,12 @@
+{
+  "container": "tadazz-hq-sb-metadata-20261115",
+  "phaseAtRelease": "FINISHED_CHECK_RECEIPTS",
+  "allocationReleased": true,
+  "network": "none",
+  "nanoCpus": 250000000,
+  "memoryBytes": 2147483648,
+  "diskFreeBytesObservedAfterRelease": 2021015552,
+  "reason": "Manager disk reserve HOLD; no further remote writes or runs until renewed bounded delta grant",
+  "preservedSourceAndEvidence": true,
+  "recordedUtc": "2026-11-15T07:46:42.380909+00:00"
+}

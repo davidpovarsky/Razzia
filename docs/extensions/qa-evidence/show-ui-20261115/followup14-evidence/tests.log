@@ -1,0 +1,17 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/presentation/tadazz-v4/full-show.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 395[2mms[22m[39m
+ [32m✓[39m src/presentation/show-library-preview/preview-candidate.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 307[2mms[22m[39m
+ [32m✓[39m src/components/oauth-consent/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 215[2mms[22m[39m
+ [32m✓[39m src/presentation/show-library-preview/native-theme-admission-v2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m42 passed[39m[22m[90m (42)[39m
+[2m   Start at [22m 18:04:49
+[2m   Duration [22m 12.41s[2m (transform 52%, import 37%, tests 10%, worker 1%)[22m
+
+[2m     Import [22m [33m89 modules were evaluated 127 times[39m[2m · 3.55s total, 37% of tracked time[22m
+[2m            [22m [2m~1.06s faster with [22m[33misolate: false[39m[2m — shared modules are evaluated once per worker instead of once per file[22m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-isolation[22m
+

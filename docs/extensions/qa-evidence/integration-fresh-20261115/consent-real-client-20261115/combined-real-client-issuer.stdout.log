@@ -1,0 +1,39 @@
+TAP version 13
+# node:internal/modules/run_main:123
+#     triggerUncaughtException(
+#     ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'zod' imported from C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\extensions\\src\\components\\oauth-consent\\client.ts
+#     at Object.getPackageJSONURL (node:internal/modules/package_json_reader:256:9)
+#     at packageResolve (node:internal/modules/esm/resolve:768:81)
+#     at moduleResolve (node:internal/modules/esm/resolve:854:18)
+#     at defaultResolve (node:internal/modules/esm/resolve:984:11)
+#     at nextResolve (node:internal/modules/esm/hooks:748:28)
+#     at resolveBase (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/docs/extensions/qa-evidence/mcp-foundation-20261115/consent-boundary/local-overlay-01/extensions/src/mcp-app/node_modules/tsx/dist/esm/index.mjs?1794767743524:2:3744)
+#     at resolveDirectory (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/docs/extensions/qa-evidence/mcp-foundation-20261115/consent-boundary/local-overlay-01/extensions/src/mcp-app/node_modules/tsx/dist/esm/index.mjs?1794767743524:2:4243)
+#     at resolveTsPaths (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/docs/extensions/qa-evidence/mcp-foundation-20261115/consent-boundary/local-overlay-01/extensions/src/mcp-app/node_modules/tsx/dist/esm/index.mjs?1794767743524:2:4984)
+#     at async resolve (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/docs/extensions/qa-evidence/mcp-foundation-20261115/consent-boundary/local-overlay-01/extensions/src/mcp-app/node_modules/tsx/dist/esm/index.mjs?1794767743524:2:5355)
+#     at async nextResolve (node:internal/modules/esm/hooks:748:22) {
+#   code: 'ERR_MODULE_NOT_FOUND'
+# }
+# Node.js v22.17.0
+# Subtest: tests\\first-party\\consent-client.nodecheck.ts
+not ok 1 - tests\\first-party\\consent-client.nodecheck.ts
+  ---
+  duration_ms: 707.093
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\consent-combined-local-01\\extensions\\src\\mcp-app\\tests\\first-party\\consent-client.nodecheck.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 731.946

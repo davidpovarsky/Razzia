@@ -1,0 +1,6 @@
+{
+  "extensions/src/presentation/tadazz-v4/motion.ts": "53d145a6f60b3e236c868c1d7a8c3b3441529680a6d72611f360e9387940b0c9",
+  "extensions/src/presentation/tadazz-v4/full-show.test.ts": "e9da568ef732e8c883a6d2c469a4cb74aef8a94275e3e7f0991c7feb5bee8624",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts": "f2ec8a9cd754fd5849e6db346772a53bf7d965ce1a4323bd65b21fab7d49a5a5",
+  "extensions/qa/theme-builder/prepare-native-fixture.mjs": "e7a08475d585c4d2ded8c24fa83a839b52d6ef1d023918928e3b36e001eb63b9"
+}

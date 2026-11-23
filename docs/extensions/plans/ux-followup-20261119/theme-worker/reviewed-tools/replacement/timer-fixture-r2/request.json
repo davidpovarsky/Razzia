@@ -1,0 +1,10 @@
+{
+  "uploadId": "2692771b-32f8-445e-bf15-1947471fd6b3",
+  "sourceDigest": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "themes": [
+    {
+      "id": "fixture-arcade",
+      "entry": "theme/src/entry.tsx"
+    }
+  ]
+}

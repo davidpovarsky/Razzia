@@ -1,0 +1,24 @@
+{
+  "kind": "current-public-entry-observation",
+  "at": "2026-11-19T13:22:54.802643+00:00",
+  "sourceCommitVerified": false,
+  "indexSha256": "c1525bc10e5b0085178cb147932180787cb375200cb4cd434e37d81db365a854",
+  "files": [
+    {
+      "path": "/assets/index-B-bI6J0t.js",
+      "status": 200,
+      "bytes": 222356,
+      "sha256": "068aaca5c16ce46d9d9d5907e2703e6cecd23031e5cb1b90060ed9fc5c885fca",
+      "contentType": "application/javascript",
+      "lastModified": "Thu, 19 Nov 2026 12:29:57 GMT"
+    },
+    {
+      "path": "/assets/index-Cw0uGzb_.css",
+      "status": 200,
+      "bytes": 125657,
+      "sha256": "c8b2982a47104e38fea8954986f762b804b7c23ee317b224597a2b47fa03c0f2",
+      "contentType": "text/css",
+      "lastModified": "Thu, 19 Nov 2026 12:29:57 GMT"
+    }
+  ]
+}

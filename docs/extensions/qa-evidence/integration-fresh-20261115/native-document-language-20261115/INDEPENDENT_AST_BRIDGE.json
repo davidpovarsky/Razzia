@@ -1,0 +1,9 @@
+{
+  "parser": "genuine installed Babel7.29.9 TypeScript/JSX",
+  "executedSha256": "c0bd7cd493d7796acccd8cc08cb487d7d0ee6a926a8c59cfe47a1c704808932c",
+  "integratedSha256": "4057e19f5d012641d75d1c287572a211c6c61c11f178c66f01124fdf8f82bdaf",
+  "normalizedAstEqual": true,
+  "decodedValuesFlagsChildOrderPreserved": true,
+  "positionsTriviaExtraRawSpellingOmitted": true,
+  "emittedJsEqualityClaimed": false
+}

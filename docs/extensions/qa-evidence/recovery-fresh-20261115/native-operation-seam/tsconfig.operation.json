@@ -1,0 +1,11 @@
+{
+  "extends": "../remaining-original-acceptance/tsconfig.owner.json",
+  "files": [
+    "../../../../../extensions/src/server/storage/creation-reservation.ts",
+    "../../../../../extensions/src/server/storage/creation-operation-record.ts",
+    "../../../../../extensions/src/server/storage/creation-operation-store.ts",
+    "../../../../../extensions/src/server/storage/creation-operation-types.ts",
+    "./operation-tests.ts"
+  ],
+  "include": []
+}

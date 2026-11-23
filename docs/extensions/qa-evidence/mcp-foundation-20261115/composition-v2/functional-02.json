@@ -1,0 +1,42 @@
+{
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "--experimental-strip-types",
+    "--loader",
+    "./loader-resolved.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "extensions/src/mcp-app/tests/server/canonical-v2.nodecheck.ts",
+    "extensions/src/mcp-app/tests/server/composition-preview-v2.nodecheck.ts"
+  ],
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\composition-v2\\local-overlay-03",
+  "started": "2026-11-15T16:58:30.742Z",
+  "ended": "2026-11-15T16:58:32.707Z",
+  "exit": 0,
+  "signal": null,
+  "before": {
+    "sourceFiles": 45,
+    "everyOverlayAndOriginalMatches": true
+  },
+  "after": {
+    "sourceFiles": 45,
+    "everyOverlayAndOriginalMatches": true
+  },
+  "packages": {
+    "zod": {
+      "version": "4.6.6",
+      "packageJsonSha256": "cff7e142055a9dd9bc2947a71ca3fb5e3aacdfda966d7728993ff3656245b94a"
+    },
+    "uuid": {
+      "version": "14.0.3",
+      "packageJsonSha256": "da6bb61e393eb364b83daab9e897e88acbf4c32e7d1d2af20597cbeff866b429"
+    }
+  },
+  "inputManifestSha256": "59f88143daa719ec3acf47120af6cbd8e01bfa9530a9c5a5cca41d30e7283487",
+  "lockSha256": "78d4d6b1c8832a8a31624fedf3e1d202b5c366864862ee5c83d6a9fe393d1014",
+  "loaderSha256": "499ae02cfaf461d033f4f0821fbc79b6079432d8cf62418cde775af681083165",
+  "logSha256": "63f60ad84bfba5b8d11b164d4463611a9edb32e4bb59fcce3a7aff17a65f6107",
+  "normalFrozenNpmCiScriptsOff": true,
+  "parentOrFullPrivateTypecheck": "NOT_RUN",
+  "oracleJob": false
+}

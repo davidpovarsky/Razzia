@@ -1,0 +1,79 @@
+{
+  "priorReport": "../ui-fidelity-20261109/legacy-regression-report.json.gz",
+  "allTwelveResolved": true,
+  "newBehaviorDefectsFixedThisTurn": 1,
+  "cases": [
+    {
+      "title": "saves every question type and setting",
+      "classification": "Outdated selectors; earlier real category gap reverified",
+      "resolutionAndPreservedChecks": "Use current Add card and numeric correct-choice labels. Preserve all types, category inheritance, question data, scoring, explanation and saved values. Category inheritance was repaired in 4d8fa98 before this follow-up.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "hides the scoring settings in survey mode",
+      "classification": "Outdated global-mode assumption",
+      "resolutionAndPreservedChecks": "Select per-question survey playMode in the mixed-show editor; retain hidden scoring/correct-answer controls and persistence assertions.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "shows validation errors and jumps to the invalid question",
+      "classification": "Real defect fixed",
+      "resolutionAndPreservedChecks": "useCompositeQuizzSave changed currentIndex without selecting the Studio timeline item. Select the matching invalid-question item and Questions tab; retain required-field errors and invalid-card badges.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "edits then deletes a quizz",
+      "classification": "Outdated card/action locators",
+      "resolutionAndPreservedChecks": "Target the actual card and hover its native actions. Retain edited persisted data, delete confirmation and disappearance.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "exports and imports a quizz as JSON",
+      "classification": "Outdated import workflow expectation",
+      "resolutionAndPreservedChecks": "Confirm import preview and inspect the saved imported show in its editor, then exit and verify manager list. Retain exported/imported title and question data.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "keeps the other questions intact when deleting one in the middle",
+      "classification": "Outdated card/action locators",
+      "resolutionAndPreservedChecks": "Use stable card identity and native hover delete action; retain exact remaining question order, text and correct choices.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "restores the quiz settings when switching back from survey",
+      "classification": "Outdated answer labels",
+      "resolutionAndPreservedChecks": "Use numeric labels; preserve solution and scoring settings across per-question quiz-survey-quiz switching.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "restores the manager screen after a reload",
+      "classification": "Outdated toolbar locators and accelerated fixture timing",
+      "resolutionAndPreservedChecks": "Support original and enhanced host control labels. Test at GAME_SPEED=1 so actual answer/reload behavior is observable; retain phase/counter/vote assertions.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "marks a player who did not answer in time as wrong",
+      "classification": "Outdated answer/control locators",
+      "resolutionAndPreservedChecks": "Use numeric choices and actual timeout expiry; retain wrong-answer result and ability to proceed.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "reveals the answers without waiting for a player who left",
+      "classification": "Outdated reconnect route and implicit auto-completion setup",
+      "resolutionAndPreservedChecks": "Reconnect through /game; explicitly enable endOnAllAnswered in actual settings. Retain exclusion of the disconnected player and wrong result on reconnect.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "lets the manager skip the auto-advance countdown",
+      "classification": "Outdated answer/control locators and implicit auto-completion setup",
+      "resolutionAndPreservedChecks": "Enable endOnAllAnswered explicitly; preserve 600-second auto-advance configuration, both votes, rank and manual countdown skip.",
+      "finalStatus": "passed"
+    },
+    {
+      "title": "keeps the waiting room when the manager reloads the page",
+      "classification": "Outdated answer/control locators",
+      "resolutionAndPreservedChecks": "Keep actual reload and same pin/player/reconnect/scoring assertions; use current native toolbar controls and numeric choice labels.",
+      "finalStatus": "passed"
+    }
+  ]
+}

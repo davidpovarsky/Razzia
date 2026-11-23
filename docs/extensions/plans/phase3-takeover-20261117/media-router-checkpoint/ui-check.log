@@ -1,0 +1,15 @@
+Scope: all 7 workspace projects
+[ERR_PNPM_UNSAFE_MODULES_DIR] Refusing to remove the modules directory at "C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-integration-20261115\node_modules" because its resolved target is not a strict subdirectory of the project root at "C:\Users\DAVID\Code\Razzia-worktrees\tadazz-phase3-codex-takeover-20261117".
+[ERROR] Command failed with exit code 1: "C:\Program Files\nodejs\node.exe" "C:\Users\DAVID\AppData\Roaming\npm\node_modules\pnpm\bin\pnpm.mjs" install
+
+pnpm: Command failed with exit code 1: "C:\Program Files\nodejs\node.exe" "C:\Users\DAVID\AppData\Roaming\npm\node_modules\pnpm\bin\pnpm.mjs" install
+    at getFinalError (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+    at makeError (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+    at getSyncResult (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+    at spawnSubprocessSync (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+    at execaCoreSync (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+    at callBoundExeca (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+    at boundExeca (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+    at sync2 (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:96024:10)
+    at runPnpmCli (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:273513:5)
+    at runDepsStatusCheck (file:///C:/Users/DAVID/AppData/Roaming/npm/node_modules/pnpm/dist/pnpm.mjs:274731:7)

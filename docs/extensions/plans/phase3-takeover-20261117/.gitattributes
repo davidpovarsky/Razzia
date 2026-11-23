@@ -1,0 +1,3 @@
+# Preserve raw Windows/Node transcripts byte-for-byte (including UTF-16/CRLF).
+# Structured receipts and all implementation/test sources remain ordinary text.
+*.log -text -diff

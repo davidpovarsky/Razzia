@@ -1,0 +1,63 @@
+{
+  "image": "sha256:56c4e4cffc30d77e1f9828078071880590a0bb9ecc1379f66020e842e1fa2819",
+  "container": "29a06e9ede01d11b54c6003813c18fac1cd97fb87a8271f9f9a8e735c6d41b71",
+  "name": "tadazz-bms-runtime-qa-a986a9b8",
+  "testExit": 0,
+  "probe": {
+    "health": 200,
+    "readyWithinMs": 2544,
+    "invalidTicket": 403,
+    "wrongHost": 404,
+    "noAccountApi": 404,
+    "validTicket": 200,
+    "htmlSha256": "8d6a44ec6212bc0ebdf530261121734e009e4f45060999bf006e56b38d2badee",
+    "htmlBytes": 821688,
+    "exactCsp": true,
+    "readOnlyStore": true,
+    "noSetCookie": true,
+    "build": "25f6b9b8bd5bd79ddcd0510471113aeb5ef67cc410f53fd05da52ffaed20245d",
+    "walAndShmPresent": true
+  },
+  "network": "none",
+  "readonlyRoot": true,
+  "memory": 268435456,
+  "memorySwap": 268435456,
+  "cpu": 500000000,
+  "pids": 64,
+  "caps": [
+    "ALL"
+  ],
+  "securityOptions": [
+    "no-new-privileges"
+  ],
+  "mounts": [
+    {
+      "source": "/home/ubuntu/tadazz-package-worker-bms-c85690fffb02-20261120/positive-53288406/synthetic-store",
+      "dest": "/runtime-store",
+      "rw": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-package-worker-bms-c85690fffb02-20261120/runtime-release/synthetic-runtime-capability",
+      "dest": "/run/secrets/runtime-capability",
+      "rw": false
+    }
+  ],
+  "envNames": [
+    "TADAZZ_PACKAGE_STORE",
+    "TADAZZ_PACKAGE_PARENT_ORIGIN",
+    "TADAZZ_PACKAGE_RUNTIME_ORIGIN",
+    "TADAZZ_PACKAGE_RUNTIME_PORT",
+    "PATH",
+    "NODE_VERSION",
+    "YARN_VERSION"
+  ],
+  "labels": {
+    "org.opencontainers.image.revision": "f276c9cbf86a72ab6fc689a113d7d33a1c0d21af",
+    "com.tadazz.package-runtime.source-manifest-sha256": "a6e128e56af63ec6b793ffeab0be393703b419e86495a3d2b45fc28c9867a978",
+    "com.tadazz.package-runtime.runtime-sha256": "cc97def60deefe4b6854a9a3bc85d5720d47d38a25671bf784593ca1ca2deb22",
+    "com.tadazz.package-runtime.bootstrap-sha256": "c84d9df7702379667a2744d9447dc909ec8d063203eb7bd86169817e3bb0079b"
+  },
+  "diagnostic": "",
+  "harness": "node:http exactHost; real native PackageStore writer+readonly runtime; bounded30sstartup",
+  "nativeWriterContainer": "tadazz-bms-native-writer-qa-7c594d8e"
+}

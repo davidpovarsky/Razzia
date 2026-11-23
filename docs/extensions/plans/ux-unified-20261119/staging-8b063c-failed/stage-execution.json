@@ -1,0 +1,5 @@
+{
+  "exit": 1,
+  "stdout": "{\"exit\": 1, \"stdout\": \"{\\\"customerMountUsed\\\": false, \\\"error\\\": \\\"SYNTHETIC_SMOKE_PROCESS_FAILED\\\", \\\"ok\\\": false, \\\"productionTouched\\\": false, \\\"releaseDir\\\": \\\"/home/ubuntu/tadazz-mcp-release-8b063c17800d-20261119\\\", \\\"runningContainersUnchanged\\\": true, \\\"sourceSha\\\": \\\"8b063c17800dffe4f91a7f2c9ae6aa882389e614\\\"}\\n\", \"stderr\": \"{\\\"ok\\\": false, \\\"gate\\\": \\\"SYNTHETIC_SMOKE_PROCESS_FAILED\\\"}\\n\", \"cacheRestoredStopped\": true}\n",
+  "stderr": ""
+}

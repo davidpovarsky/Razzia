@@ -62,8 +62,11 @@ export interface UploadedMedia {
   type: UploadedMediaType
 }
 
+export type QuestionPlayMode = "quiz" | "survey"
+
 export interface Question {
   type: QuestionType
+  playMode?: QuestionPlayMode
   question: string
   category?: string
   note?: string
@@ -99,6 +102,10 @@ export interface AutoAdvanceSettings {
 export interface GameSettings {
   generatedUsernames: boolean
   answersOnly: boolean
+  phoneInviteOnly?: boolean
+  /** Optional live event-roster override; absent preserves legacy admission. */
+  allowUnregisteredPlayers?: boolean
+  endOnAllAnswered?: boolean
   autoAdvance: AutoAdvanceSettings
 }
 
@@ -116,6 +123,9 @@ export interface PlayerAnswerRecord {
 
 export type QuestionResult = Question & {
   playerAnswers: PlayerAnswerRecord[]
+  playerAnswersCount?: number
+  skipped?: boolean
+  skipReason?: string
 }
 
 export interface GameResultPlayer {

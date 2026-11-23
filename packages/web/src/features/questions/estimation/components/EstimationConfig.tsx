@@ -1,12 +1,7 @@
+import { resolveQuestionPlayMode } from "@razzia/extensions/core"
 import type { EstimationInputMode } from "@razzia/common/types/game"
 import { ESTIMATION_INPUT_MODES, QUIZZ_MODES } from "@razzia/common/constants"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@razzia/web/components/Select"
+import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import { getEstimationOptions } from "@razzia/web/features/questions/estimation/utils"
 import BaseConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
@@ -57,23 +52,16 @@ const EstimationConfig = () => {
             icon={<SlidersHorizontal className="size-4" />}
             label={t("quizz:question.config.estimation.inputMode")}
           />
-          <Select
+          <ToggleGroup
+            aria-label={t("quizz:question.config.estimation.inputMode")}
             value={options.inputMode}
-            onValueChange={handleInputModeChange}
-          >
-            <SelectTrigger
-              aria-label={t("quizz:question.config.estimation.inputMode")}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.values(ESTIMATION_INPUT_MODES).map((mode) => (
-                <SelectItem key={mode} value={mode}>
-                  {t(`quizz:question.config.estimation.inputModes.${mode}`)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            onChange={handleInputModeChange}
+            items={Object.values(ESTIMATION_INPUT_MODES).map((value) => ({
+              value,
+              label: t(`quizz:question.config.estimation.inputModes.${value}`),
+            }))}
+            className="h-auto flex-wrap [&>button]:min-h-9 [&>button]:flex-1 [&>button]:justify-center [&>button]:px-2"
+          />
           <ConfigField.Description>
             {t(
               `quizz:question.config.estimation.inputModeHint.${options.inputMode}`,
@@ -95,7 +83,8 @@ const EstimationConfig = () => {
           </ConfigField.Description>
         </ConfigField>
 
-        {gameMode !== QUIZZ_MODES.SURVEY && (
+        {resolveQuestionPlayMode(currentQuestion, gameMode) !==
+          QUIZZ_MODES.SURVEY && (
           <ConfigField>
             <ConfigField.Label
               icon={<Crosshair className="size-4" />}

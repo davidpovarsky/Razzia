@@ -1,0 +1,179 @@
+
+Running 40 tests using 1 worker
+
+  ✓   1 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en (5.9s)
+  ✓   2 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: fr (5.3s)
+  ✓   3 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: de (5.2s)
+  ✓   4 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: es (5.4s)
+  ✓   5 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: it (5.0s)
+  ✓   6 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: ja (5.3s)
+  ✓   7 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: tr (5.2s)
+  ✓   8 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: vi (5.1s)
+  ✓   9 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:85:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal (6.9s)
+  ✓  10 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/2 (5.0s)
+  ✓  11 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/2 (4.9s)
+  ✓  12 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/3 (5.1s)
+  ✓  13 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/3 (4.6s)
+  ✓  14 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/4 (5.1s)
+  ✓  15 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/4 (5.0s)
+  ✓  16 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/5 (4.8s)
+  ✓  17 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/5 (5.0s)
+  ✓  18 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 358x202 (3.1s)
+  ✓  19 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 992x744 (7.7s)
+  ✓  20 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 1888x1062 (13.2s)
+  ✓  21 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en (9.8s)
+  ✓  22 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: fr (13.8s)
+  ✓  23 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: de (18.4s)
+  ✓  24 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: es (13.7s)
+  ✘  25 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: it (18.9s)
+  ✓  26 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: ja (9.9s)
+  ✓  27 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: tr (12.7s)
+  ✓  28 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: vi (11.8s)
+  ✘  29 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:85:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal (25.7s)
+  ✓  30 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/2 (14.8s)
+  ✘  31 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/2 (18.5s)
+  ✓  32 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/3 (12.6s)
+  ✓  33 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/3 (12.5s)
+  ✓  34 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/4 (13.5s)
+  ✓  35 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/4 (13.8s)
+  ✓  36 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset quiz/5 (14.3s)
+  ✓  37 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/5 (14.0s)
+  ✓  38 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 358x202 (11.4s)
+  ✘  39 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 992x744 (16.9s)
+  ✓  40 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 1888x1062 (21.8s)
+
+
+  1) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: it 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  getByTestId('tadazz-question-panel')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('tadazz-question-panel') with timeout 5000ms
+      - waiting for getByTestId('tadazz-question-panel')
+        - locator resolved to <div class="q-frame" data-v4="question-frame" data-testid="tadazz-question-panel">…</div>
+        - unexpected value "hidden"
+
+
+      68 |       localizedFixtureText[locale].question,
+      69 |     )
+    > 70 |     await expect(page.getByTestId("tadazz-question-panel")).toBeVisible()
+         |                                                             ^
+      71 |     await expect(page.getByTestId("tadazz-card-0")).toContainText(
+      72 |       localizedFixtureText[locale].choices[0],
+      73 |     )
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:70:61
+
+    attachment #1: native-events.json (application/json) ───────────────────────────────────────────
+    ../../out/native-browser-results/qa-native-actual-localized-authored-question-choices-it-webkit/attachments/native-events-json-7edae8281d4c6334800720a97794f59434d79a45.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-browser-results/qa-native-actual-localized-authored-question-choices-it-webkit/error-context.md
+
+  2) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:85:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('tadazz-question-panel')
+    Expected substring: "Synthetic question 2"
+    Received string:    "NEXT QUESTIONSynthetic question 1"
+    Timeout: 15000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('tadazz-question-panel') with timeout 15000ms
+      - waiting for getByTestId('tadazz-question-panel')
+        24 × locator resolved to <div class="q-frame" data-v4="question-frame" data-testid="tadazz-question-panel">…</div>
+           - unexpected value "NEXT QUESTIONSynthetic question 1"
+
+
+      104 |     }),
+      105 |   )
+    > 106 |   await expect(page.getByTestId("tadazz-question-panel")).toContainText(
+          |                                                           ^
+      107 |     "Synthetic question 2",
+      108 |     { timeout: 15000 },
+      109 |   )
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:106:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../out/native-browser-results/qa-native-actual-ref-ident-019f9-ot-resurrect-after-disposal-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: native-events.json (application/json) ───────────────────────────────────────────
+    ../../out/native-browser-results/qa-native-actual-ref-ident-019f9-ot-resurrect-after-disposal-webkit/attachments/native-events-json-a9b147aca7a326908a0e221d51c543b46cdc0dc5.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-browser-results/qa-native-actual-ref-ident-019f9-ot-resurrect-after-disposal-webkit/error-context.md
+
+  3) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/2 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  getByTestId('tadazz-card-0')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('tadazz-card-0') with timeout 5000ms
+      - waiting for getByTestId('tadazz-card-0')
+        - locator resolved to <button disabled type="button" data-index="0" data-v4-choice="0" data-testid="tadazz-card-0" data-control-source="standalone" class="border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open">…</button>
+        - unexpected value "hidden"
+        - locator resolved to <button disabled type="button" data-index="0" data-v4-choice="0" data-testid="tadazz-card-0" data-control-source="standalone" class="border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card">…</button>
+        - unexpected value "hidden"
+
+
+      156 |       )
+      157 |       for (let index = 0; index < answerCount; index++)
+    > 158 |         await expect(page.getByTestId(`tadazz-card-${index}`)).toBeVisible()
+          |                                                                ^
+      159 |       for (let index = answerCount; index < 5; index++)
+      160 |         await expect(page.getByTestId(`tadazz-card-${index}`)).not.toBeVisible()
+      161 |       expect(
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:158:64
+
+    attachment #1: native-events.json (application/json) ───────────────────────────────────────────
+    ../../out/native-browser-results/qa-native-bounded-current-card-subset-survey-2-webkit/attachments/native-events-json-dd6df18e9fd520ff5ee5a65e680846253563081c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-browser-results/qa-native-bounded-current-card-subset-survey-2-webkit/error-context.md
+
+  4) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 992x744 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('tadazz-card-0')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('tadazz-card-0') with timeout 5000ms
+      - waiting for getByTestId('tadazz-card-0')
+
+
+      186 |       })
+      187 |     }, size)
+    > 188 |     await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+          |                                                     ^
+      189 |     const path = info.outputPath("native-stage.png")
+      190 |     await page.screenshot({ path })
+      191 |     await info.attach("native-stage.png", { path, contentType: "image/png" })
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:188:53
+
+    attachment #1: native-events.json (application/json) ───────────────────────────────────────────
+    ../../out/native-browser-results/qa-native-actual-stage-responsive-992x744-webkit/attachments/native-events-json-c8e902ef2e57d7c4045266eb5c0aec3d5f557862.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-browser-results/qa-native-actual-stage-responsive-992x744-webkit/error-context.md
+
+  4 failed
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: it 
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:85:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal 
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:141:5 › bounded current-card subset survey/2 
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:172:3 › actual stage responsive 992x744 
+  36 passed (8.3m)

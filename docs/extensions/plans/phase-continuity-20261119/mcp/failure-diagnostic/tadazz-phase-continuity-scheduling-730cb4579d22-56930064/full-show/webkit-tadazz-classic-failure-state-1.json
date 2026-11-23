@@ -1,0 +1,908 @@
+{
+  "at": "2026-11-19T18:22:56.167Z",
+  "engine": "webkit",
+  "theme": "tadazz-classic",
+  "reason": "check failure",
+  "check": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+  "step": "HTTP get_game_draft_summary",
+  "detail": {
+    "check": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n"
+  },
+  "requestedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+  "initialFrame": {
+    "acknowledgedAt": "2026-11-19T18:22:40.102Z",
+    "requestedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+    "frame": {
+      "draftId": "zHU0SG8McN2spxRAPw6Vp0-d9JZjBgBK",
+      "revision": 1,
+      "title": "Full show tadazz-classic webkit",
+      "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+      "chapterCount": 28,
+      "frameDigest": "609121bafb94e186251e079b00aa0ac8b796630050a2a626d247f241d8626ad1"
+    }
+  },
+  "lastAcknowledgedPreview": {
+    "draftId": "zHU0SG8McN2spxRAPw6Vp0-d9JZjBgBK",
+    "revision": 1,
+    "title": "Full show tadazz-classic webkit",
+    "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+    "chapterCount": 28,
+    "frameDigest": "609121bafb94e186251e079b00aa0ac8b796630050a2a626d247f241d8626ad1"
+  },
+  "hostUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+  "widget": {
+    "capturedAt": "2026-11-19T18:22:56.184Z",
+    "uiEvents": [],
+    "scheduling": {
+      "startedAt": "2026-11-19T18:22:37.283Z",
+      "startedPerf": 246,
+      "frameKind": "widget",
+      "visibility": "visible",
+      "rafCount": 5,
+      "lastRafAt": "2026-11-19T18:22:46.187Z",
+      "lastRafPerf": 9150,
+      "maxRafGapMs": 4079,
+      "rafGaps": [
+        {
+          "at": "2026-11-19T18:22:38.736Z",
+          "gap": 1404,
+          "count": 2
+        },
+        {
+          "at": "2026-11-19T18:22:39.400Z",
+          "gap": 663,
+          "count": 3
+        },
+        {
+          "at": "2026-11-19T18:22:42.108Z",
+          "gap": 2708,
+          "count": 4
+        },
+        {
+          "at": "2026-11-19T18:22:46.187Z",
+          "gap": 4079,
+          "count": 5
+        }
+      ],
+      "timerCount": 110,
+      "lastTimerAt": "2026-11-19T18:22:56.100Z",
+      "lastTimerPerf": 19063,
+      "maxTimerGapMs": 5058,
+      "timerGaps": [
+        {
+          "at": "2026-11-19T18:22:38.824Z",
+          "gap": 1542,
+          "count": 1
+        },
+        {
+          "at": "2026-11-19T18:22:39.134Z",
+          "gap": 310,
+          "count": 2
+        },
+        {
+          "at": "2026-11-19T18:22:39.417Z",
+          "gap": 282,
+          "count": 3
+        },
+        {
+          "at": "2026-11-19T18:22:40.678Z",
+          "gap": 488,
+          "count": 10
+        },
+        {
+          "at": "2026-11-19T18:22:45.735Z",
+          "gap": 5058,
+          "count": 11
+        }
+      ],
+      "visibilityEvents": [],
+      "nativeRootObservedAt": "2026-11-19T18:22:40.678Z",
+      "mutationCount": 55,
+      "lastMutationAt": "2026-11-19T18:22:46.260Z",
+      "commits": [
+        {
+          "at": "2026-11-19T18:22:40.678Z",
+          "perf": 3642,
+          "reason": "observer attached",
+          "mutations": 0,
+          "rafCount": 3,
+          "timerCount": 10,
+          "hostStyle": "width: 1144px; height: 643.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        },
+        {
+          "at": "2026-11-19T18:22:41.815Z",
+          "perf": 4779,
+          "reason": "mutation",
+          "mutations": 8,
+          "rafCount": 3,
+          "timerCount": 10,
+          "chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+          "elapsed": "0",
+          "paused": "false",
+          "hostStyle": "width: 1144px; height: 643.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        },
+        {
+          "at": "2026-11-19T18:22:42.174Z",
+          "perf": 5138,
+          "reason": "mutation",
+          "mutations": 1,
+          "rafCount": 4,
+          "timerCount": 10,
+          "chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+          "elapsed": "0",
+          "paused": "false",
+          "hostStyle": "width: 1144px; height: 643.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        },
+        {
+          "at": "2026-11-19T18:22:45.983Z",
+          "perf": 8946,
+          "reason": "mutation",
+          "mutations": 39,
+          "rafCount": 4,
+          "timerCount": 12,
+          "chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+          "elapsed": "0",
+          "paused": "false",
+          "hostStyle": "width: 1144px; height: 643.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        },
+        {
+          "at": "2026-11-19T18:22:46.073Z",
+          "perf": 9036,
+          "reason": "mutation",
+          "mutations": 1,
+          "rafCount": 4,
+          "timerCount": 13,
+          "chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+          "elapsed": "1660",
+          "paused": "false",
+          "hostStyle": "width: 824px; height: 463.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        },
+        {
+          "at": "2026-11-19T18:22:46.187Z",
+          "perf": 9151,
+          "reason": "mutation",
+          "mutations": 5,
+          "rafCount": 5,
+          "timerCount": 14,
+          "chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+          "elapsed": "1660",
+          "paused": "false",
+          "hostStyle": "width: 824px; height: 463.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        },
+        {
+          "at": "2026-11-19T18:22:46.260Z",
+          "perf": 9223,
+          "reason": "mutation",
+          "mutations": 1,
+          "rafCount": 5,
+          "timerCount": 15,
+          "chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+          "elapsed": "5739",
+          "paused": "false",
+          "hostStyle": "width: 824px; height: 463.5px; aspect-ratio: 16 / 9; visibility: visible;"
+        }
+      ],
+      "capturedPerf": 19148,
+      "rafAgeMs": 9998,
+      "timerAgeMs": 85
+    },
+    "documentReady": "complete",
+    "visibilityState": "visible",
+    "uiText": "Full show tadazz-classic webkit\n\nPreview / demo — no live player votes\n\nSave in Tadazz\nEdit this draft\nAppearance and sound\n2 / 8\nChoose an answer in this demo.\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nRevision 1\n\nUndo acknowledged edit",
+    "revision": "Revision 1",
+    "status": [],
+    "pause": {
+      "attributes": {
+        "class": "bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg",
+        "data-control-source": "razzia",
+        "type": "button",
+        "data-testid": "full-show-pause",
+        "aria-label": "Pause show",
+        "title": "Pause show"
+      },
+      "rect": {
+        "x": 498.390625,
+        "y": 63,
+        "width": 40,
+        "height": 40
+      },
+      "clientSize": {
+        "width": 40,
+        "height": 40
+      },
+      "scrollSize": {
+        "width": 40,
+        "height": 40
+      },
+      "style": {
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "",
+      "textContent": ""
+    },
+    "host": {
+      "attributes": {
+        "class": "widget-stage-host",
+        "data-testid": "full-show-native-surface",
+        "style": "width: 824px; height: 463.5px; aspect-ratio: 16 / 9; visibility: visible;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 384.84375,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "",
+      "textContent": ""
+    },
+    "layoutAncestors": [
+      {
+        "attributes": {
+          "class": "widget-stage-viewport",
+          "style": "background-color: rgb(8, 1, 26); background-image: url(\"/tadazz-show/v4/question-bg.webp\"); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+        },
+        "rect": {
+          "x": 60,
+          "y": 133.1875,
+          "width": 824,
+          "height": 966.8125
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 967
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 967
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "",
+        "textContent": ""
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace-canvas",
+          "data-testid": "editor-workspace-canvas"
+        },
+        "rect": {
+          "x": 60,
+          "y": 133.1875,
+          "width": 824,
+          "height": 966.8125
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 967
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 967
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "",
+        "textContent": ""
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace-center"
+        },
+        "rect": {
+          "x": 60,
+          "y": 56,
+          "width": 824,
+          "height": 1044
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 1044
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 1044
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "2 / 8\nChoose an answer in this demo.",
+        "textContent": "2 / 8Choose an answer in this demo."
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace widget-editor-workspace",
+          "data-testid": "editor-workspace",
+          "data-layout": "wide",
+          "aria-label": "Edit this draft"
+        },
+        "rect": {
+          "x": 0,
+          "y": 56,
+          "width": 1264,
+          "height": 1044
+        },
+        "clientSize": {
+          "width": 1264,
+          "height": 1044
+        },
+        "scrollSize": {
+          "width": 1264,
+          "height": 1044
+        },
+        "style": {
+          "display": "grid",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "Save in Tadazz\nEdit this draft\nAppearance and sound\n2 / 8\nChoose an answer in this demo.\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nRevision 1\n\nUndo acknowledged edit",
+        "textContent": "Save in TadazzEdit this draftAppearance and sound2 / 8Choose an answer in this demo.Edit this draftDraft titleApply draft editQuestion textSELECTED_QUESTION_0Apply draft editAppearance and soundOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.Voting music volume (%)Apply draft editLoad approved assetsRevision 1Undo acknowledged editAppearance and soundAspect ratio16:94:3LanguageenfrdeesitjatrviheReduce motionEnable soundSave in TadazzSave in TadazzSaving to your library requires approval in Tadazz. This widget cannot approve it."
+      },
+      {
+        "attributes": {
+          "class": "widget-shell widget-workspace-shell",
+          "data-testid": "full-show-widget",
+          "dir": "ltr",
+          "lang": "en"
+        },
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1264,
+          "height": 1100
+        },
+        "clientSize": {
+          "width": 1264,
+          "height": 1100
+        },
+        "scrollSize": {
+          "width": 1264,
+          "height": 1100
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "Full show tadazz-classic webkit\n\nPreview / demo — no live player votes\n\nSave in Tadazz\nEdit this draft\nAppearance and sound\n2 / 8\nChoose an answer in this demo.\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nRevision 1\n\nUndo acknowledged edit",
+        "textContent": "Full show tadazz-classic webkitPreview / demo — no live player votesSave in TadazzEdit this draftAppearance and sound2 / 8Choose an answer in this demo.Edit this draftDraft titleApply draft editQuestion textSELECTED_QUESTION_0Apply draft editAppearance and soundOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.Voting music volume (%)Apply draft editLoad approved assetsRevision 1Undo acknowledged editAppearance and soundAspect ratio16:94:3LanguageenfrdeesitjatrviheReduce motionEnable soundSave in TadazzSave in TadazzSaving to your library requires approval in Tadazz. This widget cannot approve it."
+      }
+    ],
+    "native": {
+      "attributes": {
+        "class": "widget-native-stage"
+      },
+      "rect": {
+        "x": 60,
+        "y": 384.84375,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "ROUND 01 · QUESTION 01 / 5\nAUDIENCE RESULTS\nSELECTED_QUESTION_0\n1\nA\n0%CORRECT ANSWER\n01\n2\nB\n0%AUDIENCE FAVOURITE\n02\n3\nC\n0%AUDIENCE FAVOURITE\n03\n4\nD\n0%AUDIENCE FAVOURITE\n04\n5\nE\n0%AUDIENCE FAVOURITE\n05\nAUDIENCE RESULTS",
+      "textContent": "ROUND 01 · QUESTION 01 / 5AUDIENCE RESULTSSELECTED_QUESTION_01A0%CORRECT ANSWER012B0%AUDIENCE FAVOURITE023C0%AUDIENCE FAVOURITE034D0%AUDIENCE FAVOURITE045E0%AUDIENCE FAVOURITE05AUDIENCE RESULTSTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "stage": {
+      "attributes": {
+        "data-full-show-stage": "question",
+        "data-full-show-theme": "tadazz-classic",
+        "data-full-show-chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+        "data-playback-elapsed": "5739",
+        "data-playback-epoch": "1",
+        "data-playback-paused": "false",
+        "style": "background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; position: relative; overflow: hidden;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 384.84375,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "ROUND 01 · QUESTION 01 / 5\nAUDIENCE RESULTS\nSELECTED_QUESTION_0\n1\nA\n0%CORRECT ANSWER\n01\n2\nB\n0%AUDIENCE FAVOURITE\n02\n3\nC\n0%AUDIENCE FAVOURITE\n03\n4\nD\n0%AUDIENCE FAVOURITE\n04\n5\nE\n0%AUDIENCE FAVOURITE\n05\nAUDIENCE RESULTS",
+      "textContent": "ROUND 01 · QUESTION 01 / 5AUDIENCE RESULTSSELECTED_QUESTION_01A0%CORRECT ANSWER012B0%AUDIENCE FAVOURITE023C0%AUDIENCE FAVOURITE034D0%AUDIENCE FAVOURITE045E0%AUDIENCE FAVOURITE05AUDIENCE RESULTSTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "renderer": {
+      "attributes": {
+        "class": "tzv4-stage",
+        "data-v4-scene": "survey-results",
+        "data-stage-mode": "survey-results",
+        "data-question-key": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894",
+        "data-reduced-motion": "true",
+        "data-testid": "tadazz-stage",
+        "style": "width: 1920px; height: 1080px; --scale: 0.42916666666666664;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 384.84375,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "scrollSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "matrix(0.429167, 0, 0, 0.429167, -960, -540)",
+        "overflow": "hidden"
+      },
+      "text": "ROUND 01 · QUESTION 01 / 5\nAUDIENCE RESULTS\nSELECTED_QUESTION_0\n1\nA\n0%CORRECT ANSWER\n01\n2\nB\n0%AUDIENCE FAVOURITE\n02\n3\nC\n0%AUDIENCE FAVOURITE\n03\n4\nD\n0%AUDIENCE FAVOURITE\n04\n5\nE\n0%AUDIENCE FAVOURITE\n05\nAUDIENCE RESULTS",
+      "textContent": "ROUND 01 · QUESTION 01 / 5AUDIENCE RESULTSSELECTED_QUESTION_01A0%CORRECT ANSWER012B0%AUDIENCE FAVOURITE023C0%AUDIENCE FAVOURITE034D0%AUDIENCE FAVOURITE045E0%AUDIENCE FAVOURITE05AUDIENCE RESULTSTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "preview": {
+      "attributes": {
+        "data-testid": "native-preview-surface",
+        "data-preview-ready": "true",
+        "style": "background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; opacity: 1;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 384.84375,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "ROUND 01 · QUESTION 01 / 5\nAUDIENCE RESULTS\nSELECTED_QUESTION_0\n1\nA\n0%CORRECT ANSWER\n01\n2\nB\n0%AUDIENCE FAVOURITE\n02\n3\nC\n0%AUDIENCE FAVOURITE\n03\n4\nD\n0%AUDIENCE FAVOURITE\n04\n5\nE\n0%AUDIENCE FAVOURITE\n05\nAUDIENCE RESULTS",
+      "textContent": "ROUND 01 · QUESTION 01 / 5AUDIENCE RESULTSSELECTED_QUESTION_01A0%CORRECT ANSWER012B0%AUDIENCE FAVOURITE023C0%AUDIENCE FAVOURITE034D0%AUDIENCE FAVOURITE045E0%AUDIENCE FAVOURITE05AUDIENCE RESULTSTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "fit": null,
+    "question": {
+      "attributes": {
+        "class": "q-frame",
+        "data-v4": "question-frame",
+        "data-testid": "tadazz-question-panel"
+      },
+      "rect": {
+        "x": 171.5833282470703,
+        "y": 443.63958740234375,
+        "width": 600.8333740234375,
+        "height": 73.38751220703125
+      },
+      "clientSize": {
+        "width": 1396,
+        "height": 167
+      },
+      "scrollSize": {
+        "width": 1396,
+        "height": 167
+      },
+      "style": {
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "AUDIENCE RESULTS\nSELECTED_QUESTION_0",
+      "textContent": "AUDIENCE RESULTSSELECTED_QUESTION_0"
+    },
+    "answers": [
+      {
+        "attributes": {
+          "type": "button",
+          "disabled": "",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-favourite is-correct",
+          "data-v4-choice": "0",
+          "data-index": "0",
+          "data-testid": "tadazz-card-0",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 91.88536834716797,
+          "y": 529.6925048828125,
+          "width": 147.3792724609375,
+          "height": 238.9462890625
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1.016, 0, 0, 1.016, 0, -9)",
+          "overflow": "visible"
+        },
+        "text": "1\nA\n0%CORRECT ANSWER\n01",
+        "textContent": "1A0%CORRECT ANSWER01"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "disabled": "",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect",
+          "data-v4-choice": "1",
+          "data-index": "1",
+          "data-testid": "tadazz-card-1",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 246.25833129882812,
+          "y": 536.339599609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "2\nB\n0%AUDIENCE FAVOURITE\n02",
+        "textContent": "2B0%AUDIENCE FAVOURITE02"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "disabled": "",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect",
+          "data-v4-choice": "2",
+          "data-index": "2",
+          "data-testid": "tadazz-card-2",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 399.4708251953125,
+          "y": 536.339599609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "3\nC\n0%AUDIENCE FAVOURITE\n03",
+        "textContent": "3C0%AUDIENCE FAVOURITE03"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "disabled": "",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect",
+          "data-v4-choice": "3",
+          "data-index": "3",
+          "data-testid": "tadazz-card-3",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 552.683349609375,
+          "y": 536.339599609375,
+          "width": 145.05828857421875,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "4\nD\n0%AUDIENCE FAVOURITE\n04",
+        "textContent": "4D0%AUDIENCE FAVOURITE04"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "disabled": "",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect",
+          "data-v4-choice": "4",
+          "data-index": "4",
+          "data-testid": "tadazz-card-4",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 705.8958129882812,
+          "y": 536.339599609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "5\nE\n0%AUDIENCE FAVOURITE\n05",
+        "textContent": "5E0%AUDIENCE FAVOURITE05"
+      }
+    ],
+    "nativeMarkup": "<div class=\"widget-native-stage\"><div data-full-show-stage=\"question\" data-full-show-theme=\"tadazz-classic\" data-full-show-chapter=\"preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results\" data-playback-elapsed=\"5739\" data-playback-epoch=\"1\" data-playback-paused=\"false\" style=\"background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, &quot;Segoe UI&quot;, Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; position: relative; overflow: hidden;\"><div data-testid=\"native-preview-surface\" data-preview-ready=\"true\" style=\"background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, &quot;Segoe UI&quot;, Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; opacity: 1;\"><div class=\"tz-viewport tzv4-viewport\" data-testid=\"tadazz-stage-viewport\"><div class=\"tzv4-stage\" data-v4-scene=\"survey-results\" data-stage-mode=\"survey-results\" data-question-key=\"preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894\" data-reduced-motion=\"true\" data-testid=\"tadazz-stage\" style=\"width: 1920px; height: 1080px; --scale: 0.42916666666666664;\"><div class=\"stage-bg\" data-testid=\"tadazz-backdrop\" style=\"background-image: url(&quot;/tadazz-show/v4/question-bg.webp&quot;); background-size: cover; background-position: center center;\"></div><div class=\"veil\"></div><div class=\"ambient\" aria-hidden=\"true\"><div class=\"ambient-beam\"></div><div class=\"ambient-beam\"></div><div class=\"ambient-beam\"></div><div class=\"ambient-beam\"></div><div class=\"ambient-bulbs\"><i style=\"animation-delay: 0s;\"></i><i style=\"animation-delay: -0.16s;\"></i><i style=\"animation-delay: -0.32s;\"></i><i style=\"animation-delay: -0.48s;\"></i><i style=\"animation-delay: -0.64s;\"></i><i style=\"animation-delay: -0.8s;\"></i><i style=\"animation-delay: -0.96s;\"></i><i style=\"animation-delay: -1.12s;\"></i><i style=\"animation-delay: -1.28s;\"></i><i style=\"animation-delay: -1.44s;\"></i><i style=\"animation-delay: -1.6s;\"></i><i style=\"animation-delay: -1.76s;\"></i><i style=\"animation-delay: -1.92s;\"></i><i style=\"animation-delay: -2.08s;\"></i><i style=\"animation-delay: -2.24s;\"></i></div><div class=\"ambient-floor\"></div></div><img class=\"stage-teaser\" alt=\"Creating Worlds\" src=\"/tadazz-show/second-library/teaser-screen-source.jpg\"><div class=\"tzv4-scene-root\"><div class=\"stage-identity\"><img class=\"stage-brand-logo\" alt=\"TADAZZ!\" src=\"/tadazz-show/v4/tadazz-brand-logo.png\"></div><div class=\"stage-round-pill\">ROUND 01 · QUESTION 01 / 5</div><div class=\"q-frame\" data-v4=\"question-frame\" data-testid=\"tadazz-question-panel\"><div class=\"eyebrow\">AUDIENCE RESULTS</div><div class=\"q-text\">SELECTED_QUESTION_0</div></div><div class=\"answers\" data-v4=\"answer-cards\"><button type=\"button\" disabled=\"\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-favourite is-correct\" data-v4-choice=\"0\" data-index=\"0\" data-testid=\"tadazz-card-0\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame tz-photo-empty\"><div class=\"answer-image answer-image-empty\" aria-label=\"A\"><span class=\"answer-monogram\" aria-hidden=\"true\">1</span></div></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">A</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: visible; opacity: 1;\">0%</div><div class=\"winner-tag tz-winner-tag\" style=\"opacity: 1;\">CORRECT ANSWER</div><div class=\"result-track tz-result-track\" style=\"opacity: 1;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0.003); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">01</div></button><button type=\"button\" disabled=\"\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect\" data-v4-choice=\"1\" data-index=\"1\" data-testid=\"tadazz-card-1\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame tz-photo-empty\"><div class=\"answer-image answer-image-empty\" aria-label=\"B\"><span class=\"answer-monogram\" aria-hidden=\"true\">2</span></div></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">B</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: visible; opacity: 1;\">0%</div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 1;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0.003); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">02</div></button><button type=\"button\" disabled=\"\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect\" data-v4-choice=\"2\" data-index=\"2\" data-testid=\"tadazz-card-2\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame tz-photo-empty\"><div class=\"answer-image answer-image-empty\" aria-label=\"C\"><span class=\"answer-monogram\" aria-hidden=\"true\">3</span></div></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">C</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: visible; opacity: 1;\">0%</div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 1;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0.003); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">03</div></button><button type=\"button\" disabled=\"\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect\" data-v4-choice=\"3\" data-index=\"3\" data-testid=\"tadazz-card-3\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame tz-photo-empty\"><div class=\"answer-image answer-image-empty\" aria-label=\"D\"><span class=\"answer-monogram\" aria-hidden=\"true\">4</span></div></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">D</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: visible; opacity: 1;\">0%</div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 1;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0.003); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">04</div></button><button type=\"button\" disabled=\"\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-incorrect\" data-v4-choice=\"4\" data-index=\"4\" data-testid=\"tadazz-card-4\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame tz-photo-empty\"><div class=\"answer-image answer-image-empty\" aria-label=\"E\"><span class=\"answer-monogram\" aria-hidden=\"true\">5</span></div></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">E</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: visible; opacity: 1;\">0%</div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 1;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0.003); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">05</div></button></div><div class=\"tzv4-sr-status\" data-testid=\"tadazz-status\">AUDIENCE RESULTS</div></div><div class=\"tzv4-custom-root\"><div class=\"tz-screen\" data-testid=\"tadazz-intro-screen\"><div class=\"tz-screen-inner\"><div class=\"tz-shock\"></div><img class=\"tz-intro-logo\" alt=\"TADAZZ!\" src=\"/tadazz-show/v4/tadazz-brand-logo.png\"><div class=\"tz-intro-caption\">THE AUDIENCE DECIDES</div></div></div><div class=\"tz-screen\" data-testid=\"tadazz-finale-screen\"><div class=\"tz-screen-inner\"><div class=\"tz-confetti\"></div><img class=\"tz-win-logo\" alt=\"TADAZZ!\" src=\"/tadazz-show/v4/tadazz-brand-logo.png\"><div class=\"tz-win-headline\">THANK YOU FOR PLAYING</div><div class=\"tz-win-name\" data-testid=\"tadazz-winner-name\"></div><div class=\"tz-win-score\"></div></div></div><div class=\"tz-screen tz-custom-screen\" data-testid=\"tadazz-custom-screen\"><div class=\"tz-screen-inner\"></div></div></div><div class=\"tzv4-fx-root\" aria-hidden=\"true\"></div><div class=\"tzv4-screen-flash\" aria-hidden=\"true\" style=\"opacity: 0;\"></div></div></div></div><div class=\"widget-audio\" data-testid=\"full-show-audio\" data-audio-enabled=\"false\" data-audio-playing=\"false\"><span class=\"sr-only\" data-testid=\"audio-cue-player-state\" data-sfx-ducked=\"false\" data-cue-id=\"revealResults\" data-soundtrack-slot=\"results\" data-should-play=\"false\" data-audio-url=\"\" data-audio-identity=\"\" data-audio-loop=\"false\" data-audio-blocked=\"false\" data-audio-error=\"false\" data-audio-paused=\"true\"></span></div></div></div>"
+  },
+  "host": {
+    "capturedAt": "2026-11-19T18:22:56.289Z",
+    "ready": "true",
+    "scheduling": {
+      "startedAt": "2026-11-19T18:22:36.436Z",
+      "startedPerf": 81,
+      "frameKind": "host",
+      "visibility": "visible",
+      "rafCount": 16,
+      "lastRafAt": "2026-11-19T18:22:46.187Z",
+      "lastRafPerf": 9831,
+      "maxRafGapMs": 4079,
+      "rafGaps": [
+        {
+          "at": "2026-11-19T18:22:37.031Z",
+          "gap": 595,
+          "count": 1
+        },
+        {
+          "at": "2026-11-19T18:22:38.736Z",
+          "gap": 1404,
+          "count": 13
+        },
+        {
+          "at": "2026-11-19T18:22:39.400Z",
+          "gap": 663,
+          "count": 14
+        },
+        {
+          "at": "2026-11-19T18:22:42.108Z",
+          "gap": 2708,
+          "count": 15
+        },
+        {
+          "at": "2026-11-19T18:22:46.187Z",
+          "gap": 4079,
+          "count": 16
+        }
+      ],
+      "timerCount": 114,
+      "lastTimerAt": "2026-11-19T18:22:56.213Z",
+      "lastTimerPerf": 19858,
+      "maxTimerGapMs": 5058,
+      "timerGaps": [
+        {
+          "at": "2026-11-19T18:22:37.035Z",
+          "gap": 499,
+          "count": 2
+        },
+        {
+          "at": "2026-11-19T18:22:38.763Z",
+          "gap": 1566,
+          "count": 4
+        },
+        {
+          "at": "2026-11-19T18:22:39.134Z",
+          "gap": 372,
+          "count": 5
+        },
+        {
+          "at": "2026-11-19T18:22:39.417Z",
+          "gap": 282,
+          "count": 6
+        },
+        {
+          "at": "2026-11-19T18:22:40.678Z",
+          "gap": 586,
+          "count": 13
+        },
+        {
+          "at": "2026-11-19T18:22:45.735Z",
+          "gap": 5058,
+          "count": 14
+        }
+      ],
+      "visibilityEvents": [],
+      "nativeRootObservedAt": null,
+      "mutationCount": 0,
+      "lastMutationAt": null,
+      "commits": [],
+      "capturedPerf": 19934,
+      "rafAgeMs": 10103,
+      "timerAgeMs": 76
+    },
+    "calls": [
+      "get_game_draft_summary"
+    ],
+    "lifecycle": {
+      "documentId": "8b525f01-6c1c-42d6-b724-f7133bdd3b6b",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "iframe": [
+      {
+        "src": "http://127.0.0.1:46637/widget",
+        "rect": {
+          "width": 1264,
+          "height": 1100
+        },
+        "visibility": "visible",
+        "display": "inline"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "at": "2026-11-19T18:22:38.889Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "url": "http://127.0.0.1:46637/qa/initial?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:22:40.134Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:22:41.057Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "url": "http://127.0.0.1:46637/qa/call?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:22:45.526Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:22:42.360Z",
+      "inputRevision": 1,
+      "inputDigest": "3e4ada217938a5aa84046b9bfaa9c698e4a85f28027799bc1c9f08a51498731b",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "394c70b3-140e-4656-a599-9433e0c4d831",
+        "data": {
+          "draftId": "zHU0SG8McN2spxRAPw6Vp0-d9JZjBgBK",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    }
+  ],
+  "screenshot": "webkit-tadazz-classic-failure-state-1.png"
+}

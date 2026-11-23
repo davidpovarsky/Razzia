@@ -1,8 +1,27 @@
-import { EVENTS, MEDIA_TYPES, NO_TIME_LIMIT } from "@razzia/common/constants"
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import {
+  AnswerStageHud,
+  LegacyVotingMotion,
+} from "../tadazz-show/answer-stage-elements"
+import {
+  useQuestionPresentation,
+  useNativeVotingGate,
+} from "../tadazz-show/use-question-presentation"
+import {
+  QuestionUnderline,
+  TadazzSurveyCards,
+  useStageFit,
+} from "@razzia/extensions/presentation"
+import { EVENTS, MEDIA_TYPES } from "@razzia/common/constants"
 import type { QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
+import { type AnswerVisual, type QuestionReveal } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
+import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
+
+import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import {
   useEvent,
   useSocket,
@@ -22,6 +41,7 @@ const MOBILE_BREAKPOINT = 640
 
 interface Props {
   data: CommonStatusDataMap["SELECT_ANSWER"]
+  hideHeading?: boolean
 }
 
 const Answers = ({
@@ -34,21 +54,57 @@ const Answers = ({
     questionType,
     options,
     answersOnly,
+    playMode,
+    votingStartsAt,
   },
-}: Props) => {
+  data,
+  hideHeading = false,
+}: Props & { data?: { remainingTime?: number } }) => {
   const { socket } = useSocket()
   const { player, gameId } = usePlayerStore()
+  const { questionStates } = useQuestionStore()
+  const viewRole = useViewRole()
+  const isSpectator = viewRole === "spectator"
+  const isVisualPlayerMode = Boolean(player) || isSpectator
+  const roleCanSubmit = Boolean(player) && !isSpectator
 
-  const [cooldown, setCooldown] = useState(time)
+  const initialCooldown =
+    typeof data?.remainingTime === "number" ? data.remainingTime : time
+  const [cooldown, setCooldown] = useState(initialCooldown)
   const [totalAnswer, setTotalAnswer] = useState(0)
+  const {
+    effectiveExtensionState,
+    defaultsObj,
+    stageAnimations,
+    questionDecoration,
+    animationEpochKey,
+  } = useQuestionPresentation(question, "answers")
+  const nativeVotingOpen = useNativeVotingGate(
+    votingStartsAt,
+    Boolean(effectiveExtensionState?.pause?.paused),
+  )
+  const platformAudio = Boolean(effectiveExtensionState?.gameId)
+  const canSubmit =
+    roleCanSubmit && nativeVotingOpen && !effectiveExtensionState?.pause?.paused
   const { t } = useTranslation()
   const { width } = useScreenSize()
+  const { isUltraCompact } = useStageFit()
+
+  const rawAnswerVisuals = effectiveExtensionState?.extras.answerVisuals as
+    AnswerVisual[] | undefined
+
+  const currentVisuals =
+    rawAnswerVisuals &&
+    rawAnswerVisuals.length === answers.length &&
+    rawAnswerVisuals.some((v) => Boolean(v.url))
+      ? rawAnswerVisuals
+      : undefined
 
   const popupMedia: QuestionMediaType[] = [MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO]
   const isPopupMedia = popupMedia.includes(media?.type)
-  const showAnswersOnly = Boolean(player) && answersOnly
+  const showAnswersOnly = viewRole === "player" && answersOnly
   const showMediaInPopup =
-    Boolean(player) && width < MOBILE_BREAKPOINT && isPopupMedia
+    isVisualPlayerMode && width < MOBILE_BREAKPOINT && isPopupMedia
 
   const [sfxPop] = useSound(SFX.ANSWERS.SOUND, {
     volume: 0.1,
@@ -61,7 +117,33 @@ const Answers = ({
   })
 
   const handleSubmit = (answerKeys: number[]) => {
-    if (!player || !gameId) {
+    if (!canSubmit || !gameId) {
+      return
+    }
+
+    if (platformAudio && effectiveExtensionState) {
+      const { epoch, questionId } = effectiveExtensionState
+      socket.emit(
+        EVENTS.PLAYER.SELECTED_ANSWER,
+        {
+          gameId,
+          data: { answerKeys },
+        },
+        (result) => {
+          if (result.accepted) {
+            window.dispatchEvent(
+              new CustomEvent("tadazz:sfx", {
+                detail: {
+                  name: "answer-submitted",
+                  identity: `${gameId}:${epoch}:${questionId ?? question}:submitted`,
+                  volume: 0.2,
+                },
+              }),
+            )
+          }
+        },
+      )
+
       return
     }
 
@@ -75,6 +157,13 @@ const Answers = ({
   }
 
   useEffect(() => {
+    // When extensionState is present, GameWrapper's unified AudioCuePlayer manages answersMusic
+    if (effectiveExtensionState?.gameId) {
+      stopMusic()
+
+      return
+    }
+
     const disabledMusicMedia: QuestionMediaType[] = [
       MEDIA_TYPES.AUDIO,
       MEDIA_TYPES.VIDEO,
@@ -90,7 +179,7 @@ const Answers = ({
       stopMusic()
     }
     // oxlint-disable-next-line
-  }, [playMusic])
+  }, [playMusic, effectiveExtensionState?.gameId])
 
   useEvent(EVENTS.GAME.COOLDOWN, (sec) => {
     setCooldown(sec)
@@ -98,87 +187,191 @@ const Answers = ({
 
   useEvent(EVENTS.GAME.PLAYER_ANSWER, (count) => {
     setTotalAnswer(count)
-    sfxPop()
+
+    if (!platformAudio) {
+      sfxPop()
+    }
   })
 
   const { AnswerComponent } = QUESTION_REGISTRY[questionType]
 
   const MediaIcon = media?.type === MEDIA_TYPES.VIDEO ? Video : Image
 
+  const showTadazzCards =
+    defaultsObj?.tadazzBackground?.mode !== undefined &&
+    defaultsObj.tadazzBackground.mode !== "original" &&
+    playMode === "survey" &&
+    questionType === "single" &&
+    answers.length >= 2 &&
+    answers.length <= 5 &&
+    Boolean(currentVisuals)
+
   return (
-    <div className="flex h-full flex-1 flex-col justify-between">
-      {showAnswersOnly ? (
-        <>
-          <QuestionDialog
-            question={question}
-            media={isPopupMedia ? media : undefined}
-            label={t("game:question.show")}
-            className="hover:bg-accent absolute top-4 right-4 flex size-11 items-center justify-center rounded-md bg-white text-black"
-            showQuestion
-          >
-            <CircleQuestionMark className="size-6" />
-          </QuestionDialog>
+    <QuestionEntrance
+      entrance={
+        hideHeading
+          ? { preset: "none", durationMs: 0 }
+          : stageAnimations.questionEntrance
+      }
+      epoch={animationEpochKey}
+      className="relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
+    >
+      {/* A retained platform question must not be covered by a second legacy iframe question. */}
+      {!hideHeading && (
+        <LegacyVotingMotion
+          showTadazzCards={showTadazzCards}
+          defaultsObj={defaultsObj}
+          viewRole={viewRole}
+          isSpectator={isSpectator}
+          currentVisuals={currentVisuals}
+          effectiveExtensionState={effectiveExtensionState}
+          gameId={gameId}
+          animationEpochKey={animationEpochKey}
+          question={question}
+          questionStates={questionStates}
+          answers={answers}
+          time={time}
+        />
+      )}
+      {/* Question Header & Media Area */}
+      <div
+        className={clsx("mx-auto w-full max-w-7xl px-2 text-center", {
+          "shrink-0 pt-1 pb-1 sm:pt-2":
+            showAnswersOnly || Boolean(currentVisuals),
+          "inline-flex min-h-0 flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4":
+            !showAnswersOnly && !currentVisuals,
+        })}
+      >
+        {!hideHeading && (
+          <>
+            <h2
+              data-testid="game-question-title"
+              className={clsx(
+                "text-center leading-tight font-bold break-words text-white drop-shadow-lg",
+                (() => {
+                  if (isUltraCompact) {
+                    return "text-sm sm:text-base"
+                  }
 
-          {media?.type === MEDIA_TYPES.AUDIO && (
-            <div className="flex justify-center">
-              <QuestionMedia media={media} alt={question} />
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="mx-auto inline-flex h-full min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-center gap-5">
-          <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
-            {question}
-          </h2>
+                  if (showAnswersOnly || currentVisuals) {
+                    return "text-base sm:text-xl md:text-2xl"
+                  }
 
-          {showMediaInPopup ? (
+                  return "text-lg sm:text-2xl md:text-3xl lg:text-4xl"
+                })(),
+              )}
+            >
+              {question}
+            </h2>
+
+            <QuestionUnderline
+              decoration={questionDecoration}
+              className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
+              playerClassName="h-4 w-full"
+            />
+          </>
+        )}
+
+        {showAnswersOnly ? (
+          <>
             <QuestionDialog
               question={question}
               media={media}
-              className="hover:bg-accent flex items-center gap-2 rounded-lg bg-white px-4 py-2 font-bold text-black drop-shadow-md"
+              showQuestion
+              label={t("game:question.show")}
+              className="hover:bg-accent mr-2 ml-auto flex size-11 items-center justify-center rounded-md bg-white text-black shadow-lg"
             >
-              <MediaIcon className="size-5" />
-              {t(
-                media?.type === MEDIA_TYPES.VIDEO
-                  ? "game:media.showVideo"
-                  : "game:media.showImage",
-              )}
+              <CircleQuestionMark className="size-6" />
             </QuestionDialog>
-          ) : (
-            <QuestionMedia media={media} alt={question} />
-          )}
-        </div>
-      )}
 
-      <div className={clsx({ "flex flex-1 flex-col": showAnswersOnly })}>
-        <div className="mx-auto mb-4 flex w-full max-w-7xl justify-between gap-1 px-2 text-lg font-bold text-white md:text-xl">
-          {time !== NO_TIME_LIMIT && (
-            <div className="flex flex-col items-center rounded-lg bg-black/40 px-4 text-lg font-bold">
-              <span className="translate-y-1 text-sm">
-                {t("game:hud.time")}
-              </span>
-              <span>{cooldown}</span>
-            </div>
-          )}
-          <div className="flex flex-col items-center rounded-lg bg-black/40 px-4 text-lg font-bold">
-            <span className="translate-y-1 text-sm">
-              {t("game:hud.answers")}
-            </span>
-            <span>
-              {totalAnswer}/{totalPlayer}
-            </span>
-          </div>
-        </div>
-
-        <AnswerComponent
-          answers={answers}
-          options={options}
-          onSubmit={handleSubmit}
-          readOnly={!player}
-          fill={showAnswersOnly}
-        />
+            {media?.type === MEDIA_TYPES.AUDIO && (
+              <div className="mt-1 flex justify-center">
+                <QuestionMedia media={media} alt={question} />
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {showMediaInPopup ? (
+              <QuestionDialog
+                question={question}
+                media={media}
+                className="hover:bg-accent flex items-center gap-2 rounded-lg bg-white px-4 py-2 font-bold text-black drop-shadow-md"
+              >
+                <MediaIcon className="size-5" />
+                {t(
+                  media?.type === MEDIA_TYPES.VIDEO
+                    ? "game:media.showVideo"
+                    : "game:media.showImage",
+                )}
+              </QuestionDialog>
+            ) : (
+              <QuestionMedia
+                media={media}
+                alt={question}
+                reveal={
+                  effectiveExtensionState?.extras.reveal as
+                    QuestionReveal | undefined
+                }
+                serverStartedAt={effectiveExtensionState?.startedAt}
+                currentEpoch={effectiveExtensionState?.epoch}
+                isManager={!isVisualPlayerMode}
+                isManuallyRevealed={
+                  (
+                    effectiveExtensionState?.extras.reveal as
+                      { isRevealed?: boolean } | undefined
+                  )?.isRevealed
+                }
+              />
+            )}
+          </>
+        )}
       </div>
-    </div>
+
+      <div
+        className={clsx(
+          "flex min-h-0 flex-col overflow-y-auto overscroll-contain",
+          {
+            "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
+          },
+        )}
+      >
+        <AnswerStageHud
+          time={time}
+          cooldown={cooldown}
+          totalAnswer={totalAnswer}
+          totalPlayer={totalPlayer}
+          isUltraCompact={isUltraCompact}
+          isVisualPlayerMode={isVisualPlayerMode}
+        />
+
+        {showTadazzCards ? (
+          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-hidden px-2">
+            <TadazzSurveyCards
+              key={animationEpochKey}
+              answers={answers}
+              visuals={currentVisuals}
+              epochKey={animationEpochKey}
+              onSubmit={(index) => handleSubmit([index])}
+              readOnly={!canSubmit}
+              animations={stageAnimations}
+              choicesAriaLabel={t("game:hud.answers", "Answer choices")}
+            />
+          </div>
+        ) : (
+          <AnswerComponent
+            answers={answers}
+            options={options}
+            onSubmit={handleSubmit}
+            readOnly={!canSubmit}
+            fill={showAnswersOnly}
+            visuals={currentVisuals}
+            stageAnimations={stageAnimations}
+            animationEpochKey={animationEpochKey}
+          />
+        )}
+      </div>
+    </QuestionEntrance>
   )
 }
 

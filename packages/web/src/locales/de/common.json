@@ -1,4 +1,6 @@
 {
+  "edit": "Bearbeiten",
+  "retry": "Erneut versuchen",
   "cancel": "Abbrechen",
   "confirm": "Bestätigen",
   "connecting": "Verbinden...",
@@ -14,7 +16,8 @@
     "it": "Italiano - Italienisch",
     "ja": "日本語 - Japanisch",
     "tr": "Türkçe - Türkisch",
-    "vi": "Tiếng Việt - Vietnamesisch"
+    "vi": "Tiếng Việt - Vietnamesisch",
+    "he": "עברית"
   },
   "loading": "Laden...",
   "next": "Weiter",
@@ -24,5 +27,6 @@
   "submit": "Absenden",
   "close": "Schließen",
   "previous": "Zurück",
-  "changeLanguage": "Sprache ändern"
+  "changeLanguage": "Sprache ändern",
+  "untitledQuiz": "Quiz ohne Titel"
 }

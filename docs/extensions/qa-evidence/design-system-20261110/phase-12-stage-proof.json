@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "pairs": [
+    {
+      "engine": "chromium",
+      "frame": "qr",
+      "baseline": "50badbf57270ca0711e268486d31f8bd2df8d606a28242562f3e08035453e485",
+      "candidate": "50badbf57270ca0711e268486d31f8bd2df8d606a28242562f3e08035453e485",
+      "byteIdentical": true
+    },
+    {
+      "engine": "chromium",
+      "frame": "viewport",
+      "baseline": "aa859c12214a9fcbe8cfcd3444d0c995a299354dcd64082d8ac61151c59b999a",
+      "candidate": "aa859c12214a9fcbe8cfcd3444d0c995a299354dcd64082d8ac61151c59b999a",
+      "byteIdentical": true
+    },
+    {
+      "engine": "webkit",
+      "frame": "qr",
+      "baseline": "59476b72c89cf44f701580f007766ee68a5ea21bf6f87cdd7930759b6acb0937",
+      "candidate": "59476b72c89cf44f701580f007766ee68a5ea21bf6f87cdd7930759b6acb0937",
+      "byteIdentical": true
+    },
+    {
+      "engine": "webkit",
+      "frame": "viewport",
+      "baseline": "b304fed8d282800f6e328032fe5002c364512e911b5740831d93f0f5449a1934",
+      "candidate": "b304fed8d282800f6e328032fe5002c364512e911b5740831d93f0f5449a1934",
+      "byteIdentical": true
+    }
+  ]
+}

@@ -1,0 +1,951 @@
+{
+  "format": "tadazz-local-ref-ancestry-audit-v1",
+  "sourceHead": "914322b7bfed7e7531887852c69654aac4ce837e",
+  "cutoffUtc": "2026-11-16T00:00:00Z",
+  "snapshotVerifiedAt": "2026-11-19T01:57:22.042824+00:00",
+  "scope": "Local branches and locally available remote-tracking refs in the existing shared repository. Qualifying refs have reachable commits since the cutoff.",
+  "noFetchPerformed": true,
+  "limitation": "No fetch or remote query was performed. This proves ancestry of refs already present at the recorded snapshot time; it does not discover remote commits absent from that repository snapshot.",
+  "method": {
+    "inventory": "git for-each-ref refs/heads refs/remotes",
+    "cutoff": "git rev-list --count --since=2026-11-16T00:00:00Z <tip>",
+    "ancestry": "git merge-base --is-ancestor <tip> 914322b7bfed7e7531887852c69654aac4ce837e",
+    "readOnly": true
+  },
+  "summary": {
+    "refCount": 91,
+    "symbolicRefCount": 2,
+    "uniqueTipCount": 60,
+    "recentRefCount": 37,
+    "recentUniqueTipCount": 26,
+    "allRecentIncluded": true,
+    "excludedRecentRefCount": 0
+  },
+  "refs": [
+    {
+      "ref": "refs/heads/cez/17edc638",
+      "sha": "6fc790a53056b972b5161ea2e78355c64635c815",
+      "committerDate": "2026-11-17T00:56:29+02:00",
+      "recentReachableCommitCount": 20,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/1e96bb6f",
+      "sha": "f6fc33969bd59ca59cc030cd32d9fda4a801be79",
+      "committerDate": "2026-11-17T14:04:22+02:00",
+      "recentReachableCommitCount": 41,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/44fdfcc0",
+      "sha": "4a1d92b03d734d96717c26873686c68d6c76735c",
+      "committerDate": "2026-11-17T01:24:40+02:00",
+      "recentReachableCommitCount": 20,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/482771e7",
+      "sha": "dd6fd4392d44932fd63a80837abadece416e5ade",
+      "committerDate": "2026-11-17T05:30:10+02:00",
+      "recentReachableCommitCount": 30,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/8de82781",
+      "sha": "62a9cbea2846711a8392d695be02f9f82f635536",
+      "committerDate": "2026-11-17T12:02:01+02:00",
+      "recentReachableCommitCount": 34,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/999ed90c",
+      "sha": "34cfd464ac0bba432701b87f10f4f8388d665066",
+      "committerDate": "2026-11-17T14:27:04+02:00",
+      "recentReachableCommitCount": 41,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/c76cfcf7",
+      "sha": "0c1aa5ed0abcf16e16a6e1ed5d4598127438de02",
+      "committerDate": "2026-11-17T00:17:53+02:00",
+      "recentReachableCommitCount": 15,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/df544d57",
+      "sha": "95e892e80a1bb85c1d118d221a5dfcd7d3b74d19",
+      "committerDate": "2026-11-17T00:47:10+02:00",
+      "recentReachableCommitCount": 19,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/e0c87b17",
+      "sha": "8e13d00a7c36dd1b130018ca59499acf6fc1fa83",
+      "committerDate": "2026-11-17T00:37:00+02:00",
+      "recentReachableCommitCount": 15,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/e17507c7",
+      "sha": "02d752c04a5d9bef1d670d3f613ea9e921f0506a",
+      "committerDate": "2026-11-17T01:38:07+02:00",
+      "recentReachableCommitCount": 26,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/cez/fd341b34",
+      "sha": "a7c7c8f531fee3ad32416e8edf0b33ef01886b63",
+      "committerDate": "2026-11-17T12:17:16+02:00",
+      "recentReachableCommitCount": 37,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-demo-final-20261118",
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "committerDate": "2026-11-18T21:41:14+02:00",
+      "recentReachableCommitCount": 93,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/great-guessoff-demo-final-20261118",
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "committerDate": "2026-11-18T21:41:14+02:00",
+      "recentReachableCommitCount": 93,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-live-20261118",
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "committerDate": "2026-11-19T01:14:26+02:00",
+      "recentReachableCommitCount": 84,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/great-guessoff-live-20261118",
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "committerDate": "2026-11-19T01:14:26+02:00",
+      "recentReachableCommitCount": 84,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-public-demo-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "committerDate": "2026-11-18T17:50:15+02:00",
+      "recentReachableCommitCount": 90,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-hebrew-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "committerDate": "2026-11-18T17:50:15+02:00",
+      "recentReachableCommitCount": 90,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-save-consent-link-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "committerDate": "2026-11-18T17:50:15+02:00",
+      "recentReachableCommitCount": 90,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-chat-preview-flow-p0-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "committerDate": "2026-11-18T14:04:43+02:00",
+      "recentReachableCommitCount": 80,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-mcp-connect-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "committerDate": "2026-11-18T14:04:43+02:00",
+      "recentReachableCommitCount": 80,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-mcp-connect-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "committerDate": "2026-11-18T14:04:43+02:00",
+      "recentReachableCommitCount": 80,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-drafts-20261118",
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "committerDate": "2026-11-18T16:30:13+02:00",
+      "recentReachableCommitCount": 81,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-host-roster-hebrew-20261118",
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "committerDate": "2026-11-18T16:30:13+02:00",
+      "recentReachableCommitCount": 81,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-timer-20261118",
+      "sha": "567a145154b6b6710dea07b9c9524bd90ff1c910",
+      "committerDate": "2026-11-18T17:37:20+02:00",
+      "recentReachableCommitCount": 83,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-host-roster-hebrew-20261118-ready",
+      "sha": "98386b361fbbc5f21ac8a4ce04274e6ccc20fb4b",
+      "committerDate": "2026-11-18T17:58:14+02:00",
+      "recentReachableCommitCount": 83,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-integration-all-20261118",
+      "sha": "b672eb2e972edcfca143c659acc88fbd2efb23e3",
+      "committerDate": "2026-11-18T19:18:30+02:00",
+      "recentReachableCommitCount": 122,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-oauth-compat-20261118",
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "committerDate": "2026-11-18T15:37:52+02:00",
+      "recentReachableCommitCount": 81,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-oauth-compat-20261118",
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "committerDate": "2026-11-18T15:37:52+02:00",
+      "recentReachableCommitCount": 81,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-one-agent-consolidation-20261116",
+      "sha": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab",
+      "committerDate": "2026-11-16T13:21:38+02:00",
+      "recentReachableCommitCount": 13,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-phase3-takeover-20261117",
+      "sha": "9db0c9a0ec65b1162e5a32475e317b253265d64d",
+      "committerDate": "2026-11-18T00:24:17+02:00",
+      "recentReachableCommitCount": 58,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-save-consent-hotfix-20261118",
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "committerDate": "2026-11-18T19:53:33+02:00",
+      "recentReachableCommitCount": 91,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-save-consent-hotfix-20261118",
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "committerDate": "2026-11-18T19:53:33+02:00",
+      "recentReachableCommitCount": 91,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-scope-discovery-20261118",
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "committerDate": "2026-11-18T17:39:21+02:00",
+      "recentReachableCommitCount": 82,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-scope-discovery-20261118",
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "committerDate": "2026-11-18T17:39:21+02:00",
+      "recentReachableCommitCount": 82,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-ux-unified-20261119",
+      "sha": "914322b7bfed7e7531887852c69654aac4ce837e",
+      "committerDate": "2026-11-19T03:32:43+02:00",
+      "recentReachableCommitCount": 139,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "equal"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-ux-unified-20261119",
+      "sha": "914322b7bfed7e7531887852c69654aac4ce837e",
+      "committerDate": "2026-11-19T03:32:43+02:00",
+      "recentReachableCommitCount": 139,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "equal"
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-editor-hebrew-20261118",
+      "sha": "7ccd71a8cb20c5274c68051cbf0084a49286f9ca",
+      "committerDate": "2026-11-18T21:42:21+02:00",
+      "recentReachableCommitCount": 94,
+      "isAncestorOfSource": true,
+      "ancestorExitCode": 0,
+      "relation": "ancestor"
+    }
+  ],
+  "recentTips": [
+    {
+      "sha": "6fc790a53056b972b5161ea2e78355c64635c815",
+      "date": "2026-11-17T00:56:29+02:00",
+      "refs": [
+        "refs/heads/cez/17edc638"
+      ],
+      "recentCommitCount": 20,
+      "included": true
+    },
+    {
+      "sha": "f6fc33969bd59ca59cc030cd32d9fda4a801be79",
+      "date": "2026-11-17T14:04:22+02:00",
+      "refs": [
+        "refs/heads/cez/1e96bb6f"
+      ],
+      "recentCommitCount": 41,
+      "included": true
+    },
+    {
+      "sha": "4a1d92b03d734d96717c26873686c68d6c76735c",
+      "date": "2026-11-17T01:24:40+02:00",
+      "refs": [
+        "refs/heads/cez/44fdfcc0"
+      ],
+      "recentCommitCount": 20,
+      "included": true
+    },
+    {
+      "sha": "dd6fd4392d44932fd63a80837abadece416e5ade",
+      "date": "2026-11-17T05:30:10+02:00",
+      "refs": [
+        "refs/heads/cez/482771e7"
+      ],
+      "recentCommitCount": 30,
+      "included": true
+    },
+    {
+      "sha": "62a9cbea2846711a8392d695be02f9f82f635536",
+      "date": "2026-11-17T12:02:01+02:00",
+      "refs": [
+        "refs/heads/cez/8de82781"
+      ],
+      "recentCommitCount": 34,
+      "included": true
+    },
+    {
+      "sha": "34cfd464ac0bba432701b87f10f4f8388d665066",
+      "date": "2026-11-17T14:27:04+02:00",
+      "refs": [
+        "refs/heads/cez/999ed90c"
+      ],
+      "recentCommitCount": 41,
+      "included": true
+    },
+    {
+      "sha": "0c1aa5ed0abcf16e16a6e1ed5d4598127438de02",
+      "date": "2026-11-17T00:17:53+02:00",
+      "refs": [
+        "refs/heads/cez/c76cfcf7"
+      ],
+      "recentCommitCount": 15,
+      "included": true
+    },
+    {
+      "sha": "95e892e80a1bb85c1d118d221a5dfcd7d3b74d19",
+      "date": "2026-11-17T00:47:10+02:00",
+      "refs": [
+        "refs/heads/cez/df544d57"
+      ],
+      "recentCommitCount": 19,
+      "included": true
+    },
+    {
+      "sha": "8e13d00a7c36dd1b130018ca59499acf6fc1fa83",
+      "date": "2026-11-17T00:37:00+02:00",
+      "refs": [
+        "refs/heads/cez/e0c87b17"
+      ],
+      "recentCommitCount": 15,
+      "included": true
+    },
+    {
+      "sha": "02d752c04a5d9bef1d670d3f613ea9e921f0506a",
+      "date": "2026-11-17T01:38:07+02:00",
+      "refs": [
+        "refs/heads/cez/e17507c7"
+      ],
+      "recentCommitCount": 26,
+      "included": true
+    },
+    {
+      "sha": "a7c7c8f531fee3ad32416e8edf0b33ef01886b63",
+      "date": "2026-11-17T12:17:16+02:00",
+      "refs": [
+        "refs/heads/cez/fd341b34"
+      ],
+      "recentCommitCount": 37,
+      "included": true
+    },
+    {
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "date": "2026-11-18T21:41:14+02:00",
+      "refs": [
+        "refs/heads/codex/great-guessoff-demo-final-20261118",
+        "refs/remotes/origin/codex/great-guessoff-demo-final-20261118"
+      ],
+      "recentCommitCount": 93,
+      "included": true
+    },
+    {
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "date": "2026-11-19T01:14:26+02:00",
+      "refs": [
+        "refs/heads/codex/great-guessoff-live-20261118",
+        "refs/remotes/origin/codex/great-guessoff-live-20261118"
+      ],
+      "recentCommitCount": 84,
+      "included": true
+    },
+    {
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "date": "2026-11-18T17:50:15+02:00",
+      "refs": [
+        "refs/heads/codex/great-guessoff-public-demo-20261118",
+        "refs/heads/codex/tadazz-editor-hebrew-20261118",
+        "refs/heads/codex/tadazz-save-consent-link-20261118"
+      ],
+      "recentCommitCount": 90,
+      "included": true
+    },
+    {
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "date": "2026-11-18T14:04:43+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-chat-preview-flow-p0-20261118",
+        "refs/heads/codex/tadazz-mcp-connect-20261118",
+        "refs/remotes/origin/codex/tadazz-mcp-connect-20261118"
+      ],
+      "recentCommitCount": 80,
+      "included": true
+    },
+    {
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "date": "2026-11-18T16:30:13+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-editor-drafts-20261118",
+        "refs/heads/codex/tadazz-host-roster-hebrew-20261118"
+      ],
+      "recentCommitCount": 81,
+      "included": true
+    },
+    {
+      "sha": "567a145154b6b6710dea07b9c9524bd90ff1c910",
+      "date": "2026-11-18T17:37:20+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-editor-timer-20261118"
+      ],
+      "recentCommitCount": 83,
+      "included": true
+    },
+    {
+      "sha": "98386b361fbbc5f21ac8a4ce04274e6ccc20fb4b",
+      "date": "2026-11-18T17:58:14+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-host-roster-hebrew-20261118-ready"
+      ],
+      "recentCommitCount": 83,
+      "included": true
+    },
+    {
+      "sha": "b672eb2e972edcfca143c659acc88fbd2efb23e3",
+      "date": "2026-11-18T19:18:30+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-integration-all-20261118"
+      ],
+      "recentCommitCount": 122,
+      "included": true
+    },
+    {
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "date": "2026-11-18T15:37:52+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-oauth-compat-20261118",
+        "refs/remotes/origin/codex/tadazz-oauth-compat-20261118"
+      ],
+      "recentCommitCount": 81,
+      "included": true
+    },
+    {
+      "sha": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab",
+      "date": "2026-11-16T13:21:38+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-one-agent-consolidation-20261116"
+      ],
+      "recentCommitCount": 13,
+      "included": true
+    },
+    {
+      "sha": "9db0c9a0ec65b1162e5a32475e317b253265d64d",
+      "date": "2026-11-18T00:24:17+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-phase3-takeover-20261117"
+      ],
+      "recentCommitCount": 58,
+      "included": true
+    },
+    {
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "date": "2026-11-18T19:53:33+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-save-consent-hotfix-20261118",
+        "refs/remotes/origin/codex/tadazz-save-consent-hotfix-20261118"
+      ],
+      "recentCommitCount": 91,
+      "included": true
+    },
+    {
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "date": "2026-11-18T17:39:21+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-scope-discovery-20261118",
+        "refs/remotes/origin/codex/tadazz-scope-discovery-20261118"
+      ],
+      "recentCommitCount": 82,
+      "included": true
+    },
+    {
+      "sha": "914322b7bfed7e7531887852c69654aac4ce837e",
+      "date": "2026-11-19T03:32:43+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-ux-unified-20261119",
+        "refs/remotes/origin/codex/tadazz-ux-unified-20261119"
+      ],
+      "recentCommitCount": 139,
+      "included": true
+    },
+    {
+      "sha": "7ccd71a8cb20c5274c68051cbf0084a49286f9ca",
+      "date": "2026-11-18T21:42:21+02:00",
+      "refs": [
+        "refs/remotes/origin/codex/tadazz-editor-hebrew-20261118"
+      ],
+      "recentCommitCount": 94,
+      "included": true
+    }
+  ],
+  "noRecentTips": [
+    {
+      "sha": "1153dfa4cc235fa48310d63e675275a8472e20fc",
+      "date": "2026-10-25T21:41:44+02:00",
+      "refs": [
+        "refs/heads/agent/maya/wave2",
+        "refs/remotes/origin/agent/maya/wave2"
+      ]
+    },
+    {
+      "sha": "9d1c48b4f4c54180a465514aeeb5bece7f0a8933",
+      "date": "2026-10-24T23:50:52+02:00",
+      "refs": [
+        "refs/heads/agent/noam/wave1",
+        "refs/remotes/origin/agent/noam/wave1"
+      ]
+    },
+    {
+      "sha": "57db9e789d30b9dc91c690722cfce23925f3ca71",
+      "date": "2026-11-05T04:29:30+02:00",
+      "refs": [
+        "refs/heads/agent/tadazz-accounts-20261104",
+        "refs/remotes/origin/agent/tadazz-accounts-20261104"
+      ]
+    },
+    {
+      "sha": "158c589675933a1fcaee59795a2e20ddce05e00a",
+      "date": "2026-11-05T18:38:56+02:00",
+      "refs": [
+        "refs/heads/agent/tadazz-full-show-20261105",
+        "refs/remotes/origin/agent/tadazz-full-show-20261105"
+      ]
+    },
+    {
+      "sha": "0079e456228dddf0b53152004d7fb081e106a060",
+      "date": "2026-11-08T14:49:36+02:00",
+      "refs": [
+        "refs/heads/agent/tadazz-next-20261105",
+        "refs/remotes/origin/agent/tadazz-next-20261105"
+      ]
+    },
+    {
+      "sha": "eb71474046a03f9e496dbb8ec245d912e24c2c72",
+      "date": "2026-11-05T22:48:35+02:00",
+      "refs": [
+        "refs/heads/agent/tadazz-v4-design-kit-20261105",
+        "refs/remotes/origin/agent/tadazz-v4-design-kit-20261105"
+      ]
+    },
+    {
+      "sha": "4dc0af472331cc4b0dc510641d063c9587017a12",
+      "date": "2026-11-04T05:00:05+02:00",
+      "refs": [
+        "refs/heads/agent/tomer/wave2",
+        "refs/remotes/origin/agent/tadazz-validated-20261104",
+        "refs/remotes/origin/agent/tomer/wave2"
+      ]
+    },
+    {
+      "sha": "cd793cd0c9ceedf9deb76fc98df449db4adf1a56",
+      "date": "2026-11-08T00:50:30+02:00",
+      "refs": [
+        "refs/heads/agent/tzila-seating-20261108",
+        "refs/remotes/origin/agent/tzila-seating-20261108"
+      ]
+    },
+    {
+      "sha": "a4891979244fd96d1585e822f65e873c0d0bfdf8",
+      "date": "2026-11-09T01:57:56+02:00",
+      "refs": [
+        "refs/heads/codex/sync-all-20261109",
+        "refs/remotes/origin/codex/sync-all-20261109",
+        "refs/remotes/origin/codex/upstream-cleanup-theme-engine-20261108"
+      ]
+    },
+    {
+      "sha": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+      "date": "2026-11-12T05:44:06+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-design-system-20261110",
+        "refs/remotes/origin/codex/tadazz-design-system-20261110"
+      ]
+    },
+    {
+      "sha": "786b4d422bffeccb2aaa7a13774b8e8ed8c65a33",
+      "date": "2026-11-16T00:23:30+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-integration-20261115"
+      ]
+    },
+    {
+      "sha": "8152ed599c6e051ea0bf671332ef99976ab1e5bf",
+      "date": "2026-11-15T23:29:14+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-mcp-20261115"
+      ]
+    },
+    {
+      "sha": "039110c620a0b7fe9db9bd14d8c34bfa076a0d49",
+      "date": "2026-11-16T00:54:50+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-mcp-widget-20261115"
+      ]
+    },
+    {
+      "sha": "84132963d5b4ef376bf45c20302fd7d2f950826d",
+      "date": "2026-11-16T00:44:11+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-recovery-fresh-20261115"
+      ]
+    },
+    {
+      "sha": "c2dc5c229f421b821bca8b1a953bb1c91ec56aa0",
+      "date": "2026-11-16T00:35:12+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-show-library-20261115"
+      ]
+    },
+    {
+      "sha": "3d8a7cf4f9ca20ae6e5c1589746880d64d0bf39c",
+      "date": "2026-11-16T00:49:33+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-show-ui-20261115"
+      ]
+    },
+    {
+      "sha": "13ae967157a7e82613a3904c5b66fefee9a7a725",
+      "date": "2026-11-15T21:11:04+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-site-20261115"
+      ]
+    },
+    {
+      "sha": "f36dcbecdd30e8bc62a26c30d644f4bbb20c0e8f",
+      "date": "2026-11-16T00:52:31+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-hq-telephony-fresh-20261115"
+      ]
+    },
+    {
+      "sha": "87945bf2ec2a8c8fe4dfdbd8513a6fb2a31dbb30",
+      "date": "2026-11-16T00:47:36+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-inline-game-preview-20261115"
+      ]
+    },
+    {
+      "sha": "18d3c9d052e3a81f16a9fc532cdb70c4f1c55247",
+      "date": "2026-11-10T01:01:15+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-package-runtime-20261109",
+        "refs/remotes/origin/codex/tadazz-package-runtime-20261109"
+      ]
+    },
+    {
+      "sha": "fb6c7631999f33c8fb47638a99920e450f326fbf",
+      "date": "2026-11-10T19:58:13+02:00",
+      "refs": [
+        "refs/heads/codex/tadazz-unified-site-20261110"
+      ]
+    },
+    {
+      "sha": "22c28349295bb5f25994dc07d408311937b868d3",
+      "date": "2026-10-24T21:54:45+02:00",
+      "refs": [
+        "refs/heads/feat/modular-extensions-planning",
+        "refs/remotes/origin/agent/roni/wave1",
+        "refs/remotes/origin/feat/modular-extensions-planning"
+      ]
+    },
+    {
+      "sha": "08ddc42845da7721e91e303f4a94425a747b3ca8",
+      "date": "2026-11-10T03:07:30+02:00",
+      "refs": [
+        "refs/heads/feat/tadazz-site-library-parity-20261110"
+      ]
+    },
+    {
+      "sha": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+      "date": "2026-10-17T20:46:25+02:00",
+      "refs": [
+        "refs/heads/main",
+        "refs/remotes/origin/main"
+      ]
+    },
+    {
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "date": "2026-10-24T21:35:45+02:00",
+      "refs": [
+        "refs/remotes/origin/agent/dana/wave1",
+        "refs/remotes/origin/agent/eitan/wave1",
+        "refs/remotes/origin/agent/yael/wave1"
+      ]
+    },
+    {
+      "sha": "1f761205c76885a5a5de9eaf6b8bc19bf19636c0",
+      "date": "2026-10-24T23:12:34+02:00",
+      "refs": [
+        "refs/remotes/origin/agent/maya/wave1"
+      ]
+    },
+    {
+      "sha": "fbca624a8254b908a72181c1cfc2339f15846550",
+      "date": "2026-11-04T04:09:35+02:00",
+      "refs": [
+        "refs/remotes/origin/agent/tadazz-motion-20261104"
+      ]
+    },
+    {
+      "sha": "c2c698a937aa17c7973b1ca975a8084ed9d53f55",
+      "date": "2026-10-25T04:28:59+02:00",
+      "refs": [
+        "refs/remotes/origin/agent/tomer/wave1"
+      ]
+    },
+    {
+      "sha": "edb4b2babf5d06ace0b0c68710a86f9a63e3367e",
+      "date": "2026-11-09T00:44:15+02:00",
+      "refs": [
+        "refs/remotes/origin/codex/tadazz-billing-20261108"
+      ]
+    },
+    {
+      "sha": "4c43e4fb939c2ce2a143aa29e2b56bbbb104c9a0",
+      "date": "2026-11-03T07:43:40Z",
+      "refs": [
+        "refs/remotes/upstream/dependabot/docker/dev/docker-minor-patch-d6e9ef2941"
+      ]
+    },
+    {
+      "sha": "198bfa33df35537697a5ee4536377a9ed7bad323",
+      "date": "2026-11-03T07:49:11Z",
+      "refs": [
+        "refs/remotes/upstream/dependabot/github_actions/dev/github-actions-minor-patch-cba5b78976"
+      ]
+    },
+    {
+      "sha": "01f41775e67954df7ff6aa9ccd55ecd3bc0a92b7",
+      "date": "2026-11-03T07:47:20Z",
+      "refs": [
+        "refs/remotes/upstream/dependabot/npm_and_yarn/dev/npm-minor-patch-57cd8d95e7"
+      ]
+    },
+    {
+      "sha": "222168a52144e1567af78751f393cf735f5c4510",
+      "date": "2026-10-28T16:24:56+01:00",
+      "refs": [
+        "refs/remotes/upstream/dev"
+      ]
+    },
+    {
+      "sha": "8345663f7f47a8d466964fcf5b642cc7a4ed90fb",
+      "date": "2026-10-28T15:09:16+01:00",
+      "refs": [
+        "refs/remotes/upstream/main"
+      ]
+    }
+  ],
+  "symbolicRefs": [
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "target": "refs/remotes/origin/main"
+    },
+    {
+      "ref": "refs/remotes/upstream/HEAD",
+      "target": "refs/remotes/upstream/main"
+    }
+  ],
+  "duplicateNames": [
+    {
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "refs": [
+        "refs/heads/codex/great-guessoff-demo-final-20261118",
+        "refs/remotes/origin/codex/great-guessoff-demo-final-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "refs": [
+        "refs/heads/codex/great-guessoff-live-20261118",
+        "refs/remotes/origin/codex/great-guessoff-live-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "refs": [
+        "refs/heads/codex/great-guessoff-public-demo-20261118",
+        "refs/heads/codex/tadazz-editor-hebrew-20261118",
+        "refs/heads/codex/tadazz-save-consent-link-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "refs": [
+        "refs/heads/codex/tadazz-chat-preview-flow-p0-20261118",
+        "refs/heads/codex/tadazz-mcp-connect-20261118",
+        "refs/remotes/origin/codex/tadazz-mcp-connect-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "refs": [
+        "refs/heads/codex/tadazz-editor-drafts-20261118",
+        "refs/heads/codex/tadazz-host-roster-hebrew-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "refs": [
+        "refs/heads/codex/tadazz-oauth-compat-20261118",
+        "refs/remotes/origin/codex/tadazz-oauth-compat-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "refs": [
+        "refs/heads/codex/tadazz-save-consent-hotfix-20261118",
+        "refs/remotes/origin/codex/tadazz-save-consent-hotfix-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "refs": [
+        "refs/heads/codex/tadazz-scope-discovery-20261118",
+        "refs/remotes/origin/codex/tadazz-scope-discovery-20261118"
+      ],
+      "allIncluded": true
+    },
+    {
+      "sha": "914322b7bfed7e7531887852c69654aac4ce837e",
+      "refs": [
+        "refs/heads/codex/tadazz-ux-unified-20261119",
+        "refs/remotes/origin/codex/tadazz-ux-unified-20261119"
+      ],
+      "allIncluded": true
+    }
+  ],
+  "classification": "All 37 qualifying refs (26 distinct tips) are included by commit ancestry. No missing recent tip requires a superseded/duplicate-patch explanation."
+}

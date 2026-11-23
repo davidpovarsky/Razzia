@@ -1,0 +1,49 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mdenies an absent sidecar when backup and target are non-null[33m 8920[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mdenies ID-named non-string ID null before either native callback[33m 8879[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mdenies ID-named non-string ID 7 before either native callback[33m 8802[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mdenies ID-named non-string ID false before either native callback[33m 8697[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mdenies ID-named non-string ID {} before either native callback[33m 8602[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mdenies ID-named non-string ID [] before either native callback[33m 8699[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mpreserves a string foreign ID while restoring the native random-basename record[33m 8415[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mallows absent first-sidecar state explicitly recorded as a null backup[33m 8102[2mms[22m[39m
+[90mstderr[2m | src/server/storage/review-binding.test.ts[2m > [22m[2mR2 independent review native replay regressions[2m > [22m[2mpreflights all needed private images before immediate-missing Media rollback
+[22m[39m[MediaRollback] Ownership changed; preserving both siblings and journal Error: Prepared record changed
+    at preparedPath [90m(/work/extensions/[39msrc/server/storage/physical-binding.ts:349:11[90m)[39m
+    at assertPhysicalRestoreGroup [90m(/work/extensions/[39msrc/server/storage/physical-binding.ts:333:5[90m)[39m
+    at rollback [90m(/work/extensions/[39msrc/server/media-library.ts:503:7[90m)[39m
+    at executeMediaDeleteTransaction [90m(/work/extensions/[39msrc/server/media-library.ts:812:29[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage/review-binding.test.ts:320:26
+    at fixtureCase [90m(/work/extensions/[39msrc/server/storage/review-binding.test.ts:149:13[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage/review-binding.test.ts:294:13
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2869:63
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mpreserves native storage ID for wrapper-free backup through the default overload[33m 8294[2mms[22m[39m
+[90mstderr[2m | src/server/storage/review-binding.test.ts[2m > [22m[2mR2 independent review native replay regressions[2m > [22m[2mpreflights all needed private images before immediate-corrupt Media rollback
+[22m[39m[MediaRollback] Ownership changed; preserving both siblings and journal Error: Prepared record changed
+    at preparedPath [90m(/work/extensions/[39msrc/server/storage/physical-binding.ts:349:11[90m)[39m
+    at assertPhysicalRestoreGroup [90m(/work/extensions/[39msrc/server/storage/physical-binding.ts:333:5[90m)[39m
+    at rollback [90m(/work/extensions/[39msrc/server/media-library.ts:503:7[90m)[39m
+    at executeMediaDeleteTransaction [90m(/work/extensions/[39msrc/server/media-library.ts:812:29[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage/review-binding.test.ts:320:26
+    at fixtureCase [90m(/work/extensions/[39msrc/server/storage/review-binding.test.ts:149:13[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage/review-binding.test.ts:294:13
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2869:63
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mpreflights all needed private images before immediate-missing Media rollback[33m 8405[2mms[22m[39m
+
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mpreflights all needed private images before immediate-corrupt Media rollback[33m 8387[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mpreflights all needed private images before startup-missing Media rollback[33m 8798[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mpreflights all needed private images before startup-corrupt Media rollback[33m 8403[2mms[22m[39m
+ [32m✓[39m src/server/storage/review-binding.test.ts[2m > [22mR2 independent review native replay regressions[2m > [22mretries an already restored sibling without its consumed private backup[33m 8211[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 08:12:29
+[2m   Duration [22m 125.29s[2m (tests 96%, transform 3%, import 1%)[22m
+

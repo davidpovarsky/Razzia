@@ -1,0 +1,73 @@
+{
+  "created_utc": "2026-11-15T09:59:49.283324+00:00",
+  "new_target_head": "58cfb5c7a734518c715ae56d74666441f0743f5d",
+  "new_target_tree": "cfe5ea46c3f33194b86d416ff079e2228dc59e64",
+  "accepted_source_blob_union_exact": 29,
+  "all_other_extensions_source_unchanged_from": "9f7bfdef45cfe87b9edb99eb9082f479d1c51f09",
+  "protected_packages_unchanged": true,
+  "mcp_private_source_tree_unchanged": true,
+  "f134_parent_not_merged": true,
+  "source_fixture": {
+    "tracked_entries": 943,
+    "changed_source_files": 29,
+    "overlay_bytes": 389120,
+    "clones": "No root/.git/docs/deps/store clone"
+  },
+  "planned_server_checks": [
+    {
+      "label": "parent-types",
+      "scope": "actual parent TS7 extensions/tsconfig.json unchanged"
+    },
+    {
+      "label": "stage-metadata",
+      "expected": 26
+    },
+    {
+      "label": "recovery-original",
+      "expected": 86,
+      "files": [
+        "storage.test.ts",
+        "media-library.test.ts",
+        "storage/journal-recovery.test.ts",
+        "storage/create-recovery.test.ts",
+        "media-library-recovery.test.ts"
+      ]
+    },
+    {
+      "label": "recovery-review",
+      "expected": 14
+    },
+    {
+      "label": "recovery-native-media",
+      "expected": 4,
+      "selection": "startup preserves native binding: media|legacy-tagged Media|actual rollback binary"
+    },
+    {
+      "label": "recovery-package-stage",
+      "expected": 1
+    },
+    {
+      "label": "recovery-process-media",
+      "expected": 8,
+      "selection": "interrupts at (?!quiz-)"
+    },
+    {
+      "label": "api-routes",
+      "expected": 5,
+      "fixture": "new owned16MiB /fake TMPFS, not relabelled as prior host scratch"
+    },
+    {
+      "label": "theme-installation",
+      "expected": 5,
+      "timeout": "original30000ms unchanged"
+    }
+  ],
+  "targeted_expected_total": 149,
+  "not_repeated": [
+    "full819 suite",
+    "unchanged private SDK41;85e normal-root pin retained"
+  ],
+  "dependency_setup": "Previous real installed node_modules existed only in released consumer tmpfs and are gone. Propose one5-second standard frozen offline bootstrap in new bounded RAM for the combined tests; no new resolution, network or41 repeat. Alternatively manager can supply an exact same installed graph snapshot.",
+  "requested_resource": "fresh2400MiB/2GiB floor per latest manager;0.5CPU/3GiB active, metadata768+work752+fake16=1536MiB total tmpfs, existing64MiB physical cap; keep shared metadata alive/readOnly",
+  "execution_status": "NOT_RUN_RESOURCE_GRANT_RETURNED_BY_MANAGER"
+}

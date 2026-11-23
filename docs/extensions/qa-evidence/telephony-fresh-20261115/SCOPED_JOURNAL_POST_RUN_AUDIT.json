@@ -1,0 +1,37 @@
+{
+  "tested_source": "a12932b6f17575312bb27cf5ddc1058bc01ca9e1",
+  "targeted_tests": {
+    "pass": 3,
+    "fail": 0,
+    "skip": 0,
+    "cancel": 0,
+    "type_exit": 0,
+    "scan_exit": 0,
+    "old20_rerun": false
+  },
+  "invalid_record_variants": 29,
+  "matching_journal_but_untrusted_expected_context_denials": 6,
+  "invalid_record_coordinator_native_dispatch": 0,
+  "invalid_record_game_db_wal_unchanged": true,
+  "accepted_production_source": "0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",
+  "accepted_four_files_unchanged": true,
+  "base_hashes": 549,
+  "overlay_hashes": 23,
+  "privacy_scan": {
+    "capabilities": 3,
+    "public_evidence_files": 8,
+    "database_files": 3,
+    "raw_capability_disclosed": false,
+    "fixture_tmpfs_type": 16914836
+  },
+  "allocation": "BOTH_RELEASED",
+  "trees_allocated_bytes": 950272,
+  "container_metadata_allocated_bytes": 81920,
+  "reported_writable_bytes": 57344,
+  "total_measured_physical_bytes": 1089536,
+  "budget_bytes": 8388608,
+  "fresh_gate_bytes": 2516582400,
+  "final_available_bytes": 2890481664,
+  "final_evidence_archive_sha256": "4eb42a49e368e9d43e7dc17ab1eebe6e6092c06c4b3261a916412986b2c738a9",
+  "machine_restart_gateway_auth_provider_capacity_or_mount_proof": false
+}

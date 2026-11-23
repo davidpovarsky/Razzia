@@ -1,5 +1,5 @@
 import { EVENTS } from "@razzia/common/constants"
-import type { SessionRole } from "@razzia/common/types/auth"
+import type { SessionClaims, SessionRole } from "@razzia/common/types/auth"
 import type {
   GameSettings,
   GameUpdateQuestion,
@@ -18,6 +18,11 @@ import type { z } from "zod"
 export interface SocketData {
   clientId: string
   role: SessionRole
+  /** Server-only verified claims; never serialized to players or room state. */
+  claims?: SessionClaims
+  /** Server-only room bindings for delegated host/display revocation. */
+  managedRoomIds?: string[]
+  gameId?: string
 }
 
 export type Server = ServerIO<
@@ -94,14 +99,50 @@ export interface ServerToClientEvents {
     timedOut: boolean
   }) => void
   [EVENTS.MANAGER.LOCK_UPDATED]: (_locked: boolean) => void
+  // oxlint-disable-next-line typescript/no-explicit-any
+  [EVENTS.MANAGER.HOST_PRESENCE]: (_snapshot: any) => void
+
+  // Extension events
+  // oxlint-disable-next-line typescript/no-explicit-any
+  [EVENTS.EXTENSIONS.STATE]: (_data: any) => void
+
+  // Spectator events
+  [EVENTS.SPECTATOR.SUCCESS_JOIN]: (_data: {
+    gameId: string
+    inviteCode: string
+    gameMode: QuizzMode
+  }) => void
 }
 
 type ClientEventValidators = typeof clientEventValidators
 
+export interface AnswerSubmissionAck {
+  accepted: boolean
+  reason?: string
+}
+
+export interface ExtensionCommandAck {
+  success: boolean
+  deduplicated?: boolean
+  action?: string
+  error?: string
+}
+
 export type ClientToServerEvents = {
-  [E in keyof ClientEventValidators]: (
-    _message: z.infer<ClientEventValidators[E]>,
-  ) => void
+  [
+    E in keyof ClientEventValidators
+  ]: E extends typeof EVENTS.PLAYER.SELECTED_ANSWER
+    ? (
+        _message: z.infer<ClientEventValidators[E]>,
+        _ack?: (_result: AnswerSubmissionAck) => void,
+      ) => void
+    : E extends typeof EVENTS.EXTENSIONS.COMMAND
+      ? (
+          _message: z.infer<ClientEventValidators[E]>,
+          _ack?: (_result: ExtensionCommandAck) => void,
+        ) => void
+      : (_message: z.infer<ClientEventValidators[E]>) => void
 } & {
+  "extensions:clock": (_ack: (_serverNow: number) => void) => void
   disconnect: () => void
 }

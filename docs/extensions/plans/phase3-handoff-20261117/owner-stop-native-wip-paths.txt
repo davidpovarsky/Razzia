@@ -1,0 +1,15 @@
+ M extensions/src/site/web/studio/Studio.tsx
+?? extensions/qa/phase3-native-consent/consent-routes.nodecheck.ts
+?? extensions/qa/phase3-native-consent/crypto-helpers.ts
+?? extensions/qa/phase3-native-consent/harness.ts
+?? extensions/qa/phase3-native-consent/native-consent.playwright.config.ts
+?? extensions/qa/phase3-native-consent/native-consent.spec.ts
+?? extensions/qa/phase3-native-consent/native-host-e2e.nodecheck.ts
+?? extensions/qa/phase3-native-consent/oauth-flow.ts
+?? extensions/qa/phase3-native-consent/playwright-server.ts
+?? extensions/qa/phase3-native-consent/tsconfig.json
+?? extensions/src/mcp-app/native-host/consent-routes.ts
+?? extensions/src/mcp-app/native-host/host.ts
+?? extensions/src/mcp-app/native-host/index.ts
+?? extensions/src/mcp-app/native-host/node-bridge.ts
+?? extensions/src/mcp-app/native-host/static-site.ts

@@ -1,0 +1,122 @@
+{
+  "scope": "unmounted actual native account/session/Game source candidate",
+  "observations": [
+    {
+      "case": "AUTH-01",
+      "verifiedAccountAndRealSid": true,
+      "readonlyDenialsUnchanged": true,
+      "pendingHadZeroLifecycleAccess": true,
+      "actualCounters": {
+        "root": 1,
+        "nativeJoin": 1
+      },
+      "returnedSecretOnRetry": false
+    },
+    {
+      "case": "AUTH-02",
+      "oldVersionsDenied": 2,
+      "lostSecretRetryDidNotReveal": true,
+      "monotonicTerminalVersion": 4,
+      "actualCounters": {
+        "root": 1,
+        "nativeJoin": 1
+      }
+    },
+    {
+      "case": "AUTH-04",
+      "actualManagerPrepared": true,
+      "postCloseInitialization": false
+    },
+    {
+      "case": "AUTH-05",
+      "action": "issue",
+      "actualCommits": 1,
+      "disclosureDenied": true,
+      "decisionPreserved": true
+    },
+    {
+      "case": "AUTH-05",
+      "action": "rotate",
+      "actualCommits": 1,
+      "disclosureDenied": true,
+      "decisionPreserved": true
+    },
+    {
+      "case": "AUTH-05",
+      "action": "activate",
+      "actualCommits": 1,
+      "disclosureDenied": true,
+      "decisionPreserved": true
+    },
+    {
+      "case": "AUTH-05",
+      "action": "register",
+      "actualCommits": 3,
+      "disclosureDenied": true,
+      "decisionPreserved": true
+    },
+    {
+      "case": "AUTH-06",
+      "action": "initialize",
+      "closeErrors": 1,
+      "callerDenied": true,
+      "markerPreserved": true,
+      "reopenDenied": true,
+      "knownCommitPreserved": true
+    },
+    {
+      "case": "AUTH-06",
+      "action": "revoke",
+      "closeErrors": 1,
+      "callerDenied": true,
+      "markerPreserved": true,
+      "reopenDenied": true,
+      "knownCommitPreserved": true
+    },
+    {
+      "case": "NATIVE-01",
+      "defaultOff": true,
+      "activeLegacyMigrationDenied": true
+    },
+    {
+      "case": "NATIVE-02",
+      "legacyActionsDenied": 3,
+      "phoneBrowserIdentitiesDenied": 4,
+      "oldTicketDenied": true,
+      "reconnectAnswerDirectDelegatesDenied": true,
+      "webAndManagerControl": true,
+      "nativeAnswerAccepted": true,
+      "replaySameReceipt": true,
+      "actualPoints": 998,
+      "hangup": true,
+      "closeRetainedFence": true
+    },
+    {
+      "case": "NATIVE-03",
+      "actualTicketSigned": true,
+      "postAwaitAdoptionDeniedDisclosure": true,
+      "players": 0
+    },
+    {
+      "case": "NATIVE-04",
+      "actualRedialGeneration": 2,
+      "stableClientAndRoster": true,
+      "actualPoints": 997,
+      "retiredOperationsDenied": 3,
+      "retiredRegistrationRetriesDenied": 2,
+      "activePlayers": 1
+    },
+    {
+      "case": "AUTH-03",
+      "actualSidRevokedAfterObservedBegin": true,
+      "beginReturned": true,
+      "leaseMutationCalls": 0,
+      "leaseUnchanged": true,
+      "actualCounters": {
+        "root": 0,
+        "nativeJoin": 0
+      },
+      "actualPlayers": 0
+    }
+  ]
+}

@@ -1,0 +1,429 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media[33m 12879[2mms[22m[39m
+[31m   → expected { …(3) } to be undefined[39m
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-base[33m 13019[2mms[22m[39m
+[31m   → [Journal] Failed to recover journal SMJcc2_8TaDiiqCiH7KuR.journal.json: Error: Failed to verify rolled back base quiz SMJcc2_8TaDiiqCiH7KuR
+    at recoverJournals (/work/extensions/src/server/storage/journal.ts:393:17)
+    at recoverStartupJournals (/work/extensions/src/server/media-library.ts:1214:24)
+    at main (/work/extensions/src/server/storage/native-binding-child.ts:34:16)
+    at <anonymous> (/work/extensions/src/server/storage/native-binding-child.ts:110:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+: expected 2 to be +0 // Object.is equality[39m
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-sidecar[33m 12882[2mms[22m[39m
+[31m   → [Journal] Failed to recover journal retybs487WV_CycfPKHeR.journal.json: Error: Failed to verify rolled back base quiz retybs487WV_CycfPKHeR
+    at recoverJournals (/work/extensions/src/server/storage/journal.ts:393:17)
+    at recoverStartupJournals (/work/extensions/src/server/media-library.ts:1214:24)
+    at main (/work/extensions/src/server/storage/native-binding-child.ts:34:16)
+    at <anonymous> (/work/extensions/src/server/storage/native-binding-child.ts:110:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+: expected 2 to be +0 // Object.is equality[39m
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media-foreign[33m 12399[2mms[22m[39m
+[31m   → expected { …(3) } to deeply equal { …(3) }[39m
+ [32m✓[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-foreign[33m 13713[2mms[22m[39m
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media-sidecar-only[33m 12892[2mms[22m[39m
+[31m   → expected { …(3) } to be undefined[39m
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative composite create→GET→export uses the logical normalized digest (stripped input=false)[32m 95[2mms[22m[39m
+[31m   → expected '891633be8481a74ab75cb2d63af0044c5439e…' to be '6b26da92fdaccc4f0d610b620ceaeddaf5bd2…' // Object.is equality[39m
+ [31m×[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative composite create→GET→export uses the logical normalized digest (stripped input=true)[32m 16[2mms[22m[39m
+[31m   → expected '21224ccf1d64326efe5156fac1c582a436181…' to be '6b26da92fdaccc4f0d610b620ceaeddaf5bd2…' // Object.is equality[39m
+ [32m✓[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative writer baseline strips extra input independently of ownership bytes[32m 90[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 7 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media
+[31m[1mAssertionError[22m: expected { …(3) } to be undefined[39m
+
+[32m- Expected:[39m
+undefined
+
+[31m+ Received:[39m
+{
+  "json": {
+    "gameMode": "quiz",
+    "id": "Rftedyw2vLwUMn_1KWq0d",
+    "questions": [
+      {
+        "answers": [
+          "A",
+          "B",
+        ],
+        "cooldown": 3,
+        "media": {
+          "type": "image",
+          "url": "/media/r1-native.png",
+        },
+        "question": "Synthetic native question",
+        "solutions": [
+          0,
+        ],
+        "time": 20,
+        "type": "single",
+      },
+    ],
+    "subject": "Native R1",
+  },
+  "length": 408,
+  "sha256": "a507d0a521b4471d97a35220be8c1816a86da6090ab0719af64c3046e0f5b11b",
+}
+
+[36m [2m❯[22m src/server/storage/native-binding.test.ts:[2m201:15[22m[39m
+    [90m199|[39m             expect(
+    [90m200|[39m               run.state.files[`quizz/${descriptor.quizId}.json`],
+    [90m201|[39m             ).toBeUndefined()
+    [90m   |[39m               [31m^[39m
+    [90m202|[39m             expect(run.state.files[baseKey]).toEqual(before.files[base…
+    [90m203|[39m             expect(run.state.files[extrasKey]).toEqual(before.files[ex…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-base
+[31m[1mAssertionError[22m: [Journal] Failed to recover journal SMJcc2_8TaDiiqCiH7KuR.journal.json: Error: Failed to verify rolled back base quiz SMJcc2_8TaDiiqCiH7KuR
+    at recoverJournals (/work/extensions/src/server/storage/journal.ts:393:17)
+    at recoverStartupJournals (/work/extensions/src/server/media-library.ts:1214:24)
+    at main (/work/extensions/src/server/storage/native-binding-child.ts:34:16)
+    at <anonymous> (/work/extensions/src/server/storage/native-binding-child.ts:110:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+: expected 2 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m recoverJournals src/server/storage/journal.ts:[2m393:17[22m[39m
+    [90m391|[39m             computeCanonicalBaseDigest(entry.backupBase)
+    [90m392|[39m         ) {
+    [90m393|[39m           throw new Error(`Failed to verify rolled back base quiz ${cl…
+    [90m   |[39m                 [31m^[39m
+    [90m394|[39m         }
+    [90m395|[39m       } else {
+[90m [2m❯[22m recoverStartupJournals src/server/media-library.ts:[2m1214:24[22m[39m
+[90m [2m❯[22m main src/server/storage/native-binding-child.ts:[2m34:16[22m[39m
+[90m [2m❯[22m <anonymous> src/server/storage/native-binding-child.ts:[2m110:3[22m[39m
+[90m [2m❯[22m src/server/storage/native-binding.test.ts:[2m197:58[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-sidecar
+[31m[1mAssertionError[22m: [Journal] Failed to recover journal retybs487WV_CycfPKHeR.journal.json: Error: Failed to verify rolled back base quiz retybs487WV_CycfPKHeR
+    at recoverJournals (/work/extensions/src/server/storage/journal.ts:393:17)
+    at recoverStartupJournals (/work/extensions/src/server/media-library.ts:1214:24)
+    at main (/work/extensions/src/server/storage/native-binding-child.ts:34:16)
+    at <anonymous> (/work/extensions/src/server/storage/native-binding-child.ts:110:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+: expected 2 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m recoverJournals src/server/storage/journal.ts:[2m393:17[22m[39m
+    [90m391|[39m             computeCanonicalBaseDigest(entry.backupBase)
+    [90m392|[39m         ) {
+    [90m393|[39m           throw new Error(`Failed to verify rolled back base quiz ${cl…
+    [90m   |[39m                 [31m^[39m
+    [90m394|[39m         }
+    [90m395|[39m       } else {
+[90m [2m❯[22m recoverStartupJournals src/server/media-library.ts:[2m1214:24[22m[39m
+[90m [2m❯[22m main src/server/storage/native-binding-child.ts:[2m34:16[22m[39m
+[90m [2m❯[22m <anonymous> src/server/storage/native-binding-child.ts:[2m110:3[22m[39m
+[90m [2m❯[22m src/server/storage/native-binding.test.ts:[2m197:58[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media-foreign
+[31m[1mAssertionError[22m: expected { …(3) } to deeply equal { …(3) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "json": {[22m
+[2m      "gameMode": "quiz",[22m
+[32m-     "id": "X80ZnY2zulwajIUGEjCR6",[39m
+[31m+     "id": "xvp3R4A97aVt5_EIz3HEg",[39m
+[2m      "questions": [[22m
+[2m        {[22m
+[2m          "answers": [[22m
+[2m            "A",[22m
+[2m            "B",[22m
+[2m          ],[22m
+[2m          "cooldown": 3,[22m
+[31m+         "media": {[39m
+[31m+           "type": "image",[39m
+[31m+           "url": "/media/r1-native.png",[39m
+[31m+         },[39m
+[2m          "question": "Synthetic native question",[22m
+[2m          "solutions": [[22m
+[2m            0,[22m
+[2m          ],[22m
+[2m          "time": 20,[22m
+[2m          "type": "single",[22m
+[2m        },[22m
+[2m      ],[22m
+[32m-     "subject": "Foreign sentinel",[39m
+[31m+     "subject": "Native R1",[39m
+[2m    },[22m
+[32m-   "length": 326,[39m
+[32m-   "sha256": "07c5f6348054deaec7c3418af987e1964715a0b964ef6ebf03b97c56bc196fca",[39m
+[31m+   "length": 408,[39m
+[31m+   "sha256": "c27e21f8188a5cb02dc1cda395699172d97acf739e6e526ffd8d2efedec4d0bb",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/server/storage/native-binding.test.ts:[2m177:47[22m[39m
+    [90m175|[39m           if (descriptor.foreignName) {
+    [90m176|[39m             const sentinel = `quizz/${descriptor.foreignName}`
+    [90m177|[39m             expect(run.state.files[sentinel]).toEqual(before.files[sen…
+    [90m   |[39m                                               [31m^[39m
+    [90m178|[39m             expect(run.process.code).toBe(2)
+    [90m179|[39m             expect(run.error).toMatch(/startup blocked/i)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media-sidecar-only
+[31m[1mAssertionError[22m: expected { …(3) } to be undefined[39m
+
+[32m- Expected:[39m
+undefined
+
+[31m+ Received:[39m
+{
+  "json": {
+    "audio": {
+      "cues": {
+        "answerPressed": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "answersMusic": {
+          "enabled": true,
+          "loop": true,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "leaderboard": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "podium1": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "podium2": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "podium3": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "revealResults": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "showQuestion": {
+          "enabled": true,
+          "loop": false,
+          "source": "default",
+          "volume": 0.8,
+        },
+        "start": {
+          "enabled": true,
+          "loop": false,
+          "source": "media",
+          "url": "/media/other-audio.mp3",
+          "volume": 0.6,
+        },
+      },
+    },
+    "authoring": {
+      "showNote": "R1 native full V2
+retained note",
+    },
+    "baseDigest": "6021fa91ba94f641211deda52863dbeea218f7f5fbc1141dc329dae77e6b019f",
+    "defaults": {
+      "advanceMode": "auto",
+      "leaderboardPolicy": "cardOnly",
+      "newQuestionMode": "quiz",
+      "showTheme": {
+        "id": "tadazz-classic",
+        "overrides": {},
+        "version": "1.0.0",
+      },
+    },
+    "mediaCatalog": [
+      {
+        "addedAt": 1,
+        "name": "other-audio.mp3",
+        "type": "audio",
+        "url": "/media/other-audio.mp3",
+      },
+    ],
+    "perQuestion": {
+      "00000000-0000-4000-8000-000000000081": {
+        "answerVisuals": [
+          {
+            "alt": "R1 answer",
+            "answerIndex": 0,
+            "display": "both",
+            "url": "/media/other-answer.png",
+          },
+        ],
+        "background": {
+          "fit": "contain",
+          "overlayOpacity": 0.3,
+          "position": "center",
+          "url": "/media/r1-native.png",
+        },
+        "questionEntrance": {
+          "durationMs": 800,
+          "preset": "fade",
+        },
+      },
+    },
+    "questionIds": [
+      "00000000-0000-4000-8000-000000000081",
+    ],
+    "quizId": "wY8l7sFqvehPswtVRaM0V",
+    "revision": 1,
+    "roster": {
+      "participants": [],
+      "phoneInviteOnly": false,
+    },
+    "scenes": {
+      "00000000-0000-4000-8000-000000000082": {
+        "advance": "manual",
+        "audio": {
+          "loop": false,
+          "mode": "custom",
+          "url": "/media/other-audio.mp3",
+          "volume": 0.4,
+        },
+        "background": {
+          "fit": "cover",
+          "overlayOpacity": 0.2,
+          "position": "center",
+          "url": "/media/other-background.png",
+        },
+        "durationMs": 2000,
+        "endBehavior": "holdFrame",
+        "id": "00000000-0000-4000-8000-000000000082",
+        "kind": "opening",
+        "logoPosition": "center",
+        "loop": false,
+        "lottieFit": "contain",
+        "lottieLoop": true,
+        "lottieSpeed": 1,
+        "mediaFit": "cover",
+        "muted": false,
+        "showControls": false,
+        "stageLayout": "cinema",
+        "textOverlay": true,
+        "title": "Native scene",
+        "volume": 0.8,
+      },
+    },
+    "schemaVersion": 2,
+    "teams": {
+      "autoAssign": "roundRobin",
+      "enabled": false,
+      "teams": [],
+    },
+    "timeline": [
+      {
+        "id": "6e5fb7d3-0f6a-493d-a394-d76d1f346275",
+        "kind": "opening",
+        "sceneId": "00000000-0000-4000-8000-000000000082",
+      },
+      {
+        "id": "9e63b752-de3a-4ca7-8b91-c956efaaf307",
+        "kind": "question",
+        "questionId": "00000000-0000-4000-8000-000000000081",
+      },
+    ],
+  },
+  "length": 3748,
+  "sha256": "c97a59e75dba6fdbc1efb5875ec3a80553df49e4640a7e3297a1cc8ef1081d77",
+}
+
+[36m [2m❯[22m src/server/storage/native-binding.test.ts:[2m184:15[22m[39m
+    [90m182|[39m             expect(
+    [90m183|[39m               run.state.files[`quizz/${descriptor.sidecarOnlyId}.json`…
+    [90m184|[39m             ).toBeUndefined()
+    [90m   |[39m               [31m^[39m
+    [90m185|[39m             expect(
+    [90m186|[39m               run.state.files[
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative composite create→GET→export uses the logical normalized digest (stripped input=false)
+[31m[1mAssertionError[22m: expected '891633be8481a74ab75cb2d63af0044c5439e…' to be '6b26da92fdaccc4f0d610b620ceaeddaf5bd2…' // Object.is equality[39m
+
+Expected: [32m"6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9"[39m
+Received: [31m"891633be8481a74ab75cb2d63af0044c5439e322977da7b0eff31ad10d6fa2e3"[39m
+
+[36m [2m❯[22m src/server/storage/native-binding.test.ts:[2m266:33[22m[39m
+    [90m264|[39m         )
+    [90m265|[39m         expect(created.baseDigest).toBe(expectedLogical)
+    [90m266|[39m         expect(read.baseDigest).toBe(expectedLogical)
+    [90m   |[39m                                 [31m^[39m
+    [90m267|[39m         expect(read.digestMatches).toBe(true)
+    [90m268|[39m         expect(exported.extras.baseDigest).toBe(expectedLogical)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative composite create→GET→export uses the logical normalized digest (stripped input=true)
+[31m[1mAssertionError[22m: expected '21224ccf1d64326efe5156fac1c582a436181…' to be '6b26da92fdaccc4f0d610b620ceaeddaf5bd2…' // Object.is equality[39m
+
+Expected: [32m"6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9"[39m
+Received: [31m"21224ccf1d64326efe5156fac1c582a43618131123a413df49b130f649d5747e"[39m
+
+[36m [2m❯[22m src/server/storage/native-binding.test.ts:[2m266:33[22m[39m
+    [90m264|[39m         )
+    [90m265|[39m         expect(created.baseDigest).toBe(expectedLogical)
+    [90m266|[39m         expect(read.baseDigest).toBe(expectedLogical)
+    [90m   |[39m                                 [31m^[39m
+    [90m267|[39m         expect(read.digestMatches).toBe(true)
+    [90m268|[39m         expect(exported.extras.baseDigest).toBe(expectedLogical)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 05:26:12
+[2m   Duration [22m 84.30s[2m (tests 93%, transform 5%, import 2%)[22m
+

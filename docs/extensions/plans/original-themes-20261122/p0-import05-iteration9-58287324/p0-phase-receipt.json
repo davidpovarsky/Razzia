@@ -1,0 +1,107 @@
+{
+  "actualInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 43202,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 67201,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 23638,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 140918.845,
+      "expected": 3,
+      "flaky": 0,
+      "skipped": 0,
+      "startTime": "2026-11-22T17:47:15.820Z",
+      "unexpected": 0
+    }
+  },
+  "exit": 0,
+  "gameSpeed": 1,
+  "label": "p0",
+  "listedInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 2182.074,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 3,
+      "startTime": "2026-11-22T17:47:12.914Z",
+      "unexpected": 0
+    }
+  },
+  "originalExpectTimeout": 20000,
+  "originalTestTimeout": 240000,
+  "passed": true,
+  "requestedCases": {
+    "media-appearance-stage-acceptance.spec.ts": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion",
+    "p0-tzila-acceptance.spec.ts": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes",
+    "tzila-public-stage-and-toolbar.spec.ts": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+  },
+  "retries": 0,
+  "seconds": 144.72
+}

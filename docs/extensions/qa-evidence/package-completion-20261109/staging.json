@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "sourceCommit": "354669edc365e10ad92bdbfbad9308b05cbcf133",
+  "applicationSourceCommit": "354669edc365e10ad92bdbfbad9308b05cbcf133",
+  "applicationImage": "sha256:76a77a56d964b53611541c7a1a7594567fbee9b6bcc9bd547feda82646840d10",
+  "container": "53bcf0bfff5f0c9c4c0d5cef0164f092be62802e2f563b37b54246a00efdb492",
+  "persistedFiles": 1991,
+  "allPersistedHashesEqual": true,
+  "backupRestoredHashesEqual": true,
+  "network": "none",
+  "publishedPorts": false,
+  "memoryBytes": 8589934592,
+  "pidsLimit": 1536,
+  "nanoCpus": 2000000000,
+  "privateBackup": "package-staging-backup-visual-final.tar.gz",
+  "backupSha256": "849e634abda8a087687dbdc83898a01c3769b1bcf37d1c89d2ba70f822d6bf5f",
+  "compiledWebFiles": 90,
+  "compiledWebManifestSha256": "840449c0ddf9ff4e940397f4753a5584990b4fa30cff4f017dfb71122a7eda73",
+  "compiledWebHashesUnchangedAfterRecreation": true,
+  "priorImmutableImagesRetained": true,
+  "priorOwnQaContainerRetained": false,
+  "removedOwnStoppedContainerCopies": [
+    "tadazz-package-runtime-qa-pre-r13-20261109",
+    "tadazz-package-runtime-qa-pre-final-data-restart-20261109"
+  ],
+  "sqlitePolicy": "Checkpoint and explicitly close connections before durable backup; exclude transient SHM/WAL files.",
+  "qualification": "All 1024 units/eight projects/lint/format/build and all 81 browsers passed after the fallback viewport repair; final data restart uses the exact same tested image."
+}

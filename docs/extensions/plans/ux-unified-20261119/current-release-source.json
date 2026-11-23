@@ -1,0 +1,23 @@
+{
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "previousSourceSha": "8b063c17800dffe4f91a7f2c9ae6aa882389e614",
+  "behavioralProductSourceSha": "d4f03cc8703115a2a869be050fc86e4b260dbda3",
+  "branch": "codex/tadazz-ux-unified-20261119",
+  "origin": "https://github.com/davidpovarsky/Razzia.git",
+  "pushed": true,
+  "pushedAt": "2026-11-19T05:07:54.928324+00:00",
+  "changedFiles": {
+    "extensions/deployment/stage-mcp-site.py": "daeb027f27a183b95fc9259fd58ea2742adf387398bd56aa995bb7f97be2538a",
+    "extensions/deployment/deploy-mcp-site.py": "07b17a2ed71035c573cb9d945e9ed36acd8093af3b940978339fa4054cd532ba"
+  },
+  "nativeManifestSha256": "8d222b5bd76c0483c3b645b7f3df54064b9528548c71ae42af5e8722b53f9e9e",
+  "helpers": {
+    "stage_current_candidate.py": "efc5410b883af45df1deebebe36f37037d0212362ab27d4867a77957d976261b",
+    "deploy_current_candidate.py": "d23bf6be2e64dcef87c10a418923ffab7340c372931f62b9086eedb4a6ec5782",
+    "collect_release_evidence.py": "2218ad5c9c0cc10b0f0ddcc0b744a87719741ee1b97a884b7a077390c51e674c"
+  },
+  "repositoryHead": "2c66bc94d220b04a7e080d9aafabf2850f328432",
+  "deploymentToolSourceSha": "2c66bc94d220b04a7e080d9aafabf2850f328432",
+  "deploymentToolScriptSha256": "3cf6acd277c9c9f7322c21c17ad27da8ee10a8ab2dd76594f81bc7d5f707cc35",
+  "deploymentToolSourceRecord": "deployment-tool-source.json"
+}

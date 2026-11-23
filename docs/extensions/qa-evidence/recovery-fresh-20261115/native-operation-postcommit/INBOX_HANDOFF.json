@@ -1,0 +1,13 @@
+{
+  "parentGid": "1220547779792791",
+  "taskGid": "1220548010771092",
+  "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220548010771092",
+  "topic": "Existing pending postcommit I/O evidence handoff, centralized once under new user communication protocol",
+  "sourceTask": "1219882508725158",
+  "handedEvidence": "9faa62dc1466f19ced59e6326226a3f68039dcda",
+  "parentWasOpen": true,
+  "subtaskOpen": true,
+  "readbackNotesAndParentExact": true,
+  "managerDirectMessageSent": false,
+  "discussionPolicy": "Use comments of this subtask at next relevant work point; no polling/status ACK/duplicate handoff; routine progress stays on source task"
+}

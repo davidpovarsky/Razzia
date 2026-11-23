@@ -1,0 +1,2748 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "0.1.0",
+  "status": "CANDIDATE_NOT_ADOPTED",
+  "date": "2026-11-15",
+  "authorThread": "01a1dd19-f64c-7193-8a74-9ad7b2c66e2d",
+  "reference": {
+    "path": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110",
+    "branch": "codex/tadazz-design-system-20261110",
+    "sha": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+    "sourceEdits": false,
+    "remoteFreshness": "UNVERIFIED",
+    "productionVersion": "UNVERIFIED"
+  },
+  "scope": {
+    "ownedArtifacts": [
+      "M1_CONTRACT_20261115.md",
+      "M1_SECURITY_ACCEPTANCE_20261115.json"
+    ],
+    "sourceTaskGids": [
+      "1220539632193783",
+      "1220539611687955",
+      "1220539638955304",
+      "1220539632251971"
+    ],
+    "hqTaskGid": "1220541896328314",
+    "implementation": false,
+    "deployment": false,
+    "credentialsUsed": false
+  },
+  "sdkCandidate": {
+    "extApps": "2.1.0",
+    "mcpServer": "2.0.0",
+    "mcpNode": "2.0.0",
+    "mcpClient": "2.0.0",
+    "mcpCore": "2.0.0",
+    "nodeMinimum": 20,
+    "installed": false,
+    "compiled": false,
+    "appsSpecReference": "2026-01-26",
+    "authorizationSpecReference": "2026-07-28",
+    "baseProtocolVersion": "NEGOTIATE_AND_CAPTURE_IN_M2",
+    "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+    "webMcpBridge": false,
+    "note": "Candidate pins from official release/tag sources; integrator verifies compatibility without a project-wide upgrade."
+  },
+  "securityInvariants": [
+    "Accounts mode enabled and verified nonempty server-bound account UUID before every private filesystem, cache, audit, export or background action.",
+    "No ambient/global fallback, empty withAccount, platform impersonation or client-supplied tenant selection.",
+    "No MCP token passthrough as manager JWT; no manager token, OAuth secret, password or private phone in widget/model/URL/log.",
+    "Per-request issuer, audience, signature/time, active grant, account ownership and required scope checks; session ID is not authentication.",
+    "Strict source validator/preflight plus narrower MVP authoring policy; no independent persisted game format.",
+    "Only trusted compiled bundled renderer/assets; untrusted TSX, private media and package installer are not activated.",
+    "No real room/vote/score/call/payment/publish/overwrite/delete tools.",
+    "One-use server-recorded first-party POST consent bound to exact save input; model booleans and UI visibility never authorize save.",
+    "Same-title and crash-safe composite persistence required before enabling account saves.",
+    "All proposed runtime controls require actual acceptance evidence."
+  ],
+  "limits": {
+    "requestUtf8Bytes": 65536,
+    "authoredShowUtf8Bytes": 32768,
+    "authoredShowChars": 32768,
+    "structuredContentUtf8Bytes": 49152,
+    "previewMetaUtf8Bytes": 262144,
+    "totalResponseUtf8Bytes": 327680,
+    "modelTextUtf8Bytes": 2048,
+    "cards": 50,
+    "questions": 25,
+    "titleChars": 160,
+    "userTextChars": 1000,
+    "diagnostics": 20,
+    "catalogPage": 20,
+    "previewAssets": 64,
+    "assetUrlChars": 2048,
+    "draftQuotaPerAccount": 20,
+    "readCallsPerMinute": 60,
+    "mutationsPerMinute": 10
+  },
+  "mvpPolicy": {
+    "settingsMustBeEmpty": true,
+    "forbiddenData": [
+      "rosters",
+      "phone numbers",
+      "participant records",
+      "teams/person records",
+      "extraJson",
+      "private media URLs",
+      "external arbitrary URLs",
+      "data URIs",
+      "filesystem paths",
+      "untrusted code"
+    ],
+    "media": "Authorized immutable public bundled assets only",
+    "readOnlyToolsMustNeverWrite": true,
+    "authoringValidator": "extensions/src/core/show-authoring-schema.ts#tadaShowV1Schema",
+    "preflight": "extensions/src/core/show-import-preflight.ts#preflightShowImport",
+    "converter": "extensions/src/core/show-authoring-convert.ts#authoredShowToNativeBundleDraft",
+    "persistence": "extensions/src/server/storage/service.ts#CompositeStorageService via verified-account safe injections"
+  },
+  "oauth": {
+    "resource": "MANAGER_ALLOCATED_CANONICAL_HTTPS_MCP_URL",
+    "issuer": "MANAGER_APPROVED_AUTHORIZATION_SERVER",
+    "discovery": [
+      "protected resource metadata",
+      "issuer OAuth/OIDC metadata"
+    ],
+    "flow": "authorization_code",
+    "pkce": "S256",
+    "resourceBound": true,
+    "registrationPreference": [
+      "approved preregistered client",
+      "CIMD"
+    ],
+    "dcr": "Compatibility only after explicit reviewed requirements",
+    "exactRedirectFromActualHost": true,
+    "requireIssuerResponseWhenAdvertised": true,
+    "accessTtlSeconds": 600,
+    "codeTtlSeconds": 120,
+    "clockSkewSeconds": 60,
+    "refresh": "Only if enabled; rotate public-client refresh tokens and revoke family on reuse",
+    "offlineAccessDefault": false,
+    "transportChallenge": {
+      "unauthenticated": 401,
+      "insufficientScope": 403,
+      "header": "WWW-Authenticate with exact configured resource_metadata"
+    },
+    "identityBridge": "NOT_IMPLEMENTED; existing manager JWTs are not OAuth access tokens",
+    "accountMapping": "Active server-side subject/grant to account UUID; theme-workspace delegation deferred"
+  },
+  "tools": [
+    {
+      "name": "list_game_templates",
+      "scope": "tadazz.catalog.read",
+      "readOnly": true,
+      "visibility": [
+        "model"
+      ],
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "contractVersion"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "templateId": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        },
+                        "version": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 32
+                        },
+                        "title": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "questionCount": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 25
+                        }
+                      },
+                      "required": [
+                        "templateId",
+                        "version",
+                        "title",
+                        "questionCount"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "nextCursor": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "required": [
+                  "items"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.catalog.read"
+      ]
+    },
+    {
+      "name": "list_themes",
+      "scope": "tadazz.catalog.read",
+      "readOnly": true,
+      "visibility": [
+        "model"
+      ],
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "contractVersion"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "themeId": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64
+                        },
+                        "version": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 32
+                        },
+                        "title": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "previewAvailable": {
+                          "type": "boolean"
+                        },
+                        "exportPermitted": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "themeId",
+                        "version",
+                        "title",
+                        "previewAvailable",
+                        "exportPermitted"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "nextCursor": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "required": [
+                  "items"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.catalog.read"
+      ]
+    },
+    {
+      "name": "create_game_draft",
+      "scope": "tadazz.drafts.write",
+      "readOnly": false,
+      "visibility": [
+        "model"
+      ],
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "authoredShowJson": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 32768
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "fr",
+              "de",
+              "es",
+              "it",
+              "ja",
+              "tr",
+              "vi"
+            ]
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          }
+        },
+        "required": [
+          "contractVersion",
+          "authoredShowJson",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "draftId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 160
+                      },
+                      "cardCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 50
+                      },
+                      "questionCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 25
+                      },
+                      "themeId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "themeVersion": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32
+                      },
+                      "diagnostics": {
+                        "type": "array",
+                        "maxItems": 20,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 80
+                            },
+                            "path": {
+                              "type": "string",
+                              "minLength": 0,
+                              "maxLength": 240
+                            },
+                            "messageKey": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 160
+                            },
+                            "severity": {
+                              "enum": [
+                                "warning",
+                                "error"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "path",
+                            "messageKey",
+                            "severity"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "cardCount",
+                      "questionCount",
+                      "themeId",
+                      "themeVersion",
+                      "diagnostics"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "draftId",
+                  "revision",
+                  "summary"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.drafts.write"
+      ]
+    },
+    {
+      "name": "get_game_draft",
+      "scope": "tadazz.drafts.read",
+      "readOnly": true,
+      "visibility": [
+        "model",
+        "app"
+      ],
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "draftId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          }
+        },
+        "required": [
+          "contractVersion",
+          "draftId"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "draftId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 160
+                      },
+                      "cardCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 50
+                      },
+                      "questionCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 25
+                      },
+                      "themeId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "themeVersion": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32
+                      },
+                      "diagnostics": {
+                        "type": "array",
+                        "maxItems": 20,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 80
+                            },
+                            "path": {
+                              "type": "string",
+                              "minLength": 0,
+                              "maxLength": 240
+                            },
+                            "messageKey": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 160
+                            },
+                            "severity": {
+                              "enum": [
+                                "warning",
+                                "error"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "path",
+                            "messageKey",
+                            "severity"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "cardCount",
+                      "questionCount",
+                      "themeId",
+                      "themeVersion",
+                      "diagnostics"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "authoredShowJson": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 32768
+                  }
+                },
+                "required": [
+                  "draftId",
+                  "revision",
+                  "summary",
+                  "authoredShowJson"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.drafts.read"
+      ]
+    },
+    {
+      "name": "update_game_draft",
+      "scope": "tadazz.drafts.write",
+      "readOnly": false,
+      "visibility": [
+        "model",
+        "app"
+      ],
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "draftId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          },
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "authoredShowJson": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 32768
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          }
+        },
+        "required": [
+          "contractVersion",
+          "draftId",
+          "expectedRevision",
+          "authoredShowJson",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "draftId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 160
+                      },
+                      "cardCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 50
+                      },
+                      "questionCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 25
+                      },
+                      "themeId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "themeVersion": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32
+                      },
+                      "diagnostics": {
+                        "type": "array",
+                        "maxItems": 20,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 80
+                            },
+                            "path": {
+                              "type": "string",
+                              "minLength": 0,
+                              "maxLength": 240
+                            },
+                            "messageKey": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 160
+                            },
+                            "severity": {
+                              "enum": [
+                                "warning",
+                                "error"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "path",
+                            "messageKey",
+                            "severity"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "cardCount",
+                      "questionCount",
+                      "themeId",
+                      "themeVersion",
+                      "diagnostics"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "draftId",
+                  "revision",
+                  "summary"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.drafts.read",
+        "tadazz.drafts.write"
+      ]
+    },
+    {
+      "name": "preview_game",
+      "scope": "tadazz.drafts.read",
+      "readOnly": true,
+      "visibility": [
+        "model",
+        "app"
+      ],
+      "resourceUri": "ui://tadazz/quiz-preview/v1.html",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "draftId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          },
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "fr",
+              "de",
+              "es",
+              "it",
+              "ja",
+              "tr",
+              "vi"
+            ]
+          }
+        },
+        "required": [
+          "contractVersion",
+          "draftId",
+          "expectedRevision"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "draftId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "previewVersion": {
+                    "const": 1
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 160
+                      },
+                      "cardCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 50
+                      },
+                      "questionCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 25
+                      },
+                      "themeId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "themeVersion": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32
+                      },
+                      "diagnostics": {
+                        "type": "array",
+                        "maxItems": 20,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 80
+                            },
+                            "path": {
+                              "type": "string",
+                              "minLength": 0,
+                              "maxLength": 240
+                            },
+                            "messageKey": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 160
+                            },
+                            "severity": {
+                              "enum": [
+                                "warning",
+                                "error"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "path",
+                            "messageKey",
+                            "severity"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "cardCount",
+                      "questionCount",
+                      "themeId",
+                      "themeVersion",
+                      "diagnostics"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "rendererStatus": {
+                    "enum": [
+                      "ready",
+                      "unavailable",
+                      "unsupportedTheme"
+                    ]
+                  },
+                  "projectionDigest": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "sbRegistryVersion": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 64
+                  }
+                },
+                "required": [
+                  "draftId",
+                  "revision",
+                  "previewVersion",
+                  "summary",
+                  "rendererStatus",
+                  "projectionDigest",
+                  "sbRegistryVersion"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.drafts.read"
+      ]
+    },
+    {
+      "name": "save_game",
+      "scope": "tadazz.library.write",
+      "readOnly": false,
+      "visibility": [
+        "model"
+      ],
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "draftId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          },
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          },
+          "intent": {
+            "const": "createNew"
+          }
+        },
+        "required": [
+          "contractVersion",
+          "draftId",
+          "expectedRevision",
+          "idempotencyKey",
+          "intent"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "draftId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "quizId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "savedRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "studioUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "draftId",
+                  "revision",
+                  "quizId",
+                  "savedRevision",
+                  "studioUrl"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.drafts.read",
+        "tadazz.library.write"
+      ]
+    },
+    {
+      "name": "export_game",
+      "scope": "tadazz.exports.read",
+      "readOnly": false,
+      "visibility": [
+        "model"
+      ],
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "const": "0.1.0"
+          },
+          "draftId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          },
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{22,64}$"
+          },
+          "format": {
+            "enum": [
+              "tada-json",
+              "enhanced-bundle"
+            ]
+          }
+        },
+        "required": [
+          "contractVersion",
+          "draftId",
+          "expectedRevision",
+          "idempotencyKey",
+          "format"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": true
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "exportId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "draftId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "format": {
+                    "enum": [
+                      "tada-json",
+                      "enhanced-bundle"
+                    ]
+                  },
+                  "downloadUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 262144
+                  }
+                },
+                "required": [
+                  "exportId",
+                  "draftId",
+                  "revision",
+                  "format",
+                  "downloadUrl",
+                  "expiresAt",
+                  "sha256",
+                  "bytes"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "const": "0.1.0"
+              },
+              "ok": {
+                "const": false
+              },
+              "correlationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{22,64}$"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "VALIDATION_FAILED",
+                      "NOT_FOUND",
+                      "REVISION_CONFLICT",
+                      "CONSENT_REQUIRED",
+                      "CONSENT_DECLINED",
+                      "SCOPE_REQUIRED",
+                      "ACCOUNT_UNAVAILABLE",
+                      "RATE_LIMITED",
+                      "QUOTA_EXCEEDED",
+                      "PREVIEW_UNAVAILABLE",
+                      "EXPORT_UNAVAILABLE",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "REQUEST_KEY_REUSED",
+                      "INTERNAL"
+                    ]
+                  },
+                  "messageKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "currentRevision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "consentRequestId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{22,64}$"
+                  },
+                  "consentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "code",
+                  "messageKey",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "ok",
+              "correlationId",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiredScopes": [
+        "tadazz.drafts.read",
+        "tadazz.exports.read"
+      ]
+    }
+  ],
+  "ui": {
+    "resourceUri": "ui://tadazz/quiz-preview/v1.html",
+    "mimeType": "text/html;profile=mcp-app",
+    "renderTools": [
+      "preview_game"
+    ],
+    "bridge": "Official ext-apps App/useApp; no custom permissive bridge",
+    "widgetCallableTools": [
+      "get_game_draft",
+      "update_game_draft",
+      "preview_game"
+    ],
+    "noUiFallback": true,
+    "staticResourceContainsUserData": false,
+    "csp": {
+      "connectDomains": [],
+      "resourceDomains": "EXACT_MANAGER_APPROVED_PUBLIC_BUNDLED_ASSET_ORIGINS",
+      "frameDomains": [],
+      "baseUriDomains": []
+    },
+    "permissions": [],
+    "previewMetaKey": "tadazz/preview",
+    "previewMetaFields": [
+      "version",
+      "draftId",
+      "revision",
+      "projectionDigest",
+      "mode",
+      "authoredShowJson",
+      "sbRegistryVersion",
+      "assetManifest"
+    ],
+    "previewMode": "demo",
+    "sbPort": "PENDING_ADOPTED_SB1_VERSION_AND_HASH; no invented API or renderer",
+    "digest": "SHA256 canonicalized version/draft/revision/show/registry-pin/asset-digests; shared serializer and vectors required",
+    "secretStorageAllowed": false,
+    "hostExtensions": "Feature-detect only; embedded websites and app tools not used in MVP"
+  },
+  "mutation": {
+    "keyTuple": [
+      "verifiedPrincipalAndGrant",
+      "tool",
+      "idempotencyKey"
+    ],
+    "payloadBound": true,
+    "casRequired": true,
+    "durable": true,
+    "replayReauthorizes": true,
+    "keyMismatchError": "REQUEST_KEY_REUSED",
+    "saveConsent": "First-party authenticated CSRF-protected POST creates one-use decision bound to exact revision/digest/key/new target; no bearer in URL",
+    "saveMode": "createNew",
+    "collisionGuard": "Unique target reservation and exclusive write, never raw subject-derived legacy overwrite",
+    "crashRecovery": "Durable key-to-quiz mapping with outcome reconciliation through existing composite service; do not edit storage owner's lease"
+  },
+  "retentionProposal": {
+    "draftIdleDays": 7,
+    "draftAbsoluteDays": 30,
+    "idempotencyAndSaveMappingDays": 30,
+    "temporaryExportMinutes": 10,
+    "customerLibraryAutoDelete": false
+  },
+  "acceptance": [
+    {
+      "id": "AUTH-01",
+      "owner": "M2",
+      "fixture": "OAuth client/AS synthetic pair",
+      "expected": "Valid code + S256 + resource + exact registered redirect; missing/wrong verifier, reused code and missing metadata S256 all rejected without token issuance",
+      "evidence_required": "HTTP transcript, redacted issuer/client/resource metadata and negative assertions",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "AUTH-02",
+      "owner": "M2",
+      "fixture": "Two synthetic issuers and callbacks",
+      "expected": "Wrong/missing response iss, mismatched metadata issuer, state mismatch and untrusted redirects rejected; no open redirect",
+      "evidence_required": "Callback/mix-up tests including error response iss; host-client state validation receipt",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "AUTH-03",
+      "owner": "M2",
+      "fixture": "Synthetic JWT/JWKS and opaque-token verifier",
+      "expected": "Reject wrong issuer/audience/alg/kid/subject, ID token, expired/not-yet-valid token, manager JWT and introspection failure",
+      "evidence_required": "Per-case transport status/challenge and zero storage-call spy",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "AUTH-04",
+      "owner": "M2",
+      "fixture": "Token per exact scope",
+      "expected": "Each tool rejects absent required scopes; token scopes never replace account or ownership checks",
+      "evidence_required": "Eight-tool positive/negative scope table; 401 vs 403 assertions",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "AUTH-05",
+      "owner": "M2",
+      "fixture": "Rotating refresh and grant revocation fixture",
+      "expected": "Refresh reuse revokes family; revoked/disabled account blocks tools, replay, consent, download and resumed stream",
+      "evidence_required": "Grant/revoke/refresh traces with no raw tokens",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "AUTH-06",
+      "owner": "M2",
+      "fixture": "CIMD/discovery/JWKS attack hosts simulated in process",
+      "expected": "Block loopback/private/link-local/metadata IPs, redirects and DNS rebinding; enforce body/time bounds and exact client metadata",
+      "evidence_required": "Egress policy tests; no actual forbidden external request",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "TENANT-01",
+      "owner": "M2",
+      "fixture": "A and B concurrent async requests/timers",
+      "expected": "A cannot get/update/preview/save/export B IDs; indistinguishable NOT_FOUND; no leaked content or audit IDs",
+      "evidence_required": "Cross-account response snapshots, storage access trace",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "TENANT-02",
+      "owner": "M2",
+      "fixture": "Missing/empty/lost AsyncLocalStorage scope; account mode disabled",
+      "expected": "Private operation fails before any filesystem access; never global base path fallback",
+      "evidence_required": "Filesystem spy + sentinel global file unchanged; background callbacks covered",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "TENANT-03",
+      "owner": "M2",
+      "fixture": "Forged tenant/workspace/platform arguments and disabled membership",
+      "expected": "Strict input rejects account/tenant fields; verified server grants only; stale cache cannot bypass revoke",
+      "evidence_required": "Unknown-field and grant mutation tests",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "TENANT-04",
+      "owner": "M2/M3",
+      "fixture": "Session reuse across account switch and app reload",
+      "expected": "Session IDs are not auth; old cached tool results, stream events and widget state never appear to next user",
+      "evidence_required": "Per-account cache/SSE and host account-switch captures",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "DATA-01",
+      "owner": "M2",
+      "fixture": "Actual tadaShowV1Schema/preflight fixtures",
+      "expected": "Valid authored subset passes; unknown fields/refinements/bad answer indices/unsafe media/rosters reject; no duplicated shadow validator",
+      "evidence_required": "Source validator invocation evidence and malformed-case table",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "DATA-02",
+      "owner": "M2",
+      "fixture": "Body/output boundary fixtures",
+      "expected": "Enforce byte and char limits, cards/questions/diagnostics caps before expensive work; reject huge/deep input and output overflow",
+      "evidence_required": "Measured serialized bytes and quota/rate-limit tests",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "DATA-03",
+      "owner": "M2",
+      "fixture": "Legacy ID-less account library and read tools",
+      "expected": "Catalog/draft/preview tools perform zero writes and never trigger legacy getQuizz migration",
+      "evidence_required": "Before/after synthetic directory hashes and write spy",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "DATA-04",
+      "owner": "M2",
+      "fixture": "Malicious text/URLs/media paths",
+      "expected": "No SSRF, raw private paths, script/HTML execution or external assets accepted; text retained as data",
+      "evidence_required": "URL/text fixtures, outbound request and injection tests",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "CAS-01",
+      "owner": "M2",
+      "fixture": "Two clients at revision N",
+      "expected": "One replacement wins at N+1; other gets REVISION_CONFLICT; keys/native IDs stable and no silent merge",
+      "evidence_required": "Concurrent CAS transcript and ID-map assertions",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "CAS-02",
+      "owner": "M2",
+      "fixture": "Duplicate/replayed keys across accounts/tools",
+      "expected": "Same payload returns same authorized result; different payload key reuse rejected; no cross-tenant replay",
+      "evidence_required": "Durable key table assertions and revoke-before-replay test",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "SAVE-01",
+      "owner": "M2",
+      "fixture": "Synthetic first-party account consent flow",
+      "expected": "Forged confirmed boolean/receipt, GET, missing CSRF, other account, expired/revised draft or revoked grant cannot approve; explicit bound POST succeeds",
+      "evidence_required": "Consent request/decision and commit audit records",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "SAVE-02",
+      "owner": "M2",
+      "fixture": "Same-title concurrent synthetic games",
+      "expected": "New saves never overwrite existing file/sidecar; unique target reservation + exclusive write; display title preserved",
+      "evidence_required": "Before/after digests and target IDs, filename collision matrix",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "SAVE-03",
+      "owner": "M2 + storage owner",
+      "fixture": "Crash injection before/after composite commit and before response",
+      "expected": "Key-to-quiz mapping reconciles exactly once; uncertain state stays pending; rollback deletes only this attempt's new artifacts",
+      "evidence_required": "Crash/restart receipts and existing-file hashes; no production data",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "SAVE-04",
+      "owner": "M2 + QA",
+      "fixture": "Synthetic save/open/roundtrip",
+      "expected": "Saved game reopens correctly in Studio; JSON/enhanced export and import preserve actual authored/native semantics and IDs",
+      "evidence_required": "Actual converter/storage/browser receipt at same SHA",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "EXPORT-01",
+      "owner": "M2",
+      "fixture": "Temporary synthetic exports",
+      "expected": "Same-account login required; foreign/orphan/revoked/expired URL fails; rights check and digest/byte count correct; no OAuth URL token",
+      "evidence_required": "Download auth traces and export inventory",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-01",
+      "owner": "M2/M3",
+      "fixture": "Inspector + in-memory host/client",
+      "expected": "Initialize, tools/list, strict input/output schema, resources/read MIME/resource linkage and capability absence behave correctly",
+      "evidence_required": "Protocol transcript, package pins/integrity, exact version and SHA",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-02",
+      "owner": "M3",
+      "fixture": "SDK sandbox bridge with adversarial messages",
+      "expected": "Reject malformed/foreign frame/channel/call IDs; tool allowlist enforced; no cross-server access or privileged endpoint fetch",
+      "evidence_required": "Bridge negative tests, CSP report, network log redacted",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-03",
+      "owner": "M3",
+      "fixture": "Compiled resource + current SB port",
+      "expected": "Exact normalized show/digest/revision and registry pin; only trusted renderer; unknown theme diagnostic visible; absent SB port fails honestly",
+      "evidence_required": "SB adoption version/hash and parity fixture inputs",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-04",
+      "owner": "M3 + QA",
+      "fixture": "Actual stage and chat preview same synthetic show",
+      "expected": "Frame/cue/scene parity at selected points incl 20-second voting; no duplicated audio, drift or actual live answer traffic",
+      "evidence_required": "Reference and widget captures, timestamps/cue trace, network assertions",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-05",
+      "owner": "M3",
+      "fixture": "Chat + widget simultaneous edit and out-of-order results",
+      "expected": "Same draft revision updates; stale results ignored; conflict retains edit; offline/retry/reload deterministic",
+      "evidence_required": "Interaction trace, reload/offline captures",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-06",
+      "owner": "M3",
+      "fixture": "Preview user interactions",
+      "expected": "Question/picture choices, pause/replay/next/reveal/results/leaderboard work; no rooms/votes/score/calls/charges",
+      "evidence_required": "Clickable browser walkthrough + zero live-service invocation spy",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-07",
+      "owner": "M3 + QA",
+      "fixture": "Autoplay blocked, media unavailable, reduced motion",
+      "expected": "Muted start; user-gesture audio; accessible fallback; pause/teardown cancels local cues/listeners; no private asset escape",
+      "evidence_required": "Audio/media trace and manual listening receipt",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "UI-08",
+      "owner": "M3 + QA",
+      "fixture": "390px + desktop, all eight locale fixtures + RTL fixture",
+      "expected": "Keyboard focus, labels, captions and screen-reader path; layout/touch/safe area and reduced-motion usable",
+      "evidence_required": "Browser/accessibility outputs plus actual physical tablet observation",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "HOST-01",
+      "owner": "QA",
+      "fixture": "Actual eligible ChatGPT web synthetic account A/B",
+      "expected": "Create 5Q 20s picture-card draft, embedded interactive preview, conversational Q3/theme/audio edit, consent save/export; revoke",
+      "evidence_required": "Exact plan/org/build/browser/OS/server SHA/resource hash, screenshots and audit IDs",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "HOST-02",
+      "owner": "QA",
+      "fixture": "Actual supported ChatGPT iPad surface",
+      "expected": "Same core story or precisely recorded supported fallback; touch/audio/fullscreen/login and account switch verified",
+      "evidence_required": "Physical device/iPadOS/app build and capability report; simulator is not device proof",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "HOST-03",
+      "owner": "QA",
+      "fixture": "Actual Claude web synthetic account",
+      "expected": "Same core story; document rollout/org access and negotiated capabilities; verify connector UI rather than API tools",
+      "evidence_required": "Actual account/build/capability, interactive captures and tool traces",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "HOST-04",
+      "owner": "QA",
+      "fixture": "Actual Claude desktop synthetic account",
+      "expected": "Same core story, lifecycle, download and login; do not infer web result applies to desktop",
+      "evidence_required": "Desktop OS/app build and independent interactive receipt",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "HOST-05",
+      "owner": "QA",
+      "fixture": "Host with no MCP Apps capability",
+      "expected": "Tools remain useful with bounded text/results; authenticated save/download link; UI not falsely promised",
+      "evidence_required": "Client transcript and consent flow receipt",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "INSTALL-01",
+      "owner": "Manager + M2 + QA",
+      "fixture": "Private synthetic staging registration",
+      "expected": "Exact canonical resource/issuer/callback/client, scopes/CSP, metadata and rollback reviewed; disconnect/revoke works",
+      "evidence_required": "Private connection settings redacted; installation and removal receipts",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "OPS-01",
+      "owner": "M2/M3 + QA",
+      "fixture": "Controlled load/network fixture",
+      "expected": "Report tool p95, cold interactive timings and bytes against proposed budgets; cancellation and retries bounded",
+      "evidence_required": "Timestamped raw measurement summary, device/network specs; budgets approved",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "OPS-02",
+      "owner": "QA + integrator",
+      "fixture": "Same-SHA scoped implementation checks",
+      "expected": "Types/lint/format/build/focused suites and ui:check/freeze pass; editor/feature-off remains unchanged",
+      "evidence_required": "Exact commands, exit codes, boundary/editor evidence; no historical PASS substitution",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "RIGHTS-01",
+      "owner": "Manager/content reviewer",
+      "fixture": "Bundled assets and optional later private media",
+      "expected": "License/export rights and provenance approved; no code-backed untrusted source execution or installer enablement",
+      "evidence_required": "Human rights review and asset digest/grant inventory",
+      "status": "NOT_RUN",
+      "receipt": null
+    },
+    {
+      "id": "PRIVACY-01",
+      "owner": "M2/M3 + QA",
+      "fixture": "All error/log/model/widget payload fixtures",
+      "expected": "No token/password/phone/email/manager claims/path/private account rows; authored content only authorized user; structuredContent visibility acknowledged",
+      "evidence_required": "Redacted payload/log scans, cache headers and retention audit",
+      "status": "NOT_RUN",
+      "receipt": null
+    }
+  ],
+  "sourceTaskState": [
+    {
+      "gid": "1220539632193783",
+      "state": "OPEN_PARTIAL",
+      "reason": "Planning package only; implementation, actual hosts, persistence/security and release remain."
+    },
+    {
+      "gid": "1220539611687955",
+      "state": "OPEN_PARTIAL",
+      "reason": "Candidate ADR in leased HQ paths, not originally requested repo path; manager adoption, SB pin, current deployment freshness and actual-host proof remain."
+    },
+    {
+      "gid": "1220539638955304",
+      "state": "OPEN_PARTIAL",
+      "reason": "Schemas and proposed backend lease only; no implementation/Inspector/compile."
+    },
+    {
+      "gid": "1220539632251971",
+      "state": "OPEN_PARTIAL",
+      "reason": "Security design and test fixtures only; no real identity bridge or executed security tests."
+    }
+  ],
+  "nextLeaseProposal": {
+    "activated": false,
+    "M2": [
+      "extensions/src/mcp-app/contracts/**",
+      "extensions/src/mcp-app/server/**",
+      "extensions/src/mcp-app/tests/server/**"
+    ],
+    "M3": [
+      "extensions/src/mcp-app/widget/**",
+      "extensions/src/mcp-app/tests/widget/**"
+    ],
+    "sharedManifestsOwner": "Manager/integrator under separate exact lease",
+    "sbRendererOwner": "Existing SB engine owner, read-only dependency"
+  },
+  "sources": [
+    {
+      "id": "O1",
+      "url": "https://developers.openai.com/plugins/build/chatgpt-ui.md",
+      "description": "ChatGPT standards-first UI, data/render split, CSP and resource versioning",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "O2",
+      "url": "https://developers.openai.com/plugins/build/auth.md",
+      "description": "OpenAI OAuth discovery, callback and issuer requirements",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "O3",
+      "url": "https://developers.openai.com/plugins/reference.md",
+      "description": "structuredContent is model-visible; optional bridge and approval-gated input",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "O4",
+      "url": "https://developers.openai.com/plugins/build/plugins.md",
+      "description": "Private packaging/connection path; manifest is not server implementation",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "A1",
+      "url": "https://claude.com/resources/articles/interactive-connectors-full-tool",
+      "description": "2026-11-10 rollout announcement; not account-specific proof",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "A2",
+      "url": "https://claude.com/docs/connectors/building/mcp-apps/getting-started",
+      "description": "Claude feature prerequisites, SDK bridge and sandbox domain format",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S1",
+      "url": "https://apps.extensions.modelcontextprotocol.io/api/documents/overview.html",
+      "description": "MCP Apps lifecycle and progressive enhancement",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx",
+      "description": "Versioned Apps schema including UI MIME, metadata and visibility; main is mutable",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S3",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization",
+      "description": "Current authorization revision linked by current OpenAI guide",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S4",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/authorization-server-discovery",
+      "description": "Protected-resource and issuer metadata",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S5",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration",
+      "description": "CIMD, preregistration, compatibility-only DCR",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S6",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/security-considerations",
+      "description": "PKCE, refresh rotation, exact redirects, token audience and no passthrough",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "S7",
+      "url": "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports",
+      "description": "Streamable HTTP, Origin validation and connection semantics; M2 must recheck negotiated revision",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "K1",
+      "url": "https://github.com/modelcontextprotocol/ext-apps/releases/tag/v2.1.0",
+      "description": "Apps SDK 2.1.0 release and draft changes",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "K2",
+      "url": "https://raw.githubusercontent.com/modelcontextprotocol/ext-apps/v2.1.0/package.json",
+      "description": "Pinned package engines, exports and peer ranges",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "K3",
+      "url": "https://raw.githubusercontent.com/modelcontextprotocol/ext-apps/v2.1.0/src/server/index.ts",
+      "description": "Pinned registerAppTool/registerAppResource signatures",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "K4",
+      "url": "https://raw.githubusercontent.com/modelcontextprotocol/ext-apps/v2.1.0/examples/basic-server-vanillajs/server.ts",
+      "description": "Pinned v2 server registration example",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "K5",
+      "url": "https://raw.githubusercontent.com/modelcontextprotocol/ext-apps/v2.1.0/examples/basic-server-vanillajs/package.json",
+      "description": "Pinned example uses MCP server/node 2.0.0",
+      "openedOn": "2026-11-15"
+    },
+    {
+      "id": "K6",
+      "url": "https://apps.extensions.modelcontextprotocol.io/api/classes/app.App.html",
+      "description": "App lifecycle, notifications, capability and tool bridge methods",
+      "openedOn": "2026-11-15"
+    }
+  ],
+  "toolDescriptorPolicy": {
+    "metadataField": "_meta.securitySchemes",
+    "byTool": {
+      "list_game_templates": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.catalog.read"
+          ]
+        }
+      ],
+      "list_themes": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.catalog.read"
+          ]
+        }
+      ],
+      "create_game_draft": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.drafts.write"
+          ]
+        }
+      ],
+      "get_game_draft": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.drafts.read"
+          ]
+        }
+      ],
+      "update_game_draft": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.drafts.read",
+            "tadazz.drafts.write"
+          ]
+        }
+      ],
+      "preview_game": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.drafts.read"
+          ]
+        }
+      ],
+      "save_game": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.drafts.read",
+            "tadazz.library.write"
+          ]
+        }
+      ],
+      "export_game": [
+        {
+          "type": "oauth2",
+          "scopes": [
+            "tadazz.drafts.read",
+            "tadazz.exports.read"
+          ]
+        }
+      ]
+    },
+    "noauth": false,
+    "toolChallengeMetaKey": "mcp/www_authenticate",
+    "toolChallengeRequirements": [
+      "isError true",
+      "safe error and error_description",
+      "configured exact resource_metadata"
+    ],
+    "resourceLinkOnly": "preview_game",
+    "uiVisibilityFrom": "tools[].visibility",
+    "serverChecksAlwaysRequired": true
+  },
+  "previewMetaSchema": {
+    "type": "object",
+    "properties": {
+      "version": {
+        "const": 1
+      },
+      "draftId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{22,64}$"
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 2147483647
+      },
+      "projectionDigest": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "mode": {
+        "const": "demo"
+      },
+      "authoredShowJson": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 32768
+      },
+      "sbRegistryVersion": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "maxLength": 64
+      },
+      "assetManifest": {
+        "type": "array",
+        "maxItems": 64,
+        "items": {
+          "type": "object",
+          "properties": {
+            "assetId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "url": {
+              "type": "string",
+              "pattern": "^https://",
+              "format": "uri",
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "assetId",
+            "sha256",
+            "url"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "version",
+      "draftId",
+      "revision",
+      "projectionDigest",
+      "mode",
+      "authoredShowJson",
+      "sbRegistryVersion",
+      "assetManifest"
+    ],
+    "additionalProperties": false
+  },
+  "sb1Observation": {
+    "status": "INTERIM_CANDIDATE_NOT_ADOPTED",
+    "contractRevision": "1.0.0",
+    "contractSha256": "43e8ee171b3e8685f4aea531c907a2de5af674cd9089d3e52b5246a5b1329424",
+    "registry": "NOT_PRESENT_AT_READ",
+    "proposedFacade": "createShowProjection(authoritativeSnapshot, authenticatedRole, capabilityContext)",
+    "types": [
+      "ShowProjection",
+      "ResolvedComposition",
+      "ShowPreviewRuntime"
+    ],
+    "integrationGate": "Manager pins final adopted version/hash; adapter must support demo without fabricated live room/join/actions and redact unrevealed data before theme props"
+  },
+  "verification": {
+    "documentChecks": {
+      "status": "PASS",
+      "kind": "JSON parse and structural/cross-reference checks only; not SDK compile or JSON Schema metaschema/runtime validation",
+      "toolCount": 8,
+      "acceptanceCount": 39,
+      "officialSourceCount": 19,
+      "sourceHashCount": 11,
+      "checkedUtc": "2026-11-15T03:09:22.274Z"
+    },
+    "sourceStatusBefore": "CLEAN",
+    "sourceSha": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+    "applicationTests": "NOT_RUN",
+    "uiCheck": "PASS_WITH_PROCESS_ONLY_NODE_TYPE_STRIPPING",
+    "freezeGuard": {
+      "status": "PASS",
+      "protectedFiles": 602,
+      "unchangedHashes": 593,
+      "approvedModifiedSeams": 9
+    },
+    "guardAttempts": [
+      {
+        "command": "pnpm --dir extensions ui:check",
+        "exitCode": 1,
+        "result": "Node 22.17.0 ERR_UNKNOWN_FILE_EXTENSION tokens.ts; design check passed before loader failure"
+      },
+      {
+        "command": "Process-only NODE_OPTIONS appending --experimental-strip-types; pnpm --dir extensions ui:check; restore original env in finally",
+        "exitCode": 0,
+        "result": "Design/token/catalog/boundary checks PASS"
+      }
+    ],
+    "availableRamBeforeGuardsMB": 2449,
+    "reason": "Only lightweight guard; no application implementation phase, install or heavy runner",
+    "failedAttempts": [
+      "Two invalid literal Windows rg glob paths corrected with explicit paths",
+      "Two ext-apps API helper URLs inaccessible; pinned v2.1.0 source opened instead",
+      "Public tadazz.com fetch inaccessible in web tool; no production claim",
+      "Initial SB1 registry read/hash: file not yet present; no final pin asserted",
+      "Document write attempt initially shadowed tools binding; corrected before any JSON file write",
+      "Context-mismatched document patches rejected atomically; corrected scoped patches applied"
+    ],
+    "implementationCommit": null
+  },
+  "sourceFileHashes": [
+    {
+      "path": "packages/socket/src/services/account-scope.ts",
+      "sha256": "aef9bf0d3a9357f954c16255f14d0abec5ff8c93cb1f6099dee88785b7d1d33e"
+    },
+    {
+      "path": "packages/socket/src/api/middleware.ts",
+      "sha256": "0fa1d2b278a13d0cecb616a0c13bf597a0fe72f5f57cb2ca866df566ca66a496"
+    },
+    {
+      "path": "packages/socket/src/services/auth.ts",
+      "sha256": "ff586db579912ad16e5db544a4908671fa9bad7665eb46bfca4d32034bc59fbe"
+    },
+    {
+      "path": "packages/socket/src/api/routes/accounts.ts",
+      "sha256": "0070e6ab0ed454ae611c9ab41bb4bdff747e256f252c0874549fdeb1dbee84c6"
+    },
+    {
+      "path": "packages/socket/src/services/config.ts",
+      "sha256": "1d892a5a40f099681b0557f55d4ab4951a902cffce35e4a99e64ebbb206b0cec"
+    },
+    {
+      "path": "extensions/src/server/storage/service.ts",
+      "sha256": "f9dac6bb71ec73e7d6db709d508868d7acce9c937ff2b8a10bda8c271958f548"
+    },
+    {
+      "path": "extensions/src/core/show-authoring-schema.ts",
+      "sha256": "04a193fce8b3a9a775f69d24ea255a0ad64e5a2e8b858e4e1e57b504190596df"
+    },
+    {
+      "path": "extensions/src/core/show-import-preflight.ts",
+      "sha256": "9339ad52aefe61ae6c1bab9b303cfeccd03f56270316c8fe71722e3b6a769247"
+    },
+    {
+      "path": "extensions/src/core/show-authoring-convert.ts",
+      "sha256": "6f3c81b9746835e9d2657d131df96df7d7e6ce6f460b87cffb4e875c493b3514"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/presentation-scene.ts",
+      "sha256": "7d217e925df2cb8792a73051b53583e7f0d2605a9457bbb72bddfc6912b9f240"
+    },
+    {
+      "path": "extensions/src/core/packages/protocol.ts",
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99"
+    }
+  ],
+  "authoringResources": [
+    {
+      "uri": "tadazz://authoring/v1/schema.json",
+      "mimeType": "application/schema+json",
+      "generation": "Actual source Zod schema plus documented refinements, source SHA and narrower subset"
+    },
+    {
+      "uri": "tadazz://authoring/v1/guide.md",
+      "mimeType": "text/markdown",
+      "generation": "Actual source format guide; no private data; valid example also included in tool descriptions"
+    }
+  ]
+}

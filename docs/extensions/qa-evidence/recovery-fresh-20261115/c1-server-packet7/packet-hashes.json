@@ -1,0 +1,61 @@
+{
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "observerCommit": "47b68268375b5adf8c56a8496882830bc5922de3",
+  "executionAuthorized": true,
+  "files": [
+    {
+      "path": "manifest.json",
+      "size": 633277,
+      "sha256": "38594610716d3d8c8777ca3da00d654e27b2ba0df112c0b164ee3452a6f86700"
+    },
+    {
+      "path": "plan.json",
+      "size": 28544,
+      "sha256": "13dc51a4d6d49f0523d1d6af544e462d87c0dc54f4e0101f4f98e87959791c8b"
+    },
+    {
+      "path": "overlay.tar.gz",
+      "size": 35720,
+      "sha256": "c27c9a47466cec7fca74273319215e653306080c8e616c0ef8be1af491a2155f"
+    },
+    {
+      "path": "server-run.py",
+      "size": 1735,
+      "sha256": "95eccacf435c36737a9589c65a5bd15380fe76a5297963bc20b1970ce7a08548"
+    },
+    {
+      "path": "runner_base.py",
+      "size": 23795,
+      "sha256": "d6b908bb3ecb1b689cc46c0728f7c98c98d70d0e9752f867dc55aea76e7ca043"
+    },
+    {
+      "path": "runner_host.py",
+      "size": 10101,
+      "sha256": "436a0674d93f2f96e302216fb50e9431fbeb5e957e2fdced765d8589573ff484"
+    },
+    {
+      "path": "pid_observer.py",
+      "size": 5507,
+      "sha256": "7f0b4c3d932d771d8c6ecbd72fda29e18fd9a58e58817d3808f4aebbd19b4745"
+    },
+    {
+      "path": "verify-merged.cjs",
+      "size": 6131,
+      "sha256": "ec57985aeefc4695cdb6d02e35fd31eae5627ab0b48b9c061a83c78a954c28e7"
+    },
+    {
+      "path": "analyze-results.cjs",
+      "size": 1133,
+      "sha256": "fa50f549691807ded0fc6abd28455469848d9a9af3cbdebff426f9e6761dbd33"
+    },
+    {
+      "path": "node-observer.delta.patch",
+      "size": 7005,
+      "sha256": "32345a2ae408198aa6120b6ade26a5bf2795937d198501242ba39b55414f6a68"
+    }
+  ],
+  "runtimeMemberCount": 9,
+  "reviewDeltaMemberCount": 1,
+  "totalTransferBytesExcludingThisHashFileAndActualAdmission": 752948,
+  "authorizationMeaning": "Explicit owner wave activation; developer-issued isolated synthetic controls"
+}

@@ -12,7 +12,7 @@ test("applies the instance branding", async ({ page }) => {
     }),
   )
 
-  await page.goto("/")
+  await page.goto("/game")
 
   await expect(page).toHaveTitle("My Quiz")
   await expect(page.getByRole("img", { name: "My Quiz" })).toBeVisible()
@@ -33,7 +33,7 @@ test("keeps the default look without branding", async ({ page }) => {
     route.fulfill({ status: 404 }),
   )
 
-  await page.goto("/")
+  await page.goto("/game")
 
-  await expect(page.getByRole("img", { name: "Razzia" })).toBeVisible()
+  await expect(page.getByRole("img", { name: "TADAZZ" })).toBeVisible()
 })

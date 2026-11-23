@@ -1,0 +1,22 @@
+{
+  "verifiedUtc": "2026-11-15T22:42:37.819Z",
+  "counts": {
+    "evidence-sha256.txt": 65,
+    "supplemental-sha256.txt": 73
+  },
+  "archive": {
+    "container": "tadazz-show-ui-E-boundary27",
+    "output": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-ui-20261115\\docs\\extensions\\qa-evidence\\show-ui-20261115\\show-ui-E-boundary27-evidence.tgz",
+    "bytes": 1262098,
+    "sha256": "ca7ef389c57b680dd3429df185ec657f667eb069efb004a48a02680dbeac5e8c",
+    "receivedUtc": "2026-11-15T22:41:41.061Z",
+    "remoteArchiveWritten": false
+  },
+  "baselineExpectedFail": "1",
+  "fixedBrowser": "0",
+  "originalTypeScript": "1",
+  "correctedTypeScript": "0",
+  "originalOverall": "1",
+  "sixFinalFormattedFilesEquivalent": true,
+  "typeOnlyCorrectionEmitsIdenticalJS": true
+}

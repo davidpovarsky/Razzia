@@ -1,0 +1,121 @@
+{
+  "format": "tadazz-theme-worker-readiness",
+  "asanaTaskId": "1220708526935641",
+  "parentTaskId": "1220705115002170",
+  "preparedAt": "2026-11-19T15:17:31.653539+00:00",
+  "status": "PASS_PRODUCTION_WORKER_TIMER_ACCEPTANCE",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "missingProductionImage": "sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5",
+  "worker": {
+    "path": "/opt/tadazz-package-runtime/package-build-worker.py",
+    "sha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+    "unchangedFromReviewedSource": true
+  },
+  "service": {
+    "name": "tadazz-package-builder.service",
+    "imagePinPointsToMissingImage": false,
+    "emptyScanSuccessDoesNotProveBuildHealth": true,
+    "image": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+    "activeState": "inactive",
+    "result": "success",
+    "execMainStatus": 0,
+    "unitSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+    "effectivePropertiesUnchanged": true
+  },
+  "timer": {
+    "name": "tadazz-package-builder.timer",
+    "enabled": true,
+    "activeWaiting": true,
+    "lastTrigger": "Thu 2026-11-19 16:13:51 UTC",
+    "triggers": "tadazz-package-builder.service"
+  },
+  "archiveSearch": {
+    "scope": [
+      "/opt/tadazz-package-runtime",
+      "/home/ubuntu/tadazz-design-system-20261110"
+    ],
+    "documentedExactArchiveFound": false,
+    "nonrecursiveMetadataOnly": true,
+    "searchStopped": true
+  },
+  "replacementBaseImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "replacementBasePresent": true,
+  "architecture": "arm64",
+  "os": "linux",
+  "cacheObservations": {
+    "container": "07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872",
+    "onlyExistingContainerRead": true,
+    "notProofOfImmutableImageContents": true,
+    "mustNotRestartCache": true,
+    "versions": {
+      "node": "24.22.2",
+      "ffmpeg": "5.1.9-0+deb12u1",
+      "ffprobe": "5.1.9-0+deb12u1",
+      "python": "3.11.2",
+      "freetype": "2.12.1",
+      "esbuildMetadata": "0.28.2",
+      "react": "19.3.0",
+      "react-dom": "19.3.0",
+      "vite": "8.3.4",
+      "tsx": "4.23.15"
+    }
+  },
+  "freshImageProvenancePending": false,
+  "syntheticWorkerCompilePending": false,
+  "serviceRetargetPending": false,
+  "timerDrivenProofPending": false,
+  "evidenceJobs": {
+    "missingImage": "job_78513657a412",
+    "serviceTimer": "job_61e3e805074d",
+    "operatorDirectory": "job_11cd263ab2ee",
+    "trustedContext": "job_a59109e151ba",
+    "cacheVersionMetadata": "job_22bebd3cc9e5",
+    "decoderAndBroker": "job_2f8e3087b40c",
+    "historicalAcceptedTests": "job_786062a370b9",
+    "storeBinding": "job_0af598937fcd",
+    "phasedHelperPreparation": "job_401cefb576f3",
+    "cleanupFix": "job_412007bb018d",
+    "cleanupGuard": "job_7ff01b2d5a21",
+    "phase3R2": "job_82cc514b1405"
+  },
+  "customerStoreRead": false,
+  "credentialsRead": false,
+  "imagePulled": false,
+  "imageBuilt": true,
+  "containerStarted": true,
+  "serviceChanged": true,
+  "timerChanged": true,
+  "replacementImage": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+  "productionStoreAccessed": true,
+  "executionEvidence": {
+    "buildReceipt": "image-build-receipt.json",
+    "provenanceReceipt": "phase1-provenance-receipt.json",
+    "provenanceReceiptSha256": "d0fcdb86e5c2a45ce77fcdd810273f22ac67a5536237338b3cad83ae2c897bf0",
+    "compileReceipt": "phase2-compile-receipt.json",
+    "compileReceiptSha256": "2e7f9f814b0b1c04a6d74c16760fdaced68075c0a88ec759f3e36dcff8b38bbe",
+    "bundleSha256": "a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6",
+    "bundleBytes": 752963,
+    "actualMediaValidation": true,
+    "ownedContainersRemoved": true,
+    "cacheRemainedStopped": true,
+    "timerReceipt": "phase3-r2-timer-receipt.json",
+    "timerReceiptSha256": "e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f",
+    "timerExecution": "phase3-r2-execution.json",
+    "timerExecutionSha256": "020726f594525c70149889188f136da5eb87636cec836c9a1912c4967becb6ad",
+    "actualTimerBuild": true,
+    "bothOwnedFixturesRemoved": true,
+    "timerTriggerMicroseconds": {
+      "before": 1343961755332,
+      "after": 1345319387745
+    },
+    "runtimeConfigHashUnchanged": true,
+    "effectiveServicePropertiesUnchanged": true,
+    "firstAttemptFailureReceipt": "phase3-timer-receipt.json",
+    "firstAttemptFailureCause": "Verifier rejected a formatted systemctl monotonic timespan after actual output validation; it restored the old unit and paused the timer. Reviewed R2 fixed exact parsing and required a fresh successful timer job."
+  },
+  "claimLimit": "The missing worker image is repaired and the real production timer compiled the generated Complete fixture with media validation and owned cleanup. This complements the real native UI/API tests that used a synthetic worker result; it does not claim one joined signed-in customer production installation, alter runtime feature flags, or enable executable-theme licensing.",
+  "observedAt": "2026-11-19T16:14:04.248366+00:00",
+  "initialMissingImageFindingPreserved": true,
+  "productionStoreAccessScope": "Only two uniquely owned synthetic job paths, with exact hash/type checks and both removed after successful R2 proof. No customer tenant/job listing or customer data access.",
+  "productionStore": "/var/lib/tadazz-release-5312660/config/extensions/packages"
+}

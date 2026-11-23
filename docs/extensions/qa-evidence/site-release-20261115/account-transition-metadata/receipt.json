@@ -1,0 +1,64 @@
+{
+  "status": "PASS_NEW_ACCOUNT_METADATA_SEAM",
+  "http": {
+    "indexSha256": "9a9edaf33fbcdddc569b66fb1044c2280eb83732c958653019fb499c05681f71",
+    "authMode": {
+      "accountsEnabled": false
+    }
+  },
+  "observations": 22,
+  "containers": [
+    {
+      "id": "614544522d826920dd718eefe7acb96e7a2a51bc7f67ddcec4d8ed02e62e1833",
+      "name": "/tadazz-site-account-routes-app-A-20261115",
+      "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+      "running": false,
+      "exitCode": 0,
+      "started": "2026-11-15T18:04:24.235774713Z",
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web",
+          "Destination": "/app/web",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "sizeRwProxyBytes": 118784,
+      "networkMode": "none",
+      "cpus": 125000000,
+      "memory": 268435456
+    },
+    {
+      "id": "34b7c0e651b2648822fe40257bce0d0aecea724db94b78dd288ae6ddf7b97275",
+      "name": "/tadazz-site-account-routes-browser-A-20261115",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "running": false,
+      "exitCode": 0,
+      "started": "2026-11-15T18:04:52.649396396Z",
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+          "Destination": "/deps",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/site-account-routes-A-20261115",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "sizeRwProxyBytes": 12288,
+      "networkMode": "container:614544522d826920dd718eefe7acb96e7a2a51bc7f67ddcec4d8ed02e62e1833",
+      "cpus": 375000000,
+      "memory": 1610612736
+    }
+  ]
+}

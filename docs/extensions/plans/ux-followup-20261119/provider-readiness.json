@@ -1,0 +1,203 @@
+{
+  "observedAt": "2026-11-19T13:25:00.148028+00:00",
+  "operation": "read-only Paddle sandbox API and public DNS",
+  "productionMutation": false,
+  "realCharge": false,
+  "realEmail": false,
+  "findings": [
+    {
+      "knownSandboxFilePresent": true,
+      "knownCatalogPresent": true,
+      "credentialsPresent": {
+        "PADDLE_API_KEY": true,
+        "PADDLE_CLIENT_TOKEN": true,
+        "PADDLE_WEBHOOK_SECRET": true
+      },
+      "environment": "sandbox",
+      "clientTokenIsSandbox": true
+    },
+    {
+      "provider": "Paddle",
+      "operation": "sandbox-account-read",
+      "httpStatus": 200,
+      "environment": "sandbox",
+      "accountPresent": false
+    },
+    {
+      "testPlan": "sandbox-single",
+      "participants": 20,
+      "games": 1,
+      "prices": [
+        {
+          "currency": "ILS",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": null
+        },
+        {
+          "currency": "GBP",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": null
+        },
+        {
+          "currency": "USD",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": null
+        },
+        {
+          "currency": "EUR",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": null
+        }
+      ]
+    },
+    {
+      "testPlan": "sandbox-monthly",
+      "participants": 20,
+      "games": 5,
+      "prices": [
+        {
+          "currency": "ILS",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": {
+            "interval": "month",
+            "frequency": 1
+          }
+        },
+        {
+          "currency": "GBP",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": {
+            "interval": "month",
+            "frequency": 1
+          }
+        },
+        {
+          "currency": "USD",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": {
+            "interval": "month",
+            "frequency": 1
+          }
+        },
+        {
+          "currency": "EUR",
+          "status": 200,
+          "active": true,
+          "amountMatches": true,
+          "currencyMatches": true,
+          "recurring": {
+            "interval": "month",
+            "frequency": 1
+          }
+        }
+      ]
+    },
+    {
+      "operation": "sandbox-webhook-settings-read",
+      "httpStatus": 200,
+      "active": true,
+      "destination": "https://billing-sandbox.132.145.25.168.sslip.io/api/billing/webhooks/paddle",
+      "events": [
+        "transaction.completed",
+        "subscription.activated",
+        "subscription.canceled",
+        "subscription.created",
+        "subscription.past_due",
+        "subscription.paused",
+        "subscription.resumed",
+        "subscription.trialing",
+        "subscription.updated",
+        "adjustment.created",
+        "adjustment.updated"
+      ]
+    },
+    {
+      "dnsName": "send.goldypov.com",
+      "type": "TXT",
+      "status": 0,
+      "answerCount": 1,
+      "providerRecords": [
+        {
+          "type": 5,
+          "data": "uixie.porkbun.com."
+        }
+      ]
+    },
+    {
+      "dnsName": "resend._domainkey.send.goldypov.com",
+      "type": "TXT",
+      "status": 0,
+      "answerCount": 1,
+      "providerRecords": [
+        {
+          "type": 16,
+          "data": "DKIM public key present"
+        }
+      ]
+    },
+    {
+      "dnsName": "send.send.goldypov.com",
+      "type": "TXT",
+      "status": 0,
+      "answerCount": 2,
+      "providerRecords": [
+        {
+          "type": 5,
+          "data": "send.forge.rmta.net."
+        },
+        {
+          "type": 16,
+          "data": "\"v=spf1 ip4:52.3.252.119 ip4:44.222.39.36 ip4:199.249.231.0/24 ~all\""
+        }
+      ]
+    },
+    {
+      "dnsName": "send.send.goldypov.com",
+      "type": "MX",
+      "status": 0,
+      "answerCount": 2,
+      "providerRecords": [
+        {
+          "type": 5,
+          "data": "send.forge.rmta.net."
+        },
+        {
+          "type": 15,
+          "data": "10 feedback.forge.rmta.net."
+        }
+      ]
+    }
+  ],
+  "interpretation": {
+    "sandbox": "8 active test prices matched the stored sandbox catalog; active webhook has 11 expected events. This is not LIVE readiness or commercial price approval.",
+    "accountRead": "HTTP200 with sandbox environment confirms authenticated API response; accountPresent:false reflects a missing projected field and is not evidence that the account is absent.",
+    "mail": "Documented Accounts sender uses send.goldypov.com. Its DKIM and return-path SPF/MX exist. DNS does not establish live Resend acceptance or inbox delivery. Contact had no endpoint/recipient independently of account mail.",
+    "ownerInputs": [
+      "Explicit TADAZZ_CONTACT_EMAIL_TO recipient",
+      "Approved commercial plan prices and allowances",
+      "LIVE Paddle business/domain/checkout approval and credentials",
+      "Pilot account entitlement migration before enabling billing"
+    ]
+  }
+}

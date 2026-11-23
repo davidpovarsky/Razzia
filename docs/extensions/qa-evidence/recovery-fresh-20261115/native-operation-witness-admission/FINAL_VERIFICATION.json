@@ -1,0 +1,53 @@
+{
+  "productSource": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "productionCodeChanged": false,
+  "newCases": 4,
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "distinctFreshChildren": 8,
+  "childrenExitedZero": 8,
+  "actualBundleInputs": 185,
+  "unchangedPreviousInputs": 184,
+  "newEntryOnly": [
+    "docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-witness-admission/witness-tests.ts"
+  ],
+  "bundleSha256": "aa1e7c523b47dabdfd06120fd338c7a09ad0d305263dc6479818a072bcb5d4ec",
+  "receipts": [
+    {
+      "path": "final-receipts/exposed-mode.json",
+      "bytes": 8255,
+      "sha256": "74543d947805b3d2c922de97a1cb7c14d66d570fb56476b5f31a7ad3108bd0a1"
+    },
+    {
+      "path": "final-receipts/hard-linked-record.json",
+      "bytes": 9199,
+      "sha256": "d30e28852062faa546a01c09ecbd0f0c7338a48584eeb48bc0e30c4938c7b945"
+    },
+    {
+      "path": "final-receipts/linked-slot.json",
+      "bytes": 8932,
+      "sha256": "05c14a575e2ea0974dc8345cd360c4697607b145ef2c9a4279f5e67af5e5ec5b"
+    },
+    {
+      "path": "final-receipts/oversized-record.json",
+      "bytes": 8259,
+      "sha256": "7e924a9a841ee3f0f910d7b6bf6349fd87855eb4ecc1c09394e1f983579c7816"
+    }
+  ],
+  "original15Run": false,
+  "postcommit3Run": false,
+  "FConsumerRun": false,
+  "checks": {
+    "types": 0,
+    "format": "Actual Prettier.check true"
+  },
+  "runtime": "Local existing WSL Ubuntu Linux/ext4 Node26.11.1; not pinnedNode24/F-ledger/hardware proof",
+  "sentinelsAndRecordBytesModesLinksPreservedAfterGuard": true,
+  "nullSidecarCommittedPathBeforeFault": true,
+  "onlyOwnSyntheticModeLinkSizeFaults": true,
+  "sourceTask": "1219882508725158 remainsOPEN",
+  "routineSourceUpdateOnly": true,
+  "preservedInheritedUntracked": 16,
+  "oracleJobInstallProviderCustomerProductionActions": 0
+}

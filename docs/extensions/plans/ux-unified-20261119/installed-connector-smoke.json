@@ -1,0 +1,66 @@
+{
+  "kind": "installed-tadazz-connector-call-smoke",
+  "version": 1,
+  "status": "PASS",
+  "completedAt": "2026-11-19T13:14:12.603Z",
+  "contractVersion": "0.1.0",
+  "idempotencyKey": "ux-release-d8a402dd39bf-20261119-native-proof-v1",
+  "draftScope": "synthetic private QA draft only",
+  "create": {
+    "contractVersion": "0.1.0",
+    "ok": true,
+    "correlationId": "92daffc4-4934-4f29-b168-bed384f7c18f",
+    "data": {
+      "draftId": "lfs8KwrER5ZophXvZ2Zc94B8pNw3_q3H",
+      "revision": 1,
+      "summary": {
+        "title": "Tadazz release verification (QA)",
+        "cardCount": 1,
+        "questionCount": 1,
+        "themeId": "tadazz-classic",
+        "themeVersion": "1.0.0",
+        "diagnostics": []
+      }
+    }
+  },
+  "get": {
+    "ok": true,
+    "correlationId": "4ab6b05f-df97-4702-bd54-9162c3d1d0e2",
+    "data": {
+      "draftId": "lfs8KwrER5ZophXvZ2Zc94B8pNw3_q3H",
+      "revision": 1,
+      "summary": {
+        "title": "Tadazz release verification (QA)",
+        "cardCount": 1,
+        "questionCount": 1,
+        "themeId": "tadazz-classic",
+        "themeVersion": "1.0.0",
+        "diagnostics": []
+      },
+      "questionCount": 1
+    }
+  },
+  "preview": {
+    "contractVersion": "0.1.0",
+    "ok": true,
+    "correlationId": "aed46858-b144-4d3b-9454-8f8f1045db99",
+    "data": {
+      "draftId": "lfs8KwrER5ZophXvZ2Zc94B8pNw3_q3H",
+      "revision": 1,
+      "title": "Tadazz release verification (QA)",
+      "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+      "chapterCount": 5,
+      "frameDigest": "80200ec09d67296731db429b4f884ac25a87eb6caf7486f6caeb70073891f59b"
+    }
+  },
+  "saveGameCalled": false,
+  "liveRoomCreated": false,
+  "realPlayerVotesUsed": false,
+  "installedConnectorCallsVerified": true,
+  "installedHostVisualVerified": false,
+  "sourceRevisionReturnedByTool": false,
+  "limitations": [
+    "Successful connector calls do not establish that ChatGPT rendered or visually presented the widget.",
+    "No save-to-library, live-room, customer-content or outgoing email operation was invoked."
+  ]
+}

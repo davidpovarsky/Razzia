@@ -1,0 +1,152 @@
+{
+  "kind": "isolated-billing-public-browser",
+  "startedAt": "2026-11-19T13:49:02.012Z",
+  "status": "FAIL",
+  "externalProviderNetworkBlocked": true,
+  "productionChanged": false,
+  "realPaymentsMade": false,
+  "fixturePricesOnly": true,
+  "frontend": "actual Vite site composition",
+  "backend": "actual application and billing routes with isolated synthetic configuration",
+  "cases": [
+    {
+      "id": "disabled-desktop",
+      "mode": "disabled",
+      "width": 1440,
+      "locale": "en",
+      "status": "FAIL",
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "billingResponses": [
+        200
+      ],
+      "layout": {
+        "viewport": 1440,
+        "documentWidth": 1440,
+        "bodyWidth": 1440,
+        "direction": "ltr"
+      },
+      "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 4\n\n- Array []\n+ Array [\n+   \"Failed to load resource: the server responded with a status of 404 (Not Found)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+ ]"
+    },
+    {
+      "id": "sandbox-mobile",
+      "mode": "sandbox",
+      "width": 390,
+      "locale": "en",
+      "status": "FAIL",
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "billingResponses": [
+        200
+      ],
+      "layout": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "direction": "ltr"
+      },
+      "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 4\n\n- Array []\n+ Array [\n+   \"Failed to load resource: the server responded with a status of 404 (Not Found)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+ ]"
+    },
+    {
+      "id": "missing-token",
+      "mode": "missing-token",
+      "width": 768,
+      "locale": "en",
+      "status": "FAIL",
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "billingResponses": [
+        200
+      ],
+      "layout": {
+        "viewport": 768,
+        "documentWidth": 768,
+        "bodyWidth": 768,
+        "direction": "ltr"
+      },
+      "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 4\n\n- Array []\n+ Array [\n+   \"Failed to load resource: the server responded with a status of 404 (Not Found)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+ ]"
+    },
+    {
+      "id": "live-catalog-currency",
+      "mode": "live",
+      "width": 1440,
+      "locale": "en",
+      "status": "FAIL",
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "billingResponses": [
+        200
+      ],
+      "currencyChangeVerified": true,
+      "layout": {
+        "viewport": 1440,
+        "documentWidth": 1440,
+        "bodyWidth": 1440,
+        "direction": "ltr"
+      },
+      "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 4\n\n- Array []\n+ Array [\n+   \"Failed to load resource: the server responded with a status of 404 (Not Found)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+ ]"
+    },
+    {
+      "id": "live-catalog-hebrew",
+      "mode": "live",
+      "width": 390,
+      "locale": "he",
+      "status": "FAIL",
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "billingResponses": [
+        200
+      ],
+      "currencyChangeVerified": true,
+      "layout": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "direction": "rtl"
+      },
+      "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"Failed to load resource: the server responded with a status of 404 (Not Found)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+ ]"
+    },
+    {
+      "id": "error-retry",
+      "mode": "error",
+      "width": 390,
+      "locale": "en",
+      "status": "FAIL",
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      ],
+      "billingResponses": [
+        503,
+        200
+      ],
+      "currencyChangeVerified": true,
+      "layout": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "direction": "ltr"
+      },
+      "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 4\n\n- Array []\n+ Array [\n+   \"Failed to load resource: the server responded with a status of 404 (Not Found)\",\n+   \"Failed to load resource: the server responded with a status of 403 (Forbidden)\",\n+ ]"
+    }
+  ],
+  "finishedAt": "2026-11-19T13:49:12.189Z"
+}

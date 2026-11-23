@@ -1,0 +1,1430 @@
+{
+  "format": "tadazz-release-evidence-curation",
+  "generatedAt": "2026-11-19T16:27:44.580212+00:00",
+  "status": "FROZEN_ACCEPTED_EVIDENCE",
+  "scope": "Repository evidence curation only; no new tests, deployments, customer access, source edits, Git staging or commits.",
+  "headAtCuration": "3a3c1d148bb49849080366d59f233e573549394f",
+  "trackedProductSourceDiffEmpty": true,
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "deploymentToolSourceSha": "3a3c1d148bb49849080366d59f233e573549394f",
+  "applicationImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "applicationContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+  "sourceReleaseQualified": true,
+  "deploymentAccepted": true,
+  "deploymentStatusPending": false,
+  "originalAllowlistPreservedByteForByte": true,
+  "originalEvidenceCount": 162,
+  "followupEvidenceCount": 222,
+  "explicitStagingPathCount": 386,
+  "stagingList": "docs/extensions/plans/ux-followup-20261119/release-evidence-staging-list.txt",
+  "originalInventory": "docs/extensions/plans/ux-unified-20261119/release-verification-final-inventory.json",
+  "followupInventory": "docs/extensions/plans/ux-followup-20261119/release-evidence-inventory.json",
+  "previousInitialFollowupAllowlistSha256": "89654d1f5ff81c7f52a1d1cff60c2324e1ef748c2bd9e43a062dfe5d9a5d34ce",
+  "previousInitialFollowupInventorySha256": "943e9637d69e9834507af3128f9f226677af666374c436ee892f50189af96ed1",
+  "copiedNamedArtifacts": 51,
+  "copyManifests": [
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/source-copy-manifest.json",
+      "bytes": 5668,
+      "sha256": "15b287185256585d6202ca78105aa18727b9cc50c51b92f99a082b8072aa3826"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/source-copy-manifest.json",
+      "bytes": 19425,
+      "sha256": "59c2bc33bc09ad9b659046a4bfbbd838abee22ffcb3e5a617f376c69a3640ef3"
+    }
+  ],
+  "frozenEvidencePins": {
+    "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md": "86fd7a1109b3e6370b3f5900f739ce76045f14cc1ba9811a192e1520e283d85b",
+    "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.link-check.json": "daea99cec9ac29470990b353f302a83d2590c37405f562865170f76d5ecc3121",
+    "docs/extensions/plans/ux-followup-20261119/asana-final-readback.json": "92e2b9a2dd469d01f4e805dc064c9e982ca78e9ab320bb6256bafccd83ddaafa",
+    "docs/extensions/plans/ux-followup-20261119/email-provider-readiness.json": "07f9fa7f2a06e09001a463d66f50e12e5be1fbca71138c77d1ec955bae73efa0",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json": "e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-acceptance.json": "6e3a50ee1d85b44a623df6ddf6cb75eecde32bda514e92d837d1bf9973ae405b",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md": "2ef800a4bc0545cb083d3e24887ec18978b3b3f7d3565907c3d8bec063089c67",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/worker-image-readiness.json": "4b71a80cb441a098aa26a10537e9688b6cf9c53a2bb92afff5c13d19082cc5fc",
+    "docs/extensions/plans/ux-followup-20261119/release-tools/source-copy-manifest.json": "15b287185256585d6202ca78105aa18727b9cc50c51b92f99a082b8072aa3826",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/source-copy-manifest.json": "59c2bc33bc09ad9b659046a4bfbbd838abee22ffcb3e5a617f376c69a3640ef3"
+  },
+  "markdownClosure": {
+    "documents": 17,
+    "localLinks": 224,
+    "uniqueTargets": 165,
+    "unresolved": [],
+    "rules": "Each local target is in this explicit staging union or already tracked in Git; existence alone is insufficient.",
+    "links": [
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/current-release-source.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/stage-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/stage-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-deploy-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/preservation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-tool-source.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing-deployment-verifier-fix.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-verifier-independent-review.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-preflight-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-deploy-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-deploy-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/post-deploy-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/installed-connector-smoke.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-phase12-acceptance.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-acceptance.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/final-operational-verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/post-deploy-provider-public-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/email-provider-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing-deployment-verifier-fix.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/deployment-verifier-independent-review.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/diagnosis.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/policy-self-test.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/home-1440.png",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/forgot-390.png",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/themes/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/themes/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/themes/source-validation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-acceptance.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-checks.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-playwright.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/browser-proof.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/roster-320-hebrew.png",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/browser-proof.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/validation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/contact-final-verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/focused-test-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/focused-typed-final.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/themes/qa-cleanup.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/host-controls/verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/site-qa-cleanup.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/cleanup.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/asana-final-readback.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/asana-completion-checkpoint.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/image-build-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-provenance-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase2-compile-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-phase12-acceptance.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-retained-owned-result.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-timer-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-acceptance.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/final-operational-verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/provider-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/post-deploy-provider-public-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/email-provider-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/provider-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/focused-test-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/focused-typed-final.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/cleanup.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-transfer-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-review.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/worker-image-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/image-build-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-provenance-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase2-compile-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/cleanup-target-check.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-timer-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-retained-owned-result.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+        "target": "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/current-release-source.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/source-push-final.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-tool-source.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d4f03cc87031-4fea2f00/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/native-artifacts-d4f03cc.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/branch-audit-final.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/source-push.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/native-layout-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/native-persistence-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/site-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/prepare-label-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/production-deeplink-fix/browser-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/production-deeplink-fix/build-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/production-deeplink-fix/built-document-entry.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/platform-opening/browser-final.log",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/platform-opening/focused-unit.log",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/platform-opening/legacy-unit.log",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/host-presentation/browser-retry.log",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/host-presentation/screenshots/browser-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/tadazz-ux-unified-20261119/mcp-full-browser-release-candidate/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-identity-self-test.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/evidence-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/production-deeplink-fix/RESULTS.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/email-form-scope.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/changed-source-lint-release-summary.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/changed-source-lint-release.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-c4c4fe820467-35cfd3b0/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-c4c4fe820467-ec2ade77/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-c4c4fe820467-7d63dabb/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-c4c4fe820467-09a3093a/resource-oom-snapshot.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-914322b7bfed-b9b77895/full-show/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-914322b7bfed-b9b77895/browser-resource-evidence.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-914322b7bfed-b9b77895/failed-browser-evidence-retrieval.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-3c396e059bf3-28ffc5d8/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-3c396e059bf3-da6e891c/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-3c396e059bf3-605c8e93/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/full-show-3c396e-abort-proof.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-65a5c726430a-95454c81/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-65a5c726430a-e599be4a/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-65a5c726430a-3a75fd56/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-65a5c726430a-dba76500/full-show/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-65a5c726430a-dba76500/browser-resource-evidence.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-65a5c726430a-dba76500/failed-browser-evidence-retrieval.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-661094be855b-ca16316b/full-show/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-661094be855b-ca16316b/browser-resource-evidence.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-661094be855b-ca16316b/full-show/webkit-tadazz-classic-host-controls-readiness.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-661094be855b-ca16316b/failed-browser-evidence-retrieval.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-661094be855b-99ece436/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-661094be855b-9e9d3221/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-661094be855b-ac3396e1/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-d4f03cc87031-9f8fc92c/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d4f03cc87031-4fea2f00/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/native-artifacts-d4f03cc.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-8b063c17800d-2a32dd9b/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-8b063c17800d-d2179089/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-8b063c17800d-9eecf812/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-8b063c17800d-3345b69e/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-8b063c17800d-3345b69e/full-show/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-8b063c17800d-3345b69e/browser-resource-evidence.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-8b063c17800d-9b671101/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-8b063c17800d-3345b69e/browser-evidence-retrieval.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/stage-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/stage-result.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/synthetic-smoke-result.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/retrieval-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/browser-evidence-retrieval.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-scope-check/verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-scope-check/windows-contract-verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-scope-check/artifact-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-scope-check/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/tadazz-ux-unified-20261119/tadazz-held-expand-diagnostic-55a113c1/full-show/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/tadazz-ux-unified-20261119/tadazz-held-expand-diagnostic-55a113c1/execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/tadazz-ux-unified-20261119/mcp-host-lifecycle-diagnostic/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/tadazz-ux-unified-20261119/mcp-host-lifecycle-diagnostic/execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-d8a402dd39bf-eb615ffd/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-d8a402dd39bf-f8bf1e3f/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-d8a402dd39bf-f580e59d/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/full-show/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/browser-resource-evidence.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-d8a402dd39bf-20f26c35/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d4f03cc87031-4fea2f00/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/native-artifacts-d4f03cc.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/stage-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-qualify-backup-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/backup-qualification-receipt-pin.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-deploy-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-result.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/retrieval-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-rollback-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/windows-verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/deploy-mcp-site.py.diff",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/artifact-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-tool-source.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-preflight-tooling-2c66bc94d220-bac295ce13b9482b9762731bbe3ad9e3-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-deploy-tooling-2c66bc94d220-76c1a7e5185c40b69129a0551ef0a968-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/post-deploy-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/post-deploy-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/release-evidence/retrieval-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/release-evidence-collector-check/README.md",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/installed-connector-smoke.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/public-payload-pin-diagnostic.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/public-index-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/production-public-smoke-refusal.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/tadazz-ux-unified-20261119/mcp-full-browser-release-candidate/receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/stage-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-tool-source.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-host-config-check/windows-verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-preflight-tooling-2c66bc94d220-bac295ce13b9482b9762731bbe3ad9e3-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-qualify-backup-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/backup-qualification-receipt-pin.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-deploy-tooling-2c66bc94d220-76c1a7e5185c40b69129a0551ef0a968-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/post-deploy-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/post-deploy-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/installed-connector-smoke.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/production-public-smoke-refusal.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/public-payload-pin-diagnostic.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/public-index-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/release-evidence/retrieval-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/release-evidence-collector-check/verification.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/release-evidence-collector-check/diagnosis.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-deploy-tooling-2c66bc94d220-76c1a7e5185c40b69129a0551ef0a968-execution.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/RELEASE_REPORT.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-rollback-observation.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/site-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/prepare-label-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/native-layout-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/native-persistence-receipt.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/evidence-manifest.json",
+        "acceptedBy": "curated-union"
+      },
+      {
+        "source": "docs/extensions/plans/ux-unified-20261119/site-editor/RESULTS.md",
+        "target": "docs/extensions/plans/ux-unified-20261119/site-editor/qa-server-cleanup.json",
+        "acceptedBy": "curated-union"
+      }
+    ]
+  },
+  "privacyReview": {
+    "textFilesScanned": 317,
+    "credentialPatternLabels": [
+      "private-key",
+      "github-token",
+      "aws-access-id",
+      "paddle-api-key",
+      "bearer-jwt",
+      "password-in-url",
+      "resend-key"
+    ],
+    "matches": [],
+    "rawValuesEmitted": false,
+    "scopeLimit": "Pattern screening supplements provenance review; it is not a claim of universal secret detection. Existing named synthetic proofs and screenshots are retained; customer backups, private configuration, credentials and arbitrary runtime data are excluded."
+  },
+  "excludedFollowupFiles": [
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/README.md.bak.20261119-155808-469566",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/README.md.bak.20261119-160233-330665",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/README.md.bak.20261119-160237-784347",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/asana-readback.json.bak.20261119-160424-555871",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/billing-http-followup.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/billing-http-typed-final.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/billing-http.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/billing-units.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-format.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-lint-typed-final.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-lint.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/format-followup.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/format-qa.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/format-typed-final.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/qa-lint-fix.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/contact-final-verification.json.bak.20261119-162150-356654",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/audio-public-units.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/browser.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-browser.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-extension-types.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-lint.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-web-types.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/product-lint.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/public-lobby-unit.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/test-lint.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/linux-full-show-34568c5c937a.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/linux-native-consent-34568c5c937a.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/linux-native-launch-34568c5c937a.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/linux-proxy-34568c5c937a.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/linux-sdk-cache-diagnosis.json.bak.20261119-163727-908325",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/api-tests.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/provider-readiness.json.bak.20261119-154739-531192",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qa-cache-start.json",
+      "reason": "intermediate QA process state"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt.bak.20261119-171234-893393",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json.bak.20261119-171307-534252",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/controller.stderr.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/controller.stdout.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/linux-native-launch-34568c5c937a.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt.bak.20261119-162249-642403",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt.bak.20261119-162424-265624",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt.bak.20261119-162605-760834",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-inventory.json.bak.20261119-162613-458655",
+      "reason": "automatic backup"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/contact-1440.png",
+      "reason": "obsolete unlinked pre-font screenshot; historical receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/contact-320.png",
+      "reason": "obsolete unlinked pre-font screenshot; historical receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/contact-390.png",
+      "reason": "obsolete unlinked pre-font screenshot; historical receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/contact-he-390.png",
+      "reason": "obsolete unlinked pre-font screenshot; historical receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/failure.png",
+      "reason": "obsolete unlinked pre-font screenshot; historical receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/prepare-retry.png",
+      "reason": "obsolete unlinked pre-font screenshot; historical receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-helper.stderr.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-helper.stdout.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-helper.stderr.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-helper.stdout.log",
+      "reason": "raw log; scoped sanitized receipt retained"
+    }
+  ],
+  "excludedCounts": {
+    "automatic backup": 13,
+    "raw log; scoped sanitized receipt retained": 32,
+    "intermediate QA process state": 1,
+    "obsolete unlinked pre-font screenshot; historical receipt retained": 6
+  },
+  "historicalNamedSyntheticLogsPreserved": [
+    "docs/extensions/plans/ux-unified-20261119/changed-source-lint-release.log",
+    "docs/extensions/plans/ux-unified-20261119/host-presentation/browser-retry.log",
+    "docs/extensions/plans/ux-unified-20261119/host-presentation/qa-format-final.log",
+    "docs/extensions/plans/ux-unified-20261119/host-presentation/qa-lint-final.log",
+    "docs/extensions/plans/ux-unified-20261119/platform-opening/browser-final.log",
+    "docs/extensions/plans/ux-unified-20261119/platform-opening/final-lint.log",
+    "docs/extensions/plans/ux-unified-20261119/platform-opening/focused-unit.log",
+    "docs/extensions/plans/ux-unified-20261119/platform-opening/legacy-unit.log",
+    "docs/extensions/plans/ux-unified-20261119/site-editor/production-deeplink-fix/typecheck.log"
+  ],
+  "newFollowupRawLogsIncluded": 0,
+  "duplicateFixturePayloadsCopied": false,
+  "historicalPendingMarkers": "Candidate curation and byte-copy manifests record their creation-time pending state; this final inventory resolves curation. Historical failure receipts and source hashes remain unchanged.",
+  "claimLimits": [
+    "Email metadata returned 401 and does not establish sending permission or domain verification.",
+    "Paddle sandbox checks are not LIVE activation or approved commercial pricing.",
+    "Connected tool smoke is not native ChatGPT/Claude visual-host proof.",
+    "Worker timer repair does not enable executable theme runtime or install a customer package."
+  ],
+  "gitStagingOrCommitPerformed": false
+}

@@ -1,0 +1,17 @@
+{
+  "applicationRevision": "e30133c7dfb03412cfb898705f1115d206548668",
+  "originalOperatorSha256": {
+    "stage-mcp-site.py": "29e002d042c38aa3c7e21e449ddb3c17e1b79a6fa5bbe967ba7cda8e0c9107ba",
+    "deploy-mcp-site.py": "58888da24b38746efbbfebfa3367c66c39590a64bd4f64f409e76de65cbcd65b"
+  },
+  "operatorSha256": {
+    "stage-mcp-site.py": "983374b46ea7393049f472ddbc33824a3ef2b85dc8418c4302e4c4119c73a118",
+    "deploy-mcp-site.py": "1dca9562a014f79e98b13229b344f401c847cdd2c068f297d7b180aa0d1066d3"
+  },
+  "sourceApplicationChanged": false,
+  "productionChanged": false,
+  "stageSelfTests": 68,
+  "deploySelfTests": 17,
+  "focusedContractPassed": true,
+  "realDockerValidation": "PENDING"
+}

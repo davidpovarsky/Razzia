@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "checked": [
+    "extensions/src/platform-ui/alert-dialog.tsx",
+    "extensions/src/platform-ui/button.tsx",
+    "extensions/src/platform-ui/catalog/catalog.tsx",
+    "extensions/src/platform-ui/catalog/foundations.tsx",
+    "extensions/src/platform-ui/catalog/i18n.ts",
+    "extensions/src/platform-ui/catalog/interaction-stories.tsx",
+    "extensions/src/platform-ui/catalog/layouts.tsx",
+    "extensions/src/platform-ui/catalog/main.tsx",
+    "extensions/src/platform-ui/catalog/registry.ts",
+    "extensions/src/platform-ui/catalog/stories.tsx",
+    "extensions/src/platform-ui/catalog/story.tsx",
+    "extensions/src/platform-ui/catalog/styles.ts",
+    "extensions/src/platform-ui/dialog.tsx",
+    "extensions/src/platform-ui/fields.tsx",
+    "extensions/src/platform-ui/host-controls.tsx",
+    "extensions/src/platform-ui/index.ts",
+    "extensions/src/platform-ui/menus.tsx",
+    "extensions/src/platform-ui/portal.tsx",
+    "extensions/src/platform-ui/roster-controls.tsx",
+    "extensions/src/platform-ui/scope.tsx",
+    "extensions/src/platform-ui/shadow-focus.ts",
+    "extensions/src/platform-ui/styles.ts",
+    "extensions/src/platform-ui/surfaces.tsx",
+    "extensions/src/platform-ui/tokens.ts",
+    "extensions/src/site/web/shared/ReferenceCanvas.tsx",
+    "extensions/src/site/themes/platform.ts"
+  ],
+  "exceptions": [
+    "tokens.ts is the source of primitive values",
+    "immutable source artwork, legacy/site reference CSS, frozen editor/upstream, show-theme/cinematic runtime remain outside this incremental rule"
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "captured_utc": "2026-11-15T15:28:41.673425+00:00",
+  "producer": "9934b9522c4296c049197c2c5589cc75c53db697",
+  "application": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "observer": "47b68268375b5adf8c56a8496882830bc5922de3",
+  "sourcePaths": [
+    {
+      "path": "packages/socket/src/services/config.ts",
+      "sha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f",
+      "new": false,
+      "base_compatible": true
+    },
+    {
+      "path": "packages/socket/src/api/index.ts",
+      "sha256": "5cc5edff0c9d03063b21f738de6ef069285c3e5fb11601297169c1ff624c1e19",
+      "new": false,
+      "base_compatible": true
+    },
+    {
+      "path": "packages/socket/src/index.ts",
+      "sha256": "66cceb2e09fe1169085a1509ecc314b0a1783ee607f377a0d6b135003e4e9ef6",
+      "new": false,
+      "base_compatible": true
+    },
+    {
+      "path": "packages/socket/src/services/quiz-creation-reservation.test.ts",
+      "sha256": "5ffde110654bec01805040f01dad9b1738d03bfb641374e1cabb9b424c588e13",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "sha256": "0a2d299f7d06445236121a31f6ac345afc580c2f308ec0a32299fefaba85bb38",
+      "new": false,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/service.ts",
+      "sha256": "33e119afc937d5677eea3900ebe3401cb277bc428b6cd431816fd152621b688e",
+      "new": false,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/sidecar.ts",
+      "sha256": "182a573935f156d5b80d6f3a79e2a474bd80f7d331355e608c5eca7d6317ab92",
+      "new": false,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-child.ts",
+      "sha256": "1b1551fd766e12b60f29639cbc5bfda60d7bc5d8d205a4e34bbbfc8fac8a372c",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-fixture-root.ts",
+      "sha256": "376248cf75bc403b7a0ae1e1c657d519aa002b629b0818f5cf68d3500988ee28",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-fixture.ts",
+      "sha256": "75d240a968ee2c4606bd58edd45f8d1ffe9bf80387dd6c59d7938fe7c7496a2f",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-native-review-fixture.ts",
+      "sha256": "3bdebe912cc68c95e30087b9fc863801c8830fe0bbdddc2acb7c154c99b20853",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-process-observer.ts",
+      "sha256": "092d05a367525042b96dc18eaaf013ed8a16930c1b5515a1b00ba98a9b103d92",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-process.ts",
+      "sha256": "b7c18b62c74438caf918676500117e53b0d6bba91b8a0e345c172d6435cd8983",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-reservation.test.ts",
+      "sha256": "b4de60c9a87c348d9f1a918f1b475a71409828871b252aa3454741f7ca21c5fe",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-reservation.ts",
+      "sha256": "f976afc4e4e3e9b08f172e580867989bec24af5dfe56777ecf599813499539a8",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-review.test.ts",
+      "sha256": "31f50189c711656dd282422b2b7c1c27bf65cc99ade13301841adec48ea05ed2",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-scope.test.ts",
+      "sha256": "e89d0d710d757ea0f96a62a4422a9dbba44c678657a636e33b3bcc369cfdfe60",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-scope.ts",
+      "sha256": "7eba38e7fc319dcd2c7fc5ea57b62cc5f88601fea346129d01561837125293b1",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/durable-files.test.ts",
+      "sha256": "6614b6b44e5beb1704c77b22a2a28b49957ce7f6f19202318826f337d79965ae",
+      "new": true,
+      "base_compatible": true
+    },
+    {
+      "path": "extensions/src/server/storage/durable-files.ts",
+      "sha256": "00a3f7474afc00c0f8409868e7f2b99ce261228d2150efed6b48dac2b6d1bec7",
+      "new": true,
+      "base_compatible": true
+    }
+  ],
+  "packets": [
+    {
+      "packet": 5,
+      "rawFilesVerified": 8,
+      "childOutcomes": 0,
+      "sigkill": 0,
+      "exit0": 0,
+      "container": "ef108b100c81b4a340f4d6998f1a0fa6e189c9fc19520110969b87890eb563e7",
+      "stopped": true
+    },
+    {
+      "packet": 6,
+      "rawFilesVerified": 134,
+      "childOutcomes": 24,
+      "sigkill": 8,
+      "exit0": 16,
+      "container": "31f70757e9705e6976839a0ec50a9dbef4e28d02619b40c5530f7ebeeee441a9",
+      "stopped": true
+    },
+    {
+      "packet": 7,
+      "rawFilesVerified": 48,
+      "childOutcomes": 3,
+      "sigkill": 1,
+      "exit0": 2,
+      "container": "0a2905259bf922c51df87a00bfeb82b147aa1ce868b3aab4c6a988f0b405ede9",
+      "stopped": true
+    }
+  ],
+  "status": "PASS_SCOPED_C1_PRODUCER_QUALIFICATION_REVIEW",
+  "scope": "one synchronous cooperating writer; feature OFF; no production or full task acceptance",
+  "old37": "REUSED_OLD_PROFILE_NOT_RERUN",
+  "historicalGoCause": "NOT_ESTABLISHED"
+}

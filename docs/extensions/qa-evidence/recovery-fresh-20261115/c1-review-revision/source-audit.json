@@ -1,0 +1,141 @@
+{
+  "baseCommit": "96767de6d40b594324687e15b0f386b87dd7ef19",
+  "protectedChanges": [
+    "packages/socket/src/api/index.ts",
+    "packages/socket/src/index.ts",
+    "packages/socket/src/services/config.ts",
+    "packages/socket/src/services/quiz-creation-reservation.test.ts"
+  ],
+  "lineCounts": {
+    "packages/socket/src/services/config.ts": {
+      "added": 18,
+      "removed": 0,
+      "touched": 18,
+      "ceiling": 30
+    },
+    "packages/socket/src/api/index.ts": {
+      "added": 15,
+      "removed": 0,
+      "touched": 15,
+      "ceiling": 22
+    },
+    "packages/socket/src/index.ts": {
+      "added": 4,
+      "removed": 0,
+      "touched": 4,
+      "ceiling": 14
+    },
+    "packages/socket/src/services/quiz-creation-reservation.test.ts": {
+      "newLines": 271,
+      "ceiling": 280
+    }
+  },
+  "nativeCrudAndOriginalApiStartupByteIdenticalOutsideExactHooks": true,
+  "frozenDigestEditorCommonUnchanged": true,
+  "preparedCases": {
+    "extensions/src/server/storage/creation-review.test.ts": 12,
+    "extensions/src/server/storage/durable-files.test.ts": 5,
+    "extensions/src/server/storage/creation-scope.test.ts": 4,
+    "extensions/src/server/storage/creation-reservation.test.ts": 16,
+    "packages/socket/src/services/quiz-creation-reservation.test.ts": 11
+  },
+  "runtimeTestsExecuted": false,
+  "scope": "Prototype A: single synchronous cooperating writer only; B/production enablement not claimed",
+  "files": [
+    {
+      "file": "packages/socket/src/services/config.ts",
+      "bytes": 7628,
+      "sha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f"
+    },
+    {
+      "file": "packages/socket/src/api/index.ts",
+      "bytes": 2130,
+      "sha256": "5cc5edff0c9d03063b21f738de6ef069285c3e5fb11601297169c1ff624c1e19"
+    },
+    {
+      "file": "packages/socket/src/index.ts",
+      "bytes": 1521,
+      "sha256": "66cceb2e09fe1169085a1509ecc314b0a1783ee607f377a0d6b135003e4e9ef6"
+    },
+    {
+      "file": "packages/socket/src/services/quiz-creation-reservation.test.ts",
+      "bytes": 10674,
+      "sha256": "5ffde110654bec01805040f01dad9b1738d03bfb641374e1cabb9b424c588e13"
+    },
+    {
+      "file": "extensions/src/server/index.ts",
+      "bytes": 1363,
+      "sha256": "0a2d299f7d06445236121a31f6ac345afc580c2f308ec0a32299fefaba85bb38"
+    },
+    {
+      "file": "extensions/src/server/storage/service.ts",
+      "bytes": 18453,
+      "sha256": "33e119afc937d5677eea3900ebe3401cb277bc428b6cd431816fd152621b688e"
+    },
+    {
+      "file": "extensions/src/server/storage/sidecar.ts",
+      "bytes": 3255,
+      "sha256": "182a573935f156d5b80d6f3a79e2a474bd80f7d331355e608c5eca7d6317ab92"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-child.ts",
+      "bytes": 4112,
+      "sha256": "1b1551fd766e12b60f29639cbc5bfda60d7bc5d8d205a4e34bbbfc8fac8a372c"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-fixture-root.ts",
+      "bytes": 492,
+      "sha256": "376248cf75bc403b7a0ae1e1c657d519aa002b629b0818f5cf68d3500988ee28"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-fixture.ts",
+      "bytes": 4402,
+      "sha256": "75d240a968ee2c4606bd58edd45f8d1ffe9bf80387dd6c59d7938fe7c7496a2f"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-native-review-fixture.ts",
+      "bytes": 4080,
+      "sha256": "3bdebe912cc68c95e30087b9fc863801c8830fe0bbdddc2acb7c154c99b20853"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-process.ts",
+      "bytes": 2936,
+      "sha256": "ecb08a06c5c73219143bf42206eaff1ef64bd618aa245988d8764f9abeb1608f"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-reservation.test.ts",
+      "bytes": 17493,
+      "sha256": "b4de60c9a87c348d9f1a918f1b475a71409828871b252aa3454741f7ca21c5fe"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-reservation.ts",
+      "bytes": 28143,
+      "sha256": "f976afc4e4e3e9b08f172e580867989bec24af5dfe56777ecf599813499539a8"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-review.test.ts",
+      "bytes": 12104,
+      "sha256": "31f50189c711656dd282422b2b7c1c27bf65cc99ade13301841adec48ea05ed2"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-scope.test.ts",
+      "bytes": 4481,
+      "sha256": "e89d0d710d757ea0f96a62a4422a9dbba44c678657a636e33b3bcc369cfdfe60"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-scope.ts",
+      "bytes": 5611,
+      "sha256": "7eba38e7fc319dcd2c7fc5ea57b62cc5f88601fea346129d01561837125293b1"
+    },
+    {
+      "file": "extensions/src/server/storage/durable-files.test.ts",
+      "bytes": 4985,
+      "sha256": "6614b6b44e5beb1704c77b22a2a28b49957ce7f6f19202318826f337d79965ae"
+    },
+    {
+      "file": "extensions/src/server/storage/durable-files.ts",
+      "bytes": 7708,
+      "sha256": "00a3f7474afc00c0f8409868e7f2b99ce261228d2150efed6b48dac2b6d1bec7"
+    }
+  ]
+}

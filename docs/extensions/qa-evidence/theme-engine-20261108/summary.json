@@ -1,0 +1,206 @@
+{
+  "generatedAt": "2026-11-08T10:15:11.529Z",
+  "sourceCommit": "2db7e036078db85de6ca59785b6bcf9061c2c6af",
+  "uncommittedSinceSourceCommit": "Equivalent class-token composition hardening; passed 53 focused tests after the normal Tailwind formatter, effective typechecks and production build.",
+  "typechecks": {
+    "web": {
+      "passed": true,
+      "diagnostics": ""
+    },
+    "socket": {
+      "passed": true,
+      "diagnostics": ""
+    },
+    "extensions": {
+      "passed": true,
+      "diagnostics": ""
+    },
+    "e2e": {
+      "passed": true,
+      "diagnostics": ""
+    }
+  },
+  "root": {
+    "total": 351,
+    "passed": 351,
+    "failed": 0
+  },
+  "extensions": {
+    "total": 570,
+    "passed": 555,
+    "failed": 15,
+    "identicalBaselineFailures": true
+  },
+  "browserCases": [
+    {
+      "name": "Classic host, player and display keep the current lobby and authoritative pause/roster",
+      "project": "chromium",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 7845
+        }
+      ]
+    },
+    {
+      "name": "explicit rollback uses extracted scene presenter and original Studio controls",
+      "project": "chromium",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4989
+        }
+      ]
+    },
+    {
+      "name": "unknown versions preserve stored identity and warn only the manager",
+      "project": "chromium",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2949
+        }
+      ]
+    },
+    {
+      "name": "blocked audio waits for a user gesture without retrying on ticks",
+      "project": "chromium",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 6474
+        }
+      ]
+    },
+    {
+      "name": "Studio shows only registered Classic choices, previews locally, and persists explicit mute",
+      "project": "chromium",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3958
+        }
+      ]
+    },
+    {
+      "name": "live theme shares all roles, fits five viewports, and restarts voting music only for a new question",
+      "project": "chromium",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 53905
+        }
+      ]
+    },
+    {
+      "name": "Classic host, player and display keep the current lobby and authoritative pause/roster",
+      "project": "webkit-ipad",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 16846
+        }
+      ]
+    },
+    {
+      "name": "explicit rollback uses extracted scene presenter and original Studio controls",
+      "project": "webkit-ipad",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 6406
+        }
+      ]
+    },
+    {
+      "name": "unknown versions preserve stored identity and warn only the manager",
+      "project": "webkit-ipad",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4083
+        }
+      ]
+    },
+    {
+      "name": "blocked audio waits for a user gesture without retrying on ticks",
+      "project": "webkit-ipad",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 10496
+        }
+      ]
+    },
+    {
+      "name": "Studio shows only registered Classic choices, previews locally, and persists explicit mute",
+      "project": "webkit-ipad",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 7869
+        }
+      ]
+    },
+    {
+      "name": "live theme shares all roles, fits five viewports, and restarts voting music only for a new question",
+      "project": "webkit-ipad",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 66317
+        }
+      ]
+    }
+  ],
+  "viewports": [
+    [
+      1920,
+      1080
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      800,
+      600
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      320,
+      568
+    ]
+  ],
+  "browserConfig": "packages/e2e/playwright.cleanup-theme.config.ts; fresh temporary CONFIG_PATH; ports 3170/3171; no operational config",
+  "manualListening": "NOT TESTED",
+  "physicalIpad": "NOT TESTED",
+  "fullHistoricalPixelParity": "NOT TESTED",
+  "productionThemeInstaller": "NOT IMPLEMENTED/DEPLOYED",
+  "pushDeployMainMerge": false,
+  "postMatrixNativeClassCheck": {
+    "tests": 53,
+    "passed": 53,
+    "productionBuild": "PASS",
+    "effectiveTypechecks": "PASS",
+    "formatterRoundtrip": "PASS",
+    "note": "Equivalent token composition preserves canonical class strings and prevents future formatter trimming."
+  },
+  "productionPatchSha256": "72a7a23e933c4204d9c481b08aab4c146fc3d7cc4371622e12bac9d4dd47e01c",
+  "timerAudioAssetAssertions": "manual lock: zero timer-expiry asset plays; natural expiration: exactly one, in Chromium and WebKit"
+}

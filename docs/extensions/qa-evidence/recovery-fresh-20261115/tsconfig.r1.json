@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.recovery.json",
+  "compilerOptions": {
+    "paths": {
+      "@razzia/common/*": ["../../../../packages/common/src/*"],
+      "@razzia/socket/*": ["../../../../packages/socket/src/*"],
+      "zod": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/zod"],
+      "uuid": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/uuid"],
+      "http-status-codes": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/http-status-codes"],
+      "vitest": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/vitest"],
+      "nanoid": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/packages/socket/node_modules/nanoid"]
+    }
+  }
+}

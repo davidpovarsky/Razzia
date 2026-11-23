@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "unitTests": {
+    "root": {
+      "passed": 365,
+      "failed": 0,
+      "skipped": 0
+    },
+    "extension": {
+      "passed": 659,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "browserTests": {
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "typescriptProjects": 7,
+  "lint": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "format": "passed",
+  "build": "passed",
+  "remoteQaOnly": true,
+  "base": "785f74f",
+  "latestOriginBase": "a489197",
+  "builderImage": "sha256:41a49a0e68d13c2bdfc576d0364176c2e27ab278e10605b5a577ffc62cbe3c88",
+  "sourceCommit": "ca5cadbedb7a185148cbf523ac055f54eda170c4",
+  "sourceFilesVerified": 1752,
+  "immutableFilesVerified": 791
+}

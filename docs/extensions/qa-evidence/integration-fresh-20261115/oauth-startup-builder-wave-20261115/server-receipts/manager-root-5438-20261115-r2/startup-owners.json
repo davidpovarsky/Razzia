@@ -1,0 +1,23 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/node_modules/vitest/vitest.mjs",
+    "run",
+    "--root",
+    "/work/project/extensions",
+    "--config",
+    "/work/project/extensions/vitest.config.ts",
+    "--configLoader",
+    "runner",
+    "src/server/storage/startup-recovery.test.ts",
+    "--maxWorkers",
+    "1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/startup-owners.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "c4387b3d2386a5838e20a85ab30ab22110558b95745b1a34b96954b76bec250f",
+  "seconds": 6.518
+}

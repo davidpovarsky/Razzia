@@ -1,0 +1,28 @@
+{
+  "id": "b5573c90-47f3-4369-a7a5-afee60bd42a9",
+  "context": {
+    "mode": "recover",
+    "root": "/scratch/c1/tadazz-c1-native-synthetic-BkQ2R2",
+    "sequence": "2",
+    "owner": ""
+  },
+  "pid": 362,
+  "event": "close",
+  "code": 0,
+  "signal": null,
+  "observedNs": "996272320774080",
+  "startedNs": "996268419064937",
+  "streams": {
+    "stdout": {
+      "file": "b5573c90-47f3-4369-a7a5-afee60bd42a9.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "b5573c90-47f3-4369-a7a5-afee60bd42a9.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observationErrors": []
+}

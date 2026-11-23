@@ -1,0 +1,34 @@
+# Native document language correction — 15 November 2026
+
+The retained 9b221bc/31b Site candidate has a reproducible native-route metadata defect: `/game?lng=ja` and `/game?lng=tr` translate the UI and title while leaving `<html lang="en">`. The Site metadata effect returned early for all native routes. No other document-language owner was found in the actual upstream i18n/branding code.
+
+`SiteMetadata.tsx` now updates document language on native routes too. Only the platform route sets/restores `dir="ltr"`; native direction behavior is preserved. No upstream, editor, dictionary, theme or backend source changed. A separate native-language browser spec protects the new seam; the completed catalogue-locale task remains untouched.
+
+## Executed evidence
+
+- Original immutable candidate: unchanged `native-language.cjs` + `cases.json`, Chromium and WebKit × Japanese/Turkish: **0 PASS, 4 FAIL**, exit 1 (`baseline-results.json`). All four had the correct translated title and incorrect English document language.
+- Corrected real production build: exact retained Linux dependencies, Node 24.22.2, Vite config runner, network-none/read-only source with one SiteMetadata file overlay, RAM output. **Build exit 0**. Affected component/import closure TypeScript check **exit 0** with strict inherited web configuration. No installation, cache rewrite or generated source rewrite.
+- Same unchanged baseline harness against corrected artifact: **4 PASS, 0 FAIL**, exit 0 (`fixed-results.json`). Both languages correct in Chromium 156.0.8078.4 and WebKit 27.2; native `dir` stays empty.
+- Actual repository `native-document-language.spec.ts`, copied byte-for-byte with the two existing dictionaries: **4 PASS**, no retries/skips/flakes, exit 0 (`spec-results.json`, `spec2-run.log`). It independently asserts localized title, document language and absent native direction attribute.
+- Scoped oxlint and Prettier checks on the changed component and new spec: **exit 0**. The first lint attempt required two blank lines. `source-bridge.json` verifies the final component differs from the executed build input only by those blank lines, with every nonblank line identical. Build/typecheck/browser results are reused across that formatting-only correction, not represented as rerun on a different byte hash.
+- Source `git diff --check`: **exit 0**. Full staged check reports one blank-at-EOF warning in the preserved exact failed-run receipt `spec-loader-failure.log`; a clean full staged whitespace result is not claimed. Full CI and previously accepted 96 metadata, catalogue, account-history, rollback, fault and parent-integration suites were not repeated.
+
+One captured `errors:auth.sessionFailed` page error occurs in the first corrected Chromium/Japanese harness sample; the other three have no captured errors. Its cause is unclassified. Language/title assertions still pass. This is **not** a zero-console-error or authentication-health claim; no account submission or customer data was created. The synthetic backend has accounts disabled.
+
+Follow-up classification: the cause was subsequently established from the same stopped fixture's existing Nginx/supervisor logs as an API-readiness race: the first session POST received 502/connection refused before the backend began listening, followed by seven recorded session 200s. See [the classification addendum](session-error-classification/RESULTS.md) and exact raw/hash receipts there. No test or probe was rerun. It also records the distinct optional tenant-branding fixture boundary (config-mode0700 causes branding403); the default-brand language proof is not tenant-override acceptance. The original sample and error remain preserved.
+
+The first source-spec runner failed before discovering tests because its fixture lacked the repository module package context (`spec-loader-failure.log`). The corrected fixture preserves the real extensions package.json and resolves retained dependencies. An intervening invalid dependency mount exited 125 without creating a container (`spec2.log`). All failed receipts remain. The local optional legacy TypeScript transpile API probe was unavailable; the bridge uses exact nonblank source equality and makes no emitted-JavaScript claim.
+
+## Source and artifact custody
+
+All 1,234 original retained source-file SHA256/byte values were independently matched against actual Git blobs at `9b221bc0edabe449cdf27bc818ae77acbc676bae` (`source-git-verification.json`). The source-before map's derived `gitBlob` field is not used as verification; authoritative comparisons use SHA256/bytes. The fixed build input differs only in SiteMetadata (`fixed-source.json`). Final readback confirms all original 1,234 files and all original 152 artifact bodies unchanged.
+
+The fixed artifact has 152 files; only `assets/index-COPgzYZb.js` and `index.html` differ, totaling **223,867 bytes**. Fixed entry SHA256: `e5d2c9e772ca5da640ba8eaa6b43a0af714efcf64c1f2877a0d1447fd82f4d6d`. Full before/after artifact manifest SHA256: `dde1613d3cb048b849d1121d2c3c70da1e52a191ef21ab5af8d9038adaa81487` (`fixed-artifact.json`). This is a tested local successor artifact, **not a replacement of the selected release pins or a newly published image**.
+
+Retained server root: `/home/ubuntu/tadazz-hq-qa-20261115/evidence/site-native-lang-A-20261115`. Build output exported only changed payload bodies. `fixed-output/web` contains hard links to 150 original operator artifact bodies and the two new payload bodies; exact source/inode/hash custody is in `custody.json`. Any future exclusive-writer scope must cover **these aliases as well as the canonical operator web root**, with bodies revalidated before publication. Do not modify either tree or reuse a hold/stage/backup as a fresh release tuple.
+
+Seven own fresh containers are stopped and preserved, PID 0 and no OOM; build/spec/browser states are in `final-readback.json`. Production `dd140163...`, gateway `c29ea46f...`, old synthetic pair `505772e3...`/`701c07ef...` and RAM metadata keeper `06144b29...` remain running with their recorded IDs/start times. No production/control/lease installation or release action occurred. Measured new data plus writable-layer/log bytes: 1,353,317; conservative 2 MiB charge including metadata, within Site 16 MiB allocation. Functional claim released; peer and historical rows preserved.
+
+## Release implication
+
+The original retained candidate cannot claim native localized document-language acceptance. Existing normal rollback and fault proofs remain valid in their recorded scope; they were not rerun against these new application bytes. The manager must review/select the tested successor or explicitly retain the old candidate's known limitation. Original title/meta and postdeploy tasks stay **OPEN** pending actual live acceptance. Production remains unchanged; existing live authorization and exclusive-writer requirements continue without a new approval stage.

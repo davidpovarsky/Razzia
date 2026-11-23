@@ -1,0 +1,900 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.live-acceptance.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.live-acceptance.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-12-live-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-stage-integration.spec.ts",
+          "tds-host.spec.ts",
+          "tds-roster.spec.ts",
+          "tds-package-admin.spec.ts"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "/evidence/phase-12-live-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-stage-integration.spec.ts",
+          "tds-host.spec.ts",
+          "tds-roster.spec.ts",
+          "tds-package-admin.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-12-live-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-stage-integration.spec.ts",
+          "tds-host.spec.ts",
+          "tds-roster.spec.ts",
+          "tds-package-admin.spec.ts"
+        ],
+        "timeout": 180000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": {},
+        "outputDir": "/evidence/phase-12-live-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-stage-integration.spec.ts",
+          "tds-host.spec.ts",
+          "tds-roster.spec.ts",
+          "tds-package-admin.spec.ts"
+        ],
+        "timeout": 180000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-12-live.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-host.spec.ts",
+      "file": "tds-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18930,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    },
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:47:56.826Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-620fc10431e286bba2fb",
+          "file": "tds-host.spec.ts",
+          "line": 119,
+          "column": 1
+        },
+        {
+          "title": "real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17171,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:48:15.885Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-39f4ba31adb6916f14c2",
+          "file": "tds-host.spec.ts",
+          "line": 255,
+          "column": 1
+        },
+        {
+          "title": "restart and skip keep original confirmations and one command per explicit confirmation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11673,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:48:33.088Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-3d7f3a699da736ca12e7",
+          "file": "tds-host.spec.ts",
+          "line": 339,
+          "column": 1
+        },
+        {
+          "title": "touch host controls and compact landscape dialogs keep named reachable close actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4809,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:48:44.783Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-1ed4c49941e5a27c1a17",
+          "file": "tds-host.spec.ts",
+          "line": 379,
+          "column": 1
+        },
+        {
+          "title": "legacy settings switches use visible token thumbs and preserve a real confirmed server save",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6303,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:48:49.606Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-537bc5ef74615d5d9260",
+          "file": "tds-host.spec.ts",
+          "line": 430,
+          "column": 1
+        },
+        {
+          "title": "real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 48647,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:50:28.491Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-35ea3b3c5a1290aa1d92",
+          "file": "tds-host.spec.ts",
+          "line": 255,
+          "column": 1
+        },
+        {
+          "title": "restart and skip keep original confirmations and one command per explicit confirmation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 47572,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:51:17.310Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-688b7173c34db84a5bcd",
+          "file": "tds-host.spec.ts",
+          "line": 339,
+          "column": 1
+        },
+        {
+          "title": "touch host controls and compact landscape dialogs keep named reachable close actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 20143,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:52:04.920Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-994b3fb8a02397981943",
+          "file": "tds-host.spec.ts",
+          "line": 379,
+          "column": 1
+        },
+        {
+          "title": "legacy settings switches use visible token thumbs and preserve a real confirmed server save",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13861,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:52:25.088Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-3960840f03f259540596",
+          "file": "tds-host.spec.ts",
+          "line": 430,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tds-package-admin.spec.ts",
+      "file": "tds-package-admin.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "current Studio package administration preserves build, install, export and responsive controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8879,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:48:55.944Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cbd72ded307b58ea4266-403a1833aa1f6753840e",
+          "file": "tds-package-admin.spec.ts",
+          "line": 8,
+          "column": 1
+        },
+        {
+          "title": "current Studio package administration preserves build, install, export and responsive controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17784,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:52:39.006Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cbd72ded307b58ea4266-178787bfb5baa8c811b3",
+          "file": "tds-package-admin.spec.ts",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tds-roster.spec.ts",
+      "file": "tds-roster.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16308,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:49:04.856Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "007dbc774b82b5e3c806-8c806b7413a0e69de325",
+          "file": "tds-roster.spec.ts",
+          "line": 75,
+          "column": 1
+        },
+        {
+          "title": "authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 50757,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:52:56.821Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "007dbc774b82b5e3c806-1bbfb14c115219c4078f",
+          "file": "tds-roster.spec.ts",
+          "line": 75,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tds-stage-integration.spec.ts",
+      "file": "tds-stage-integration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 32369,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:49:21.199Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-102381373501d91c258c",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 105,
+          "column": 1
+        },
+        {
+          "title": "configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24549,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:49:53.613Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-e059be9de38cd250548f",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 246,
+          "column": 1
+        },
+        {
+          "title": "a failed per-card image falls back to the selected full-window theme without classroom or duplicate media",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9361,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:50:18.189Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-6e0b3496c249230fce13",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 328,
+          "column": 1
+        },
+        {
+          "title": "actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 53860,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:53:47.621Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-2c5ac2b20f09f8464836",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 105,
+          "column": 1
+        },
+        {
+          "title": "configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 85016,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:54:41.520Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-dd30096ec7016be7897b",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 246,
+          "column": 1
+        },
+        {
+          "title": "a failed per-card image falls back to the selected full-window theme without classroom or duplicate media",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19124,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:56:06.594Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-4e5450914facffcd993e",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 328,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T22:47:48.669Z",
+    "duration": 517403.005,
+    "expected": 19,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

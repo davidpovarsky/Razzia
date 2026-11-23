@@ -1,0 +1,35 @@
+{
+  "phase": "CONDITIONAL_EXACT_TEST_ASSERTION_LEASE",
+  "recordedBeforeEditUtc": "2026-11-15T09:22:13.570217+00:00",
+  "path": "extensions/src/server/show-themes/installation.test.ts",
+  "oldGitBlob": "477080ba7e3853547da82a167ec9b42d9fb20be1",
+  "oldFileSha256": "ed8a2e78732cb4150c3d64f3e346ee6017f0d68d2e2e083401bb4ba3610bc92e",
+  "oldAssertion": "    expect(store.readAsset(author, first, \"picture\", true).bytes).toEqual(\n      picture,\n    )",
+  "newAssertion": "    const publishedPictureBytes = store.readAsset(\n      author,\n      first,\n      \"picture\",\n      true,\n    ).bytes\n    expect(Buffer.isBuffer(publishedPictureBytes)).toBe(true)\n    expect(publishedPictureBytes.length).toBe(picture.length)\n    expect(publishedPictureBytes.equals(picture)).toBe(true)",
+  "allowedScope": "FIRST CASE readAsset byte assertion only; no setup/business/SQL/PRAGMA/timeout/fixture edits",
+  "reason": "Exact original large Buffer toEqual measured dominant CPU/allocation cost; body completed with no unexpected SQL/logic error",
+  "traceSha256": "4667925643ab0f18d97c646b0faf5520e7757cf8a55f7c1f30186f6f5405b01d",
+  "traceReceiptSha256": "dfd9c6eaaf9a6358c02af72b28b53330641b6162c5be36e5e5b1bebbe9352546",
+  "measurements": {
+    "bodyDurationMs": 32797.982859,
+    "matcherDurationMs": 32012.032441,
+    "matcherShare": 0.9760366233076333,
+    "matcherCpuUserUs": 7678690,
+    "matcherCpuSystemUs": 325948,
+    "readAssetMs": 8.328002,
+    "bodyComplete": true,
+    "expectedThrows": 3,
+    "unexpectedThrows": 0,
+    "matcherHeapDelta": 616684536,
+    "matcherThrottleDeltaUs": 29369043
+  },
+  "semanticProofRequired": [
+    "same-byte Buffer copy true",
+    "mutated first/middle/last byte false",
+    "shorter/longer Buffer false",
+    "non-Buffer rejected",
+    "original fixture SHA unchanged"
+  ],
+  "nextValidation": "ONLY all5 original installation.test.ts cases, original30000ms/.25CPU2GiB; focused types/changed-file format; no819 repeat",
+  "conditionalGrant": "Root message explicitly authorizes exactly this assertion change IF dominant matcher/no SQL/logic failure is proved"
+}

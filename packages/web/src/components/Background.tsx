@@ -1,12 +1,12 @@
-import defaultLogo from "@razzia/web/assets/logo.svg"
 import { getBranding, imageFallback } from "@razzia/web/branding"
-import GithubIcon from "@razzia/web/components/GithubIcon"
 import type { PropsWithChildren } from "react"
+
+const defaultLogo = "/tadazz-show/v4/tadazz-brand-logo.png"
 
 const Background = ({ children }: PropsWithChildren) => {
   const branding = getBranding()
   const logo = branding?.logo ?? defaultLogo
-  const appName = branding?.appName ?? "Razzia"
+  const appName = branding?.appName ?? "TADAZZ"
 
   return (
     <section className="relative flex min-h-dvh flex-col items-center justify-center">
@@ -18,21 +18,10 @@ const Background = ({ children }: PropsWithChildren) => {
       <img
         src={logo}
         onError={imageFallback(defaultLogo)}
-        className="mb-10 h-16"
+        className="mb-8 h-auto w-64 max-w-[70vw]"
         alt={appName}
       />
       {children}
-
-      <a
-        href="https://github.com/Ralex91/Razzia"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 text-sm font-semibold text-white/50 transition-colors hover:text-white/80"
-      >
-        <GithubIcon size={14} />
-        {/* oxlint-disable-next-line no-undef */}
-        Razzia - v{__APP_VERSION__}
-      </a>
     </section>
   )
 }

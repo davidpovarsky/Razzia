@@ -1,0 +1,69 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-copy 233ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal 165ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write 157ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write 140ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete 136ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal 150ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup 165ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at journal-cleanup 209ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal and quarantine after partial restore and retries 149ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > blocks startup rather than restoring refs when original and quarantine are missing 100ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show 168ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present 188ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit 110ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > rejects unsafe journal IDs without writing outside authorized paths 88ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if create sidecar write and base cleanup fail 73ms
+stderr | src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-VGsQ6R\extensions\quizzes\f3ce49bc-e53e-4572-8fff-3cb4ee15d0bd.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/sidecar.ts:63:25)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:241:30)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/create-recovery.test.ts:54:12
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if import sidecar write and base cleanup fail 44ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base 42ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at base-written and replay is a no-op 103ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at sidecar-written and replay is a no-op 66ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > preserves V1 backups 63ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is throw 35ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content 49ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision 51ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for invalid-v2 42ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch 37ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for newer-revision 43ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id 54ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename 50ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal after partial sidecar write and retries safely 92ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal if cleanup fails after exact restoration 52ms
+
+ Test Files  3 passed (3)
+      Tests  30 passed (30)
+   Start at  05:03:41
+   Duration  6.41s (tests 54%, import 33%, transform 12%)

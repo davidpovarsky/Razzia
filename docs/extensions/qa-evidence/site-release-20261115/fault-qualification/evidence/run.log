@@ -1,0 +1,10 @@
+{"mode": "drop-start-ack", "status": "PASS_SCOPED_FAULT_WITNESS", "execId": "33e1c99d7921db41bfac0ba935d9e9e2144c67b2fbb71951f12c233daf16193b", "holdPhase": "start-intent", "failureKind": null, "webFiles": 202}
+Traceback (most recent call last):
+  File "/run/tadazz-site-fault-wave-A-20261115/run-fault-qualification.py", line 440, in <module>
+    main()
+  File "/run/tadazz-site-fault-wave-A-20261115/run-fault-qualification.py", line 431, in main
+    results = [case(nonce, mode, sources, protected) for nonce, mode in CASES]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/run/tadazz-site-fault-wave-A-20261115/run-fault-qualification.py", line 383, in case
+    raise ValueError('native injected syscall failure missing')
+ValueError: native injected syscall failure missing

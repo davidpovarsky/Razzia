@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.c1-review.json",
+  "include": [
+    "../../../../extensions/src/server/storage/creation-process.ts",
+    "../../../../extensions/src/server/storage/creation-process-observer.ts"
+  ]
+}

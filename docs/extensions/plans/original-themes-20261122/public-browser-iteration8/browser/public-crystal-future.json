@@ -1,0 +1,6468 @@
+{
+  "sequences": [
+    {
+      "number": 0,
+      "question": "A robot moves 2 steps each second. How far in 6 seconds?",
+      "questionAt": 3914.0999999046326,
+      "votingAt": 5782,
+      "answersAt": 5782,
+      "timerAt": 5782,
+      "resultsAt": 7744.200000047684,
+      "resultsFrames": 2,
+      "earlyAnswers": false,
+      "earlyTimer": false,
+      "retainedPanel": true,
+      "retainedHeading": true,
+      "duplicateHeadings": false,
+      "headingChanged": false,
+      "newQuestionAnimations": 0,
+      "stableTypography": true,
+      "stableGeometry": true,
+      "geometryEvidence": null,
+      "photo": false,
+      "samples": [
+        {
+          "phase": "question",
+          "at": 3914.0999999046326,
+          "answers": false,
+          "timer": false,
+          "headings": 1
+        },
+        {
+          "phase": "voting",
+          "at": 5782,
+          "answers": true,
+          "timer": true,
+          "headings": 1
+        },
+        {
+          "phase": "results",
+          "at": 7744.200000047684,
+          "answers": true,
+          "timer": false,
+          "headings": 1
+        }
+      ],
+      "explicitReplay": false,
+      "identityLockedAt": null,
+      "initialReplayRemounts": [],
+      "diagnostic": {
+        "clock": "performance.now",
+        "installedAt": 2673.5,
+        "phaseTransitions": [
+          {
+            "at": 3122.899999856949,
+            "oldPhase": "intro",
+            "phase": "preparing",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 3763.5,
+            "oldPhase": "preparing",
+            "phase": "question",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 5775,
+            "oldPhase": "question",
+            "phase": "voting",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 7579.5,
+            "oldPhase": "voting",
+            "phase": "results",
+            "batchIndex": 0,
+            "batchSize": 1
+          }
+        ],
+        "phaseOverflow": false,
+        "leadingFrames": [
+          {
+            "at": 2884.7000000476837,
+            "frameTimestamp": 2870.7,
+            "phase": "intro",
+            "gap": null,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 2884.7000000476837
+          },
+          {
+            "at": 3094.7999999523163,
+            "frameTimestamp": 3087.3,
+            "phase": "intro",
+            "gap": 210.09999990463257,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 3094.7999999523163
+          },
+          {
+            "at": 3362.7000000476837,
+            "frameTimestamp": 3354,
+            "phase": "preparing",
+            "gap": 267.90000009536743,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 3362.7000000476837
+          },
+          {
+            "at": 3617.2999999523163,
+            "frameTimestamp": 3604,
+            "phase": "preparing",
+            "gap": 254.59999990463257,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 3617.2999999523163
+          },
+          {
+            "at": 3759.7999999523163,
+            "frameTimestamp": 3754.1,
+            "phase": "preparing",
+            "gap": 142.5,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 3759.7999999523163
+          }
+        ],
+        "frames": [
+          {
+            "at": 3914.0999999046326,
+            "frameTimestamp": 3904,
+            "phase": "question",
+            "gap": 154.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 3914.899999856949
+          },
+          {
+            "at": 4063.0999999046326,
+            "frameTimestamp": 4054,
+            "phase": "question",
+            "gap": 149,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4063.5999999046326
+          },
+          {
+            "at": 4247.599999904633,
+            "frameTimestamp": 4220.6,
+            "phase": "question",
+            "gap": 184.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4248
+          },
+          {
+            "at": 4249.399999856949,
+            "frameTimestamp": 4237.3,
+            "phase": "question",
+            "gap": 1.7999999523162842,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4249.700000047684
+          },
+          {
+            "at": 4391,
+            "frameTimestamp": 4387.3,
+            "phase": "question",
+            "gap": 141.60000014305115,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4391.399999856949
+          },
+          {
+            "at": 4526.399999856949,
+            "frameTimestamp": 4520.6,
+            "phase": "question",
+            "gap": 135.39999985694885,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4526.899999856949
+          },
+          {
+            "at": 4668.599999904633,
+            "frameTimestamp": 4654,
+            "phase": "question",
+            "gap": 142.20000004768372,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4668.799999952316
+          },
+          {
+            "at": 4817,
+            "frameTimestamp": 4803.9,
+            "phase": "question",
+            "gap": 148.40000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4817.200000047684
+          },
+          {
+            "at": 4820.799999952316,
+            "frameTimestamp": 4820.6,
+            "phase": "question",
+            "gap": 3.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4821
+          },
+          {
+            "at": 4838.700000047684,
+            "frameTimestamp": 4837.3,
+            "phase": "question",
+            "gap": 17.90000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4839
+          },
+          {
+            "at": 4855.299999952316,
+            "frameTimestamp": 4854,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4855.700000047684
+          },
+          {
+            "at": 4872,
+            "frameTimestamp": 4870.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4872.200000047684
+          },
+          {
+            "at": 4887.700000047684,
+            "frameTimestamp": 4887.3,
+            "phase": "question",
+            "gap": 15.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4888
+          },
+          {
+            "at": 4904.599999904633,
+            "frameTimestamp": 4903.9,
+            "phase": "question",
+            "gap": 16.899999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4904.799999952316
+          },
+          {
+            "at": 4921.700000047684,
+            "frameTimestamp": 4920.6,
+            "phase": "question",
+            "gap": 17.100000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4921.899999856949
+          },
+          {
+            "at": 4937.799999952316,
+            "frameTimestamp": 4937.3,
+            "phase": "question",
+            "gap": 16.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4938
+          },
+          {
+            "at": 4955.5,
+            "frameTimestamp": 4953.9,
+            "phase": "question",
+            "gap": 17.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4955.799999952316
+          },
+          {
+            "at": 4970.899999856949,
+            "frameTimestamp": 4970.6,
+            "phase": "question",
+            "gap": 15.399999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4971.099999904633
+          },
+          {
+            "at": 4987.599999904633,
+            "frameTimestamp": 4987.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 4988.599999904633
+          },
+          {
+            "at": 5004.599999904633,
+            "frameTimestamp": 5004,
+            "phase": "question",
+            "gap": 17,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5004.899999856949
+          },
+          {
+            "at": 5021.099999904633,
+            "frameTimestamp": 5020.7,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5021.399999856949
+          },
+          {
+            "at": 5037.599999904633,
+            "frameTimestamp": 5037.3,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5037.799999952316
+          },
+          {
+            "at": 5054.299999952316,
+            "frameTimestamp": 5053.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5054.599999904633
+          },
+          {
+            "at": 5071.399999856949,
+            "frameTimestamp": 5070.6,
+            "phase": "question",
+            "gap": 17.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5071.599999904633
+          },
+          {
+            "at": 5087.599999904633,
+            "frameTimestamp": 5087.3,
+            "phase": "question",
+            "gap": 16.200000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5087.799999952316
+          },
+          {
+            "at": 5104.299999952316,
+            "frameTimestamp": 5104,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5104.5
+          },
+          {
+            "at": 5121,
+            "frameTimestamp": 5120.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5121.099999904633
+          },
+          {
+            "at": 5137.599999904633,
+            "frameTimestamp": 5137.3,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5137.799999952316
+          },
+          {
+            "at": 5154.200000047684,
+            "frameTimestamp": 5154,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5154.5
+          },
+          {
+            "at": 5170.799999952316,
+            "frameTimestamp": 5170.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5171.099999904633
+          },
+          {
+            "at": 5187.599999904633,
+            "frameTimestamp": 5187.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5187.799999952316
+          },
+          {
+            "at": 5204.200000047684,
+            "frameTimestamp": 5203.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5204.5
+          },
+          {
+            "at": 5220.799999952316,
+            "frameTimestamp": 5220.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5221.099999904633
+          },
+          {
+            "at": 5237.899999856949,
+            "frameTimestamp": 5237.3,
+            "phase": "question",
+            "gap": 17.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5238.099999904633
+          },
+          {
+            "at": 5254.200000047684,
+            "frameTimestamp": 5254,
+            "phase": "question",
+            "gap": 16.300000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5254.5
+          },
+          {
+            "at": 5271.299999952316,
+            "frameTimestamp": 5270.6,
+            "phase": "question",
+            "gap": 17.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5271.599999904633
+          },
+          {
+            "at": 5288,
+            "frameTimestamp": 5287.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5288.200000047684
+          },
+          {
+            "at": 5304.599999904633,
+            "frameTimestamp": 5304,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5304.799999952316
+          },
+          {
+            "at": 5320.799999952316,
+            "frameTimestamp": 5320.6,
+            "phase": "question",
+            "gap": 16.200000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5321.099999904633
+          },
+          {
+            "at": 5337.899999856949,
+            "frameTimestamp": 5337.3,
+            "phase": "question",
+            "gap": 17.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5338.200000047684
+          },
+          {
+            "at": 5354.599999904633,
+            "frameTimestamp": 5354,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5354.899999856949
+          },
+          {
+            "at": 5371.200000047684,
+            "frameTimestamp": 5370.6,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5371.599999904633
+          },
+          {
+            "at": 5387.700000047684,
+            "frameTimestamp": 5387.3,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5387.899999856949
+          },
+          {
+            "at": 5404.200000047684,
+            "frameTimestamp": 5404,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5404.5
+          },
+          {
+            "at": 5420.899999856949,
+            "frameTimestamp": 5420.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5421.200000047684
+          },
+          {
+            "at": 5437.899999856949,
+            "frameTimestamp": 5437.3,
+            "phase": "question",
+            "gap": 17,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5438.099999904633
+          },
+          {
+            "at": 5454.299999952316,
+            "frameTimestamp": 5454,
+            "phase": "question",
+            "gap": 16.40000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5454.5
+          },
+          {
+            "at": 5471.200000047684,
+            "frameTimestamp": 5470.6,
+            "phase": "question",
+            "gap": 16.90000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5471.5
+          },
+          {
+            "at": 5488,
+            "frameTimestamp": 5487.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5488.299999952316
+          },
+          {
+            "at": 5504.299999952316,
+            "frameTimestamp": 5504,
+            "phase": "question",
+            "gap": 16.299999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5504.5
+          },
+          {
+            "at": 5521,
+            "frameTimestamp": 5520.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5521.700000047684
+          },
+          {
+            "at": 5537.700000047684,
+            "frameTimestamp": 5537.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5539.700000047684
+          },
+          {
+            "at": 5555.399999856949,
+            "frameTimestamp": 5553.9,
+            "phase": "question",
+            "gap": 17.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5555.799999952316
+          },
+          {
+            "at": 5571.099999904633,
+            "frameTimestamp": 5570.6,
+            "phase": "question",
+            "gap": 15.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5571.5
+          },
+          {
+            "at": 5587.899999856949,
+            "frameTimestamp": 5587.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5588.399999856949
+          },
+          {
+            "at": 5605.399999856949,
+            "frameTimestamp": 5604,
+            "phase": "question",
+            "gap": 17.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5605.700000047684
+          },
+          {
+            "at": 5622,
+            "frameTimestamp": 5620.6,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5622.5
+          },
+          {
+            "at": 5637.899999856949,
+            "frameTimestamp": 5637.2,
+            "phase": "question",
+            "gap": 15.899999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5640.200000047684
+          },
+          {
+            "at": 5655.399999856949,
+            "frameTimestamp": 5654,
+            "phase": "question",
+            "gap": 17.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5655.899999856949
+          },
+          {
+            "at": 5672.200000047684,
+            "frameTimestamp": 5670.6,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5672.5
+          },
+          {
+            "at": 5687.899999856949,
+            "frameTimestamp": 5687.3,
+            "phase": "question",
+            "gap": 15.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5688.299999952316
+          },
+          {
+            "at": 5704.700000047684,
+            "frameTimestamp": 5703.9,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5705.099999904633
+          },
+          {
+            "at": 5722.299999952316,
+            "frameTimestamp": 5720.6,
+            "phase": "question",
+            "gap": 17.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5722.799999952316
+          },
+          {
+            "at": 5738.700000047684,
+            "frameTimestamp": 5737.3,
+            "phase": "question",
+            "gap": 16.40000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5739.099999904633
+          },
+          {
+            "at": 5755.399999856949,
+            "frameTimestamp": 5753.9,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 5755.799999952316
+          },
+          {
+            "at": 5782,
+            "frameTimestamp": 5770.6,
+            "phase": "voting",
+            "gap": 26.600000143051147,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 5782.700000047684
+          },
+          {
+            "at": 5827.200000047684,
+            "frameTimestamp": 5820.6,
+            "phase": "voting",
+            "gap": 45.200000047683716,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 5828
+          },
+          {
+            "at": 5992.899999856949,
+            "frameTimestamp": 5987.2,
+            "phase": "voting",
+            "gap": 165.69999980926514,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 5995
+          },
+          {
+            "at": 6164.200000047684,
+            "frameTimestamp": 6153.9,
+            "phase": "voting",
+            "gap": 171.30000019073486,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 6165
+          },
+          {
+            "at": 6336.799999952316,
+            "frameTimestamp": 6320.6,
+            "phase": "voting",
+            "gap": 172.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 6337.599999904633
+          },
+          {
+            "at": 6471.599999904633,
+            "frameTimestamp": 6470.6,
+            "phase": "voting",
+            "gap": 134.79999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 6472.399999856949
+          },
+          {
+            "at": 6615.599999904633,
+            "frameTimestamp": 6603.9,
+            "phase": "voting",
+            "gap": 144,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 6616.399999856949
+          },
+          {
+            "at": 6758.899999856949,
+            "frameTimestamp": 6753.9,
+            "phase": "voting",
+            "gap": 143.29999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 6759.799999952316
+          },
+          {
+            "at": 6898.899999856949,
+            "frameTimestamp": 6887.2,
+            "phase": "voting",
+            "gap": 140,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 6899.799999952316
+          },
+          {
+            "at": 7093.799999952316,
+            "frameTimestamp": 7087.3,
+            "phase": "voting",
+            "gap": 194.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 7094.599999904633
+          },
+          {
+            "at": 7109.899999856949,
+            "frameTimestamp": 7103.9,
+            "phase": "voting",
+            "gap": 16.09999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 7110.700000047684
+          },
+          {
+            "at": 7410.099999904633,
+            "frameTimestamp": 7403.9,
+            "phase": "voting",
+            "gap": 300.2000000476837,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 7410.799999952316
+          },
+          {
+            "at": 7545.099999904633,
+            "frameTimestamp": 7537.2,
+            "phase": "voting",
+            "gap": 135,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 7545.700000047684
+          },
+          {
+            "at": 7744.200000047684,
+            "frameTimestamp": 7737.2,
+            "phase": "results",
+            "gap": 199.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 7748.5
+          },
+          {
+            "at": 7892.899999856949,
+            "frameTimestamp": 7887.2,
+            "phase": "results",
+            "gap": 148.69999980926514,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 7894.5
+          }
+        ],
+        "firstFrameByPhase": {
+          "question": {
+            "at": 3914.0999999046326,
+            "frameTimestamp": 3904,
+            "phase": "question",
+            "gap": 154.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 3914.899999856949
+          },
+          "voting": {
+            "at": 5782,
+            "frameTimestamp": 5770.6,
+            "phase": "voting",
+            "gap": 26.600000143051147,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 5782.700000047684
+          },
+          "results": {
+            "at": 7744.200000047684,
+            "frameTimestamp": 7737.2,
+            "phase": "results",
+            "gap": 199.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 7748.5
+          }
+        },
+        "observedFrameCount": 80,
+        "omittedFrameCount": 0,
+        "largestRafGapMs": 300.2000000476837,
+        "limits": {
+          "phaseTransitions": 16,
+          "leadingFrames": 8,
+          "firstFrames": 192,
+          "lastFrames": 48,
+          "resultsFrames": 4
+        }
+      },
+      "observedThrough": "results",
+      "leadMs": 1867.9000000953674,
+      "answersTimerDeltaMs": 0
+    },
+    {
+      "number": 1,
+      "question": "Which route is shortest: 12 km, 9 km or 15 km?",
+      "questionAt": 10886.099999904633,
+      "votingAt": 12772,
+      "answersAt": 12772,
+      "timerAt": 12772,
+      "resultsAt": 14351,
+      "resultsFrames": 2,
+      "earlyAnswers": false,
+      "earlyTimer": false,
+      "retainedPanel": true,
+      "retainedHeading": true,
+      "duplicateHeadings": false,
+      "headingChanged": false,
+      "newQuestionAnimations": 0,
+      "stableTypography": true,
+      "stableGeometry": true,
+      "geometryEvidence": null,
+      "photo": false,
+      "samples": [
+        {
+          "phase": "question",
+          "at": 10886.099999904633,
+          "answers": false,
+          "timer": false,
+          "headings": 1
+        },
+        {
+          "phase": "voting",
+          "at": 12772,
+          "answers": true,
+          "timer": true,
+          "headings": 1
+        },
+        {
+          "phase": "results",
+          "at": 14351,
+          "answers": true,
+          "timer": false,
+          "headings": 1
+        }
+      ],
+      "explicitReplay": false,
+      "identityLockedAt": null,
+      "initialReplayRemounts": [],
+      "diagnostic": {
+        "clock": "performance.now",
+        "installedAt": 2673.5,
+        "phaseTransitions": [
+          {
+            "at": 10050.5,
+            "oldPhase": "results",
+            "phase": "preparing",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 10753.799999952316,
+            "oldPhase": "preparing",
+            "phase": "question",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 12760.799999952316,
+            "oldPhase": "question",
+            "phase": "voting",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 14190.399999856949,
+            "oldPhase": "voting",
+            "phase": "results",
+            "batchIndex": 0,
+            "batchSize": 1
+          }
+        ],
+        "phaseOverflow": false,
+        "leadingFrames": [
+          {
+            "at": 9745.799999952316,
+            "frameTimestamp": 9737.1,
+            "phase": "results",
+            "gap": 132.70000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 9746.299999952316
+          },
+          {
+            "at": 9895.299999952316,
+            "frameTimestamp": 9887.1,
+            "phase": "results",
+            "gap": 149.5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 9895.700000047684
+          },
+          {
+            "at": 10023.899999856949,
+            "frameTimestamp": 10020.4,
+            "phase": "results",
+            "gap": 128.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 10024.200000047684
+          },
+          {
+            "at": 10187.799999952316,
+            "frameTimestamp": 10187.1,
+            "phase": "preparing",
+            "gap": 163.90000009536743,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 10187.799999952316
+          },
+          {
+            "at": 10355.099999904633,
+            "frameTimestamp": 10353.8,
+            "phase": "preparing",
+            "gap": 167.29999995231628,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 10355.099999904633
+          },
+          {
+            "at": 10491.200000047684,
+            "frameTimestamp": 10487,
+            "phase": "preparing",
+            "gap": 136.10000014305115,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 10491.200000047684
+          },
+          {
+            "at": 10622.200000047684,
+            "frameTimestamp": 10620.4,
+            "phase": "preparing",
+            "gap": 131,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 10622.200000047684
+          },
+          {
+            "at": 10751.799999952316,
+            "frameTimestamp": 10737.1,
+            "phase": "preparing",
+            "gap": 129.59999990463257,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 10751.799999952316
+          }
+        ],
+        "frames": [
+          {
+            "at": 10886.099999904633,
+            "frameTimestamp": 10870.4,
+            "phase": "question",
+            "gap": 134.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 10886.700000047684
+          },
+          {
+            "at": 10889.5,
+            "frameTimestamp": 10887.1,
+            "phase": "question",
+            "gap": 3.4000000953674316,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 10889.899999856949
+          },
+          {
+            "at": 11024.399999856949,
+            "frameTimestamp": 11020.4,
+            "phase": "question",
+            "gap": 134.89999985694885,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11024.799999952316
+          },
+          {
+            "at": 11284.5,
+            "frameTimestamp": 11270.4,
+            "phase": "question",
+            "gap": 260.10000014305115,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11285
+          },
+          {
+            "at": 11417.599999904633,
+            "frameTimestamp": 11403.7,
+            "phase": "question",
+            "gap": 133.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11418.099999904633
+          },
+          {
+            "at": 11550.5,
+            "frameTimestamp": 11537.1,
+            "phase": "question",
+            "gap": 132.90000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11550.700000047684
+          },
+          {
+            "at": 11678.399999856949,
+            "frameTimestamp": 11670.4,
+            "phase": "question",
+            "gap": 127.89999985694885,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11678.599999904633
+          },
+          {
+            "at": 11687.399999856949,
+            "frameTimestamp": 11687,
+            "phase": "question",
+            "gap": 9,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11687.599999904633
+          },
+          {
+            "at": 11703.899999856949,
+            "frameTimestamp": 11703.7,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11704.200000047684
+          },
+          {
+            "at": 11720.700000047684,
+            "frameTimestamp": 11720.4,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11721
+          },
+          {
+            "at": 11737.200000047684,
+            "frameTimestamp": 11737.1,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11737.599999904633
+          },
+          {
+            "at": 11753.899999856949,
+            "frameTimestamp": 11753.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11754.099999904633
+          },
+          {
+            "at": 11770.599999904633,
+            "frameTimestamp": 11770.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11770.899999856949
+          },
+          {
+            "at": 11787.200000047684,
+            "frameTimestamp": 11787,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11787.599999904633
+          },
+          {
+            "at": 11803.899999856949,
+            "frameTimestamp": 11803.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11804.099999904633
+          },
+          {
+            "at": 11820.599999904633,
+            "frameTimestamp": 11820.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11820.799999952316
+          },
+          {
+            "at": 11837.200000047684,
+            "frameTimestamp": 11837,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11837.5
+          },
+          {
+            "at": 11853.899999856949,
+            "frameTimestamp": 11853.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11854.200000047684
+          },
+          {
+            "at": 11870.599999904633,
+            "frameTimestamp": 11870.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11870.899999856949
+          },
+          {
+            "at": 11887.399999856949,
+            "frameTimestamp": 11887,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11887.599999904633
+          },
+          {
+            "at": 11904,
+            "frameTimestamp": 11903.7,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11904.200000047684
+          },
+          {
+            "at": 11920.599999904633,
+            "frameTimestamp": 11920.4,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11920.799999952316
+          },
+          {
+            "at": 11937.299999952316,
+            "frameTimestamp": 11937,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11937.5
+          },
+          {
+            "at": 11953.899999856949,
+            "frameTimestamp": 11953.7,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11954.099999904633
+          },
+          {
+            "at": 11970.5,
+            "frameTimestamp": 11970.4,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11970.799999952316
+          },
+          {
+            "at": 11987.399999856949,
+            "frameTimestamp": 11987,
+            "phase": "question",
+            "gap": 16.899999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 11987.599999904633
+          },
+          {
+            "at": 12003.899999856949,
+            "frameTimestamp": 12003.6,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12004.200000047684
+          },
+          {
+            "at": 12020.899999856949,
+            "frameTimestamp": 12020.3,
+            "phase": "question",
+            "gap": 17,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12021.200000047684
+          },
+          {
+            "at": 12037.200000047684,
+            "frameTimestamp": 12037,
+            "phase": "question",
+            "gap": 16.300000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12037.5
+          },
+          {
+            "at": 12053.899999856949,
+            "frameTimestamp": 12053.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12054.200000047684
+          },
+          {
+            "at": 12070.599999904633,
+            "frameTimestamp": 12070.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12070.899999856949
+          },
+          {
+            "at": 12087.200000047684,
+            "frameTimestamp": 12087,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12087.5
+          },
+          {
+            "at": 12103.899999856949,
+            "frameTimestamp": 12103.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12104.099999904633
+          },
+          {
+            "at": 12120.599999904633,
+            "frameTimestamp": 12120.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12120.899999856949
+          },
+          {
+            "at": 12137.299999952316,
+            "frameTimestamp": 12137,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12137.599999904633
+          },
+          {
+            "at": 12153.899999856949,
+            "frameTimestamp": 12153.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12154.099999904633
+          },
+          {
+            "at": 12170.599999904633,
+            "frameTimestamp": 12170.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12170.799999952316
+          },
+          {
+            "at": 12187.299999952316,
+            "frameTimestamp": 12187,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12187.5
+          },
+          {
+            "at": 12203.799999952316,
+            "frameTimestamp": 12203.7,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12204.099999904633
+          },
+          {
+            "at": 12220.599999904633,
+            "frameTimestamp": 12220.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12220.799999952316
+          },
+          {
+            "at": 12237.200000047684,
+            "frameTimestamp": 12237,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12237.399999856949
+          },
+          {
+            "at": 12253.899999856949,
+            "frameTimestamp": 12253.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12254.099999904633
+          },
+          {
+            "at": 12270.599999904633,
+            "frameTimestamp": 12270.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12270.899999856949
+          },
+          {
+            "at": 12287.299999952316,
+            "frameTimestamp": 12287,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12287.599999904633
+          },
+          {
+            "at": 12303.899999856949,
+            "frameTimestamp": 12303.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12304.200000047684
+          },
+          {
+            "at": 12320.599999904633,
+            "frameTimestamp": 12320.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12320.799999952316
+          },
+          {
+            "at": 12337.200000047684,
+            "frameTimestamp": 12337,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12337.5
+          },
+          {
+            "at": 12353.899999856949,
+            "frameTimestamp": 12353.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12354.099999904633
+          },
+          {
+            "at": 12370.5,
+            "frameTimestamp": 12370.3,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12370.799999952316
+          },
+          {
+            "at": 12387.299999952316,
+            "frameTimestamp": 12387,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12387.399999856949
+          },
+          {
+            "at": 12403.899999856949,
+            "frameTimestamp": 12403.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12404.099999904633
+          },
+          {
+            "at": 12420.599999904633,
+            "frameTimestamp": 12420.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12420.899999856949
+          },
+          {
+            "at": 12437.200000047684,
+            "frameTimestamp": 12437,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12437.5
+          },
+          {
+            "at": 12453.799999952316,
+            "frameTimestamp": 12453.7,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12454.099999904633
+          },
+          {
+            "at": 12470.5,
+            "frameTimestamp": 12470.4,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12470.799999952316
+          },
+          {
+            "at": 12487.200000047684,
+            "frameTimestamp": 12486.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12487.700000047684
+          },
+          {
+            "at": 12503.899999856949,
+            "frameTimestamp": 12503.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12504.399999856949
+          },
+          {
+            "at": 12520.599999904633,
+            "frameTimestamp": 12520.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12521
+          },
+          {
+            "at": 12537.299999952316,
+            "frameTimestamp": 12537,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12537.700000047684
+          },
+          {
+            "at": 12554,
+            "frameTimestamp": 12553.7,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12554.399999856949
+          },
+          {
+            "at": 12570.599999904633,
+            "frameTimestamp": 12570.3,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12571
+          },
+          {
+            "at": 12587.200000047684,
+            "frameTimestamp": 12587,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12587.599999904633
+          },
+          {
+            "at": 12604,
+            "frameTimestamp": 12603.6,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12604.399999856949
+          },
+          {
+            "at": 12620.599999904633,
+            "frameTimestamp": 12620.3,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12621
+          },
+          {
+            "at": 12637.299999952316,
+            "frameTimestamp": 12636.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12637.700000047684
+          },
+          {
+            "at": 12653.899999856949,
+            "frameTimestamp": 12653.7,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12654.299999952316
+          },
+          {
+            "at": 12670.599999904633,
+            "frameTimestamp": 12670.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12670.899999856949
+          },
+          {
+            "at": 12687.299999952316,
+            "frameTimestamp": 12687,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12687.700000047684
+          },
+          {
+            "at": 12703.899999856949,
+            "frameTimestamp": 12703.7,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12704.299999952316
+          },
+          {
+            "at": 12720.599999904633,
+            "frameTimestamp": 12720.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12721
+          },
+          {
+            "at": 12737.200000047684,
+            "frameTimestamp": 12736.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12737.599999904633
+          },
+          {
+            "at": 12753.899999856949,
+            "frameTimestamp": 12753.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 12754.299999952316
+          },
+          {
+            "at": 12772,
+            "frameTimestamp": 12770.3,
+            "phase": "voting",
+            "gap": 18.100000143051147,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 12772.700000047684
+          },
+          {
+            "at": 12806.299999952316,
+            "frameTimestamp": 12803.7,
+            "phase": "voting",
+            "gap": 34.299999952316284,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 12807
+          },
+          {
+            "at": 12963.599999904633,
+            "frameTimestamp": 12953.6,
+            "phase": "voting",
+            "gap": 157.29999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 12964.5
+          },
+          {
+            "at": 13094.799999952316,
+            "frameTimestamp": 13087,
+            "phase": "voting",
+            "gap": 131.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13096.5
+          },
+          {
+            "at": 13228.5,
+            "frameTimestamp": 13220.3,
+            "phase": "voting",
+            "gap": 133.70000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13229.299999952316
+          },
+          {
+            "at": 13366,
+            "frameTimestamp": 13353.6,
+            "phase": "voting",
+            "gap": 137.5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13366.799999952316
+          },
+          {
+            "at": 13501.599999904633,
+            "frameTimestamp": 13486.9,
+            "phase": "voting",
+            "gap": 135.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13502.700000047684
+          },
+          {
+            "at": 13637.299999952316,
+            "frameTimestamp": 13636.9,
+            "phase": "voting",
+            "gap": 135.70000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13638.200000047684
+          },
+          {
+            "at": 13771.700000047684,
+            "frameTimestamp": 13770.3,
+            "phase": "voting",
+            "gap": 134.40000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13772.5
+          },
+          {
+            "at": 13907.799999952316,
+            "frameTimestamp": 13903.6,
+            "phase": "voting",
+            "gap": 136.09999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 13908.700000047684
+          },
+          {
+            "at": 14037.700000047684,
+            "frameTimestamp": 14036.9,
+            "phase": "voting",
+            "gap": 129.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 14038.399999856949
+          },
+          {
+            "at": 14170.099999904633,
+            "frameTimestamp": 14153.6,
+            "phase": "voting",
+            "gap": 132.39999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 14170.899999856949
+          },
+          {
+            "at": 14174.899999856949,
+            "frameTimestamp": 14170.3,
+            "phase": "voting",
+            "gap": 4.799999952316284,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 14176
+          },
+          {
+            "at": 14351,
+            "frameTimestamp": 14336.9,
+            "phase": "results",
+            "gap": 176.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 14352
+          },
+          {
+            "at": 14490.399999856949,
+            "frameTimestamp": 14486.9,
+            "phase": "results",
+            "gap": 139.39999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 14491.299999952316
+          }
+        ],
+        "firstFrameByPhase": {
+          "question": {
+            "at": 10886.099999904633,
+            "frameTimestamp": 10870.4,
+            "phase": "question",
+            "gap": 134.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 10886.700000047684
+          },
+          "voting": {
+            "at": 12772,
+            "frameTimestamp": 12770.3,
+            "phase": "voting",
+            "gap": 18.100000143051147,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 12772.700000047684
+          },
+          "results": {
+            "at": 14351,
+            "frameTimestamp": 14336.9,
+            "phase": "results",
+            "gap": 176.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 14352
+          }
+        },
+        "observedFrameCount": 87,
+        "omittedFrameCount": 0,
+        "largestRafGapMs": 260.10000014305115,
+        "limits": {
+          "phaseTransitions": 16,
+          "leadingFrames": 8,
+          "firstFrames": 192,
+          "lastFrames": 48,
+          "resultsFrames": 4
+        }
+      },
+      "observedThrough": "results",
+      "leadMs": 1885.9000000953674,
+      "answersTimerDeltaMs": 0
+    },
+    {
+      "number": 2,
+      "question": "Water freezes into which state?",
+      "questionAt": 22473.799999952316,
+      "votingAt": 24342.39999985695,
+      "answersAt": 24342.39999985695,
+      "timerAt": 24342.39999985695,
+      "resultsAt": 25956.39999985695,
+      "resultsFrames": 2,
+      "earlyAnswers": false,
+      "earlyTimer": false,
+      "retainedPanel": true,
+      "retainedHeading": true,
+      "duplicateHeadings": false,
+      "headingChanged": false,
+      "newQuestionAnimations": 0,
+      "stableTypography": true,
+      "stableGeometry": true,
+      "geometryEvidence": null,
+      "photo": false,
+      "samples": [
+        {
+          "phase": "question",
+          "at": 22473.799999952316,
+          "answers": false,
+          "timer": false,
+          "headings": 1
+        },
+        {
+          "phase": "voting",
+          "at": 24342.39999985695,
+          "answers": true,
+          "timer": true,
+          "headings": 1
+        },
+        {
+          "phase": "results",
+          "at": 25956.39999985695,
+          "answers": true,
+          "timer": false,
+          "headings": 1
+        }
+      ],
+      "explicitReplay": false,
+      "identityLockedAt": null,
+      "initialReplayRemounts": [],
+      "diagnostic": {
+        "clock": "performance.now",
+        "installedAt": 2673.5,
+        "phaseTransitions": [
+          {
+            "at": 21630.5,
+            "oldPhase": "interlude",
+            "phase": "preparing",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 22336.099999904633,
+            "oldPhase": "preparing",
+            "phase": "question",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 24341,
+            "oldPhase": "question",
+            "phase": "voting",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 25797.700000047684,
+            "oldPhase": "voting",
+            "phase": "results",
+            "batchIndex": 0,
+            "batchSize": 1
+          }
+        ],
+        "phaseOverflow": false,
+        "leadingFrames": [
+          {
+            "at": 21620.299999952316,
+            "frameTimestamp": 21620,
+            "phase": "interlude",
+            "gap": 16.59999990463257,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 21620.299999952316
+          },
+          {
+            "at": 21637.200000047684,
+            "frameTimestamp": 21636.7,
+            "phase": "preparing",
+            "gap": 16.90000009536743,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 21637.200000047684
+          },
+          {
+            "at": 21654.39999985695,
+            "frameTimestamp": 21653.3,
+            "phase": "preparing",
+            "gap": 17.199999809265137,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 21654.39999985695
+          },
+          {
+            "at": 21795.299999952316,
+            "frameTimestamp": 21786.6,
+            "phase": "preparing",
+            "gap": 140.90000009536743,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 21795.39999985695
+          },
+          {
+            "at": 21928.39999985695,
+            "frameTimestamp": 21920,
+            "phase": "preparing",
+            "gap": 133.09999990463257,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 21928.5
+          },
+          {
+            "at": 22061.5,
+            "frameTimestamp": 22053.2,
+            "phase": "preparing",
+            "gap": 133.10000014305115,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 22061.5
+          },
+          {
+            "at": 22194.700000047684,
+            "frameTimestamp": 22186.6,
+            "phase": "preparing",
+            "gap": 133.20000004768372,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 22194.700000047684
+          },
+          {
+            "at": 22332,
+            "frameTimestamp": 22320,
+            "phase": "preparing",
+            "gap": 137.29999995231628,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 22332
+          }
+        ],
+        "frames": [
+          {
+            "at": 22473.799999952316,
+            "frameTimestamp": 22469.9,
+            "phase": "question",
+            "gap": 141.79999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 22474.39999985695
+          },
+          {
+            "at": 22609.299999952316,
+            "frameTimestamp": 22603.2,
+            "phase": "question",
+            "gap": 135.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 22609.799999952316
+          },
+          {
+            "at": 22745.200000047684,
+            "frameTimestamp": 22736.6,
+            "phase": "question",
+            "gap": 135.90000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 22749.599999904633
+          },
+          {
+            "at": 22878.89999985695,
+            "frameTimestamp": 22869.9,
+            "phase": "question",
+            "gap": 133.69999980926514,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 22879.299999952316
+          },
+          {
+            "at": 23014.700000047684,
+            "frameTimestamp": 23003.2,
+            "phase": "question",
+            "gap": 135.80000019073486,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23015.099999904633
+          },
+          {
+            "at": 23148.700000047684,
+            "frameTimestamp": 23136.6,
+            "phase": "question",
+            "gap": 134,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23149
+          },
+          {
+            "at": 23282,
+            "frameTimestamp": 23269.9,
+            "phase": "question",
+            "gap": 133.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23282.39999985695
+          },
+          {
+            "at": 23286.799999952316,
+            "frameTimestamp": 23286.5,
+            "phase": "question",
+            "gap": 4.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23287.099999904633
+          },
+          {
+            "at": 23303.5,
+            "frameTimestamp": 23303.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23303.700000047684
+          },
+          {
+            "at": 23320.200000047684,
+            "frameTimestamp": 23319.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23320.39999985695
+          },
+          {
+            "at": 23336.799999952316,
+            "frameTimestamp": 23336.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23337.099999904633
+          },
+          {
+            "at": 23353.5,
+            "frameTimestamp": 23353.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23353.799999952316
+          },
+          {
+            "at": 23370.200000047684,
+            "frameTimestamp": 23369.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23370.5
+          },
+          {
+            "at": 23386.799999952316,
+            "frameTimestamp": 23386.5,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23387.099999904633
+          },
+          {
+            "at": 23403.39999985695,
+            "frameTimestamp": 23403.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23403.700000047684
+          },
+          {
+            "at": 23420.200000047684,
+            "frameTimestamp": 23419.8,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23420.39999985695
+          },
+          {
+            "at": 23436.799999952316,
+            "frameTimestamp": 23436.5,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23437.099999904633
+          },
+          {
+            "at": 23453.5,
+            "frameTimestamp": 23453.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23453.799999952316
+          },
+          {
+            "at": 23470.099999904633,
+            "frameTimestamp": 23469.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23470.39999985695
+          },
+          {
+            "at": 23486.799999952316,
+            "frameTimestamp": 23486.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23487.099999904633
+          },
+          {
+            "at": 23503.5,
+            "frameTimestamp": 23503.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23503.799999952316
+          },
+          {
+            "at": 23520.099999904633,
+            "frameTimestamp": 23519.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23520.39999985695
+          },
+          {
+            "at": 23536.799999952316,
+            "frameTimestamp": 23536.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23537.099999904633
+          },
+          {
+            "at": 23553.5,
+            "frameTimestamp": 23553.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23553.700000047684
+          },
+          {
+            "at": 23570.099999904633,
+            "frameTimestamp": 23569.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23570.39999985695
+          },
+          {
+            "at": 23586.799999952316,
+            "frameTimestamp": 23586.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23587.099999904633
+          },
+          {
+            "at": 23603.5,
+            "frameTimestamp": 23603.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23603.700000047684
+          },
+          {
+            "at": 23620.200000047684,
+            "frameTimestamp": 23619.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23620.5
+          },
+          {
+            "at": 23636.799999952316,
+            "frameTimestamp": 23636.5,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23637.200000047684
+          },
+          {
+            "at": 23653.599999904633,
+            "frameTimestamp": 23653.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23653.799999952316
+          },
+          {
+            "at": 23670.200000047684,
+            "frameTimestamp": 23669.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23670.39999985695
+          },
+          {
+            "at": 23686.799999952316,
+            "frameTimestamp": 23686.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23687.099999904633
+          },
+          {
+            "at": 23703.5,
+            "frameTimestamp": 23703.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23703.700000047684
+          },
+          {
+            "at": 23720.099999904633,
+            "frameTimestamp": 23719.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23720.5
+          },
+          {
+            "at": 23736.700000047684,
+            "frameTimestamp": 23736.6,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23737.099999904633
+          },
+          {
+            "at": 23753.5,
+            "frameTimestamp": 23753.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23753.700000047684
+          },
+          {
+            "at": 23770.099999904633,
+            "frameTimestamp": 23769.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23770.5
+          },
+          {
+            "at": 23786.89999985695,
+            "frameTimestamp": 23786.5,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23787.099999904633
+          },
+          {
+            "at": 23803.599999904633,
+            "frameTimestamp": 23803.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23803.700000047684
+          },
+          {
+            "at": 23820.099999904633,
+            "frameTimestamp": 23819.9,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23820.299999952316
+          },
+          {
+            "at": 23836.799999952316,
+            "frameTimestamp": 23836.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23837
+          },
+          {
+            "at": 23853.39999985695,
+            "frameTimestamp": 23853.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23853.700000047684
+          },
+          {
+            "at": 23870.200000047684,
+            "frameTimestamp": 23869.9,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23870.39999985695
+          },
+          {
+            "at": 23886.799999952316,
+            "frameTimestamp": 23886.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23887
+          },
+          {
+            "at": 23903.5,
+            "frameTimestamp": 23903.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23903.799999952316
+          },
+          {
+            "at": 23920.099999904633,
+            "frameTimestamp": 23919.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23920.39999985695
+          },
+          {
+            "at": 23936.700000047684,
+            "frameTimestamp": 23936.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23937
+          },
+          {
+            "at": 23953.5,
+            "frameTimestamp": 23953.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23953.700000047684
+          },
+          {
+            "at": 23970.099999904633,
+            "frameTimestamp": 23969.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23970.39999985695
+          },
+          {
+            "at": 23986.799999952316,
+            "frameTimestamp": 23986.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 23987
+          },
+          {
+            "at": 24003.5,
+            "frameTimestamp": 24003.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24003.700000047684
+          },
+          {
+            "at": 24020.099999904633,
+            "frameTimestamp": 24019.8,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24020.299999952316
+          },
+          {
+            "at": 24036.700000047684,
+            "frameTimestamp": 24036.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24037
+          },
+          {
+            "at": 24053.5,
+            "frameTimestamp": 24053.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24053.700000047684
+          },
+          {
+            "at": 24070,
+            "frameTimestamp": 24069.8,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24070.39999985695
+          },
+          {
+            "at": 24086.799999952316,
+            "frameTimestamp": 24086.5,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24087.099999904633
+          },
+          {
+            "at": 24103.5,
+            "frameTimestamp": 24103.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24103.799999952316
+          },
+          {
+            "at": 24120.099999904633,
+            "frameTimestamp": 24119.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24120.5
+          },
+          {
+            "at": 24136.799999952316,
+            "frameTimestamp": 24136.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24137.200000047684
+          },
+          {
+            "at": 24153.5,
+            "frameTimestamp": 24153.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24153.799999952316
+          },
+          {
+            "at": 24170.099999904633,
+            "frameTimestamp": 24169.8,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24170.5
+          },
+          {
+            "at": 24186.799999952316,
+            "frameTimestamp": 24186.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24187.099999904633
+          },
+          {
+            "at": 24203.5,
+            "frameTimestamp": 24203.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24203.89999985695
+          },
+          {
+            "at": 24220.099999904633,
+            "frameTimestamp": 24219.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24220.5
+          },
+          {
+            "at": 24236.799999952316,
+            "frameTimestamp": 24236.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24237.200000047684
+          },
+          {
+            "at": 24253.5,
+            "frameTimestamp": 24253.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24253.89999985695
+          },
+          {
+            "at": 24270.099999904633,
+            "frameTimestamp": 24269.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24270.5
+          },
+          {
+            "at": 24286.700000047684,
+            "frameTimestamp": 24286.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24287.099999904633
+          },
+          {
+            "at": 24303.5,
+            "frameTimestamp": 24303.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24303.799999952316
+          },
+          {
+            "at": 24320.099999904633,
+            "frameTimestamp": 24319.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 24320.5
+          },
+          {
+            "at": 24342.39999985695,
+            "frameTimestamp": 24336.5,
+            "phase": "voting",
+            "gap": 22.299999952316284,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24342.799999952316
+          },
+          {
+            "at": 24381.599999904633,
+            "frameTimestamp": 24369.9,
+            "phase": "voting",
+            "gap": 39.200000047683716,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24382.5
+          },
+          {
+            "at": 24554.39999985695,
+            "frameTimestamp": 24553.2,
+            "phase": "voting",
+            "gap": 172.79999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24555.200000047684
+          },
+          {
+            "at": 24686.700000047684,
+            "frameTimestamp": 24686.5,
+            "phase": "voting",
+            "gap": 132.30000019073486,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24687.5
+          },
+          {
+            "at": 24821.599999904633,
+            "frameTimestamp": 24819.9,
+            "phase": "voting",
+            "gap": 134.89999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24822.39999985695
+          },
+          {
+            "at": 24955.39999985695,
+            "frameTimestamp": 24953.1,
+            "phase": "voting",
+            "gap": 133.79999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24956.299999952316
+          },
+          {
+            "at": 25091,
+            "frameTimestamp": 25086.4,
+            "phase": "voting",
+            "gap": 135.60000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 25091.89999985695
+          },
+          {
+            "at": 25226.5,
+            "frameTimestamp": 25219.8,
+            "phase": "voting",
+            "gap": 135.5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 25227.39999985695
+          },
+          {
+            "at": 25366.89999985695,
+            "frameTimestamp": 25353.1,
+            "phase": "voting",
+            "gap": 140.39999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 25367.799999952316
+          },
+          {
+            "at": 25503.89999985695,
+            "frameTimestamp": 25503.1,
+            "phase": "voting",
+            "gap": 137,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 25505
+          },
+          {
+            "at": 25639.799999952316,
+            "frameTimestamp": 25636.5,
+            "phase": "voting",
+            "gap": 135.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 25640.599999904633
+          },
+          {
+            "at": 25776.799999952316,
+            "frameTimestamp": 25769.8,
+            "phase": "voting",
+            "gap": 137,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 25777.599999904633
+          },
+          {
+            "at": 25956.39999985695,
+            "frameTimestamp": 25953.2,
+            "phase": "results",
+            "gap": 179.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 25959.599999904633
+          },
+          {
+            "at": 26111.599999904633,
+            "frameTimestamp": 26103.1,
+            "phase": "results",
+            "gap": 155.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 26112.599999904633
+          }
+        ],
+        "firstFrameByPhase": {
+          "question": {
+            "at": 22473.799999952316,
+            "frameTimestamp": 22469.9,
+            "phase": "question",
+            "gap": 141.79999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 22474.39999985695
+          },
+          "voting": {
+            "at": 24342.39999985695,
+            "frameTimestamp": 24336.5,
+            "phase": "voting",
+            "gap": 22.299999952316284,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 24342.799999952316
+          },
+          "results": {
+            "at": 25956.39999985695,
+            "frameTimestamp": 25953.2,
+            "phase": "results",
+            "gap": 179.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 25959.599999904633
+          }
+        },
+        "observedFrameCount": 84,
+        "omittedFrameCount": 0,
+        "largestRafGapMs": 179.59999990463257,
+        "limits": {
+          "phaseTransitions": 16,
+          "leadingFrames": 8,
+          "firstFrames": 192,
+          "lastFrames": 48,
+          "resultsFrames": 4
+        }
+      },
+      "observedThrough": "results",
+      "leadMs": 1868.5999999046326,
+      "answersTimerDeltaMs": 0
+    },
+    {
+      "number": 3,
+      "question": "A solar panel receives its energy from what?",
+      "questionAt": 29047,
+      "votingAt": 30921.599999904633,
+      "answersAt": 30921.599999904633,
+      "timerAt": 30921.599999904633,
+      "resultsAt": 32658.599999904633,
+      "resultsFrames": 2,
+      "earlyAnswers": false,
+      "earlyTimer": false,
+      "retainedPanel": true,
+      "retainedHeading": true,
+      "duplicateHeadings": false,
+      "headingChanged": false,
+      "newQuestionAnimations": 0,
+      "stableTypography": true,
+      "stableGeometry": true,
+      "geometryEvidence": null,
+      "photo": false,
+      "samples": [
+        {
+          "phase": "question",
+          "at": 29047,
+          "answers": false,
+          "timer": false,
+          "headings": 1
+        },
+        {
+          "phase": "voting",
+          "at": 30921.599999904633,
+          "answers": true,
+          "timer": true,
+          "headings": 1
+        },
+        {
+          "phase": "results",
+          "at": 32658.599999904633,
+          "answers": true,
+          "timer": false,
+          "headings": 1
+        }
+      ],
+      "explicitReplay": false,
+      "identityLockedAt": null,
+      "initialReplayRemounts": [],
+      "diagnostic": {
+        "clock": "performance.now",
+        "installedAt": 2673.5,
+        "phaseTransitions": [
+          {
+            "at": 28300.5,
+            "oldPhase": "results",
+            "phase": "preparing",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 28909.799999952316,
+            "oldPhase": "preparing",
+            "phase": "question",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 30916.599999904633,
+            "oldPhase": "question",
+            "phase": "voting",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 32498,
+            "oldPhase": "voting",
+            "phase": "results",
+            "batchIndex": 0,
+            "batchSize": 1
+          }
+        ],
+        "phaseOverflow": false,
+        "leadingFrames": [
+          {
+            "at": 28158.39999985695,
+            "frameTimestamp": 28153,
+            "phase": "results",
+            "gap": 143.69999980926514,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 28158.799999952316
+          },
+          {
+            "at": 28289.5,
+            "frameTimestamp": 28286.4,
+            "phase": "results",
+            "gap": 131.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 28289.799999952316
+          },
+          {
+            "at": 28304,
+            "frameTimestamp": 28303,
+            "phase": "preparing",
+            "gap": 14.5,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 28304
+          },
+          {
+            "at": 28330.700000047684,
+            "frameTimestamp": 28319.7,
+            "phase": "preparing",
+            "gap": 26.700000047683716,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 28330.700000047684
+          },
+          {
+            "at": 28488.599999904633,
+            "frameTimestamp": 28486.4,
+            "phase": "preparing",
+            "gap": 157.89999985694885,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 28488.599999904633
+          },
+          {
+            "at": 28626.299999952316,
+            "frameTimestamp": 28619.7,
+            "phase": "preparing",
+            "gap": 137.70000004768372,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 28626.299999952316
+          },
+          {
+            "at": 28766.5,
+            "frameTimestamp": 28753,
+            "phase": "preparing",
+            "gap": 140.20000004768372,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 28766.5
+          },
+          {
+            "at": 28908,
+            "frameTimestamp": 28903,
+            "phase": "preparing",
+            "gap": 141.5,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 28908
+          }
+        ],
+        "frames": [
+          {
+            "at": 29047,
+            "frameTimestamp": 29036.3,
+            "phase": "question",
+            "gap": 139,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29047.599999904633
+          },
+          {
+            "at": 29185.599999904633,
+            "frameTimestamp": 29169.7,
+            "phase": "question",
+            "gap": 138.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29186.099999904633
+          },
+          {
+            "at": 29187,
+            "frameTimestamp": 29186.3,
+            "phase": "question",
+            "gap": 1.4000000953674316,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29187.299999952316
+          },
+          {
+            "at": 29324.799999952316,
+            "frameTimestamp": 29319.6,
+            "phase": "question",
+            "gap": 137.79999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29325.39999985695
+          },
+          {
+            "at": 29460.299999952316,
+            "frameTimestamp": 29453,
+            "phase": "question",
+            "gap": 135.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29460.700000047684
+          },
+          {
+            "at": 29594.39999985695,
+            "frameTimestamp": 29586.3,
+            "phase": "question",
+            "gap": 134.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29594.799999952316
+          },
+          {
+            "at": 29731.799999952316,
+            "frameTimestamp": 29719.6,
+            "phase": "question",
+            "gap": 137.40000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29732.200000047684
+          },
+          {
+            "at": 29864.299999952316,
+            "frameTimestamp": 29852.9,
+            "phase": "question",
+            "gap": 132.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29864.5
+          },
+          {
+            "at": 29995.39999985695,
+            "frameTimestamp": 29986.3,
+            "phase": "question",
+            "gap": 131.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29995.700000047684
+          },
+          {
+            "at": 30003.200000047684,
+            "frameTimestamp": 30003,
+            "phase": "question",
+            "gap": 7.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30003.5
+          },
+          {
+            "at": 30019.89999985695,
+            "frameTimestamp": 30019.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30020.099999904633
+          },
+          {
+            "at": 30036.599999904633,
+            "frameTimestamp": 30036.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30036.799999952316
+          },
+          {
+            "at": 30053.200000047684,
+            "frameTimestamp": 30052.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30053.5
+          },
+          {
+            "at": 30069.89999985695,
+            "frameTimestamp": 30069.7,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30070.200000047684
+          },
+          {
+            "at": 30086.599999904633,
+            "frameTimestamp": 30086.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30086.89999985695
+          },
+          {
+            "at": 30103.200000047684,
+            "frameTimestamp": 30103,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30103.5
+          },
+          {
+            "at": 30121,
+            "frameTimestamp": 30119.7,
+            "phase": "question",
+            "gap": 17.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30121.200000047684
+          },
+          {
+            "at": 30140.700000047684,
+            "frameTimestamp": 30136.3,
+            "phase": "question",
+            "gap": 19.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30141
+          },
+          {
+            "at": 30153.599999904633,
+            "frameTimestamp": 30153,
+            "phase": "question",
+            "gap": 12.899999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30153.89999985695
+          },
+          {
+            "at": 30177.5,
+            "frameTimestamp": 30169.6,
+            "phase": "question",
+            "gap": 23.90000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30177.89999985695
+          },
+          {
+            "at": 30186.599999904633,
+            "frameTimestamp": 30186.3,
+            "phase": "question",
+            "gap": 9.099999904632568,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30186.89999985695
+          },
+          {
+            "at": 30203.200000047684,
+            "frameTimestamp": 30202.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30203.5
+          },
+          {
+            "at": 30219.799999952316,
+            "frameTimestamp": 30219.7,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30220.099999904633
+          },
+          {
+            "at": 30236.599999904633,
+            "frameTimestamp": 30236.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30236.89999985695
+          },
+          {
+            "at": 30253.299999952316,
+            "frameTimestamp": 30253,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30253.5
+          },
+          {
+            "at": 30269.89999985695,
+            "frameTimestamp": 30269.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30270.099999904633
+          },
+          {
+            "at": 30286.5,
+            "frameTimestamp": 30286.3,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30286.799999952316
+          },
+          {
+            "at": 30303.200000047684,
+            "frameTimestamp": 30302.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30303.5
+          },
+          {
+            "at": 30319.799999952316,
+            "frameTimestamp": 30319.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30320.099999904633
+          },
+          {
+            "at": 30336.599999904633,
+            "frameTimestamp": 30336.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30336.799999952316
+          },
+          {
+            "at": 30353.200000047684,
+            "frameTimestamp": 30353,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30353.5
+          },
+          {
+            "at": 30369.89999985695,
+            "frameTimestamp": 30369.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30370.099999904633
+          },
+          {
+            "at": 30386.5,
+            "frameTimestamp": 30386.2,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30386.700000047684
+          },
+          {
+            "at": 30403.099999904633,
+            "frameTimestamp": 30403,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30403.5
+          },
+          {
+            "at": 30419.799999952316,
+            "frameTimestamp": 30419.7,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30420.099999904633
+          },
+          {
+            "at": 30436.599999904633,
+            "frameTimestamp": 30436.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30436.89999985695
+          },
+          {
+            "at": 30453.200000047684,
+            "frameTimestamp": 30452.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30453.5
+          },
+          {
+            "at": 30469.799999952316,
+            "frameTimestamp": 30469.7,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30470.099999904633
+          },
+          {
+            "at": 30486.5,
+            "frameTimestamp": 30486.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30486.799999952316
+          },
+          {
+            "at": 30503.200000047684,
+            "frameTimestamp": 30503,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30503.5
+          },
+          {
+            "at": 30519.799999952316,
+            "frameTimestamp": 30519.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30520
+          },
+          {
+            "at": 30536.5,
+            "frameTimestamp": 30536.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30536.799999952316
+          },
+          {
+            "at": 30553.200000047684,
+            "frameTimestamp": 30552.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30553.39999985695
+          },
+          {
+            "at": 30569.89999985695,
+            "frameTimestamp": 30569.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30570.099999904633
+          },
+          {
+            "at": 30586.5,
+            "frameTimestamp": 30586.3,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30586.700000047684
+          },
+          {
+            "at": 30603.299999952316,
+            "frameTimestamp": 30602.9,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30603.5
+          },
+          {
+            "at": 30619.799999952316,
+            "frameTimestamp": 30619.6,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30620.099999904633
+          },
+          {
+            "at": 30636.599999904633,
+            "frameTimestamp": 30636.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30636.89999985695
+          },
+          {
+            "at": 30653.299999952316,
+            "frameTimestamp": 30652.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30653.799999952316
+          },
+          {
+            "at": 30669.799999952316,
+            "frameTimestamp": 30669.6,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30670.200000047684
+          },
+          {
+            "at": 30686.5,
+            "frameTimestamp": 30686.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30686.89999985695
+          },
+          {
+            "at": 30703.200000047684,
+            "frameTimestamp": 30702.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30703.599999904633
+          },
+          {
+            "at": 30719.89999985695,
+            "frameTimestamp": 30719.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30720.299999952316
+          },
+          {
+            "at": 30736.5,
+            "frameTimestamp": 30736.3,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30736.89999985695
+          },
+          {
+            "at": 30753.200000047684,
+            "frameTimestamp": 30753,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30753.599999904633
+          },
+          {
+            "at": 30769.89999985695,
+            "frameTimestamp": 30769.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30770.200000047684
+          },
+          {
+            "at": 30790,
+            "frameTimestamp": 30786.2,
+            "phase": "question",
+            "gap": 20.100000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30791.200000047684
+          },
+          {
+            "at": 30806.200000047684,
+            "frameTimestamp": 30802.9,
+            "phase": "question",
+            "gap": 16.200000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30806.700000047684
+          },
+          {
+            "at": 30820,
+            "frameTimestamp": 30819.6,
+            "phase": "question",
+            "gap": 13.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30820.599999904633
+          },
+          {
+            "at": 30836.599999904633,
+            "frameTimestamp": 30836.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30837.099999904633
+          },
+          {
+            "at": 30853.200000047684,
+            "frameTimestamp": 30852.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30853.599999904633
+          },
+          {
+            "at": 30869.89999985695,
+            "frameTimestamp": 30869.6,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30870.299999952316
+          },
+          {
+            "at": 30886.5,
+            "frameTimestamp": 30886.2,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30886.89999985695
+          },
+          {
+            "at": 30903.200000047684,
+            "frameTimestamp": 30902.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 30903.599999904633
+          },
+          {
+            "at": 30921.599999904633,
+            "frameTimestamp": 30919.6,
+            "phase": "voting",
+            "gap": 18.399999856948853,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 30922.099999904633
+          },
+          {
+            "at": 30950.799999952316,
+            "frameTimestamp": 30936.3,
+            "phase": "voting",
+            "gap": 29.200000047683716,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 30952
+          },
+          {
+            "at": 30956.39999985695,
+            "frameTimestamp": 30952.9,
+            "phase": "voting",
+            "gap": 5.599999904632568,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 30957.099999904633
+          },
+          {
+            "at": 31086.799999952316,
+            "frameTimestamp": 31086.3,
+            "phase": "voting",
+            "gap": 130.40000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31089.099999904633
+          },
+          {
+            "at": 31263.299999952316,
+            "frameTimestamp": 31252.9,
+            "phase": "voting",
+            "gap": 176.5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31264.200000047684
+          },
+          {
+            "at": 31391.89999985695,
+            "frameTimestamp": 31386.3,
+            "phase": "voting",
+            "gap": 128.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31392.89999985695
+          },
+          {
+            "at": 31525.5,
+            "frameTimestamp": 31519.5,
+            "phase": "voting",
+            "gap": 133.60000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31526.39999985695
+          },
+          {
+            "at": 31660.39999985695,
+            "frameTimestamp": 31652.9,
+            "phase": "voting",
+            "gap": 134.89999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31661.299999952316
+          },
+          {
+            "at": 31795.099999904633,
+            "frameTimestamp": 31786.3,
+            "phase": "voting",
+            "gap": 134.70000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31796
+          },
+          {
+            "at": 31930.700000047684,
+            "frameTimestamp": 31919.6,
+            "phase": "voting",
+            "gap": 135.60000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 31931.799999952316
+          },
+          {
+            "at": 32073.599999904633,
+            "frameTimestamp": 32069.6,
+            "phase": "voting",
+            "gap": 142.89999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 32074.39999985695
+          },
+          {
+            "at": 32207.200000047684,
+            "frameTimestamp": 32202.9,
+            "phase": "voting",
+            "gap": 133.60000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 32208
+          },
+          {
+            "at": 32342.599999904633,
+            "frameTimestamp": 32336.2,
+            "phase": "voting",
+            "gap": 135.39999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 32344.200000047684
+          },
+          {
+            "at": 32477.200000047684,
+            "frameTimestamp": 32469.5,
+            "phase": "voting",
+            "gap": 134.60000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 32478
+          },
+          {
+            "at": 32658.599999904633,
+            "frameTimestamp": 32652.8,
+            "phase": "results",
+            "gap": 181.39999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 32659.599999904633
+          },
+          {
+            "at": 32812.700000047684,
+            "frameTimestamp": 32802.9,
+            "phase": "results",
+            "gap": 154.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 32813.799999952316
+          }
+        ],
+        "firstFrameByPhase": {
+          "question": {
+            "at": 29047,
+            "frameTimestamp": 29036.3,
+            "phase": "question",
+            "gap": 139,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 29047.599999904633
+          },
+          "voting": {
+            "at": 30921.599999904633,
+            "frameTimestamp": 30919.6,
+            "phase": "voting",
+            "gap": 18.399999856948853,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 30922.099999904633
+          },
+          "results": {
+            "at": 32658.599999904633,
+            "frameTimestamp": 32652.8,
+            "phase": "results",
+            "gap": 181.39999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 32659.599999904633
+          }
+        },
+        "observedFrameCount": 80,
+        "omittedFrameCount": 0,
+        "largestRafGapMs": 181.39999985694885,
+        "limits": {
+          "phaseTransitions": 16,
+          "leadingFrames": 8,
+          "firstFrames": 192,
+          "lastFrames": 48,
+          "resultsFrames": 4
+        }
+      },
+      "observedThrough": "results",
+      "leadMs": 1874.5999999046326,
+      "answersTimerDeltaMs": 0
+    },
+    {
+      "number": 4,
+      "question": "A machine sorts items in pairs. Can 14 items make complete pairs?",
+      "questionAt": 40404.59999990463,
+      "votingAt": 42287.299999952316,
+      "answersAt": 42287.299999952316,
+      "timerAt": 42287.299999952316,
+      "resultsAt": 43861.200000047684,
+      "resultsFrames": 2,
+      "earlyAnswers": false,
+      "earlyTimer": false,
+      "retainedPanel": true,
+      "retainedHeading": true,
+      "duplicateHeadings": false,
+      "headingChanged": false,
+      "newQuestionAnimations": 0,
+      "stableTypography": true,
+      "stableGeometry": true,
+      "geometryEvidence": null,
+      "photo": false,
+      "samples": [
+        {
+          "phase": "question",
+          "at": 40404.59999990463,
+          "answers": false,
+          "timer": false,
+          "headings": 1
+        },
+        {
+          "phase": "voting",
+          "at": 42287.299999952316,
+          "answers": true,
+          "timer": true,
+          "headings": 1
+        },
+        {
+          "phase": "results",
+          "at": 43861.200000047684,
+          "answers": true,
+          "timer": false,
+          "headings": 1
+        }
+      ],
+      "explicitReplay": false,
+      "identityLockedAt": null,
+      "initialReplayRemounts": [],
+      "diagnostic": {
+        "clock": "performance.now",
+        "installedAt": 2673.5,
+        "phaseTransitions": [
+          {
+            "at": 39568.39999985695,
+            "oldPhase": "interlude",
+            "phase": "preparing",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 40271.89999985695,
+            "oldPhase": "preparing",
+            "phase": "question",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 42276.59999990463,
+            "oldPhase": "question",
+            "phase": "voting",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 43709.700000047684,
+            "oldPhase": "voting",
+            "phase": "results",
+            "batchIndex": 0,
+            "batchSize": 1
+          }
+        ],
+        "phaseOverflow": false,
+        "leadingFrames": [
+          {
+            "at": 39558,
+            "frameTimestamp": 39552.6,
+            "phase": "interlude",
+            "gap": 95.5,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 39558
+          },
+          {
+            "at": 39570.700000047684,
+            "frameTimestamp": 39569.3,
+            "phase": "preparing",
+            "gap": 12.700000047683716,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 39570.700000047684
+          },
+          {
+            "at": 39587.09999990463,
+            "frameTimestamp": 39585.9,
+            "phase": "preparing",
+            "gap": 16.399999856948853,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 39587.09999990463
+          },
+          {
+            "at": 39736.799999952316,
+            "frameTimestamp": 39735.9,
+            "phase": "preparing",
+            "gap": 149.70000004768372,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 39736.799999952316
+          },
+          {
+            "at": 39875.700000047684,
+            "frameTimestamp": 39869.3,
+            "phase": "preparing",
+            "gap": 138.90000009536743,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 39875.700000047684
+          },
+          {
+            "at": 40010.799999952316,
+            "frameTimestamp": 40002.5,
+            "phase": "preparing",
+            "gap": 135.09999990463257,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 40010.799999952316
+          },
+          {
+            "at": 40140.200000047684,
+            "frameTimestamp": 40135.9,
+            "phase": "preparing",
+            "gap": 129.40000009536743,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 40140.200000047684
+          },
+          {
+            "at": 40270.09999990463,
+            "frameTimestamp": 40269.2,
+            "phase": "preparing",
+            "gap": 129.89999985694885,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 40270.09999990463
+          }
+        ],
+        "frames": [
+          {
+            "at": 40404.59999990463,
+            "frameTimestamp": 40402.6,
+            "phase": "question",
+            "gap": 134.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 40405.200000047684
+          },
+          {
+            "at": 40544.299999952316,
+            "frameTimestamp": 40535.9,
+            "phase": "question",
+            "gap": 139.70000004768372,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 40544.89999985695
+          },
+          {
+            "at": 40681.799999952316,
+            "frameTimestamp": 40669.2,
+            "phase": "question",
+            "gap": 137.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 40682.200000047684
+          },
+          {
+            "at": 40814.39999985695,
+            "frameTimestamp": 40802.5,
+            "phase": "question",
+            "gap": 132.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 40814.700000047684
+          },
+          {
+            "at": 40955.299999952316,
+            "frameTimestamp": 40952.6,
+            "phase": "question",
+            "gap": 140.90000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 40955.799999952316
+          },
+          {
+            "at": 41086.59999990463,
+            "frameTimestamp": 41085.8,
+            "phase": "question",
+            "gap": 131.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41087
+          },
+          {
+            "at": 41102.89999985695,
+            "frameTimestamp": 41102.5,
+            "phase": "question",
+            "gap": 16.299999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41103.09999990463
+          },
+          {
+            "at": 41119.5,
+            "frameTimestamp": 41119.2,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41119.700000047684
+          },
+          {
+            "at": 41136.09999990463,
+            "frameTimestamp": 41135.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41136.39999985695
+          },
+          {
+            "at": 41152.700000047684,
+            "frameTimestamp": 41152.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41153
+          },
+          {
+            "at": 41169.5,
+            "frameTimestamp": 41169.1,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41169.700000047684
+          },
+          {
+            "at": 41186.09999990463,
+            "frameTimestamp": 41185.8,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41186.39999985695
+          },
+          {
+            "at": 41202.700000047684,
+            "frameTimestamp": 41202.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41203
+          },
+          {
+            "at": 41219.5,
+            "frameTimestamp": 41219.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41219.700000047684
+          },
+          {
+            "at": 41236.09999990463,
+            "frameTimestamp": 41235.8,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41236.39999985695
+          },
+          {
+            "at": 41253.39999985695,
+            "frameTimestamp": 41252.5,
+            "phase": "question",
+            "gap": 17.299999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41253.59999990463
+          },
+          {
+            "at": 41269.39999985695,
+            "frameTimestamp": 41269.2,
+            "phase": "question",
+            "gap": 16,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41269.700000047684
+          },
+          {
+            "at": 41286,
+            "frameTimestamp": 41285.8,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41286.299999952316
+          },
+          {
+            "at": 41302.799999952316,
+            "frameTimestamp": 41302.5,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41303.09999990463
+          },
+          {
+            "at": 41319.39999985695,
+            "frameTimestamp": 41319.1,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41319.700000047684
+          },
+          {
+            "at": 41336,
+            "frameTimestamp": 41335.8,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41336.39999985695
+          },
+          {
+            "at": 41352.700000047684,
+            "frameTimestamp": 41352.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41353
+          },
+          {
+            "at": 41369.39999985695,
+            "frameTimestamp": 41369.2,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41369.700000047684
+          },
+          {
+            "at": 41386.09999990463,
+            "frameTimestamp": 41385.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41386.299999952316
+          },
+          {
+            "at": 41402.700000047684,
+            "frameTimestamp": 41402.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41403
+          },
+          {
+            "at": 41419.5,
+            "frameTimestamp": 41419.1,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41419.799999952316
+          },
+          {
+            "at": 41436,
+            "frameTimestamp": 41435.9,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41436.299999952316
+          },
+          {
+            "at": 41453.39999985695,
+            "frameTimestamp": 41452.5,
+            "phase": "question",
+            "gap": 17.399999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41453.59999990463
+          },
+          {
+            "at": 41469.39999985695,
+            "frameTimestamp": 41469.2,
+            "phase": "question",
+            "gap": 16,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41469.700000047684
+          },
+          {
+            "at": 41486.09999990463,
+            "frameTimestamp": 41485.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41486.39999985695
+          },
+          {
+            "at": 41502.799999952316,
+            "frameTimestamp": 41502.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41503
+          },
+          {
+            "at": 41519.5,
+            "frameTimestamp": 41519.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41519.700000047684
+          },
+          {
+            "at": 41536.09999990463,
+            "frameTimestamp": 41535.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41536.39999985695
+          },
+          {
+            "at": 41552.700000047684,
+            "frameTimestamp": 41552.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41552.89999985695
+          },
+          {
+            "at": 41569.39999985695,
+            "frameTimestamp": 41569.1,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41569.700000047684
+          },
+          {
+            "at": 41586.09999990463,
+            "frameTimestamp": 41585.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41586.299999952316
+          },
+          {
+            "at": 41602.799999952316,
+            "frameTimestamp": 41602.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41603
+          },
+          {
+            "at": 41619.39999985695,
+            "frameTimestamp": 41619.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41619.700000047684
+          },
+          {
+            "at": 41636.09999990463,
+            "frameTimestamp": 41635.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41636.39999985695
+          },
+          {
+            "at": 41652.799999952316,
+            "frameTimestamp": 41652.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41653
+          },
+          {
+            "at": 41669.59999990463,
+            "frameTimestamp": 41669.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41669.89999985695
+          },
+          {
+            "at": 41686,
+            "frameTimestamp": 41685.9,
+            "phase": "question",
+            "gap": 16.40000009536743,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41686.39999985695
+          },
+          {
+            "at": 41702.799999952316,
+            "frameTimestamp": 41702.5,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41703.09999990463
+          },
+          {
+            "at": 41719.39999985695,
+            "frameTimestamp": 41719.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41719.59999990463
+          },
+          {
+            "at": 41736.09999990463,
+            "frameTimestamp": 41735.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41736.39999985695
+          },
+          {
+            "at": 41752.700000047684,
+            "frameTimestamp": 41752.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41753.09999990463
+          },
+          {
+            "at": 41769.39999985695,
+            "frameTimestamp": 41769.2,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41769.700000047684
+          },
+          {
+            "at": 41786,
+            "frameTimestamp": 41785.8,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41786.299999952316
+          },
+          {
+            "at": 41802.700000047684,
+            "frameTimestamp": 41802.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41802.89999985695
+          },
+          {
+            "at": 41819.39999985695,
+            "frameTimestamp": 41819.1,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41819.700000047684
+          },
+          {
+            "at": 41836.09999990463,
+            "frameTimestamp": 41835.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41836.39999985695
+          },
+          {
+            "at": 41852.799999952316,
+            "frameTimestamp": 41852.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41853
+          },
+          {
+            "at": 41869.5,
+            "frameTimestamp": 41869.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41869.700000047684
+          },
+          {
+            "at": 41886.799999952316,
+            "frameTimestamp": 41885.8,
+            "phase": "question",
+            "gap": 17.299999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41887
+          },
+          {
+            "at": 41902.700000047684,
+            "frameTimestamp": 41902.5,
+            "phase": "question",
+            "gap": 15.900000095367432,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41902.89999985695
+          },
+          {
+            "at": 41919.299999952316,
+            "frameTimestamp": 41919.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41919.59999990463
+          },
+          {
+            "at": 41936.09999990463,
+            "frameTimestamp": 41935.8,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41936.299999952316
+          },
+          {
+            "at": 41952.59999990463,
+            "frameTimestamp": 41952.5,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41952.89999985695
+          },
+          {
+            "at": 41969.39999985695,
+            "frameTimestamp": 41969.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41969.700000047684
+          },
+          {
+            "at": 41985.89999985695,
+            "frameTimestamp": 41985.8,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 41986.200000047684
+          },
+          {
+            "at": 42002.700000047684,
+            "frameTimestamp": 42002.4,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42002.89999985695
+          },
+          {
+            "at": 42019.39999985695,
+            "frameTimestamp": 42019.1,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42019.700000047684
+          },
+          {
+            "at": 42036.09999990463,
+            "frameTimestamp": 42035.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42036.5
+          },
+          {
+            "at": 42053.200000047684,
+            "frameTimestamp": 42052.4,
+            "phase": "question",
+            "gap": 17.100000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42053.700000047684
+          },
+          {
+            "at": 42069.39999985695,
+            "frameTimestamp": 42069.1,
+            "phase": "question",
+            "gap": 16.199999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42069.799999952316
+          },
+          {
+            "at": 42086,
+            "frameTimestamp": 42085.8,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42086.5
+          },
+          {
+            "at": 42102.799999952316,
+            "frameTimestamp": 42102.4,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42103.200000047684
+          },
+          {
+            "at": 42119.39999985695,
+            "frameTimestamp": 42119.1,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42119.799999952316
+          },
+          {
+            "at": 42136.09999990463,
+            "frameTimestamp": 42135.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42136.39999985695
+          },
+          {
+            "at": 42152.700000047684,
+            "frameTimestamp": 42152.4,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42153.200000047684
+          },
+          {
+            "at": 42169.39999985695,
+            "frameTimestamp": 42169.1,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42169.799999952316
+          },
+          {
+            "at": 42186,
+            "frameTimestamp": 42185.9,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42186.39999985695
+          },
+          {
+            "at": 42202.700000047684,
+            "frameTimestamp": 42202.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42203.09999990463
+          },
+          {
+            "at": 42219.39999985695,
+            "frameTimestamp": 42219.1,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42219.799999952316
+          },
+          {
+            "at": 42236.09999990463,
+            "frameTimestamp": 42235.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42236.39999985695
+          },
+          {
+            "at": 42252.700000047684,
+            "frameTimestamp": 42252.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42253.200000047684
+          },
+          {
+            "at": 42269.39999985695,
+            "frameTimestamp": 42269.1,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 42269.799999952316
+          },
+          {
+            "at": 42287.299999952316,
+            "frameTimestamp": 42285.8,
+            "phase": "voting",
+            "gap": 17.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42288
+          },
+          {
+            "at": 42320.39999985695,
+            "frameTimestamp": 42319.1,
+            "phase": "voting",
+            "gap": 33.09999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42321.200000047684
+          },
+          {
+            "at": 42481.299999952316,
+            "frameTimestamp": 42469.2,
+            "phase": "voting",
+            "gap": 160.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42482.39999985695
+          },
+          {
+            "at": 42615.299999952316,
+            "frameTimestamp": 42602.4,
+            "phase": "voting",
+            "gap": 134,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42616.09999990463
+          },
+          {
+            "at": 42750.5,
+            "frameTimestamp": 42735.8,
+            "phase": "voting",
+            "gap": 135.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42751.299999952316
+          },
+          {
+            "at": 42880.39999985695,
+            "frameTimestamp": 42869.1,
+            "phase": "voting",
+            "gap": 129.89999985694885,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42881.299999952316
+          },
+          {
+            "at": 43012.799999952316,
+            "frameTimestamp": 43002.5,
+            "phase": "voting",
+            "gap": 132.40000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43013.89999985695
+          },
+          {
+            "at": 43143,
+            "frameTimestamp": 43135.8,
+            "phase": "voting",
+            "gap": 130.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43145.799999952316
+          },
+          {
+            "at": 43274,
+            "frameTimestamp": 43269.1,
+            "phase": "voting",
+            "gap": 131,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43277
+          },
+          {
+            "at": 43418.09999990463,
+            "frameTimestamp": 43402.4,
+            "phase": "voting",
+            "gap": 144.09999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43419
+          },
+          {
+            "at": 43423.09999990463,
+            "frameTimestamp": 43419.1,
+            "phase": "voting",
+            "gap": 5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43424.200000047684
+          },
+          {
+            "at": 43559.09999990463,
+            "frameTimestamp": 43552.4,
+            "phase": "voting",
+            "gap": 136,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43559.799999952316
+          },
+          {
+            "at": 43693,
+            "frameTimestamp": 43685.7,
+            "phase": "voting",
+            "gap": 133.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 43693.700000047684
+          },
+          {
+            "at": 43861.200000047684,
+            "frameTimestamp": 43852.4,
+            "phase": "results",
+            "gap": 168.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 43862.700000047684
+          },
+          {
+            "at": 44018.700000047684,
+            "frameTimestamp": 44002.4,
+            "phase": "results",
+            "gap": 157.5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 44024
+          }
+        ],
+        "firstFrameByPhase": {
+          "question": {
+            "at": 40404.59999990463,
+            "frameTimestamp": 40402.6,
+            "phase": "question",
+            "gap": 134.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 40405.200000047684
+          },
+          "voting": {
+            "at": 42287.299999952316,
+            "frameTimestamp": 42285.8,
+            "phase": "voting",
+            "gap": 17.90000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 42288
+          },
+          "results": {
+            "at": 43861.200000047684,
+            "frameTimestamp": 43852.4,
+            "phase": "results",
+            "gap": 168.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 43862.700000047684
+          }
+        },
+        "observedFrameCount": 92,
+        "omittedFrameCount": 0,
+        "largestRafGapMs": 168.20000004768372,
+        "limits": {
+          "phaseTransitions": 16,
+          "leadingFrames": 8,
+          "firstFrames": 192,
+          "lastFrames": 48,
+          "resultsFrames": 4
+        }
+      },
+      "observedThrough": "results",
+      "leadMs": 1882.7000000476837,
+      "answersTimerDeltaMs": 0
+    },
+    {
+      "number": 5,
+      "question": "The launch code is 100 minus 25 plus 5. What is it?",
+      "questionAt": 47052.200000047684,
+      "votingAt": 48920.700000047684,
+      "answersAt": 48920.700000047684,
+      "timerAt": 48920.700000047684,
+      "resultsAt": 51183.59999990463,
+      "resultsFrames": 2,
+      "earlyAnswers": false,
+      "earlyTimer": false,
+      "retainedPanel": true,
+      "retainedHeading": true,
+      "duplicateHeadings": false,
+      "headingChanged": false,
+      "newQuestionAnimations": 0,
+      "stableTypography": true,
+      "stableGeometry": true,
+      "geometryEvidence": null,
+      "photo": false,
+      "samples": [
+        {
+          "phase": "question",
+          "at": 47052.200000047684,
+          "answers": false,
+          "timer": false,
+          "headings": 1
+        },
+        {
+          "phase": "voting",
+          "at": 48920.700000047684,
+          "answers": true,
+          "timer": true,
+          "headings": 1
+        },
+        {
+          "phase": "results",
+          "at": 51183.59999990463,
+          "answers": true,
+          "timer": false,
+          "headings": 1
+        }
+      ],
+      "explicitReplay": false,
+      "identityLockedAt": null,
+      "initialReplayRemounts": [],
+      "diagnostic": {
+        "clock": "performance.now",
+        "installedAt": 2673.5,
+        "phaseTransitions": [
+          {
+            "at": 46194.5,
+            "oldPhase": "results",
+            "phase": "preparing",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 46909,
+            "oldPhase": "preparing",
+            "phase": "question",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 48915.59999990463,
+            "oldPhase": "question",
+            "phase": "voting",
+            "batchIndex": 0,
+            "batchSize": 1
+          },
+          {
+            "at": 51031.799999952316,
+            "oldPhase": "voting",
+            "phase": "results",
+            "batchIndex": 0,
+            "batchSize": 1
+          }
+        ],
+        "phaseOverflow": false,
+        "leadingFrames": [
+          {
+            "at": 46181.700000047684,
+            "frameTimestamp": 46168.9,
+            "phase": "results",
+            "gap": 128.40000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 46182.09999990463
+          },
+          {
+            "at": 46335.09999990463,
+            "frameTimestamp": 46318.9,
+            "phase": "preparing",
+            "gap": 153.39999985694885,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46335.09999990463
+          },
+          {
+            "at": 46337.09999990463,
+            "frameTimestamp": 46335.6,
+            "phase": "preparing",
+            "gap": 2,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46337.09999990463
+          },
+          {
+            "at": 46364.09999990463,
+            "frameTimestamp": 46352.3,
+            "phase": "preparing",
+            "gap": 27,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46364.09999990463
+          },
+          {
+            "at": 46507.59999990463,
+            "frameTimestamp": 46502.3,
+            "phase": "preparing",
+            "gap": 143.5,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46507.59999990463
+          },
+          {
+            "at": 46643.89999985695,
+            "frameTimestamp": 46635.6,
+            "phase": "preparing",
+            "gap": 136.29999995231628,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46643.89999985695
+          },
+          {
+            "at": 46777,
+            "frameTimestamp": 46769,
+            "phase": "preparing",
+            "gap": 133.10000014305115,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46777
+          },
+          {
+            "at": 46907,
+            "frameTimestamp": 46902.3,
+            "phase": "preparing",
+            "gap": 130,
+            "headingVisible": null,
+            "answers": null,
+            "timer": null,
+            "endAt": 46907
+          }
+        ],
+        "frames": [
+          {
+            "at": 47052.200000047684,
+            "frameTimestamp": 47052.3,
+            "phase": "question",
+            "gap": 145.20000004768372,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47052.89999985695
+          },
+          {
+            "at": 47184.299999952316,
+            "frameTimestamp": 47169,
+            "phase": "question",
+            "gap": 132.09999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47184.799999952316
+          },
+          {
+            "at": 47311.799999952316,
+            "frameTimestamp": 47302.3,
+            "phase": "question",
+            "gap": 127.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47312.299999952316
+          },
+          {
+            "at": 47440.59999990463,
+            "frameTimestamp": 47435.6,
+            "phase": "question",
+            "gap": 128.79999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47440.89999985695
+          },
+          {
+            "at": 47572.89999985695,
+            "frameTimestamp": 47568.9,
+            "phase": "question",
+            "gap": 132.29999995231628,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47573.200000047684
+          },
+          {
+            "at": 47701.39999985695,
+            "frameTimestamp": 47685.6,
+            "phase": "question",
+            "gap": 128.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47701.700000047684
+          },
+          {
+            "at": 47702.39999985695,
+            "frameTimestamp": 47702.3,
+            "phase": "question",
+            "gap": 1,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47702.700000047684
+          },
+          {
+            "at": 47719.200000047684,
+            "frameTimestamp": 47718.9,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47719.39999985695
+          },
+          {
+            "at": 47735.799999952316,
+            "frameTimestamp": 47735.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47736.09999990463
+          },
+          {
+            "at": 47752.59999990463,
+            "frameTimestamp": 47752.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47752.799999952316
+          },
+          {
+            "at": 47769.200000047684,
+            "frameTimestamp": 47769,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47769.39999985695
+          },
+          {
+            "at": 47785.799999952316,
+            "frameTimestamp": 47785.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47786
+          },
+          {
+            "at": 47802.59999990463,
+            "frameTimestamp": 47802.2,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47802.799999952316
+          },
+          {
+            "at": 47819.200000047684,
+            "frameTimestamp": 47819,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47819.5
+          },
+          {
+            "at": 47835.799999952316,
+            "frameTimestamp": 47835.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47836
+          },
+          {
+            "at": 47852.5,
+            "frameTimestamp": 47852.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47852.799999952316
+          },
+          {
+            "at": 47869.200000047684,
+            "frameTimestamp": 47868.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47869.5
+          },
+          {
+            "at": 47885.799999952316,
+            "frameTimestamp": 47885.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47886
+          },
+          {
+            "at": 47902.39999985695,
+            "frameTimestamp": 47902.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47902.700000047684
+          },
+          {
+            "at": 47919.09999990463,
+            "frameTimestamp": 47918.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47919.5
+          },
+          {
+            "at": 47935.799999952316,
+            "frameTimestamp": 47935.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47936
+          },
+          {
+            "at": 47952.5,
+            "frameTimestamp": 47952.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47952.700000047684
+          },
+          {
+            "at": 47969.200000047684,
+            "frameTimestamp": 47968.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47969.39999985695
+          },
+          {
+            "at": 47985.799999952316,
+            "frameTimestamp": 47985.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47986
+          },
+          {
+            "at": 48002.5,
+            "frameTimestamp": 48002.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48002.700000047684
+          },
+          {
+            "at": 48019.09999990463,
+            "frameTimestamp": 48018.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48019.299999952316
+          },
+          {
+            "at": 48035.799999952316,
+            "frameTimestamp": 48035.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48036
+          },
+          {
+            "at": 48052.5,
+            "frameTimestamp": 48052.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48052.59999990463
+          },
+          {
+            "at": 48069.09999990463,
+            "frameTimestamp": 48068.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48069.299999952316
+          },
+          {
+            "at": 48085.799999952316,
+            "frameTimestamp": 48085.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48086.09999990463
+          },
+          {
+            "at": 48102.5,
+            "frameTimestamp": 48102.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48102.700000047684
+          },
+          {
+            "at": 48119.09999990463,
+            "frameTimestamp": 48118.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48119.299999952316
+          },
+          {
+            "at": 48135.89999985695,
+            "frameTimestamp": 48135.5,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48136.09999990463
+          },
+          {
+            "at": 48152.5,
+            "frameTimestamp": 48152.2,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48152.700000047684
+          },
+          {
+            "at": 48169.09999990463,
+            "frameTimestamp": 48168.9,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48169.299999952316
+          },
+          {
+            "at": 48185.799999952316,
+            "frameTimestamp": 48185.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48186.09999990463
+          },
+          {
+            "at": 48202.39999985695,
+            "frameTimestamp": 48202.3,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48202.700000047684
+          },
+          {
+            "at": 48219.09999990463,
+            "frameTimestamp": 48218.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48219.39999985695
+          },
+          {
+            "at": 48235.799999952316,
+            "frameTimestamp": 48235.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48236.09999990463
+          },
+          {
+            "at": 48252.5,
+            "frameTimestamp": 48252.3,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48252.799999952316
+          },
+          {
+            "at": 48269.200000047684,
+            "frameTimestamp": 48268.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48269.39999985695
+          },
+          {
+            "at": 48285.799999952316,
+            "frameTimestamp": 48285.5,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48285.89999985695
+          },
+          {
+            "at": 48302.39999985695,
+            "frameTimestamp": 48302.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48302.700000047684
+          },
+          {
+            "at": 48319.200000047684,
+            "frameTimestamp": 48318.9,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48319.39999985695
+          },
+          {
+            "at": 48335.700000047684,
+            "frameTimestamp": 48335.6,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48336
+          },
+          {
+            "at": 48352.39999985695,
+            "frameTimestamp": 48352.2,
+            "phase": "question",
+            "gap": 16.699999809265137,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48352.700000047684
+          },
+          {
+            "at": 48369.09999990463,
+            "frameTimestamp": 48368.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48369.39999985695
+          },
+          {
+            "at": 48385.799999952316,
+            "frameTimestamp": 48385.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48386
+          },
+          {
+            "at": 48402.5,
+            "frameTimestamp": 48402.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48402.700000047684
+          },
+          {
+            "at": 48419.200000047684,
+            "frameTimestamp": 48418.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48419.39999985695
+          },
+          {
+            "at": 48435.799999952316,
+            "frameTimestamp": 48435.6,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48436
+          },
+          {
+            "at": 48452.39999985695,
+            "frameTimestamp": 48452.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48452.700000047684
+          },
+          {
+            "at": 48469.09999990463,
+            "frameTimestamp": 48468.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48469.299999952316
+          },
+          {
+            "at": 48485.700000047684,
+            "frameTimestamp": 48485.5,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48485.89999985695
+          },
+          {
+            "at": 48502.59999990463,
+            "frameTimestamp": 48502.2,
+            "phase": "question",
+            "gap": 16.899999856948853,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48502.89999985695
+          },
+          {
+            "at": 48519.09999990463,
+            "frameTimestamp": 48518.9,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48519.5
+          },
+          {
+            "at": 48535.799999952316,
+            "frameTimestamp": 48535.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48536
+          },
+          {
+            "at": 48552.5,
+            "frameTimestamp": 48552.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48552.700000047684
+          },
+          {
+            "at": 48569.299999952316,
+            "frameTimestamp": 48568.9,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48569.5
+          },
+          {
+            "at": 48585.799999952316,
+            "frameTimestamp": 48585.6,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48585.89999985695
+          },
+          {
+            "at": 48602.39999985695,
+            "frameTimestamp": 48602.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48602.59999990463
+          },
+          {
+            "at": 48619.09999990463,
+            "frameTimestamp": 48618.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48619.299999952316
+          },
+          {
+            "at": 48635.799999952316,
+            "frameTimestamp": 48635.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48636
+          },
+          {
+            "at": 48652.39999985695,
+            "frameTimestamp": 48652.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48652.700000047684
+          },
+          {
+            "at": 48669.200000047684,
+            "frameTimestamp": 48668.9,
+            "phase": "question",
+            "gap": 16.800000190734863,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48669.5
+          },
+          {
+            "at": 48685.700000047684,
+            "frameTimestamp": 48685.5,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48686.09999990463
+          },
+          {
+            "at": 48702.5,
+            "frameTimestamp": 48702.3,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48702.700000047684
+          },
+          {
+            "at": 48719,
+            "frameTimestamp": 48718.9,
+            "phase": "question",
+            "gap": 16.5,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48719.39999985695
+          },
+          {
+            "at": 48735.799999952316,
+            "frameTimestamp": 48735.5,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48736.09999990463
+          },
+          {
+            "at": 48752.39999985695,
+            "frameTimestamp": 48752.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48752.799999952316
+          },
+          {
+            "at": 48769.09999990463,
+            "frameTimestamp": 48768.8,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48769.39999985695
+          },
+          {
+            "at": 48785.799999952316,
+            "frameTimestamp": 48785.5,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48786.09999990463
+          },
+          {
+            "at": 48802.39999985695,
+            "frameTimestamp": 48802.2,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48802.700000047684
+          },
+          {
+            "at": 48819.09999990463,
+            "frameTimestamp": 48818.9,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48819.5
+          },
+          {
+            "at": 48835.89999985695,
+            "frameTimestamp": 48835.6,
+            "phase": "question",
+            "gap": 16.799999952316284,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48836.200000047684
+          },
+          {
+            "at": 48852.5,
+            "frameTimestamp": 48852.2,
+            "phase": "question",
+            "gap": 16.600000143051147,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48852.89999985695
+          },
+          {
+            "at": 48869.09999990463,
+            "frameTimestamp": 48868.8,
+            "phase": "question",
+            "gap": 16.59999990463257,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48869.5
+          },
+          {
+            "at": 48885.799999952316,
+            "frameTimestamp": 48885.6,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48886.09999990463
+          },
+          {
+            "at": 48902.5,
+            "frameTimestamp": 48902.2,
+            "phase": "question",
+            "gap": 16.700000047683716,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 48902.799999952316
+          },
+          {
+            "at": 48920.700000047684,
+            "frameTimestamp": 48918.9,
+            "phase": "voting",
+            "gap": 18.200000047683716,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 48921.299999952316
+          },
+          {
+            "at": 48964.89999985695,
+            "frameTimestamp": 48952.2,
+            "phase": "voting",
+            "gap": 44.19999980926514,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 48965.700000047684
+          },
+          {
+            "at": 49110,
+            "frameTimestamp": 49102.2,
+            "phase": "voting",
+            "gap": 145.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49110.89999985695
+          },
+          {
+            "at": 49250.59999990463,
+            "frameTimestamp": 49235.5,
+            "phase": "voting",
+            "gap": 140.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49251.299999952316
+          },
+          {
+            "at": 49381.89999985695,
+            "frameTimestamp": 49368.9,
+            "phase": "voting",
+            "gap": 131.29999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49384.799999952316
+          },
+          {
+            "at": 49519,
+            "frameTimestamp": 49518.9,
+            "phase": "voting",
+            "gap": 137.10000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49519.89999985695
+          },
+          {
+            "at": 49657.5,
+            "frameTimestamp": 49652.2,
+            "phase": "voting",
+            "gap": 138.5,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49658.299999952316
+          },
+          {
+            "at": 49794.799999952316,
+            "frameTimestamp": 49785.5,
+            "phase": "voting",
+            "gap": 137.29999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49795.59999990463
+          },
+          {
+            "at": 49933.799999952316,
+            "frameTimestamp": 49918.8,
+            "phase": "voting",
+            "gap": 139,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 49934.799999952316
+          },
+          {
+            "at": 50080.39999985695,
+            "frameTimestamp": 50068.9,
+            "phase": "voting",
+            "gap": 146.59999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50081.39999985695
+          },
+          {
+            "at": 50214.799999952316,
+            "frameTimestamp": 50202.2,
+            "phase": "voting",
+            "gap": 134.40000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50215.700000047684
+          },
+          {
+            "at": 50345.799999952316,
+            "frameTimestamp": 50335.5,
+            "phase": "voting",
+            "gap": 131,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50346.59999990463
+          },
+          {
+            "at": 50479.200000047684,
+            "frameTimestamp": 50468.8,
+            "phase": "voting",
+            "gap": 133.40000009536743,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50479.89999985695
+          },
+          {
+            "at": 50611.89999985695,
+            "frameTimestamp": 50602.1,
+            "phase": "voting",
+            "gap": 132.69999980926514,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50612.700000047684
+          },
+          {
+            "at": 50741.5,
+            "frameTimestamp": 50735.5,
+            "phase": "voting",
+            "gap": 129.60000014305115,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50742
+          },
+          {
+            "at": 50874.700000047684,
+            "frameTimestamp": 50868.8,
+            "phase": "voting",
+            "gap": 133.20000004768372,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 50875.299999952316
+          },
+          {
+            "at": 51010.5,
+            "frameTimestamp": 51002.1,
+            "phase": "voting",
+            "gap": 135.79999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 51011.09999990463
+          },
+          {
+            "at": 51183.59999990463,
+            "frameTimestamp": 51168.8,
+            "phase": "results",
+            "gap": 173.09999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 51184.799999952316
+          },
+          {
+            "at": 51336.39999985695,
+            "frameTimestamp": 51335.4,
+            "phase": "results",
+            "gap": 152.79999995231628,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 51337.39999985695
+          }
+        ],
+        "firstFrameByPhase": {
+          "question": {
+            "at": 47052.200000047684,
+            "frameTimestamp": 47052.3,
+            "phase": "question",
+            "gap": 145.20000004768372,
+            "headingVisible": true,
+            "answers": false,
+            "timer": false,
+            "endAt": 47052.89999985695
+          },
+          "voting": {
+            "at": 48920.700000047684,
+            "frameTimestamp": 48918.9,
+            "phase": "voting",
+            "gap": 18.200000047683716,
+            "headingVisible": true,
+            "answers": true,
+            "timer": true,
+            "endAt": 48921.299999952316
+          },
+          "results": {
+            "at": 51183.59999990463,
+            "frameTimestamp": 51168.8,
+            "phase": "results",
+            "gap": 173.09999990463257,
+            "headingVisible": true,
+            "answers": true,
+            "timer": false,
+            "endAt": 51184.799999952316
+          }
+        },
+        "observedFrameCount": 98,
+        "omittedFrameCount": 0,
+        "largestRafGapMs": 173.09999990463257,
+        "limits": {
+          "phaseTransitions": 16,
+          "leadingFrames": 8,
+          "firstFrames": 192,
+          "lastFrames": 48,
+          "resultsFrames": 4
+        }
+      },
+      "observedThrough": "results",
+      "leadMs": 1868.5,
+      "answersTimerDeltaMs": 0
+    }
+  ],
+  "checkpoints": [
+    "act-1-scores",
+    "act-2-scores",
+    "act-3-scores"
+  ],
+  "interludes": [
+    "act-2",
+    "act-3"
+  ],
+  "chosenLabels": [
+    "12 steps",
+    "9 km",
+    "Solid",
+    "Sunlight",
+    "Yes",
+    "80"
+  ],
+  "expectedScore": 6000
+}

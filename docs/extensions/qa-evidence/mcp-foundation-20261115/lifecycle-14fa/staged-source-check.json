@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "testedInputs": 128,
+  "gitIndexBytesMatchTestedManifest": true,
+  "renames": "8 R100 byte-identical moves",
+  "parentVitestIntersection": 0,
+  "originalPrivateCoverage": 8,
+  "totalPrivateCoverage": 9,
+  "unleasedPaths": [],
+  "priorFrozenEvidenceChanges": 0,
+  "sourceWhitespace": "PASS scoped git diff --cached --check",
+  "rawEvidence": "Raw guard FAIL and previous success/failure evidence preserved"
+}

@@ -1,0 +1,632 @@
+[
+  {
+    "path": "run5-evidence/format-receipts.json",
+    "bytes": 4139,
+    "sha256": "c812b020dfc49d1c1bbf61a913d1416c6e4a2b0e1328f561684ec45c52ea20db"
+  },
+  {
+    "path": "run5-evidence/launch.json",
+    "bytes": 2390,
+    "sha256": "5ef334ef3a1e164b0b1e40e98ea732c894681f825ec1877dab1f29b7faa2fe6d"
+  },
+  {
+    "path": "run5-evidence/native-build-receipt.json",
+    "bytes": 79931,
+    "sha256": "0915448dca9f5f47ed79c2e6e2288c6922df26d24a89de169504f746748b3d3a"
+  },
+  {
+    "path": "run5-evidence/native-build.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "run5-evidence/native-build.log",
+    "bytes": 1070,
+    "sha256": "c7cc86623615f7e4a8ee3fd2019462a8a807a3e4494fc5ad007098aca02d96b9"
+  },
+  {
+    "path": "run5-evidence/native-module-receipt.json",
+    "bytes": 111343,
+    "sha256": "8b83c445cfc103e913e740dc5fd49b71eaf367cb79d0792bfbcb0fecf682f2a4"
+  },
+  {
+    "path": "run5-evidence/native-receipt.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "run5-evidence/physical-mounts.json",
+    "bytes": 1449,
+    "sha256": "4b17640c971981ab90fd54b09cb38f45ca7f4a185d8b70f82b5907a671d90319"
+  },
+  {
+    "path": "run5-evidence/runtime-toolchain.json",
+    "bytes": 2563,
+    "sha256": "9bcd42ad51e9b11860323146afd205989ca566bfd35fca078a96a4e4e5f648c0"
+  },
+  {
+    "path": "run5-evidence/server-build.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "run5-evidence/server-build.log",
+    "bytes": 221,
+    "sha256": "a821ccec0a176965bae8bcd0bb55a2205f34e31bce71c4bfad85d29c71c20972"
+  },
+  {
+    "path": "run5-evidence/source-sha256.json",
+    "bytes": 5871,
+    "sha256": "0ce5b9e3a1a9b7962dd95013074505b299e49b9a62136bf3a5f10cefa06e6e5b"
+  },
+  {
+    "path": "run5-evidence/tests.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "run5-evidence/tests.log",
+    "bytes": 1945,
+    "sha256": "85197c4a15ab5682d93e4d5e6818960dbc235beeae6503292ec5d7882be8f474"
+  },
+  {
+    "path": "run5-evidence/typescript.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "run5-evidence/typescript.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "run5-evidence/ui-browser.log",
+    "bytes": 3785,
+    "sha256": "663865bc53f389ccc70c9891fe368e47859dc886983d753aa16f76e7441e4be3"
+  },
+  {
+    "path": "run5-evidence/ui-build.exit",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "run5-evidence/ui-build.log",
+    "bytes": 46938,
+    "sha256": "2b009660e54a909215b7245f3cf26751f82362273dd0ef9018e6cf33ceb7a8bc"
+  },
+  {
+    "path": "run5-evidence/formatted/docs/extensions/qa-evidence/show-ui-20261115/qa-native-receipt.vite.config.ts",
+    "bytes": 2011,
+    "sha256": "c870dfd6e64a23ff8716b75c1ba093b5b2f1a08ae57b6946bcd028943a6602f0"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/env.d.ts",
+    "bytes": 38,
+    "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/fixture.tsx",
+    "bytes": 1517,
+    "sha256": "1f9221997546f349d549ce9533514090d7cf21dfaa31687f38d38d839e7b38f3"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/fixture.vite.config.ts",
+    "bytes": 488,
+    "sha256": "280bdc600af5e18d5d9c2cb951fb2432e84bda2f4ad2d7e65ec9b1b6ecc68862"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/format.mjs",
+    "bytes": 2742,
+    "sha256": "9d972a12cb199d76a5b2114a49e797107031c4ad135d077caf9ccf718cf60121"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/native-build-receipt.mjs",
+    "bytes": 1955,
+    "sha256": "8441fa7624db86e7167626a953d29bbba78d47ec8c2af76a49c1cbf447ea28df"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/playwright.config.ts",
+    "bytes": 856,
+    "sha256": "0483b4b6ac95442fa007215db810207bb6aee9f8cd55cf6db37cba051e23fa09"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/server.ts",
+    "bytes": 3356,
+    "sha256": "e128ec58fa3f73ed17df49095793dca6f0ee005d64018949ede59486a22a5d3e"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/server.vite.config.ts",
+    "bytes": 440,
+    "sha256": "481b8c703e2178f9c824cba0ccc585075992ca640d1eee762e02a2a8796ef954"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/qa/theme-builder/theme-builder.spec.ts",
+    "bytes": 8298,
+    "sha256": "5624483e5f02845c1821c816dbb400986646545ea527b040b11fb24157f5d243"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/BuilderLibrary.tsx",
+    "bytes": 6474,
+    "sha256": "a93fc043598d02a7636bcaadb81b77be25ed304141855ecabef8b9710d00f1e5"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/BuilderProperties.tsx",
+    "bytes": 2428,
+    "sha256": "68dc7717c71acdd5cee85c3fe179a6108671187d9f3e1bf288754c4c45b7d153"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/BuilderTree.tsx",
+    "bytes": 4196,
+    "sha256": "38e1e7e133ca768fb1c7be3b6265447a77051562ec0382461a9b6142c1164065"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/client.ts",
+    "bytes": 3275,
+    "sha256": "c9baebf1a233efe5d33b6daf768ebbe2a66932727437cfb5fb8d6c1ead1b5ab2"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/document.fixture.ts",
+    "bytes": 3080,
+    "sha256": "6be6e14fc5c9c38fe4fbd1ec255fa769fffea6cf008fa9397d3471e87cf24a72"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/document.test.ts",
+    "bytes": 5507,
+    "sha256": "cfa064fe83610297cf552c338702cb1a088a3eb0193f4aa5f87bd3f9c37755f9"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/document.ts",
+    "bytes": 9034,
+    "sha256": "465b17cf6a3bc5fd654eef67e6d133433eccfdd26143be61b522a9e9539305f1"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/NativeLibraryPanel.tsx",
+    "bytes": 5763,
+    "sha256": "9c35dbbb27f77a798eaa4812110a7bbdc1f1a86fe3169e41d27ac6d2137288ab"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/OpenThemeBuilderLink.tsx",
+    "bytes": 670,
+    "sha256": "7608f4255db5e9f345237ec32bc7881c7f51486df0500ebd4dfb8f9ce520d71c"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/strings.ts",
+    "bytes": 14674,
+    "sha256": "abb4da01a827b756ba0093fe8f095d559ccc06bc921405cb859df1a45e7583b1"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/StudioThemeBuilder.tsx",
+    "bytes": 6988,
+    "sha256": "aa735f98155e2c3320b60ed5e94dc61c11140d63fa37b9015df0e87f7395198a"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/styles.ts",
+    "bytes": 3198,
+    "sha256": "bd0f0037a3c450c096ec00cedc6a0b11a28b1659263aff1d77244529caf8c5ed"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/components/theme-builder/ThemeBuilderShell.tsx",
+    "bytes": 17442,
+    "sha256": "29caed8a33edc959cd3d904e3eda6808e7c57accfa0ee8df90bf9d7e84976451"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/presentation/index.ts",
+    "bytes": 1887,
+    "sha256": "191c10bb80fb7de1f4ccfcb934036e8ba5212808ec9a431b2b9dc8b51c549135"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+    "bytes": 6261,
+    "sha256": "f9941f67589ec6ef0ec1e7f62d52460b2d36b5d0a1170a3bd4329ef108c79566"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/presentation/show-library-preview/preview-candidate.test.ts",
+    "bytes": 12613,
+    "sha256": "e86a94054e8d79b4a9fb6a5fe26243ae4dd28589f8a749655cfd6b004255a81f"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/presentation/show-library-preview/projected-frame.ts",
+    "bytes": 932,
+    "sha256": "4ee0cd3924b3975961bcd33f0b1bf705fd1eadaa8b5b019232eac0ba715e09b7"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+    "bytes": 2845,
+    "sha256": "3af2210bdb1afcb7dedcedcd9654ad29059eaa7a1767036986615290a7ce7216"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+    "bytes": 3811,
+    "sha256": "a606eee766b3eba0e00e5c103bf80c08990dfd2c3d95db3f1fa529b4b994f950"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/server/show-themes/builder-routes.test.ts",
+    "bytes": 4614,
+    "sha256": "bc9ca393e59293adadbccd8aee93bb28818d1428292bd0de04664eed3b56d95c"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/server/show-themes/builder-routes.ts",
+    "bytes": 3246,
+    "sha256": "2b0cfd232573afc48fc0cf8cd03208f6cd7160119e7832268b7e1fabe4370fed"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/server/show-themes/installation.ts",
+    "bytes": 31526,
+    "sha256": "e6248f5c602d21e61a9bbb25b5fabbeac772c1a6453be70c48c2abb35d85ef6a"
+  },
+  {
+    "path": "run5-evidence/formatted/extensions/src/site/web/studio/Studio.tsx",
+    "bytes": 20435,
+    "sha256": "0dfe0767d2a2e301cbe765987bb361fd95170d8a41cfbf271a506f5f8e4d7582"
+  },
+  {
+    "path": "run5-evidence/formatted/packages/web/src/features/quizz/components/studio/show-theme-settings.tsx",
+    "bytes": 12147,
+    "sha256": "65e5273eb5ce94b75d2a31055c74ae380620106c913352478a318d51c7050aa7"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/.last-run.json",
+    "bytes": 45,
+    "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-de-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-de-chromium/attachments/browser-events-json-377f31a4d37bfdc24ac9c9246f2fdef98dded487.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-de-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-de-webkit/attachments/browser-events-json-83ebf3a1aee62d23a008b3615c8b3b35a1e2f682.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-en-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-en-chromium/attachments/browser-events-json-f760130e284315bcd50be477ae895325c66b2e3d.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-en-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-en-webkit/attachments/browser-events-json-60381c296008b2aa12d016cc5c4d779582d2eae9.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-es-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-es-chromium/attachments/browser-events-json-93c3bea49a153e4c218f2bc27630b538fc64cc09.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-es-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-es-webkit/attachments/browser-events-json-d9846c45b59fbe22d2a1aa66ad2012e3447ae049.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-fr-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-fr-chromium/attachments/browser-events-json-d070b92ea1b97e33ef31606fb54a7dc2fa0b755c.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-fr-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-fr-webkit/attachments/browser-events-json-ba2964d7e483b77e556ed162e70fedcf872c4d5b.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-it-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-it-chromium/attachments/browser-events-json-4ca1f256079c857b16b54ee79581423b54fc1bcc.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-it-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-it-webkit/attachments/browser-events-json-e88d44da376035de6cf16fc548c6e1929b789869.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-ja-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-ja-chromium/attachments/browser-events-json-5150b039999ab2c2a81c58b58b04a5d5711cf696.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-ja-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-ja-webkit/attachments/browser-events-json-faed0609107cbef3f062aa180f4fa17be37ff13a.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-tr-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-tr-chromium/attachments/browser-events-json-1d357a341558d7d9cea57d7a70d671803411f3ba.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-tr-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-tr-webkit/attachments/browser-events-json-1a04bd3e93f14c54bd09420b5e89bb81f88ce9b4.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-vi-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-vi-chromium/attachments/browser-events-json-7c744740e0ad76aa8e2b8bf2d1ebfe5fe41740c7.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-vi-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-authored-UI-and-15-slots-16-events-vi-webkit/attachments/browser-events-json-b62e5c18f8912b51b628423b635e5150006a3006.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-draft-conflict-preserves-local-edits-chromium/browser-events.json",
+    "bytes": 126,
+    "sha256": "878da4f43559a09277e5bbcd041f7ad0814cab18f915487504d88ac7f8b4a528"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-draft-conflict-preserves-local-edits-chromium/attachments/browser-events-json-02b2414be32501240eabe66c59c62e82e2fb2963.json",
+    "bytes": 126,
+    "sha256": "878da4f43559a09277e5bbcd041f7ad0814cab18f915487504d88ac7f8b4a528"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-draft-conflict-preserves-local-edits-webkit/browser-events.json",
+    "bytes": 126,
+    "sha256": "878da4f43559a09277e5bbcd041f7ad0814cab18f915487504d88ac7f8b4a528"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-draft-conflict-preserves-local-edits-webkit/attachments/browser-events-json-2e46d065e04a8b70ed8ccb89cf5f4edced37a16a.json",
+    "bytes": 126,
+    "sha256": "878da4f43559a09277e5bbcd041f7ad0814cab18f915487504d88ac7f8b4a528"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-edits-made-d-bc073--dirty-after-acknowledgment-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-edits-made-d-bc073--dirty-after-acknowledgment-chromium/attachments/browser-events-json-c2ea83d3be41e2e531c51f52c1c058e0df5b1648.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-edits-made-d-bc073--dirty-after-acknowledgment-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-edits-made-d-bc073--dirty-after-acknowledgment-webkit/attachments/browser-events-json-47d989c8cd0ccb0e5c9630380d486080f669b3cb.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-keyboard-tre-22b9d-l-persisted-draft-roundtrip-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-keyboard-tre-22b9d-l-persisted-draft-roundtrip-chromium/attachments/browser-events-json-6d8b653c3475cd86d872a0852cefabbf66adda27.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-keyboard-tre-22b9d-l-persisted-draft-roundtrip-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-keyboard-tre-22b9d-l-persisted-draft-roundtrip-webkit/attachments/browser-events-json-5cac5ad76bee6cdb71dc392a5e725f7a2fbbea84.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-read-only-UI-ca26c-ted-cross-tenant-API-denial-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-read-only-UI-ca26c-ted-cross-tenant-API-denial-chromium/attachments/browser-events-json-6d8bf3fcfd9d5c686fa5e87bf5e39cc7cbd50c41.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-read-only-UI-ca26c-ted-cross-tenant-API-denial-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-read-only-UI-ca26c-ted-cross-tenant-API-denial-webkit/attachments/browser-events-json-3355b9c8e971b4ded465f73a215c1f70374706c6.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-chromium/builder-1024.png",
+    "bytes": 165962,
+    "sha256": "a4deac309074e029288b42dd126a663f01955320f365618abb4de889abb6b190"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-chromium/attachments/browser-events-json-0da188480d7bc72d1bbdd360b5d6c26dd460896f.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-chromium/attachments/builder-png-a7996d6b650a3e275f8955ef594c7bd7e3d8e367.png",
+    "bytes": 165962,
+    "sha256": "a4deac309074e029288b42dd126a663f01955320f365618abb4de889abb6b190"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-webkit/builder-1024.png",
+    "bytes": 234627,
+    "sha256": "48808e859a2398389459cb2d11aeac1a9f37b7f1522e54253981c838cf91f98b"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-webkit/attachments/browser-events-json-04e26d7198100ebaf1b5947064f468f59169eb77.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1024-webkit/attachments/builder-png-33d26d83d4ec086679ffbee33ed27fd7179ffbd3.png",
+    "bytes": 234627,
+    "sha256": "48808e859a2398389459cb2d11aeac1a9f37b7f1522e54253981c838cf91f98b"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-chromium/builder-1920.png",
+    "bytes": 164191,
+    "sha256": "e300c7c45c37bca465ee63e05d6633407d7225403ea35db149283edbbc0bc58c"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-chromium/attachments/browser-events-json-d212b2d2ea771ea018486ad644cad085d3717a42.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-chromium/attachments/builder-png-b975fcdead99e09e6ab57acee16f4a39748427b8.png",
+    "bytes": 164191,
+    "sha256": "e300c7c45c37bca465ee63e05d6633407d7225403ea35db149283edbbc0bc58c"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-webkit/builder-1920.png",
+    "bytes": 240513,
+    "sha256": "a4687b0f6fc3fa72f5f05ce669a366cbdb5ec168df7f1841ccad26c1b297a458"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-webkit/attachments/browser-events-json-797ea39bef2cbf8abee81aab74c3d043337228fe.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-1920-webkit/attachments/builder-png-c13e697eb41fb1f249b526cc47a207bd90791782.png",
+    "bytes": 240513,
+    "sha256": "a4687b0f6fc3fa72f5f05ce669a366cbdb5ec168df7f1841ccad26c1b297a458"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-chromium/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-chromium/builder-390.png",
+    "bytes": 221097,
+    "sha256": "4d165dd87e4ef177748adafa84da3c41a6b8fea9de737dbff08809d472c83cfd"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-chromium/attachments/browser-events-json-12dc8bcb5c8a702f770facb4574b074aa4a46729.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-chromium/attachments/builder-png-91d344cd17112cabf0f3875fb536ffd60677155e.png",
+    "bytes": 221097,
+    "sha256": "4d165dd87e4ef177748adafa84da3c41a6b8fea9de737dbff08809d472c83cfd"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-webkit/browser-events.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-webkit/builder-390.png",
+    "bytes": 280299,
+    "sha256": "df8ffc787cd28c0b436936dd0097e7dfd9f46a56d9186c23310e62d00dc82b4e"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-webkit/attachments/browser-events-json-5591777aed021b4221e9f38d717331736d95715d.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "run5-evidence/ui-browser-results/theme-builder-responsive-keyboard-RTL-reduced-motion-390-webkit/attachments/builder-png-5dd2c854c9ae7ac30b1c13428c40502126f80894.png",
+    "bytes": 280299,
+    "sha256": "df8ffc787cd28c0b436936dd0097e7dfd9f46a56d9186c23310e62d00dc82b4e"
+  }
+]

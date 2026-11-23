@@ -1,0 +1,25 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/server/storage.test.ts",
+    "src/server/media-library.test.ts",
+    "src/server/storage/journal-recovery.test.ts",
+    "src/server/storage/create-recovery.test.ts",
+    "src/server/media-library-recovery.test.ts",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/recovery-original.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "64ce3c23887e5c6feb51b10a98e41f84e67751318cb451763a7608b18ad133f4",
+  "seconds": 12.095
+}

@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "c1cabd878a1bcde51ac7da05d8c72ded3e8125cc",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+  "argv": [
+    "extensions/node_modules/typescript/bin/tsc",
+    "--project",
+    "extensions/src/core/show-library/tsconfig.focused.json"
+  ],
+  "exitCode": 0,
+  "startedUtc": "2026-11-15T15:04:05.9131203Z",
+  "log": "types-verified-c1.log",
+  "logSha256": "4229b47d43e0366d8db1833349b89a3c1552c818059a3edf79b4eb647920f30e",
+  "preservedInitialFailure": "types.log",
+  "sourceHashesMatchCommitted": true
+}

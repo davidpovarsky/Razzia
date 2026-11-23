@@ -1,0 +1,39 @@
+{
+  "source_sha": "21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d",
+  "phase": "invite",
+  "container": "phone-invite-21f7b2d-attempt01",
+  "recorded_utc": "2026-11-15T19:32:33.134577+00:00",
+  "prior_cumulative_bytes": 13496320,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-invite-receipts-invite-21f7b2d.tar",
+  "archive_sha256": "a6a7dea2a7644488cba128e7c943f97769b0ab44acd212f7a2c85a600907bf71",
+  "archive_bytes": 30720,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-invite-21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d",
+      "allocated_bytes": 446464
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d",
+      "allocated_bytes": 626688
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-invite-21f7b2d-attempt01",
+      "allocated_bytes": 69632
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-invite-21f7b2d",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-invite-receipts-invite-21f7b2d.tar",
+      "allocated_bytes": 32768
+    },
+    {
+      "path": "/var/lib/docker/containers/267cc505ef6ba4a6ada9bd0079c6bf30fb40df00f7665f32d32cb459d46feebc",
+      "allocated_bytes": 45056
+    }
+  ],
+  "new_allocated_bytes": 1232896,
+  "cumulative_allocated_bytes": 14729216
+}

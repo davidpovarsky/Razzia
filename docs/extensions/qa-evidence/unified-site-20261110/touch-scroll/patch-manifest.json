@@ -1,0 +1,18 @@
+{
+  "sourceRevision": "db1539974c82389e05c5152f66a95a74ba4c1e39",
+  "baseImage": "sha256:6b08742f1758aee1dc60554bbec5b885148209b3eaa4e5020b6db5ada6d92ba8",
+  "expectedContainer": "96e9a2b4c3f42edb6e4618309475b2893aa7e5d814fdb8527e5ed0220c554fb1",
+  "previousIndexSha256": "9d8cb6d29dd9aa3219610c3c68c3e8fb474cfbddd07acea9faae4919a555a914",
+  "files": [
+    {
+      "path": "web/assets/index-Ce9j7yUX.js",
+      "sha256": "7290224208fa8d31cacc9ef6d189e303d014d081d59fbc39206f2d1f65cfcc81",
+      "bytes": 4597761
+    },
+    {
+      "path": "web/index.html",
+      "sha256": "901b4aa669f33d91e5fe63fc88f584288c4979a4aba49199163f4dd03ec91fb8",
+      "bytes": 985
+    }
+  ]
+}

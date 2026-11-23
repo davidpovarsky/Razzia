@@ -1,0 +1,3365 @@
+{
+  "modules": [
+    {
+      "id": "/work/extensions/src/core/packages/manifest.ts",
+      "importedIds": [
+        "/work/extensions/src/core/packages/paths.ts",
+        "/work/extensions/src/core/show-themes/selection.ts",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/packages/paths.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/packages/protocol.ts",
+      "importedIds": [
+        "/work/extensions/src/core/packages/manifest.ts",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/product-branding.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "importedIds": [
+        "/work/extensions/src/core/show-library/stage-metadata-schema.ts",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/audio.ts",
+      "importedIds": [
+        "/work/extensions/src/core/show-themes/selection.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/classic.manifest.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/definition.ts",
+      "importedIds": [
+        "/work/extensions/src/core/packages/protocol.ts",
+        "/work/extensions/src/core/show-themes/selection.ts",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/index.ts",
+      "importedIds": [
+        "/work/extensions/src/core/show-themes/audio.ts",
+        "/work/extensions/src/core/show-themes/definition.ts",
+        "/work/extensions/src/core/show-themes/media.ts",
+        "/work/extensions/src/core/show-themes/registry.ts",
+        "/work/extensions/src/core/show-themes/resolve.ts",
+        "/work/extensions/src/core/show-themes/selection.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/media.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/razzia.manifest.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/registry.ts",
+      "importedIds": [
+        "/work/extensions/src/core/show-themes/classic.manifest.json",
+        "/work/extensions/src/core/show-themes/definition.ts",
+        "/work/extensions/src/core/show-themes/razzia.manifest.json",
+        "/work/extensions/src/core/show-themes/selection.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/resolve.ts",
+      "importedIds": [
+        "/work/extensions/src/core/product-branding.ts",
+        "/work/extensions/src/core/show-themes/registry.ts",
+        "/work/extensions/src/core/show-themes/selection.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/selection.ts",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/de/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/en/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/es/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/fr/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/it/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/ja/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/tr/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/locales/vi/extensions.json",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/platform-controls.tsx",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+      "importedIds": [
+        "/work/extensions/src/core/show-themes/resolve.ts",
+        "/work/extensions/src/core/show-themes/selection.ts",
+        "/work/extensions/src/presentation/show-library-preview/i18n.ts",
+        "/work/extensions/src/presentation/show-library-preview/preview-clock.ts",
+        "/work/extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+        "/work/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+        "/work/extensions/src/presentation/show-themes/context.tsx",
+        "/work/extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/i18n.ts",
+      "importedIds": [
+        "/work/extensions/src/locales/de/extensions.json",
+        "/work/extensions/src/locales/en/extensions.json",
+        "/work/extensions/src/locales/es/extensions.json",
+        "/work/extensions/src/locales/fr/extensions.json",
+        "/work/extensions/src/locales/it/extensions.json",
+        "/work/extensions/src/locales/ja/extensions.json",
+        "/work/extensions/src/locales/tr/extensions.json",
+        "/work/extensions/src/locales/vi/extensions.json",
+        "/work/extensions/src/presentation/tadazz-v4/types.ts",
+        "/work/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/preview-clock.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-show/show-director.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+      "importedIds": [
+        "/work/extensions/src/core/show-library/native-preview-frame-schema.ts",
+        "/work/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+        "/work/extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+        "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+      "importedIds": [
+        "/work/extensions/src/core/show-library/native-preview-frame-schema.ts",
+        "/work/extensions/src/presentation/show-library-preview/preview-clock.ts",
+        "/work/extensions/src/presentation/tadazz-show/show-director.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-themes/context.tsx",
+      "importedIds": [
+        "/work/extensions/src/core/product-branding.ts",
+        "/work/extensions/src/core/show-themes/index.ts",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+      "importedIds": [
+        "/work/extensions/src/core/product-branding.ts",
+        "/work/extensions/src/presentation/platform-controls.tsx",
+        "/work/extensions/src/presentation/tadazz-show/labels.ts",
+        "/work/extensions/src/presentation/tadazz-show/motion-engine.ts",
+        "/work/extensions/src/presentation/tadazz-show/motion-spec.ts",
+        "/work/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+        "/work/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+        "/work/extensions/src/presentation/tadazz-show/labels.ts",
+        "/work/extensions/src/presentation/tadazz-show/motion-engine.ts",
+        "/work/extensions/src/presentation/tadazz-show/motion-spec.ts",
+        "/work/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+        "/work/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+        "/work/extensions/src/presentation/tadazz-show/voting-presentation.ts",
+        "/work/extensions/src/presentation/tadazz-v4/index.ts",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/labels.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/motion-engine.ts",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-show/motion-spec.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/motion-spec.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/show-director.ts",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/voting-presentation.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+      "importedIds": [
+        "/work/extensions/src/presentation/platform-controls.tsx",
+        "/work/extensions/src/presentation/show-themes/context.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-v4/components.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/full-show.css",
+        "/work/extensions/src/presentation/tadazz-v4/motion.ts",
+        "/work/extensions/src/presentation/tadazz-v4/source-layout.css",
+        "/work/extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+        "/work/extensions/src/presentation/tadazz-v4/types.ts",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/components.tsx",
+      "importedIds": [
+        "/work/extensions/src/presentation/platform-controls.tsx",
+        "/work/extensions/src/presentation/show-themes/context.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/presentation-note.ts",
+        "/work/extensions/src/presentation/tadazz-v4/types.ts",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/full-show.css",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/index.ts",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/components.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/motion.ts",
+        "/work/extensions/src/presentation/tadazz-v4/types.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/motion.ts",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-v4/types.ts"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/presentation-note.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+      "importedIds": [
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+        "/work/extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+        "/work/extensions/src/presentation/tadazz-v4/types.ts",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/source-layout.css",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/types.ts",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+        "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "importedIds": [],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "importedIds": [
+        "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js"
+      ],
+      "dynamicallyImportedIds": []
+    }
+  ],
+  "outputs": [
+    {
+      "type": "chunk",
+      "fileName": "renderer.js",
+      "facadeModuleId": "/work/extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+      "isEntry": true,
+      "imports": [],
+      "dynamicImports": [],
+      "moduleContributions": [
+        {
+          "id": "\u0000rolldown/runtime.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 161,
+          "originalLength": null,
+          "renderedExports": [
+            "__commonJSMin"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 15460,
+          "originalLength": null,
+          "renderedExports": [
+            "captureStackTrace",
+            "optionalKeys",
+            "nullish",
+            "getLengthableOrigin",
+            "escapeRegex",
+            "assignProp",
+            "explicitlyAborted",
+            "required",
+            "jsonStringifyReplacer",
+            "safeExtend",
+            "codePointLength",
+            "floatSafeRemainder",
+            "finalizeIssue",
+            "sizeCaps",
+            "rawShape",
+            "merge",
+            "prefixIssues",
+            "getEnumValues",
+            "propertyKeyTypes",
+            "normalizeParams",
+            "constantCatch",
+            "unwrapMessage",
+            "members",
+            "extend",
+            "own",
+            "CONSTANT_CATCH",
+            "allowsEval",
+            "issue",
+            "attachSchema",
+            "hide",
+            "joinValues",
+            "parsedType",
+            "shallowClone",
+            "installLazyProp",
+            "NUMBER_FORMAT_RANGES",
+            "derived",
+            "partial",
+            "isPlainObject",
+            "omit",
+            "cached",
+            "stringifyPrimitive",
+            "pick",
+            "esc",
+            "clone",
+            "aborted",
+            "defineLazyInternal",
+            "cleanRegex",
+            "mergeDefs",
+            "slugify",
+            "isObject",
+            "BIGINT_FORMAT_RANGES"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3015,
+          "originalLength": null,
+          "renderedExports": [
+            "globalConfig",
+            "$ZodEncodeError",
+            "$ZodAsyncError",
+            "$constructor",
+            "config"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3416,
+          "originalLength": null,
+          "renderedExports": [
+            "formatError",
+            "flattenError",
+            "$ZodError"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 5207,
+          "originalLength": null,
+          "renderedExports": [
+            "_safeDecode",
+            "_decode",
+            "validateAsync",
+            "_parseAsync",
+            "_encode",
+            "_parse",
+            "_encodeAsync",
+            "_decodeAsync",
+            "_safeDecodeAsync",
+            "_safeParse",
+            "_safeParseAsync",
+            "validate",
+            "_safeEncodeAsync",
+            "_safeEncode"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3899,
+          "originalLength": null,
+          "renderedExports": [
+            "uuid",
+            "nanoid",
+            "cidrv6",
+            "emoji",
+            "base64",
+            "cuid",
+            "cidrv4",
+            "duration",
+            "uppercase",
+            "httpProtocol",
+            "anyString",
+            "e164",
+            "number",
+            "xid",
+            "guid",
+            "nanoidOfLength",
+            "ipv4",
+            "datetime",
+            "email",
+            "integer",
+            "boolean",
+            "lowercase",
+            "time",
+            "cuid2",
+            "ulid",
+            "ksuid",
+            "date",
+            "ipv6",
+            "base64url"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 8920,
+          "originalLength": null,
+          "renderedExports": [
+            "$ZodCheckLessThan",
+            "$ZodCheckGreaterThan",
+            "$ZodCheckMultipleOf",
+            "$ZodCheckMaxLength",
+            "$ZodCheckStringFormat",
+            "$ZodCheckNumberFormat",
+            "$ZodCheckLowerCase",
+            "$ZodCheckMinLength",
+            "$ZodCheckLengthEquals",
+            "$ZodCheckRegex",
+            "$ZodCheckUpperCase",
+            "$ZodCheckIncludes",
+            "$ZodCheckStartsWith",
+            "$ZodCheckEndsWith",
+            "$ZodCheckOverwrite",
+            "$ZodCheck"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 995,
+          "originalLength": null,
+          "renderedExports": [
+            "Doc"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 145,
+          "originalLength": null,
+          "renderedExports": [
+            "version"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 48451,
+          "originalLength": null,
+          "renderedExports": [
+            "$ZodISODate",
+            "$ZodReadonly",
+            "$ZodEmail",
+            "$ZodBase64",
+            "$ZodNumberFormat",
+            "$ZodCUID",
+            "$ZodStringFormat",
+            "isValidCIDRv6",
+            "isValidIPv6",
+            "urlHostnameOk",
+            "$ZodUUID",
+            "$ZodTransform",
+            "$ZodEmoji",
+            "$ZodExactOptional",
+            "standardProps",
+            "$ZodPrefault",
+            "$ZodEnum",
+            "$ZodCustom",
+            "base64urlCharset",
+            "stripTabAndNewline",
+            "base64Charset",
+            "canParseURL",
+            "isValidJWT",
+            "$ZodPipe",
+            "urlProtocolOk",
+            "$ZodLiteral",
+            "$ZodArray",
+            "$ZodCatch",
+            "$ZodIPv6",
+            "$ZodNumber",
+            "$ZodType",
+            "$ZodUnknown",
+            "$ZodObjectJIT",
+            "$ZodRecord",
+            "isValidBase64",
+            "$ZodNonOptional",
+            "$ZodIntersection",
+            "$ZodOptional",
+            "$ZodDiscriminatedUnion",
+            "$ZodXID",
+            "$ZodString",
+            "validateURL",
+            "$ZodBase64URL",
+            "$ZodISODuration",
+            "$ZodBoolean",
+            "$ZodISOTime",
+            "$ZodGUID",
+            "$ZodISODateTime",
+            "$ZodNanoID",
+            "parseURLObject",
+            "$ZodURL",
+            "$ZodJWT",
+            "$ZodIPv4",
+            "isValidBase64URL",
+            "$ZodULID",
+            "$ZodDefault",
+            "$ZodCUID2",
+            "$ZodCIDRv6",
+            "$ZodCIDRv4",
+            "$ZodObject",
+            "mergeValues",
+            "$ZodNullable",
+            "$ZodE164",
+            "$ZodNever",
+            "$ZodUnion",
+            "$ZodKSUID"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 6426,
+          "originalLength": null,
+          "renderedExports": [
+            "memoizer",
+            "$ZodCyclicError",
+            "isBackEdge"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3898,
+          "originalLength": null,
+          "renderedExports": [
+            "default"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 1232,
+          "originalLength": null,
+          "renderedExports": [
+            "globalRegistry",
+            "registry",
+            "$ZodRegistry"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 10398,
+          "originalLength": null,
+          "renderedExports": [
+            "_uppercase",
+            "_ipv6",
+            "_includes",
+            "_check",
+            "_isoDuration",
+            "_startsWith",
+            "_cuid2",
+            "_base64",
+            "_boolean",
+            "_gte",
+            "_min",
+            "_endsWith",
+            "_uuidv7",
+            "_ipv4",
+            "_number",
+            "_uuidv6",
+            "_isoDateTime",
+            "_emoji",
+            "_slugify",
+            "_gt",
+            "_guid",
+            "_multipleOf",
+            "_never",
+            "_isoDate",
+            "_base64url",
+            "_toUpperCase",
+            "_length",
+            "_toLowerCase",
+            "_nanoid",
+            "_email",
+            "_lte",
+            "_ksuid",
+            "_normalize",
+            "_cidrv4",
+            "_jwt",
+            "_xid",
+            "_regex",
+            "_string",
+            "_lowercase",
+            "_trim",
+            "_lt",
+            "_unknown",
+            "_cuid",
+            "_e164",
+            "_cidrv6",
+            "_max",
+            "_array",
+            "_isoTime",
+            "_uuidv4",
+            "_int",
+            "_ulid",
+            "_uuid",
+            "_maxLength",
+            "_overwrite",
+            "_minLength",
+            "_refine",
+            "_url",
+            "_superRefine"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 15593,
+          "originalLength": null,
+          "renderedExports": [
+            "initializeContext",
+            "extractDefs",
+            "processSchema",
+            "handleUnrepresentable",
+            "process",
+            "createToJSONSchemaMethod",
+            "createStandardJSONSchemaMethod",
+            "finalize"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 17187,
+          "originalLength": null,
+          "renderedExports": [
+            "intersectionProcessor",
+            "neverProcessor",
+            "defaultProcessor",
+            "catchProcessor",
+            "aggregateChecks",
+            "unionProcessor",
+            "objectProcessor",
+            "booleanProcessor",
+            "unknownProcessor",
+            "transformProcessor",
+            "nullableProcessor",
+            "optionalProcessor",
+            "literalProcessor",
+            "nonoptionalProcessor",
+            "readonlyProcessor",
+            "numberProcessor",
+            "prefaultProcessor",
+            "arrayProcessor",
+            "recordProcessor",
+            "pipeProcessor",
+            "stringProcessor",
+            "enumProcessor",
+            "customProcessor"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 1542,
+          "originalLength": null,
+          "renderedExports": [
+            "ZodRealError"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 816,
+          "originalLength": null,
+          "renderedExports": [
+            "decode",
+            "encode",
+            "decodeAsync",
+            "safeParseAsync",
+            "encodeAsync",
+            "safeParse",
+            "parseAsync",
+            "safeDecode",
+            "safeDecodeAsync",
+            "parse",
+            "safeEncode",
+            "safeEncodeAsync"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 25148,
+          "originalLength": null,
+          "renderedExports": [
+            "nullable",
+            "ZodString",
+            "ZodCIDRv6",
+            "exactOptional",
+            "ZodDefault",
+            "pipe",
+            "_default",
+            "ZodURL",
+            "ZodPipe",
+            "string",
+            "ZodUnknown",
+            "ZodISOTime",
+            "ZodBoolean",
+            "ZodJWT",
+            "ZodType",
+            "strictObject",
+            "ZodISODate",
+            "ZodNonOptional",
+            "number",
+            "optional",
+            "ZodDiscriminatedUnion",
+            "ZodCatch",
+            "array",
+            "ZodCIDRv4",
+            "never",
+            "catch",
+            "ZodRecord",
+            "ZodReadonly",
+            "_ZodString",
+            "ZodEmoji",
+            "ZodNumber",
+            "partialRecord",
+            "ZodCustom",
+            "superRefine",
+            "int",
+            "ZodExactOptional",
+            "ZodUnion",
+            "ZodBase64URL",
+            "ZodPrefault",
+            "literal",
+            "ZodCUID",
+            "prefault",
+            "ZodObject",
+            "ZodNanoID",
+            "ZodTransform",
+            "record",
+            "ZodISODuration",
+            "discriminatedUnion",
+            "ZodIntersection",
+            "refine",
+            "intersection",
+            "ZodISODateTime",
+            "transform",
+            "ZodOptional",
+            "ZodIPv6",
+            "ZodLiteral",
+            "ZodBase64",
+            "ZodGUID",
+            "unknown",
+            "ZodE164",
+            "ZodEnum",
+            "ZodKSUID",
+            "readonly",
+            "boolean",
+            "ZodNever",
+            "enum",
+            "ZodCUID2",
+            "ZodUUID",
+            "ZodNumberFormat",
+            "ZodEmail",
+            "ZodULID",
+            "ZodIPv4",
+            "ZodNullable",
+            "ZodXID",
+            "nonoptional",
+            "ZodStringFormat",
+            "ZodArray",
+            "union"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 386,
+          "originalLength": null,
+          "renderedExports": [
+            "restoreNativeCspConfiguration"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 9103,
+          "originalLength": null,
+          "renderedExports": [
+            "unstable_Profiling",
+            "unstable_runWithPriority",
+            "unstable_wrapCallback",
+            "unstable_ImmediatePriority",
+            "unstable_shouldYield",
+            "unstable_requestPaint",
+            "unstable_cancelCallback",
+            "unstable_next",
+            "unstable_getCurrentPriorityLevel",
+            "unstable_UserBlockingPriority",
+            "unstable_NormalPriority",
+            "unstable_IdlePriority",
+            "unstable_LowPriority",
+            "unstable_scheduleCallback",
+            "unstable_forceFrameRate"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 227,
+          "originalLength": null,
+          "renderedExports": [
+            "unstable_Profiling",
+            "unstable_runWithPriority",
+            "unstable_wrapCallback",
+            "unstable_ImmediatePriority",
+            "unstable_shouldYield",
+            "unstable_requestPaint",
+            "unstable_cancelCallback",
+            "unstable_next",
+            "unstable_getCurrentPriorityLevel",
+            "unstable_UserBlockingPriority",
+            "unstable_NormalPriority",
+            "unstable_IdlePriority",
+            "unstable_LowPriority",
+            "unstable_scheduleCallback",
+            "unstable_forceFrameRate"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 16034,
+          "originalLength": null,
+          "renderedExports": [
+            "createContext",
+            "Activity",
+            "Children",
+            "cacheSignal",
+            "createRef",
+            "useEffect",
+            "useOptimistic",
+            "isValidElement",
+            "ViewTransition",
+            "Component",
+            "forwardRef",
+            "cloneElement",
+            "startTransition",
+            "useState",
+            "useReducer",
+            "version",
+            "cache",
+            "__COMPILER_RUNTIME",
+            "useDebugValue",
+            "memo",
+            "__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE",
+            "unstable_useCacheRefresh",
+            "useActionState",
+            "useDeferredValue",
+            "useTransition",
+            "useInsertionEffect",
+            "StrictMode",
+            "Fragment",
+            "useLayoutEffect",
+            "createElement",
+            "useImperativeHandle",
+            "useContext",
+            "useCallback",
+            "useMemo",
+            "addTransitionType",
+            "PureComponent",
+            "useId",
+            "Profiler",
+            "Suspense",
+            "useEffectEvent",
+            "useSyncExternalStore",
+            "lazy",
+            "useRef",
+            "use"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 211,
+          "originalLength": null,
+          "renderedExports": [
+            "use",
+            "Activity",
+            "Children",
+            "cacheSignal",
+            "createRef",
+            "useEffect",
+            "useOptimistic",
+            "isValidElement",
+            "ViewTransition",
+            "Component",
+            "forwardRef",
+            "cloneElement",
+            "startTransition",
+            "useState",
+            "useReducer",
+            "version",
+            "cache",
+            "__COMPILER_RUNTIME",
+            "useDebugValue",
+            "memo",
+            "__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE",
+            "unstable_useCacheRefresh",
+            "useActionState",
+            "useDeferredValue",
+            "useTransition",
+            "useInsertionEffect",
+            "StrictMode",
+            "Fragment",
+            "useLayoutEffect",
+            "createElement",
+            "useImperativeHandle",
+            "useContext",
+            "useCallback",
+            "useMemo",
+            "addTransitionType",
+            "PureComponent",
+            "useId",
+            "Profiler",
+            "Suspense",
+            "useEffectEvent",
+            "useSyncExternalStore",
+            "lazy",
+            "useRef",
+            "createContext"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 6322,
+          "originalLength": null,
+          "renderedExports": [
+            "preinitModule",
+            "__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE",
+            "createPortal",
+            "useFormState",
+            "useFormStatus",
+            "preconnect",
+            "preload",
+            "requestFormReset",
+            "version",
+            "flushSync",
+            "preinit",
+            "preloadModule",
+            "browser",
+            "prefetchDNS",
+            "unstable_batchedUpdates"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 520,
+          "originalLength": null,
+          "renderedExports": [
+            "preinitModule",
+            "__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE",
+            "createPortal",
+            "useFormState",
+            "useFormStatus",
+            "preconnect",
+            "preload",
+            "requestFormReset",
+            "version",
+            "flushSync",
+            "preinit",
+            "preloadModule",
+            "browser",
+            "prefetchDNS",
+            "unstable_batchedUpdates"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 529608,
+          "originalLength": null,
+          "renderedExports": [
+            "createRoot"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 525,
+          "originalLength": null,
+          "renderedExports": [
+            "createRoot"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/product-branding.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 197,
+          "originalLength": null,
+          "renderedExports": [
+            "TADAZZ_PRODUCT_LOGO_URL"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/razzia.manifest.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 39231,
+          "originalLength": null,
+          "renderedExports": [
+            "category",
+            "posterAssetId",
+            "adapterAssets",
+            "nameKey",
+            "assets",
+            "slots",
+            "default",
+            "rendererId",
+            "version",
+            "capabilities",
+            "tokens",
+            "audioEvents",
+            "localizations",
+            "id",
+            "kind",
+            "provenance",
+            "descriptionKey",
+            "choreographyCues"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/classic.manifest.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 35950,
+          "originalLength": null,
+          "renderedExports": [
+            "category",
+            "posterAssetId",
+            "adapterAssets",
+            "nameKey",
+            "assets",
+            "slots",
+            "default",
+            "rendererId",
+            "version",
+            "capabilities",
+            "tokens",
+            "audioEvents",
+            "id",
+            "kind",
+            "provenance",
+            "descriptionKey",
+            "choreographyCues"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/selection.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2864,
+          "originalLength": null,
+          "renderedExports": [
+            "isSafeThemeAssetUrl",
+            "CLASSIC_THEME_ID",
+            "createDefaultShowTheme",
+            "SHOW_THEME_AUDIO_EVENTS",
+            "CLASSIC_THEME_VERSION",
+            "SHOW_THEME_ROLES",
+            "showThemeSelectionSchema",
+            "themeVersionSchema",
+            "themeAssetUrlSchema",
+            "themeOverridesSchema",
+            "SHOW_THEME_SLOTS",
+            "themeIdSchema",
+            "scopedThemeOverridesSchema"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/packages/paths.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 534,
+          "originalLength": null,
+          "renderedExports": [
+            "packagePath",
+            "packagePathKey"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/packages/manifest.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2750,
+          "originalLength": null,
+          "renderedExports": [
+            "packagePathSchema",
+            "PACKAGE_LIMITS",
+            "packageContentSchema",
+            "packageDigestSchema",
+            "packageFileSchema"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/packages/protocol.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3467,
+          "originalLength": null,
+          "renderedExports": [
+            "runtimePinSchema",
+            "RUNTIME_PHASES",
+            "runtimeSnapshotSchema",
+            "sandboxDefinitionSchema"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/definition.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 9374,
+          "originalLength": null,
+          "renderedExports": [
+            "SHOW_THEME_LOCALES",
+            "showThemeDefinitionSchema",
+            "TRUSTED_THEME_RENDERERS",
+            "TRUSTED_SLOT_RENDERERS"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/registry.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 1045,
+          "originalLength": null,
+          "renderedExports": [
+            "ShowThemeRegistry",
+            "showThemeRegistry"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/resolve.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3783,
+          "originalLength": null,
+          "renderedExports": [
+            "resolveShowTheme"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/audio.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-themes/index.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [
+            "CLASSIC_THEME_ID",
+            "SHOW_THEME_AUDIO_EVENTS",
+            "CLASSIC_THEME_VERSION",
+            "SHOW_THEME_ROLES",
+            "showThemeSelectionSchema",
+            "themeVersionSchema",
+            "themeAssetUrlSchema",
+            "SHOW_THEME_LOCALES",
+            "ShowThemeRegistry",
+            "showThemeRegistry",
+            "SHOW_THEME_SLOTS",
+            "resolveShowTheme",
+            "themeIdSchema",
+            "TRUSTED_SLOT_RENDERERS",
+            "TRUSTED_THEME_RENDERERS",
+            "createDefaultShowTheme",
+            "showThemeDefinitionSchema",
+            "themeOverridesSchema",
+            "scopedThemeOverridesSchema",
+            "isSafeThemeAssetUrl"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 906,
+          "originalLength": null,
+          "renderedExports": [
+            "Fragment",
+            "jsxs",
+            "jsx"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 235,
+          "originalLength": null,
+          "renderedExports": [
+            "Fragment",
+            "jsxs",
+            "jsx"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-themes/context.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 1222,
+          "originalLength": null,
+          "renderedExports": [
+            "themeAdapterAsset",
+            "ShowThemeScope",
+            "showThemeStyle",
+            "useOptionalShowTheme"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/platform-controls.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 599,
+          "originalLength": null,
+          "renderedExports": [
+            "PlatformButton"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/types.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2468,
+          "originalLength": null,
+          "renderedExports": [
+            "TADAZZ_V4_LABELS",
+            "TADAZZ_V4_ASSET_BASE",
+            "percentagesFor",
+            "normalizeData",
+            "TADAZZ_V4_SHOW_SCENES",
+            "topIndicesFor"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 4149,
+          "originalLength": null,
+          "renderedExports": [
+            "MixerMarkup"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 15212,
+          "originalLength": null,
+          "renderedExports": [
+            "RevealMarkup"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 15361,
+          "originalLength": null,
+          "renderedExports": [
+            "createMixerRenderer"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 6504,
+          "originalLength": null,
+          "renderedExports": [
+            "createRevealRenderer"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 377,
+          "originalLength": null,
+          "renderedExports": [
+            "storyElapsedSeconds"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 4460,
+          "originalLength": null,
+          "renderedExports": [
+            "ReferenceStoryScene"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 21171,
+          "originalLength": null,
+          "renderedExports": [
+            "FULL_SHOW_SCENES",
+            "PhoneInstructions",
+            "Directory",
+            "Readiness",
+            "Tie",
+            "isFullShowScene",
+            "StoryProgress",
+            "Finale",
+            "CompanyOpening",
+            "BrandLogo",
+            "FullShowSceneView",
+            "RoundLaunch",
+            "GrandOpening"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/presentation-note.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 251,
+          "originalLength": null,
+          "renderedExports": [
+            "presentationNote"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/components.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 22463,
+          "originalLength": null,
+          "renderedExports": [
+            "FivePictureAnswersV4",
+            "VoteStatusV4",
+            "labelsFor",
+            "CountdownFloaterV4",
+            "QuestionImageV4",
+            "QuestionFrameV4",
+            "LeaderboardV4",
+            "TopPickV4",
+            "RoundRecapV4",
+            "InterludeV4",
+            "ZWipeV4",
+            "StageSceneV4",
+            "StageAmbientV4",
+            "StageIdentityV4",
+            "StageBackdropV4",
+            "AnswerSlotV4"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/full-show.css",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/motion.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 29568,
+          "originalLength": null,
+          "renderedExports": [
+            "V4_EASE_DRAMATIC",
+            "V4_FX_COLORS",
+            "V4_EASE",
+            "TadazzV4Motion"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/source-layout.css",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 10250,
+          "originalLength": null,
+          "renderedExports": [
+            "TadazzV4Stage"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-v4/index.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/labels.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 1062,
+          "originalLength": null,
+          "renderedExports": [
+            "DEFAULT_TADAZZ_STAGE_LABELS"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/motion-spec.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 6429,
+          "originalLength": null,
+          "renderedExports": [
+            "cardLengthClass",
+            "CARD_ENTER",
+            "DEFAULT_TIMING",
+            "RESULT_NUMBER_ENTER",
+            "WIPE",
+            "FINALE",
+            "questionFontSize",
+            "INTRO",
+            "CARD_WIDTH",
+            "QUESTION_PANEL_ENTER",
+            "LEADER_ROW_MOVE",
+            "STAGE_WIDTH",
+            "LEADER_SCORE_MOVE",
+            "LEADER_ROW_ENTER",
+            "CARD_LOCK",
+            "RESULT_FILL",
+            "confettiBit",
+            "STAGE_HEIGHT",
+            "WINNER_SPRING",
+            "EASE",
+            "formatTimer",
+            "LEADER_SCORE_ENTER",
+            "RESULT_COUNT",
+            "SPRING",
+            "cardsRowInsets",
+            "tzEaseOutCubic"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/motion-engine.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 3726,
+          "originalLength": null,
+          "renderedExports": [
+            "MotionEngine"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/voting-presentation.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 215,
+          "originalLength": null,
+          "renderedExports": [
+            "votingPresentation"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 0,
+          "originalLength": null,
+          "renderedExports": [],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 32536,
+          "originalLength": null,
+          "renderedExports": [
+            "TADAZZ_LOGO_URL"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 19244,
+          "originalLength": null,
+          "renderedExports": [
+            "TadazzV4StageAdapter"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 75318,
+          "originalLength": null,
+          "renderedExports": [
+            "default",
+            "createInstance",
+            "keyFromSelector"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/en/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 34792,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/fr/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 37341,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/de/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 36004,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/es/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 37177,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/it/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 36700,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/ja/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 26369,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/tr/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 34881,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/locales/vi/extensions.json",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 34932,
+          "originalLength": null,
+          "renderedExports": [
+            "stageFit",
+            "cardBackground",
+            "tabs",
+            "roster",
+            "errors",
+            "preview",
+            "timeline",
+            "stageMotion",
+            "mediaLibrary",
+            "studio",
+            "tadazzShow",
+            "entrance",
+            "teams",
+            "visuals",
+            "bundle",
+            "themes",
+            "default",
+            "editor",
+            "showImport",
+            "audio",
+            "interludes",
+            "leaderboard",
+            "reveal",
+            "host",
+            "conflict",
+            "cardAudio"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/i18n.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2254,
+          "originalLength": null,
+          "renderedExports": [
+            "previewNativeLabels"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/tadazz-show/show-director.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 14535,
+          "originalLength": null,
+          "renderedExports": [
+            "runSteps",
+            "planTransition",
+            "LEADERBOARD_UPDATE_DELAY_MS",
+            "collapseForResume"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2525,
+          "originalLength": null,
+          "renderedExports": [
+            "createPreviewTransitionOwner"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/preview-clock.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 517,
+          "originalLength": null,
+          "renderedExports": [
+            "previewVotingDeadline"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-library/stage-metadata-schema.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 442,
+          "originalLength": null,
+          "renderedExports": [
+            "previewStageMetadataSchema"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/core/show-library/native-preview-frame-schema.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2400,
+          "originalLength": null,
+          "renderedExports": [
+            "nativePreviewFrameV1Schema",
+            "nativePreviewRendererInputV1Schema"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 2700,
+          "originalLength": null,
+          "renderedExports": [
+            "validatePreviewFrame",
+            "pausedPreviewSteps",
+            "previewSteps"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 4763,
+          "originalLength": null,
+          "renderedExports": [
+            "NativePreviewStage"
+          ],
+          "removedExports": null
+        },
+        {
+          "id": "/work/extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+          "availableFields": [
+            "code",
+            "renderedLength",
+            "renderedExports"
+          ],
+          "renderedLength": 1924,
+          "originalLength": null,
+          "renderedExports": [
+            "mountPreviewCandidate"
+          ],
+          "removedExports": null
+        }
+      ]
+    }
+  ]
+}

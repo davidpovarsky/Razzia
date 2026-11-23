@@ -1,0 +1,42 @@
+{
+  "recordedAtUtc": "2026-11-19T19:23:49.344627+00:00",
+  "baseCommit": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "codeHashes": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "29bf9264ea80a877df603a5faece0fa5680629164ef9c4478c16fa35f45d4114",
+    "extensions/qa/phase3-full-show/preference-race.mjs": "ac3efd6fc2ced0815cc900d0ed008750463ae9885eb26f003bd47d25c1c6ad14"
+  },
+  "baselineExpectedFailure": "AssertionError [ERR_ASSERTION]: Automatic loading must not disable the motion preference\n\ntrue !== false\n",
+  "fixedCaseCount": 4,
+  "preferenceRaceCount": 8,
+  "receiptSha256": "941c208b40abb7436f396ff2d16cacbd3fb84bbab89694a450370bde6b657c52",
+  "witnesses": [
+    {
+      "path": "docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\preference-race\\fixed\\matrix\\qa\\chromium-tadazz-classic-preference-race.json",
+      "sha256": "bac07c16ff0dc619c1ae3af9ac686859dc71bdb11d71435612f11905dc83efcc",
+      "cases": 2
+    },
+    {
+      "path": "docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\preference-race\\fixed\\matrix\\qa\\chromium-razzia-original-preference-race.json",
+      "sha256": "00a052d862d366db98c8137892b41d134bc66fd0b0b237f07acab9aeb6f5f952",
+      "cases": 2
+    },
+    {
+      "path": "docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\preference-race\\fixed\\matrix\\qa\\webkit-tadazz-classic-preference-race.json",
+      "sha256": "d01e1c43f82c8808677f666a281ba9c182ef157ffb1fe2022a7c0a7b274a985c",
+      "cases": 2
+    },
+    {
+      "path": "docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\preference-race\\fixed\\matrix\\qa\\webkit-razzia-original-preference-race.json",
+      "sha256": "8e2fbd75291d19e38622c7af3e73270a5adc644054cdf569dc6e8ba165306bb8",
+      "cases": 2
+    }
+  ],
+  "callCounts": {
+    "get_game_draft_summary": 8,
+    "preview_show": 16
+  },
+  "sourceHashesUnchanged": true,
+  "canonicalGateCountsChanged": false,
+  "productionChanged": false
+}

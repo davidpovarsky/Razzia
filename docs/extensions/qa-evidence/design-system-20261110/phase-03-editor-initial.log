@@ -1,0 +1,57 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › qa/tds-baseline.spec.ts:66:1 › synthetic site, Studio, package and frozen editor baseline (10.0s)
+
+
+  1) [chromium] › qa/tds-baseline.spec.ts:66:1 › synthetic site, Studio, package and frozen editor baseline
+
+    Error: expect(Buffer).toMatchSnapshot(expected) failed
+
+      1551 pixels (ratio 0.01 of all image pixels) are different.
+
+      Snapshot: editor-question.png
+
+
+      30 |   })
+      31 |   if (process.env.TDS_COMPARE_EDITOR === "1" && /^editor-/u.test(name)) {
+    > 32 |     expect(bytes).toMatchSnapshot(`${name}.png`, {
+         |                   ^
+      33 |       threshold: 0,
+      34 |       maxDiffPixels: 0,
+      35 |     })
+        at shot (/cleanup/extensions/qa/tds-baseline.spec.ts:32:19)
+        at /cleanup/extensions/qa/tds-baseline.spec.ts:146:3
+
+    attachment #1: editor-question (image/png) ─────────────────────────────────────────────────────
+    Expected: ../../evidence/before/editor-question.png
+    Received: ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/editor-question-actual.png
+    Diff:     ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/editor-question-diff.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa/tds-baseline.spec.ts:66:1 › synthetic site, Studio, package and frozen editor baseline

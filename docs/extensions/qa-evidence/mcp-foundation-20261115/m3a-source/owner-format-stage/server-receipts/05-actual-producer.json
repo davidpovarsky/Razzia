@@ -1,0 +1,17 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "tsx",
+    "--tsconfig",
+    "tsconfig.json",
+    "tests/first-party/compatibility.observation.ts"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 7.096,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 1452,
+  "logSha256": "77d2bcbb3c1805a4e746a320d8f5ea4fa9cd676489a86de5751b4fcae6a8ca40"
+}

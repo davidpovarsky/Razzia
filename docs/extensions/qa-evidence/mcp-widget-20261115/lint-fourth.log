@@ -1,0 +1,5 @@
+(node:19916) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+extensions/src/mcp-app/widget/entry.tsx:17:11: error eslint(no-shadow): 'target' is already declared in the upper scope. help: Consider renaming 'target' to avoid shadowing the variable from the outer scope.
+extensions/qa/mcp-widget/controller.nodecheck.ts:214:9: error eslint(no-lone-blocks): Nested block is redundant. help: Remove the redundant nested block statement.
+extensions/qa/mcp-widget/server.ts:30:5: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `{ selection: { contractVersion: "0.1.0"; draftId: string; expectedRevision: number; locale?: "de" | "en" | "es" | "fr...`.

@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "explicit phone-only removes all PIN, QR and web joins",
+      "passed": true
+    },
+    {
+      "name": "one actual server phone number and left-to-right direction",
+      "passed": true
+    },
+    {
+      "name": "supplied instructions occur once",
+      "passed": true
+    },
+    {
+      "name": "public register highlights connected player only",
+      "passed": true
+    },
+    {
+      "name": "standard lobby markup is unchanged",
+      "passed": true
+    },
+    {
+      "name": "Creating Worlds seating markup is unchanged",
+      "passed": true
+    },
+    {
+      "name": "native 1920x1080 phone, instructions and register do not overlap",
+      "passed": true
+    }
+  ],
+  "network": "none",
+  "synthetic": true,
+  "customerData": false,
+  "geometry": {
+    "phone": {
+      "x": 80,
+      "y": 136,
+      "width": 1760,
+      "height": 112
+    },
+    "instructions": {
+      "x": 134,
+      "y": 425.90625,
+      "width": 772,
+      "height": 89.59375
+    },
+    "register": {
+      "x": 980,
+      "y": 320,
+      "width": 840,
+      "height": 670
+    }
+  },
+  "sourceSha256": "dd057b484c110be837a65bcaa8e2969ff506b3a744fe2279d72e9977f3c785da",
+  "baseSha": "56dfb46531757dc80425a747ac0d5f38c987bbbd",
+  "evidence": "/home/ubuntu/tadazz-native-lobby-d4862c6c"
+}

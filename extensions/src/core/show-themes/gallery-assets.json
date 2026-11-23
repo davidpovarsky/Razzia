@@ -1,0 +1,134 @@
+[
+  {
+    "name": "crowd-backdrop",
+    "url": "/tadazz-show/gallery/crowd-backdrop.png",
+    "sha256": "cfcf740185d8ea3fceb6aec1ab41cd5e610eb8047577f07ab74ad08a32458a61",
+    "bytes": 835183
+  },
+  {
+    "name": "quiz-backdrop",
+    "url": "/tadazz-show/gallery/quiz-backdrop.png",
+    "sha256": "7ab696a8198b8e7e81c964cf311dd45d2989a24e99dcc685156cc932a58ff03d",
+    "bytes": 734295
+  },
+  {
+    "name": "story-backdrop",
+    "url": "/tadazz-show/gallery/story-backdrop.png",
+    "sha256": "25dcb1b0fbf29a3704cebdf3bde28b2d1303f4dab402dc44274660ff0f6ffad8",
+    "bytes": 901875
+  },
+  {
+    "name": "picture-backdrop",
+    "url": "/tadazz-show/gallery/picture-backdrop.png",
+    "sha256": "b074c5cbcb9fe6ade519b2bab7ad3017a2ef3d51fdb6e4adb441de9dbf9c9e40",
+    "bytes": 749990
+  },
+  {
+    "name": "truth-backdrop",
+    "url": "/tadazz-show/gallery/truth-backdrop.png",
+    "sha256": "2cbc4b2a003c008fef54642023bc48d464d89695be24b2acbeb38267f5a22821",
+    "bytes": 686251
+  },
+  {
+    "name": "finale-backdrop",
+    "url": "/tadazz-show/gallery/finale-backdrop.png",
+    "sha256": "ef1d48e912d19dd1421b3a77ef77eb9221f1c5fd8880fcba8aecea00c21b6d7e",
+    "bytes": 768508
+  },
+  {
+    "name": "family-backdrop",
+    "url": "/tadazz-show/gallery/family-backdrop.png",
+    "sha256": "81661db1335b650938936bf8702c98192101b6e2d946504e74530f02a5676d23",
+    "bytes": 749007
+  },
+  {
+    "name": "classroom-backdrop",
+    "url": "/tadazz-show/gallery/classroom-backdrop.png",
+    "sha256": "84c60d60ddc6705014f4076988cbc4fdb5d30fbd056bda8c07355ea00502d8f2",
+    "bytes": 940184
+  },
+  {
+    "name": "team-backdrop",
+    "url": "/tadazz-show/gallery/team-backdrop.png",
+    "sha256": "d25d1daa7fa72f142186961f0fcd0ad4f25d854b489e84d7e98d6d2aa4330cd2",
+    "bytes": 722035
+  },
+  {
+    "name": "picture-triangle",
+    "url": "/tadazz-show/gallery/picture-triangle.png",
+    "sha256": "836ff9ffe35a7b87e29585a83ccf0a526f4f8c233ed3cd0895f5a064f21c6cc3",
+    "bytes": 17220
+  },
+  {
+    "name": "picture-square",
+    "url": "/tadazz-show/gallery/picture-square.png",
+    "sha256": "46bdc7dc816164bd5e4acc5abf025ad1deeea4cf6f328ebd71f74ab0de6cdb8e",
+    "bytes": 10223
+  },
+  {
+    "name": "picture-circle",
+    "url": "/tadazz-show/gallery/picture-circle.png",
+    "sha256": "156c276eed8103a31d394db26813e3a4f0dd0ee164fe3f453dd5c24b62632563",
+    "bytes": 19152
+  },
+  {
+    "name": "picture-star",
+    "url": "/tadazz-show/gallery/picture-star.png",
+    "sha256": "75af93d0b4f9ae4e9fb4bd247a71bf05c3e424ade0d4286e32521bebca4bb249",
+    "bytes": 23708
+  },
+  {
+    "name": "picture-sun",
+    "url": "/tadazz-show/gallery/picture-sun.png",
+    "sha256": "65ab4fab47cc04dd648d707dd647a69ee2dcb3c97103003d446defc424f64684",
+    "bytes": 23324
+  },
+  {
+    "name": "picture-cloud",
+    "url": "/tadazz-show/gallery/picture-cloud.png",
+    "sha256": "796dfd8f3dcc5dff7a1f596c01d2eaf62a7c41b5b118f3286fcce9aad0a1e65f",
+    "bytes": 20139
+  },
+  {
+    "name": "picture-umbrella",
+    "url": "/tadazz-show/gallery/picture-umbrella.png",
+    "sha256": "6bdd09cf2131b0b12b773a1839f08edeac660860911cf77f2756d3f34a7899b6",
+    "bytes": 24010
+  },
+  {
+    "name": "picture-balloon",
+    "url": "/tadazz-show/gallery/picture-balloon.png",
+    "sha256": "f6a94336a4b886a88a4536917fbaa75b75851b89d78b9ae47922e7632a864939",
+    "bytes": 20407
+  },
+  {
+    "name": "picture-leaf",
+    "url": "/tadazz-show/gallery/picture-leaf.png",
+    "sha256": "8ca834a1151c1e56176dbcbc77f416434bff4b3959400a055a203ce331cdf3c0",
+    "bytes": 26881
+  },
+  {
+    "name": "picture-boat",
+    "url": "/tadazz-show/gallery/picture-boat.png",
+    "sha256": "f6ac0b8e71804d9a875944a39e16af2e4e2ef2f1a3cabdf8f8e6e96fdddb5be7",
+    "bytes": 19555
+  },
+  {
+    "name": "picture-bicycle",
+    "url": "/tadazz-show/gallery/picture-bicycle.png",
+    "sha256": "17412045e0b555ced3c10161484737890bba70edd1def4fc12599b2be2d7c436",
+    "bytes": 26444
+  },
+  {
+    "name": "picture-rocket",
+    "url": "/tadazz-show/gallery/picture-rocket.png",
+    "sha256": "91a8ad9028260c992f7ab580456ca28c7159bea15fa613456da5263f743aad2b",
+    "bytes": 25318
+  },
+  {
+    "name": "picture-train",
+    "url": "/tadazz-show/gallery/picture-train.png",
+    "sha256": "a747cefc8431f62e9c98529cd2f4fb2e507e8798bd4478fc24f908b4f984fbd9",
+    "bytes": 17211
+  }
+]

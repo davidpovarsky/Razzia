@@ -1,0 +1,78 @@
+{
+  "kind": "prepared unapplied optional Linux transport proof mode",
+  "preparedAtUtc": "2026-11-19T20:34:20.501486+00:00",
+  "baseProposalPath": "work/phase-continuity-20261119/release-tools/fullshow_two_cpu_budget.py",
+  "baseProposalSha256": "0f19aabf900d7bd6bace5d49121c70f2111170d63f0fd5b3dadcade77fb06afd",
+  "proposedPath": "work/phase-continuity-20261119/release-tools/fullshow_two_cpu_with_transport.py",
+  "proposedSha256": "6ab6c244740f79c9475ab8009fe6b80fc650e425666cfee0c680d68f3d8f9e83",
+  "proposedBytes": 15017,
+  "patchPath": "docs/extensions/plans/phase-continuity-20261119/release-planning/fullshow-transport-mode.patch",
+  "patchSha256": "d0a7b23d2c1476105af1bf7abf033b4bda49c62ff0f68c4d1dae55fd970ef939",
+  "canonicalApplied": false,
+  "executed": false,
+  "outerAndRemoteSyntaxParsed": true,
+  "defaultMode": {
+    "argument": "qualified source run only",
+    "prefix": "tadazz-codex-fullshow-",
+    "diagnosticMode": null,
+    "requiredPassedEntries": 40,
+    "requiredPassedRendererFixtures": 44,
+    "browserEngines": [
+      "chromium",
+      "webkit"
+    ],
+    "receiptKey": "fullShow"
+  },
+  "optionalMode": {
+    "argument": "transport-race",
+    "prefix": "tadazz-codex-transport-",
+    "addedEnvironment": [
+      "TADAZZ_FULL_SHOW_DIAGNOSTIC=transport-race",
+      "TADAZZ_FULL_SHOW_THEMES=tadazz-classic"
+    ],
+    "browserEngines": [
+      "chromium",
+      "webkit"
+    ],
+    "requiredPassedEntries": 2,
+    "actionsPerWitness": [
+      "pause",
+      "replay",
+      "next",
+      "previous"
+    ],
+    "requiredRealResponseGatesPerWitness": 7,
+    "diagnosticOnly": true,
+    "releaseQualified": false,
+    "receiptKey": "transportRace",
+    "fullShowKeyAbsent": true
+  },
+  "schemaEvidence": [
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/qualification-failure-e66317a53858/full-show/receipt.json",
+      "sha256": "bcb6b1523805f3726b5897db51dcd811444b62386e9a12d7c85e151006a61298",
+      "observed": "diagnosticMode null,40 entries,44 fixtures,fixture.observed.status PASS"
+    },
+    {
+      "location": "isolated transport-race worktree/docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-transport-race.json",
+      "sha256": "167d749202ee16f49fb0224b9fc71e8c84b03631ad144d2bbd96a42f7bb2f9c2",
+      "observed": "status PASS,four action/status cases,pause userPausePreserved true,seven named claimed/fulfilled gates"
+    }
+  ],
+  "unchanged": [
+    "all product and semantic QA source",
+    "all per-assertion timeouts",
+    "all existing run timeouts",
+    "two-CPU quota with strict before/after guards",
+    "3GiB memory and zero swap",
+    "nice19 and no CPU affinity pin",
+    "read-only root/source/dependency mounts",
+    "network none and no published ports",
+    "source/widget/SDK before-after hashes",
+    "OOM rejection",
+    "owned-container cleanup",
+    "generic qualifier and deployment/staging helpers"
+  ],
+  "ordering": "Root runs this optional transport proof only after the complete standard exact-source qualifier has passed, using that same Linux-built source run/artifact. Root additionally requires the transport proof before staging.",
+  "receiptSeparation": "Transport runs cannot match the fullshow receipt glob. Their outer receipt has transportRace instead of fullShow and explicitly marks diagnosticOnly true and releaseQualified false."
+}

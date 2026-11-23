@@ -1,0 +1,9 @@
+{
+  "aggregate_mount_cap": 1610612736,
+  "cgroup_memory_current": "620429312",
+  "metadata_tmpfs_capacity": 805306368,
+  "metadata_tmpfs_used": 435142656,
+  "note": "Shared tmpfs pages from the exited hydrator may be charged to ancestor cgroup; not duplicated by this read-only mount. Work tmpfs is charged to this consumer; the two physical mount limits bound all file data.",
+  "work_tmpfs_capacity": 805306368,
+  "work_tmpfs_used": 508715008
+}

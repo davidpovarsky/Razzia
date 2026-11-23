@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pnpm",
+    "install",
+    "--ignore-workspace",
+    "--lockfile-only",
+    "--offline",
+    "--ignore-scripts",
+    "--store-dir=/ram/store",
+    "--package-import-method=copy",
+    "--verify-store-integrity=true",
+    "--reporter=append-only"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 1.092,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 165,
+  "logSha256": "05198aa05a1c42f83c92a4aa15da001ed3cc70259ef2b2825a63faf2ec4ee896"
+}

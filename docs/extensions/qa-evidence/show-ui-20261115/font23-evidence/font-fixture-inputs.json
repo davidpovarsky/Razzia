@@ -1,0 +1,119 @@
+{
+  "retained21HashRowsVerified": 167,
+  "retainedRendererUnchanged": true,
+  "fontPackage": "@fontsource-variable/rubik@5.3.0",
+  "inputs": [
+    {
+      "name": "renderer.js",
+      "source": "/tmp/retained21/native-v2-candidate/renderer-v2.js",
+      "physicalPath": "/tmp/retained21/native-v2-candidate/renderer-v2.js",
+      "bytes": 1068185,
+      "sha256": "10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340"
+    },
+    {
+      "name": "renderer.css",
+      "source": "/tmp/retained21/native-v2-candidate/renderer-v2.css",
+      "physicalPath": "/tmp/retained21/native-v2-candidate/renderer-v2.css",
+      "bytes": 166501,
+      "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+    },
+    {
+      "name": "tadazz-show/motion/backdrop.webp",
+      "source": "/fixture-base/tadazz-show/motion/backdrop.webp",
+      "physicalPath": "/fixture-base/tadazz-show/motion/backdrop.webp",
+      "bytes": 94502,
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+    },
+    {
+      "name": "tadazz-show/v4/question-bg.webp",
+      "source": "/fixture-base/tadazz-show/v4/question-bg.webp",
+      "physicalPath": "/fixture-base/tadazz-show/v4/question-bg.webp",
+      "bytes": 87904,
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+    },
+    {
+      "name": "tadazz-show/v4/show-stage.webp",
+      "source": "/fixture-base/tadazz-show/v4/show-stage.webp",
+      "physicalPath": "/fixture-base/tadazz-show/v4/show-stage.webp",
+      "bytes": 261066,
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+    },
+    {
+      "name": "tadazz-show/story/84acdb923677d591.webp",
+      "source": "/fixture-base/tadazz-show/story/84acdb923677d591.webp",
+      "physicalPath": "/fixture-base/tadazz-show/story/84acdb923677d591.webp",
+      "bytes": 134540,
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+    },
+    {
+      "name": "tadazz-show/v4/tadazz-brand-logo.png",
+      "source": "/fixture-base/tadazz-show/v4/tadazz-brand-logo.png",
+      "physicalPath": "/fixture-base/tadazz-show/v4/tadazz-brand-logo.png",
+      "bytes": 1976726,
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+    },
+    {
+      "name": "tadazz-show/second-library/teaser-screen-source.jpg",
+      "source": "/fixture-base/tadazz-show/second-library/teaser-screen-source.jpg",
+      "physicalPath": "/fixture-base/tadazz-show/second-library/teaser-screen-source.jpg",
+      "bytes": 266631,
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+    },
+    {
+      "name": "fonts/rubik-wght.css",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/wght.css",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/wght.css",
+      "bytes": 2581,
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+    },
+    {
+      "name": "fonts/files/rubik-arabic-wght-normal.woff2",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-arabic-wght-normal.woff2",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-arabic-wght-normal.woff2",
+      "bytes": 32468,
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+    },
+    {
+      "name": "fonts/files/rubik-cyrillic-ext-wght-normal.woff2",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-cyrillic-ext-wght-normal.woff2",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-cyrillic-ext-wght-normal.woff2",
+      "bytes": 12388,
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+    },
+    {
+      "name": "fonts/files/rubik-cyrillic-wght-normal.woff2",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-cyrillic-wght-normal.woff2",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-cyrillic-wght-normal.woff2",
+      "bytes": 15112,
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+    },
+    {
+      "name": "fonts/files/rubik-hebrew-wght-normal.woff2",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2",
+      "bytes": 9348,
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+    },
+    {
+      "name": "fonts/files/rubik-latin-ext-wght-normal.woff2",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-ext-wght-normal.woff2",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-ext-wght-normal.woff2",
+      "bytes": 19400,
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+    },
+    {
+      "name": "fonts/files/rubik-latin-wght-normal.woff2",
+      "source": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+      "physicalPath": "/work/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+      "bytes": 35348,
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+    },
+    {
+      "name": "browser.mjs",
+      "source": "/work/docs/extensions/qa-evidence/show-ui-20261115/qa-browser-v2.mjs",
+      "physicalPath": "/work/docs/extensions/qa-evidence/show-ui-20261115/qa-browser-v2.mjs",
+      "bytes": 3618,
+      "sha256": "00a6c5bb406a2f6ac06fb9f8dce3b7ef1f9fb100504c02446e22c5bf73c44ca2"
+    }
+  ]
+}

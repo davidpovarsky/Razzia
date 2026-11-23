@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "checks": [
+    "Empty-name error is translated Hebrew",
+    "Invalid-phone error is translated Hebrew",
+    "Duplicate-phone error is translated; original row retained; phone LTR and names bidi-isolated",
+    "No-match search shows translated empty state",
+    "CSV row diagnostic translated Hebrew",
+    "CSV fatal header diagnostic translated Hebrew",
+    "Valid Hebrew CSV preview and in-memory approval add second isolated QA row"
+  ],
+  "errors": [],
+  "screens": 13
+}

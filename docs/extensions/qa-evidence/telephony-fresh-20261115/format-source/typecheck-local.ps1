@@ -1,0 +1,45 @@
+$ErrorActionPreference = 'Stop'
+$root = 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-telephony-fresh-20261115'
+$integration = 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115'
+$evidence = Join-Path $root 'docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115'
+$prior = Get-Content -Raw (Join-Path $evidence 'semantic-format.json') | ConvertFrom-Json
+$created = @()
+$exitCode = $null
+$targets = @('node_modules','extensions/node_modules','packages/socket/node_modules','packages/common/node_modules','packages/web/node_modules','docs/extensions/qa-evidence/telephony-fresh-20261115/node_modules')
+try {
+  foreach ($relative in $targets) {
+    $link = Join-Path $root $relative
+    $target = Join-Path $integration $(if ($relative.StartsWith('docs/')) { 'packages/socket/node_modules' } else { $relative })
+    if (Test-Path -LiteralPath $link) { throw "Preexisting dependency path must be preserved: $link" }
+    if (!(Test-Path -LiteralPath $target)) { throw "Retained dependency path absent: $target" }
+    New-Item -ItemType Junction -Path $link -Target $target | Out-Null
+    $created += [pscustomobject]@{ path=$link; target=$target }
+  }
+  $files = @($prior.production_files | ForEach-Object { Join-Path $root $_.path }) + @(
+    (Join-Path $root 'docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts'),
+    (Join-Path $root 'docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/revoke-after-sql-wait.child.ts')
+  )
+  $production = @($prior.production_files | ForEach-Object { Join-Path $root $_.path })
+  node (Join-Path $integration 'node_modules/prettier/bin/prettier.cjs') --config $prior.config --check @production 2>&1 | Tee-Object -FilePath (Join-Path $evidence 'prettier-check.log')
+  if ($LASTEXITCODE -ne 0) { throw 'Scoped installed-config formatter check failed' }
+  $config = [ordered]@{
+    extends=(Join-Path $root 'tsconfig.json')
+    compilerOptions=[ordered]@{ noEmit=$true; target='ESNext'; module='ESNext'; moduleResolution='bundler'; jsx='react-jsx'; skipLibCheck=$true; allowImportingTsExtensions=$true; types=@('node'); typeRoots=@((Join-Path $root 'packages/socket/node_modules/@types'),(Join-Path $root 'extensions/node_modules/@types')) }
+    files=$files
+    include=@()
+  }
+  $config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $evidence 'affected.tsconfig.json')
+  $env:GOMEMLIMIT = '640MiB'
+  $env:GOMAXPROCS = '1'
+  node --max-old-space-size=256 (Join-Path $integration 'node_modules/typescript/bin/tsc') --noEmit --pretty false -p (Join-Path $evidence 'affected.tsconfig.json') 2>&1 | Tee-Object -FilePath (Join-Path $evidence 'typecheck.log')
+  $exitCode = $LASTEXITCODE
+} finally {
+  foreach ($item in $created) {
+    $link = Get-Item -Force -LiteralPath $item.path
+    if ($link.LinkType -ne 'Junction' -or @($link.Target)[0].Replace('\','/') -ne $item.target.Replace('\','/')) { throw 'Dependency junction changed; do not remove it' }
+    if (!$link.FullName.Replace('\','/').StartsWith($root + '/', [StringComparison]::OrdinalIgnoreCase)) { throw 'Dependency link outside assigned worktree' }
+    Remove-Item -LiteralPath $item.path -Force
+  }
+  [ordered]@{ scope='Seven formatter production roots plus existing actual-auth two-file test project and transitive imports'; compiler='TypeScript 7.0.2 native installed in manager integration'; type_exit=$exitCode; no_install=$true; local_memory_limit='Go640MiB plus Node256MiB; GOMAXPROCS1'; temporary_dependency_links=$created; all_temporary_links_removed=(@($created | Where-Object { Test-Path -LiteralPath $_.path }).Count -eq 0) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $evidence 'typecheck-result.json')
+}
+if ($exitCode -ne 0) { throw "Affected TypeScript failed: $exitCode" }

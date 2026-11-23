@@ -1,0 +1,162 @@
+{
+  "fixture": "Actual BMS theme source and vendored libraries; synthetic public snapshots and roster; real game questions",
+  "checks": [
+    {
+      "name": "BMS stays English under Hebrew account locale",
+      "pass": true
+    },
+    {
+      "name": "phone only; room code and URL absent",
+      "pass": true
+    },
+    {
+      "name": "register can scroll an uploaded class list",
+      "pass": true
+    },
+    {
+      "name": "connected rows carry a real Rough Notation marker",
+      "pass": true
+    },
+    {
+      "name": "Rough Notation marker animation finishes visibly under the platform style CSP",
+      "pass": true
+    },
+    {
+      "name": "desktop lobby text fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "new connection updates attendance once without replaying existing marks",
+      "pass": true
+    },
+    {
+      "name": "unattached roster is omitted",
+      "pass": true
+    },
+    {
+      "name": "pending reveal withholds labels and shares even with legacy eager payload",
+      "pass": true
+    },
+    {
+      "name": "engine audience stage shows tied choices without disclosing correctness",
+      "pass": true
+    },
+    {
+      "name": "one question node with unchanged geometry across question, answers, lock, reveal",
+      "pass": true,
+      "first": {
+        "same": true,
+        "box": [
+          163.34375,
+          273.578125,
+          1593.3125,
+          119.453125
+        ],
+        "text": "Who was the last speaker that we had in sem?"
+      },
+      "answers": {
+        "same": true,
+        "box": [
+          163.34375,
+          273.578125,
+          1593.3125,
+          119.453125
+        ],
+        "text": "Who was the last speaker that we had in sem?"
+      },
+      "result": {
+        "same": true,
+        "box": [
+          163.34375,
+          273.578125,
+          1593.3125,
+          119.453125
+        ],
+        "text": "Who was the last speaker that we had in sem?"
+      }
+    },
+    {
+      "name": "answer nodes persist on reveal",
+      "pass": true
+    },
+    {
+      "name": "correctness and tied audience choices attach only to answers",
+      "pass": true
+    },
+    {
+      "name": "desktop result text and badges fit",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "five-answer desktop fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "laptop answers and result badges fit",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "all 23 actual BMS questions and their original answers fit desktop, laptop, and phone",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "one final standings screen, no duplicate finale overlay",
+      "pass": true
+    },
+    {
+      "name": "closing presentation remains platform-owned",
+      "pass": true
+    },
+    {
+      "name": "opening presentation remains platform-owned",
+      "pass": true
+    },
+    {
+      "name": "player submits once and controls lock",
+      "pass": true
+    },
+    {
+      "name": "player phone content fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "phone lobby fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "no unexpected browser errors",
+      "pass": true
+    },
+    {
+      "name": "no sandbox content-security-policy violations",
+      "pass": true,
+      "violations": []
+    }
+  ],
+  "screenshots": [
+    "title-1920.png",
+    "lobby-register-1920.png",
+    "lobby-phone-only-1920.png",
+    "question-three-1920.png",
+    "audience-tie-1920.png",
+    "reveal-tie-1920.png",
+    "question-five-1920.png",
+    "reveal-five-1366.png",
+    "final-1366.png",
+    "player-390.png",
+    "lobby-390.png",
+    "title-reduced-1920.png"
+  ],
+  "network": "none (container loopback only)",
+  "errors": [],
+  "passed": true,
+  "fixtureRun": "tadazz-bms-design-2b6c4410",
+  "scope": "Actual BMS theme and libraries under platform-equivalent resource/style CSP. Synthetic public snapshots/roster, unchanged actual game questions and instructions."
+}

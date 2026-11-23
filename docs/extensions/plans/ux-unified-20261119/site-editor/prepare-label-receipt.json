@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "Prepare action labels cover empty, pending and acknowledged room",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,121 @@
+{
+  "kind": "FORMAT_ONLY_SEMANTIC_AST_EQUIVALENCE",
+  "typescriptVersion": "5.9.3",
+  "prettierVersion": "3.9.10",
+  "normalization": "Ignore source positions/trivia; unwrap grouping parentheses; normalize noncomputed static property-name spelling; preserve node kind/children/decoded text/type-only and declaration/optional-chain flags/raw template text.",
+  "files": [
+    {
+      "path": "extensions/src/mcp-app/first-party/bindings.ts",
+      "beforeSha256": "d0e48d6bb9cdfcd2a1e693fd1943536a73dc307366f99d1ba90f62f4e3a5c836",
+      "afterSha256": "55de1b53a9bc6b75d6a2f1e80f9f439b52b89006483c509c014a28cc0447b20b",
+      "beforeBytes": 6471,
+      "afterBytes": 6529,
+      "canonicalAstSha256": "bc26b5eb05ef001c0d07b72d0aed45c0c7061230cf1dde1a9fee5f6dd24dd7e2",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/oauth-grants.ts",
+      "beforeSha256": "87d5c12aa321e94852826fe8777fe42a622b4306a4654ca6c4d9b77cf1993385",
+      "afterSha256": "54d496fa547e3e68e561263e86ae71a7bbd1b8c64a2eb5c93d81a2c012bdb230",
+      "beforeBytes": 22099,
+      "afterBytes": 24775,
+      "canonicalAstSha256": "62b9ca1b820718f18f41d2dd3309ac748a9eca61fb1f745c53104c626c905eff",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/oauth-protocol.ts",
+      "beforeSha256": "6a7ba38fef7da8bd0e6f65e57bf99f40942a5eb71ddb0a7dae630439d0cf7483",
+      "afterSha256": "afc8f0cf391e0b7d0e8d8c2e946618004b2485a7ce33634768abe466e5bb5edc",
+      "beforeBytes": 10658,
+      "afterBytes": 11851,
+      "canonicalAstSha256": "60fb629c13eb1412cd64ff9095cdfbd59bfbe2907b43abab6e742df55bc1b85e",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/oauth.ts",
+      "beforeSha256": "7d2def028342203fb7a1bd037faadd6a5298eae28c42bc1ccbb6a6679ce2c1dc",
+      "afterSha256": "1d16d96c7bdd3aca20bbc6a3f595dabc6f733a1d0f802dc060409914446c0d6e",
+      "beforeBytes": 10329,
+      "afterBytes": 11417,
+      "canonicalAstSha256": "f41ec20929f20aa18faa3f54b60f4488c005a281e4eaaae6a947523e3542443c",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/server/access-token.ts",
+      "beforeSha256": "40be69a84bdfd1f23ff69d3eb59ba82ab89ad783a8b500baf6711fbac26e4dac",
+      "afterSha256": "a0c04e49e06d797523a2e4f4191cc9bb3fd85a15b2ad6daad4b614aca52132f7",
+      "beforeBytes": 6530,
+      "afterBytes": 6577,
+      "canonicalAstSha256": "e04e8a61b68f3d649a3c53f7ae744d881432bc5e4e6395f2a48a31f29259d430",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authorization.ts",
+      "beforeSha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e",
+      "afterSha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e",
+      "beforeBytes": 3053,
+      "afterBytes": 3053,
+      "canonicalAstSha256": "1da0f4918a1d8563d09cec5438f22ddf4a764def380a7ddde1eb74084dc72fb1",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dependencies.ts",
+      "beforeSha256": "ec5ba9dc3b495bb6cc7d2cd4a8c330404d58fd364f37257fa6d6346c7c8008e3",
+      "afterSha256": "ec5ba9dc3b495bb6cc7d2cd4a8c330404d58fd364f37257fa6d6346c7c8008e3",
+      "beforeBytes": 4722,
+      "afterBytes": 4722,
+      "canonicalAstSha256": "3fd7ec288943ec19141f342fcda285c4e1be826d376e570988417af041054551",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/server/http.ts",
+      "beforeSha256": "b89d2811a20166f667aa73b847adc1a54ebf891ea5dc7abaefb588eb80cca948",
+      "afterSha256": "08d749fc8737f52526a158fde1a102bc5b88239be7e79e857e4cdfb98bb97727",
+      "beforeBytes": 16746,
+      "afterBytes": 17456,
+      "canonicalAstSha256": "2d1a485d9b8b06539acc2c3074802879626d53dc50de47ae848bd738749a371e",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/oauth.nodecheck.ts",
+      "beforeSha256": "e76bd21b94aea1353ed2824023d453d23787f8ac240015513b8a681c6df51770",
+      "afterSha256": "70e2c65706f7872a57caba213da907fcac633d4a8c30aa267ef51e7bb2468fcb",
+      "beforeBytes": 13909,
+      "afterBytes": 15397,
+      "canonicalAstSha256": "d40056f2b56f3b5332ff1a19a7091db2af3ab2f58e200b7f16c89c4b9d5b4c32",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/http.nodecheck.ts",
+      "beforeSha256": "98e2ebedaed1cb754d9a088580a11b77965ae75aea996e16655f547e6d2ba26c",
+      "afterSha256": "f91235df8545ac03cb24fdda8463c84bb5f8776bbbc11bcf862b25f936435511",
+      "beforeBytes": 11887,
+      "afterBytes": 12331,
+      "canonicalAstSha256": "32be7fa01c18a4722fc4c0d2f70999b970bc8b7b17b15fcb6a2c488e804c2b71",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    }
+  ],
+  "comparedTypeScriptFiles": 10,
+  "unchangedOtherInputs": 160,
+  "applicationImported": false
+}

@@ -1,0 +1,143 @@
+{
+  "kind": "scheduling-evidence-curation-summary",
+  "createdUtc": "2026-11-19T18:28:58.312836+00:00",
+  "run": "tadazz-phase-continuity-scheduling-730cb4579d22-56930064",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "browserCheckResults": [
+    {
+      "name": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "status": "FAIL"
+    },
+    {
+      "name": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "status": "FAIL"
+    }
+  ],
+  "collectionReceipt": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/collection.json",
+  "diagnosis": {
+    "path": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/diagnosis.md",
+    "sha256": "fdb0a3a0ba30a7d215860d19e09996f10b2b5f27c55222ef8fa1143c7f676fc9"
+  },
+  "hostSamples": {
+    "count": 64,
+    "sha256": "de1fd9bc3d65bcd98831ec982478f61be3bc0c892f4e88c336629f755e75dcfa",
+    "cores": [
+      {
+        "core": "cpu0",
+        "tickDeltas": [
+          0,
+          5885,
+          367,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "totalTicksExcludingDoubleCountedGuest": 6253,
+        "idleTicks": 0,
+        "idlePercent": 0.0,
+        "idleAndIoWaitPercent": 0.0
+      },
+      {
+        "core": "cpu1",
+        "tickDeltas": [
+          65,
+          0,
+          41,
+          6123,
+          3,
+          0,
+          0,
+          21,
+          0,
+          0
+        ],
+        "totalTicksExcludingDoubleCountedGuest": 6253,
+        "idleTicks": 6123,
+        "idlePercent": 97.921,
+        "idleAndIoWaitPercent": 97.969
+      }
+    ],
+    "processArgumentsCollected": false
+  },
+  "firstFailureFrameTelemetry": [
+    {
+      "file": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/full-show/webkit-razzia-original-failure-state-1.json",
+      "theme": "razzia-original",
+      "capturedAt": "2026-11-19T18:23:21.805Z",
+      "surfaces": {
+        "host": {
+          "visibility": "visible",
+          "rafCount": 5,
+          "rafAgeMs": 9875,
+          "timerCount": 25,
+          "timerAgeMs": 95,
+          "maxTimerGapMs": 9704
+        },
+        "widget": {
+          "visibility": "visible",
+          "rafCount": 4,
+          "rafAgeMs": 9784,
+          "timerCount": 21,
+          "timerAgeMs": 4,
+          "maxTimerGapMs": 9703
+        }
+      }
+    },
+    {
+      "file": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/full-show/webkit-tadazz-classic-failure-state-1.json",
+      "theme": "tadazz-classic",
+      "capturedAt": "2026-11-19T18:22:56.184Z",
+      "surfaces": {
+        "host": {
+          "visibility": "visible",
+          "rafCount": 16,
+          "rafAgeMs": 10103,
+          "timerCount": 114,
+          "timerAgeMs": 76,
+          "maxTimerGapMs": 5058
+        },
+        "widget": {
+          "visibility": "visible",
+          "rafCount": 5,
+          "rafAgeMs": 9998,
+          "timerCount": 110,
+          "timerAgeMs": 85,
+          "maxTimerGapMs": 5058
+        }
+      }
+    }
+  ],
+  "resourceBounds": {
+    "cpuQuota": 1.0,
+    "memoryBytes": 3221225472,
+    "nice": 19,
+    "physicalCpuAffinity": "0",
+    "quotaThrottledPeriodsDelta": 0,
+    "quotaThrottledUsecDelta": 0,
+    "dockerOOMKilled": false
+  },
+  "codeUnchanged": {
+    "all13TaskSourceHashesMatchCommittedSource": true,
+    "qaSourceRestoredToSha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+    "restorationReceipt": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/source-restoration.json",
+    "widgetArtifactsUnchanged": true
+  },
+  "caveats": [
+    "Diagnostic browser checks failed; coordinator integrity success is not release qualification.",
+    "Classic had responsive timers while native animation frames stopped; Original also had a 9.7-second timer gap. Do not claim timers were continuously healthy in both cases.",
+    "The earlier later-paused Classic snapshot is explained by title-field focus and does not prove a timed-out click applied late.",
+    "CPU affinity/environment correction and qualification rerun are root-owned pending work; this curation makes no passing-result claim."
+  ],
+  "actionsDuringCuration": {
+    "testsRun": false,
+    "productChanged": false,
+    "gitMutated": false,
+    "rawOriginalEvidenceModified": false,
+    "diagnosticOrReleaseHelpersExecuted": false
+  }
+}

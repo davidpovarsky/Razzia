@@ -1,0 +1,49 @@
+{
+  "observedUtc": "2026-11-15T22:48:56.860Z",
+  "source": "0546306f4b6d169c4cb7b2b9c2e479db820c28b1",
+  "evidence": "d5fce0e081a6a6522642553d2fa141e7225bf62b",
+  "checks": [
+    {
+      "task": "1220486196056865",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "scopedEvidenceAndFailureVerified": true,
+      "parent": "1220486195135227"
+    },
+    {
+      "task": "1220486371643814",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "scopedEvidenceAndFailureVerified": true,
+      "parent": "1220486195135227"
+    },
+    {
+      "task": "1220486398573830",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "scopedEvidenceAndFailureVerified": true,
+      "parent": "1220486195135227"
+    },
+    {
+      "task": "1220548686600633",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "scopedEvidenceAndFailureVerified": true,
+      "parent": "1220547779792791"
+    }
+  ],
+  "inboxParent": "1220547779792791",
+  "handoff": "1220548686600633",
+  "managerDecisionCommentsRead": [
+    "1220548615613759",
+    "1220548329444922"
+  ],
+  "directManagerMessageSent": false,
+  "priorNativeSaveAndFontTopicsDuplicated": false,
+  "resource": {
+    "ownerBytes": 94322688,
+    "ceilingBytes": 94371840,
+    "remainingBytes": 49152,
+    "computeReleased": true
+  }
+}

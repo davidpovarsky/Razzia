@@ -10,8 +10,18 @@ import {
   sessionClaimsValidator,
 } from "@razzia/common/validators/auth"
 import { jwtSecret } from "@razzia/socket/env"
+import { accountsEnabled } from "@razzia/socket/services/account-scope"
+import {
+  activeAccount,
+  createAccountSession,
+  isAccountSessionValid,
+} from "@razzia/socket/services/account-auth"
 import { sign, verify } from "hono/jwt"
 import { v7 as uuid } from "uuid"
+import {
+  ManagedClientStore,
+  type ManagedClientPrincipal,
+} from "./managed-clients"
 
 const ALGORITHM = "HS256"
 const PLAYER_TTL = 60 * 60 * 24 * 30
@@ -36,13 +46,79 @@ export const mintToken = async (
   const iat = Math.floor(Date.now() / 1000)
   const exp = iat + (role === SESSION_ROLES.MANAGER ? MANAGER_TTL : PLAYER_TTL)
 
-  const token = await sign({ sub, role, iat, exp }, jwtSecret, ALGORITHM)
+  const sid = (() => {
+    if (accountsEnabled() && role === SESSION_ROLES.MANAGER) {
+      if (activeAccount(sub)) {
+        return createAccountSession(sub, exp)
+      }
+
+      return (() => {
+        throw new Error("Account inactive")
+      })()
+    }
+
+    return undefined
+  })()
+  const token = await sign(
+    { sub, role, iat, exp, ...(sid ? { sid } : {}) },
+    jwtSecret,
+    ALGORITHM,
+  )
 
   return { token, clientId: sub, role, expiresAt: exp }
 }
 
-export const verifyToken = async (token: string): Promise<SessionClaims> =>
-  parseClaims(await verify(token, jwtSecret, ALGORITHM))
+export const verifyToken = async (token: string): Promise<SessionClaims> => {
+  const claims = parseClaims(await verify(token, jwtSecret, ALGORITHM))
+
+  if (claims.managedClientId) {
+    if (
+      !accountsEnabled() ||
+      !new ManagedClientStore().session(claims.sub, claims.sid)
+    ) {
+      throw new Error("Managed client session revoked or invalid")
+    }
+
+    return claims
+  }
+
+  if (
+    accountsEnabled() &&
+    claims.role === SESSION_ROLES.MANAGER &&
+    !isAccountSessionValid(claims.sub, claims.sid)
+  ) {
+    throw new Error("Manager session revoked or invalid")
+  }
+
+  return claims
+}
+
+/** Issued only after the six-digit exchange has created its revocable DB row. */
+export const mintManagedClientToken = async (
+  principal: ManagedClientPrincipal,
+): Promise<string> => {
+  const current = new ManagedClientStore().session(
+    principal.id,
+    principal.sessionId,
+  )
+
+  if (!current || current.ownerId !== principal.ownerId) {
+    throw new Error("Managed client session revoked or invalid")
+  }
+
+  return await sign(
+    {
+      sub: current.id,
+      role: SESSION_ROLES.MANAGER,
+      managedClientId: current.id,
+      sid: current.sessionId,
+      iat: Math.floor(Date.now() / 1000),
+      exp: current.expiresAt,
+    },
+    jwtSecret,
+    ALGORITHM,
+  )
+}
 
 export const verifyIgnoringExpiry = async (
   token: string,
@@ -51,15 +127,35 @@ export const verifyIgnoringExpiry = async (
 
 const JOIN_TICKET_TTL = 60 * 5
 
+export interface MintJoinTicketOptions {
+  username?: string
+  rosterPlayerId?: string
+  phoneE164?: string
+  source?: "web" | "phone"
+}
+
 export const mintJoinTicket = (
   sub: string,
   gameId: string,
-  username?: string,
+  usernameOrOptions?: string | MintJoinTicketOptions,
 ): Promise<string> => {
   const iat = Math.floor(Date.now() / 1000)
+  const opts: MintJoinTicketOptions =
+    typeof usernameOrOptions === "string"
+      ? { username: usernameOrOptions }
+      : (usernameOrOptions ?? {})
 
   return sign(
-    { sub, gameId, username, iat, exp: iat + JOIN_TICKET_TTL },
+    {
+      sub,
+      gameId,
+      username: opts.username,
+      ...(opts.rosterPlayerId ? { rosterPlayerId: opts.rosterPlayerId } : {}),
+      ...(opts.phoneE164 ? { phoneE164: opts.phoneE164 } : {}),
+      ...(opts.source ? { source: opts.source } : {}),
+      iat,
+      exp: iat + JOIN_TICKET_TTL,
+    },
     jwtSecret,
     ALGORITHM,
   )

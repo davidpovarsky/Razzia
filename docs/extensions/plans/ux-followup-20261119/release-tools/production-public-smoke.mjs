@@ -1,0 +1,498 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+import { createHash } from "node:crypto";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
+const DOCS = path.join(ROOT, "docs/extensions/plans/ux-followup-20261119");
+const ORIGIN = "https://tadazz.com";
+const EDGE = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+const options = Object.fromEntries(process.argv.slice(2).map((v, i, all) => v.startsWith("--") ? [v.slice(2), all[i + 1]] : null).filter(Boolean));
+const expectedRevision = options["expected-revision"];
+const out = path.resolve(options.out || path.join(DOCS, "production-public-smoke-anonymous-session"));
+const proofPath = path.resolve(options["identity-proof"] || path.join(DOCS, "post-deploy-observation.json"));
+const deployPath = path.resolve(options["deployment-execution"] || path.join(DOCS, "deployment-deploy-execution.json"));
+const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
+const requireThat = (condition, code) => { if (!condition) throw new Error(code); };
+const cleanUrl = (value) => {
+  try { const u = new URL(value); return u.origin + u.pathname; } catch { return String(value).slice(0, 200); }
+};
+const cleanError = (value) => String(value).replace(/https?:\/\/[^\s"'<>]+/gu, cleanUrl).replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/giu, "[redacted-email]").slice(0, 1600);
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const bounded = async (promise, ms, code) => {
+  let timer;
+  try { return await Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(code)), ms); })]); }
+  finally { clearTimeout(timer); }
+};
+
+const SESSION_URL = ORIGIN + "/api/auth/session";
+const BRANDING_URL = ORIGIN + "/branding/theme.json";
+const BUILT_IN_LOGO = "/tadazz-design-reference/marketing-logo.webp";
+
+// This one bootstrap signs a stateless anonymous PLAYER token. It does not open
+// a socket, join a room, authenticate an account, or persist a server session.
+function publicRequestPolicy(request, bootstrapCount) {
+  const url = new URL(request.url);
+  const { method, type, headers, body, mainFrame } = request;
+  if (url.origin === ORIGIN && url.pathname === "/api/auth/session") {
+    const sensitiveHeader = Object.keys(headers).some((key) =>
+      ["cookie", "authorization", "proxy-authorization"].includes(key.toLowerCase()));
+    if (request.url !== SESSION_URL || method !== "POST" || type !== "fetch" ||
+        mainFrame !== true || bootstrapCount !== 0 || sensitiveHeader ||
+        headers["content-type"] !== "application/json" || body !== "{}") {
+      return { allowed: false, reason: "anonymous-bootstrap-boundary" };
+    }
+    return { allowed: true, anonymousBootstrap: true };
+  }
+  if (!["GET", "HEAD"].includes(method)) return { allowed: false, reason: "non-read-only-method" };
+  if (url.origin === ORIGIN && url.pathname.startsWith("/api/") && url.pathname !== "/api/auth/mode")
+    return { allowed: false, reason: "outside-public-api-scope" };
+  if (url.origin === ORIGIN && /^\/(?:ws|socket\.io|oauth|mcp|manager|studio)(?:\/|$)/u.test(url.pathname))
+    return { allowed: false, reason: "outside-anonymous-public-scope" };
+  if (type === "document" && (url.origin !== ORIGIN || !["/", "/forgot"].includes(url.pathname)))
+    return { allowed: false, reason: "unexpected-document-navigation" };
+  if (url.origin !== ORIGIN && ["xhr", "fetch"].includes(type))
+    return { allowed: false, reason: "cross-origin-data-request" };
+  return { allowed: true };
+}
+
+function validateAnonymousSession(status, headers, body, now = Math.floor(Date.now() / 1000)) {
+  requireThat(status === 200, "ANONYMOUS_SESSION_NOT_HTTP200");
+  requireThat(/^application\/json(?:\s*;|$)/iu.test(headers["content-type"] || ""), "ANONYMOUS_SESSION_NOT_JSON");
+  requireThat(!Object.keys(headers).some((key) => key.toLowerCase() === "set-cookie"), "ANONYMOUS_SESSION_SET_COOKIE");
+  requireThat(body && typeof body === "object" && !Array.isArray(body) &&
+    Object.keys(body).sort().join(",") === "clientId,expiresAt,role,token", "ANONYMOUS_SESSION_SCHEMA");
+  requireThat(body.role === "player" && typeof body.clientId === "string" &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(body.clientId), "ANONYMOUS_SESSION_PLAYER_ID");
+  requireThat(Number.isSafeInteger(body.expiresAt) && Math.abs(body.expiresAt - now - 30 * 24 * 60 * 60) <= 120, "ANONYMOUS_SESSION_EXPIRY");
+  requireThat(typeof body.token === "string" && body.token.length <= 8192 &&
+    /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/u.test(body.token), "ANONYMOUS_SESSION_TOKEN_SHAPE");
+  let header, claims;
+  try {
+    const parts = body.token.split(".");
+    header = JSON.parse(Buffer.from(parts[0], "base64url").toString("utf8"));
+    claims = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf8"));
+  } catch { throw new Error("ANONYMOUS_SESSION_CLAIMS_JSON"); }
+  requireThat(header?.alg === "HS256" && claims && typeof claims === "object" &&
+    Object.keys(claims).sort().join(",") === "exp,iat,role,sub" && claims.role === "player" &&
+    claims.sub === body.clientId && claims.exp === body.expiresAt &&
+    Number.isSafeInteger(claims.iat) && Math.abs(claims.iat - now) <= 120, "ANONYMOUS_SESSION_CLAIMS");
+  return { status, schemaValidated: true, playerRole: true, anonymousClaimsValidated: true,
+    serverSessionPersistenceInSource: false, cookieSet: false, tokenOrClientIdRecorded: false };
+}
+
+function optionalBranding404(request, status) {
+  return request.url === BRANDING_URL && request.method === "GET" && request.type === "fetch" && status === 404;
+}
+function optionalBrandingConsole(error, responseCount, fallbackRendered) {
+  return responseCount === 1 && fallbackRendered === true && error.exactOptionalBrandingSource === true &&
+    error.url === BRANDING_URL &&
+    /^Failed to load resource: the server responded with a status of 404 \([^)]*\)$/u.test(error.message);
+}
+
+function policySelfTest() {
+  const checks = [];
+  const check = (name, condition) => { requireThat(condition, "POLICY_SELF_TEST_FAILED:" + name); checks.push({ name, passed: true }); };
+  const request = { url: SESSION_URL, method: "POST", type: "fetch", mainFrame: true,
+    headers: { "content-type": "application/json" }, body: "{}" };
+  check("exact anonymous bootstrap admitted once", publicRequestPolicy(request, 0).anonymousBootstrap === true);
+  for (const [name, patch, count = 0] of [
+    ["Cookie header rejected", { headers: { ...request.headers, cookie: "" } }],
+    ["Authorization header rejected", { headers: { ...request.headers, authorization: "synthetic" } }],
+    ["mixed-case authorization rejected", { headers: { ...request.headers, Authorization: "synthetic" } }],
+    ["query rejected", { url: SESSION_URL + "?token=synthetic" }],
+    ["token body rejected", { body: '{"token":"synthetic"}' }],
+    ["empty body rejected", { body: null }],
+    ["GET bootstrap rejected", { method: "GET" }],
+    ["PUT bootstrap rejected", { method: "PUT" }],
+    ["wrong content type rejected", { headers: { "content-type": "text/plain" } }],
+    ["subframe bootstrap rejected", { mainFrame: false }],
+    ["second bootstrap rejected", {}, 1],
+    ["cross-origin bootstrap rejected", { url: "https://example.invalid/api/auth/session" }],
+    ["contact write rejected", { url: ORIGIN + "/api/contact" }],
+    ["private API read rejected", { url: ORIGIN + "/api/accounts/me", method: "GET" }],
+    ["game socket polling rejected", { url: ORIGIN + "/ws/?transport=polling", method: "GET" }],
+  ]) check(name, publicRequestPolicy({ ...request, ...patch }, count).allowed === false);
+  check("public auth mode GET retained", publicRequestPolicy({ ...request, url: ORIGIN + "/api/auth/mode", method: "GET" }, 1).allowed === true);
+  const now = 1795100000, clientId = "00000000-0000-7000-8000-000000000001";
+  const jwt = (claims) => Buffer.from('{"alg":"HS256","typ":"JWT"}').toString("base64url") + "." +
+    Buffer.from(JSON.stringify(claims)).toString("base64url") + ".c3ludGhldGlj";
+  const claims = { sub: clientId, role: "player", iat: now, exp: now + 30 * 24 * 60 * 60 };
+  const body = { token: jwt(claims), clientId, role: "player", expiresAt: claims.exp };
+  const headers = { "content-type": "application/json; charset=UTF-8" };
+  check("anonymous response schema accepted without recording credentials", validateAnonymousSession(200, headers, body, now).tokenOrClientIdRecorded === false);
+  for (const [name, status, testHeaders, testBody] of [
+    ["401 response rejected", 401, headers, body],
+    ["Set-Cookie rejected", 200, { ...headers, "set-cookie": "synthetic" }, body],
+    ["manager role rejected", 200, headers, { ...body, role: "manager" }],
+    ["extra response key rejected", 200, headers, { ...body, sid: "synthetic" }],
+    ["server-session claim rejected", 200, headers, { ...body, token: jwt({ ...claims, sid: "synthetic" }) }],
+    ["invalid expiry rejected", 200, headers, { ...body, expiresAt: 0 }],
+  ]) {
+    let rejected = false;
+    try { validateAnonymousSession(status, testHeaders, testBody, now); } catch { rejected = true; }
+    check(name, rejected);
+  }
+  const brandingRequest = { url: BRANDING_URL, method: "GET", type: "fetch" };
+  check("exact optional branding404 classified", optionalBranding404(brandingRequest, 404));
+  check("other branding HTTP errors retained", !optionalBranding404(brandingRequest, 500));
+  check("branding query404 retained", !optionalBranding404({ ...brandingRequest, url: BRANDING_URL + "?other=1" }, 404));
+  const error = { message: "Failed to load resource: the server responded with a status of 404 ()",
+    url: BRANDING_URL, exactOptionalBrandingSource: true };
+  check("correlated optional branding console classified", optionalBrandingConsole(error, 1, true));
+  check("unattributed console error retained", !optionalBrandingConsole({ ...error, exactOptionalBrandingSource: false }, 1, true));
+  check("uncorrelated console error retained", !optionalBrandingConsole(error, 0, true));
+  check("missing built-in fallback retained as failure", !optionalBrandingConsole(error, 1, false));
+  return { status: "PASS", checks, networkUsed: false, browserLaunched: false, filesWritten: false, tokenValuesRecorded: false };
+}
+
+if (process.argv.includes("--policy-self-test")) {
+  console.log(JSON.stringify(policySelfTest()));
+  process.exit(0);
+}
+const requireFromE2e = createRequire(path.join(ROOT, "packages/e2e/package.json"));
+const { chromium, expect } = requireFromE2e("@playwright/test");
+
+// No browser, network navigation, or evidence directory before the deployment guard.
+function verifyLiveCandidate() {
+  requireThat(/^[a-f0-9]{40}$/u.test(expectedRevision || ""), "EXPECTED_REVISION_REQUIRED");
+  requireThat(Number(process.versions.node.split(".")[0]) >= 24, "NODE24_REQUIRED");
+  requireThat(fs.existsSync(EDGE), "ISOLATED_EDGE_EXECUTABLE_MISSING");
+  const source = readJson(path.join(DOCS, "current-release-source.json"));
+  const envelope = readJson(deployPath);
+  requireThat(source.sourceSha === expectedRevision && source.pushed === true, "CURRENT_SOURCE_MISMATCH");
+  requireThat(envelope.action === "deploy" && envelope.exit === 0 && !envelope.timedOut && !envelope.stateRequiresInspection, "DEPLOYMENT_NOT_ACCEPTED");
+  const remote = JSON.parse(envelope.stdout);
+  requireThat(remote.action === "deploy" && remote.exit === 0 && remote.childExit === 0 && !remote.deadlineExceeded && !remote.stateRequiresInspection && remote.sourceSha === expectedRevision, "REMOTE_DEPLOYMENT_NOT_ACCEPTED");
+  const deployed = JSON.parse(remote.stdout);
+  requireThat(deployed.success === true && deployed.phase === "verified" && deployed.revision === expectedRevision && !deployed.rolledBack, "DEPLOYMENT_NOT_VERIFIED");
+  const live = readJson(proofPath);
+  requireThat(live.passed === true && live.sourceSha === expectedRevision && live.runtimeConfigHashUnchanged === true && live.noCustomerMutation === true, "LIVE_IDENTITY_NOT_VERIFIED");
+  requireThat(/^sha256:[a-f0-9]{64}$/u.test(live.image || "") && /^[a-f0-9]{64}$/u.test(live.container || ""), "LIVE_IDENTITY_INVALID");
+  requireThat(deployed.image === live.image && deployed.replacementContainer === live.container, "DEPLOYED_AND_LIVE_IDENTITY_DIFFER");
+  const observed = remote.observedContainers?.tadazz;
+  requireThat(observed?.id === live.container && observed.image === live.image && observed.running === true, "DEPLOYMENT_CONTAINER_OBSERVATION_MISMATCH");
+  const observation = live.observation;
+  requireThat(observation?.passed === true && observation.container === live.container && observation.image === live.image && observation.gateway === live.gateway && observation.restartsDuringWindow === 0 && observation.endingSnapshot?.releaseIdentityVerified === true && observation.endingSnapshot?.gatewayIdentityVerified === true, "LIVE_OBSERVATION_NOT_ACCEPTED");
+  const observedAt = Date.parse(observation.finishedAt);
+  const ageMs = Date.now() - observedAt;
+  requireThat(Number.isFinite(ageMs) && ageMs >= -30000 && ageMs <= 20 * 60 * 1000, "LIVE_OBSERVATION_STALE");
+  requireThat(!fs.existsSync(out), "OUTPUT_ALREADY_EXISTS_PRESERVE_EVIDENCE");
+  return {
+    verified: true, sourceSha: expectedRevision, sourceRun: live.sourceRun,
+    image: live.image, container: live.container, gateway: live.gateway,
+    observedAt: observation.finishedAt, ageMs,
+    observationFile: path.relative(ROOT, proofPath),
+    observationSha256: sha256(fs.readFileSync(proofPath)),
+    deploymentExecutionFile: path.relative(ROOT, deployPath),
+    deploymentExecutionSha256: sha256(fs.readFileSync(deployPath)),
+  };
+}
+
+const identity = verifyLiveCandidate();
+fs.mkdirSync(out, { recursive: false });
+const receiptPath = path.join(out, "receipt.json");
+const receipt = {
+  kind: "anonymous-public-browse-with-stateless-player-bootstrap", version: 2, status: "RUNNING",
+  startedAt: new Date().toISOString(), identity, nodePid: process.pid,
+  productionOrigin: ORIGIN, installedChatGptVerified: false, authenticatedStudioVerified: false,
+  accountLoginPerformed: false, formsSubmitted: false, emailsSent: false, gamesCreated: false,
+  customerDataRequested: false, userBrowserProfileUsed: false, cspBypassed: false,
+  browser: { engine: "chromium", executable: "Microsoft Edge", headless: true, nonpersistentContexts: true },
+  policy: { sameOriginPublicBrowse: true, anonymousStatelessBootstrap: "one exact empty-object POST per fresh context", otherNonGetHeadRequestsBlocked: true, privateApiRequestsBlocked: true, gameSocketRequestsBlocked: true, serviceWorkers: "blocked", traceHarVideoRecorded: false },
+  cases: [], failures: [], cleanup: { completed: false },
+};
+const persist = () => fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2) + "\n", "utf8");
+persist();
+let server, browser, timedOut = false, interrupted = false;
+const started = Date.now();
+const stopOwnedBrowser = async () => {
+  if (!server) return;
+  try { await bounded(server.close(), 8000, "OWNED_BROWSER_GRACEFUL_CLOSE_TIMEOUT"); }
+  catch {
+    receipt.cleanup.forcedOwnedBrowserKill = true;
+    await bounded(server.kill(), 8000, "OWNED_BROWSER_KILL_TIMEOUT");
+  }
+  const child = server.process();
+  receipt.cleanup.browserPid = child.pid;
+  receipt.cleanup.browserExitCode = child.exitCode;
+  receipt.cleanup.browserSignal = child.signalCode;
+  receipt.cleanup.completed = child.exitCode !== null || child.signalCode !== null;
+  requireThat(receipt.cleanup.completed, "OWNED_BROWSER_STILL_RUNNING");
+};
+const globalDeadline = setTimeout(() => {
+  timedOut = true;
+  receipt.failures.push({ code: "GLOBAL_120_SECOND_DEADLINE" });
+  persist();
+  void server?.kill().catch(() => {});
+}, 120000);
+for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => {
+  interrupted = true;
+  receipt.failures.push({ code: signal });
+  persist();
+  void server?.kill().catch(() => {});
+});
+
+const pages = [
+  { id: "home", relative: "/", heading: /Make it a\s+show\./u },
+  { id: "forgot", relative: "/forgot", heading: "Reset your password." },
+];
+const viewports = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
+const assetTypes = new Set(["script", "stylesheet", "font", "image", "media"]);
+const captures = new Set(["home-1440", "home-390", "forgot-390"]);
+
+async function runCase(spec, viewport) {
+  const item = {
+    name: spec.id + "-" + viewport.width, route: spec.relative, viewport,
+    status: "RUNNING", startedAt: new Date().toISOString(),
+    pageErrors: [], consoleErrors: [], cspViolations: [], failedSameOriginRequests: [],
+    sameOriginHttpErrors: [], otherHttpErrors: [], blockedRequests: [],
+    loadedSameOriginAssets: [], findings: [],
+    anonymousSession: { requestsAllowed: 0, responsesValidated: 0 },
+  };
+  receipt.cases.push(item);
+  let context, page, collecting = true;
+  const guarded = new WeakSet();
+  const anonymousRequests = new WeakSet();
+  const responseReads = [];
+  try {
+    context = await browser.newContext({
+      viewport, locale: "en-GB", timezoneId: "UTC",
+      bypassCSP: false, ignoreHTTPSErrors: false, serviceWorkers: "block",
+      acceptDownloads: false, permissions: [],
+    });
+    const initial = await context.storageState();
+    requireThat(initial.cookies.length === 0 && initial.origins.length === 0, "CONTEXT_NOT_FRESH");
+    await context.route("**/*", async (route) => {
+      const request = route.request();
+      const method = request.method();
+      const type = request.resourceType();
+      const decision = publicRequestPolicy({
+        url: request.url(), method, type, headers: await request.allHeaders(), body: request.postData(),
+        mainFrame: Boolean(page && request.frame() === page.mainFrame()),
+      }, item.anonymousSession.requestsAllowed);
+      if (!decision.allowed) {
+        guarded.add(request);
+        if (collecting) item.blockedRequests.push({ method, type, url: cleanUrl(request.url()), reason: decision.reason });
+        await route.abort("blockedbyclient");
+      } else {
+        if (decision.anonymousBootstrap) {
+          item.anonymousSession.requestsAllowed += 1;
+          anonymousRequests.add(request);
+        }
+        await route.continue();
+      }
+    });
+    await context.routeWebSocket("**/*", (socket) => {
+      if (collecting) item.blockedRequests.push({ type: "websocket", url: cleanUrl(socket.url()), reason: "anonymous-smoke-does-not-open-game-sockets" });
+      socket.close({ code: 1000, reason: "Anonymous public smoke does not open game sockets" });
+    });
+    page = await context.newPage();
+    page.setDefaultTimeout(8000);
+    page.setDefaultNavigationTimeout(20000);
+    await page.addInitScript(() => {
+      window.__tadazzPublicSmokeCsp = [];
+      document.addEventListener("securitypolicyviolation", (event) => {
+        window.__tadazzPublicSmokeCsp.push({
+          disposition: event.disposition, directive: event.effectiveDirective,
+          blockedURI: event.blockedURI, sourceFile: event.sourceFile, lineNumber: event.lineNumber,
+        });
+      });
+    });
+    page.on("pageerror", (error) => { if (collecting) item.pageErrors.push(cleanError(error.message)); });
+    page.on("console", (message) => {
+      if (collecting && message.type() === "error") {
+        const location = message.location();
+        item.consoleErrors.push({ message: cleanError(message.text()), url: cleanUrl(location.url || ""),
+          exactOptionalBrandingSource: location.url === BRANDING_URL });
+      }
+    });
+    page.on("crash", () => { if (collecting) item.pageErrors.push("BROWSER_PAGE_CRASH"); });
+    page.on("requestfailed", (request) => {
+      if (!collecting || guarded.has(request)) return;
+      if (new URL(request.url()).origin === ORIGIN) item.failedSameOriginRequests.push({
+        url: cleanUrl(request.url()), type: request.resourceType(), error: cleanError(request.failure()?.errorText || ""),
+      });
+    });
+    page.on("response", (response) => {
+      if (!collecting) return;
+      const request = response.request(), url = new URL(response.url()), type = request.resourceType();
+      const detail = { path: url.pathname, type, status: response.status(),
+        optionalBranding404: optionalBranding404({ url: response.url(), method: request.method(), type }, response.status()) };
+      if (url.origin === ORIGIN && response.status() >= 400) item.sameOriginHttpErrors.push(detail);
+      else if (url.origin !== ORIGIN && response.status() >= 400) item.otherHttpErrors.push({ url: cleanUrl(response.url()), type, status: response.status() });
+      if (url.origin === ORIGIN && assetTypes.has(type) && response.status() < 400 && item.loadedSameOriginAssets.length < 160) item.loadedSameOriginAssets.push(detail);
+      if (url.origin === ORIGIN && url.pathname === "/api/auth/session") {
+        responseReads.push((async () => {
+          requireThat(anonymousRequests.has(request), "UNADMITTED_SESSION_RESPONSE");
+          const headers = await response.allHeaders();
+          const bytes = await response.body();
+          requireThat(bytes.length <= 12288, "ANONYMOUS_SESSION_RESPONSE_TOO_LARGE");
+          let body;
+          try { body = JSON.parse(bytes.toString("utf8")); } catch { throw new Error("ANONYMOUS_SESSION_RESPONSE_INVALID_JSON"); }
+          item.anonymousSession.response = validateAnonymousSession(response.status(), headers, body);
+          item.anonymousSession.responsesValidated += 1;
+        })().catch((error) => { item.pageErrors.push("ANONYMOUS_SESSION_REJECTED: " + cleanError(error.message)); }));
+      }
+      if (url.origin === ORIGIN && url.pathname === "/api/auth/mode") {
+        responseReads.push(response.json().then((body) => { item.accountService = { status: response.status(), accountsEnabled: body.accountsEnabled === true }; })
+          .catch((error) => { item.pageErrors.push("AUTH_MODE_INVALID_JSON: " + cleanError(error.message)); }));
+      }
+    });
+    page.on("dialog", (dialog) => { item.findings.push("UNEXPECTED_DIALOG"); void dialog.dismiss(); });
+    page.on("popup", (popup) => { item.findings.push("UNEXPECTED_POPUP"); void popup.close(); });
+
+    const response = await page.goto(ORIGIN + spec.relative, { waitUntil: "domcontentloaded" });
+    requireThat(response?.status() === 200, "PUBLIC_DOCUMENT_NOT_HTTP200");
+    requireThat((response.headers()["content-type"] || "").includes("text/html"), "PUBLIC_DOCUMENT_NOT_HTML");
+    item.document = {
+      status: response.status(), path: new URL(page.url()).pathname,
+      cspHeaderPresent: Boolean(response.headers()["content-security-policy"]),
+      contentType: response.headers()["content-type"],
+    };
+    const root = page.locator('[data-tadazz-site="marketing"]');
+    await expect(root).toBeVisible();
+    await expect(root.getByRole("heading", { level: 1, name: spec.heading })).toBeVisible();
+    await expect(root.locator("img[alt='Tadazz']").first()).toBeVisible();
+
+    if (spec.id === "home") {
+      await expect(root.getByRole("button", { name: "Explore games", exact: true })).toBeVisible();
+      await expect(root.locator(".cinema-buttons").getByRole("button", { name: "Try a round", exact: true })).toBeEnabled();
+      if (viewport.width === 390) {
+        const toggle = root.getByRole("button", { name: "Toggle navigation", exact: true });
+        await expect(toggle).toBeVisible();
+        await toggle.click();
+        await expect(root.getByRole("navigation", { name: "Mobile navigation", exact: true })).toBeVisible();
+        await expect(toggle).toHaveAttribute("aria-expanded", "true");
+        await toggle.click();
+        await expect(toggle).toHaveAttribute("aria-expanded", "false");
+        item.findings.push("Mobile navigation opens and closes through the real React handler.");
+      } else {
+        await expect(root.getByRole("navigation", { name: "Main navigation", exact: true })).toBeVisible();
+        await expect(root.getByRole("link", { name: "Log in", exact: true })).toBeVisible();
+      }
+    } else {
+      const form = root.locator("form.account-fields");
+      const email = form.getByRole("textbox", { name: "Email address", exact: true });
+      await expect(email).toBeVisible();
+      await expect(email).toHaveAttribute("type", "email");
+      await expect(email).toHaveClass(/tds-input/u);
+      const metrics = await email.evaluate((input) => {
+        const box = input.getBoundingClientRect(), style = getComputedStyle(input);
+        return { width: box.width, height: box.height, left: box.left, right: box.right,
+          fontFamily: style.fontFamily, borderRadius: style.borderRadius,
+          associatedLabelCount: input.labels?.length || 0, required: input.required, empty: input.value === "" };
+      });
+      requireThat(metrics.height >= 40 && metrics.width >= 180 && metrics.associatedLabelCount >= 1 && metrics.empty, "CANONICAL_EMAIL_CONTROL_NOT_RENDERED");
+      item.emailControl = metrics;
+      await expect(form.getByRole("button", { name: "Send reset code", exact: true })).toBeVisible();
+      await expect(form.getByRole("button", { name: "Send reset code", exact: true })).toBeEnabled();
+      await expect(root.getByRole("button", { name: "Back to login", exact: true })).toBeVisible();
+      await expect(form.locator("input[type='password']")).toHaveCount(0);
+      await expect(form.locator("input")).toHaveCount(1);
+    }
+
+    await bounded(page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    }), 8000, "FONT_OR_RENDER_SETTLE_TIMEOUT");
+    await expect.poll(async () => page.locator("img").evaluateAll((images) =>
+      images.filter((img) => {
+        const b = img.getBoundingClientRect();
+        return b.width > 0 && b.height > 0 && b.bottom > 0 && b.top < innerHeight && b.right > 0 && b.left < innerWidth;
+      }).every((img) => img.complete && img.naturalWidth > 0)), { timeout: 8000 }).toBe(true);
+    await expect.poll(() => item.anonymousSession.responsesValidated, { timeout: 8000 }).toBe(1);
+    await Promise.all(responseReads);
+    requireThat(item.anonymousSession.requestsAllowed === 1, "ANONYMOUS_SESSION_COUNT");
+    item.builtInAssets = await root.locator("img[alt='Tadazz']").first().evaluate((img) => ({
+      logoDecoded: img.complete && img.naturalWidth > 0,
+      logoUrl: new URL(img.currentSrc || img.src).origin + new URL(img.currentSrc || img.src).pathname,
+      fontsLoaded: document.fonts.status === "loaded",
+    }));
+    requireThat(item.builtInAssets.logoDecoded && item.builtInAssets.logoUrl === ORIGIN + BUILT_IN_LOGO &&
+      item.builtInAssets.fontsLoaded, "BUILT_IN_BRANDING_NOT_RENDERED");
+    item.layout = await page.evaluate(() => ({
+      viewport: { width: innerWidth, height: innerHeight },
+      documentWidth: document.documentElement.scrollWidth,
+      bodyWidth: document.body.scrollWidth, fonts: document.fonts.status,
+      moduleEntries: [...document.querySelectorAll("script[type='module'][src]")].map((x) => new URL(x.src).pathname),
+    }));
+    requireThat(item.layout.documentWidth <= viewport.width + 1 && item.layout.bodyWidth <= viewport.width + 1, "HORIZONTAL_PAGE_OVERFLOW");
+    requireThat(item.layout.moduleEntries.length > 0, "BUILT_MODULE_ENTRY_MISSING");
+    if (spec.id === "forgot") requireThat(item.accountService?.accountsEnabled === true, "ACCOUNT_SERVICE_NOT_ENABLED");
+    await delay(250);
+    item.cspViolations = (await page.evaluate(() => window.__tadazzPublicSmokeCsp || [])).map((x) => ({
+      ...x, blockedURI: cleanUrl(x.blockedURI), sourceFile: cleanUrl(x.sourceFile),
+    }));
+    requireThat(item.pageErrors.length === 0, "PRODUCTION_PAGE_ERRORS");
+    const brandingResponses = item.sameOriginHttpErrors.filter((entry) => entry.optionalBranding404);
+    const fallbackRendered = item.builtInAssets.logoDecoded && item.builtInAssets.fontsLoaded &&
+      item.builtInAssets.logoUrl === ORIGIN + BUILT_IN_LOGO &&
+      item.loadedSameOriginAssets.some((entry) => entry.path === BUILT_IN_LOGO && entry.status === 200) &&
+      item.loadedSameOriginAssets.some((entry) => entry.type === "font" && entry.status === 200);
+    const brandingConsole = item.consoleErrors.filter((entry) =>
+      optionalBrandingConsole(entry, brandingResponses.length, fallbackRendered));
+    if (brandingResponses.length) {
+      requireThat(brandingResponses.length === 1 && fallbackRendered, "OPTIONAL_BRANDING_FALLBACK_NOT_VERIFIED");
+      item.optionalBrandingFallback = { path: "/branding/theme.json", status: 404,
+        responseCount: brandingResponses.length, consoleCount: brandingConsole.length, fallbackRendered: true };
+      item.findings.push("The optional /branding/theme.json override returned HTTP 404; the built-in Tadazz logo and font loaded and rendered. The exact correlated resource error remains recorded.");
+    }
+    requireThat(item.consoleErrors.length === brandingConsole.length, "PRODUCTION_CONSOLE_ERRORS");
+    requireThat(item.failedSameOriginRequests.length === 0, "SAME_ORIGIN_REQUEST_FAILURE");
+    requireThat(item.otherHttpErrors.length === 0, "CROSS_ORIGIN_HTTP_ERROR");
+    requireThat(item.sameOriginHttpErrors.length === brandingResponses.length, "SAME_ORIGIN_HTTP_ERROR");
+    requireThat(item.blockedRequests.length === 0, "ANONYMOUS_PUBLIC_SCOPE_GUARD_TRIGGERED");
+    requireThat(item.cspViolations.filter((x) => x.disposition !== "report").length === 0, "ENFORCED_CSP_VIOLATION");
+    requireThat(!item.findings.some((x) => x.startsWith("UNEXPECTED_")), "UNEXPECTED_PUBLIC_UI");
+    if (captures.has(item.name)) {
+      item.screenshot = item.name + ".png";
+      await page.screenshot({ path: path.join(out, item.screenshot), fullPage: false, timeout: 10000 });
+    }
+    item.status = "PASS";
+  } catch (error) {
+    item.status = "FAIL";
+    item.error = cleanError(error.stack || error.message || error);
+    receipt.failures.push({ case: item.name, error: item.error });
+    if (page && !page.isClosed()) {
+      try {
+        item.screenshot = item.name + "-failure.png";
+        await page.screenshot({ path: path.join(out, item.screenshot), fullPage: false, timeout: 5000 });
+      } catch { item.failureScreenshotUnavailable = true; }
+    }
+  } finally {
+    collecting = false;
+    if (context) {
+      try { await bounded(context.close(), 5000, "CONTEXT_CLOSE_TIMEOUT"); item.contextClosed = true; }
+      catch (error) { item.contextClosed = false; item.status = "FAIL"; receipt.failures.push({ case: item.name, error: cleanError(error.message) }); throw error; }
+    }
+    item.finishedAt = new Date().toISOString();
+    persist();
+  }
+}
+
+try {
+  // A loopback-only Playwright server exposes an owned ChildProcess handle for exact cleanup.
+  server = await chromium.launchServer({ executablePath: EDGE, headless: true, host: "127.0.0.1", port: 0, timeout: 20000 });
+  receipt.browser.pid = server.process().pid;
+  browser = await chromium.connect(server.wsEndpoint(), { timeout: 10000 });
+  receipt.browser.version = browser.version();
+  for (const viewport of viewports) for (const spec of pages) {
+    if (timedOut || interrupted) throw new Error("RUN_INTERRUPTED");
+    await runCase(spec, viewport);
+  }
+} catch (error) {
+  receipt.failures.push({ code: "RUN_FAILURE", error: cleanError(error.stack || error.message || error) });
+} finally {
+  try { await stopOwnedBrowser(); }
+  catch (error) { receipt.cleanup.error = cleanError(error.message); receipt.failures.push({ code: "CLEANUP_FAILURE", error: receipt.cleanup.error }); }
+  clearTimeout(globalDeadline);
+  receipt.finishedAt = new Date().toISOString();
+  receipt.seconds = Math.round((Date.now() - started) / 10) / 100;
+  receipt.status = !timedOut && !interrupted && receipt.failures.length === 0 && receipt.cases.length === 4 && receipt.cases.every((x) => x.status === "PASS" && x.contextClosed) && receipt.cleanup.completed ? "PASS" : "FAIL";
+  persist();
+}
+console.log(JSON.stringify({ status: receipt.status, sourceSha: identity.sourceSha, cases: receipt.cases.map((x) => ({ name: x.name, status: x.status })), failures: receipt.failures.length, cleanupCompleted: receipt.cleanup.completed, receipt: path.relative(ROOT, receiptPath) }));
+process.exitCode = receipt.status === "PASS" ? 0 : 1;

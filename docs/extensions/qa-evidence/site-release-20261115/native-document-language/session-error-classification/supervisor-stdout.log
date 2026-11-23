@@ -1,0 +1,14 @@
+2026-11-15T18:34:56.108273389Z 2026-11-15 18:34:56,107 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2026-11-15T18:34:56.109823964Z 2026-11-15 18:34:56,109 INFO supervisord started with pid 1
+2026-11-15T18:34:57.114141298Z 2026-11-15 18:34:57,113 INFO spawned: 'nginx' with pid 7
+2026-11-15T18:34:57.119446630Z 2026-11-15 18:34:57,119 INFO spawned: 'socket' with pid 8
+2026-11-15T18:34:58.210623137Z 2026-11-15 18:34:58,210 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-11-15T18:34:58.210672378Z 2026-11-15 18:34:58,210 INFO success: socket entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-11-15T18:35:00.813574798Z Game cleanup task started
+2026-11-15T18:35:01.203019059Z Server running on port 3001
+2026-11-15T18:37:58.394383764Z 2026-11-15 18:37:58,394 WARN received SIGTERM indicating exit request
+2026-11-15T18:37:58.395576456Z 2026-11-15 18:37:58,394 INFO waiting for nginx, socket to die
+2026-11-15T18:37:58.395592696Z Game cleanup task stopped
+2026-11-15T18:37:58.395596256Z Registry cleaned up
+2026-11-15T18:37:58.403013009Z 2026-11-15 18:37:58,402 INFO stopped: socket (exit status 0)
+2026-11-15T18:37:58.420665422Z 2026-11-15 18:37:58,420 INFO stopped: nginx (exit status 0)

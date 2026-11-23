@@ -1,0 +1,1066 @@
+[
+  {
+    "path": "assets/AccountGateway-BdXuExWx.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/AccountGateway-BdXuExWx.js",
+    "inode": 351115,
+    "bytes": 9503,
+    "sha256": "79513d503bd51926fc5d24ac8bef4eec96a2c7d12721d321bdb74d0a188bfc4c"
+  },
+  {
+    "path": "assets/Card-B-I9cFXq.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/Card-B-I9cFXq.js",
+    "inode": 351138,
+    "bytes": 331,
+    "sha256": "b1e56f948351c9fbabb032bff17ae75b398914cc58597b54abeaa8adefe34474"
+  },
+  {
+    "path": "assets/Catalogue-C3vo4PgE.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/Catalogue-C3vo4PgE.js",
+    "inode": 351091,
+    "bytes": 4508,
+    "sha256": "026c2a1e09f746ad2a75da1a96e7fb5f5e2b441b254bf7f1041eea220df96829"
+  },
+  {
+    "path": "assets/Dialog-det_vpQs.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/Dialog-det_vpQs.js",
+    "inode": 351127,
+    "bytes": 656,
+    "sha256": "3a2cc776f79e411bfcb53cd0400217deea528a4bbaa7fbf73f2afc064f8af832"
+  },
+  {
+    "path": "assets/Events-Cz7aikys.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/Events-Cz7aikys.js",
+    "inode": 351130,
+    "bytes": 4598,
+    "sha256": "dd74208ba0ffdec3d8f4e7d5b0ce7b4a07eca6dd7c91b8cc8bd6fe7ab29e780c"
+  },
+  {
+    "path": "assets/LegacyTools-B3BPO9GP.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/LegacyTools-B3BPO9GP.js",
+    "inode": 351134,
+    "bytes": 453,
+    "sha256": "799645fa041593fb201b8d30a52f1583c9fcc78a8665cb8e236af5d99d6a9b52"
+  },
+  {
+    "path": "assets/ManagerAuthBackground-B1zcnzl5.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/ManagerAuthBackground-B1zcnzl5.js",
+    "inode": 351118,
+    "bytes": 18294,
+    "sha256": "a2b59de77f00e16f79d80ddbfeb73c2c4180655ef9caaa566d322358869aa9b6"
+  },
+  {
+    "path": "assets/MarketingSite-SInwJIjo.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/MarketingSite-SInwJIjo.js",
+    "inode": 351125,
+    "bytes": 87095,
+    "sha256": "154cf330f4e3cb18094d4fe1bc9e4e4718e9bcad7abe48bd9c9055b948375945"
+  },
+  {
+    "path": "assets/MyGames-CK1GEdJe.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/MyGames-CK1GEdJe.js",
+    "inode": 351141,
+    "bytes": 11546,
+    "sha256": "f8e7cec8abcf1e98a1f81e856edb13906552bdb2893264291b3a962b7662fe1b"
+  },
+  {
+    "path": "assets/PackageManager-BJ2Bz8Ke.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/PackageManager-BJ2Bz8Ke.js",
+    "inode": 351087,
+    "bytes": 13632,
+    "sha256": "050604a6fb990e2d25a11b689a03ac839100fa02c7af2efe8466695d08ac9aad"
+  },
+  {
+    "path": "assets/PackageManager-DwgNxCtK.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/PackageManager-DwgNxCtK.js",
+    "inode": 351114,
+    "bytes": 62,
+    "sha256": "81ea60cadc40161f9bb0e4cc54625d4f8295933bbf2b0a53350736d197f0e70d"
+  },
+  {
+    "path": "assets/QueryClientProvider-FJJaVXOC.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/QueryClientProvider-FJJaVXOC.js",
+    "inode": 351122,
+    "bytes": 11926,
+    "sha256": "c5aeb93d712c5721d61c39583934944d26eb108fbd5765ef37b726b2be0b8290"
+  },
+  {
+    "path": "assets/ReferenceCanvas-Btv1jHAY.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/ReferenceCanvas-Btv1jHAY.js",
+    "inode": 351129,
+    "bytes": 93581,
+    "sha256": "c898f83611507a27568c9c2143defa634c954a1bbfce92d7a6117849ed9b7644"
+  },
+  {
+    "path": "assets/ResultModal-Bl8PHG4J.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/ResultModal-Bl8PHG4J.js",
+    "inode": 351117,
+    "bytes": 232494,
+    "sha256": "d9372cf8840d6f4e26e902f18f859f0587137acb5e95f4f594c45eb30b495019"
+  },
+  {
+    "path": "assets/ShowImportModal-DXtuIk6X.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/ShowImportModal-DXtuIk6X.js",
+    "inode": 351136,
+    "bytes": 11785,
+    "sha256": "e88b4e4dd0563048217b3d0d4fe3b63401bfb9fad7ce113b8d206fa0775ce3e5"
+  },
+  {
+    "path": "assets/SiteButton-CJORaGUG.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/SiteButton-CJORaGUG.js",
+    "inode": 351120,
+    "bytes": 268,
+    "sha256": "dff1011cb268b8b4d7b79a55ed9db08be9a7076f0a7428a4d781b6fdfe91cfa7"
+  },
+  {
+    "path": "assets/SiteLink-BX5Mqv7C.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/SiteLink-BX5Mqv7C.js",
+    "inode": 351101,
+    "bytes": 513,
+    "sha256": "8b8aa34a408d97419894f177a665c3550fccdecf74a3ef01bea0df32fb57eb73"
+  },
+  {
+    "path": "assets/Studio-yN29TW8C.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/Studio-yN29TW8C.js",
+    "inode": 351123,
+    "bytes": 73706,
+    "sha256": "51ffa1a02ca9df2f9bdc5a2d3f2e6925b3697cf760a972f3d79e82a4019ae06c"
+  },
+  {
+    "path": "assets/__root-inufZ5Hx.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/__root-inufZ5Hx.js",
+    "inode": 351105,
+    "bytes": 18435,
+    "sha256": "8cd9cdcfb7eec8b159d34fbafa57321b0522707d2c469cfb5b97ba7d9eac3452"
+  },
+  {
+    "path": "assets/api-Cg5P1hD8.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/api-Cg5P1hD8.js",
+    "inode": 351098,
+    "bytes": 46398,
+    "sha256": "df788b76b94e48b92e8566463f2d49050197d7491dc3786733e8b9b9b092732a"
+  },
+  {
+    "path": "assets/arrow-left-CtQqBsPh.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/arrow-left-CtQqBsPh.js",
+    "inode": 351097,
+    "bytes": 196,
+    "sha256": "30b05cdd107231716114821b2658dd50e8f0d9cbf47e7a0340c5f0c04c07f864"
+  },
+  {
+    "path": "assets/arrow-right-BDNFMtme.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/arrow-right-BDNFMtme.js",
+    "inode": 351108,
+    "bytes": 196,
+    "sha256": "fbfc9e53513e2a7958f7cf11881fd4e137bfd985b11bdef3fb5e211f6e812013"
+  },
+  {
+    "path": "assets/background-CMjhDDHd.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/background-CMjhDDHd.png",
+    "inode": 351102,
+    "bytes": 2777381,
+    "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+  },
+  {
+    "path": "assets/circle-x-DkvyeCeS.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/circle-x-DkvyeCeS.js",
+    "inode": 351104,
+    "bytes": 480,
+    "sha256": "937b49c25b157d27b9f8743351ec225d633c9029116cd53501db43d8b75194f3"
+  },
+  {
+    "path": "assets/client-DvBgviii.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/client-DvBgviii.js",
+    "inode": 351133,
+    "bytes": 1147,
+    "sha256": "1ec3e3552f847b044901fdb55c2e871ee8ca73c8060016abe4f55db08e97654d"
+  },
+  {
+    "path": "assets/dist-C0FbLVbZ.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/dist-C0FbLVbZ.js",
+    "inode": 351107,
+    "bytes": 63731,
+    "sha256": "28f0da754634ce05fd890ad764a1d1f93f287ea1cbb948ddac31de3d896122e5"
+  },
+  {
+    "path": "assets/howler-DvpfHRP7.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/howler-DvpfHRP7.js",
+    "inode": 351111,
+    "bytes": 35943,
+    "sha256": "6bde5a81ee3770a016e796c84ceee7a092a991817c6d56210afba780b59e3074"
+  },
+  {
+    "path": "assets/index-COPgzYZb.js",
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/site-native-lang-A-20261115/fixed-output/files/assets/index-COPgzYZb.js",
+    "inode": 355146,
+    "bytes": 221129,
+    "sha256": "7d0ccaec8a639337071dd01430c27dd45769d4eff276691e8f0ae4e66f91ea16"
+  },
+  {
+    "path": "assets/index-DzSMiCNC.css",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/index-DzSMiCNC.css",
+    "inode": 351124,
+    "bytes": 123543,
+    "sha256": "b6499f38106b0405bb40b64f609fbfafaef8e3b877791f53707ae3d419793a73"
+  },
+  {
+    "path": "assets/locales-DBwna5RC.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/locales-DBwna5RC.js",
+    "inode": 351116,
+    "bytes": 570727,
+    "sha256": "af204a44f3e4967a2011c33ee84921a402062c9a91caf8f991894e4960fd4e12"
+  },
+  {
+    "path": "assets/manager-a3Jzb0JM.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/manager-a3Jzb0JM.js",
+    "inode": 351126,
+    "bytes": 883,
+    "sha256": "6cb68b499fcd38838a843e5424f575152b8dffff78a951c69275a778f7e87b2a"
+  },
+  {
+    "path": "assets/mutation-D5SS4KGD.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/mutation-D5SS4KGD.js",
+    "inode": 351139,
+    "bytes": 3450,
+    "sha256": "b45937dfbcf70ad3fc8770bdaca06ded4c44f2021d665979fd6da5b285f427cc"
+  },
+  {
+    "path": "assets/platform-BCFCwdN3.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/platform-BCFCwdN3.js",
+    "inode": 351090,
+    "bytes": 5956,
+    "sha256": "e9230f2df72194fa66447a8467f2e0ce07a7c180527b3558922cbc345997a3c9"
+  },
+  {
+    "path": "assets/platform-controls-D1CJgNE7.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/platform-controls-D1CJgNE7.js",
+    "inode": 351128,
+    "bytes": 122937,
+    "sha256": "bf1bc70d3e0b31478cfdd69fffc8e008fdcb715be0bc1142105497ef3bcddb49"
+  },
+  {
+    "path": "assets/platform-ui-DdwUqZXl.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/platform-ui-DdwUqZXl.js",
+    "inode": 351094,
+    "bytes": 16286,
+    "sha256": "9f7ed2d009adf0b21354ffe2e679053a17324e3d85d00e1eb3ccc6ff2227c320"
+  },
+  {
+    "path": "assets/play-BGhL75p-.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/play-BGhL75p-.js",
+    "inode": 351121,
+    "bytes": 221,
+    "sha256": "65cd764403b0b4be70ea5e2bb8fae581fb1f9211239d453d023474710c8cc069"
+  },
+  {
+    "path": "assets/portal-DcFwFJqb.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/portal-DcFwFJqb.js",
+    "inode": 351109,
+    "bytes": 155718,
+    "sha256": "020faefd53fbda25793bfa2ca42ecead2a08dd187f3fc7736f297fae08fc5731"
+  },
+  {
+    "path": "assets/preload-helper-C8O7Ckvh.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/preload-helper-C8O7Ckvh.js",
+    "inode": 351088,
+    "bytes": 8666,
+    "sha256": "50a404cff1d0b1ab1422bdc09555da33be8c089c23c2aaf57ee0b31842b90b0f"
+  },
+  {
+    "path": "assets/presentation-CoLdMLel.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/presentation-CoLdMLel.js",
+    "inode": 351140,
+    "bytes": 1024972,
+    "sha256": "e7e39d82524cd0a9a2c53982d997144586922361aebced339da138f34c14b0fe"
+  },
+  {
+    "path": "assets/presentation-DYrgA-iG.css",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/presentation-DYrgA-iG.css",
+    "inode": 351135,
+    "bytes": 166422,
+    "sha256": "f4bb86ef38c5821d35d1e2cc692b56a6b1b92e88602d1dc890dad88dc4bb1fdc"
+  },
+  {
+    "path": "assets/query-sD_nJkaD.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/query-sD_nJkaD.js",
+    "inode": 351137,
+    "bytes": 7622,
+    "sha256": "67e09af69e568d79593ced96c892ab82a41894b2278dff776c1e7e023a532477"
+  },
+  {
+    "path": "assets/react-Db6Pv1-m.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/react-Db6Pv1-m.js",
+    "inode": 351119,
+    "bytes": 126508,
+    "sha256": "6478099ce37d363371b036a478e207753f296216a1259d55f0ce5d5d72e08717"
+  },
+  {
+    "path": "assets/rolldown-runtime-hePW80VL.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rolldown-runtime-hePW80VL.js",
+    "inode": 351099,
+    "bytes": 716,
+    "sha256": "580ad8c58061a4dde99bde0a56905e382f0568516ee2f5b84dbfb52085709021"
+  },
+  {
+    "path": "assets/route.gen-DAAFEfiF.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/route.gen-DAAFEfiF.js",
+    "inode": 351095,
+    "bytes": 308524,
+    "sha256": "1368ff3fa6e75ac4ca6c988386780b74daa82f196cf05c0560c5ed78e2af278c"
+  },
+  {
+    "path": "assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2",
+    "inode": 351093,
+    "bytes": 32468,
+    "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+  },
+  {
+    "path": "assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2",
+    "inode": 351131,
+    "bytes": 12388,
+    "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+  },
+  {
+    "path": "assets/rubik-cyrillic-wght-normal-DveCct9I.woff2",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2",
+    "inode": 351112,
+    "bytes": 15112,
+    "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+  },
+  {
+    "path": "assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2",
+    "inode": 351089,
+    "bytes": 9348,
+    "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+  },
+  {
+    "path": "assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2",
+    "inode": 351092,
+    "bytes": 19400,
+    "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+  },
+  {
+    "path": "assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+    "inode": 351132,
+    "bytes": 35348,
+    "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+  },
+  {
+    "path": "assets/search-D3eomMgJ.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/search-D3eomMgJ.js",
+    "inode": 351103,
+    "bytes": 330,
+    "sha256": "d40ef96ee997b07b574aa2e76745f8870230436ba1e41222ee513d4d4abaaa75"
+  },
+  {
+    "path": "assets/socket-context-CMAWaZNK.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/socket-context-CMAWaZNK.js",
+    "inode": 351106,
+    "bytes": 42749,
+    "sha256": "b18d0dde0c32bd140ecb950474a5cff5a8c2431adeba9a48ece262474785f6a0"
+  },
+  {
+    "path": "assets/tadazz-question-background-BnsH8I8M.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/tadazz-question-background-BnsH8I8M.png",
+    "inode": 351096,
+    "bytes": 1610338,
+    "sha256": "fb3dba4bc8587abf8e10165f02191c649610923f4c6bc8625218065965c3a31c"
+  },
+  {
+    "path": "assets/useQuery-CAVK7DVf.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/useQuery-CAVK7DVf.js",
+    "inode": 351100,
+    "bytes": 8639,
+    "sha256": "e878d5b77f726bf4aaae6d782c3b314d491e135b1a4a9e00159dfeeb4616e159"
+  },
+  {
+    "path": "assets/useRouterState-D-Nsdb0J.js",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/assets/useRouterState-D-Nsdb0J.js",
+    "inode": 351113,
+    "bytes": 1693,
+    "sha256": "4c953a7e89194d73befc309cc55248142aae4fce8b69b8093ae6bed1113c39a6"
+  },
+  {
+    "path": "icon.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/icon.svg",
+    "inode": 351084,
+    "bytes": 988,
+    "sha256": "7594a69ec11c73e9f8c04d189bd3ac6d5533bfe00f65dedb4d420478ea4bcadb"
+  },
+  {
+    "path": "index.html",
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/site-native-lang-A-20261115/fixed-output/files/index.html",
+    "inode": 355147,
+    "bytes": 2738,
+    "sha256": "e5d2c9e772ca5da640ba8eaa6b43a0af714efcf64c1f2877a0d1447fd82f4d6d"
+  },
+  {
+    "path": "media/blue-sky.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/media/blue-sky.png",
+    "inode": 351144,
+    "bytes": 70,
+    "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77"
+  },
+  {
+    "path": "motion/tadazz-motion-runtime.html",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/motion/tadazz-motion-runtime.html",
+    "inode": 351166,
+    "bytes": 992496,
+    "sha256": "d5980f1d673271274eba650ed00a9d62284d48fd4607e8cd83d5ef1f05aba8b6"
+  },
+  {
+    "path": "sounds/answersMusic.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/answersMusic.mp3",
+    "inode": 351010,
+    "bytes": 1246763,
+    "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6"
+  },
+  {
+    "path": "sounds/answersSound.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/answersSound.mp3",
+    "inode": 351002,
+    "bytes": 28212,
+    "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b"
+  },
+  {
+    "path": "sounds/boump.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/boump.mp3",
+    "inode": 350996,
+    "bytes": 5878,
+    "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224"
+  },
+  {
+    "path": "sounds/first.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/first.mp3",
+    "inode": 351000,
+    "bytes": 164093,
+    "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90"
+  },
+  {
+    "path": "sounds/results.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/results.mp3",
+    "inode": 350995,
+    "bytes": 52845,
+    "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382"
+  },
+  {
+    "path": "sounds/second.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/second.mp3",
+    "inode": 350998,
+    "bytes": 77750,
+    "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb"
+  },
+  {
+    "path": "sounds/show.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/show.mp3",
+    "inode": 351007,
+    "bytes": 7941,
+    "sha256": "e3e2d6b871982ffcef21d2329109fc477103fa6e6243fb2958432e7225757649"
+  },
+  {
+    "path": "sounds/snearRoll.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/snearRoll.mp3",
+    "inode": 351003,
+    "bytes": 390765,
+    "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212"
+  },
+  {
+    "path": "sounds/tadazz-confirm-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-confirm-20261108.mp3",
+    "inode": 351006,
+    "bytes": 8193,
+    "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94"
+  },
+  {
+    "path": "sounds/tadazz-reveal-bright-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-reveal-bright-20261108.mp3",
+    "inode": 351001,
+    "bytes": 28255,
+    "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823"
+  },
+  {
+    "path": "sounds/tadazz-silky-transition-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-silky-transition-20261108.mp3",
+    "inode": 351004,
+    "bytes": 18476,
+    "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104"
+  },
+  {
+    "path": "sounds/tadazz-soft-reveal-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-soft-reveal-20261108.mp3",
+    "inode": 351009,
+    "bytes": 17647,
+    "sha256": "0b7f14b455819166fa3576b92c2a2f5c1271a6aaba3cd7e1231ab46abb7ec427"
+  },
+  {
+    "path": "sounds/tadazz-timer-end-368edc1d9522.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-timer-end-368edc1d9522.mp3",
+    "inode": 350994,
+    "bytes": 25974,
+    "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4"
+  },
+  {
+    "path": "sounds/tadazz-timer-final-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-timer-final-20261108.mp3",
+    "inode": 350997,
+    "bytes": 9447,
+    "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e"
+  },
+  {
+    "path": "sounds/tadazz-timer-tick-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-timer-tick-20261108.mp3",
+    "inode": 350999,
+    "bytes": 5058,
+    "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275"
+  },
+  {
+    "path": "sounds/tadazz-timer-urgent-20261108.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/tadazz-timer-urgent-20261108.mp3",
+    "inode": 351008,
+    "bytes": 5685,
+    "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047"
+  },
+  {
+    "path": "sounds/three.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/sounds/three.mp3",
+    "inode": 351005,
+    "bytes": 61238,
+    "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997"
+  },
+  {
+    "path": "tadazz-design-reference/favicon-z-64-20261110.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/favicon-z-64-20261110.png",
+    "inode": 351155,
+    "bytes": 6331,
+    "sha256": "368e3b274765d2fdd564065f38d3c2c137964d01cc062569827ebc112657ccf8"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-exclaim.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-exclaim.webp",
+    "inode": 351161,
+    "bytes": 19460,
+    "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-icons.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-icons.svg",
+    "inode": 351151,
+    "bytes": 3571,
+    "sha256": "bca131a95be247ba5789580406e85bc70ee8859e2268fd0d48052083a14d9b9a"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-logo.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-logo.webp",
+    "inode": 351156,
+    "bytes": 187692,
+    "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-questions.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-questions.webp",
+    "inode": 351164,
+    "bytes": 79910,
+    "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-rays.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-rays.webp",
+    "inode": 351159,
+    "bytes": 35080,
+    "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-stage.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-stage.webp",
+    "inode": 351153,
+    "bytes": 242306,
+    "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-worlds.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-worlds.webp",
+    "inode": 351162,
+    "bytes": 56520,
+    "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-zb.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-zb.webp",
+    "inode": 351157,
+    "bytes": 53972,
+    "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+  },
+  {
+    "path": "tadazz-design-reference/marketing-zl.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing-zl.webp",
+    "inode": 351152,
+    "bytes": 48894,
+    "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+  },
+  {
+    "path": "tadazz-design-reference/marketing.css",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/marketing.css",
+    "inode": 351154,
+    "bytes": 72036,
+    "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309"
+  },
+  {
+    "path": "tadazz-design-reference/studio-blue.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-blue.webp",
+    "inode": 351160,
+    "bytes": 53972,
+    "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+  },
+  {
+    "path": "tadazz-design-reference/studio-icons.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-icons.svg",
+    "inode": 351163,
+    "bytes": 3352,
+    "sha256": "f51ebefd4edfc2cd3cf4854b6257e76d9b4ece1ff4a9b75f56c555a51d9e807e"
+  },
+  {
+    "path": "tadazz-design-reference/studio-lime.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-lime.webp",
+    "inode": 351158,
+    "bytes": 48894,
+    "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+  },
+  {
+    "path": "tadazz-design-reference/studio-logo.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-logo.webp",
+    "inode": 351149,
+    "bytes": 187692,
+    "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+  },
+  {
+    "path": "tadazz-design-reference/studio-questions.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-questions.webp",
+    "inode": 351146,
+    "bytes": 79910,
+    "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+  },
+  {
+    "path": "tadazz-design-reference/studio-stage.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-stage.webp",
+    "inode": 351148,
+    "bytes": 242306,
+    "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+  },
+  {
+    "path": "tadazz-design-reference/studio-worlds.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio-worlds.webp",
+    "inode": 351150,
+    "bytes": 56520,
+    "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+  },
+  {
+    "path": "tadazz-design-reference/studio.css",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-design-reference/studio.css",
+    "inode": 351147,
+    "bytes": 1927702,
+    "sha256": "119e2a3edc6050f778e7db424bb9242bb3e0815f2535f0d3e42c01c32b7acea4"
+  },
+  {
+    "path": "tadazz-favicon-z-20261108.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-favicon-z-20261108.png",
+    "inode": 351085,
+    "bytes": 1223522,
+    "sha256": "0773459d325e1903f56fdc8542560a98c9021e2a26e8b4c1ccfa5ae61b2a410f"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v1/backdrop.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v1/backdrop.png",
+    "inode": 351070,
+    "bytes": 2228060,
+    "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v1/logo.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v1/logo.png",
+    "inode": 351072,
+    "bytes": 11791,
+    "sha256": "9057bad3a21e098f26494c056fa725b05943d2ed53a4df67116ae16fe7f9007a"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v1/opening.json",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v1/opening.json",
+    "inode": 351071,
+    "bytes": 1121,
+    "sha256": "4ec6b0de97a844b7f46ae1190d806fe90f7cda7f18f773e65c3e0dca51ad136b"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v1/opening.webm",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v1/opening.webm",
+    "inode": 351073,
+    "bytes": 145492,
+    "sha256": "a517338c881a4f1b674a862839d03f849e770a3ee27a35356c0aa0d7a4d338a0"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v2/backdrop.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v2/backdrop.png",
+    "inode": 351066,
+    "bytes": 2228060,
+    "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v2/opening.json",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v2/opening.json",
+    "inode": 351067,
+    "bytes": 574,
+    "sha256": "e02fddf90cafac0427d291fa658b3b6dcd4e8af76e45fe4cc8b369cbdabd7697"
+  },
+  {
+    "path": "tadazz-show/demos/cosmic/v2/opening.webm",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/cosmic/v2/opening.webm",
+    "inode": 351068,
+    "bytes": 151150,
+    "sha256": "09919adec55d6463e8bb532b98abe20a5d0ff9e3334b2486e0eff7d9537a7304"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v1/backdrop.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v1/backdrop.png",
+    "inode": 351080,
+    "bytes": 2183148,
+    "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v1/logo.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v1/logo.png",
+    "inode": 351082,
+    "bytes": 11217,
+    "sha256": "ef6eb964850cd2992416104dbf161a1d369acb5413f60fcee810c7635460ed1e"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v1/opening.json",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v1/opening.json",
+    "inode": 351081,
+    "bytes": 1120,
+    "sha256": "2232e53b589b83df629dcc772c4996af010750ba37b0e6582662424d08ee048c"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v1/opening.webm",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v1/opening.webm",
+    "inode": 351083,
+    "bytes": 158881,
+    "sha256": "2f570937511660da009fa1dcc65fd406d461bc7e027b34a99d84b0445b2bc485"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v2/backdrop.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v2/backdrop.png",
+    "inode": 351076,
+    "bytes": 2183148,
+    "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v2/opening.json",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v2/opening.json",
+    "inode": 351077,
+    "bytes": 573,
+    "sha256": "ea3bc7bba8f09cd73b98bee3c49e7fdae1852766c93723ec2203c377b1e9d107"
+  },
+  {
+    "path": "tadazz-show/demos/jade/v2/opening.webm",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/demos/jade/v2/opening.webm",
+    "inode": 351078,
+    "bytes": 157352,
+    "sha256": "e9d119aeb6b20b8a74c3bf5b9da6f56a056198375acd21a2b7f03b14c6ee3894"
+  },
+  {
+    "path": "tadazz-show/motion/backdrop.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/motion/backdrop.webp",
+    "inode": 351047,
+    "bytes": 94502,
+    "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+  },
+  {
+    "path": "tadazz-show/motion/logo.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/motion/logo.webp",
+    "inode": 351046,
+    "bytes": 151654,
+    "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672"
+  },
+  {
+    "path": "tadazz-show/music/balloons-forever.ogg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/music/balloons-forever.ogg",
+    "inode": 351015,
+    "bytes": 2962473,
+    "sha256": "63c963f6f90fe9aec17061089271038833dc161f9e08a3f40109eeb58f552b5a"
+  },
+  {
+    "path": "tadazz-show/music/credits.html",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/music/credits.html",
+    "inode": 351013,
+    "bytes": 1125,
+    "sha256": "3bf75206f9b0728ab5a6ff13d303f138d1d873e838ca7656c1c266fc759814ed"
+  },
+  {
+    "path": "tadazz-show/music/cutie-patootie.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/music/cutie-patootie.mp3",
+    "inode": 351016,
+    "bytes": 784914,
+    "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c"
+  },
+  {
+    "path": "tadazz-show/music/epic-main-menu.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/music/epic-main-menu.mp3",
+    "inode": 351014,
+    "bytes": 839514,
+    "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36"
+  },
+  {
+    "path": "tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+    "inode": 351043,
+    "bytes": 5028530,
+    "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac"
+  },
+  {
+    "path": "tadazz-show/opening/Scene-1.json",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/opening/Scene-1.json",
+    "inode": 351044,
+    "bytes": 1354334,
+    "sha256": "7da27b375f06da524a04fd51fadd651f91fb6a54a04a4f1b6dc39353fbdfe06b"
+  },
+  {
+    "path": "tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+    "inode": 351042,
+    "bytes": 1212173,
+    "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78"
+  },
+  {
+    "path": "tadazz-show/razzia-original/background.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/razzia-original/background.png",
+    "inode": 351040,
+    "bytes": 2777381,
+    "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+  },
+  {
+    "path": "tadazz-show/second-library/cards/dog.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/cards/dog.svg",
+    "inode": 351058,
+    "bytes": 1962,
+    "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a"
+  },
+  {
+    "path": "tadazz-show/second-library/cards/lamplighter.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/cards/lamplighter.svg",
+    "inode": 351057,
+    "bytes": 2039,
+    "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b"
+  },
+  {
+    "path": "tadazz-show/second-library/cards/pirate.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/cards/pirate.svg",
+    "inode": 351056,
+    "bytes": 1923,
+    "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb"
+  },
+  {
+    "path": "tadazz-show/second-library/cards/shadchan.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/cards/shadchan.svg",
+    "inode": 351055,
+    "bytes": 1932,
+    "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564"
+  },
+  {
+    "path": "tadazz-show/second-library/cards/therapist.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/cards/therapist.svg",
+    "inode": 351059,
+    "bytes": 1847,
+    "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe"
+  },
+  {
+    "path": "tadazz-show/second-library/creating-worlds-intro.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/creating-worlds-intro.png",
+    "inode": 351060,
+    "bytes": 2410686,
+    "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd"
+  },
+  {
+    "path": "tadazz-show/second-library/curtain-left.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/curtain-left.png",
+    "inode": 351052,
+    "bytes": 1132717,
+    "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060"
+  },
+  {
+    "path": "tadazz-show/second-library/curtain-right.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/curtain-right.png",
+    "inode": 351061,
+    "bytes": 1132143,
+    "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa"
+  },
+  {
+    "path": "tadazz-show/second-library/question-bg.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/question-bg.webp",
+    "inode": 351051,
+    "bytes": 87904,
+    "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+  },
+  {
+    "path": "tadazz-show/second-library/show-stage.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/show-stage.webp",
+    "inode": 351053,
+    "bytes": 261066,
+    "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+  },
+  {
+    "path": "tadazz-show/second-library/tadazz-brand-logo.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/tadazz-brand-logo.png",
+    "inode": 351049,
+    "bytes": 1976726,
+    "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+  },
+  {
+    "path": "tadazz-show/second-library/teaser-screen-source.jpg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/teaser-screen-source.jpg",
+    "inode": 351062,
+    "bytes": 266631,
+    "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+  },
+  {
+    "path": "tadazz-show/second-library/teaser-screen.jpg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/second-library/teaser-screen.jpg",
+    "inode": 351050,
+    "bytes": 3780431,
+    "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d"
+  },
+  {
+    "path": "tadazz-show/story/672dd07f229b8c36.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/story/672dd07f229b8c36.mp3",
+    "inode": 351019,
+    "bytes": 1222052,
+    "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8"
+  },
+  {
+    "path": "tadazz-show/story/7ff12046cb1aac7b.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/story/7ff12046cb1aac7b.png",
+    "inode": 351021,
+    "bytes": 412633,
+    "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037"
+  },
+  {
+    "path": "tadazz-show/story/84acdb923677d591.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/story/84acdb923677d591.webp",
+    "inode": 351023,
+    "bytes": 134540,
+    "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+  },
+  {
+    "path": "tadazz-show/story/9db4acdc6c4e411c.mp3",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/story/9db4acdc6c4e411c.mp3",
+    "inode": 351018,
+    "bytes": 91052,
+    "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b"
+  },
+  {
+    "path": "tadazz-show/story/b789ffb48c74e55d.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/story/b789ffb48c74e55d.webp",
+    "inode": 351022,
+    "bytes": 60174,
+    "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748"
+  },
+  {
+    "path": "tadazz-show/story/fef87578b7d57eae.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/story/fef87578b7d57eae.webp",
+    "inode": 351020,
+    "bytes": 178706,
+    "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371"
+  },
+  {
+    "path": "tadazz-show/v4/cards/dog.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/cards/dog.svg",
+    "inode": 351034,
+    "bytes": 1962,
+    "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a"
+  },
+  {
+    "path": "tadazz-show/v4/cards/lamplighter.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/cards/lamplighter.svg",
+    "inode": 351033,
+    "bytes": 2039,
+    "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b"
+  },
+  {
+    "path": "tadazz-show/v4/cards/pirate.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/cards/pirate.svg",
+    "inode": 351032,
+    "bytes": 1923,
+    "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb"
+  },
+  {
+    "path": "tadazz-show/v4/cards/shadchan.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/cards/shadchan.svg",
+    "inode": 351031,
+    "bytes": 1932,
+    "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564"
+  },
+  {
+    "path": "tadazz-show/v4/cards/therapist.svg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/cards/therapist.svg",
+    "inode": 351035,
+    "bytes": 1847,
+    "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe"
+  },
+  {
+    "path": "tadazz-show/v4/creating-worlds-intro.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/creating-worlds-intro.png",
+    "inode": 351036,
+    "bytes": 2410686,
+    "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd"
+  },
+  {
+    "path": "tadazz-show/v4/curtain-left.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/curtain-left.png",
+    "inode": 351028,
+    "bytes": 1132717,
+    "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060"
+  },
+  {
+    "path": "tadazz-show/v4/curtain-right.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/curtain-right.png",
+    "inode": 351037,
+    "bytes": 1132143,
+    "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa"
+  },
+  {
+    "path": "tadazz-show/v4/question-bg.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/question-bg.webp",
+    "inode": 351027,
+    "bytes": 87904,
+    "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+  },
+  {
+    "path": "tadazz-show/v4/show-stage.webp",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/show-stage.webp",
+    "inode": 351029,
+    "bytes": 261066,
+    "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+  },
+  {
+    "path": "tadazz-show/v4/tadazz-brand-logo.png",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/tadazz-brand-logo.png",
+    "inode": 351025,
+    "bytes": 1976726,
+    "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+  },
+  {
+    "path": "tadazz-show/v4/teaser-screen-source.jpg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/teaser-screen-source.jpg",
+    "inode": 351038,
+    "bytes": 266631,
+    "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+  },
+  {
+    "path": "tadazz-show/v4/teaser-screen.jpg",
+    "source": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0/web/tadazz-show/v4/teaser-screen.jpg",
+    "inode": 351026,
+    "bytes": 3780431,
+    "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d"
+  }
+]

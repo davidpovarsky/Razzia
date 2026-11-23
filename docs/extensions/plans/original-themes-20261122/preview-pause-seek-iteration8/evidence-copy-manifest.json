@@ -1,0 +1,104 @@
+{
+  "baseSourceSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "bytes": 5243784,
+  "excluded": [
+    "config",
+    "authentication state",
+    "temporary runtime",
+    "traces",
+    "videos"
+  ],
+  "files": [
+    {
+      "bytes": 275631,
+      "path": "diagnostic-receipt.json",
+      "sha256": "1e5ac1ad1974a101dda528c1ca582325a031c06602bae1864e2b8a462f9d5fd5"
+    },
+    {
+      "bytes": 445739,
+      "path": "source-before.json",
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    {
+      "bytes": 445739,
+      "path": "source-after.json",
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    {
+      "bytes": 1488,
+      "path": "container-plan.json",
+      "sha256": "1dfd064ebfc35d74971ddb83c5fc7fb28543f2c88b07f31b11db26a402ecd5f8"
+    },
+    {
+      "bytes": 1596,
+      "path": "execution-plan.json",
+      "sha256": "f7d7183091d23916ed00af32d42c3a93e44e2344d1f5c88b8c2bc4fad0cf46b8"
+    },
+    {
+      "bytes": 939,
+      "path": "browser.stdout.log",
+      "sha256": "96d1cafb481648f70a74a08f05909aa68407daf482a454f07dc7db9779af72e9"
+    },
+    {
+      "bytes": 7160,
+      "path": "browser.stderr.log",
+      "sha256": "5f1140b97f5f6525fa73d7c83349e89689f42a718b4b9abecc7a93f7d40e7ad2"
+    },
+    {
+      "bytes": 584905,
+      "path": "preview-pause-seek/chromium-tadazz-classic-normal-phase-continuity-answers.png",
+      "sha256": "2fc09206f9623a2fdba918691b611e39c7670a90caec3dfb6e339ee66861d1d6"
+    },
+    {
+      "bytes": 598813,
+      "path": "preview-pause-seek/chromium-tadazz-classic-normal-phase-continuity-results.png",
+      "sha256": "65bbba3a8091a4863695100a928951665cb30c7d14df7defe618a931f6808440"
+    },
+    {
+      "bytes": 56963,
+      "path": "preview-pause-seek/chromium-tadazz-classic-normal-phase-continuity.json",
+      "sha256": "3f76519e6869558d65d9bf5dc1e31ef3269cd99fc81e37484a38aadd1ac46b23"
+    },
+    {
+      "bytes": 587096,
+      "path": "preview-pause-seek/chromium-tadazz-classic-reduced-phase-continuity-answers.png",
+      "sha256": "60f6abbfd9864591fe84a7115099615d06720afc1fdfcf76869de6bb39755e94"
+    },
+    {
+      "bytes": 599675,
+      "path": "preview-pause-seek/chromium-tadazz-classic-reduced-phase-continuity-results.png",
+      "sha256": "9ba1247ad5c76d80b3c6236364b675d017e6b9fc0d1203b9959107a1008f4eb8"
+    },
+    {
+      "bytes": 56220,
+      "path": "preview-pause-seek/chromium-tadazz-classic-reduced-phase-continuity.json",
+      "sha256": "6122a8aac119217084da86cb69353e0bc723e0d862311e689d99fcb213c9f5dd"
+    },
+    {
+      "bytes": 259161,
+      "path": "preview-pause-seek/receipt.json",
+      "sha256": "5500dab08816b1d75a2822399c97c369511d71c0be2544e8d039528dfd6cff69"
+    },
+    {
+      "bytes": 6582,
+      "path": "preview-pause-seek/webkit-tadazz-classic-normal-phase-continuity.json",
+      "sha256": "d5adca000fb4e9cfee3c44de471bbbe059d79fa16a5281a6193a20508ebc7ca7"
+    },
+    {
+      "bytes": 624924,
+      "path": "preview-pause-seek/webkit-tadazz-classic-reduced-phase-continuity-answers.png",
+      "sha256": "2daaf7a2cf6e757edbaff22cbae9cd962a1fd30d83aa8c99e2c41023c309114c"
+    },
+    {
+      "bytes": 636303,
+      "path": "preview-pause-seek/webkit-tadazz-classic-reduced-phase-continuity-results.png",
+      "sha256": "b21d84828fded7f4a92e1cfa7e101deffcd2b2ef23cdf1b9225d7c4c9a8aa3a0"
+    },
+    {
+      "bytes": 54850,
+      "path": "preview-pause-seek/webkit-tadazz-classic-reduced-phase-continuity.json",
+      "sha256": "4b4c6bb9f38ff08a0c4b45d1749c4fdc6783a474f3aab53ea2086f14f4bb5a07"
+    }
+  ],
+  "run": "preview-pause-seek-iteration8"
+}

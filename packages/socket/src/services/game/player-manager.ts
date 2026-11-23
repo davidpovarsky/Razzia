@@ -47,6 +47,36 @@ export class PlayerManager {
       return result.error.issues[0].message
     }
 
+    return this.addPlayer(socket, username, clientId)
+  }
+
+  // Internal native admission only. The phone controller resolves and rechecks
+  // the actual roster row; ordinary callers always use join/usernameValidator.
+  joinResolvedRoster(socket: Socket, displayName: string): string | null {
+    const clientId = getClientId(socket)
+
+    if (this.findByClientId(clientId)) {
+      return "errors:game.playerAlreadyConnected"
+    }
+
+    if (typeof displayName !== "string") {
+      return "errors:invalidRequest"
+    }
+
+    const { length } = displayName.trim()
+
+    if (length < 1) {
+      return "errors:auth.usernameTooShort"
+    }
+
+    if (length > 40) {
+      return "errors:auth.usernameTooLong"
+    }
+
+    return this.addPlayer(socket, displayName, clientId)
+  }
+
+  private addPlayer(socket: Socket, username: string, clientId: string): null {
     socket.join(this.gameId)
 
     const player: Player = {
@@ -114,6 +144,14 @@ export class PlayerManager {
 
     if (player) {
       player.id = newId
+    }
+  }
+
+  updateClientId(socketId: string, newClientId: string): void {
+    const player = this.findById(socketId)
+
+    if (player) {
+      player.clientId = newClientId
     }
   }
 

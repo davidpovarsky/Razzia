@@ -1,0 +1,117 @@
+{
+  "growth": {
+    "allocatedOwnedBytesExcludingExistingArtifactInodes": 5816320,
+    "dockerSizeRwProxyBytes": 229376,
+    "metadataFinalExportAllowanceBytes": 4194304,
+    "conservativeChargedBytes": 10240000,
+    "freeBytes": 2614829056,
+    "containers": [
+      {
+        "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+        "sizeRwProxyBytes": 12288
+      },
+      {
+        "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+        "sizeRwProxyBytes": 24576
+      },
+      {
+        "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+        "sizeRwProxyBytes": 28672
+      },
+      {
+        "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+        "sizeRwProxyBytes": 24576
+      },
+      {
+        "id": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+        "sizeRwProxyBytes": 40960
+      },
+      {
+        "id": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+        "sizeRwProxyBytes": 24576
+      },
+      {
+        "id": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+        "sizeRwProxyBytes": 12288
+      },
+      {
+        "id": "c9c2be46a520372596a218bb583555a9fa7d0de5b5caa1ad2d5932c6a63eeb82",
+        "sizeRwProxyBytes": 24576
+      },
+      {
+        "id": "6406e3e27cf473993b901c47a437e850d9c6aabf3d5361abf99d29541722dd01",
+        "sizeRwProxyBytes": 12288
+      },
+      {
+        "id": "c5b4dbe77c23d0323db8cc8b174e01a1d446713516e5571753533de8b45558bc",
+        "sizeRwProxyBytes": 24576
+      }
+    ],
+    "method": "inode dedup; existing artifact hard-link bodies excluded with inode identity proof; container logical SizeRw proxy plus4MiB allowance; sampled, not hard physical quota"
+  },
+  "freshContainers": [
+    {
+      "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+      "name": "/tadazz-atomic-qa-e56ad13c4b404aa7a752e0c6e822a61d",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+      "name": "/tadazz-atomic-controller-e56ad13c4b404aa7a752e0c6e822a61d",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+      "name": "/tadazz-atomic-qa-f8e1688d4d504cddbf90113c70c26998",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+      "name": "/tadazz-atomic-controller-f8e1688d4d504cddbf90113c70c26998",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+      "name": "/tadazz-atomic-qa-83e631a8f8b94f469665beef772b02b8",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+      "name": "/tadazz-atomic-controller-83e631a8f8b94f469665beef772b02b8",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+      "name": "/tadazz-atomic-qa-2a3e9f85a62f40bfa452c29028d174da",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "c9c2be46a520372596a218bb583555a9fa7d0de5b5caa1ad2d5932c6a63eeb82",
+      "name": "/tadazz-atomic-controller-2a3e9f85a62f40bfa452c29028d174da",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "6406e3e27cf473993b901c47a437e850d9c6aabf3d5361abf99d29541722dd01",
+      "name": "/tadazz-atomic-qa-49a3b323aede4e87a75d582cb338a4d4",
+      "running": false,
+      "exitCode": 137
+    },
+    {
+      "id": "c5b4dbe77c23d0323db8cc8b174e01a1d446713516e5571753533de8b45558bc",
+      "name": "/tadazz-atomic-controller-49a3b323aede4e87a75d582cb338a4d4",
+      "running": false,
+      "exitCode": 137
+    }
+  ],
+  "protectedSnapshotUnchanged": true,
+  "retained175bHoldSha256": "f1e41324302a6bd5f764e1444b55a01eec85aa1faa3903c1db354cc63aa820b1",
+  "productionControlPresent": false
+}

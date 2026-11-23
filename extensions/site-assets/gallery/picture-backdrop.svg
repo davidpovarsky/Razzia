@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    <defs><linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#132563"/><stop offset="1" stop-color="#3d4ba6"/></linearGradient>
+    <radialGradient id="shade"><stop stop-color="#132563" stop-opacity=".02"/><stop offset=".55" stop-color="#132563" stop-opacity=".17"/><stop offset="1" stop-color="#132563" stop-opacity=".52"/></radialGradient>
+    <radialGradient id="light" cx=".5" cy="0" r="1"><stop stop-color="#ffaf8d" stop-opacity=".07"/><stop offset=".7" stop-color="#ffaf8d" stop-opacity="0"/></radialGradient></defs>
+    <rect width="1600" height="900" fill="url(#base)"/><rect width="1600" height="900" fill="url(#light)"/>
+    <rect x="-90" y="85" width="340" height="340" rx="48" fill="#ffaf8d" opacity="0.24" transform="rotate(-14 80 255)"/><rect x="25" y="72" width="250" height="250" rx="32" fill="#8edbdc" opacity="0.25" transform="rotate(12 150 197)"/>
+        <rect x="1310" y="530" width="330" height="330" rx="50" fill="#8edbdc" opacity="0.21" transform="rotate(14 1475 695)"/><rect x="1350" y="580" width="220" height="220" rx="30" fill="#ffaf8d" opacity="0.23" transform="rotate(-9 1460 690)"/>
+        <path d="M1490 0h110v310Z" fill="#ffaf8d" opacity=".25"/>
+        <path d="M0 900V710l220 190Z" fill="#8edbdc" opacity=".20"/>
+        <circle cx="1420" cy="165" r="60" fill="none" stroke="#ffaf8d" stroke-width="16" opacity="0.22"/><circle cx="250" cy="760" r="43" fill="#8edbdc" opacity="0.26"/>
+        <polygon points="1260,76 1265.9248753431082,91.84510869670054 1282.8253563910837,92.58359213500127 1269.5866496842552,103.11489130329947 1274.1068460550193,119.41640786499875 1260,110.08 1245.8931539449807,119.41640786499875 1250.4133503157448,103.11489130329947 1237.1746436089163,92.58359213500125 1254.0751246568918,91.84510869670054" fill="#ffaf8d" opacity="0.4"/><rect width="1600" height="900" fill="url(#shade)"/>
+  </svg>

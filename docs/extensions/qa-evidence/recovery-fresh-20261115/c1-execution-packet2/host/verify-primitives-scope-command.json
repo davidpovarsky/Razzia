@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "sudo",
+    "-n",
+    "docker",
+    "exec",
+    "77bf6b4467255991f45c3ec71ebcedde77838e5e87b91ab192d82bafb542c570",
+    "node",
+    "/inputs/verify-merged.cjs"
+  ],
+  "wallSeconds": 90
+}

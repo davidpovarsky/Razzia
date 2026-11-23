@@ -1,0 +1,66 @@
+[
+  {
+    "browser": "chromium",
+    "browserVersion": "156.0.8078.4",
+    "lang": "ja",
+    "title": "ゲームに参加 | Tadazz",
+    "status": "FAIL",
+    "error": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('html')\nExpected: \"ja\"\nReceived: \"en\"\nTimeout:  2500ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('html') with timeout 2500ms\n  - waiting for locator('html')\n    9 × locator resolved to <html lang=\"en\">…</html>\n      - unexpected value \"en\"\n",
+    "observed": {
+      "title": "ゲームに参加 | Tadazz",
+      "lang": "en",
+      "dir": "",
+      "canonical": "http://127.0.0.1:3000/game",
+      "body": "JA\n\nPINコード\n\n送信"
+    },
+    "errors": []
+  },
+  {
+    "browser": "chromium",
+    "browserVersion": "156.0.8078.4",
+    "lang": "tr",
+    "title": "Oyuna katıl | Tadazz",
+    "status": "FAIL",
+    "error": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('html')\nExpected: \"tr\"\nReceived: \"en\"\nTimeout:  2500ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('html') with timeout 2500ms\n  - waiting for locator('html')\n    9 × locator resolved to <html lang=\"en\">…</html>\n      - unexpected value \"en\"\n",
+    "observed": {
+      "title": "Oyuna katıl | Tadazz",
+      "lang": "en",
+      "dir": "",
+      "canonical": "http://127.0.0.1:3000/game",
+      "body": "TR\n\nPIN Kodu\n\nGönder"
+    },
+    "errors": []
+  },
+  {
+    "browser": "webkit",
+    "browserVersion": "27.2",
+    "lang": "ja",
+    "title": "ゲームに参加 | Tadazz",
+    "status": "FAIL",
+    "error": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('html')\nExpected: \"ja\"\nReceived: \"en\"\nTimeout:  2500ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('html') with timeout 2500ms\n  - waiting for locator('html')\n    8 × locator resolved to <html lang=\"en\">…</html>\n      - unexpected value \"en\"\n",
+    "observed": {
+      "title": "ゲームに参加 | Tadazz",
+      "lang": "en",
+      "dir": "",
+      "canonical": "http://127.0.0.1:3000/game",
+      "body": "JA\n\nPINコード\n\n送信"
+    },
+    "errors": []
+  },
+  {
+    "browser": "webkit",
+    "browserVersion": "27.2",
+    "lang": "tr",
+    "title": "Oyuna katıl | Tadazz",
+    "status": "FAIL",
+    "error": "expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('html')\nExpected: \"tr\"\nReceived: \"en\"\nTimeout:  2500ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('html') with timeout 2500ms\n  - waiting for locator('html')\n    8 × locator resolved to <html lang=\"en\">…</html>\n      - unexpected value \"en\"\n",
+    "observed": {
+      "title": "Oyuna katıl | Tadazz",
+      "lang": "en",
+      "dir": "",
+      "canonical": "http://127.0.0.1:3000/game",
+      "body": "TR\n\nPIN Kodu\n\nGönder"
+    },
+    "errors": []
+  }
+]

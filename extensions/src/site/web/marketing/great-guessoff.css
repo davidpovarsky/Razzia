@@ -1,0 +1,371 @@
+/* The native stage artwork remains here. Viewer chrome and presentation
+   controls are owned by GameViewer and the root platform component. */
+.ggo-native {
+  width: 100%;
+  min-width: 0;
+  color: #fff4e6;
+  font-family: "Rubik", system-ui, sans-serif;
+}
+.ggo-native * {
+  box-sizing: border-box;
+}
+.ggo-native-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #09021c;
+  overflow: hidden;
+}
+.ggo-native-frame .tz-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.ggo-native-frame .tzv4-stage .stage-teaser {
+  display: none;
+} /* This sample does not use the Creating Worlds teaser artwork. */
+
+.ggo-native-frame button:focus-visible {
+  outline: 3px solid #eafa50;
+  outline-offset: 3px;
+}
+
+.ggo-native-disclaimer {
+  text-align: center;
+  margin: 12px 0 0;
+  color: #bcafd5;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.ggo-native-error {
+  margin: 12px auto 0;
+  color: #ffd0ca;
+  text-align: center;
+  font-weight: 700;
+}
+@media (max-width: 700px) {
+  .ggo-native {
+    border-radius: 10px;
+  }
+
+  .ggo-native-disclaimer {
+    font-size: 10px;
+  }
+}
+
+/* Answer layout for this public demo ONLY. Reuse the exact V4 stage and motion;
+   the host's other games and Creating Worlds retain their existing CSS. */
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-card {
+  height: 270px;
+  padding: 24px 18px;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .tz-photo-frame {
+  display: none;
+}
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage
+  .answer-card
+  figure.answer-figure {
+  height: 100%;
+  justify-content: center;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .answer-title {
+  height: 100%;
+  min-height: 200px;
+  font-size: 32px;
+  line-height: 1.2;
+  padding: 8px 12px 30px;
+  overflow: visible;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-index {
+  margin-top: 12px;
+  width: 92px;
+  height: 70px;
+  font-size: 43px;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .result-percentage {
+  top: auto;
+  right: 16px;
+  bottom: 26px;
+  min-width: 84px;
+  font-size: 31px;
+}
+
+/* The image card contains the IMAGE only; its two adjacent elements underneath
+   are the original V4 answer number and its matching caption. */
+.ggo-native[data-ggo-media="image"] .tzv4-stage .choice-slot .answer-card {
+  height: 350px;
+  overflow: visible;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .answer-card .answer-title {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 98px;
+  right: -7px;
+  width: auto;
+  height: 75px;
+  min-height: 75px;
+  padding: 0 3px;
+  overflow: visible;
+  font-size: 26px;
+  line-height: 1.1;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .choice-slot .answer-index {
+  align-self: flex-start;
+  width: 86px;
+  height: 75px;
+  font-size: 41px;
+  margin-top: 12px;
+}
+
+/* Scored multiple choice shows the correct choice with the canonical lime
+   highlight — never survey percentage bars, counters or audience winner tags.
+   The native correct-answer badge is retained. */
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot
+  .result-track,
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot
+  .result-percentage {
+  display: none !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-card {
+  border-color: #eaff58;
+  box-shadow:
+    0 22px 44px #050011c2,
+    0 0 0 5px #eaff58a6,
+    0 0 53px #eaff58a8,
+    inset 0 2px 0 #fff9;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-incorrect {
+  opacity: 0.5;
+}
+
+/* In Hebrew/RTL layouts, the native answer number sits to the right.
+   Position its caption to the LEFT of the number, without overlap. */
+.ggo-native:dir(rtl)[data-ggo-media="image"]
+  .tzv4-stage
+  .answer-card
+  .answer-title {
+  left: -7px;
+  right: 98px;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+/* Trivia is a single, stable reveal: no expanding yellow flash or
+   glowing blanket over the answer number. Keep the native card visible. */
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct {
+  z-index: 9 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-card {
+  border: 4px solid #c8e9fb !important;
+  box-shadow:
+    0 0 0 4px #a9e8ff7a,
+    0 0 28px #aedafa88,
+    0 16px 40px #06011b99 !important;
+  background: linear-gradient(140deg, #67368ef2, #2b1457f2 80%) !important;
+  transform: none !important;
+  animation: none !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-title {
+  color: #fff9e8 !important;
+  text-shadow: 0 2px 8px #11032680 !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-index {
+  z-index: 26 !important;
+  color: #23103f !important;
+  background: linear-gradient(160deg, #f7ffb7, #d9ed78) !important;
+  border: 3px solid #fff8d9 !important;
+  text-shadow: none !important;
+  box-shadow: 0 3px 14px #11042580 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot
+  .winner-tag {
+  display: none !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-incorrect {
+  opacity: 0.44 !important;
+  filter: grayscale(0.25) brightness(0.78) !important;
+}
+/* The native question-frame gradient line is unnecessary on quiz answers. */
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="quiz"]
+  .tzv4-stage
+  .q-frame::before,
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="quiz"]
+  .tzv4-stage
+  .q-frame::after {
+  content: none !important;
+  display: none !important;
+}
+
+.ggo-native[data-ggo-media="image"] .tzv4-stage .answer-card .answer-title {
+  font-weight: 760 !important;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .choice-slot .answer-index {
+  width: 114px !important;
+  height: 92px !important;
+  font-size: 60px !important;
+  color: #241047 !important;
+  background: linear-gradient(158deg, #f6ffab, #dcff52) !important;
+  border: 3px solid #fffed2 !important;
+  border-radius: 21px !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 8px 24px #0008,
+    0 0 24px #eaff5466 !important;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .answer-card .answer-title {
+  left: 128px !important;
+}
+.ggo-native:dir(rtl)[data-ggo-media="image"]
+  .tzv4-stage
+  .answer-card
+  .answer-title {
+  left: -7px !important;
+  right: 128px !important;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .result-percentage {
+  min-width: 114px !important;
+  font-size: 46px !important;
+  color: #edff62 !important;
+  border-color: #edff62bb !important;
+}
+.ggo-native[data-ggo-media="image"]
+  .tzv4-stage
+  .choice-slot
+  .result-percentage {
+  min-width: 118px !important;
+  font-size: 55px !important;
+  color: #f2ff80 !important;
+  border-color: #e9ff66bb !important;
+  text-shadow:
+    0 0 15px #d4ff7399,
+    0 3px 7px #06000d !important;
+}
+
+/* The final curtain is the only ending. Remove its two decorative Z glyphs,
+   while retaining the original Tadazz curtain animation and brand logo. */
+.ggo-native[data-ggo-phase="closing"] .tzv4-stage .full-finale-z,
+.ggo-native[data-ggo-phase="closing"] .tzv4-stage .full-final-zigzags {
+  display: none !important;
+}
+
+/* The question must not change position, size or typography on reveal.
+   The result belongs to the highlighted answer, never to the question. */
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
+  display: none !important;
+}
+.ggo-native[data-ggo-phase="results"]
+  .tzv4-stage
+  .choice-slot:is(.is-favourite, .is-correct)
+  .winner-tag {
+  display: block !important;
+  opacity: 1 !important;
+  top: 8px;
+  left: 54px;
+  right: 10px;
+  padding: 7px 5px;
+  font-size: 13px;
+  line-height: 1.1;
+  white-space: normal;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot.is-incorrect {
+  opacity: 0.44 !important;
+}
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="survey"]
+  .tzv4-stage
+  .choice-slot.is-favourite
+  .answer-card {
+  box-shadow:
+    0 0 0 4px #ebff7280,
+    0 0 27px #d7ff6280,
+    0 16px 36px #07011b8a !important;
+}
+/* The canonical Z-wipe remains visible. Hide ONLY the previous/native answer
+   scene for the duration of a question change. This also prevents the old
+   results from acquiring the NEXT question's header during transition. */
+.ggo-native[data-ggo-phase="question-transition"] .tzv4-stage .tzv4-scene-root {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* This is an English-language public sample even when the surrounding website
+   is viewed in Hebrew. Prevent mirrored punctuation and reversed A–D order. */
+.ggo-native-frame {
+  direction: ltr;
+}
+.ggo-native .tzv4-stage .q-frame .q-text {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+/* The marketing header is sticky on catalogue pages; in the interactive demo
+   it otherwise crosses the answer cards when the player scrolls into view. */
+.site-header:has(~ main .ggo-native) {
+  position: relative !important;
+  top: auto !important;
+}
+
+/* The Great Guess-off library cover must be a genuine clickable surface.
+   The platform's unstyled SiteButton otherwise collapses to 0 x 0 around
+   the aspect-ratio cover. */
+.ggo-catalogue-cover {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 10;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  overflow: hidden;
+  position: relative !important;
+  background: transparent !important;
+  cursor: pointer;
+}
+.ggo-catalogue-cover > .game-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+.ggo-catalogue-cover:focus-visible {
+  outline: 3px solid #eaff66;
+  outline-offset: 3px;
+}

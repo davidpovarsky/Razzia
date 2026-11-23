@@ -1,0 +1,15 @@
+{
+  "revision": "ba64f49bcb384ced8482d625cf2956d2ae37e443",
+  "image": "sha256:8bc2c0dc796151f0e9b8584773a980142bebdb0e14b30e704d3f207505196c2a",
+  "tag": "tadazz:site-audit-final-ba64f49",
+  "timestampUtc": "2026-11-10T17:42:24.255976+00:00",
+  "success": true,
+  "containerUnchanged": true,
+  "socketProcessUnchanged": true,
+  "gatewayUnchanged": true,
+  "environmentUnchanged": true,
+  "mountsUnchanged": true,
+  "originalIconBytes": 1223522,
+  "derivedIconBytes": 6331,
+  "indexBackup": "/home/ubuntu/tadazz-site-icon-20261110-ba64f49/index-before.html"
+}

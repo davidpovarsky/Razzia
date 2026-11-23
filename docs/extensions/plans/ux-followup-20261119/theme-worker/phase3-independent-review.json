@@ -1,0 +1,110 @@
+{
+  "format": "tadazz-theme-worker-phase3-independent-static-review",
+  "status": "PASS_STATIC_REVIEW",
+  "reviewedAt": "2026-11-19T15:46:18.005781+00:00",
+  "scope": "Read-only source, static diff/AST, concrete canonical-record equality and recorded offline-test review. The reviewer did not import or execute the activation helper, issue Linux/operator commands, mutate product source, or commit.",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "helper": {
+    "path": "work/ux-followup-20261119/theme-worker/replacement/activate_and_verify_timer.py",
+    "sha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+    "bytes": 27471
+  },
+  "admission": {
+    "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-admission.json",
+    "sha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+    "concrete": true,
+    "records": [
+      {
+        "name": "stage-execution.json",
+        "sha256": "a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62",
+        "copiedEqualsCanonical": true
+      },
+      {
+        "name": "deployment-deploy-execution.json",
+        "sha256": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315",
+        "copiedEqualsCanonical": true
+      },
+      {
+        "name": "post-deploy-execution.json",
+        "sha256": "802654edaeefde8c0e2d64cf86f486905f179514c428a5331c35fa1ace28db82",
+        "copiedEqualsCanonical": true
+      },
+      {
+        "name": "post-deploy-observation.json",
+        "sha256": "88a19398695dc5c9c35df81da90dffb9045dda1874487129051cf018cc410553",
+        "copiedEqualsCanonical": true
+      }
+    ]
+  },
+  "acceptedRelease": {
+    "container": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "gateway": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "observerFinishedAt": "2026-11-19T15:37:40.963690+00:00",
+    "observerAgeSecondsAtReview": 517,
+    "maximumObserverAgeSeconds": 1200,
+    "observerExpiresAt": "2026-11-19T15:57:40.963690+00:00",
+    "runtimeConfigSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5"
+  },
+  "worker": {
+    "image": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+    "brokerSha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+    "unitBeforeSha256": "64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053",
+    "unitAfterSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+    "phase1ReceiptSha256": "d0fcdb86e5c2a45ce77fcdd810273f22ac67a5536237338b3cad83ae2c897bf0",
+    "phase2ReceiptSha256": "2e7f9f814b0b1c04a6d74c16760fdaced68075c0a88ec759f3e36dcff8b38bbe",
+    "timerInputManifestSha256": "eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de",
+    "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d"
+  },
+  "reviewedGates": [
+    "Exact helper/admission/four-record hashes, nested deployment outer/remote/core success and source/image/container preservation gates.",
+    "Exact accepted observer envelope, nested identities/health, source-run correlation and timezone-aware age from 0 to 1200 seconds.",
+    "Current app/gateway identity and zero app restarts; current relevant config/store bind resolved using every ancestor of the actual container package store.",
+    "Pinned runtime configuration bytes are hashed without parsing or printing, before mutation and after acceptance.",
+    "Exact prior unit bytes/mode/root ownership and no drop-ins; private prior-byte backup; only the single immutable image argument changes.",
+    "Unchanged broker bytes and effective static service properties; named timer targets only the reviewed service.",
+    "Fresh absent synthetic tenant/upload path, pinned generated input archive, exclusive writes, request published atomically last while future timer triggers are paused.",
+    "Normal timer-driven execution only; 90-second result bound and 50-second broker-drain bounds; no manual compiler invocation or active broker termination.",
+    "Timer advances, broker completes inactive/success/exit0, actual owned result/bundle source/output digests and media validation pass before cleanup.",
+    "Cleanup checks exact owned directory/file types, exact file-name set and original/input/output hashes; removes only owned files and empty directories.",
+    "Failures restore exact prior unit when guarded, preserve active work and published inputs when outcome is ambiguous, and verify effective rollback state before reporting it.",
+    "Final timer is enabled/active, final worker image/static properties and app/runtime/cache identities are rechecked, and an already failed broker cannot produce PASS.",
+    "No executable-runtime activation, account installation, application restart, customer-job inspection, queue pruning or live data restore is present."
+  ],
+  "resolvedFindings": [
+    "Original draft admitted only outer deployment exit and observer passed bit; full nested accepted-release checks were added.",
+    "Original draft lacked observer freshness and current runtime-byte verification; both are now enforced.",
+    "Original mount lookup could miss a deeper package-store override; lookup now uses the actual store ancestor chain.",
+    "Original cleanup could race an active broker; future triggers now pause and the existing broker drains before validation/cleanup.",
+    "Partial cleanup formerly trusted recomputed hashes; it now compares original input pins.",
+    "Timer-stop intent, unknown-unit rollback guards and effective restored-service checks now prevent misleading restoration claims.",
+    "Timer target and final restarted-service health are checked; retained-fixture and late-error reports reflect the observed state."
+  ],
+  "staticComparison": {
+    "initialDraftSha256": "350b87686c772c56eaea395cd50bb5ed09fe3352b52f8a3fab9e84ee5ee668aa",
+    "hardenedDraftSha256": "5bdef95b18f7ca75d967af4b0eb8e9480995e10a3fcc19ab062115467f145572",
+    "finalChangedFunctionsComparedWithHardenedDraft": [
+      "timer",
+      "main"
+    ],
+    "allOtherFunctionsAndTopLevelNodesUnchanged": true,
+    "syntax": "PASS"
+  },
+  "recordedOfflineGuards": {
+    "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-offline-guards.json",
+    "sha256": "5c73ab9a1ed2b23e0875cf8a880de1f0436de4f9872507a6185e0b379b3751d2",
+    "status": "PASS",
+    "count": 10,
+    "helperSha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+    "admissionSha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+    "linuxCommandExecuted": false,
+    "rerunByIndependentReviewer": false,
+    "testSourceSha256": "f59056c5c4a138191c34b2eff10cf4b0cbd1e429671d875f8268b1419a627537"
+  },
+  "blockers": [],
+  "execution": {
+    "performedByReviewer": false,
+    "phase3ProductionAcceptance": "PENDING_ACTUAL_EXECUTION_AND_RECEIPT",
+    "condition": "Root may use only these exact reviewed bytes and admission pin while all runtime gates still pass; an expired observer requires a new accepted observation and hash-bound admission."
+  }
+}

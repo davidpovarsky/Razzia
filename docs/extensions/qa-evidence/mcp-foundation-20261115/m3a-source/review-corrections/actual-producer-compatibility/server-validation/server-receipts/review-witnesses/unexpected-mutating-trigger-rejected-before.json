@@ -1,0 +1,138 @@
+{
+  "visibleVersion": 1,
+  "ownerMatches": true,
+  "beforeState": {
+    "tenants": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073721851697"
+    },
+    "tenants/057b7723-59fa-48b4-bfc4-7a501725461c": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072335838245"
+    },
+    "tenants/057b7723-59fa-48b4-bfc4-7a501725461c/native-sentinels": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072335838245"
+    },
+    "tenants/057b7723-59fa-48b4-bfc4-7a501725461c/native-sentinels/quiz.json": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745072335838245",
+      "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+    },
+    "tenants/2e95fddf-987c-4fe9-b78f-191f656c0c45": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072630841108"
+    },
+    "tenants/2e95fddf-987c-4fe9-b78f-191f656c0c45/extensions": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072630841108"
+    },
+    "tenants/2e95fddf-987c-4fe9-b78f-191f656c0c45/extensions/mcp-first-party": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073326092536"
+    },
+    "tenants/2e95fddf-987c-4fe9-b78f-191f656c0c45/extensions/mcp-first-party/drafts.sqlite": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745073326092536",
+      "sha256": "b4411279f52e9bb73644858a576aa2d20bde0d4166244484b06c34dc839659ce"
+    },
+    "tenants/61205afb-78d7-4b6a-8fee-42cc0175a3a9": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073722468263"
+    },
+    "tenants/61205afb-78d7-4b6a-8fee-42cc0175a3a9/extensions": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073722468263"
+    },
+    "tenants/61205afb-78d7-4b6a-8fee-42cc0175a3a9/extensions/mcp-first-party": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073727408111"
+    },
+    "tenants/61205afb-78d7-4b6a-8fee-42cc0175a3a9/extensions/mcp-first-party/drafts.sqlite": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745073727408111",
+      "sha256": "1bface3053211003c6a06ad54155893fb8f22e36150af6727ac56d8d7a1f88b3"
+    },
+    "tenants/6ea0f294-0acf-4f05-8da6-b7ab9c31530a": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072337838264"
+    },
+    "tenants/6ea0f294-0acf-4f05-8da6-b7ab9c31530a/native-sentinels": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072337838264"
+    },
+    "tenants/6ea0f294-0acf-4f05-8da6-b7ab9c31530a/native-sentinels/quiz.json": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745072337838264",
+      "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+    },
+    "tenants/7b533131-8747-4188-9718-cc32fc4d7b39": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073335847951"
+    },
+    "tenants/7b533131-8747-4188-9718-cc32fc4d7b39/extensions": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073335847951"
+    },
+    "tenants/7b533131-8747-4188-9718-cc32fc4d7b39/extensions/mcp-first-party": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073423330960"
+    },
+    "tenants/7b533131-8747-4188-9718-cc32fc4d7b39/extensions/mcp-first-party/drafts.sqlite": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745073423330960",
+      "sha256": "d39c2ae93de55f79096c09e9c7ddd6f018bcf12231f0c22f67568360829accee"
+    },
+    "tenants/80a553cd-4bef-491a-beb6-efd27851e2a8": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073529309229"
+    },
+    "tenants/80a553cd-4bef-491a-beb6-efd27851e2a8/extensions": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073529309229"
+    },
+    "tenants/80a553cd-4bef-491a-beb6-efd27851e2a8/extensions/mcp-first-party": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745073622484693"
+    },
+    "tenants/80a553cd-4bef-491a-beb6-efd27851e2a8/extensions/mcp-first-party/drafts.sqlite": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745073622484693",
+      "sha256": "70b6c2bfceac712177b4e0c72b5b4817dbce0a563cdc3929350dedb9e31a3fb9"
+    },
+    "native-sentinels": {
+      "kind": "directory",
+      "mode": 16832,
+      "mtime": "1794745072338838274"
+    },
+    "native-sentinels/quiz.json": {
+      "kind": "file",
+      "mode": 33152,
+      "mtime": "1794745072338838274",
+      "sha256": "0ddcd7929fbfd542aa0f670b270d6051a4094670f785e7e7bab1706d244bfb86"
+    }
+  }
+}

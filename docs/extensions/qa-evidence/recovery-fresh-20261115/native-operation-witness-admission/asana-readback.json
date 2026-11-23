@@ -1,0 +1,11 @@
+{
+  "gid": "1219882508725158",
+  "completed": false,
+  "oldNotesLength": 39701,
+  "newNotesLength": 41295,
+  "priorNotesPreservedExactly": true,
+  "exactAppendReadback": true,
+  "evidenceCommit": "03023d171b1970e3a27320303968b7e0507d2a7c",
+  "modifiedAt": "2026-11-15T21:29:52.124Z",
+  "append": "\n\n[2026-11-15 — ROUTINE C1 PHYSICAL OUTCOME-WITNESS ACCEPTANCE]\nEvidence03023d171b1970e3a27320303968b7e0507d2a7c, branch codex/tadazz-hq-recovery-fresh-20261115. Product1909 unchanged. New independent four-case entry under docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-witness-admission/RESULTS.md and FINAL_VERIFICATION.json.\nACTUAL4/4PASS,0skip,8distinct fresh children exit0 on existing local WSL Linux/ext4 Node26.11.1. Actual null-sidecar native creation/committed lookup succeeds before owned receipt faults: exposed mode644, valid JSON enlarged beyond16KiB, additional hard-link alias, replaced/linked private slot. Each makes fresh lookup unresolved and retry refuse; no duplicate target or native/private sentinel mutation, and record bytes/modes/link counts remain preserved after guard. No automatic repair. All faults affect disposable token/prefix/physical-root admitted fixtures only.\n185final input hashes verified;184 non-entry bodies identical to accepted producer, source/test TS0 and actual Prettier.check true. Original15, postcommit3 and F consumer NOT_RUN. No product/contract change, Oracle job/claim, install, agent, polling, provider/customer/production action. All16 inherited untracked inputs unchanged. PinnedNode24, real F auth/ledger, hardware/B-F1 and production remain separate OPEN acceptance. Task staysOPEN.\nRoutine completion is recorded only here under the new communication protocol. The prior pending postcommit handoff was centralized once in inbox subtask1220548010771092; no new handoff/manager chat duplication for this update.\n"
+}

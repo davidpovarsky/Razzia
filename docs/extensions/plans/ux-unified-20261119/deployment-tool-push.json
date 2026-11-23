@@ -1,0 +1,12 @@
+{
+  "appSourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "toolingSha": "2c66bc94d220b04a7e080d9aafabf2850f328432",
+  "scriptPath": "extensions/deployment/deploy-mcp-site.py",
+  "scriptSha256": "3cf6acd277c9c9f7322c21c17ad27da8ee10a8ab2dd76594f81bc7d5f707cc35",
+  "pushed": true,
+  "branch": "codex/tadazz-ux-unified-20261119",
+  "pushedAt": "2026-11-19T05:55:55.124992+00:00",
+  "applicationSourceUnchanged": true,
+  "applicationCandidateImage": "sha256:ca3717033dc0206e3b64f697e74b344637eb3b197f9910c1018c74e8b22c2001",
+  "applicationQualificationSourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62"
+}

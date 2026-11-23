@@ -1,0 +1,255 @@
+## agent/tadazz-next-20261105...origin/agent/tadazz-next-20261105 [ahead 9]
+ M docs/extensions/qa-evidence/tadazz-next-source-parity-20261106/native_scenes_harness.html
+ M extensions/package.json
+ M extensions/qa/tadazz-audio-flow.cjs
+ M extensions/qa/tadazz-navigation-participation.cjs
+ M extensions/scripts/capture-tzila-screenshots.ts
+ M extensions/scripts/intake-tzila-media.ts
+ M extensions/src/core/card-appearance.test.ts
+ M extensions/src/core/card-appearance.ts
+ M extensions/src/core/card-media-references.ts
+ M extensions/src/core/cinematic-overlays.test.ts
+ M extensions/src/core/cinematic-overlays.ts
+ M extensions/src/core/creating-worlds-show.test.ts
+ M extensions/src/core/creating-worlds-show.ts
+ M extensions/src/core/lottie.test.ts
+ M extensions/src/core/lottie.ts
+ M extensions/src/core/media.ts
+ M extensions/src/core/show-authoring-convert.ts
+ M extensions/src/core/show-authoring.test.ts
+ M extensions/src/core/show-import-preflight.test.ts
+ M extensions/src/core/show-import-preflight.ts
+ M extensions/src/core/show-workbook.test.ts
+ M extensions/src/core/show-workbook.ts
+ M extensions/src/core/studio-timeline.test.ts
+ M extensions/src/core/tzila-show-acceptance.test.ts
+ M extensions/src/editor/editor-state.ts
+ M extensions/src/gameplay/timeline-runner.ts
+ M extensions/src/media/rich-answer-card.tsx
+ M extensions/src/presentation/audio-cue-player.tsx
+ M extensions/src/presentation/cinematic-clock.ts
+ M extensions/src/presentation/cinematic-geometry.ts
+ M extensions/src/presentation/cinematic-layer-stack.tsx
+ M extensions/src/presentation/cinematic-overlay.tsx
+ M extensions/src/presentation/index.ts
+ M extensions/src/presentation/lottie-player.tsx
+ M extensions/src/presentation/poll-ranking.ts
+ M extensions/src/presentation/presentation.test.ts
+ M extensions/src/presentation/scene-presenter.tsx
+ M extensions/src/presentation/stage-fit.test.ts
+ M extensions/src/presentation/stage-fit.tsx
+ M extensions/src/presentation/tadazz-answer-cards.tsx
+ M extensions/src/presentation/tadazz-audio-policy.ts
+ M extensions/src/presentation/tadazz-sfx-policy.ts
+ M extensions/src/presentation/tadazz-show/TadazzOpening.tsx
+ M extensions/src/presentation/tadazz-show/TadazzStage.tsx
+ M extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx
+ M extensions/src/presentation/tadazz-show/index.ts
+ M extensions/src/presentation/tadazz-show/labels.ts
+ M extensions/src/presentation/tadazz-show/lottie-plate.ts
+ M extensions/src/presentation/tadazz-show/motion-engine.ts
+ M extensions/src/presentation/tadazz-show/motion-spec.ts
+ M extensions/src/presentation/tadazz-show/navigation-clock.test.ts
+ M extensions/src/presentation/tadazz-show/presentation-scene.test.ts
+ M extensions/src/presentation/tadazz-show/presentation-scene.ts
+ M extensions/src/presentation/tadazz-show/question-identity.test.ts
+ M extensions/src/presentation/tadazz-show/show-director.ts
+ M extensions/src/presentation/tadazz-v4/FullShowScenes.tsx
+ M extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx
+ M extensions/src/presentation/tadazz-v4/components.tsx
+ M extensions/src/presentation/tadazz-v4/full-show.test.ts
+ M extensions/src/presentation/tadazz-v4/index.ts
+ M extensions/src/presentation/tadazz-v4/motion.ts
+ M extensions/src/presentation/tadazz-v4/presentation-note.ts
+ M extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx
+ M extensions/src/presentation/tadazz-v4/reference-story/SeatingPlan.tsx
+ M extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx
+ M extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts
+ M extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx
+ M extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts
+ M extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts
+ M extensions/src/presentation/tadazz-v4/source-parity-export.test.ts
+ M extensions/src/presentation/tadazz-v4/types.ts
+ M extensions/src/presentation/team-leaderboard-panel.tsx
+ M extensions/src/presentation/timer-end-cue.ts
+ M extensions/src/server/api/routes.ts
+ M extensions/src/server/game/creating-worlds-lobby.test.ts
+ M extensions/src/server/game/session.ts
+ M extensions/src/server/game/story-tie.test.ts
+ M extensions/src/server/game/studio-show-coordinator.test.ts
+ M extensions/src/server/game/studio-show-coordinator.ts
+ M extensions/src/server/gameplay-phase-a.test.ts
+ M extensions/src/server/index.ts
+ M extensions/src/server/media-library.test.ts
+ M extensions/src/server/media-library.ts
+ M extensions/src/server/real-telephony-e2e.test.ts
+ M extensions/src/server/storage.test.ts
+ M extensions/src/server/storage/journal.ts
+ M extensions/src/telephony/bridge.ts
+ M extensions/src/telephony/pilot-runtime/diagnose-pilot.cjs
+ M extensions/src/telephony/pilot-runtime/tada-audio-logic.test.cjs
+ M extensions/src/telephony/pilot-runtime/tada-pilot-gateway.cjs
+ M extensions/src/telephony/pilot-runtime/tada-pilot-gateway.test.cjs
+ M extensions/src/telephony/types.ts
+ M oxlint.config.ts
+ M package.json
+ M packages/common/src/validators/auth.ts
+ M packages/e2e/capture_native_scenes.mjs
+ M packages/e2e/capture_reference_scenes.mjs
+ M packages/e2e/playwright.config.ts
+ M packages/e2e/playwright.live-production-smoke.config.ts
+ M packages/e2e/playwright.p0-acceptance.config.ts
+ M packages/e2e/playwright.tadazz-show.config.ts
+ M packages/e2e/render-diagnostics.cjs
+ M packages/e2e/tests/branding.spec.ts
+ M packages/e2e/tests/browser-acceptance.spec.ts
+ M packages/e2e/tests/cinematic-video-overlays.spec.ts
+ M packages/e2e/tests/creating-worlds-full-game.spec.ts
+ M packages/e2e/tests/editor.spec.ts
+ M packages/e2e/tests/flow.spec.ts
+ M packages/e2e/tests/game.spec.ts
+ M packages/e2e/tests/live-production-smoke.spec.ts
+ M packages/e2e/tests/live-production-tzila.spec.ts
+ M packages/e2e/tests/manager.spec.ts
+ M packages/e2e/tests/media-appearance-stage-acceptance.spec.ts
+ M packages/e2e/tests/media-library.spec.ts
+ M packages/e2e/tests/p0-tzila-acceptance.spec.ts
+ M packages/e2e/tests/presenter-audio.spec.ts
+ M packages/e2e/tests/quizz-types.spec.ts
+ M packages/e2e/tests/release-candidate-tzila.spec.ts
+ M packages/e2e/tests/results.spec.ts
+ M packages/e2e/tests/settings.spec.ts
+ M packages/e2e/tests/tadazz-full-show-parity.spec.ts
+ M packages/e2e/tests/tadazz-native-directory.spec.ts
+ M packages/e2e/tests/tadazz-next-live.spec.ts
+ M packages/e2e/tests/tzila-exact-player-screen.spec.ts
+ M packages/e2e/tests/tzila-public-stage-and-toolbar.spec.ts
+ M packages/e2e/tests/wave1-card-editor-regression.spec.ts
+ M packages/e2e/tests/wave1-show-import-acceptance.spec.ts
+ M packages/e2e/utils/editor.ts
+ M packages/e2e/utils/manager.ts
+ M packages/e2e/utils/player.ts
+ M packages/socket/src/api/accounts-isolation.test.ts
+ M packages/socket/src/api/middleware.ts
+ M packages/socket/src/api/pilot-phone.test.ts
+ M packages/socket/src/api/routes/accounts.ts
+ M packages/socket/src/api/routes/auth.ts
+ M packages/socket/src/api/routes/games.ts
+ M packages/socket/src/api/routes/media.ts
+ M packages/socket/src/app.ts
+ M packages/socket/src/handlers/game.ts
+ M packages/socket/src/services/account-auth.test.ts
+ M packages/socket/src/services/account-auth.ts
+ M packages/socket/src/services/account-db.ts
+ M packages/socket/src/services/account-directory.ts
+ M packages/socket/src/services/account-mail.ts
+ M packages/socket/src/services/account-scope.ts
+ M packages/socket/src/services/auth.ts
+ M packages/socket/src/services/game/cooldown-timer.ts
+ M packages/socket/src/services/game/creating-worlds-repair.test.ts
+ M packages/socket/src/services/game/game.test.ts
+ M packages/socket/src/services/game/index.ts
+ M packages/socket/src/services/game/pilot-dial-target.ts
+ M packages/socket/src/services/game/pilot-target.test.ts
+ M packages/socket/src/services/game/pilot-target.ts
+ M packages/socket/src/services/game/round-manager.ts
+ M packages/socket/src/services/media-access.ts
+ M packages/socket/src/services/media-read.ts
+ M packages/socket/src/services/scoring/round.test.ts
+ M packages/web/src/features/game/components/AnswerButton.tsx
+ M packages/web/src/features/game/components/AnswerCountdown.tsx
+ M packages/web/src/features/game/components/GameWrapper.tsx
+ M packages/web/src/features/game/components/HistoryDialog.tsx
+ M packages/web/src/features/game/components/HostPlayersModal.tsx
+ M packages/web/src/features/game/components/ManagerControlToolbar.tsx
+ M packages/web/src/features/game/components/PhotoCardGrid.tsx
+ M packages/web/src/features/game/components/TadazzMotionStage.tsx
+ M packages/web/src/features/game/components/game-controls.test.ts
+ M packages/web/src/features/game/components/host-presentation-controller.test.ts
+ M packages/web/src/features/game/components/host-presentation-controller.ts
+ M packages/web/src/features/game/components/p1-timer-entrance.test.ts
+ M packages/web/src/features/game/components/states/Answers.tsx
+ M packages/web/src/features/game/components/states/Leaderboard.tsx
+ M packages/web/src/features/game/components/states/Question.tsx
+ M packages/web/src/features/game/components/states/Responses.tsx
+ M packages/web/src/features/game/components/tadazz-show/LiveParticipation.tsx
+ M packages/web/src/features/game/components/tadazz-show/TadazzAnswerPad.tsx
+ M packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx
+ M packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx
+ M packages/web/src/features/game/components/tadazz-show/use-timer-beeps.ts
+ M packages/web/src/features/game/components/tadazz-show/useTadazzLabels.ts
+ M packages/web/src/features/game/contexts/socket-context.tsx
+ M packages/web/src/features/manager/components/AccountLogin.tsx
+ M packages/web/src/features/manager/components/ResultModal/ResultModalAnswers.tsx
+ M packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx
+ M packages/web/src/features/manager/components/configurations/ShowImportModal.tsx
+ M packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx
+ M packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx
+ M packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx
+ M packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig.tsx
+ M packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig.tsx
+ M packages/web/src/features/quizz/components/QuizzEditorHeader.tsx
+ M packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx
+ M packages/web/src/features/quizz/components/studio/studio-editor-context.tsx
+ M packages/web/src/features/quizz/components/studio/studio-scene-editor.tsx
+ M packages/web/src/features/quizz/components/studio/studio-settings-page.tsx
+ M packages/web/src/features/quizz/contexts/quizz-editor-context.tsx
+ M packages/web/src/features/quizz/hooks/useUploadMedia.ts
+ M packages/web/src/features/quizz/queries.ts
+ M packages/web/src/pages/(auth)/game.tsx
+ M packages/web/src/pages/(auth)/index.tsx
+ M packages/web/src/pages/(auth)/manager/index.tsx
+ M packages/web/src/pages/display/$gameId.tsx
+ M packages/web/vite.config.ts
+ M pnpm-lock.yaml
+ M scripts/local/Claim-Legacy-Quizzes.mjs
+ M scripts/prepare-creating-worlds-title.cjs
+ M scripts/tadazz/check-v4-assets.mjs
+ M scripts/tadazz/extract-motion-assets.mjs
+ M tsconfig.json
+?? docs/extensions/qa-evidence/tadazz-comprehensive-20261108/
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/backend_logs_redacted.txt
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/docker_metrics.csv
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/full_game_50x10.py
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/gateway_e2e.json
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/load_test_oci.py
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/run_all_qa_load50.py
+?? docs/extensions/qa-evidence/tadazz-phone-load50-20261106/run_gateway_e2e.cjs
+?? extensions/qa/audio-browser-types.ts
+?? extensions/qa/browser-types.ts
+?? extensions/qa/cleanup-production-fixtures.ts
+?? extensions/qa/collect-server-evidence.py
+?? extensions/qa/comprehensive-gateway.ts
+?? extensions/qa/deploy-six-fixes.py
+?? extensions/qa/final-checks.sh
+?? extensions/qa/manage-real-gateway.py
+?? extensions/qa/prepare-lint-fixes.py
+?? extensions/qa/prepare-real-server.py
+?? extensions/qa/real-gateway-runner.cjs
+?? extensions/qa/real-server-scoring.ts
+?? extensions/qa/real-server-security.ts
+?? extensions/qa/run-editor-diagnostics.py
+?? extensions/qa/run-final-checks.py
+?? extensions/qa/run-last-browser-checks.py
+?? extensions/qa/run-server-regressions.py
+?? extensions/qa/snapshot-source.py
+?? extensions/qa/start-patched-backend.py
+?? extensions/qa/summarize-browser-failures.py
+?? extensions/src/core/authoring-test-utils.ts
+?? extensions/src/core/defined.ts
+?? extensions/src/presentation/tadazz-show/question-options-patch.test.ts
+?? extensions/src/presentation/tadazz-show/question-options-patch.ts
+?? extensions/src/presentation/tadazz-v4/leaderboard-streak.test.ts
+?? extensions/src/presentation/tadazz-v4/paused-restore.test.ts
+?? extensions/src/presentation/tadazz-v4/reference-story/stage-dom.ts
+?? extensions/src/telephony/pilot-runtime/tada-pilot-gateway.faults.test.cjs
+?? extensions/tsconfig.tsbuildinfo
+?? packages/e2e/playwright.debug-lobby.config.ts
+?? packages/e2e/tests/debug-tzila-lobby-temp.spec.ts
+?? packages/e2e/utils/browser-types.ts
+?? packages/e2e/utils/reference-types.ts
+?? packages/e2e/utils/show-fixture.ts
+?? packages/socket/src/services/game/creating-worlds-navigation.test.ts
+?? packages/socket/src/services/game/reconnect-scoring-ledger.test.ts
+?? packages/socket/tsconfig.tsbuildinfo
+?? work/

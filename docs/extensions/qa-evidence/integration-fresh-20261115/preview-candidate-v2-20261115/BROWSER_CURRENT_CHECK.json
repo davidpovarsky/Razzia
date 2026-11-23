@@ -1,0 +1,113 @@
+{
+  "utc": "2026-11-15T21:13:48.695967+00:00",
+  "managerSource": "e4087f683f42fc9844341b0b33ef555010a6c64b",
+  "command": [
+    "C:/Program Files/nodejs/node.exe",
+    "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\candidate-combined-local-01\\browser-current.mjs",
+    "candidate-01"
+  ],
+  "exit": 0,
+  "originalCommittedDriverSha256": "b4a34fa528e4229768b32a1d866a890e3a353e37622c36417eaadf4608d4a25b",
+  "currentDriverSha256": "9ade5631ea435d016b2f10073eaae44b147a2fdfb03938511ac24aa9566d2bdd",
+  "driverOnlyDifference": "Output directory rebound to owned existing out; actual assertions, Edge, E mount/build hashes/denials/teardown unchanged.",
+  "actualRunReason": "Own browser109 graph has108byte-equal inputs and canonical.ts same fullTS AST but existing root formatting/compiler entry config changes module initialization declaration order in generated bundle. Strict outputAST bridge failed and was NOT used to certify reuse. Execute actual current8 instead; no product fix or old native45 rerun.",
+  "stdoutSha256": "dbaf65e835e02d8eb6b69a0979ebd5ab3de1b4f88bd17e85e7a8215541c672be",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "noNewInstallOracleOrPublicService": true,
+  "actualBrowserResult": {
+    "started": "2026-11-15T21:13:44.410Z",
+    "ended": "2026-11-15T21:13:47.712Z",
+    "pass": 8,
+    "fail": 0,
+    "browser": "157.0.4341.46",
+    "platform": "win32",
+    "actualRenderer": "E native21 candidate only",
+    "executableAcceptance": false,
+    "noMediaRightsGrant": true,
+    "syntheticQaShellOnly": true,
+    "productionGArtifactNotSupplied": true,
+    "resourceShellSha256": "53e6378ddb9f275593a32c2c1238f95bb358f558acbad24a26be6c09857ed37e",
+    "artifacts": [
+      {
+        "url": "/consumer.mjs",
+        "bytes": 802905,
+        "sha256": "1c0260b964e69212a47d8ae7072129c64737de7d4ab9044cd34454f13576aa37"
+      },
+      {
+        "url": "/renderer.mjs",
+        "bytes": 1068185,
+        "sha256": "10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340"
+      },
+      {
+        "url": "/renderer.css",
+        "bytes": 166501,
+        "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+      },
+      {
+        "url": "/bootstrap.mjs",
+        "bytes": 1194,
+        "sha256": "0711b2a46b3d6a744e5710e003b392af730f124aad966ff122c31ea726ae901f"
+      }
+    ],
+    "eBuildReceiptSha256": "5a5d95b5c52fdd735d1c94f7b607995e23c7ba7e455038a2138a2313f717f2b1",
+    "checks": [
+      {
+        "case": "real HTTP candidate to genuine E Razzia/JA paused15 frame",
+        "pass": true
+      },
+      {
+        "case": "real HTTP candidate to genuine E Classic ready and opacity1",
+        "pass": true
+      },
+      {
+        "case": "reject acceptance and dispose stale stage",
+        "pass": true
+      },
+      {
+        "case": "reject input-digest and dispose stale stage",
+        "pass": true
+      },
+      {
+        "case": "reject exact-definition and dispose stale stage",
+        "pass": true
+      },
+      {
+        "case": "old selection ticket rejected; latest selection rendered",
+        "pass": true
+      },
+      {
+        "case": "invalid new selection invalidates previous ticket",
+        "pass": true
+      },
+      {
+        "case": "actual E renderer disposed on consumer teardown",
+        "pass": true
+      }
+    ],
+    "pageErrors": [],
+    "deniedRequests": [
+      "/tadazz-show/v4/show-stage.webp",
+      "/tadazz-show/v4/question-bg.webp",
+      "/tadazz-show/v4/tadazz-brand-logo.png",
+      "/tadazz-show/second-library/teaser-screen-source.jpg"
+    ],
+    "status": {
+      "failures": 3,
+      "diagnostics": {
+        "disposed": true,
+        "handleId": null,
+        "lifecycle": [
+          {
+            "event": "mounted",
+            "handleId": 3
+          },
+          {
+            "event": "disposed",
+            "handleId": 3
+          }
+        ]
+      }
+    }
+  },
+  "publicReceiptSha256": "f3a02ff8d12239dcc67773989d2219c11efeecb1d8781dcdd1b08e6376865966"
+}

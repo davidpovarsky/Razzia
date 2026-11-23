@@ -1,0 +1,13 @@
+{
+  "format": "tadazz-paused-countdown-late-display-diagnostic",
+  "version": 1,
+  "preparationOnly": true,
+  "releaseQualified": false,
+  "productionChanged": false,
+  "customerMountUsed": false,
+  "family": "royal-quiz",
+  "checks": [],
+  "browserErrors": [],
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'question'\n- 'voting'\n\n    at probePausedCountdownLateDisplay (/diagnostics/paused-countdown-late-display-diagnostic.mjs:179:12)\n    at async main (/diagnostics/paused-countdown-late-display-diagnostic.mjs:376:20)\n    at async <anonymous> (/diagnostics/paused-countdown-late-display-diagnostic.mjs:405:3)",
+  "passed": false
+}

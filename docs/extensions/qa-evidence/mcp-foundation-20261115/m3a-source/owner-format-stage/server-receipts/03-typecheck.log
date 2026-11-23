@@ -1,0 +1,3 @@
+$ tsc --noEmit -p tsconfig.json
+Killed
+[ELIFECYCLE] Command failed with exit code 137.

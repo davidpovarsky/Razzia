@@ -1,10 +1,35 @@
+import { EVENTS } from "@razzia/common/constants"
 import type { Question } from "@razzia/common/types/game"
+import { STATUS } from "@razzia/common/types/game/status"
+import { observeLiveFlow } from "@razzia/e2e/utils/extension-manager"
 import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
-import { seedQuizz } from "@razzia/e2e/utils/editor"
+import { readQuizz, seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { answer, confirm, joinGame } from "@razzia/e2e/utils/player"
+
+/** Exercise the original automatic-completion capability explicitly; manual hosting remains available. */
+const createAutomaticGame = async (
+  manager: import("@playwright/test").Page,
+  subject = BASIC_QUIZZ,
+) => {
+  const pin = await createGame(manager, subject)
+  await manager.getByRole("button", { name: t("game:settings.title") }).click()
+  const dialog = manager.getByRole("dialog")
+  const completion = dialog.getByTestId("settings-end-on-all-answered")
+
+  if ((await completion.getAttribute("aria-checked")) !== "true") {
+    await completion.click()
+  }
+
+  await dialog
+    .getByRole("button", { name: t("common:save"), exact: true })
+    .click()
+  await expect(dialog).toBeHidden()
+
+  return pin
+}
 
 const question = (overrides: Partial<Question>): Question => ({
   type: "single",
@@ -22,26 +47,61 @@ test("restores the manager screen after a reload", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const subject = uniqueSubject("Manager reload quiz")
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((item) => ({ ...item, time: 120 })),
+  })
+  const hostWire = observeLiveFlow(manager)
+  const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(
-    manager.getByRole("button", { name: t("common:skip") }),
-  ).toBeVisible()
+  await expect(manager.getByTestId("host-end-timer-btn")).toBeVisible()
+  await expect
+    .poll(
+      () =>
+        hostWire.findLast((row) => row.name === STATUS.SELECT_ANSWER)?.data
+          .questionId,
+    )
+    .toEqual(expect.any(String))
+  const initialVoting = hostWire.findLast(
+    (row) => row.name === STATUS.SELECT_ANSWER,
+  )
+  expect(initialVoting).toBeDefined()
+  const replayStart = hostWire.length
 
   await manager.reload()
 
-  await expect(manager.getByText("1 / 2")).toBeVisible()
-  await expect(
-    manager.getByRole("button", { name: t("common:skip") }),
-  ).toBeVisible()
+  await expect(manager.getByText("1 / 2", { exact: true })).toBeVisible()
+  await expect(manager.getByTestId("host-end-timer-btn")).toBeVisible()
+  await expect
+    .poll(
+      () =>
+        hostWire
+          .slice(replayStart)
+          .findLast((row) => row.name === EVENTS.MANAGER.SUCCESS_RECONNECT)
+          ?.data,
+    )
+    .toMatchObject({
+      currentQuestion: { current: 1, total: 2 },
+      status: {
+        name: STATUS.SELECT_ANSWER,
+        data: { questionId: initialVoting!.data.questionId },
+      },
+    })
 
   await answer(player, "Paris")
   await expect(
-    manager.getByRole("button", { name: t("common:next") }),
+    manager.getByRole("button", { name: t("common:next"), exact: true }).or(
+      manager.getByRole("button", {
+        name: t("extensions:host.nextScreen"),
+        exact: true,
+      }),
+    ),
   ).toBeVisible()
 })
 
@@ -51,19 +111,26 @@ test("marks a player who did not answer in time as wrong", async ({
 }) => {
   const subject = uniqueSubject("Timeout quizz")
 
-  seedQuizz(subject, { questions: [question({ time: 5 })] })
+  // Six real voting seconds at this suite's GAME_SPEED=10 leave a visible
+  // answer window while still requiring natural expiry with no host command.
+  seedQuizz(subject, { questions: [question({ time: 60 })] })
 
-  const pin = await createGame(manager, subject)
+  const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(player.getByRole("button", { name: /^A Paris$/u })).toBeVisible()
+  await expect(player.getByRole("button", { name: /^1 Paris$/u })).toBeVisible()
 
   await expect(player.getByText(t("game:wrong"))).toBeVisible()
   await expect(
-    manager.getByRole("button", { name: t("common:next") }),
+    manager.getByRole("button", { name: t("common:next"), exact: true }).or(
+      manager.getByRole("button", {
+        name: t("extensions:host.nextScreen"),
+        exact: true,
+      }),
+    ),
   ).toBeVisible()
 })
 
@@ -71,7 +138,7 @@ test("reveals the answers without waiting for a player who left", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const pin = await createAutomaticGame(manager)
   const alice = await newPage()
   const bob = await newPage()
 
@@ -81,7 +148,7 @@ test("reveals the answers without waiting for a player who left", async ({
   await startGame(manager)
   await expect(alice.getByText(BASIC_QUIZZ)).toBeVisible()
 
-  await bob.goto("/")
+  await bob.goto("/game")
   await expect(bob.getByText(t("game:reconnectTitle"))).toBeVisible()
 
   await answer(alice, "Paris")
@@ -109,7 +176,7 @@ test("scores an estimation answered with the slider", async ({
     ],
   })
 
-  const pin = await createGame(manager, subject)
+  const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
@@ -128,7 +195,15 @@ test("lets the manager skip the auto-advance countdown", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const subject = `Auto advance board ${crypto.randomUUID()}`
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((item) => ({ ...item, time: 120 })),
+    leaderboard: "upstream",
+  })
+  const hostWire = observeLiveFlow(manager)
+  const pin = await createAutomaticGame(manager, subject)
 
   await manager.getByRole("button", { name: t("game:settings.title") }).click()
 
@@ -143,6 +218,11 @@ test("lets the manager skip the auto-advance countdown", async ({
   await dialog
     .getByLabel(t("game:settings.autoAdvance.responsesDelay"))
     .fill("600")
+  // Both countdowns must remain active while the real Next button is exercised.
+  // GAME_SPEED=10 makes the default leaderboard delay only half a real second.
+  await dialog
+    .getByLabel(t("game:settings.autoAdvance.leaderboardDelay"))
+    .fill("600")
   await dialog.getByRole("button", { name: t("common:save") }).click()
   await expect(dialog).toBeHidden()
 
@@ -154,11 +234,31 @@ test("lets the manager skip the auto-advance countdown", async ({
   await answer(player, "Paris")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
 
+  const expectActiveCountdown = async (since = 0) => {
+    await expect
+      .poll(
+        () =>
+          hostWire
+            .slice(since)
+            .findLast((row) => row.name === EVENTS.MANAGER.AUTO_ADVANCE)?.data,
+      )
+      .toMatchObject({ total: 600, seconds: expect.any(Number) })
+    const seconds = hostWire
+      .slice(since)
+      .findLast((row) => row.name === EVENTS.MANAGER.AUTO_ADVANCE)?.data.seconds
+    expect(seconds).toBeGreaterThan(0)
+  }
+  await expectActiveCountdown()
+  const beforeLeaderboard = hostWire.length
   await next(manager)
 
-  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+  await expect(
+    manager.getByRole("heading", { name: t("game:leaderboard"), exact: true }),
+  ).toBeVisible()
+  await expectActiveCountdown(beforeLeaderboard)
 
   await next(manager)
+  await expect(manager.getByText("2 / 2", { exact: true })).toBeVisible()
   await answer(player, "4")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
   await next(manager)
@@ -172,7 +272,7 @@ test("keeps the waiting room when the manager reloads the page", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const pin = await createAutomaticGame(manager)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")

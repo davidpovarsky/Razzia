@@ -1,0 +1,32 @@
+[
+  {
+    "path": "extensions/src/components/theme-builder/StudioThemeBuilder.tsx",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/account-boundary-fixture.tsx",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/account-boundary-playwright.config.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/account-boundary-server.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/account-boundary.spec.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/account-boundary.vite.config.ts",
+    "sameAst": true,
+    "changed": true
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "bytes": 966774,
+  "candidateSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "excluded": [
+    ".config",
+    "auth state",
+    "trace.zip",
+    "video"
+  ],
+  "files": [
+    {
+      "bytes": 4220,
+      "path": "focused-p0-receipt.json",
+      "sha256": "5fbae8f34e47655a1d0abdecdc52d1627ef75aaf792900a07b605bdd7ee3a50d"
+    },
+    {
+      "bytes": 23514,
+      "path": "results.json",
+      "sha256": "ae451f600da2cc553ad98d12a311e25d4ca4f8f829d10a02d57500dadc7fa9b4"
+    },
+    {
+      "bytes": 7151,
+      "path": "listed-tests.json",
+      "sha256": "4f23bc30b8da5c524f6918bf42e90db303e015b99430b62f1aa0d1f224f81413"
+    },
+    {
+      "bytes": 445739,
+      "path": "source-before.json",
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    {
+      "bytes": 445739,
+      "path": "source-after.json",
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    {
+      "bytes": 15375,
+      "path": "exact-test-copy.json",
+      "sha256": "6cdbbffe843e7576db11542b3af9d33d44f834edc031745be69f9e3a47b02f28"
+    },
+    {
+      "bytes": 1481,
+      "path": "container-plan.json",
+      "sha256": "0242252bcdfc9127303ee02b3ee07e0d3ad47a30feb6da3f872f4ec82757c63b"
+    },
+    {
+      "bytes": 1895,
+      "path": "execution-plan.json",
+      "sha256": "ef6276b758d13a75e1c28046db160c1331fd5f8f692e6e49c4eebd56a23a064a"
+    },
+    {
+      "bytes": 749,
+      "path": "listing.stdout.log",
+      "sha256": "d0a261dfd11455c33b8246b3b52a779f4a57db3e09c7ad4dbabb5b6e3d38e381"
+    },
+    {
+      "bytes": 0,
+      "path": "listing.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 8132,
+      "path": "browser.stdout.log",
+      "sha256": "84df40b681baa9332848c0e8c43cf1887f865aad0ea2f6cc356355962eb7bd05"
+    },
+    {
+      "bytes": 0,
+      "path": "browser.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 4314,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/media-appearance-stage-acc-cf8ee--Single-Audio-Staged-Motion-chromium/error-context.md",
+      "sha256": "c9712581ef8948ebe5c0f530c97b9dcad8130219382f516a075476726c297332"
+    },
+    {
+      "bytes": 4250,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/p0-tzila-acceptance-P0-Tzi-9cf84-ator-display-tie-zero-votes-chromium/error-context.md",
+      "sha256": "d6b54506c81fac303fcfbb53c4c28a639f82847ba142727a0c866cdb1c428926"
+    },
+    {
+      "bytes": 4215,
+      "path": "runtime/packages/e2e/test-results/p0-acceptance/tzila-public-stage-and-too-8792c-ross-Viewports-Localization-chromium/error-context.md",
+      "sha256": "64ca5fadea73c9e3eb59252c6ca86be96466343cd037c7dfb3fcb9b8ab0d82f0"
+    }
+  ],
+  "run": "p0-iteration8-c96b96a7"
+}

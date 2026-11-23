@@ -1,0 +1,89 @@
+{
+  "status": "DOCUMENT_STATIC_CHECK_PASS",
+  "acceptedSourceCommit": "19a2e83060e78fa4505647b88eca762113cb1ca8",
+  "acceptedModuleHashesUnchanged": 26,
+  "documentSha256": "0be6194be9d71ecac4a8f1ff33aba83439a11ac190acaffbb2bf0117914536d9",
+  "existingPinFieldsUnchanged": [
+    "portVersion",
+    "identityRuleVersion",
+    "registry",
+    "registrySha256",
+    "renderer",
+    "rendererBuildSha256"
+  ],
+  "sourceAnchors": [
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "sha256": "42fc1d5411b60626bec1a9022b64b21c1dba34eccff0973762b7dc9a89bc7095",
+      "anchors": [
+        "export const compiledPreviewPinSchema",
+        "registrySha256: digestSchema",
+        "rendererBuildSha256: digestSchema"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "sha256": "76e97c2343a36681a4c8a64af383c6989bd2040abbc60e3c8ff9a19a252324a3",
+      "anchors": [
+        "pins: [],",
+        "export class PreviewManifestCatalog",
+        "show-library:unaccepted-compiled-manifest"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/digest.ts",
+      "sha256": "48da5947c15856d8f71f9ecff1542f20c661e2c583a690090817560e72c82021",
+      "anchors": [
+        "export function canonicalJson",
+        "export function sha256(text: string)",
+        "new TextEncoder().encode(text)"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/primitives.ts",
+      "sha256": "60fcf76917d34f7e73257638fa7b1c33e2ec6c1e12bacc27c133ebe437fff5c5",
+      "anchors": [
+        "maxDepth = 24",
+        "maxNodes = 10000",
+        "show-library:prototype-key"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/assets.ts",
+      "sha256": "d8b50b13328c6df1e026ec26879e275d837b289d83411240fcbdec533afbaaa0",
+      "anchors": [
+        "metadata-policy-only-requires-trusted-storage-authorization"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/schemas.ts",
+      "sha256": "a2728c29c81ef4f6d88d25338bf357e1a08fe3867d41a5c445a833366bdebf18",
+      "anchors": [
+        "export const assetDescriptorSchema",
+        ".max(100000000)"
+      ]
+    },
+    {
+      "path": "extensions/src/core/product-branding.ts",
+      "sha256": "f6a8447cd41a2d81b5d25968455dea9ad119b10dfa77ba38cbae87cd8110fad9",
+      "anchors": [
+        "/tadazz-show/v4/tadazz-brand-logo.png"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata-schema.ts",
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261",
+      "anchors": [
+        "import { z } from \"zod\""
+      ]
+    }
+  ],
+  "compiledPins": "SOURCE_REMAINS_EMPTY_NOT_ACTIVATED",
+  "newImplementation": "NONE",
+  "tests": "NOT_RUN_DOCUMENT_ONLY",
+  "typecheck": "NOT_RUN_DOCUMENT_ONLY",
+  "build": "NOT_RUN_DOCUMENT_ONLY",
+  "serverGrant": "NONE_REQUESTED_OR_USED",
+  "parentIntegrationSnapshots": "NOT_TOUCHED",
+  "createdUtc": "2026-11-15T08:02:32.156995+00:00"
+}

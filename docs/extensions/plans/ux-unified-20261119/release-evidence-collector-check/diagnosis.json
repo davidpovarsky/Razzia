@@ -1,0 +1,35 @@
+{
+  "kind": "windows-path-and-handle-stat-diagnostic",
+  "observedAt": "2026-11-19T13:11:08.864185+00:00",
+  "python": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+  "files": [
+    {
+      "file": "stage-execution.json",
+      "sha256": "d97b168bd0818e766e0e478b7d5e39613cdcf915fc49dd34af4529d3c0efc82c",
+      "pathCtimeBefore": 1795063816144640500,
+      "pathCtimeAfter": 1795063816144640500,
+      "handleCtimeBefore": 1795066762370807800,
+      "handleCtimeAfter": 1795066762370807800,
+      "sameIdentityAndSizeAndModificationTime": true
+    },
+    {
+      "file": "deployment-qualify-backup-execution.json",
+      "sha256": "a51b6e669b351db47ff07d836ee4269ca09635f507b50d67a29666888c0c8f1e",
+      "pathCtimeBefore": 1795066907426029800,
+      "pathCtimeAfter": 1795066907426029800,
+      "handleCtimeBefore": 1795066907426536700,
+      "handleCtimeAfter": 1795066907426536700,
+      "sameIdentityAndSizeAndModificationTime": true
+    },
+    {
+      "file": "deployment-deploy-execution.json",
+      "sha256": "f80b1aaf9b7782b1b266beb472a1788fd38b4660e5a3d5edec538ba071ed22ee",
+      "pathCtimeBefore": 1795067028592254000,
+      "pathCtimeAfter": 1795067028592254000,
+      "handleCtimeBefore": 1795068347901741600,
+      "handleCtimeAfter": 1795068347901741600,
+      "sameIdentityAndSizeAndModificationTime": true
+    }
+  ],
+  "finding": "ctime differs between path.stat and os.fstat but each is stable within its own API"
+}

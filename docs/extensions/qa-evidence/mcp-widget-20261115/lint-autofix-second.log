@@ -1,0 +1,47 @@
+(node:35536) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+extensions/src/mcp-app/widget/stage.tsx:28:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/entry.tsx:14:11: error eslint(no-shadow): 'target' is already declared in the upper scope. help: Consider renaming 'target' to avoid shadowing the variable from the outer scope.
+extensions/src/mcp-app/widget/entry.tsx:9:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/entry.tsx:16:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:87:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/qa/mcp-widget/server.ts:111:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/qa/mcp-widget/server.ts:21:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/fixture-entry.tsx:32:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:2:32: error eslint(no-duplicate-imports): 'react' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/mcp-app/widget/Widget.tsx:9:52: error eslint(no-duplicate-imports): '../../core/show-library/native-preview-renderer-v2-schema' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/mcp-app/widget/Widget.tsx:151:18: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/Widget.tsx:153:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/Widget.tsx:354:37: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:367:29: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:368:37: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/qa/mcp-widget/host-entry.tsx:134:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:13:3: error eslint(no-inline-comments): Unexpected comment inline with code help: Move the comment to a separate line
+extensions/qa/mcp-widget/browser.mjs:4:14: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/qa/mcp-widget/browser.mjs:379:62: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/src/mcp-app/widget/controller.ts:102:20: error eslint(array-callback-return): Unexpected return value in callback for "Array.prototype.forEach" help: Expected the return expression to be started with `void`
+extensions/src/mcp-app/widget/controller.ts:125:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/controller.ts:203:9: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/build.mjs:11:14: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/qa/mcp-widget/controller.nodecheck.ts:55:7: error eslint(init-declarations): Variable 'resolve' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/qa/mcp-widget/controller.nodecheck.ts:80:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:110:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:139:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:156:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:173:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:200:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:202:22: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/controller.nodecheck.ts:204:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/controller.nodecheck.ts:221:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:253:16: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/controller.nodecheck.ts:148:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:21:5: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `{ selection: { contractVersion: "0.1.0"; draftId: string; expectedRevision: number; locale?: "de" | "en" | "es" | "fr...`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:110:5: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:157:5: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:174:7: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:201:5: error typescript(require-await): Function has no 'await' expression.
+extensions/src/mcp-app/widget/vite.config.ts:16:35: error typescript(TS2307): Cannot find module '../../../../packages/web/node_modules/@tailwindcss/vite' or its corresponding type declarations.
+extensions/src/mcp-app/widget/vite.config.ts:15:7: error typescript(no-unsafe-assignment): Unsafe assignment of an error typed value. help: Assigned value has type `error`, so the target is also inferred as `error`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/src/mcp-app/widget/vite.config.ts:17:3: error typescript(no-unsafe-member-access): Unsafe member access .default on an `error` typed value.
+extensions/src/mcp-app/widget/vite.config.ts:90:5: error typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+extensions/src/mcp-app/widget/controller.ts:286:9: error typescript(no-unnecessary-condition): Unnecessary optional chain on a non-nullish value. help: The checked value has type `{ draftId: string; revision: number; before: string; }`. Remove the optional chain; the value cannot be `null` or `undefined`.

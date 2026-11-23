@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-19T18:05:40.563656+00:00",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "sourceCommit": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "source": "extensions/qa/phase3-full-show/browser-verify.mjs",
+  "originalSha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+  "sha256": "68250f4a6919907f5a5e02444b07911f9a30f3884a36f766d6c00775477a33be",
+  "bytes": 120047,
+  "formatExit": 0,
+  "syntaxExit": 0,
+  "diffSha256": "026bcd979b7da5b316955490e1718b9509a8ed3fa1b3c2ddc7a9754ebfadaa50",
+  "environment": {
+    "TADAZZ_FULL_SHOW_DIAGNOSTIC": "failure-state",
+    "TADAZZ_FULL_SHOW_BROWSERS": "webkit",
+    "TADAZZ_FULL_SHOW_THEMES": "tadazz-classic,razzia-original"
+  },
+  "timeoutsChanged": false,
+  "widgetRebuilt": false,
+  "passiveUiEventJournal": true
+}

@@ -1,0 +1,24 @@
+✔ valid public metadata passes without claiming host installation (42.1547ms)
+✔ SPA HTML on every route fails every public gate (2.1974ms)
+✔ rejects wrong issuer (2.6396ms)
+✔ rejects foreign token endpoint (1.4467ms)
+✔ rejects PKCE plain only (2.7246ms)
+✔ rejects malformed PKCE type (1.8722ms)
+✔ rejects wrong audience (1.4543ms)
+✔ rejects private signing key (1.2867ms)
+✔ oversized and redirected documents fail without following locations (3.5141ms)
+✔ invalid configuration cannot issue network requests (1.012ms)
+✔ machine/discovery GET and HEAD cannot fall through to SPA or static bytes (46.4413ms)
+✔ configured machine paths are denied before SPA and asset resolution (5.5119ms)
+✔ Studio GET and HEAD retain identical HTML headers and HEAD has no body (1.5253ms)
+✔ OAuth consent and configured consent HTML use the existing root security policy (7.8983ms)
+✔ assets retain content types and missing assets do not become HTML (3.501ms)
+✔ unsafe encoded segments and unsupported methods fail closed (0.7403ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 291.4831

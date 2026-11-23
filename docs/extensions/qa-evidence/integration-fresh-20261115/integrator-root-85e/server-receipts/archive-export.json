@@ -1,0 +1,8 @@
+{
+  "files": 459,
+  "bytes": 62574556,
+  "sha256": "6f1d6c6a60e2f7de3f11d2bf1b85ac1f6003c78f74aae8351195a2bbe896ed98",
+  "inventory_sha256": "6f2126891ed74af76c8b6644a25e0faec29e438d248107010d808bbd49649c80",
+  "destination": "binary stdout over existing SSH directly to private Windows artifact; no server archive",
+  "all_mirror_files_verified_before_stream": true
+}

@@ -1,0 +1,2327 @@
+{
+  "status": "READ_ONLY_NATIVE_ASSET_OBSERVATION",
+  "capturedUtc": "2026-11-15T18:20:13.542787+00:00",
+  "sourceCommit": "ed0efade3d1eaf972475d3f5544f4c3ae10aa6eb",
+  "declarations": [
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/0",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-backdrop",
+      "url": "/tadazz-show/motion/backdrop.webp",
+      "kind": "image",
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",
+      "bytes": 94502,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "critical"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/1",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-logo",
+      "url": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "kind": "image",
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "critical"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/2",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-poster",
+      "url": "/tadazz-show/v4/show-stage.webp",
+      "kind": "image",
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "bytes": 261066,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/3",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-opening-video",
+      "url": "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+      "kind": "video",
+      "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac",
+      "bytes": 5028530,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/4",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-opening-lottie",
+      "url": "/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+      "kind": "lottie",
+      "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "bytes": 1212173,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/5",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-transition",
+      "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+      "kind": "audio",
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "bytes": 18476,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/6",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-reveal",
+      "url": "/sounds/tadazz-reveal-bright-20261108.mp3",
+      "kind": "audio",
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "bytes": 28255,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/7",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-confirm",
+      "url": "/sounds/tadazz-confirm-20261108.mp3",
+      "kind": "audio",
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "bytes": 8193,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/8",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-voting",
+      "url": "/sounds/answersMusic.mp3",
+      "kind": "audio",
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "bytes": 1246763,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/9",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-timer",
+      "url": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "kind": "audio",
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "bytes": 25974,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/10",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-tick",
+      "url": "/sounds/tadazz-timer-tick-20261108.mp3",
+      "kind": "audio",
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "bytes": 5058,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/11",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-urgent",
+      "url": "/sounds/tadazz-timer-urgent-20261108.mp3",
+      "kind": "audio",
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "bytes": 5685,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/12",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-final",
+      "url": "/sounds/tadazz-timer-final-20261108.mp3",
+      "kind": "audio",
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "bytes": 9447,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/13",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-leaderboard",
+      "url": "/sounds/snearRoll.mp3",
+      "kind": "audio",
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/14",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-first",
+      "url": "/sounds/first.mp3",
+      "kind": "audio",
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/15",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-second",
+      "url": "/sounds/second.mp3",
+      "kind": "audio",
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "bytes": 77750,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/16",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-third",
+      "url": "/sounds/three.mp3",
+      "kind": "audio",
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "bytes": 61238,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/17",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-story-mixer",
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "kind": "audio",
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "bytes": 1222052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/18",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-story-reveal",
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "kind": "audio",
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "bytes": 91052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/19",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-results-music",
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "kind": "audio",
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "bytes": 784914,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/20",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-results-fallback",
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "kind": "audio",
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "bytes": 839514,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/21",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-0f3c7d29e913",
+      "url": "/tadazz-show/motion/logo.webp",
+      "kind": "image",
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "bytes": 151654,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/22",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-d6997d876b26",
+      "url": "/tadazz-show/second-library/creating-worlds-intro.png",
+      "kind": "image",
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/23",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-b47f49feae9c",
+      "url": "/tadazz-show/second-library/curtain-left.png",
+      "kind": "image",
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/24",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-cfc4eaa014dd",
+      "url": "/tadazz-show/second-library/curtain-right.png",
+      "kind": "image",
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/25",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-7af6b5041525",
+      "url": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "kind": "image",
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/26",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-a5b34d556931",
+      "url": "/tadazz-show/story/7ff12046cb1aac7b.png",
+      "kind": "image",
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "bytes": 412633,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/27",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-5ebee0b89664",
+      "url": "/tadazz-show/story/84acdb923677d591.webp",
+      "kind": "image",
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "bytes": 134540,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/28",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-86afffeb48f1",
+      "url": "/tadazz-show/story/b789ffb48c74e55d.webp",
+      "kind": "image",
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "bytes": 60174,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/29",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-8baa3c35f436",
+      "url": "/tadazz-show/story/fef87578b7d57eae.webp",
+      "kind": "image",
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "bytes": 178706,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/classic.manifest.json",
+      "manifestPointer": "/assets/30",
+      "theme": {
+        "id": "tadazz-classic",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-a27be4883ee9",
+      "url": "/tadazz-show/v4/question-bg.webp",
+      "kind": "image",
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "bytes": 87904,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/0",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-backdrop",
+      "url": "/tadazz-show/razzia-original/background.png",
+      "kind": "image",
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "provenance": "Byte-identical upstream Razzia v4.0.1 game background.",
+      "rights": "repository-existing",
+      "preload": "critical"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/1",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-logo",
+      "url": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "kind": "image",
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "critical"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/2",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-poster",
+      "url": "/tadazz-show/razzia-original/background.png",
+      "kind": "image",
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "provenance": "Byte-identical upstream Razzia v4.0.1 game background.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/3",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-opening-video",
+      "url": "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+      "kind": "video",
+      "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac",
+      "bytes": 5028530,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/4",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-opening-lottie",
+      "url": "/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+      "kind": "lottie",
+      "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "bytes": 1212173,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/5",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-transition",
+      "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+      "kind": "audio",
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "bytes": 18476,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/6",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-reveal",
+      "url": "/sounds/tadazz-reveal-bright-20261108.mp3",
+      "kind": "audio",
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "bytes": 28255,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/7",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-confirm",
+      "url": "/sounds/tadazz-confirm-20261108.mp3",
+      "kind": "audio",
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "bytes": 8193,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/8",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-voting",
+      "url": "/sounds/answersMusic.mp3",
+      "kind": "audio",
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "bytes": 1246763,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/9",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-timer",
+      "url": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "kind": "audio",
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "bytes": 25974,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/10",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-tick",
+      "url": "/sounds/tadazz-timer-tick-20261108.mp3",
+      "kind": "audio",
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "bytes": 5058,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/11",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-urgent",
+      "url": "/sounds/tadazz-timer-urgent-20261108.mp3",
+      "kind": "audio",
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "bytes": 5685,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/12",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-final",
+      "url": "/sounds/tadazz-timer-final-20261108.mp3",
+      "kind": "audio",
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "bytes": 9447,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/13",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-leaderboard",
+      "url": "/sounds/snearRoll.mp3",
+      "kind": "audio",
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/14",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-first",
+      "url": "/sounds/first.mp3",
+      "kind": "audio",
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/15",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-second",
+      "url": "/sounds/second.mp3",
+      "kind": "audio",
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "bytes": 77750,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/16",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-third",
+      "url": "/sounds/three.mp3",
+      "kind": "audio",
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "bytes": 61238,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/17",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-story-mixer",
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "kind": "audio",
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "bytes": 1222052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/18",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-story-reveal",
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "kind": "audio",
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "bytes": 91052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/19",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-results-music",
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "kind": "audio",
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "bytes": 784914,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/20",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-results-fallback",
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "kind": "audio",
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "bytes": 839514,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/21",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-0f3c7d29e913",
+      "url": "/tadazz-show/motion/logo.webp",
+      "kind": "image",
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "bytes": 151654,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/22",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-d6997d876b26",
+      "url": "/tadazz-show/second-library/creating-worlds-intro.png",
+      "kind": "image",
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/23",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-b47f49feae9c",
+      "url": "/tadazz-show/second-library/curtain-left.png",
+      "kind": "image",
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/24",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-cfc4eaa014dd",
+      "url": "/tadazz-show/second-library/curtain-right.png",
+      "kind": "image",
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/25",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-7af6b5041525",
+      "url": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "kind": "image",
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/26",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-a5b34d556931",
+      "url": "/tadazz-show/story/7ff12046cb1aac7b.png",
+      "kind": "image",
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "bytes": 412633,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/27",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-5ebee0b89664",
+      "url": "/tadazz-show/story/84acdb923677d591.webp",
+      "kind": "image",
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "bytes": 134540,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/28",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-86afffeb48f1",
+      "url": "/tadazz-show/story/b789ffb48c74e55d.webp",
+      "kind": "image",
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "bytes": 60174,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/29",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-8baa3c35f436",
+      "url": "/tadazz-show/story/fef87578b7d57eae.webp",
+      "kind": "image",
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "bytes": 178706,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/30",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "classic-adapter-a27be4883ee9",
+      "url": "/tadazz-show/razzia-original/background.png",
+      "kind": "image",
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "provenance": "Byte-identical upstream Razzia v4.0.1 game background.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/31",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "razzia-audio-opening",
+      "url": "/sounds/boump.mp3",
+      "kind": "audio",
+      "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224",
+      "bytes": 5878,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/32",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "razzia-audio-answerSubmitted",
+      "url": "/sounds/answersSound.mp3",
+      "kind": "audio",
+      "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b",
+      "bytes": 28212,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/33",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "razzia-audio-revealResults",
+      "url": "/sounds/results.mp3",
+      "kind": "audio",
+      "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382",
+      "bytes": 52845,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/34",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "razzia-audio-leaderboard",
+      "url": "/sounds/snearRoll.mp3",
+      "kind": "audio",
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "manifestPath": "extensions/src/core/show-themes/razzia.manifest.json",
+      "manifestPointer": "/assets/35",
+      "theme": {
+        "id": "razzia-original",
+        "version": "1.0.0"
+      },
+      "id": "razzia-audio-closing",
+      "url": "/sounds/first.mp3",
+      "kind": "audio",
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    }
+  ],
+  "observedFiles": [
+    {
+      "url": "/sounds/answersMusic.mp3",
+      "path": "packages/web/public/sounds/answersMusic.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "c182028b7a55428da9684539c4926cd6cf6cd963"
+      },
+      "bytes": 1246763,
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "mtimeNs": 1794713301890396000,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-voting",
+          "declaredBytes": 1246763,
+          "declaredSha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-voting",
+          "declaredBytes": 1246763,
+          "declaredSha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/answersSound.mp3",
+      "path": "packages/web/public/sounds/answersSound.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "aa01044905b14cf01fbc39e4e6412d629fe6a254"
+      },
+      "bytes": 28212,
+      "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b",
+      "mtimeNs": 1794713301892602500,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "razzia-audio-answerSubmitted",
+          "declaredBytes": 28212,
+          "declaredSha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/boump.mp3",
+      "path": "packages/web/public/sounds/boump.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "42862b8c3de39d9b9d38c52401b434ad8dd335dc"
+      },
+      "bytes": 5878,
+      "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224",
+      "mtimeNs": 1794713301893601800,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "razzia-audio-opening",
+          "declaredBytes": 5878,
+          "declaredSha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/first.mp3",
+      "path": "packages/web/public/sounds/first.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "a78ac4322561f287c78ab26f26c0e8150260a29d"
+      },
+      "bytes": 164093,
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "mtimeNs": 1794713301896766200,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-first",
+          "declaredBytes": 164093,
+          "declaredSha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-first",
+          "declaredBytes": 164093,
+          "declaredSha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "razzia-audio-closing",
+          "declaredBytes": 164093,
+          "declaredSha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/results.mp3",
+      "path": "packages/web/public/sounds/results.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "172af89d6eb1173db6490ddd95e5c4e53acb0a0a"
+      },
+      "bytes": 52845,
+      "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382",
+      "mtimeNs": 1794713301898276100,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "razzia-audio-revealResults",
+          "declaredBytes": 52845,
+          "declaredSha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/second.mp3",
+      "path": "packages/web/public/sounds/second.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "59ef123e4db69f4331b18efbdb97f5f4ea14eca9"
+      },
+      "bytes": 77750,
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "mtimeNs": 1794713301900295400,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-second",
+          "declaredBytes": 77750,
+          "declaredSha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-second",
+          "declaredBytes": 77750,
+          "declaredSha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/snearRoll.mp3",
+      "path": "packages/web/public/sounds/snearRoll.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "0293b2d1f1592b48ade93f9a873b379746b69a6d"
+      },
+      "bytes": 390765,
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "mtimeNs": 1794713301906799100,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-leaderboard",
+          "declaredBytes": 390765,
+          "declaredSha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-leaderboard",
+          "declaredBytes": 390765,
+          "declaredSha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "razzia-audio-leaderboard",
+          "declaredBytes": 390765,
+          "declaredSha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-confirm-20261108.mp3",
+      "path": "packages/web/public/sounds/tadazz-confirm-20261108.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "1294c35403df14400bc8f104a6e8c3791d7be031"
+      },
+      "bytes": 8193,
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "mtimeNs": 1794713301907796900,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-confirm",
+          "declaredBytes": 8193,
+          "declaredSha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-confirm",
+          "declaredBytes": 8193,
+          "declaredSha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-reveal-bright-20261108.mp3",
+      "path": "packages/web/public/sounds/tadazz-reveal-bright-20261108.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "356545e45d39135edb1b716c2ae209a3b0371547"
+      },
+      "bytes": 28255,
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "mtimeNs": 1794713301910130600,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-reveal",
+          "declaredBytes": 28255,
+          "declaredSha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-reveal",
+          "declaredBytes": 28255,
+          "declaredSha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+      "path": "packages/web/public/sounds/tadazz-silky-transition-20261108.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "11a942cc3520bbcb595c7288f52efa5f2825fcff"
+      },
+      "bytes": 18476,
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "mtimeNs": 1794713301911392100,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-transition",
+          "declaredBytes": 18476,
+          "declaredSha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-transition",
+          "declaredBytes": 18476,
+          "declaredSha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "path": "packages/web/public/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "fc1de198e14d89431f91c5b11567f66a5b79f7de"
+      },
+      "bytes": 25974,
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "mtimeNs": 1794713301914390400,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-timer",
+          "declaredBytes": 25974,
+          "declaredSha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-timer",
+          "declaredBytes": 25974,
+          "declaredSha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-timer-final-20261108.mp3",
+      "path": "packages/web/public/sounds/tadazz-timer-final-20261108.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "7cefdd056471fde41fed5712a0b937b27a29af49"
+      },
+      "bytes": 9447,
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "mtimeNs": 1794713301915907600,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-final",
+          "declaredBytes": 9447,
+          "declaredSha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-final",
+          "declaredBytes": 9447,
+          "declaredSha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-timer-tick-20261108.mp3",
+      "path": "packages/web/public/sounds/tadazz-timer-tick-20261108.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "cfe1919e18963617f5722b60b1ac0e13e23b401c"
+      },
+      "bytes": 5058,
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "mtimeNs": 1794713301916907300,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-tick",
+          "declaredBytes": 5058,
+          "declaredSha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-tick",
+          "declaredBytes": 5058,
+          "declaredSha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/tadazz-timer-urgent-20261108.mp3",
+      "path": "packages/web/public/sounds/tadazz-timer-urgent-20261108.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "f58669c4c21cb31c5757e2437c513b295e45875f"
+      },
+      "bytes": 5685,
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "mtimeNs": 1794713301918925400,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-urgent",
+          "declaredBytes": 5685,
+          "declaredSha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-urgent",
+          "declaredBytes": 5685,
+          "declaredSha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/sounds/three.mp3",
+      "path": "packages/web/public/sounds/three.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "23c47a3956bc5a841de6c25022ef4126d1480e8a"
+      },
+      "bytes": 61238,
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "mtimeNs": 1794713301918925400,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-third",
+          "declaredBytes": 61238,
+          "declaredSha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-third",
+          "declaredBytes": 61238,
+          "declaredSha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/motion/backdrop.webp",
+      "path": "packages/web/public/tadazz-show/motion/backdrop.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "3b9c1176f617b79fce215d2c7ccf6f64bea279eb"
+      },
+      "bytes": 94502,
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",
+      "mtimeNs": 1794713302046869500,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-backdrop",
+          "declaredBytes": 94502,
+          "declaredSha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/motion/logo.webp",
+      "path": "packages/web/public/tadazz-show/motion/logo.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "b5448c73e1201a0d283f60c585e57594146b14a8"
+      },
+      "bytes": 151654,
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "mtimeNs": 1794713302050908600,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-0f3c7d29e913",
+          "declaredBytes": 151654,
+          "declaredSha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-0f3c7d29e913",
+          "declaredBytes": 151654,
+          "declaredSha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "path": "packages/web/public/tadazz-show/music/cutie-patootie.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "003583c0ff42720b554840f6439ea2d550a71dd9"
+      },
+      "bytes": 784914,
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "mtimeNs": 1794713302079700400,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-results-music",
+          "declaredBytes": 784914,
+          "declaredSha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-results-music",
+          "declaredBytes": 784914,
+          "declaredSha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "path": "packages/web/public/tadazz-show/music/epic-main-menu.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "91b9ba949b9373dec9ec04b16529393ff6c3ebc7"
+      },
+      "bytes": 839514,
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "mtimeNs": 1794713302088929500,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-results-fallback",
+          "declaredBytes": 839514,
+          "declaredSha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-results-fallback",
+          "declaredBytes": 839514,
+          "declaredSha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+      "path": "packages/web/public/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+      "git": {
+        "mode": "100644",
+        "blob": "fe5fe9682a2a7f04e7ac7de657264e6436f63321"
+      },
+      "bytes": 5028530,
+      "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac",
+      "mtimeNs": 1794713302108011100,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-opening-video",
+          "declaredBytes": 5028530,
+          "declaredSha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-opening-video",
+          "declaredBytes": 5028530,
+          "declaredSha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+      "path": "packages/web/public/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+      "git": {
+        "mode": "100644",
+        "blob": "1c33e0a14961967ca119a7508c1beeb236fd1b1b"
+      },
+      "bytes": 1212173,
+      "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "mtimeNs": 1794713302137506300,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-opening-lottie",
+          "declaredBytes": 1212173,
+          "declaredSha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-opening-lottie",
+          "declaredBytes": 1212173,
+          "declaredSha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/razzia-original/background.png",
+      "path": "packages/web/public/tadazz-show/razzia-original/background.png",
+      "git": {
+        "mode": "100644",
+        "blob": "8ed76ec5013fd0e77b3cb2aabc7d259456af9ee5"
+      },
+      "bytes": 2777381,
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "mtimeNs": 1794713302155530800,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-backdrop",
+          "declaredBytes": 2777381,
+          "declaredSha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-poster",
+          "declaredBytes": 2777381,
+          "declaredSha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-a27be4883ee9",
+          "declaredBytes": 2777381,
+          "declaredSha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/second-library/creating-worlds-intro.png",
+      "path": "packages/web/public/tadazz-show/second-library/creating-worlds-intro.png",
+      "git": {
+        "mode": "100644",
+        "blob": "9438a2c890b7925c2aa7696d78d1d754fd8c6d0e"
+      },
+      "bytes": 2410686,
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "mtimeNs": 1794713302180922100,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-d6997d876b26",
+          "declaredBytes": 2410686,
+          "declaredSha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-d6997d876b26",
+          "declaredBytes": 2410686,
+          "declaredSha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/second-library/curtain-left.png",
+      "path": "packages/web/public/tadazz-show/second-library/curtain-left.png",
+      "git": {
+        "mode": "100644",
+        "blob": "abc79c25d5752ed156d1bc74341e29dca1d65b5d"
+      },
+      "bytes": 1132717,
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "mtimeNs": 1794713302185440200,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-b47f49feae9c",
+          "declaredBytes": 1132717,
+          "declaredSha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-b47f49feae9c",
+          "declaredBytes": 1132717,
+          "declaredSha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/second-library/curtain-right.png",
+      "path": "packages/web/public/tadazz-show/second-library/curtain-right.png",
+      "git": {
+        "mode": "100644",
+        "blob": "567d3a6a9fee6e3ee859ec1bc40df2c717b752a4"
+      },
+      "bytes": 1132143,
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "mtimeNs": 1794713302189985500,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-cfc4eaa014dd",
+          "declaredBytes": 1132143,
+          "declaredSha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-cfc4eaa014dd",
+          "declaredBytes": 1132143,
+          "declaredSha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "path": "packages/web/public/tadazz-show/second-library/teaser-screen-source.jpg",
+      "git": {
+        "mode": "100644",
+        "blob": "60855bb50b758a6f9e994e5ed264840646c0db77"
+      },
+      "bytes": 266631,
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "mtimeNs": 1794713302204021700,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-7af6b5041525",
+          "declaredBytes": 266631,
+          "declaredSha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-7af6b5041525",
+          "declaredBytes": 266631,
+          "declaredSha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "path": "packages/web/public/tadazz-show/story/672dd07f229b8c36.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "e6d25283c58cdb51a696a52fe2925969f65daf9b"
+      },
+      "bytes": 1222052,
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "mtimeNs": 1794713302238037300,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-story-mixer",
+          "declaredBytes": 1222052,
+          "declaredSha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-story-mixer",
+          "declaredBytes": 1222052,
+          "declaredSha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/story/7ff12046cb1aac7b.png",
+      "path": "packages/web/public/tadazz-show/story/7ff12046cb1aac7b.png",
+      "git": {
+        "mode": "100644",
+        "blob": "ec312d7c3b38b952dabd31968976e387bff742c0"
+      },
+      "bytes": 412633,
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "mtimeNs": 1794713302242204800,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-a5b34d556931",
+          "declaredBytes": 412633,
+          "declaredSha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-a5b34d556931",
+          "declaredBytes": 412633,
+          "declaredSha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/story/84acdb923677d591.webp",
+      "path": "packages/web/public/tadazz-show/story/84acdb923677d591.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "d4931fe81d28df401085c57d25de86e68b245170"
+      },
+      "bytes": 134540,
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "mtimeNs": 1794713302245254400,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-5ebee0b89664",
+          "declaredBytes": 134540,
+          "declaredSha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-5ebee0b89664",
+          "declaredBytes": 134540,
+          "declaredSha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "path": "packages/web/public/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "git": {
+        "mode": "100644",
+        "blob": "fcdadd7fd9b7beacdba3336e0d8e219b59828469"
+      },
+      "bytes": 91052,
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "mtimeNs": 1794713302248775800,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-story-reveal",
+          "declaredBytes": 91052,
+          "declaredSha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-story-reveal",
+          "declaredBytes": 91052,
+          "declaredSha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/story/b789ffb48c74e55d.webp",
+      "path": "packages/web/public/tadazz-show/story/b789ffb48c74e55d.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "290456a985bdbd52c16018a793cf439a09334927"
+      },
+      "bytes": 60174,
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "mtimeNs": 1794713302251792200,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-86afffeb48f1",
+          "declaredBytes": 60174,
+          "declaredSha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-86afffeb48f1",
+          "declaredBytes": 60174,
+          "declaredSha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/story/fef87578b7d57eae.webp",
+      "path": "packages/web/public/tadazz-show/story/fef87578b7d57eae.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "10639a59d473f7ed0c4a7f5bda91dc3f5974a5ba"
+      },
+      "bytes": 178706,
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "mtimeNs": 1794713302255309300,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-8baa3c35f436",
+          "declaredBytes": 178706,
+          "declaredSha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-8baa3c35f436",
+          "declaredBytes": 178706,
+          "declaredSha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/v4/question-bg.webp",
+      "path": "packages/web/public/tadazz-show/v4/question-bg.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "39e3e2c6a0e569a1e84c807e1af5e78134c0515f"
+      },
+      "bytes": 87904,
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "mtimeNs": 1794713302295051200,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-adapter-a27be4883ee9",
+          "declaredBytes": 87904,
+          "declaredSha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/v4/show-stage.webp",
+      "path": "packages/web/public/tadazz-show/v4/show-stage.webp",
+      "git": {
+        "mode": "100644",
+        "blob": "15d0884fde20bdec61afe23bb8ad8210e8d3e52f"
+      },
+      "bytes": 261066,
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "mtimeNs": 1794713302298714500,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-poster",
+          "declaredBytes": 261066,
+          "declaredSha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    },
+    {
+      "url": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "path": "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png",
+      "git": {
+        "mode": "100644",
+        "blob": "3100afcd466c060ea8de1c8d1f41665b897d952b"
+      },
+      "bytes": 1976726,
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "mtimeNs": 1794713302308497900,
+      "matchesGitBlob": true,
+      "declaredReferences": [
+        {
+          "theme": {
+            "id": "tadazz-classic",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-logo",
+          "declaredBytes": 1976726,
+          "declaredSha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+        },
+        {
+          "theme": {
+            "id": "razzia-original",
+            "version": "1.0.0"
+          },
+          "assetId": "classic-logo",
+          "declaredBytes": 1976726,
+          "declaredSha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+        }
+      ],
+      "allDeclaredHashesAndSizesMatch": true
+    }
+  ],
+  "lottie": [
+    {
+      "url": "/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+      "sourceSha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "assetEntries": 71,
+      "embeddedPngs": [
+        {
+          "pointer": "/assets/0/p",
+          "assetId": "0",
+          "mime": "image/png",
+          "bytes": 184561,
+          "sha256": "b1da22de1c6f92af8a7e9be050b8f7ec185828cbf4e68ecc28a4543bc3ca5bbd",
+          "width": 356,
+          "height": 445,
+          "dimensionsMatchDeclaration": true,
+          "embeddedFlag": 1,
+          "base": "",
+          "independentRights": "UNKNOWN"
+        },
+        {
+          "pointer": "/assets/1/p",
+          "assetId": "1",
+          "mime": "image/png",
+          "bytes": 178032,
+          "sha256": "2705c5d776d8861e2b81b1e8a7e2bac89a9b731da5ebe5e2b20f14275222b1a9",
+          "width": 356,
+          "height": 445,
+          "dimensionsMatchDeclaration": true,
+          "embeddedFlag": 1,
+          "base": "",
+          "independentRights": "UNKNOWN"
+        },
+        {
+          "pointer": "/assets/2/p",
+          "assetId": "2",
+          "mime": "image/png",
+          "bytes": 57783,
+          "sha256": "bbd6d85e4864e55b80944a0cd23520f91874b64ad6021f0f88f39db82f063f58",
+          "width": 213,
+          "height": 320,
+          "dimensionsMatchDeclaration": true,
+          "embeddedFlag": 1,
+          "base": "",
+          "independentRights": "UNKNOWN"
+        },
+        {
+          "pointer": "/assets/3/p",
+          "assetId": "3",
+          "mime": "image/png",
+          "bytes": 60586,
+          "sha256": "0c2f5d14cb2bb96bb4c8fd499529b5babcb1ff15487419295b6c7daab6a37227",
+          "width": 310,
+          "height": 310,
+          "dimensionsMatchDeclaration": true,
+          "embeddedFlag": 1,
+          "base": "",
+          "independentRights": "UNKNOWN"
+        },
+        {
+          "pointer": "/assets/4/p",
+          "assetId": "4",
+          "mime": "image/png",
+          "bytes": 369618,
+          "sha256": "62a934792b7a242616d9a9bdac99898c885c808d4d2740b2e8d51a8cc6fda296",
+          "width": 1061,
+          "height": 354,
+          "dimensionsMatchDeclaration": true,
+          "embeddedFlag": 1,
+          "base": "",
+          "independentRights": "UNKNOWN"
+        }
+      ],
+      "nonImageAssetEntries": 66,
+      "assetReferenceCount": 71,
+      "unresolvedAssetIds": [],
+      "externalReferences": [
+        {
+          "pointer": "/meta/g",
+          "value": "https://jitter.video"
+        }
+      ],
+      "stringExpressionProperties": [],
+      "fontsPresent": false,
+      "metadata": {
+        "g": "https://jitter.video"
+      },
+      "runtimeExecuted": false
+    }
+  ],
+  "counts": {
+    "manifestDeclarations": 67,
+    "exactIdHashReferences": 39,
+    "distinctIds": 36,
+    "distinctUrls": 35,
+    "distinctSha256": 35,
+    "kindsByUrl": {
+      "image": 14,
+      "video": 1,
+      "lottie": 1,
+      "audio": 19
+    },
+    "uniqueUrlBytes": 22384330
+  },
+  "allDeclaredHashesAndSizesMatch": true,
+  "allMediaMatchGitBlobs": true,
+  "allInputSnapshotsMatchGit": true,
+  "sourceInputsUnchanged": true,
+  "mediaHashesSizesMtimeUnchanged": true,
+  "rightsStatus": "NOT_AUTHORIZED_BY_THIS_OBSERVATION",
+  "trustedReceiptsInstalled": false,
+  "executableAcceptance": false,
+  "remoteWrites": 0,
+  "remoteJobs": 0,
+  "existingNoticeObservations": {
+    "rootLicense": "MIT software license, Copyright (c) 2024 Ralex; not treated as an asset-specific reviewed grant",
+    "audioRefresh": "Repository notice claims transition CC0 adaptation with exact adapted SHA and five procedural original sounds; external grant and generator not independently verified",
+    "revealSfx": "Separate soft reveal file is not referenced by these two native manifests; no grant transferred by similarity"
+  }
+}

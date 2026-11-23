@@ -1,0 +1,46 @@
+{
+  "engine": "webkit",
+  "theme": "tadazz-classic",
+  "check": "host control request readiness",
+  "timeoutMs": 5000,
+  "status": "failed",
+  "error": "TimeoutError: page.waitForFunction: Timeout 5000ms exceeded.",
+  "snapshot": {
+    "waitedMs": 7387,
+    "firstReadyMs": null,
+    "sameDocument": true,
+    "sameHost": true,
+    "sameBridgeBinding": true,
+    "received": {
+      "proof": "synthetic-host-ui-control-fixture",
+      "saveRequests": [
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "x5PfgRnoLoKZpGhAcOwh4enfe10scKOu",
+          "expectedRevision": 11,
+          "idempotencyKey": "004a50f0-c822-46f2-827a-079dc89e617c",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "x5PfgRnoLoKZpGhAcOwh4enfe10scKOu",
+          "expectedRevision": 11,
+          "idempotencyKey": "004a50f0-c822-46f2-827a-079dc89e617c",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "x5PfgRnoLoKZpGhAcOwh4enfe10scKOu",
+          "expectedRevision": 11,
+          "idempotencyKey": "004a50f0-c822-46f2-827a-079dc89e617c",
+          "intent": "createNew"
+        }
+      ],
+      "openedLinks": [
+        "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+        "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+      ],
+      "displayRequests": []
+    }
+  }
+}

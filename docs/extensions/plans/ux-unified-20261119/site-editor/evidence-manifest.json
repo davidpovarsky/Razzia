@@ -1,0 +1,100 @@
+{
+  "preservedAt": "2026-11-19T00:12:16.366583+00:00",
+  "sourceBaseline": "5f28699 plus uncommitted follow-up changes present at QA",
+  "artifacts": [
+    {
+      "file": "native-layout-receipt.json",
+      "source": "extensions/qa/.ux-native-editor-evidence/receipt.json",
+      "bytes": 24632,
+      "sha256": "f934969b50020c3293562d4214234499f60457d1d690422b14e4e5a1e43d14af"
+    },
+    {
+      "file": "native-persistence-receipt.json",
+      "source": "extensions/qa/.ux-native-editor-persistence-evidence/receipt.json",
+      "bytes": 4547,
+      "sha256": "6149ad871944d96a23e61b030af5f955f1c2521527c8bc7522d440c78f3e80a0"
+    },
+    {
+      "file": "site-receipt.json",
+      "source": "extensions/qa/.ux-site-evidence/receipt.json",
+      "bytes": 1223,
+      "sha256": "96563884363f428930ce3f0c2873226d854cc3c8385f7e38a8a9c789cbd12024"
+    },
+    {
+      "file": "prepare-label-receipt.json",
+      "source": "extensions/qa/.ux-site-label-evidence/receipt.json",
+      "bytes": 169,
+      "sha256": "606bfccbef60e77b8b3f6e76e7567c0e8e425d10c2ec90d0041045b2a402a4e5"
+    },
+    {
+      "file": "native-question-320x640-16-9.png",
+      "source": "extensions/qa/.ux-native-editor-evidence/question-320x640-16-9.png",
+      "bytes": 96531,
+      "sha256": "614248bd08c8adf3baea52fbeeb7eec30f978345ed79ec89e2eee38c0f8d0b87"
+    },
+    {
+      "file": "native-question-1440x900-16-9.png",
+      "source": "extensions/qa/.ux-native-editor-evidence/question-1440x900-16-9.png",
+      "bytes": 477608,
+      "sha256": "c02f4ef59f3f24b0527c541d4876a7b0e0dfbfaf12e7ec8bd4edcd73411cd8c1"
+    },
+    {
+      "file": "native-question-844x390-4-3.png",
+      "source": "extensions/qa/.ux-native-editor-evidence/question-844x390-4-3.png",
+      "bytes": 179000,
+      "sha256": "9c7ca91ea9676a40ebf8559caa4cdde8d84de632c2153fee610186e6d01fd067"
+    },
+    {
+      "file": "native-edit-drawer-320x640.png",
+      "source": "extensions/qa/.ux-native-editor-evidence/drawer-edit-320x640.png",
+      "bytes": 42278,
+      "sha256": "4ba238baca6ed76643ea97d6239c133fe752fdf1b9c2635da7c7bce4533ac4c5"
+    },
+    {
+      "file": "native-rtl-320x640.png",
+      "source": "extensions/qa/.ux-native-editor-evidence/rtl-question-320x640.png",
+      "bytes": 90683,
+      "sha256": "8e25e3359b88d461d79792b16de5848bfee5109f132847e070a9022338b432e3"
+    },
+    {
+      "file": "native-saved-reloaded-390x844.png",
+      "source": "extensions/qa/.ux-native-editor-persistence-evidence/saved-reloaded-390x844.png",
+      "bytes": 178836,
+      "sha256": "08c506e94f99c7b511eccf7e9c55d3fd2ae2266c0240e31460b144fb7d35b767"
+    },
+    {
+      "file": "site-sort-1440.png",
+      "source": "extensions/qa/.ux-site-evidence/sort-1440.png",
+      "bytes": 489574,
+      "sha256": "960799f0f33db9760d4a983a3dc6644a8194af220df7bae2a9b4f11e94b7ae6b"
+    },
+    {
+      "file": "site-sort-390.png",
+      "source": "extensions/qa/.ux-site-evidence/sort-390.png",
+      "bytes": 365547,
+      "sha256": "f28472efa00c8e7d6187dd4984f20fba261c2773badf91ffe968621b1255df57"
+    },
+    {
+      "file": "site-contact-390.png",
+      "source": "extensions/qa/.ux-site-evidence/contact-390.png",
+      "bytes": 82168,
+      "sha256": "618d05faf017d42a61108e237f254265c31d21887471f504111768fa7bea6777"
+    },
+    {
+      "file": "site-account-reset-390.png",
+      "source": "extensions/qa/.ux-site-evidence/account-reset-390.png",
+      "bytes": 118704,
+      "sha256": "1f7de589a8c48e58f25207154d87ab097d2f0374523c1475f1b92507c3dc40a2"
+    },
+    {
+      "file": "RESULTS.md",
+      "bytes": 4748,
+      "sha256": "0a97e91b3ab8e5381cf796cf5d5c25248c10eb6a97646c91ad4ccc691b4fd022"
+    },
+    {
+      "file": "qa-server-cleanup.json",
+      "bytes": 1045,
+      "sha256": "3c70350ad00682de474da0139adb11b531b6067c08f71fe7e181d412a041f101"
+    }
+  ]
+}

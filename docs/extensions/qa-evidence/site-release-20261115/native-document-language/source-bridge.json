@@ -1,0 +1,6 @@
+{
+  "executedSourceSha256": "c0bd7cd493d7796acccd8cc08cb487d7d0ee6a926a8c59cfe47a1c704808932c",
+  "finalSourceSha256": "4057e19f5d012641d75d1c287572a211c6c61c11f178c66f01124fdf8f82bdaf",
+  "onlyBlankLinesChanged": true,
+  "reason": "Two blank lines required by scoped oxlint; every nonblank source line is identical to the executed build/typecheck/browser input. No emitted-JavaScript comparison is claimed; installed TypeScript did not expose the legacy transpile API."
+}

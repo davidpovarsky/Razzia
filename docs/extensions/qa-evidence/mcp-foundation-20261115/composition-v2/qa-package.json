@@ -1,0 +1,10 @@
+{
+  "name": "tadazz-f-composition-v2-local-evidence",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "zod": "4.6.6",
+    "uuid": "14.0.3"
+  }
+}

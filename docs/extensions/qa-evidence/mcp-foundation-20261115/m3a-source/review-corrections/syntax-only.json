@@ -1,0 +1,79 @@
+{
+  "kind": "SOURCE_PARSE_ONLY_NO_APPLICATION_IMPORT",
+  "nodeVersion": "v22.17.0",
+  "checks": [
+    {
+      "file": "first-party/schema-manifest.ts",
+      "exit": 0,
+      "sha256": "af7addecc1ce5eb37f6a73012c1ea26a0ed761a964ddd4e3714ff25586b559c6",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "first-party/schema.ts",
+      "exit": 0,
+      "sha256": "d4df62b9750f465e5e9285312a823cba1094b8129fe8b3d09524c0b7b440db11",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "first-party/ingress.ts",
+      "exit": 0,
+      "sha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "first-party/bindings.ts",
+      "exit": 0,
+      "sha256": "a72e164bd24ec3bbc5e7f736b769196da8bad22e61a218e9f8ea866bf3801372",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "first-party/http.ts",
+      "exit": 0,
+      "sha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "tests/first-party/schema-ad895.fixture.ts",
+      "exit": 0,
+      "sha256": "92de1321d21b94bf629973eed76d12e5e1d76f91be5e7c3881e2f1c0bbc6c28a",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "tests/first-party/schema.nodecheck.ts",
+      "exit": 0,
+      "sha256": "3b9f9ae5dadd2e42c6c8c036b8f85d58263467c09383bfca801e9afb36e7ab33",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "tests/first-party/abort.nodecheck.ts",
+      "exit": 0,
+      "sha256": "0d9d516898b4cf9915df9dd916782e730891db68702bc2492e914842a0daa450",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "tests/first-party/review-evidence.fixture.ts",
+      "exit": 0,
+      "sha256": "642a22b7928a6e03c843a5692c7a3ce489ad3d47c36530dd679bc4404e7fc28f",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "tests/first-party/store.nodecheck.ts",
+      "exit": 0,
+      "sha256": "eb6bac0a5b8843950257e0682f5d7a8768af264536b0692c03897d878376762e",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "functionalTests": "NOT_RUN",
+  "typecheck": "NOT_RUN",
+  "install": "NOT_RUN"
+}

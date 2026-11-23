@@ -1,0 +1,56 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115
+
+stderr | docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved quiz-save journal in an enabled tenant
+[Journal] Malformed JSON in journal synthetic-unresolved.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:174:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1398:24)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:59
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:65:14)
+    at withAccount (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/packages/socket/src/services/account-scope.ts:12:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:34
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+stderr | docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved media-delete journal in an enabled tenant
+[MediaJournal] Malformed JSON in journal synthetic-unresolved.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:917:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:59
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:65:14)
+    at withAccount (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/packages/socket/src/services/account-scope.ts:12:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:34
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+ × docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved quiz-save journal in an enabled tenant 82ms
+   → .toMatch() expects to receive a string, but got undefined
+ × docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved media-delete journal in an enabled tenant 57ms
+   → .toMatch() expects to receive a string, but got undefined
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved quiz-save journal in an enabled tenant
+ FAIL  docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved media-delete journal in an enabled tenant
+TypeError: .toMatch() expects to receive a string, but got undefined
+ ❯ docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:47:52
+     45|       // Actual production startup uses this ownerless options object …
+     46|       // throw before listen when critical existing tenant evidence is…
+     47|       expect(globalError, JSON.stringify(receipt)).toMatch(/startup bl…
+       |                                                    ^
+     48|       receipt.state = "PASS"
+     49|     } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  17:37:37
+   Duration  4.27s (transform 52%, import 44%, tests 4%)
+
+  Transform  transforming modules took 2.03s · 52% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/results-attempt2.json

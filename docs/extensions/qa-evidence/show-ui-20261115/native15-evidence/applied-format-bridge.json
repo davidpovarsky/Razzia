@@ -1,0 +1,6 @@
+{
+  "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+  "before": "f684cb39f448da93431e008828c5c1f3109f8731e6d0c121f36ba7f8175f59e7",
+  "after": "21de9536fece162c4651682bbb2400721464f9925c83c8b240c2c5ca2ab0e0ec",
+  "sameAst": true
+}

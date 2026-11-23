@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "candidateContainer": "4702975cec8fc1f73076e372c4ab19832a5eaadbbf53cae3cdce5980a0b57cc9",
+  "image": "sha256:6b08742f1758aee1dc60554bbec5b885148209b3eaa4e5020b6db5ada6d92ba8",
+  "checks": {
+    "/": 200,
+    "/site": 200,
+    "/login": 200,
+    "/signup": 200,
+    "/forgot": 200,
+    "/reset": 200,
+    "/studio/games": 200,
+    "/manager/quizz": 200,
+    "/game": 200,
+    "/api/quizz": 401,
+    "/api/results": 401,
+    "/api/accounts/me": 401,
+    "/api/packages/capabilities": 401,
+    "/assets/index-utt8Akjm.js": 200,
+    "/assets/rolldown-runtime-hePW80VL.js": 200,
+    "/assets/index-DpoUs08e.css": 200,
+    "/tadazz-design-reference/marketing-logo.webp": 200,
+    "/tadazz-design-reference/studio-logo.webp": 200
+  },
+  "verifiedArtifactFiles": 111,
+  "socketHandshake": true,
+  "nginxValidation": true,
+  "productionDataMounted": false,
+  "productionCredentialsUsed": false,
+  "mailSent": false
+}

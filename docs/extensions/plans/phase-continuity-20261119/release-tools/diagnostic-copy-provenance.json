@@ -1,0 +1,35 @@
+{
+  "kind": "failure-diagnostic-helper-copy-provenance",
+  "createdUtc": "2026-11-19T18:18:31.203508+00:00",
+  "scriptsExecutedDuringCuration": false,
+  "originalEvidenceModified": false,
+  "privateKeyContentsRead": false,
+  "helperFiles": [
+    {
+      "source": "work/phase-continuity-20261119/release-tools/diagnose_fullshow_failure_state.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/diagnose_fullshow_failure_state.py",
+      "bytes": 16388,
+      "sourceBeforeSha256": "30bfe2deeff09ae3282b7b2bc126d9b3ba103f4daa2faa6e573ccfbcc2d3a4d4",
+      "copySha256": "30bfe2deeff09ae3282b7b2bc126d9b3ba103f4daa2faa6e573ccfbcc2d3a4d4",
+      "sourceAfterSha256": "30bfe2deeff09ae3282b7b2bc126d9b3ba103f4daa2faa6e573ccfbcc2d3a4d4",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/diagnose_fullshow_failure_state.provenance.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/diagnose_fullshow_failure_state.provenance.json",
+      "bytes": 847,
+      "sourceBeforeSha256": "3a03742c9480c76e42929f8e69e8aa2cea983fb0f22e715a81343532f5abf312",
+      "copySha256": "3a03742c9480c76e42929f8e69e8aa2cea983fb0f22e715a81343532f5abf312",
+      "sourceAfterSha256": "3a03742c9480c76e42929f8e69e8aa2cea983fb0f22e715a81343532f5abf312",
+      "allEqual": true
+    }
+  ],
+  "executedOverlay": {
+    "path": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07/browser-verify.overlay.mjs",
+    "sha256": "68250f4a6919907f5a5e02444b07911f9a30f3884a36f766d6c00775477a33be",
+    "bytes": 120047,
+    "matchesCompletedDiagnosticReceipt": true
+  },
+  "completedDiagnosticReceipt": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07/receipt.json",
+  "findings": []
+}

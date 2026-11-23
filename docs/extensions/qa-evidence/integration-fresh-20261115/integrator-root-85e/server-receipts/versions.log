@@ -1,0 +1,8 @@
+v24.22.2
+12.18.0
+aarch64
+Iface	Destination	Gateway 	Flags	RefCnt	Use	Metric	Mask		MTU	Window	IRTT                                                       
+3221225472
+50000 100000
+Filesystem      1B-blocks     Used Available Use% Mounted on
+tmpfs          1073741824 86777856 986963968   9% /work

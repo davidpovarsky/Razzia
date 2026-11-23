@@ -1,0 +1,20 @@
+{
+  "environment": "sandbox",
+  "authenticated": true,
+  "activeProducts": 2,
+  "includedPrices": 8,
+  "currencies": [
+    "EUR",
+    "USD",
+    "GBP",
+    "ILS"
+  ],
+  "notificationDestinations": [
+    {
+      "active": true,
+      "destination": "https://billing-sandbox.132.145.25.168.sslip.io/api/billing/webhooks/paddle",
+      "subscribedEvents": 11,
+      "includeSensitiveFields": false
+    }
+  ]
+}

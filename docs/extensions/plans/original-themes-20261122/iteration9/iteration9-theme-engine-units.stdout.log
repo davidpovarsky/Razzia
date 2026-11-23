@@ -1,0 +1,76 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/evidence/source/extensions[39m
+
+ [32m✓[39m src/core/show-authoring.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m src/core/show-workbook.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 139[2mms[22m[39m
+ [32m✓[39m src/core/show-library/compiled-index.test.ts [2m([22m[2m53 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/presentation-scene.test.ts [2m([22m[2m54 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/full-show.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-preview-v2.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 280[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/source-parity-export.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-repository.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/platform-audio-inheritance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 398[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-preview-frame.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/original-themes.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 352[2mms[22m[39m
+ [32m✓[39m src/core/show-library/identity.test.ts [2m([22m[2m71 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+ [32m✓[39m src/core/show-library/registry.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m src/core/show-library/projection.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 119[2mms[22m[39m
+ [32m✓[39m src/core/show-library/stage-metadata.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 173[2mms[22m[39m
+ [32m✓[39m src/core/show-library/projection-assets.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 120[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-validation.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-preview-input.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 1642[2mms[22m[39m
+   [32m✓[39m account application preview source binding [2m(26)[22m
+     [33m[2m✓[22m[39m resolves every public catalogue game through its exact bundled theme and shared production renderer[33m 1162[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/show-themes.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-restore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m src/core/show-library/consumer-contract.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 912[2mms[22m[39m
+   [32m✓[39m cumulative public library consumer contract [2m(6)[22m
+     [33m[2m✓[22m[39m reconstructs every actual native catalog from bounded JSON pages without omissions[33m 800[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/change.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m src/core/show-library/public-demo-catalogue.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 797[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/history-audio.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/roundtrip.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/motion-spec.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m src/core/show-library/preview-port.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-media-library.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-composition-pin.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/authored-scene-identity.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-motion-library.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-package-preview.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/types.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-library.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 350[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/opening-and-engine.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/full-show-locales.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m src/core/show-library/registry-locked.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/core/show-library/registry-motion-references.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/live-playback.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/core/show-library/full-show-preview-timeline.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/question-sequencing.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-preview-scopes.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/question-identity.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-reset.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/default-event-artwork.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/navigation-clock.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/results-labels.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/product-brand.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/backdrop.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/hebrew-compatibility.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/core/show-library/original-renderer-contract.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/scene-preset-editor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/recap-page-limit.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/core/show-library/sanitized-authored-preview.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/opening-watermark.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/reference-story/seating-presence.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/reference-story/story-clock.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/opening-private-cache.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-v4/scenes.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m59 passed[39m[22m[90m (59)[39m
+[2m      Tests [22m [1m[32m745 passed[39m[22m[90m (745)[39m
+[2m   Start at [22m 17:39:24
+[2m   Duration [22m 44.15s[2m (import 63%, tests 23%, transform 12%, worker 1%)[22m
+
+[2m     Import [22m [33m516 modules were evaluated 839 times[39m[2m · 21.89s total, 63% of tracked time[22m
+[2m            [22m [2m~8.43s faster with [22m[33misolate: false[39m[2m — shared modules are evaluated once per worker instead of once per file[22m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-isolation[22m
+

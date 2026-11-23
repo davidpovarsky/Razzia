@@ -1,0 +1,19 @@
+{
+  "method": "SSR actual StageSceneV4/FullShowSceneView under previewNativeLabels(he).i18n and original CSS; static visual fixture, not interactive acceptance",
+  "scenes": [
+    "company-opening",
+    "grand-opening",
+    "representative-directory",
+    "phone-instructions",
+    "connection-readiness",
+    "round-one",
+    "story-progress",
+    "tie-break",
+    "story-assembly",
+    "story-live",
+    "round-two",
+    "grand-finale"
+  ],
+  "font": "original bundled Rubik Hebrew and Latin",
+  "direction": "rtl"
+}

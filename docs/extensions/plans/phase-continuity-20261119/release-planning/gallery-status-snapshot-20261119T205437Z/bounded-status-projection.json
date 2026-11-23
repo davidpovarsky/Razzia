@@ -1,0 +1,61 @@
+{
+  "kind": "bounded foreign-gallery baseline/hold projection for concurrency decision",
+  "observedAt": "2026-11-19T20:54:37.259870+00:00",
+  "derivedOnlyFromRetainedSnapshots": true,
+  "sources": [
+    {
+      "sourcePath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-public-gallery-20261119\\docs\\extensions\\plans\\public-gallery-20261119\\release-state.json",
+      "bytes": 16440,
+      "sha256": "bd6cca1268621a1eb2558632db033424922763b04b4cd35009fe2e1551eeb09f"
+    },
+    {
+      "sourcePath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-public-gallery-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-845b2ae6cba5-908946e3\\receipt.json",
+      "bytes": 2651973,
+      "sha256": "7d1e845df1d0bcec6b36e065159c95170d4359e1e4d48b2e0271f665a80c4d86"
+    }
+  ],
+  "exactCopyProvenance": {
+    "path": "docs/extensions/plans/phase-continuity-20261119/release-planning/gallery-status-snapshot-20261119T205437Z/collection.json",
+    "sha256": "129aa64098ec4664fc49c4de47f3b2fa7d8b50edf9c0427a174f5bbd2a90e09f"
+  },
+  "baseline": {
+    "sourceSha": "845b2ae6cba51dea87ff33b568e27355331e74c7",
+    "wrapperExit": 0,
+    "checks": 40,
+    "passedChecks": 40,
+    "failedChecks": 0,
+    "rendererFixtures": 44,
+    "passedRendererFixtures": 44,
+    "sourceHashesUnchanged": true,
+    "productionChanged": false,
+    "customerMountAccessed": false
+  },
+  "releaseStateAtObservation": {
+    "status": "waiting-unrelated-server-release-lease-before-mobile-wip",
+    "staged": false,
+    "disposition": "845 successful engine/functional baseline; reviewed mobile improvement is uncommitted WIP, not yet release-qualified",
+    "mobileChangesApplied": true,
+    "mobileRequiresQualification": true,
+    "mobileWipStatus": "blocked-readonly-preflight-deployment-lock",
+    "mobileLinuxSourceCreated": false,
+    "mobileBuildsOrTestsRun": false,
+    "mobileFormatCopybackCount": 0
+  },
+  "decisionScope": {
+    "urgentCandidateKept": "dccfd9d22a4673130704fea02bd80a8399498467",
+    "galleryBranchPreservedSeparately": true,
+    "noMergePerformedByCurator": true,
+    "noGalleryMutationByCurator": true,
+    "futureCombinedSourceRequiresNewPinsAndQualification": true
+  },
+  "limits": [
+    "State may change after the observation timestamp.",
+    "The845 baseline pass does not qualify its uncommitted mobile WIP, dcc, or any combined source.",
+    "This projection establishes no production rollout or customer-game visual result."
+  ],
+  "publicationPolicy": {
+    "fullForeignStateAndWrapper": "Excluded retained local originals; do not add to this task commit.",
+    "boundedProjectionAndCopyProvenance": "Proposed for commit.",
+    "ownFinalReceipts": "Keep exact copies when finalized."
+  }
+}

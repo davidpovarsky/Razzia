@@ -1,0 +1,31 @@
+{
+  "checkpoint": "C1 packet3 assembled/source-only staged for independent review",
+  "packetCommit": "63455c5",
+  "executionAuthorized": false,
+  "checks": [
+    {
+      "gid": "1220109925694179",
+      "completed": false,
+      "appendReadbackVerified": true,
+      "notesChars": 30403
+    },
+    {
+      "gid": "1220111293723790",
+      "completed": false,
+      "appendReadbackVerified": true,
+      "notesChars": 29590
+    },
+    {
+      "gid": "1219882508725158",
+      "completed": false,
+      "appendReadbackVerified": true,
+      "notesChars": 26041
+    },
+    {
+      "gid": "1220541793835278",
+      "completed": false,
+      "appendReadbackVerified": true,
+      "notesChars": 25036
+    }
+  ]
+}

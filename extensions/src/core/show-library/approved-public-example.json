@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "catalogueId": "quiz",
+  "approval": "Owner authorization in Phase 2 chat: existing goldysterling games may be used and connected. Text-only public demonstration derivative; no tenant media, notes, roster or account identifiers.",
+  "show": {
+    "title": "Example Quizz",
+    "settings": [],
+    "cards": [
+      {
+        "key": "Q01",
+        "kind": "quiz",
+        "questionType": "single",
+        "question": "What is good answer ?",
+        "correctAnswers": [2],
+        "timeSeconds": 15,
+        "cooldownSeconds": 5,
+        "maxPoints": 1000,
+        "penalty": 0,
+        "answers": [
+          {
+            "text": "No"
+          },
+          {
+            "text": "Good answer"
+          },
+          {
+            "text": "No"
+          },
+          {
+            "text": "No"
+          }
+        ]
+      },
+      {
+        "key": "Q02",
+        "kind": "quiz",
+        "questionType": "single",
+        "question": "What is good answer with image ?",
+        "correctAnswers": [4],
+        "timeSeconds": 20,
+        "cooldownSeconds": 5,
+        "maxPoints": 1000,
+        "penalty": 0,
+        "answers": [
+          {
+            "text": "No"
+          },
+          {
+            "text": "No"
+          },
+          {
+            "text": "No"
+          },
+          {
+            "text": "Good answer"
+          }
+        ]
+      },
+      {
+        "key": "Q03",
+        "kind": "quiz",
+        "questionType": "single",
+        "question": "What is good answer with two answers ?",
+        "correctAnswers": [1],
+        "timeSeconds": 20,
+        "cooldownSeconds": 5,
+        "maxPoints": 1000,
+        "penalty": 0,
+        "answers": [
+          {
+            "text": "Good answer"
+          },
+          {
+            "text": "No"
+          }
+        ]
+      },
+      {
+        "key": "Q04",
+        "kind": "quiz",
+        "questionType": "single",
+        "question": "Which of these are primary colors ?",
+        "correctAnswers": [1, 3, 4],
+        "timeSeconds": 20,
+        "cooldownSeconds": 5,
+        "maxPoints": 1000,
+        "penalty": 0,
+        "answers": [
+          {
+            "text": "Red"
+          },
+          {
+            "text": "Green"
+          },
+          {
+            "text": "Blue"
+          },
+          {
+            "text": "Yellow"
+          }
+        ]
+      }
+    ],
+    "defaults": {
+      "showTheme": {
+        "id": "razzia-original",
+        "version": "1.0.0",
+        "overrides": {}
+      }
+    },
+    "format": "tada-show",
+    "version": 1
+  }
+}

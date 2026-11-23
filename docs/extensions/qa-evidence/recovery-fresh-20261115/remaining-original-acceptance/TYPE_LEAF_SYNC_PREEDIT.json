@@ -1,0 +1,28 @@
+{
+  "authority": "Single manager 15 Nov accepted integration handoff: preserve pure startup-owner-snapshot leaf export from abd4dcb; type-only backport, no runtime change or coverage rerun",
+  "managerProduct": "abd4dcb7573807cb2a15e75c2383be463b7cbace",
+  "managerEvidence": "c30c8dce8ef70b166a1800a09eda82177ff7dcde",
+  "localBefore": "f67c84088295b29044947aac68bbca2033f91441",
+  "paths": [
+    {
+      "path": "extensions/package.json",
+      "beforeSha256": "bc22399bfe10c8b6f892d715362b805c1fb7d3735e2e718b1fcecaf2fbf4c2cf",
+      "responsibility": "Add exactly ./server/startup-owner-snapshot public export; preserve all other exports"
+    },
+    {
+      "path": "extensions/src/server/storage/startup-owner-snapshot.ts",
+      "beforeSha256": null,
+      "responsibility": "Preserve exact manager type leaf/import/re-export; runtime body unchanged"
+    },
+    {
+      "path": "extensions/src/server/storage/startup-recovery.ts",
+      "beforeSha256": "98735cb43d77673ed9f149d11ff0a17c45e626c6805be4824986a5c57afb9e72",
+      "responsibility": "Preserve exact manager type leaf/import/re-export; runtime body unchanged"
+    },
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "beforeSha256": "ba830d98d49e5deeac3c6a4708f6f9b3200ad2cd943228b0c96b4dc884271289",
+      "responsibility": "Preserve exact manager type leaf/import/re-export; runtime body unchanged"
+    }
+  ]
+}

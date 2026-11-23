@@ -1,0 +1,133 @@
+{
+  "head": "2836e25ef9a588de161f5b73272d1b7776813f3a",
+  "originFetch": "PASS",
+  "allFeatureAndOriginHeadsIncluded": true,
+  "refs": [
+    {
+      "branch": "agent/dana/wave1",
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "included": true
+    },
+    {
+      "branch": "agent/eitan/wave1",
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "included": true
+    },
+    {
+      "branch": "agent/maya/wave1",
+      "sha": "1f761205c76885a5a5de9eaf6b8bc19bf19636c0",
+      "included": true
+    },
+    {
+      "branch": "agent/maya/wave2",
+      "sha": "1153dfa4cc235fa48310d63e675275a8472e20fc",
+      "included": true
+    },
+    {
+      "branch": "agent/noam/wave1",
+      "sha": "9d1c48b4f4c54180a465514aeeb5bece7f0a8933",
+      "included": true
+    },
+    {
+      "branch": "agent/roni/wave1",
+      "sha": "22c28349295bb5f25994dc07d408311937b868d3",
+      "included": true
+    },
+    {
+      "branch": "agent/tadazz-accounts-20261104",
+      "sha": "57db9e789d30b9dc91c690722cfce23925f3ca71",
+      "included": true
+    },
+    {
+      "branch": "agent/tadazz-full-show-20261105",
+      "sha": "158c589675933a1fcaee59795a2e20ddce05e00a",
+      "included": true
+    },
+    {
+      "branch": "agent/tadazz-motion-20261104",
+      "sha": "fbca624a8254b908a72181c1cfc2339f15846550",
+      "included": true
+    },
+    {
+      "branch": "agent/tadazz-next-20261105",
+      "sha": "0079e456228dddf0b53152004d7fb081e106a060",
+      "included": true
+    },
+    {
+      "branch": "agent/tadazz-v4-design-kit-20261105",
+      "sha": "eb71474046a03f9e496dbb8ec245d912e24c2c72",
+      "included": true
+    },
+    {
+      "branch": "agent/tadazz-validated-20261104",
+      "sha": "4dc0af472331cc4b0dc510641d063c9587017a12",
+      "included": true
+    },
+    {
+      "branch": "agent/tomer/wave1",
+      "sha": "c2c698a937aa17c7973b1ca975a8084ed9d53f55",
+      "included": true
+    },
+    {
+      "branch": "agent/tomer/wave2",
+      "sha": "4dc0af472331cc4b0dc510641d063c9587017a12",
+      "included": true
+    },
+    {
+      "branch": "agent/tzila-seating-20261108",
+      "sha": "cd793cd0c9ceedf9deb76fc98df449db4adf1a56",
+      "included": true
+    },
+    {
+      "branch": "agent/yael/wave1",
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "included": true
+    },
+    {
+      "branch": "codex/tadazz-billing-20261108",
+      "sha": "ef35617456a44ff88460a383e7a294a73300ddbd",
+      "included": true
+    },
+    {
+      "branch": "codex/upstream-cleanup-theme-engine-20261108",
+      "sha": "2836e25ef9a588de161f5b73272d1b7776813f3a",
+      "included": true
+    },
+    {
+      "branch": "feat/modular-extensions-planning",
+      "sha": "22c28349295bb5f25994dc07d408311937b868d3",
+      "included": true
+    },
+    {
+      "branch": "main",
+      "sha": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+      "included": true
+    },
+    {
+      "branch": "origin",
+      "sha": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+      "included": true
+    },
+    {
+      "branch": "origin/agent/tadazz-full-show-20261105",
+      "sha": "158c589675933a1fcaee59795a2e20ddce05e00a",
+      "included": true
+    },
+    {
+      "branch": "origin/agent/tadazz-next-20261105",
+      "sha": "5ea0f47edefc1c6aa858f84d4245be19f927f1d7",
+      "included": true
+    },
+    {
+      "branch": "origin/agent/tadazz-v4-design-kit-20261105",
+      "sha": "eb71474046a03f9e496dbb8ec245d912e24c2c72",
+      "included": true
+    },
+    {
+      "branch": "origin/main",
+      "sha": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+      "included": true
+    }
+  ],
+  "newUpstreamOriginalTouches": []
+}

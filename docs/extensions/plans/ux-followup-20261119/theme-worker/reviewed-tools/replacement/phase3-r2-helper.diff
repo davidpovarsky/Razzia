@@ -1,0 +1,187 @@
+--- activate_and_verify_timer.py preserved first attempt
++++ activate_and_verify_timer_r2.py
+@@ -2,6 +2,7 @@
+ """Phase 3 only. Requires separately reviewed admission after successful app observation."""
+ import argparse,datetime,hashlib,json,os,posixpath,re,stat,subprocess,sys,time
+ from pathlib import Path
++from decimal import Decimal, InvalidOperation, localcontext
+ NAMESPACE=Path("/home/ubuntu/tadazz-theme-worker-ux-followup-20261119")
+ HERE=NAMESPACE/"inputs/replacement"
+ SOURCE="34568c5c937a51d236a440513adeb9bf93637525"
+@@ -19,8 +20,17 @@
+ CACHE="07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872"
+ COMPILE_RECEIPT=NAMESPACE/"evidence/compile-4ef04ef7/receipt.json"
+ COMPILE_SHA="2e7f9f814b0b1c04a6d74c16760fdaced68075c0a88ec759f3e36dcff8b38bbe"
+-INPUT_MANIFEST_SHA="eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de"
+-RUN=NAMESPACE/"evidence/phase3-timer-4ef04ef7"
++INPUT_MANIFEST_SHA="8d9432822cb94d93fa6a461804a3760f1734e414f737376a34f9b8c1bf49b80f"
++RUN=NAMESPACE/"evidence/phase3-timer-4ef04ef7-r2"
++PRIOR_RECEIPT=NAMESPACE/"evidence/phase3-timer-4ef04ef7/receipt.json"
++PRIOR_RECEIPT_SHA="d05873d0ad9c016e4e3e25f4e9787783ca04997b6a48c479c14f02b3aeeae6e4"
++PRIOR_OWNED_PROOF_SHA="9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e"
++RECORD_SOURCE_PATHS={
++ "stage-execution.json":"docs/extensions/plans/ux-followup-20261119/stage-execution.json",
++ "deployment-deploy-execution.json":"docs/extensions/plans/ux-followup-20261119/deployment-deploy-execution.json",
++ "post-deploy-execution.json":"docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-execution.json",
++ "post-deploy-observation.json":"docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-observation.json",
++}
+ MAX_TIMER_WAIT=90
+ APP_IMAGE="sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a"
+ APP_CONTAINER="090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40"
+@@ -29,6 +39,30 @@
+ RUNTIME=Path("/var/lib/tadazz-release-5312660/config/extensions/mcp-service/runtime.json")
+ RUNTIME_SHA="6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5"
+ STATIC_PROPERTIES=["Type","WorkingDirectory","TimeoutStartUSec","TimeoutStopUSec","KillMode","PrivateTmp","ProtectSystem","ProtectHome","NoNewPrivileges","MemoryMax","TasksMax","CPUQuotaPerSecUSec","CapabilityBoundingSet","ReadWritePaths","ReadOnlyPaths","RuntimeDirectory","RootDirectory","UnitFileState"]
++def monotonic_microseconds(value):
++    # systemd format_timespan: src/basic/time-util.c and exact factors in time-util.h.
++    require(isinstance(value,str) and 0<len(value)<=160,"Bounded systemd monotonic string required")
++    require(value==value.strip(),"Unexpected monotonic whitespace")
++    maximum=(1<<64)-2  # UINT64_MAX is systemd USEC_INFINITY
++    if re.fullmatch(r"[0-9]{1,20}",value):
++        result=int(value);require(result<=maximum,"Monotonic integer exceeds uint64");return result
++    factors={"y":31557600000000,"month":2629800000000,"w":604800000000,"d":86400000000,"h":3600000000,"min":60000000,"s":1000000,"ms":1000,"us":1}
++    units=list(factors);previous=-1;total=0
++    tokens=value.split(" ")
++    require(1<=len(tokens)<=len(units) and all(tokens),"Invalid systemd timespan tokenization")
++    with localcontext() as context:
++        context.prec=80
++        for index,token in enumerate(tokens):
++            match=re.fullmatch(r"([0-9]{1,20}(?:\.[0-9]{1,18})?)(month|min|ms|us|y|w|d|h|s)",token)
++            require(match is not None,"Unknown or negative systemd timespan token")
++            amount,unit=match.groups();position=units.index(unit)
++            require(position>previous,"Duplicate or unordered systemd timespan units")
++            require("." not in amount or index==len(tokens)-1,"Fraction must occur only in the final unit")
++            micros=Decimal(amount)*factors[unit]
++            require(micros==micros.to_integral_value(),"Sub-microsecond systemd value rejected")
++            total+=int(micros);require(total<=maximum,"Monotonic timespan exceeds uint64")
++            previous=position
++    return total
+ def sha(data): return hashlib.sha256(data).hexdigest()
+ def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+ def require(ok,message):
+@@ -119,7 +153,7 @@
+     finally:os.close(fd)
+ def load_admission(expected_hash):
+     require(re.fullmatch("[a-f0-9]{64}",expected_hash) is not None,"Exact admission SHA-256 required")
+-    data=regular(HERE/"phase3-admission.json")
++    data=regular(HERE/"phase3-admission-r2.json")
+     require(sha(data)==expected_hash,"Admission digest mismatch")
+     a=json.loads(data)
+     require(a["status"]=="READY_FOR_REVIEWED_PHASE3" and a["sourceSha"]==SOURCE and a["workerImage"]==NEW_IMAGE,"Admission is pending or for a different release")
+@@ -127,9 +161,10 @@
+     require(a["helperSha256"]==sha(regular(Path(__file__))) and a["unitBeforeSha256"]==UNIT_BEFORE and a["unitAfterSha256"]==UNIT_AFTER,"Admission helper/unit pin mismatch")
+     required={"stage-execution.json","deployment-deploy-execution.json","post-deploy-execution.json","post-deploy-observation.json"}
+     require(set(a["records"])==required,"Exact four release guard records required")
++    require(a["recordSourcePaths"]==RECORD_SOURCE_PATHS,"Recovery record source provenance changed")
+     records={}
+     for name,pin in a["records"].items():
+-        blob=regular(confined(HERE/"phase3-admission-records",name),4_000_000)
++        blob=regular(confined(HERE/"phase3-admission-records-r2",name),4_000_000)
+         require(sha(blob)==pin,"Release record changed: "+name)
+         if name=="stage-execution.json":require(pin==STAGE_SHA,"Qualified stage receipt changed")
+         records[name]=json.loads(blob)
+@@ -158,8 +193,26 @@
+     age=(datetime.datetime.now(datetime.timezone.utc)-finished).total_seconds()
+     require(0<=age<=1200,"Accepted observation is stale or in the future; bounded fresh observation required")
+     return a
+-def cleanup_owned(tenant,job,expected,created):
+-    require(created and tenant==STORE/job.parent.parent.name and job.parent.parent==tenant,"Owned fixture path mismatch")
++def verify_prior_owned():
++    raw=regular(PRIOR_RECEIPT)
++    require(sha(raw)==PRIOR_RECEIPT_SHA,"Prior failed-attempt receipt changed")
++    prior=json.loads(raw)
++    require(prior["status"]=="FAIL" and prior["sourceSha"]==SOURCE and prior["workerImage"]==NEW_IMAGE,"Exact prior attempt identity required")
++    require(prior["rollback"]["unitRestored"] is True and prior["rollback"]["timerLeftStopped"] is True and prior["rollback"]["serviceState"]=="inactive" and prior["cleanup"]["removed"] is False,"Exact preserved rollback state required")
++    proof_raw=regular(HERE/"phase3-retained-owned-result.json")
++    require(sha(proof_raw)==PRIOR_OWNED_PROOF_SHA,"Retained owned result proof changed")
++    proof=json.loads(proof_raw)
++    require(proof["priorFailureReceiptSha256"]==PRIOR_RECEIPT_SHA and proof["retainedOwnedResultValidated"] is True,"Owned retained-result proof invalid")
++    require(proof["tenant"]=="975cf0bc96ad9d54014b0cb115ae3a841ff1f80a72511a3ea428083ce3da4639" and proof["uploadId"]=="c1869a7e-4587-4edd-acc8-c28244723d52","Prior owned fixture identity changed")
++    require(set(proof["files"])=={"source.tadazz","request.json","result.json","bundle.json"},"Exact prior owned file inventory required")
++    tenant=STORE/proof["tenant"];job=tenant/"jobs"/proof["uploadId"]
++    require(not tenant.is_symlink() and not job.parent.is_symlink() and not job.is_symlink() and tenant.stat().st_uid==job.stat().st_uid==0,"Prior owned directory identity changed")
++    for name,pin in proof["files"].items():
++        blob=regular(job/name,8_000_000)
++        require(len(blob)==pin["bytes"] and sha(blob)==pin["sha256"],"Retained owned file changed: "+name)
++    return tenant,job,{name:pin["sha256"] for name,pin in proof["files"].items()}
++def cleanup_owned(tenant,job,expected,owned):
++    require(owned and tenant==STORE/job.parent.parent.name and job.parent.parent==tenant,"Owned fixture path mismatch")
+     require(tenant.stat().st_uid==0 and job.stat().st_uid==0 and not tenant.is_symlink() and not job.parent.is_symlink() and not job.is_symlink(),"Owned directory identity changed")
+     require(set(p.name for p in job.iterdir())==set(expected),"Unexpected files in owned synthetic job")
+     for name,pin in expected.items():
+@@ -190,24 +243,26 @@
+     replacement=original.replace(OLD_IMAGE.encode(),NEW_IMAGE.encode())
+     require(original.count(OLD_IMAGE.encode())==1 and sha(replacement)==UNIT_AFTER and replacement.replace(NEW_IMAGE.encode(),OLD_IMAGE.encode())==original,"Only reviewed image substitution allowed")
+     before_service=service();before_timer=timer();before_binding=app_binding(admission)
+-    require(before_service["image"]==OLD_IMAGE and before_timer["UnitFileState"]=="enabled" and before_timer["ActiveState"]=="active","Expected prior worker/timer state required")
+-    manifest_data=regular(HERE/"timer-input-manifest.json")
++    require(before_service["image"]==OLD_IMAGE and before_service["ActiveState"]=="inactive" and before_timer["UnitFileState"]=="enabled" and before_timer["ActiveState"]=="inactive","Exact first-attempt rollback service/timer state required")
++    prior_tenant,prior_job,prior_pins=verify_prior_owned()
++    manifest_data=regular(HERE/"timer-input-manifest-r2.json")
+     require(sha(manifest_data)==INPUT_MANIFEST_SHA,"Timer input manifest changed")
+     manifest=json.loads(manifest_data);fixture=manifest["fixture"]
+     require(re.fullmatch("[a-f0-9]{64}",fixture["tenant"]) and re.fullmatch("[a-f0-9-]{36}",fixture["uploadId"]),"Unique fixture identity required")
+     inputs={}
+     for name,pin in manifest["files"].items():
+         require(name in ("source.tadazz","request.json","fixture-summary.json"),"Unexpected timer input")
+-        blob=regular(confined(HERE/"timer-fixture",name))
++        blob=regular(confined(HERE/"timer-fixture-r2",name))
+         require(len(blob)==pin["bytes"] and sha(blob)==pin["sha256"],"Timer input pin mismatch")
+         inputs[name]=blob
+     require(set(inputs)=={"source.tadazz","request.json","fixture-summary.json"},"Complete pinned fixture required")
+     tenant=STORE/fixture["tenant"];job=tenant/"jobs"/fixture["uploadId"]
++    require(tenant!=prior_tenant and job.name!=prior_job.name,"Recovery requires a separate fresh synthetic job")
+     require(not tenant.exists() and not tenant.is_symlink(),"Synthetic tenant must be fresh; never reuse a customer path")
+     require(not RUN.exists() and not RUN.is_symlink(),"Fresh phase 3 evidence namespace required")
+     RUN.mkdir(mode=0o700)
+     write_exclusive(RUN/"prior-unit.service",original)
+-    report={"status":"FAIL","phase":3,"asanaTaskId":"1220708526935641","startedAt":now(),"sourceSha":SOURCE,"workerImage":NEW_IMAGE,"admissionSha256":a.admission_sha256,"unitBeforeSha256":UNIT_BEFORE,"unitAfterSha256":UNIT_AFTER,"beforeService":before_service,"beforeTimer":before_timer,"beforeBinding":before_binding,"tenant":fixture["tenant"],"uploadId":fixture["uploadId"],"customerDataAccessed":False,"runtimeFlagsChanged":False,"cleanup":{"removed":False},"serviceImageChanged":False}
++    report={"status":"FAIL","phase":3,"asanaTaskId":"1220708526935641","startedAt":now(),"sourceSha":SOURCE,"workerImage":NEW_IMAGE,"admissionSha256":a.admission_sha256,"unitBeforeSha256":UNIT_BEFORE,"unitAfterSha256":UNIT_AFTER,"beforeService":before_service,"beforeTimer":before_timer,"beforeBinding":before_binding,"tenant":fixture["tenant"],"uploadId":fixture["uploadId"],"customerDataAccessed":False,"runtimeFlagsChanged":False,"cleanup":{"removed":False},"serviceImageChanged":False,"recoveryFromReceiptSha256":PRIOR_RECEIPT_SHA,"priorOwnedProofSha256":PRIOR_OWNED_PROOF_SHA,"priorOwnedCleanup":{"removed":False}}
+     stopped=False;changed=False;created=False;published=False;result_complete=False
+     try:
+         load_admission(a.admission_sha256);app_binding(admission);cache_stopped();runtime_unchanged()
+@@ -217,7 +272,7 @@
+         drained=drain_service()
+         require(effective_static(drained)==effective_static(before_service) and drained["image"]==OLD_IMAGE,"Prior effective service properties changed")
+         require(sha(regular(UNIT))==UNIT_BEFORE and sha(regular(BROKER))==BROKER_SHA,"Operator inputs changed before mutation")
+-        load_admission(a.admission_sha256);app_binding(admission);runtime_unchanged()
++        load_admission(a.admission_sha256);app_binding(admission);runtime_unchanged();verify_prior_owned()
+         replace_unit(replacement,UNIT_BEFORE);changed=True;report["serviceImageChanged"]=True
+         command(["/usr/bin/systemctl","daemon-reload"])
+         effective=service()
+@@ -246,7 +301,7 @@
+         require(sorted(bundle)==fixture["expectedCompiledThemeIds"] and all(isinstance(value.get("js"),str) and value["js"] and isinstance(value.get("css"),str) and isinstance(value.get("assets"),dict) for value in bundle.values()),"Actual compiled theme output missing")
+         require(sha(regular(job/"source.tadazz"))==fixture["archiveSha256"] and regular(job/"request.json")==inputs["request.json"],"Owned timer source/request changed")
+         after_timer=timer();after_service=service()
+-        require(after_timer["ActiveState"]=="inactive" and after_timer["UnitFileState"]=="enabled" and int(after_timer["LastTriggerUSecMonotonic"])>int(before_timer["LastTriggerUSecMonotonic"]),"Actual enabled timer did not advance")
++        require(after_timer["ActiveState"]=="inactive" and after_timer["UnitFileState"]=="enabled" and monotonic_microseconds(after_timer["LastTriggerUSecMonotonic"])>monotonic_microseconds(before_timer["LastTriggerUSecMonotonic"]),"Actual enabled timer did not advance")
+         require(after_service["image"]==NEW_IMAGE and after_service["ActiveState"]=="inactive" and after_service["Result"]=="success" and after_service["ExecMainStatus"]=="0" and effective_static(after_service)==effective_static(before_service),"Completed broker/static service health failed")
+         require(sha(regular(BROKER))==BROKER_SHA and sha(regular(UNIT))==UNIT_AFTER,"Operator pins changed after timer run")
+         after_binding=app_binding(admission);cache_stopped();runtime_unchanged()
+@@ -254,6 +309,9 @@
+         result_complete=True
+         expected={"source.tadazz":fixture["archiveSha256"],"request.json":sha(inputs["request.json"]),"result.json":sha(result_bytes),"bundle.json":sha(bundle_bytes)}
+         report["cleanup"]=cleanup_owned(tenant,job,expected,created)
++        report["priorOwnedCleanup"]=cleanup_owned(prior_tenant,prior_job,prior_pins,True)
++        report["bothOwnedFixturesRemoved"]=True
++        report["timerTriggerMicroseconds"]={"before":monotonic_microseconds(before_timer["LastTriggerUSecMonotonic"]),"after":monotonic_microseconds(after_timer["LastTriggerUSecMonotonic"])}
+         command(["/usr/bin/systemctl","start",TIMER])
+         final_timer=timer();final_service=service()
+         require(final_timer["ActiveState"]=="active" and final_timer["UnitFileState"]=="enabled" and final_service["image"]==NEW_IMAGE and effective_static(final_service)==effective_static(before_service),"Final enabled timer/service state changed")
+@@ -278,13 +336,13 @@
+                 restored=service()
+                 require(restored["image"]==OLD_IMAGE and effective_static(restored)==effective_static(before_service),"Effective prior service properties were not restored")
+                 require(timer()["ActiveState"]=="inactive" and sha(regular(UNIT))==UNIT_BEFORE,"Rollback state changed before confirmation")
+-                rollback.update({"unitRestored":True,"timerLeftStopped":True,"oldImageStillMissing":True,"serviceState":restored["ActiveState"],"ownedFixtureRetained":created and tenant.exists()})
++                rollback.update({"unitRestored":True,"timerLeftStopped":True,"oldImageStillMissing":True,"serviceState":restored["ActiveState"],"ownedFixtureRetained":created and tenant.exists(),"priorOwnedFixtureRetained":prior_tenant.exists()})
+             elif stopped:
+                 require(current_sha==UNIT_BEFORE and sha(regular(BROKER))==BROKER_SHA,"Unknown operator change; prior timer will not be restarted")
+                 prior_effective=service()
+                 require(prior_effective["image"]==OLD_IMAGE and effective_static(prior_effective)==effective_static(before_service),"Unknown effective service change; prior timer will not be restarted")
+-                command(["/usr/bin/systemctl","start",TIMER])
+-                rollback.update({"unitRestored":True,"priorTimerRestored":True})
++                require(before_timer["ActiveState"]=="inactive" and timer()["ActiveState"]=="inactive","Preserved paused timer state changed")
++                rollback.update({"unitRestored":True,"priorTimerRestored":True,"priorTimerState":"inactive","missingImageTimerWasNotStarted":True})
+         except BaseException as rollback_error:rollback["error"]=type(rollback_error).__name__+": "+str(rollback_error)[:800]
+         report["rollback"]=rollback
+         if created and not published:

@@ -1,0 +1,39 @@
+{
+  "source_sha": "b764b38222a872cf499419defc9d02e1a1cbdd94",
+  "phase": "gateway",
+  "container": "phone-gateway-b764b38-attempt01",
+  "recorded_utc": "2026-11-15T18:30:39.345626+00:00",
+  "prior_cumulative_bytes": 10190848,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-gateway-receipts-gateway-b764b38.tar",
+  "archive_sha256": "a7a2723c22aa6f01604448d4126f0214a5bbace8144bf7104f08bcd901ff0b02",
+  "archive_bytes": 40960,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-gateway-b764b38222a872cf499419defc9d02e1a1cbdd94",
+      "allocated_bytes": 376832
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-b764b38222a872cf499419defc9d02e1a1cbdd94",
+      "allocated_bytes": 512000
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-gateway-b764b38-attempt01",
+      "allocated_bytes": 65536
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-gateway-b764b38",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-gateway-receipts-gateway-b764b38.tar",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/5902b7fe19f0928b6a3903ab95635ed9f400a423fb72276e9659c2d51b1202aa",
+      "allocated_bytes": 40960
+    }
+  ],
+  "new_allocated_bytes": 1048576,
+  "cumulative_allocated_bytes": 11239424
+}

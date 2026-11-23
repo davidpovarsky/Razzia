@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next"
 const Room = () => {
   const { updatePlayer } = usePlayerStore()
   const [invitation, setInvitation] = useState("")
-  const { pin } = useSearch({ from: "/(auth)/" })
+  const { pin } = useSearch({ from: "/(auth)" })
   const hasCheckedRef = useRef(false)
   const { t } = useTranslation()
 

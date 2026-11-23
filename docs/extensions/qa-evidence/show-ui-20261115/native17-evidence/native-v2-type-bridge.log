@@ -1,0 +1,12 @@
+file:///verify-native-v2-type-bridge.mjs:12
+const emit = source => ts.transpileModule(source, { fileName: "renderer-entry-v2.tsx", compilerOptions: { target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext, jsx: ts.JsxEmit.ReactJSX, removeComments: true } }).outputText
+                                                                                                                                  ^
+
+TypeError: Cannot read properties of undefined (reading 'ESNext')
+    at emit (file:///verify-native-v2-type-bridge.mjs:12:131)
+    at file:///verify-native-v2-type-bridge.mjs:15:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.22.2

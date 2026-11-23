@@ -1,0 +1,34 @@
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+{"retainedSyntheticRoot":"/tmp/tadazz-m3a-synthetic-ETLZvz","globalNativeQuizzExists":false}
+✖ real F manager consent publishes through actual B bound native C1 and reopens the same native game (655.268808ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1629.029118
+
+✖ failing tests:
+
+test at docs/extensions/qa-evidence/mcp-foundation-20261115/native-save/native-candidate-01.mjs:55904:1
+✖ real F manager consent publishes through actual B bound native C1 and reopens the same native game (655.268808ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'ae9r2XgyHQ7NipgrrN5fJ'
+  
+      at TestContext.<anonymous> (file:///mnt/c/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/docs/extensions/qa-evidence/mcp-foundation-20261115/native-save/native-candidate-01.mjs:55921:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'ae9r2XgyHQ7NipgrrN5fJ',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

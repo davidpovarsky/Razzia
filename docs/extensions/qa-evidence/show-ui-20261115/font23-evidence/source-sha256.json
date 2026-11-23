@@ -1,0 +1,10 @@
+{
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-fixture-server.ts": "f5ce52e78914aa7fb6ad0b24bbb341dd5363dd07a42e2370ef369a3b353dee77",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-browser.mjs": "92c44f56165cbb15524e0f4e55bc7a8e3351d9c6463cd22e7e511f20d9ee39d1",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-browser-v2.mjs": "00a6c5bb406a2f6ac06fb9f8dce3b7ef1f9fb100504c02446e22c5bf73c44ca2",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-rubik-resources.ts": "d329c7e323a6bb74c17d519b297473d6c5ff59bf6964d42d01de6c3a333ad839",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-native-font.config.ts": "bde1fa8881b2e982f91d304895871e52fbd11923176373c760b6405289e6ee1c",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-native-font.spec.ts": "b423cbb89494e389267f5bc785594c46d43c373699e51093a7cb4fb3fbbc14c0",
+  "docs/extensions/qa-evidence/show-ui-20261115/prepare-font23.mjs": "d62a139b66bd4152d173d505a7e8449e7c182b492e8b5be1fe0d6a3b8910bcc2",
+  "docs/extensions/qa-evidence/show-ui-20261115/verify-font-host-policy.mjs": "c6edd2093c2fd50a6880ead4ed62e3b8cd39d872e8194cdcc2a115a99a4af7a4"
+}

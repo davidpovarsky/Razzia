@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import fs from 'node:fs';const expected={'@modelcontextprotocol/server':'2.4.0','@modelcontextprotocol/client':'2.4.0','@modelcontextprotocol/core':'2.4.0','@modelcontextprotocol/ext-apps':'2.1.0','@types/node':'26.6.5','typescript':'5.9.3','tsx':'4.21.0','hono':'4.13.13','http-status-codes':'2.3.0','zod':'4.6.6','uuid':'14.0.3','socket.io':'4.8.4'};for(const [p,want] of Object.entries(expected)){const file=fs.realpathSync(process.cwd()+'/extensions/src/mcp-app/node_modules/'+p+'/package.json');if(JSON.parse(fs.readFileSync(file)).version!==want||!file.startsWith(process.cwd()+'/node_modules/.pnpm/'))throw Error(p+' graph mismatch');console.log(JSON.stringify({package:p,path:file,version:want}));}"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "37aac6d1832f01eff961e40a0f2186415f1535f788413754f9ad2d698d464db4",
+  "seconds": 0.094
+}

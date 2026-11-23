@@ -1,0 +1,40 @@
+{
+  "source_sha": "b764b38222a872cf499419defc9d02e1a1cbdd94",
+  "evidence_sha": "762177df612045e07a717adbcceeeb125f158827",
+  "recorded_utc": "2026-11-15T18:33:14.952Z",
+  "update_summary": "Updated 4 of 4 tasks.",
+  "checks": [
+    {
+      "task": "1219846294963052",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 23492,
+      "append": "2026-11-15 Lane C isolated gateway custody packet — source b764b38222a872cf499419defc9d02e1a1cbdd94; evidence 762177df612045e07a717adbcceeeb125f158827, branch codex/tadazz-hq-telephony-fresh-20261115. New default-OFF trusted one-attempt versioned delivery, explicit fresh Game fence before Registry publication, real live owner/session/lease/executor host port, injected gateway-specific key/root, AES-256-GCM ciphertext custody, CAS/lost-ACK metadata reconciliation, no secret getter/cache, generic destination errors and fail-closed uncertainty barriers. Actual final private synthetic job: 7 PASS/0 FAIL/0 skipped; affected TypeScript7.0.2 exit0; formatter7/7. Final public receipts SHA256 a7a2723c22aa6f01604448d4126f0214a5bbace8144bf7104f08bcd901ff0b02 (40960 bytes). Handoff docs/extensions/qa-evidence/telephony-fresh-20261115/GATEWAY_CUSTODY_HANDOFF_20261115.md; explicit host ports gateway-source/HOST_COMPOSITION.md. Both own jobs terminal Pid0/OOMKilled=false; runtime claim released; cumulative disk11239424/16777216 bytes. Fresh adapter in same live host proven; fresh OS process/persistent production host/key transport/provider/PSTN/power loss/chronology NOT proven. No automatic repair, cold Game/score reconstruction, push or deployment. Existing authority DB/schema and SecretAttempt remain unchanged.\nPartial OPEN: this isolated credential boundary does not connect a real Israeli telephone call or establish physical native answer/score chronology."
+    },
+    {
+      "task": "1219881067977912",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 25047,
+      "append": "2026-11-15 Lane C isolated gateway custody packet — source b764b38222a872cf499419defc9d02e1a1cbdd94; evidence 762177df612045e07a717adbcceeeb125f158827, branch codex/tadazz-hq-telephony-fresh-20261115. New default-OFF trusted one-attempt versioned delivery, explicit fresh Game fence before Registry publication, real live owner/session/lease/executor host port, injected gateway-specific key/root, AES-256-GCM ciphertext custody, CAS/lost-ACK metadata reconciliation, no secret getter/cache, generic destination errors and fail-closed uncertainty barriers. Actual final private synthetic job: 7 PASS/0 FAIL/0 skipped; affected TypeScript7.0.2 exit0; formatter7/7. Final public receipts SHA256 a7a2723c22aa6f01604448d4126f0214a5bbace8144bf7104f08bcd901ff0b02 (40960 bytes). Handoff docs/extensions/qa-evidence/telephony-fresh-20261115/GATEWAY_CUSTODY_HANDOFF_20261115.md; explicit host ports gateway-source/HOST_COMPOSITION.md. Both own jobs terminal Pid0/OOMKilled=false; runtime claim released; cumulative disk11239424/16777216 bytes. Fresh adapter in same live host proven; fresh OS process/persistent production host/key transport/provider/PSTN/power loss/chronology NOT proven. No automatic repair, cold Game/score reconstruction, push or deployment. Existing authority DB/schema and SecretAttempt remain unchanged.\nPartial OPEN: actual revocation/close/secret-echo/CAS/cipher/key/file-uncertainty negatives pass. Provider callback call-binding, delayed hangup/redial chronology and physical ingress remain unaccepted."
+    },
+    {
+      "task": "1219999342715862",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 21963,
+      "append": "2026-11-15 Lane C isolated gateway custody packet — source b764b38222a872cf499419defc9d02e1a1cbdd94; evidence 762177df612045e07a717adbcceeeb125f158827, branch codex/tadazz-hq-telephony-fresh-20261115. New default-OFF trusted one-attempt versioned delivery, explicit fresh Game fence before Registry publication, real live owner/session/lease/executor host port, injected gateway-specific key/root, AES-256-GCM ciphertext custody, CAS/lost-ACK metadata reconciliation, no secret getter/cache, generic destination errors and fail-closed uncertainty barriers. Actual final private synthetic job: 7 PASS/0 FAIL/0 skipped; affected TypeScript7.0.2 exit0; formatter7/7. Final public receipts SHA256 a7a2723c22aa6f01604448d4126f0214a5bbace8144bf7104f08bcd901ff0b02 (40960 bytes). Handoff docs/extensions/qa-evidence/telephony-fresh-20261115/GATEWAY_CUSTODY_HANDOFF_20261115.md; explicit host ports gateway-source/HOST_COMPOSITION.md. Both own jobs terminal Pid0/OOMKilled=false; runtime claim released; cumulative disk11239424/16777216 bytes. Fresh adapter in same live host proven; fresh OS process/persistent production host/key transport/provider/PSTN/power loss/chronology NOT proven. No automatic repair, cold Game/score reconstruction, push or deployment. Existing authority DB/schema and SecretAttempt remain unchanged.\nPartial OPEN: no new load/capacity claim. Prior synthetic100 evidence remains historical at its exact source; it was NOT rerun/re-certified for these new transitive inputs and is not100 physical callers."
+    },
+    {
+      "task": "1219886202109096",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 20855,
+      "append": "2026-11-15 Lane C isolated gateway custody packet — source b764b38222a872cf499419defc9d02e1a1cbdd94; evidence 762177df612045e07a717adbcceeeb125f158827, branch codex/tadazz-hq-telephony-fresh-20261115. New default-OFF trusted one-attempt versioned delivery, explicit fresh Game fence before Registry publication, real live owner/session/lease/executor host port, injected gateway-specific key/root, AES-256-GCM ciphertext custody, CAS/lost-ACK metadata reconciliation, no secret getter/cache, generic destination errors and fail-closed uncertainty barriers. Actual final private synthetic job: 7 PASS/0 FAIL/0 skipped; affected TypeScript7.0.2 exit0; formatter7/7. Final public receipts SHA256 a7a2723c22aa6f01604448d4126f0214a5bbace8144bf7104f08bcd901ff0b02 (40960 bytes). Handoff docs/extensions/qa-evidence/telephony-fresh-20261115/GATEWAY_CUSTODY_HANDOFF_20261115.md; explicit host ports gateway-source/HOST_COMPOSITION.md. Both own jobs terminal Pid0/OOMKilled=false; runtime claim released; cumulative disk11239424/16777216 bytes. Fresh adapter in same live host proven; fresh OS process/persistent production host/key transport/provider/PSTN/power loss/chronology NOT proven. No automatic repair, cold Game/score reconstruction, push or deployment. Existing authority DB/schema and SecretAttempt remain unchanged.\nPartial OPEN: explicit fresh Game/default-OFF composition is now tested. This packet does not implement or accept provider invitation parsing or actual phone invitation behavior."
+    }
+  ]
+}

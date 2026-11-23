@@ -1,0 +1,7 @@
+{
+  "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+  "proxy_sha256": "07804330b009fd71cea7e394f4d1237fa0f17d604a11af8445ac6c7c9e804648",
+  "runner_sha256": "ec6078ad5f68bb9fd88589cd8d0d3bc9ca65f3b2b259d178ffba1bcc615675d5",
+  "prior_nonce_preserved_inconclusive": "2a3e9f85a62f40bfa452c29028d174da",
+  "reason": "Native pre-ACK PID gate lacked raw inspection/ready polling. New fresh namespace adds bounded read-only PID readiness observations, no start retry."
+}

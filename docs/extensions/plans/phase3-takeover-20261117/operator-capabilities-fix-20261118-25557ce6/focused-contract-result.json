@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "stage: exact inspected flags, missing accounts, remote-QA exception and duplicate denial",
+    "stage: status mismatch retained, query/body diagnostic rejected",
+    "deploy: exact inspected flags, missing accounts, remote-QA exception and duplicate denial",
+    "deploy: status mismatch retained, query/body diagnostic rejected",
+    "deploy: ten real request/json-probe paths with synthetic HTTP responses, including wrong status/MIME/body",
+    "stage: nine actual JavaScript probe executions with mocked Node HTTP, no network or Docker",
+    "clone: nine actual JavaScript probe executions with mocked Node HTTP, no network or Docker"
+  ],
+  "dockerUsed": false,
+  "networkUsed": false,
+  "operatorSha256": {
+    "deploy-mcp-site.py": "1dca9562a014f79e98b13229b344f401c847cdd2c068f297d7b180aa0d1066d3",
+    "stage-mcp-site.py": "983374b46ea7393049f472ddbc33824a3ef2b85dc8418c4302e4c4119c73a118"
+  },
+  "passed": true,
+  "productionTouched": false
+}

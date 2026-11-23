@@ -1,0 +1,36 @@
+{
+  "binaryExecution": false,
+  "readOnly": true,
+  "files": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/node_modules/.pnpm/@esbuild+linux-arm64@0.28.2/node_modules/@esbuild/linux-arm64/bin/esbuild",
+      "exists": true,
+      "resolvedPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/node_modules/.pnpm/@esbuild+linux-arm64@0.28.2/node_modules/@esbuild/linux-arm64/bin/esbuild",
+      "bytes": 10289264,
+      "sha256": "90bd269553d258e80b19e3ccab4f98f0831f87442a2f056510ce24fd1b425fc2",
+      "elf": true,
+      "goVersionStrings": [
+        "go1.26",
+        "go1.26.5"
+      ]
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/bin/esbuild",
+      "exists": true,
+      "resolvedPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/bin/esbuild",
+      "bytes": 9350,
+      "sha256": "183d6ead2dbc3af51aec767d5395f86fe54fbbc2d2aa8e54feb4e31d76a62f7e",
+      "elf": false,
+      "goVersionStrings": []
+    },
+    {
+      "path": "/usr/bin/docker-init",
+      "exists": true,
+      "resolvedPath": "/usr/bin/docker-init",
+      "bytes": 604224,
+      "sha256": "57d92dde938e0b0e7399eb4e2f0ef6bc38f5c4e2ae904db83964450405dd98d2",
+      "elf": true,
+      "goVersionStrings": []
+    }
+  ]
+}

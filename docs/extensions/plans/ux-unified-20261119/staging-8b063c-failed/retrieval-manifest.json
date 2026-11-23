@@ -1,0 +1,32 @@
+{
+  "kind": "failed-staging-public-evidence-retrieval",
+  "sourceSha": "8b063c17800dffe4f91a7f2c9ae6aa882389e614",
+  "retrievedAt": "2026-11-19T04:55:24.451819+00:00",
+  "exactBytesPreserved": true,
+  "remoteAllowlist": [
+    "stage-result.json",
+    "synthetic-smoke-result.json"
+  ],
+  "privateFilesRead": false,
+  "productionChanged": false,
+  "files": [
+    {
+      "sourcePath": "/home/ubuntu/tadazz-mcp-release-8b063c17800d-20261119/stage-result.json",
+      "localPath": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/stage-result.json",
+      "sha256": "05c3e39e3991c73f7dfba123e0cfda62ca5212e072ac7e5a4e9a18d2c080b479",
+      "bytes": 293
+    },
+    {
+      "sourcePath": "/home/ubuntu/tadazz-mcp-release-8b063c17800d-20261119/synthetic-smoke-result.json",
+      "localPath": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/synthetic-smoke-result.json",
+      "sha256": "03efebfbde7032fbfe8b252ac4068ec1ecf2b44d42864c876880325f975fdafe",
+      "bytes": 2227
+    },
+    {
+      "sourcePath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\stage-execution.json",
+      "localPath": "docs/extensions/plans/ux-unified-20261119/staging-8b063c-failed/stage-execution.json",
+      "sha256": "beac5d25651f49474dcacd069c62b537680791d532e0f3c22bed3b168ad10bf3",
+      "bytes": 551
+    }
+  ]
+}

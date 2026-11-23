@@ -1,0 +1,115 @@
+{
+  "vite": "8.3.4",
+  "babel": "7.29.9",
+  "results": [
+    {
+      "path": "extensions/src/components/native-save-consent/client.test.ts",
+      "beforeSourceSha256": "05bd6d703029c7168df0f968332b83e2530c429af352524576ad5ef3cc8a614b",
+      "afterSourceSha256": "4862ef65b3ea0446bf3e135913acb6eacc5da0968d5f3bf0dfceb3f4d5fc7593",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "784f627db714c2b05baba051a5446d1d981064e1b49cd100bde94afc403a48d7",
+      "afterEmittedJsSha256": "784f627db714c2b05baba051a5446d1d981064e1b49cd100bde94afc403a48d7"
+    },
+    {
+      "path": "extensions/src/components/native-save-consent/client.ts",
+      "beforeSourceSha256": "6f198f2cdb08ecfdf34a34afe414305f011fe37f9f462f2e3d4a5a96e73736d8",
+      "afterSourceSha256": "560c2828bb7fb70368c776602e0b63acefa36596bdcfd2f3eac7e33dc35efbed",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "c4e57059986d9b3be681768afdcb9d1d68edb20a79948240a49e9bcef190ddf8",
+      "afterEmittedJsSha256": "c4e57059986d9b3be681768afdcb9d1d68edb20a79948240a49e9bcef190ddf8"
+    },
+    {
+      "path": "extensions/src/components/native-save-consent/csp-admission.ts",
+      "beforeSourceSha256": "256497b78ca04a43542874fbba709c41394bf27af3fcea8eb2e11f979f6fbeec",
+      "afterSourceSha256": "256497b78ca04a43542874fbba709c41394bf27af3fcea8eb2e11f979f6fbeec",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "3dd4ab8f970988190817d194f28d84956558111b5413553446194bea4ab479f4",
+      "afterEmittedJsSha256": "3dd4ab8f970988190817d194f28d84956558111b5413553446194bea4ab479f4"
+    },
+    {
+      "path": "extensions/src/components/native-save-consent/NativeSaveConsentPage.tsx",
+      "beforeSourceSha256": "6844044ead51b13055e4b274faf2903bdcfb3119170a146fad1785b9679e7bb3",
+      "afterSourceSha256": "047f5f5791af5de32d56bbc2881c559fcb7e8e56ac7ec514390402273a42789c",
+      "babelSourceAstEqual": false,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "1fa7f44e5de8878761f1f636f60763d333eed88b1d5a1c950888e3503f8e5c1c",
+      "afterEmittedJsSha256": "1fa7f44e5de8878761f1f636f60763d333eed88b1d5a1c950888e3503f8e5c1c"
+    },
+    {
+      "path": "extensions/src/components/native-save-consent/strings.ts",
+      "beforeSourceSha256": "10aaa4f08a49b928f8822da1322e7973b45bfb773f5300707088a1b563d34a94",
+      "afterSourceSha256": "70bcaed2aad7e093b44b06b1324fa0e40ca63960e0d6233da73d80a893a7274b",
+      "babelSourceAstEqual": false,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "48fcd7ee2b9bf6ea63e4f7c79c1fe1bff32c0bae58f12511b6cb9c6567913180",
+      "afterEmittedJsSha256": "48fcd7ee2b9bf6ea63e4f7c79c1fe1bff32c0bae58f12511b6cb9c6567913180"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save-build-receipt.mjs",
+      "beforeSourceSha256": "a2b198a8d7101876e1fd07b6dc11bdf2152200fb3b931f0914601d26f8305555",
+      "afterSourceSha256": "c31552a3c52785222677d297945154e85fbc01310637b88bb53957af3b1ff74c",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "c6a7bafc6450cd265afdc6ba5ca0cab2aaf074d4f4d78e0b915ece010d10687f",
+      "afterEmittedJsSha256": "c6a7bafc6450cd265afdc6ba5ca0cab2aaf074d4f4d78e0b915ece010d10687f"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save-fixture.tsx",
+      "beforeSourceSha256": "1f88ca8eafa2a3470d56ad14b0993d17d388ff4fa0d37d30d0d224008b258ead",
+      "afterSourceSha256": "4893aae586bd21a7df04d4c6edc68e2b1655d3c78041f4dca6209a4a97923efd",
+      "babelSourceAstEqual": false,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "f7e36d9f8c6bfbeffd6192560358f79a824646994d5ccf225d6716960d0fb2be",
+      "afterEmittedJsSha256": "f7e36d9f8c6bfbeffd6192560358f79a824646994d5ccf225d6716960d0fb2be"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save-playwright.config.ts",
+      "beforeSourceSha256": "ea8ec5121469392ba7108a966ab379b3a42435b54e3e3506d9a8bb39d1e8f06a",
+      "afterSourceSha256": "2f9e80be5cf7a5e438d25b4908652a57c2586e37dbe62ffcbd3a0b5f364aa165",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "d11146eda7db93c413fddb0c1ab6b8b5f31da4cf740defe561558310b41c714e",
+      "afterEmittedJsSha256": "d11146eda7db93c413fddb0c1ab6b8b5f31da4cf740defe561558310b41c714e"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save-server.ts",
+      "beforeSourceSha256": "1fcf96c01cd60aa0fea641b548505dce2c0fa7ea2c6eaba8cf19400a01538fff",
+      "afterSourceSha256": "189be1aedb0751aa851f776689ac10a0a4376cbf59d63dba44f90a51774026c9",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "b2b9c18c65b01a1ac62411f0da5bb003ee68484b7e251e7d376a119f4a63cf3b",
+      "afterEmittedJsSha256": "b2b9c18c65b01a1ac62411f0da5bb003ee68484b7e251e7d376a119f4a63cf3b"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save-server.vite.config.ts",
+      "beforeSourceSha256": "9d1012e63b1f2d3c3ce116162e8904ed68e7b22288de52caa6003d5c69b5df0e",
+      "afterSourceSha256": "9ad2ffcda2385b3efe8d26a5cbd87aa2b512830473fbc1b014e9fa3ee9839139",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "1e3d5ef5359daa9577737b063dc6da2d051988eff126637cfba2e6f67b4e5a90",
+      "afterEmittedJsSha256": "1e3d5ef5359daa9577737b063dc6da2d051988eff126637cfba2e6f67b4e5a90"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save-ui.vite.config.ts",
+      "beforeSourceSha256": "d3563e7f64ea185578d4014f56d0d3be79c301461fc7ce37c38ee6253f24a5dd",
+      "afterSourceSha256": "1f07465b746a0e70305a51f37eb4fd49a2ac5b8a19d49b08402f41061b83d16e",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "cf2cd50d4bc4689240e7a8515fa4aace825a74e436c08e66c152899adb3425be",
+      "afterEmittedJsSha256": "cf2cd50d4bc4689240e7a8515fa4aace825a74e436c08e66c152899adb3425be"
+    },
+    {
+      "path": "extensions/qa/theme-builder/native-save.spec.ts",
+      "beforeSourceSha256": "6a366623f061b270b666dc6af165a04786e3a30a7d7a806ff60db61b5f140e77",
+      "afterSourceSha256": "630453594a40b3dc941be351fcc75e0d3e2a178cd42acf4dc1c9429e5bbc49ea",
+      "babelSourceAstEqual": true,
+      "sameExecutableAst": true,
+      "beforeEmittedJsSha256": "b09801b28bd2de0acf9be406763c111a02af56866b5a6ac7a8ee3a371d116d33",
+      "afterEmittedJsSha256": "b09801b28bd2de0acf9be406763c111a02af56866b5a6ac7a8ee3a371d116d33"
+    }
+  ],
+  "meaning": "Only final own-source formatting after actual TypeScript0/unit10/browser30. Exact executed inputs retained; every emitted executable AST is identical. F DTO leaves were not formatted or changed."
+}

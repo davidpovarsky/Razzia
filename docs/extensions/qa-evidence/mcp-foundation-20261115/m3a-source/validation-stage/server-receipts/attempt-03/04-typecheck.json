@@ -1,0 +1,16 @@
+{
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "tsconfig.json"
+  ],
+  "actualReturnCode": 2,
+  "shellExit": 2,
+  "seconds": 40.781,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 222,
+  "logSha256": "0cd0bc2c8d4d113b52b173a963eb12256a13d5686c8d339d4fd66cd421dfb608"
+}

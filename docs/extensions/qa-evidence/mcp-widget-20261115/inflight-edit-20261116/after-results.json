@@ -1,0 +1,41 @@
+{
+  "artifactSha256": "d276cc4ec3f75103fea467fb45a315a9783e0562fd6f5d625f7d6d8692e69514",
+  "hostSha256": "a21acf24cfcc868d8fc06f5e4d743b2dff9b0cf478bd1f947c04b7ee2d87cba9",
+  "scope": "Actual Edge / opaque iframe / AppSDK; existing synthetic host draft handlers only",
+  "cases": [
+    {
+      "name": "Manager reproduction: later edit survives ACK and retains its original base",
+      "status": "PASS",
+      "revisionBeforeAck": 1,
+      "afterAck": "UNSENT title B",
+      "calls": [
+        "get_game_draft",
+        "update_game_draft"
+      ]
+    },
+    {
+      "name": "Unchanged submitted edit clears dirty only after its own ACK",
+      "status": "PASS"
+    },
+    {
+      "name": "Reset then new edit during the write is not cleared by the earlier ACK",
+      "status": "PASS"
+    },
+    {
+      "name": "Undo ACK preserves an edit made while undo was pending",
+      "status": "PASS"
+    },
+    {
+      "name": "Cancellation and refresh preserve a later local edit without rebasing it",
+      "status": "PASS"
+    },
+    {
+      "name": "No page errors or external requests",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "browser": "157.0.4341.46",
+  "ownBrowserAndLoopbackClosed": true
+}

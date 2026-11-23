@@ -1,0 +1,21 @@
+{
+  "utc": "2026-11-18T15:35:13.396853+00:00",
+  "verifiedListenerPids": {
+    "3191": 33500,
+    "3190": 32156
+  },
+  "cleanup": [
+    {
+      "port": 3190,
+      "pid": 32156,
+      "exitCode": 0,
+      "output": "SUCCESS: The process with PID 32156 (child process of PID 9980) has been terminated."
+    },
+    {
+      "port": 3191,
+      "pid": 33500,
+      "exitCode": 0,
+      "output": "SUCCESS: The process with PID 25764 (child process of PID 10344) has been terminated.\nSUCCESS: The process with PID 10344 (child process of PID 33500) has been terminated.\nSUCCESS: The process with PID 33500 (child process of PID 9980) has been terminated."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+
+Running 14 tests using 1 worker
+
+  ✓   1 [chromium] › tests/theme-lab.spec.ts:15:1 › three themes are selectable, all packaged demo assets match their hashes and videos decode (5.8s)
+  ✓   2 [chromium] › tests/theme-lab.spec.ts:120:3 › Classic — Quick Quiz: host, participant, display and saved theme (28.9s)
+  ✓   3 [chromium] › tests/theme-lab.spec.ts:120:3 › Classic — Audience Picks: host, participant, display and saved theme (29.4s)
+  ✓   4 [chromium] › tests/theme-lab.spec.ts:120:3 › Cosmic Night — Quick Quiz: host, participant, display and saved theme (29.1s)
+  ✓   5 [chromium] › tests/theme-lab.spec.ts:120:3 › Cosmic Night — Audience Picks: host, participant, display and saved theme (27.9s)
+  ✓   6 [chromium] › tests/theme-lab.spec.ts:120:3 › Jade Studio — Quick Quiz: host, participant, display and saved theme (29.6s)
+  ✓   7 [chromium] › tests/theme-lab.spec.ts:120:3 › Jade Studio — Audience Picks: host, participant, display and saved theme (30.0s)
+  ✓   8 [webkit] › tests/theme-lab.spec.ts:15:1 › three themes are selectable, all packaged demo assets match their hashes and videos decode (18.4s)
+  ✓   9 [webkit] › tests/theme-lab.spec.ts:120:3 › Classic — Quick Quiz: host, participant, display and saved theme (1.2m)
+  ✓  10 [webkit] › tests/theme-lab.spec.ts:120:3 › Classic — Audience Picks: host, participant, display and saved theme (1.0m)
+  ✓  11 [webkit] › tests/theme-lab.spec.ts:120:3 › Cosmic Night — Quick Quiz: host, participant, display and saved theme (1.1m)
+  ✓  12 [webkit] › tests/theme-lab.spec.ts:120:3 › Cosmic Night — Audience Picks: host, participant, display and saved theme (58.0s)
+  ✓  13 [webkit] › tests/theme-lab.spec.ts:120:3 › Jade Studio — Quick Quiz: host, participant, display and saved theme (55.2s)
+  ✓  14 [webkit] › tests/theme-lab.spec.ts:120:3 › Jade Studio — Audience Picks: host, participant, display and saved theme (51.7s)
+
+  Slow test file: [webkit] › tests/theme-lab.spec.ts (6.4m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  14 passed (9.5m)

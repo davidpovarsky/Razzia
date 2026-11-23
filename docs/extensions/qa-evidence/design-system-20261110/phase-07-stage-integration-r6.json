@@ -1,0 +1,245 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.stage.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.stage.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-07-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-stage-integration.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-07-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-stage-integration.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-07-stage-integration.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-stage-integration.spec.ts",
+      "file": "tds-stage-integration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 25134,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:26:50.591Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-102381373501d91c258c",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 100,
+          "column": 1
+        },
+        {
+          "title": "configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22310,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Seating QR geometry [\n  {\n    tag: \u001b[32m'svg'\u001b[39m,\n    cls: \u001b[1mnull\u001b[22m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m59\u001b[39m,\n    y: \u001b[33m439.03125\u001b[39m,\n    width: \u001b[33m108\u001b[39m,\n    height: \u001b[33m108\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'qr'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'grid'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m49\u001b[39m,\n    y: \u001b[33m429.03125\u001b[39m,\n    width: \u001b[33m128\u001b[39m,\n    height: \u001b[33m128\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'qr-and-pin'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'flex'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m49\u001b[39m,\n    y: \u001b[33m429.03125\u001b[39m,\n    width: \u001b[33m417\u001b[39m,\n    height: \u001b[33m128\u001b[39m\n  },\n  {\n    tag: \u001b[32m'SECTION'\u001b[39m,\n    cls: \u001b[32m'dial-info'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m49\u001b[39m,\n    y: \u001b[33m270\u001b[39m,\n    width: \u001b[33m417\u001b[39m,\n    height: \u001b[33m287.03125\u001b[39m\n  },\n  {\n    tag: \u001b[32m'ASIDE'\u001b[39m,\n    cls: \u001b[32m'left-panel'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'5'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m500\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[1mnull\u001b[22m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'tadazz-reference-seating has-host-guide'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'tz-screen-inner'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'1'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'tz-screen tz-custom-screen is-visible'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'15'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'tzv4-custom-root'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'6'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'tzv4-stage stage-show'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'tz-viewport tzv4-viewport'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'relative min-h-0 w-full min-w-0 flex-1 overflow-hidden'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'SECTION'\u001b[39m,\n    cls: \u001b[32m'relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'flex'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'h-dvh w-full max-w-full'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'MAIN'\u001b[39m,\n    cls: \u001b[32m'relative flex min-h-dvh w-full flex-col overflow-x-hidden text-white'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'flex'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'bg-secondary antialiased'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[1mnull\u001b[22m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'BODY'\u001b[39m,\n    cls: \u001b[32m'font-display touch-none bg-secondary'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'HTML'\u001b[39m,\n    cls: \u001b[1mnull\u001b[22m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    visibility: \u001b[32m'visible'\u001b[39m,\n    display: \u001b[32m'block'\u001b[39m,\n    filter: \u001b[32m'none'\u001b[39m,\n    clipPath: \u001b[32m'none'\u001b[39m,\n    contentVisibility: \u001b[32m'visible'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  }\n]\n"
+                    },
+                    {
+                      "text": "Painted assets [\n  {\n    tag: \u001b[32m'DIV'\u001b[39m,\n    cls: \u001b[32m'stage-bg'\u001b[39m,\n    src: \u001b[1mnull\u001b[22m,\n    bg: \u001b[32m'url(\"http://127.0.0.1:4310/tadazz-show/v4/show-stage.webp\")'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    z: \u001b[32m'0'\u001b[39m,\n    parent: \u001b[32m'tzv4-stage stage-show'\u001b[39m,\n    x: \u001b[33m0\u001b[39m,\n    y: \u001b[33m0\u001b[39m,\n    width: \u001b[33m1920\u001b[39m,\n    height: \u001b[33m1080\u001b[39m\n  },\n  {\n    tag: \u001b[32m'IMG'\u001b[39m,\n    cls: \u001b[32m'logo'\u001b[39m,\n    src: \u001b[32m'/tadazz-show/story/b789ffb48c74e55d.webp'\u001b[39m,\n    bg: \u001b[32m'none'\u001b[39m,\n    opacity: \u001b[32m'1'\u001b[39m,\n    z: \u001b[32m'auto'\u001b[39m,\n    parent: \u001b[32m'left-panel'\u001b[39m,\n    x: \u001b[33m33\u001b[39m,\n    y: \u001b[33m60\u001b[39m,\n    width: \u001b[33m433\u001b[39m,\n    height: \u001b[33m180\u001b[39m\n  }\n]\n"
+                    }
+                  ],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:27:15.918Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-e059be9de38cd250548f",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 241,
+          "column": 1
+        },
+        {
+          "title": "a failed per-card image falls back to the selected full-window theme without classroom or duplicate media",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9600,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T23:27:38.278Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b3d02301dd3d03c81e7-6e0b3496c249230fce13",
+          "file": "tds-stage-integration.spec.ts",
+          "line": 381,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T23:26:43.577Z",
+    "duration": 64534.195999999996,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

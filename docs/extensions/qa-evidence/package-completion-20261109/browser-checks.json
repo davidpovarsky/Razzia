@@ -1,0 +1,77 @@
+[
+  {
+    "name": "upstream-browser",
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "--config",
+      "playwright.upstream-parity.config.ts"
+    ],
+    "exitCode": 0,
+    "seconds": 243.16,
+    "stats": {
+      "startTime": "2026-11-09T15:28:05.179Z",
+      "duration": 241880.653,
+      "expected": 21,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "name": "ui-browser",
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "--config",
+      "playwright.ui-fidelity.config.ts"
+    ],
+    "exitCode": 0,
+    "seconds": 605.9,
+    "stats": {
+      "startTime": "2026-11-09T15:28:17.272Z",
+      "duration": 604039.3319999999,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "name": "cleanup-browser",
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "--config",
+      "playwright.cleanup-theme.config.ts"
+    ],
+    "exitCode": 0,
+    "seconds": 508.07,
+    "stats": {
+      "startTime": "2026-11-09T15:28:17.056Z",
+      "duration": 506294.22599999997,
+      "expected": 28,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "name": "package-browser",
+    "exitCode": 0,
+    "stats": {
+      "startTime": "2026-11-09T15:38:22.715Z",
+      "duration": 411847.538,
+      "expected": 10,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

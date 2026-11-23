@@ -1,0 +1,554 @@
+.catalogue-cover {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  color: #fff;
+  text-align: start;
+}
+.catalogue-cover-art,
+.catalogue-cover-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.catalogue-cover-art {
+  opacity: 0.92;
+  transition: transform 0.7s ease;
+}
+.catalogue-cover-shade {
+  background: linear-gradient(
+    180deg,
+    #06091224 0%,
+    #090b1333 35%,
+    #050610c9 100%
+  );
+}
+.catalogue-cover-orbit {
+  position: absolute;
+  width: 45%;
+  aspect-ratio: 1;
+  top: 5%;
+  inset-inline-end: 12%;
+  border: 1px solid color-mix(in srgb, var(--catalogue-accent) 65%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 16px #ffffff07,
+    0 0 0 40px #ffffff04;
+  transform: rotate(-22deg);
+}
+.catalogue-cover-emblem {
+  position: absolute;
+  top: 21%;
+  inset-inline-end: 21%;
+  width: 25%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--catalogue-accent);
+  filter: drop-shadow(0 6px 24px #0007);
+}
+.catalogue-cover-emblem svg {
+  width: 80%;
+  height: 80%;
+}
+.catalogue-cover .cover-title {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 24px;
+  /* Reserve a separate row for the localized preview action below the title. */
+  bottom: 64px;
+  max-width: 85%;
+  color: #fff8ed;
+  font-size: clamp(25px, 2.5vw, 34px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  text-wrap: balance;
+  text-shadow:
+    0 2px 4px #000c,
+    0 4px 20px #000b;
+}
+.catalogue-cover .cover-kicker {
+  position: absolute;
+  z-index: 2;
+  inset-inline-start: 20px;
+  top: 18px;
+  padding: 5px 9px;
+  background: #0a0b1699;
+  border: 1px solid #ffffff45;
+  border-radius: 99px;
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  max-width: 65%;
+}
+.catalogue-cover-brand {
+  position: absolute;
+  top: 22px;
+  inset-inline-end: 20px;
+  color: #fff9;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+[data-catalogue-cover="quiz"] .catalogue-cover-orbit {
+  border-radius: 8px;
+  transform: rotate(45deg);
+}
+[data-catalogue-cover="story"] .catalogue-cover-orbit {
+  border-radius: 50% 50% 12px 12px;
+}
+[data-catalogue-cover="picture"] .catalogue-cover-orbit {
+  border-radius: 22px;
+  transform: rotate(15deg);
+}
+[data-catalogue-cover="truth"] .catalogue-cover-orbit {
+  border-style: dashed;
+}
+[data-catalogue-cover="family"] .catalogue-cover-emblem {
+  transform: rotate(-12deg);
+}
+[data-catalogue-cover="classroom"] .catalogue-cover-orbit {
+  border-radius: 14px;
+  transform: rotate(-12deg);
+}
+[data-catalogue-cover="team"] .catalogue-cover-orbit {
+  border-radius: 30% 12%;
+}
+[data-catalogue-card]:hover .catalogue-cover-art {
+  transform: scale(1.025);
+}
+.catalogue-title-link {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.catalogue-title-link:hover {
+  color: #e9fa84;
+}
+.catalogue-audiences,
+.catalogue-product-audience {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -3px 0 17px;
+}
+.catalogue-audiences span,
+.catalogue-product-audience span {
+  color: #d4c7e6;
+  background: #ffffff08;
+  border-radius: 6px;
+  padding: 4px 7px;
+  font-size: 10px;
+  line-height: 1.25;
+}
+.catalogue-audience-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 0 24px;
+}
+.catalogue-audience-filter .filter-btn {
+  padding: 7px 11px;
+  font-size: 11px;
+}
+.catalogue-count {
+  margin-inline-start: auto;
+  color: #bbaad0;
+  font-size: 12px;
+}
+.catalogue-full-preview {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+.catalogue-full-preview > .game-preview-surface,
+.catalogue-full-preview .game-preview-poster,
+.catalogue-full-preview .game-cover {
+  width: 100%;
+  height: 100%;
+}
+.catalogue-demo-shell {
+  width: 100%;
+}
+.product-preview .game-preview-poster {
+  aspect-ratio: 16 / 9;
+}
+.product-preview .game-preview-poster,
+.product-preview .game-cover {
+  width: 100%;
+  height: 100%;
+}
+.product-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 23px;
+}
+.product-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+.product-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 18px;
+  color: #cfc1e1;
+}
+.product-facts span {
+  padding: 5px 9px;
+  border: 1px solid #765c9266;
+  border-radius: 7px;
+  font-size: 12px;
+}
+.product-fineprint {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #bbaacb;
+}
+.catalogue-product-audience {
+  margin: 12px 0;
+}
+.catalogue-product-audience span {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+.catalogue-player {
+  width: 100%;
+  min-width: 0;
+  color: #fff6ea;
+}
+.catalogue-player-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.catalogue-player-frame .tz-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.catalogue-player-note {
+  text-align: center;
+  color: #bdaed1;
+  font-size: 12px;
+  line-height: 1.55;
+  margin: 17px 0 0;
+}
+.catalogue-player-error {
+  color: #ffcec7;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 14px 0;
+}
+.catalogue-answer-note {
+  margin: 0 0 17px;
+  padding: 12px 16px;
+  color: #eee7f7;
+  font-size: 14px;
+  line-height: 1.6;
+  border-inline-start: 3px solid var(--show-theme-accent);
+  background: #ffffff06;
+}
+.catalogue-player .tzv4-stage .stage-teaser {
+  display: none;
+}
+/* Classic catalogue geometry must not reposition an authored original world.
+   :where preserves the existing specificity for every legacy demo. */
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answers {
+  top: 355px;
+  left: 225px !important;
+  right: 225px !important;
+  width: auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: 220px;
+  gap: 26px 28px;
+}
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .choice-slot,
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-card {
+  height: 220px;
+  min-height: 220px;
+}
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-card {
+  padding: 24px 30px;
+}
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .tz-photo-frame {
+  display: none;
+}
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-figure {
+  height: 100%;
+  justify-content: center;
+}
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-title {
+  height: 100%;
+  min-height: 0;
+  padding: 15px 72px 15px 10px;
+  font-size: 42px;
+  line-height: 1.2;
+  font-weight: 760;
+  white-space: normal;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .choice-slot
+  .answer-index {
+  position: absolute;
+  top: 17px;
+  right: 18px;
+  width: 65px;
+  height: 65px;
+  font-size: 35px;
+  margin: 0;
+}
+.catalogue-player[data-answer-count="2"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answers {
+  top: 450px;
+}
+.catalogue-player[data-game-phase="results"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .winner-tag {
+  display: none;
+}
+.catalogue-player[data-game-phase="transition"] .tzv4-stage .tzv4-scene-root {
+  visibility: hidden;
+  pointer-events: none;
+}
+.site-header:has(~ main .catalogue-player) {
+  position: relative;
+  top: auto;
+}
+.studio-public-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+.studio-public-gallery article {
+  overflow: hidden;
+  border: 1px solid #a78bca40;
+  border-radius: 16px;
+  background: #201332;
+}
+.studio-public-gallery .site-game-body {
+  padding: 18px;
+}
+.studio-public-gallery .site-game-body p {
+  min-height: 4.5em;
+  color: #bbadcd;
+  font-size: 13px;
+}
+.studio-public-gallery .catalogue-studio-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.studio-public-gallery h3 {
+  margin: 0 0 10px;
+}
+@media (max-width: 1000px) {
+  .studio-public-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .catalogue-player {
+    border-radius: 10px;
+  }
+
+  .catalogue-player-note {
+    font-size: 11px;
+  }
+  .catalogue-count {
+    width: 100%;
+    margin: 7px 0 0;
+  }
+  .catalogue-audience-filter {
+    gap: 6px;
+  }
+}
+@media (max-width: 540px) {
+  .studio-public-gallery {
+    grid-template-columns: 1fr;
+  }
+  .catalogue-cover .cover-title {
+    font-size: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catalogue-cover-art {
+    transition: none;
+  }
+}
+
+/* Viewer pages give the game the available width; details follow the stage. */
+.catalogue-viewer-page,
+.catalogue-product-page.wrap {
+  width: calc(100% - 24px);
+  max-width: none;
+  min-width: 0;
+  margin-inline: auto;
+}
+.catalogue-viewer-page {
+  padding-block: 12px 24px;
+}
+.catalogue-viewer-page > :is(.eyebrow, .h1, .prose) {
+  margin-block: 0 8px;
+}
+.catalogue-viewer-page > .h1 {
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+}
+.catalogue-product-page .breadcrumb {
+  margin-block: 12px;
+}
+.catalogue-product-page .product-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  padding-block-end: 16px;
+}
+.catalogue-product-page .product-preview {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: auto;
+}
+.catalogue-product-page .product-side > h1 {
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.2;
+  margin-block: 0 12px;
+}
+.catalogue-product-page .product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 12px;
+}
+.catalogue-product-page .product-actions .btn {
+  width: auto;
+  min-height: 44px;
+}
+.site-header:has(~ main .catalogue-viewer-page) .header-inner {
+  height: 56px;
+}
+.site-header:has(~ main .catalogue-viewer-page) {
+  position: relative;
+  top: auto;
+}
+.studio-public-gallery .site-game-body {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.studio-public-gallery .site-game-body h3 {
+  margin: 0;
+}
+.studio-public-gallery .site-game-body p {
+  min-height: 0;
+  margin: 0;
+  line-height: 1.5;
+}
+.studio-public-gallery .catalogue-audiences {
+  margin: 0;
+}
+.studio-public-gallery .catalogue-studio-actions {
+  gap: 8px;
+}
+.catalogue-studio-details {
+  min-width: 0;
+  font-size: 13px;
+  color: var(--tds-muted-text, #c6b7d8);
+}
+.catalogue-studio-details > summary {
+  min-height: 44px;
+  padding-block: 11px;
+  cursor: pointer;
+  color: var(--tds-text, #fff);
+}
+.catalogue-studio-details[open] > summary {
+  margin-bottom: 8px;
+}
+.catalogue-studio-details > summary:focus-visible {
+  outline: 2px solid var(--tds-focus, #e7ff37);
+  outline-offset: 2px;
+}
+@media (max-width: 700px) {
+  .catalogue-viewer-page,
+  .catalogue-product-page.wrap {
+    width: calc(100% - 12px);
+  }
+  .catalogue-viewer-page {
+    padding-block: 6px 16px;
+  }
+  .catalogue-product-page .product-actions .btn {
+    flex: 1 1 10rem;
+  }
+}
+
+/* Secondary route actions stay available without competing with the viewer. */
+.catalogue-viewer-details {
+  margin-block: 8px 0;
+  padding-inline: 12px;
+  border: 1px solid var(--tds-border, #654579);
+  border-radius: 12px;
+  color: var(--tds-muted-text, #c6b7d8);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.catalogue-viewer-details > summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding-block: 11px;
+  color: var(--tds-text, #fff);
+  cursor: pointer;
+}
+.catalogue-viewer-details > summary:focus-visible {
+  outline: 2px solid var(--tds-focus, #e7ff37);
+  outline-offset: -2px;
+}
+.catalogue-viewer-details[open] {
+  padding-bottom: 12px;
+}
+.catalogue-viewer-details > .prose {
+  margin-block: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.catalogue-viewer-details .button-row {
+  gap: 8px;
+}
+.catalogue-studio-details[open] > :not(summary) {
+  margin-block: 8px;
+}

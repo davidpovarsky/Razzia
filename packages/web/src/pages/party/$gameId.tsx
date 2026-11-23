@@ -1,6 +1,6 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
-import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
+import PlayerGameView from "@razzia/web/features/game/components/PlayerGameView"
 import {
   socketClient,
   useEvent,
@@ -9,10 +9,7 @@ import {
 import { useSocketConnection } from "@razzia/web/features/game/hooks/useSocketConnection"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
-import {
-  GAME_STATE_COMPONENTS,
-  isKeyOf,
-} from "@razzia/web/features/game/utils/constants"
+import { GAME_STATE_COMPONENTS } from "@razzia/web/features/game/utils/constants"
 import { createStatus } from "@razzia/web/features/game/utils/createStatus"
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
@@ -95,7 +92,7 @@ const PlayerGamePage = () => {
   useEvent(EVENTS.GAME.RESET, (message) => {
     localStorage.removeItem("game_pin")
     localStorage.removeItem("game_id")
-    navigate({ to: "/" })
+    navigate({ to: "/game" })
     resetPlayer()
     setQuestionStates(null)
     toast.error(t(message))
@@ -105,19 +102,8 @@ const PlayerGamePage = () => {
     return null
   }
 
-  const CurrentComponent =
-    status && isKeyOf(GAME_STATE_COMPONENTS, status.name)
-      ? GAME_STATE_COMPONENTS[status.name]
-      : null
-
-  if (!status) {
-    return null
-  }
-
   return (
-    <GameWrapper statusName={status.name}>
-      {CurrentComponent && <CurrentComponent data={status.data as never} />}
-    </GameWrapper>
+    <PlayerGameView status={status} viewRole="player" roomId={gameIdParam} />
   )
 }
 

@@ -1,0 +1,56 @@
+{
+  "kind": "contact-final-focused-verification",
+  "recordedAt": "2026-11-19T14:21:46.512Z",
+  "provenance": {
+    "tool": "SentinelX notifications_get",
+    "jobId": "job_a1d7bc84bc6f",
+    "startedAt": "2026-11-19T14:04:34.608465+00:00",
+    "finishedAt": "2026-11-19T14:04:38.523359+00:00",
+    "status": "succeeded",
+    "exitCode": 0,
+    "outputTruncated": false
+  },
+  "scope": "Sanitized summary of the already completed final contact test and scoped lint execution. No additional tests were run to produce this receipt.",
+  "results": [
+    {
+      "name": "root-format",
+      "exitCode": 0,
+      "stderrEmpty": true,
+      "file": "packages/socket/src/api/contact.test.ts"
+    },
+    {
+      "name": "root-scoped-lint",
+      "exitCode": 0,
+      "stderrEmpty": true,
+      "files": 9,
+      "warnings": 0,
+      "errors": 0,
+      "typedLint": true
+    },
+    {
+      "name": "contact-tests-final",
+      "exitCode": 0,
+      "stderrEmpty": true,
+      "testPath": "packages/socket/src/api/contact.test.ts",
+      "testFiles": 1,
+      "passed": 9,
+      "failed": 0
+    }
+  ],
+  "sourceBinding": {
+    "workingTreeAtExecution": true,
+    "canonicalCommit": null,
+    "exactReleaseQualification": "pending",
+    "note": "This job output did not itself record an immutable source commit or file digests. Historical source receipts are preserved separately and are not rewritten to imply this run attests later changes."
+  },
+  "privacy": {
+    "syntheticTests": true,
+    "realProviderEmailSent": false,
+    "secretValuesIncluded": false,
+    "customerDataIncluded": false
+  },
+  "limitations": [
+    "No production inbox delivery or real mail-provider send is proved by these fixture tests.",
+    "Final exact-source Linux qualification and production deployment/observation remain separate gates."
+  ]
+}

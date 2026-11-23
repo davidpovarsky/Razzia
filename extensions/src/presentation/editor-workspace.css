@@ -1,0 +1,269 @@
+.editor-workspace {
+  --workspace-surface: var(--color-background, #fff);
+  --workspace-ink: var(--color-foreground, #374151);
+  --workspace-muted: var(--color-accent, #e5e7eb);
+  --workspace-action: var(--color-primary, #ff9900);
+  --workspace-rail: 48px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: var(--workspace-rail) minmax(0, 1fr) var(
+      --workspace-rail
+    );
+  grid-template-rows: minmax(0, 1fr);
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  color: var(--workspace-ink);
+  font-family: var(--font-display, Rubik, sans-serif);
+}
+.editor-workspace *,
+.editor-workspace *::before,
+.editor-workspace *::after {
+  box-sizing: border-box;
+}
+.editor-workspace-rail {
+  z-index: 3;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 2px;
+  overflow: hidden auto;
+  scrollbar-width: thin;
+  background: color-mix(in srgb, var(--workspace-surface) 94%, transparent);
+  border-inline: 1px solid
+    color-mix(in srgb, var(--workspace-ink) 12%, transparent);
+}
+.editor-workspace-rail-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+.editor-workspace-rail-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+.editor-workspace-toggle {
+  flex: 0 0 auto;
+  min-width: 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 7px 3px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: var(--workspace-muted);
+  color: var(--workspace-ink);
+  font-size: 10px;
+  line-height: 1.2;
+}
+.editor-workspace-toggle-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.editor-workspace-toggle span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.editor-workspace-toggle[aria-expanded="true"] {
+  border-color: var(--workspace-action);
+  background: color-mix(
+    in srgb,
+    var(--workspace-action) 16%,
+    var(--workspace-surface)
+  );
+}
+.editor-workspace button:focus-visible {
+  outline: 2px solid var(--workspace-action);
+  outline-offset: 2px;
+}
+.editor-workspace-center {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+.editor-workspace-toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-height: 88px;
+  overflow: auto;
+  padding: 7px 8px;
+  background: color-mix(in srgb, var(--workspace-surface) 94%, transparent);
+}
+.editor-workspace-canvas {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(6px, 1.2vw, 16px);
+}
+.editor-workspace-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  border: 0;
+  background: rgb(0 0 0 / 32%);
+}
+.editor-workspace-panel {
+  position: absolute;
+  z-index: 10;
+  inset-block: 8px;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, calc(100% - 32px));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--workspace-muted);
+  border-radius: 12px;
+  background: var(--workspace-surface);
+  color: var(--workspace-ink);
+  box-shadow: 0 14px 44px rgb(0 0 0 / 20%);
+}
+.editor-workspace-panel[hidden] {
+  display: none;
+}
+.editor-workspace-panel-left {
+  inset-inline-start: 8px;
+}
+.editor-workspace-panel-right {
+  inset-inline-end: 8px;
+}
+.editor-workspace-panel-heading {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 48px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--workspace-muted);
+  font-size: 14px;
+}
+.editor-workspace-close {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 6px;
+  background: var(--workspace-muted);
+  color: var(--workspace-ink);
+}
+.editor-workspace-panel-body {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 12px;
+}
+.editor-workspace-panel-body > [data-testid="editor-timeline"],
+.editor-workspace-panel-body > [data-testid="question-config"] {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-height: none;
+  overflow: visible;
+  box-shadow: none;
+}
+.editor-workspace-panel-body
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.editor-workspace-panel-body textarea,
+.editor-workspace-panel-body select {
+  max-width: 100%;
+}
+.editor-workspace[data-layout="wide"] {
+  --workspace-rail: 60px;
+  grid-template-columns:
+    var(--workspace-rail) minmax(180px, 220px) minmax(0, 1fr) minmax(
+      260px,
+      320px
+    )
+    var(--workspace-rail);
+}
+.editor-workspace[data-layout="wide"] .editor-workspace-center {
+  grid-column: 3;
+}
+.editor-workspace[data-layout="wide"] .editor-workspace-rail-right {
+  grid-column: 5;
+}
+.editor-workspace[data-layout="wide"]:not(
+    :has(.editor-workspace-panel-left[data-docked="true"])
+  ) {
+  grid-template-columns:
+    var(--workspace-rail) 0 minmax(0, 1fr) minmax(260px, 320px)
+    var(--workspace-rail);
+}
+.editor-workspace[data-layout="wide"]:not(
+    :has(.editor-workspace-panel-right[data-docked="true"])
+  ) {
+  grid-template-columns:
+    var(--workspace-rail) minmax(180px, 220px) minmax(0, 1fr)
+    0 var(--workspace-rail);
+}
+.editor-workspace[data-layout="wide"]:not(
+    :has(.editor-workspace-panel[data-docked="true"])
+  ) {
+  grid-template-columns: var(--workspace-rail) 0 minmax(0, 1fr) 0 var(
+      --workspace-rail
+    );
+}
+.editor-workspace-panel[data-docked="true"] {
+  position: relative;
+  inset: auto;
+  grid-row: 1;
+  width: auto;
+  margin-block: 8px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+  z-index: 2;
+}
+.editor-workspace-panel-left[data-docked="true"] {
+  grid-column: 2;
+}
+.editor-workspace-panel-right[data-docked="true"] {
+  grid-column: 4;
+}
+/* Keep narrow rails compact without splitting translated control labels. */
+.editor-workspace[data-layout="compact"]
+  .editor-workspace-toggle-content
+  > span {
+  display: none;
+}
+.editor-workspace[data-layout="wide"] .editor-workspace-toggle {
+  width: 54px;
+}
+.editor-workspace[data-layout="wide"] .editor-workspace-toggle-content > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .editor-workspace-panel:not([data-docked="true"]):not([hidden]) {
+    animation: editor-drawer-in 140ms ease-out;
+  }
+  @keyframes editor-drawer-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

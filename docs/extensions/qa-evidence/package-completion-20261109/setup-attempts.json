@@ -1,0 +1,106 @@
+[
+  {
+    "attempt": 1,
+    "stats": {
+      "startTime": "2026-11-09T13:18:30.978Z",
+      "duration": 152137.86299999998,
+      "expected": 1,
+      "skipped": 7,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "reason": "512 PID cap reached; first new fixture also needed an actual joined participant; interrupted for harness fixes",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 2,
+    "stats": {
+      "startTime": "2026-11-09T13:21:34.860Z",
+      "duration": 108488.134,
+      "expected": 2,
+      "skipped": 7,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "reason": "4 GiB memory cap reached (OOM); interrupted for QA resource adjustment",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 3,
+    "stats": {
+      "startTime": "2026-11-09T13:23:52.796Z",
+      "duration": 184083.794,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 6,
+      "flaky": 0
+    },
+    "reason": "Chromium load/heavy passed; repeated fixture login hit existing 12-per-15-minute account protection",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 4,
+    "stats": {
+      "startTime": "2026-11-09T13:27:57.696Z",
+      "duration": 404458.88499999995,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "reason": "Nine cases passed; WebKit forty-tab process hit the 7 GiB cap",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 5,
+    "stats": {
+      "startTime": "2026-11-09T13:35:00.732Z",
+      "duration": 98080.06999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "reason": "Focused WebKit forty-tab 800x600 profile also hit 8 GiB",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 6,
+    "stats": {
+      "startTime": "2026-11-09T13:38:43.395Z",
+      "duration": 84878.63799999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "reason": "Focused WebKit forty-tab 400x300 profile also hit 8 GiB; retain as failed capacity probe, final qualification is 40 Chromium / 20 WebKit",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 7,
+    "stats": {
+      "startTime": "2026-11-09T13:42:05.602Z",
+      "duration": 101029.898,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "reason": "Twenty WebKit clients reached the opening/question transition, but exceeded the 40-second startup assertion",
+    "includedInFinalPassCounts": false
+  },
+  {
+    "attempt": 8,
+    "stats": {
+      "startTime": "2026-11-09T13:46:39.615Z",
+      "duration": 99051.765,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "reason": "Pre-start health diagnostic: all 21 surfaces visible with no renderer error; opening/question startup still exceeded assertion; steady-state fanout fixture separated from the independently covered opening choreography",
+    "includedInFinalPassCounts": false
+  }
+]

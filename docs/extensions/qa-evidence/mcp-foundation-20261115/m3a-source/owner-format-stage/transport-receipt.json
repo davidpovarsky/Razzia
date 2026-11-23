@@ -1,0 +1,27 @@
+{
+  "exit": 0,
+  "stdout": "{\"source\": \"/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-format-F-20261115-01a1dfaa\", \"files\": 5, \"freeBefore\": 2668625920}\n{\"launchExit\": 0, \"container\": \"tadazz-hq-mcp-format-F-20261115-01a1dfaa\", \"stdout\": \"bf5588720effa0994f608ec11da28416e3d6a5a5104af47c411eb2727b406992\\n\", \"stderr\": \"\", \"freshFreeBytes\": 2668576768, \"freshAvailableRamBytes\": 10696380416}\n\n\n",
+  "stderr": "",
+  "members": {
+    "consumer.py": {
+      "bytes": 15486,
+      "sha256": "11e584e88f35b6ab497318e590cdf133bed52f27dd5be54bce9d4c34348bef9e"
+    },
+    "format-and-compare.mjs": {
+      "bytes": 6173,
+      "sha256": "f5932899607153f7b6150afde0a92a7793a46a55f63bf5feba1a2b1acf710b8c"
+    },
+    "run-phase.py": {
+      "bytes": 2006,
+      "sha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    "launch.py": {
+      "bytes": 5231,
+      "sha256": "8d42b609421cbbb2971a7d668b3961e27d7987e908c1532e436fcf5869bb82fe"
+    },
+    "activation.json": {
+      "bytes": 573,
+      "sha256": "82d6f76d7eb35627cc8b577dc567f173f40214b8caf0759e4d208dcb3b5a0263"
+    }
+  }
+}

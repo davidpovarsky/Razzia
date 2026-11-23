@@ -1,0 +1,12 @@
+{
+  "version": 7,
+  "samples": 30,
+  "minFreeBytes": 2646425600,
+  "maxAccountedBytes": 17571840,
+  "maxPidsCurrent": 47,
+  "maxPidsPeak": 47,
+  "maxPidLimitEvents": 0,
+  "maxZombiesObserved": 0,
+  "allDrainSamplesClean": true,
+  "runnerStopped": true
+}

@@ -1,0 +1,15 @@
+{
+  "result": {
+    "numTotalTests": 11,
+    "numPassedTests": 1,
+    "numFailedTests": 0,
+    "numPendingTests": 10
+  },
+  "rawChildResults": 3,
+  "tenantWitnessPids": [
+    58,
+    71,
+    84
+  ],
+  "passed": true
+}

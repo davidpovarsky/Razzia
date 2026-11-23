@@ -1,0 +1,20 @@
+--- stage_current_candidate.py
++++ stage_current_candidate_with_lock.py
+@@ -38,8 +38,16 @@
+  "expectedConfigSha256":"6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+  "baseImage":"sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"}
+ payload=base64.b64encode(gzip.compress(json.dumps(cfg).encode(),mtime=0)).decode()
+-remote=r'''import base64,gzip,hashlib,json,os,pathlib,re,shutil,subprocess,time
++remote=r'''import base64,fcntl,gzip,hashlib,json,os,pathlib,re,shutil,stat,subprocess,time
+ os.umask(0o077)
++# Keep the established shared release lock throughout staging.
++lock_fd=os.open("/run/lock/tadazz-mcp-deploy.lock",os.O_CREAT|os.O_RDWR|getattr(os,"O_NOFOLLOW",0),0o600)
++lock_info=os.fstat(lock_fd)
++assert stat.S_ISREG(lock_info.st_mode) and lock_info.st_uid==0 and lock_info.st_nlink==1 and stat.S_IMODE(lock_info.st_mode)==0o600,"Unsafe shared release lock"
++fcntl.flock(lock_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
++active_names=subprocess.check_output(["docker","ps","--format","{{.Names}}"],text=True,timeout=20).splitlines()
++heavy=[name for name in active_names if name.startswith(("tadazz-codex-","tadazz-gallery-","tadazz-editor-pins-","tadazz-mcp-stage-","tadazz-mcp-restore-proof-"))]
++assert not heavy,("Other Tadazz QA is active",heavy)
+ c=json.loads(gzip.decompress(base64.b64decode(__PAYLOAD__)))
+ assert re.fullmatch(r"[0-9a-f]{40}",c["sha"])
+ assert re.fullmatch(r"tadazz-codex-"+c["sha"][:12]+r"-[0-9a-f]{8}",c["sourceRun"])

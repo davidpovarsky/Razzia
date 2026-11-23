@@ -1,0 +1,99 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 4 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✘  1 [chromium] › qa/tds-host.spec.ts:118:1 › display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus (34.0s)
+  ✘  2 [chromium] › qa/tds-host.spec.ts:248:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once (28.8s)
+[WebServer] 11:48:52 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:48:52 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓  3 [chromium] › qa/tds-host.spec.ts:328:1 › restart and skip keep original confirmations and one command per explicit confirmation (11.0s)
+  ✓  4 [chromium] › qa/tds-host.spec.ts:368:1 › touch host controls and compact landscape dialogs keep named reachable close actions (5.2s)
+
+
+  1) [chromium] › qa/tds-host.spec.ts:118:1 › display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByTestId('host-bottom-players-btn')
+    Expected: focused
+    Received: inactive
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toBeFocused" getByTestId('host-bottom-players-btn') with timeout 15000ms
+      - waiting for getByTestId('host-bottom-players-btn')
+        34 × locator resolved to <button type="button" data-state="closed" data-testid="host-bottom-players-btn" class="hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">…</button>
+           - unexpected value "inactive"
+
+
+      215 |     await page.keyboard.press("Escape")
+      216 |     await expect(dialog).toHaveCount(0)
+    > 217 |     await expect(trigger).toBeFocused()
+          |                           ^
+      218 |   }
+      219 |   await fullscreen(page)
+      220 |   const trigger = page.getByRole("button", {
+        at /cleanup/extensions/qa/tds-host.spec.ts:217:27
+
+    Error Context: ../../evidence/phase-08-host-traces/tds-host-display-modes-sta-6109f--and-fullscreen-modal-focus-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-08-host-traces/tds-host-display-modes-sta-6109f--and-fullscreen-modal-focus-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-08-host-traces/tds-host-display-modes-sta-6109f--and-fullscreen-modal-focus-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-host.spec.ts:248:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Confirm' })
+
+
+       at ../../packages/e2e/utils/player.ts:32
+
+      30 |
+      31 | export const confirm = async (page: Page) => {
+    > 32 |   await page.getByRole("button", { name: t("game:confirm") }).click()
+         |                                                               ^
+      33 | }
+      34 |
+      35 | export const expectPoints = async (page: Page, points: number) => {
+        at confirm (/cleanup/packages/e2e/utils/player.ts:32:63)
+        at /cleanup/extensions/qa/tds-host.spec.ts:289:9
+
+    Error Context: ../../evidence/phase-08-host-traces/tds-host-real-game-pause-a-a658c-istory-replay-confirms-once-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-08-host-traces/tds-host-real-game-pause-a-a658c-istory-replay-confirms-once-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-08-host-traces/tds-host-real-game-pause-a-a658c-istory-replay-confirms-once-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › qa/tds-host.spec.ts:118:1 › display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus
+    [chromium] › qa/tds-host.spec.ts:248:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once
+  2 passed (1.5m)

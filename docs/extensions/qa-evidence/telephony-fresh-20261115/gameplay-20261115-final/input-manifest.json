@@ -1,0 +1,312 @@
+{
+  "schema": 1,
+  "review_sha": "ccb0c5c2add55b7ba13bff2f56f04a4295dfc867",
+  "base_sha": "003cf88b6cba19989388dca20efcfaa01cc8f9ad",
+  "accepted_core": "0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",
+  "scope": "New actual fresh-composition gameplay and invitation acceptance; no old suites selected",
+  "files": [
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts",
+      "mode": "100644",
+      "bytes": 35037,
+      "sha256": "b962adeb91687673115a4c66f2d054929ee0f1c1feb60096ed3ff47bfdf97d84"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/package.json",
+      "mode": "100644",
+      "bytes": 33,
+      "sha256": "a90fc33418afa2b9cbf4768524b021135b965ecdf993457505bfae3ac44a8428"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/prepare-overlay.mjs",
+      "mode": "100644",
+      "bytes": 2836,
+      "sha256": "07a37b4d9a9ec757f0d2dc9a7db4fd52f7c72cb51a58dd6b0fdcd683898dc2b7"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/revoke-after-sql-wait.child.ts",
+      "mode": "100644",
+      "bytes": 918,
+      "sha256": "a6de2f2cd12e280942abb9a21c69ce8d06057ad6ccbe0c78f3d902789beddc83"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/run-first-batch.sh",
+      "mode": "100644",
+      "bytes": 2457,
+      "sha256": "8fbc3f02f5b42f6812610d1566e573e36956ad599510ea58f7ec2f3bdf745bfa"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/safe-extract.py",
+      "mode": "100644",
+      "bytes": 3162,
+      "sha256": "7d144aced19491e6ae914700acd961d4f288c8d1f225bb623b54c4b6d77766a6"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/tsconfig.json",
+      "mode": "100644",
+      "bytes": 420,
+      "sha256": "c1e3ea2e7425d694c706d134c48f6d7fb97d9fc8311f4ff3f9e553b79c9b218e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/typecheck.mjs",
+      "mode": "100644",
+      "bytes": 785,
+      "sha256": "ced2bd2914118bd620d3c838b1989bfb9baa7b16dbe0169c2d421894f45bb1fe"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-composed.mjs",
+      "mode": "100644",
+      "bytes": 2217,
+      "sha256": "389cc20ec31a44074dc0ca60adf671bf28b5bd393da0fe9ef225649b7b7b9379"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-overlay.mjs",
+      "mode": "100644",
+      "bytes": 1130,
+      "sha256": "9634ba939777b31f0d2ae875cac8e69213ae52c0f5e89004664bc2a4db12b876"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/actual-gameplay-backend.ts",
+      "mode": "100644",
+      "bytes": 10661,
+      "sha256": "01363f7cf374efc651d096984ef1c34160ca3a8430b67816acdbca197a00264f"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/check-local.ps1",
+      "mode": "100644",
+      "bytes": 3993,
+      "sha256": "03d460df2a3a453c5b732a9c659a85f603026fe57825f077d41cc4b1a67f4609"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/gameplay.node.ts",
+      "mode": "100644",
+      "bytes": 14692,
+      "sha256": "5a2debb8e22f8268ca4c8d57953e219df8987815df8b9e367a6c7c57af539a2c"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/prepare-overlay.mjs",
+      "mode": "100644",
+      "bytes": 4755,
+      "sha256": "e8dd97d3dc9d057426484755dfd8ce8187c985a2b17626804ddd8f51513c9ec5"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/run.sh",
+      "mode": "100644",
+      "bytes": 2453,
+      "sha256": "23baac51662b24e34220eb8a979bba36fe9a99b07704e07fc6d25e40c0aa634a"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/HOST_COMPOSITION.md",
+      "mode": "100644",
+      "bytes": 5358,
+      "sha256": "631d05ef3e54eb73732793bf10b3d4c12a6412c364e6a444c4c9557a0b1f4788"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/check-local.ps1",
+      "mode": "100644",
+      "bytes": 4218,
+      "sha256": "a33ff9f6b4a5917bc5c2497443a15b6296a491eba077f52dd21dcb2147f7ed21"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/gateway.node.ts",
+      "mode": "100644",
+      "bytes": 14564,
+      "sha256": "c7ab75ce4e9c24b28004d2681c0e29ed83625a0c40c1084707ba2ae9be90fff3"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/prepare-overlay.mjs",
+      "mode": "100644",
+      "bytes": 3408,
+      "sha256": "7bd1c2e79558d1a7730a18073208cfddc0f179c20ccc75e1d1c9f6de28a77db7"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/run.sh",
+      "mode": "100644",
+      "bytes": 2367,
+      "sha256": "36aa43e0098264cb84db1367d290fb1851bae651787bd49073d4f937fa53f064"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/actual-auth-backend.ts",
+      "mode": "100644",
+      "bytes": 10355,
+      "sha256": "7b1d5122253186d3ea821c3583ed072d2f8925db752b14cda35c926e404be7b4"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/authority-crash.child.ts",
+      "mode": "100644",
+      "bytes": 2967,
+      "sha256": "5eba8eb4378a901d11e18cbec7b0fcfda1c20afd35788ab4b91d5fe43b8c6dff"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/authority-crash.node.ts",
+      "mode": "100644",
+      "bytes": 8379,
+      "sha256": "b57c2dff455b58e22b6f1f5387c16f0ba5ce65ab8abe67790def0d1dc296d2d2"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/authority-negative.node.ts",
+      "mode": "100644",
+      "bytes": 11718,
+      "sha256": "c4b266e42b0ca8ede455bcdf3f342adb740526f6450969edfa332633c669001d"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/check-local.ps1",
+      "mode": "100644",
+      "bytes": 4036,
+      "sha256": "0f4c10ffbb6e5ecb81c671d5e69d1de22e74c64d87dafcd37f7d2c3235fab024"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/package.json",
+      "mode": "100644",
+      "bytes": 42,
+      "sha256": "609158e6c5fbc237939fa3ddf7faab80ab690bdc0c8d584414a885130103c4e8"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/prepare-overlay.mjs",
+      "mode": "100644",
+      "bytes": 3272,
+      "sha256": "064efc8b1e9a5e16589866f110f8ef75bcc5799d196e8a6947dfa7c75dcc78f1"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/run-crash.sh",
+      "mode": "100644",
+      "bytes": 2538,
+      "sha256": "181c29568e4ccbe6dce1c3c3006d631a5f6eee31921de012e07d4a192fc861ef"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/run.sh",
+      "mode": "100644",
+      "bytes": 2376,
+      "sha256": "4759648d9f0de53a8ad690b54af3a720ba005a88b195eb09777a50f6fc8d8c2e"
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "mode": "100644",
+      "bytes": 1369,
+      "sha256": "294158b67785d1d75de54becd14be47842ab3b51c65e041bae49ba27dde2a4fb"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "mode": "100644",
+      "bytes": 13132,
+      "sha256": "22186133c2af777367c37288d33f09acd53531bf54661bfa67d9cfd153cbd5b2"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
+      "mode": "100644",
+      "bytes": 1408,
+      "sha256": "2d57f8ca1d51c125818b9940e1a78d4028dfb0c79410f4be89c54303fbd422ff"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "mode": "100644",
+      "bytes": 2612,
+      "sha256": "1705535650977ba5985e975810aff7f4ca82edf45e381b8f70fe4ba22cd24c5d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "mode": "100644",
+      "bytes": 9082,
+      "sha256": "58e36ff0d02673fb77456291a813cddfe77db4df1f1fbd8ca02d4d311ec5cc39"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "mode": "100644",
+      "bytes": 24428,
+      "sha256": "acddb9d1ba9f1612b294e855bfb7e803647d66b673ff782fde81d571157a4e45"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "mode": "100644",
+      "bytes": 3221,
+      "sha256": "d7ce6a8f26559598c4625d6a6d192cf2d85abd3c00f75526d89044e124b1b6b0"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "mode": "100644",
+      "bytes": 4450,
+      "sha256": "b4c1fdd6843d122044ef46a1e192c42bdae79d742b6cbafe342e180537afa088"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/native-adoption.ts",
+      "mode": "100644",
+      "bytes": 2444,
+      "sha256": "ec98f77fd59bf99be1ec04d602d6e81e71eb0f5e0cd50066aae040b1a68ffbf3"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "mode": "100644",
+      "bytes": 4892,
+      "sha256": "5430ca64e15c4e01be961a338f75d290fe68cb7a5834048b96abab79045434ec"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "mode": "100644",
+      "bytes": 18476,
+      "sha256": "bc365f05e6a3e0135322fc357a3c6c338e088c94f3ef9f48a736b1e4aa80239f"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/adapter.ts",
+      "mode": "100644",
+      "bytes": 4381,
+      "sha256": "5b49def323fad681987e658c2a20ba1bb6344fe13a3a5c664b04a8ccea676d65"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/codec.ts",
+      "mode": "100644",
+      "bytes": 5125,
+      "sha256": "6c0fb25dca55f8c125c7ab0f6ec3c1fb9e8ac7c9841935f8e9785da6369fbbb5"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/contracts.ts",
+      "mode": "100644",
+      "bytes": 2718,
+      "sha256": "64aa3f37a86ba11193c030c4ea31d7cbcfc387e934371dc22e8b8895c57e17c3"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/private-custody.ts",
+      "mode": "100644",
+      "bytes": 13775,
+      "sha256": "79e7699e3ded4e73ca04b9ca4f6810d09c5fb748d1d4bc5132ae5bab5f13458c"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "mode": "100644",
+      "bytes": 4124,
+      "sha256": "acb3c038caa5b1899020a00fca4f44d1f88344d3f390f330ef4d6ba9aaebaae0"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "mode": "100644",
+      "bytes": 7136,
+      "sha256": "7a67361869eb67d4d48438bc441f6af3d2b5418c2e74b728a9ae0434f1d6dc01"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "mode": "100644",
+      "bytes": 14649,
+      "sha256": "7ea07761f84468820e0eb1679ab0d36601e4fe5671f528ae4190c0c2f14caf1a"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "mode": "100644",
+      "bytes": 4932,
+      "sha256": "eac9cb37379a15c562d89aca4813350f3139aef90dcc6902eb124f06759ef411"
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "mode": "100644",
+      "bytes": 33509,
+      "sha256": "ef9f3b5e3c9dd810ea878b25f6eea089d11f8c2b3d0e28a897f82a101164ff07"
+    }
+  ],
+  "reusedLive": {
+    "source": "c1ed0216d64a2d9ebc713c8e7912e418b7b9d331",
+    "case": "LIVE-COMPOSED-01",
+    "actual_pass": true,
+    "test_and_shared_helper_prefix_sha256": "6369c3bf9ec3d09f9f6272b65ac89dfa3852ab37ededfcb08672f15fda55fe2d",
+    "actual_backend_sha256": "01363f7cf374efc651d096984ef1c34160ca3a8430b67816acdbca197a00264f",
+    "production_unchanged": true,
+    "final_run_selects_invitation_only": true
+  }
+}

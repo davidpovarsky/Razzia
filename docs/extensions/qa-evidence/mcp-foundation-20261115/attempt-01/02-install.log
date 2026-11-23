@@ -1,0 +1,7 @@
+v24.22.2
+12.18.0
+Error: ERR_PNPM_CLI_PREFIX_IO_ERROR
+
+  × failed to access /work/extensions/src/mcp-app/node_modules: Permission
+  │ denied (os error 13)
+

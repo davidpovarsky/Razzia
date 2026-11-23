@@ -1,0 +1,47 @@
+{
+  "createdAt": "2026-11-08T20:25:48.880Z",
+  "samples": [
+    {
+      "quizId": "23elnCx2N4YJPxJpwFjZY",
+      "themeId": "tadazz-classic",
+      "name": "Classic — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "1yCA0XK30DG30nqgwpY4k",
+      "themeId": "tadazz-classic",
+      "name": "Classic — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    },
+    {
+      "quizId": "odElJ5ENVgPfNsfFqZUWS",
+      "themeId": "tadazz-demo-cosmic",
+      "name": "Cosmic Night — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "MbihkygAQfIiFcZbA3haC",
+      "themeId": "tadazz-demo-cosmic",
+      "name": "Cosmic Night — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    },
+    {
+      "quizId": "r2NJES6CtegrJnzpbP3ml",
+      "themeId": "tadazz-demo-jade",
+      "name": "Jade Studio — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "Bq7tLZRXOMy_wVNqJkKPo",
+      "themeId": "tadazz-demo-jade",
+      "name": "Jade Studio — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    }
+  ]
+}

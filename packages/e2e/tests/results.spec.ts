@@ -90,8 +90,8 @@ test("shows the stats, answers and points of each question", async ({
   await expect(previous).toBeDisabled()
   await expect(manager.getByText("50%")).toBeVisible()
   await expect(manager.getByText("2/2")).toBeVisible()
-  await expectRow(manager, `Alice A Paris ${CORRECT} 1000`)
-  await expectRow(manager, `Bob B Lyon ${INCORRECT} 0`)
+  await expectRow(manager, `Alice 1 Paris ${CORRECT} 1000`)
+  await expectRow(manager, `Bob 2 Lyon ${INCORRECT} 0`)
 
   await nextQuestion.click()
   await expect(
@@ -103,8 +103,8 @@ test("shows the stats, answers and points of each question", async ({
     }),
   ).toBeVisible()
   await expect(manager.getByText("50%")).toBeVisible()
-  await expectRow(manager, `Alice A Red ${INCORRECT} -100`)
-  await expectRow(manager, `Bob A Red B Blue ${CORRECT} 1000`)
+  await expectRow(manager, `Alice 1 Red ${INCORRECT} -100`)
+  await expectRow(manager, `Bob 1 Red 2 Blue ${CORRECT} 1000`)
 
   await nextQuestion.click()
   await expect(
@@ -149,7 +149,7 @@ test("falls back to computed values for older results", async ({
 
   await openResult(manager, subject)
 
-  await expectRow(manager, `Alice A Yes ${CORRECT} 1500`)
+  await expectRow(manager, `Alice 1 Yes ${CORRECT} 1500`)
 })
 
 test("hides correctness in the result of a survey", async ({
@@ -183,5 +183,5 @@ test("hides correctness in the result of a survey", async ({
       name: t("manager:result.table.correctIncorrect"),
     }),
   ).toBeHidden()
-  await expectRow(manager, "Alice A Yes 0")
+  await expectRow(manager, "Alice 1 Yes 0")
 })

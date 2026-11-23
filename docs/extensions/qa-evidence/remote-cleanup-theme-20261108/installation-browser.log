@@ -1,0 +1,17 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › tests/theme-installation-preview.spec.ts:23:1 › reviews all fifteen native slots, sixteen explicit audio events and eight locale maps (31.0s)
+  ✓  2 [webkit-ipad] › tests/theme-installation-preview.spec.ts:23:1 › reviews all fifteen native slots, sixteen explicit audio events and eight locale maps (1.6m)
+
+  2 passed (2.2m)
+  ✓  1 [chromium] › tests/theme-installation-flow.spec.ts:31:1 › package to private review, approved publication, Studio persistence and all real game roles (2.9m)
+  ✓  2 [webkit-ipad] › tests/theme-installation-flow.spec.ts:31:1 › package to private review, approved publication, Studio persistence and all real game roles (1.8m)
+
+  2 passed (4.8m)

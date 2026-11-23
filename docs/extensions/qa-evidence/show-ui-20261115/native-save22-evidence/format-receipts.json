@@ -1,0 +1,62 @@
+[
+  {
+    "path": "extensions/src/components/native-save-consent/client.test.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/components/native-save-consent/client.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/components/native-save-consent/csp-admission.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/native-save-consent/NativeSaveConsentPage.tsx",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/components/native-save-consent/strings.ts",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save-build-receipt.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save-fixture.tsx",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save-playwright.config.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save-server.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save-server.vite.config.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save-ui.vite.config.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-save.spec.ts",
+    "sameAst": true,
+    "changed": true
+  }
+]

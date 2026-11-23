@@ -1,0 +1,8 @@
+{
+  "baselineCommit": "3823be999a8cb9931f78143d1673ecff8b926ca9",
+  "baselineDiagnostics": 8125,
+  "currentDiagnostics": 7944,
+  "addedGroups": [],
+  "focusedDiagnostics": "",
+  "method": "Counts by repository-relative file/rule, including warnings, ignoring line shifts and expanded inferred types. Full lint is still failing."
+}

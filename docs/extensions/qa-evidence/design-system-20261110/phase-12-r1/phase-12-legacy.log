@@ -1,0 +1,122 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 18 tests using 1 worker
+
+  ✘   1 [chromium] › ../packages/e2e/tests/game.spec.ts:7:1 › plays a full quiz from the lobby to the podium (2.5m)
+  ✘   2 [chromium] › ../packages/e2e/tests/game.spec.ts:53:1 › refuses players once the room is locked (2.5m)
+  ✘   3 [chromium] › ../packages/e2e/tests/game.spec.ts:68:1 › submits the PIN with the Enter key (36.4s)
+
+
+  1) [chromium] › ../packages/e2e/tests/game.spec.ts:7:1 › plays a full quiz from the lobby to the podium
+
+    Test timeout of 150000ms exceeded.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('textbox', { name: 'PIN digit 1' })
+
+
+       at ../utils/player.ts:8
+
+       6 |   await page
+       7 |     .getByRole("textbox", { name: t("game:pinDigit", { position: 1 }) })
+    >  8 |     .click()
+         |      ^
+       9 |   await page.keyboard.type(pin)
+      10 | }
+      11 |
+        at typePin (/cleanup/packages/e2e/utils/player.ts:8:6)
+        at enterPin (/cleanup/packages/e2e/utils/player.ts:13:3)
+        at /cleanup/packages/e2e/tests/game.spec.ts:15:3
+
+    Error Context: ../../evidence/phase-12-legacy-traces/game-plays-a-full-quiz-from-the-lobby-to-the-podium-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-legacy-traces/game-plays-a-full-quiz-from-the-lobby-to-the-podium-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-legacy-traces/game-plays-a-full-quiz-from-the-lobby-to-the-podium-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › ../packages/e2e/tests/game.spec.ts:53:1 › refuses players once the room is locked
+
+    Test timeout of 150000ms exceeded.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('textbox', { name: 'PIN digit 1' })
+
+
+       at ../utils/player.ts:8
+
+       6 |   await page
+       7 |     .getByRole("textbox", { name: t("game:pinDigit", { position: 1 }) })
+    >  8 |     .click()
+         |      ^
+       9 |   await page.keyboard.type(pin)
+      10 | }
+      11 |
+        at typePin (/cleanup/packages/e2e/utils/player.ts:8:6)
+        at enterPin (/cleanup/packages/e2e/utils/player.ts:13:3)
+        at /cleanup/packages/e2e/tests/game.spec.ts:63:3
+
+    Error Context: ../../evidence/phase-12-legacy-traces/game-refuses-players-once-the-room-is-locked-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-legacy-traces/game-refuses-players-once-the-room-is-locked-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-legacy-traces/game-refuses-players-once-the-room-is-locked-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › ../packages/e2e/tests/game.spec.ts:68:1 › submits the PIN with the Enter key ─────
+
+    Test was interrupted.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('textbox', { name: 'PIN digit 1' })
+
+
+       at ../utils/player.ts:8
+
+       6 |   await page
+       7 |     .getByRole("textbox", { name: t("game:pinDigit", { position: 1 }) })
+    >  8 |     .click()
+         |      ^
+       9 |   await page.keyboard.type(pin)
+      10 | }
+      11 |
+        at typePin (/cleanup/packages/e2e/utils/player.ts:8:6)
+        at /cleanup/packages/e2e/tests/game.spec.ts:75:3
+
+    Error Context: ../../evidence/phase-12-legacy-traces/game-submits-the-PIN-with-the-Enter-key-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-legacy-traces/game-submits-the-PIN-with-the-Enter-key-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-legacy-traces/game-submits-the-PIN-with-the-Enter-key-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › ../packages/e2e/tests/game.spec.ts:7:1 › plays a full quiz from the lobby to the podium
+    [chromium] › ../packages/e2e/tests/game.spec.ts:53:1 › refuses players once the room is locked ─
+  1 interrupted
+    [chromium] › ../packages/e2e/tests/game.spec.ts:68:1 › submits the PIN with the Enter key ──────
+  15 did not run

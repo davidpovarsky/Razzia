@@ -1,0 +1,87 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 8 tests using 1 worker
+
+  ✘  1 [chromium] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active (7.7s)
+  ✓  2 [chromium] › qa/tds-motion.spec.ts:53:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (8.3s)
+  ✓  3 [chromium] › qa/tds-motion.spec.ts:183:1 › reopening during dialog exit cancels stale dismissal in both portal contexts (3.4s)
+  ✓  4 [chromium] › qa/tds-motion.spec.ts:210:1 › reduced motion removes platform animation without changing keyboard state (2.1s)
+  ✘  5 [webkit] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active (25.0s)
+  ✓  6 [webkit] › qa/tds-motion.spec.ts:53:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (22.3s)
+  ✓  7 [webkit] › qa/tds-motion.spec.ts:183:1 › reopening during dialog exit cancels stale dismissal in both portal contexts (5.9s)
+  ✓  8 [webkit] › qa/tds-motion.spec.ts:210:1 › reduced motion removes platform animation without changing keyboard state (5.0s)
+
+
+  1) [chromium] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('menuitem', { name: 'host first action', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('menuitem', { name: 'host first action', exact: true }) with timeout 5000ms
+      - waiting for getByRole('menuitem', { name: 'host first action', exact: true })
+
+
+      43 |           exact: true,
+      44 |         }),
+    > 45 |       ).toBeVisible()
+         |         ^
+      46 |       await page.keyboard.press("Escape")
+      47 |       await expect(page.getByRole("menu")).toHaveCount(0)
+      48 |       await expect(trigger).toBeFocused()
+        at /cleanup/extensions/qa/tds-motion.spec.ts:45:9
+
+    Error Context: ../../evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [webkit] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('menuitem', { name: 'site first action', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms
+      - waiting for getByRole('menuitem', { name: 'site first action', exact: true })
+
+
+      43 |           exact: true,
+      44 |         }),
+    > 45 |       ).toBeVisible()
+         |         ^
+      46 |       await page.keyboard.press("Escape")
+      47 |       await expect(page.getByRole("menu")).toHaveCount(0)
+      48 |       await expect(trigger).toBeFocused()
+        at /cleanup/extensions/qa/tds-motion.spec.ts:45:9
+
+    Error Context: ../../evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active
+    [webkit] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active
+  6 passed (1.4m)

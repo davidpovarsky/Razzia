@@ -1,0 +1,25 @@
+{
+  "retrievedAt": "2026-11-19T03:05:29.502486+00:00",
+  "candidateSha": "65a5c726430a3f504b4266ab032676b149c1d361",
+  "sourceRun": "tadazz-codex-65a5c726430a-95454c81",
+  "browserRun": "tadazz-codex-fullshow-65a5c726430a-dba76500",
+  "sourceHost": "ubuntu@132.145.25.168",
+  "remoteAccess": "read-only file reads via SSH",
+  "files": [
+    {
+      "relative_path": "full-show/receipt.json",
+      "source_path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-65a5c726430a-dba76500/full-show/receipt.json",
+      "sha256": "4861199e412035306dd0ce00a87b2a1c0f32acdc3a9acfede41e61c2d60064ae",
+      "bytes": 1293629,
+      "destinationPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-65a5c726430a-dba76500\\full-show\\receipt.json"
+    },
+    {
+      "relative_path": "browser-resource-evidence.json",
+      "source_path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-65a5c726430a-dba76500/browser-resource-evidence.json",
+      "sha256": "5a7f56331a55ac931e58a665cdcfdfe5d7e4960a25ca39c3e1cdedccc3df086e",
+      "bytes": 854,
+      "destinationPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-65a5c726430a-dba76500\\browser-resource-evidence.json"
+    }
+  ],
+  "outerReceipt": "Not fabricated: normal runner exited on failed browser assertions before writing outer receipt."
+}

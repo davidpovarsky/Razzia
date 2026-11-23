@@ -1,0 +1,6 @@
+Observed output from the successful post-guard source check (not a new rerun):
+LINT 0
+Found 0 warnings and 0 errors.
+Finished in 1.4s on 1 file with 233 rules using 12 threads.
+
+The redundant later receipt-refresh command timed out in job_85ab959983bf. Source stayed frozen; no pass is attributed to that timeout.

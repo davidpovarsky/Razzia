@@ -1,0 +1,95 @@
+{
+  "phase": "phase-06",
+  "sourceControl": "cb29c8c9010ebe26e22f8d8d1a22c101ec0a3a9475efd1aed4a1d5fa39bb8b2a",
+  "pairs": [
+    {
+      "name": "editor-question",
+      "byteIdentical": false,
+      "changedRgbaPixels": 9,
+      "samples": [
+        {
+          "x": 24,
+          "y": 132,
+          "delta": 7
+        },
+        {
+          "x": 1172,
+          "y": 268,
+          "delta": 1
+        },
+        {
+          "x": 1173,
+          "y": 268,
+          "delta": 1
+        },
+        {
+          "x": 1175,
+          "y": 268,
+          "delta": 1
+        },
+        {
+          "x": 24,
+          "y": 284,
+          "delta": 1
+        },
+        {
+          "x": 1172,
+          "y": 628,
+          "delta": 2
+        },
+        {
+          "x": 1174,
+          "y": 628,
+          "delta": 1
+        },
+        {
+          "x": 1172,
+          "y": 734,
+          "delta": 2
+        },
+        {
+          "x": 1174,
+          "y": 734,
+          "delta": 1
+        }
+      ],
+      "control": "f6ea941ae0bcb6152f576a6e3e86ad0fcc2b11389a4e1ef7638f55832e7bc19d",
+      "candidate": "6b3eb5f8137b6ac95c91b0f22baac703cd1e5a1b81af41c1e78286bd08cc443c"
+    },
+    {
+      "name": "editor-media",
+      "byteIdentical": false,
+      "changedRgbaPixels": 2,
+      "samples": [
+        {
+          "x": 24,
+          "y": 132,
+          "delta": 4
+        },
+        {
+          "x": 24,
+          "y": 284,
+          "delta": 1
+        }
+      ],
+      "control": "03b22c1d72bc642346e1e4bae562d544ec37d4c5c63699d47684cf43ebc37dbc",
+      "candidate": "f19ce5c5515a1dbe059f8dd371fdb667628a58677e7198a397041029854784c0"
+    },
+    {
+      "name": "editor-scene-timeline",
+      "byteIdentical": true,
+      "changedRgbaPixels": 0,
+      "samples": [],
+      "control": "7a2390b2b1e42e3f406ed86a6d63696b7ff25aac93ee4e2600d68fe8d1325530",
+      "candidate": "7a2390b2b1e42e3f406ed86a6d63696b7ff25aac93ee4e2600d68fe8d1325530"
+    },
+    {
+      "name": "editor-theme-settings",
+      "byteIdentical": true,
+      "changedRgbaPixels": 0,
+      "samples": [],
+      "control": "02928cf270fa6173dcef5620ef154079a90fb39cbd3c8accf0e5364c142d71b5",
+      "candidate": "02928cf270fa6173dcef5620ef154079a90fb39cbd3c8accf0e5364c142d71b5"
+    }
+  ]
+}

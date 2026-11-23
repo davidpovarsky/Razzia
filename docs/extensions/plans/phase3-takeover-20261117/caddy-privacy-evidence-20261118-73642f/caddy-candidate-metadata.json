@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "passed": true,
+  "source": "/etc/caddy/Caddyfile",
+  "beforeSha256": "d4c77ac56bfe8d66e51707718de3dfd6c7da77a878929c7137dcd9cccf47e055",
+  "sourceMode": "0o644",
+  "sourceUid": 0,
+  "sourceGid": 0,
+  "backup": "/var/tmp/tadazz-caddy-privacy-candidate-20261118-73642f/Caddyfile.before",
+  "candidate": "/var/tmp/tadazz-caddy-privacy-candidate-20261118-73642f/Caddyfile.candidate",
+  "candidateSha256": "101381b7b10b99f72573584de230498119639e6c26ec8bf8439aeed4a534ba24",
+  "exactSourceChange": "prepend-only default logging encoder filter",
+  "onlyAdaptedChange": "/logging/logs/default/encoder",
+  "encoder": {
+    "format": "filter",
+    "wrap": {
+      "format": "json"
+    },
+    "fields": {
+      "request>uri": {
+        "filter": "delete"
+      },
+      "request>headers>Referer": {
+        "filter": "delete"
+      }
+    }
+  },
+  "adaptPassed": true,
+  "validatePassed": true,
+  "validationUid": 995,
+  "activeMatchesPersistedBefore": true,
+  "productionConfigurationChanged": false,
+  "runtimeReloaded": false,
+  "startupService": "caddy.service",
+  "startupConfig": "/etc/caddy/Caddyfile",
+  "reloadCommandUsesSameConfig": true,
+  "previousPrivatePreparation": "caddy-user validation could not traverse /home/ubuntu; preserved failure evidence and moved only private candidate to /var/tmp without changing existing permissions"
+}

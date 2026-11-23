@@ -1,0 +1,33 @@
+{
+  "grant": "mcp-runtime-F-20261115-01a1dfaa",
+  "productSource": "uncommitted remote source atop formatted bfb796",
+  "manifestSha256": "4c02c37421191cd8ea2fe46e35c0b8a37467a7d89708a11bf8cd68047bac29ab",
+  "phases": {
+    "semanticFormat": 0,
+    "typecheck": 0,
+    "remoteFormat": 0,
+    "remoteTypecheck": 0,
+    "remoteSdkTests": 1
+  },
+  "firstFailure": {
+    "phase": "08-remote-sdk-tests",
+    "exit": 1
+  },
+  "firstPartyDeclarations": 34,
+  "separateCompatibilityObservation": 1,
+  "sdk41": "REUSED_NOT_RERUN",
+  "resources": {
+    "newPhysicalUpperBoundBytes": 2711552,
+    "diskCapBytes": 5324800,
+    "dockerAllowanceBytes": 2097152,
+    "freeBytes": 2651226112,
+    "requiredRemainingReserveBytes": 2590248960,
+    "absoluteFloorBytes": 2147483648,
+    "ownTmpfsUsedBytes": 153108480,
+    "ownTmpfsCapBytes": 268435456
+  },
+  "unchangedOtherInputs": 152,
+  "formattedAstEqualInputs": 8,
+  "nativeOrOAuthMount": false,
+  "syscallZeroWriteProof": false
+}

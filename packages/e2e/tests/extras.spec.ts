@@ -65,6 +65,7 @@ test("shows a streak badge after two right answers in a row", async ({
       question({ question: "Second" }),
       question({ question: "Third" }),
     ],
+    leaderboard: "upstream",
   })
 
   const pin = await createGame(manager, subject)
@@ -77,14 +78,20 @@ test("shows a streak badge after two right answers in a row", async ({
   const streakBadge = manager.getByRole("img", { name: t("game:streak") })
 
   await answer(player, "Right")
+  await expect(player.getByText(t("game:correct"))).toBeVisible()
   await next(manager)
-  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+  await expect(
+    manager.getByRole("heading", { name: t("game:leaderboard"), exact: true }),
+  ).toBeVisible()
   await expect(streakBadge).toHaveCount(0)
   await next(manager)
 
   await answer(player, "Right")
+  await expect(player.getByText(t("game:correct"))).toBeVisible()
   await next(manager)
-  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+  await expect(
+    manager.getByRole("heading", { name: t("game:leaderboard"), exact: true }),
+  ).toBeVisible()
   await expect(streakBadge).toBeVisible()
 })
 

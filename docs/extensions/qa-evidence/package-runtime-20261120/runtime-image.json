@@ -1,0 +1,32 @@
+{
+  "image": "sha256:56c4e4cffc30d77e1f9828078071880590a0bb9ecc1379f66020e842e1fa2819",
+  "tag": "tadazz:package-runtime-f276c9c-20261120",
+  "baseImage": "sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9",
+  "root": "/home/ubuntu/tadazz-package-worker-bms-c85690fffb02-20261120/runtime-release",
+  "labels": {
+    "org.opencontainers.image.revision": "f276c9cbf86a72ab6fc689a113d7d33a1c0d21af",
+    "com.tadazz.package-runtime.source-manifest-sha256": "a6e128e56af63ec6b793ffeab0be393703b419e86495a3d2b45fc28c9867a978",
+    "com.tadazz.package-runtime.runtime-sha256": "cc97def60deefe4b6854a9a3bc85d5720d47d38a25671bf784593ca1ca2deb22",
+    "com.tadazz.package-runtime.bootstrap-sha256": "c84d9df7702379667a2744d9447dc909ec8d063203eb7bd86169817e3bb0079b"
+  },
+  "hashes": {
+    "runtime.mjs": "cc97def60deefe4b6854a9a3bc85d5720d47d38a25671bf784593ca1ca2deb22",
+    "bootstrap.mjs": "c84d9df7702379667a2744d9447dc909ec8d063203eb7bd86169817e3bb0079b",
+    "runtime-source-manifest.json": "a6e128e56af63ec6b793ffeab0be393703b419e86495a3d2b45fc28c9867a978"
+  },
+  "envNames": [
+    "NODE_VERSION",
+    "PATH",
+    "YARN_VERSION"
+  ],
+  "entrypoint": [
+    "node",
+    "/app/runtime/bootstrap.mjs"
+  ],
+  "cmd": null,
+  "user": "0:0",
+  "workingDir": "/app/runtime",
+  "runtimeBytes": 1343576,
+  "sourceInputs": 76,
+  "dependencyInputs": 150
+}

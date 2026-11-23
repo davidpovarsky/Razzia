@@ -1,0 +1,182 @@
+#1 [internal] booting buildkit
+#1 starting container buildx_buildkit_tadazz-cleanup-theme-qa0
+#1 starting container buildx_buildkit_tadazz-cleanup-theme-qa0 0.9s done
+#1 DONE 0.9s
+Name:          tadazz-cleanup-theme-qa
+Driver:        docker-container
+Last Activity: 2026-11-08 20:24:31 +0000 UTC
+
+Nodes:
+Name:                  tadazz-cleanup-theme-qa0
+Endpoint:              unix:///var/run/docker.sock
+Driver Options:        memory="4g" restart-policy="no" cpu-period="100000" cpu-quota="200000"
+Status:                running
+BuildKit daemon flags: --allow-insecure-entitlement=network.host
+BuildKit version:      v0.34.2
+Platforms:             linux/arm64, linux/arm/v7, linux/arm/v6
+Labels:
+ org.mobyproject.buildkit.worker.executor:         oci
+ org.mobyproject.buildkit.worker.hostname:         6da80b356420
+ org.mobyproject.buildkit.worker.network:          host
+ org.mobyproject.buildkit.worker.oci.process-mode: sandbox
+ org.mobyproject.buildkit.worker.selinux.enabled:  false
+ org.mobyproject.buildkit.worker.snapshotter:      overlayfs
+GC Policy rule#0:
+ All:            false
+ Filters:        type==source.local type==exec.cachemount type==source.git.checkout
+ Keep Duration:  48h0m0s
+ Max Used Space: 488.3MiB
+GC Policy rule#1:
+ All:            false
+ Keep Duration:  1440h0m0s
+ Reserved Space: 4.657GiB
+ Max Used Space: 35.39GiB
+ Min Free Space: 9.313GiB
+GC Policy rule#2:
+ All:            false
+ Reserved Space: 4.657GiB
+ Max Used Space: 35.39GiB
+ Min Free Space: 9.313GiB
+GC Policy rule#3:
+ All:            true
+ Reserved Space: 4.657GiB
+ Max Used Space: 35.39GiB
+ Min Free Space: 9.313GiB
+#0 building with "tadazz-cleanup-theme-qa" instance using docker-container driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:26-alpine
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/alpine:3.24.2
+#3 DONE 0.7s
+
+#2 [internal] load metadata for docker.io/library/node:26-alpine
+#2 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 391B done
+#4 DONE 0.0s
+
+#5 [runner 1/8] FROM docker.io/library/alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+#5 resolve docker.io/library/alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 0.0s done
+#5 DONE 0.0s
+
+#6 [base 1/2] FROM docker.io/library/node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
+#6 resolve docker.io/library/node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 120.27kB 0.1s done
+#7 DONE 0.1s
+
+#8 [builder  2/11] COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+#8 CACHED
+
+#9 [builder  1/11] WORKDIR /app
+#9 CACHED
+
+#10 [builder  3/11] COPY packages/common/package.json ./packages/common/
+#10 CACHED
+
+#11 [builder  4/11] COPY packages/web/package.json ./packages/web/
+#11 CACHED
+
+#12 [builder  5/11] COPY packages/socket/package.json ./packages/socket/
+#12 CACHED
+
+#13 [builder  6/11] COPY packages/e2e/package.json ./packages/e2e/
+#13 CACHED
+
+#14 [builder  7/11] COPY extensions/package.json ./extensions/
+#14 CACHED
+
+#15 [base 2/2] RUN npm install -g pnpm
+#15 CACHED
+
+#16 [builder  8/11] RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+#16 CACHED
+
+#17 [builder  9/11] COPY . .
+#17 DONE 1.7s
+
+#18 [builder 10/11] RUN pnpm build
+#18 0.410 $ pnpm -r run build
+#18 0.426 Scope: 5 of 6 workspace projects
+#18 0.439 $ rolldown -c
+#18 1.637 <DIR>/index.cjs.map  asset │ size: 3,510.06 kB
+#18 1.642 <DIR>/index.cjs      chunk │ size: 1,024.14 kB
+#18 1.643 
+#18 1.643 ✔ rolldown v1.2.13 Finished in 909.72 ms
+#18 1.728 $ node --experimental-strip-types ./node_modules/vite/bin/vite.js build
+#18 4.172 (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+#18 4.172   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+#18 4.172 Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+#18 4.821 vite v8.3.4 building client environment for production...
+#18 4.920 transforming...
+#18 8.373 ✓ 3160 modules transformed.
+#18 9.165 rendering chunks...
+#18 10.51 computing gzip size...
+#18 10.64 dist/index.html                                                0.98 kB │ gzip:   0.52 kB
+#18 10.64 dist/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2            9.34 kB
+#18 10.64 dist/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2     12.38 kB
+#18 10.64 dist/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2         15.11 kB
+#18 10.64 dist/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2        19.40 kB
+#18 10.64 dist/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2           32.46 kB
+#18 10.64 dist/assets/rubik-latin-wght-normal-CnQIisVs.woff2            35.34 kB
+#18 10.64 dist/assets/tadazz-question-background-BnsH8I8M.png        1,610.33 kB
+#18 10.64 dist/assets/background-CMjhDDHd.png                        2,777.38 kB
+#18 10.64 dist/assets/index-B5hBey8H.css                               288.42 kB │ gzip:  55.20 kB
+#18 10.64 dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:   0.42 kB
+#18 10.64 dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:   9.60 kB
+#18 10.64 dist/assets/index-Xa61dZ8I.js                              2,762.58 kB │ gzip: 723.19 kB
+#18 10.64 
+#18 10.65 [plugin builtin:vite-reporter] 
+#18 10.65 (!) Some chunks are larger than 2000 kB after minification. Consider:
+#18 10.65 - Using dynamic import() to code-split the application
+#18 10.65 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#18 10.65 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#18 10.67 ✓ built in 5.91s
+#18 DONE 11.3s
+
+#19 [builder 11/11] RUN mkdir -p /app/runtime &&     find /app/node_modules -type f -name dotlottie-player.wasm -print -quit |       xargs -r -I {} cp {} /app/runtime/dotlottie-player.wasm &&     test -s /app/runtime/dotlottie-player.wasm
+#19 DONE 0.2s
+
+#20 [runner 4/8] COPY extensions/deployment/nginx-server.conf /etc/nginx/tadazz/server.conf
+#20 CACHED
+
+#21 [runner 2/8] RUN apk add --no-cache nginx nodejs supervisor
+#21 CACHED
+
+#22 [runner 3/8] COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+#22 CACHED
+
+#23 [runner 5/8] COPY docker/supervisord.conf /etc/supervisord.conf
+#23 CACHED
+
+#24 [runner 6/8] COPY --from=builder /app/packages/web/dist /app/web
+#24 DONE 0.3s
+
+#25 [runner 7/8] COPY --from=builder /app/packages/socket/dist/index.cjs /app/socket/index.cjs
+#25 DONE 0.0s
+
+#26 [runner 8/8] COPY --from=builder /app/runtime/dotlottie-player.wasm /app/runtime/dotlottie-player.wasm
+#26 DONE 0.0s
+
+#27 exporting to oci image format
+#27 exporting layers
+#27 exporting layers 2.5s done
+#27 exporting manifest sha256:e0bc48ecd01c6a79c63e244337e07334c85226bcb819247361ab904c4ae923b3 0.0s done
+#27 exporting config sha256:006f8a96e7347a42c6f152ffa863c4a7d79eb9762c0d2dc532f9a869db6354a8 0.1s done
+#27 sending tarball
+#27 ...
+
+#28 importing to docker
+#28 DONE 0.0s
+
+#27 exporting to oci image format
+#27 sending tarball 2.9s done
+#27 DONE 5.6s

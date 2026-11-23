@@ -1,0 +1,427 @@
+{
+  "uniqueRecordedChildPids": 52,
+  "killCount": 10,
+  "exit0Count": 14,
+  "exit2Count": 28,
+  "recordedChildren": {
+    "128": {
+      "pid": 128,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "enhanced-sidecar-race.json"
+    },
+    "142": {
+      "pid": 142,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "enhanced-sidecar-race.json"
+    },
+    "100": {
+      "pid": 100,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "failed-intent-fence.json"
+    },
+    "114": {
+      "pid": 114,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "failed-intent-fence.json"
+    },
+    "183": {
+      "pid": 183,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-base-replacement.json"
+    },
+    "197": {
+      "pid": 197,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-base-replacement.json"
+    },
+    "211": {
+      "pid": 211,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-base-replacement.json"
+    },
+    "267": {
+      "pid": 267,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-missing-witness.json"
+    },
+    "281": {
+      "pid": 281,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-missing-witness.json"
+    },
+    "295": {
+      "pid": 295,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-missing-witness.json"
+    },
+    "309": {
+      "pid": 309,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-newer-intent.json"
+    },
+    "323": {
+      "pid": 323,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-newer-intent.json"
+    },
+    "337": {
+      "pid": 337,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-newer-intent.json"
+    },
+    "225": {
+      "pid": 225,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-sidecar-in-place.json"
+    },
+    "239": {
+      "pid": 239,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-sidecar-in-place.json"
+    },
+    "253": {
+      "pid": 253,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "proof-sidecar-in-place.json"
+    },
+    "351": {
+      "pid": 351,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "qualified-external-interference.json"
+    },
+    "365": {
+      "pid": 365,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "qualified-external-interference.json"
+    },
+    "475": {
+      "pid": 475,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-base.json"
+    },
+    "489": {
+      "pid": 489,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-base.json"
+    },
+    "503": {
+      "pid": 503,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-base.json"
+    },
+    "517": {
+      "pid": 517,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-base.json"
+    },
+    "531": {
+      "pid": 531,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-base.json"
+    },
+    "545": {
+      "pid": 545,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-sidecar.json"
+    },
+    "559": {
+      "pid": 559,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-sidecar.json"
+    },
+    "573": {
+      "pid": 573,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-sidecar.json"
+    },
+    "587": {
+      "pid": 587,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-sidecar.json"
+    },
+    "601": {
+      "pid": 601,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-absent-sidecar.json"
+    },
+    "615": {
+      "pid": 615,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-committed.json"
+    },
+    "629": {
+      "pid": 629,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-committed.json"
+    },
+    "643": {
+      "pid": 643,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-committed.json"
+    },
+    "657": {
+      "pid": 657,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-committed.json"
+    },
+    "671": {
+      "pid": 671,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-committed.json"
+    },
+    "756": {
+      "pid": 756,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-empty.json"
+    },
+    "770": {
+      "pid": 770,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-empty.json"
+    },
+    "784": {
+      "pid": 784,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-empty.json"
+    },
+    "798": {
+      "pid": 798,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-empty.json"
+    },
+    "812": {
+      "pid": 812,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-active-empty.json"
+    },
+    "686": {
+      "pid": 686,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-committed.json"
+    },
+    "700": {
+      "pid": 700,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-committed.json"
+    },
+    "714": {
+      "pid": 714,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-committed.json"
+    },
+    "728": {
+      "pid": 728,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-committed.json"
+    },
+    "742": {
+      "pid": 742,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-committed.json"
+    },
+    "826": {
+      "pid": 826,
+      "code": null,
+      "signal": "SIGKILL",
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-empty.json"
+    },
+    "840": {
+      "pid": 840,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-empty.json"
+    },
+    "854": {
+      "pid": 854,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-empty.json"
+    },
+    "868": {
+      "pid": 868,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-empty.json"
+    },
+    "882": {
+      "pid": 882,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "review-move-resolved-empty.json"
+    },
+    "379": {
+      "pid": 379,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "warm-visible-commit.json"
+    },
+    "393": {
+      "pid": 393,
+      "code": 2,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "warm-visible-commit.json"
+    },
+    "407": {
+      "pid": 407,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "warm-visible-commit.json"
+    },
+    "421": {
+      "pid": 421,
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stderr": "",
+      "receipt": "warm-visible-commit.json"
+    }
+  },
+  "historicalCgroupPidsCountersAvailable": false,
+  "historicalOrphanThreadCountsAvailable": false,
+  "countsAreCumulativeReceiptedChildrenNotConcurrentTasks": true
+}

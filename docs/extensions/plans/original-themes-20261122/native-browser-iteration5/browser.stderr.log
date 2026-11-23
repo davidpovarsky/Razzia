@@ -1,0 +1,55 @@
+ExpectError: expect(locator).toBeEnabled() failed
+
+Locator: locator('button').filter({ has: getByTestId('answer-badge-0') })
+Expected: enabled
+Timeout: 15000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeEnabled" locator('button').filter({ has: getByTestId('answer-badge-0') }) with timeout 15000ms
+  - waiting for locator('button').filter({ has: getByTestId('answer-badge-0') })
+
+    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+    at Object.toBeEnabled (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+    at select (/source/extensions/qa/original-themes/browser-verify.mjs:839:30)
+    at verifyNative (/source/extensions/qa/original-themes/browser-verify.mjs:893:17)
+    at async verifyOriginalThemeBrowser (/source/extensions/qa/original-themes/browser-verify.mjs:1092:5)
+    at async <anonymous> (/source/extensions/qa/original-themes/account-verify.mjs:249:3) {
+  matcherResult: {
+    message: 'expect(locator).toBeEnabled() failed\n' +
+      '\n' +
+      "Locator: locator('button').filter({ has: getByTestId('answer-badge-0') })\n" +
+      'Expected: enabled\n' +
+      'Timeout: 15000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeEnabled" locator('button').filter({ has: getByTestId('answer-badge-0') }) with timeout 15000ms\n` +
+      "  - waiting for locator('button').filter({ has: getByTestId('answer-badge-0') })\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeEnabled',
+    expected: 'enabled',
+    log: [
+      `  - Expect "toBeEnabled" locator('button').filter({ has: getByTestId('answer-badge-0') }) with timeout 15000ms`,
+      "  - waiting for locator('button').filter({ has: getByTestId('answer-badge-0') })"
+    ],
+    timeout: 15000,
+    ariaSnapshot: '- text: 1 / 4\n' +
+      '- img "TADAZZ!"\n' +
+      `- 'heading "royal-quiz: 2 choices, an authored correct answer" [level=2]'\n` +
+      `- 'timer "Time: 15s"': Time 15\n` +
+      '- text: Answers 0/2\n' +
+      `- 'button "1: Choice 1 (circle)"':\n` +
+      '  - text: "1"\n' +
+      '  - img "circle"\n' +
+      '  - paragraph: Choice 1\n' +
+      `- 'button "2: Choice 2 (square)"':\n` +
+      '  - text: "2"\n' +
+      '  - img "square"\n' +
+      '  - paragraph: Choice 2\n' +
+      '- paragraph: Original QA 1\n' +
+      '- text: "0"'
+  }
+}

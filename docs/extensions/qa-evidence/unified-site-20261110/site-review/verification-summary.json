@@ -1,0 +1,29 @@
+{
+  "sourceRevisionDeployed": "ba64f49bcb384ced8482d625cf2956d2ae37e443",
+  "unitExtensions": {
+    "passed": 672,
+    "files": 80
+  },
+  "unitRoot": {
+    "passed": 364,
+    "failed": 1,
+    "knownBaselineFailure": "Windows oversized theme POST ECONNRESET, reproduced at clean 18d3c9d"
+  },
+  "browserSitePassed": 9,
+  "browserNativeCompatibilityPassed": 4,
+  "browserProductionFinalPassed": 3,
+  "focusedLoadingEvidencePassed": 1,
+  "typecheckExtensionsFinalExitCode": 0,
+  "typecheckWebExitCode": 0,
+  "typecheckSocketExitCode": 0,
+  "lintFinalExitCode": 0,
+  "formatFinalExitCode": 0,
+  "defaultOffBuildExitCode": 0,
+  "optInBuildExitCode": 0,
+  "notes": [
+    "Private browser flows ran against isolated real local backend, not production accounts.",
+    "Package worker output in browser test uses local fixture attestation, not actual ffmpeg execution.",
+    "Production checks read-only; no real payments, email delivery, phone calls or load test.",
+    "All performance cases are one cold-cache lab sample; no physical Safari or field INP."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "exit": 1,
+  "stdout": "09-final-format {\"command\": [\"node\", \"/evidence/format-final.mjs\"], \"actualReturnCode\": 0, \"shellExit\": 0, \"seconds\": 7.094, \"outputLimitBytes\": 1048576, \"logTruncated\": false, \"observedOutputBytes\": 158, \"logSha256\": \"2f2a764c2ee59b99f4aefbc972a140d52089d4dc245405e4bc46a8b4c978263b\"}\n10-final-typecheck {\"command\": [\"pnpm\", \"run\", \"typecheck\"], \"actualReturnCode\": 0, \"shellExit\": 0, \"seconds\": 42.099, \"outputLimitBytes\": 1048576, \"logTruncated\": false, \"observedOutputBytes\": 864, \"logSha256\": \"04a56023fb11b9c6d13b934771ec56058bca9563022b555a8db2375634764f43\"}\n11-final-sdk-tests {\"command\": [\"pnpm\", \"run\", \"test\"], \"actualReturnCode\": 1, \"shellExit\": 1, \"seconds\": 68.315, \"outputLimitBytes\": 1048576, \"logTruncated\": false, \"observedOutputBytes\": 7904, \"logSha256\": \"eae1d629b2c13d882dd8a6a9ea139c80435fd51f36a3160ee914c79653b5985a\"}\n{\"phases\": {\"09-final-format\": 0, \"10-final-typecheck\": 0, \"11-final-sdk-tests\": 1}, \"sourceInputs\": 165}\n",
+  "stderr": "",
+  "rawManifestSha256": "2fa25de61d62057974d2ce9c3fd32a0742f89066a2c5388cfb54541de57c8984"
+}

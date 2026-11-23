@@ -1,0 +1,10 @@
+{
+  "kind": "POST_RUN_STATIC_SOURCE_AND_FREEZE_CHECK",
+  "sourceInputsUnchanged": 160,
+  "protectedFilesUnchanged": 602,
+  "applicationGitDiffFromBfb": [],
+  "rawGuardExit": 1,
+  "rawGuardDenied": 56,
+  "rawGuardMismatches": [],
+  "sourceEditOrRuntimeRetry": false
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "install",
+    "--offline",
+    "--frozen-lockfile",
+    "--store-dir=/work/store",
+    "--package-import-method=copy",
+    "--verify-store-integrity=true",
+    "--reporter=append-only"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "abc4a09ea589e9844e64306b5e9f3ade2c10fc4bf003e90ceafebbd76f6c7904",
+  "seconds": 5.907
+}

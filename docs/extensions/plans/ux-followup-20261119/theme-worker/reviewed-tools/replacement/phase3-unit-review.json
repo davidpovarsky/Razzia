@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-11-19T15:29:37.326986+00:00",
+  "unitPath": "/etc/systemd/system/tadazz-package-builder.service",
+  "unitSha256": "64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053",
+  "replacementUnitSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+  "unitBytes": 489,
+  "unitMode": "0o644",
+  "uid": 0,
+  "gid": 0,
+  "service": {
+    "Result": "success",
+    "ActiveState": "inactive",
+    "SubState": "dead",
+    "FragmentPath": "/etc/systemd/system/tadazz-package-builder.service",
+    "DropInPaths": ""
+  },
+  "diff": {
+    "line": 13,
+    "old": "ExecStart=/usr/bin/python3 /opt/tadazz-package-runtime/package-build-worker.py /var/lib/tadazz-release-5312660/config/extensions/packages --image sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5",
+    "new": "ExecStart=/usr/bin/python3 /opt/tadazz-package-runtime/package-build-worker.py /var/lib/tadazz-release-5312660/config/extensions/packages --image sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411"
+  },
+  "onlyImagePinChanges": true,
+  "serviceChanged": false,
+  "fullUnitContentReturned": false
+}

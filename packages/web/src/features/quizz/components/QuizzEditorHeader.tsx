@@ -1,146 +1,127 @@
-import { QUIZZ_MODES } from "@razzia/common/constants"
-import type { QuizzValidated } from "@razzia/common/validators/quizz"
+import {
+  StudioHeaderNavigation,
+  StudioCardKindBar,
+  StudioConversionDialog,
+} from "./studio/header-controls"
+import { useCompositeQuizzSave } from "./studio/use-composite-quizz-save"
+import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import FieldError from "@razzia/web/components/forms/FieldError"
 import Input from "@razzia/web/components/Input"
-import ToggleGroup from "@razzia/web/components/ToggleGroup"
-import {
-  createQuizz,
-  quizzKeys,
-  updateQuizz,
-} from "@razzia/web/features/manager/queries"
-import {
-  useQuizzEditor,
-  type QuizzFormValues,
-} from "@razzia/web/features/quizz/contexts/quizz-editor-context"
-import { ApiError } from "@razzia/web/lib/api"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { ConflictDialog } from "@razzia/web/features/quizz/components/ConflictDialog"
 import clsx from "clsx"
-import { Controller, useFormContext } from "react-hook-form"
-import toast from "react-hot-toast"
+import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 
-const QUIZZ_MODE_LIST = Object.values(QUIZZ_MODES)
-
 const QuizzEditorHeader = () => {
-  const { quizzId, setCurrentIndex } = useQuizzEditor()
-  const { handleSubmit, control } = useFormContext<
-    QuizzFormValues,
-    unknown,
-    QuizzValidated
-  >()
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
+  const {
+    control,
+    isSaving,
+    canSave,
+    navigationBlocked,
+    cancelNavigation,
+    confirmNavigation,
+    conflict,
+    setConflict,
+    handleExit,
+    handleSave,
+    handleReloadConflict,
+    handleForceOverwriteConflict,
+  } = useCompositeQuizzSave()
   const { t } = useTranslation()
 
-  const handleExit = () => {
-    navigate({ to: "/manager/config" })
-  }
-
-  const onError = (error: Error) => {
-    toast.error(
-      t(error instanceof ApiError ? error.key : "errors:quizz.failedToSave"),
-    )
-  }
-
-  const onSaved = (messageKey: string) => {
-    queryClient.invalidateQueries({ queryKey: quizzKeys.all })
-    toast.success(t(messageKey))
-    handleExit()
-  }
-
-  const { mutate: create } = useMutation({
-    mutationFn: createQuizz,
-    onSuccess: () => onSaved("quizz:quizzSaved"),
-    onError,
-  })
-
-  const { mutate: update } = useMutation({
-    mutationFn: updateQuizz,
-    onSuccess: () => onSaved("quizz:quizzUpdated"),
-    onError,
-  })
-
-  const handleSave = handleSubmit(
-    (values) => {
-      if (quizzId) {
-        update({ id: quizzId, json: values })
-
-        return
-      }
-
-      create(values)
-    },
-    (invalid) => {
-      if (!Array.isArray(invalid.questions)) {
-        return
-      }
-
-      const index = invalid.questions.findIndex(Boolean)
-
-      if (index >= 0) {
-        setCurrentIndex(index)
-      }
-    },
-  )
-
   return (
-    <header className="bg-background z-20 flex h-14 items-center justify-between gap-4 px-4 shadow-sm">
-      <div className="flex items-center gap-4">
-        <Controller
-          control={control}
-          name="subject"
-          render={({ field, fieldState }) => (
-            <div className="flex items-center gap-6">
-              <Input
-                {...field}
-                variant="sm"
-                aria-invalid={fieldState.invalid}
-                aria-describedby={
-                  fieldState.invalid ? `${field.name}-error` : undefined
-                }
-                className={clsx(
-                  "w-64",
-                  fieldState.invalid && "ring-2 ring-red-500",
-                )}
-                placeholder={t("quizz:titleQuizzPlaceholder")}
-              />
-              <FieldError
-                id={`${field.name}-error`}
-                errors={[fieldState.error]}
-              />
-            </div>
-          )}
-        />
+    <header
+      inert={isSaving}
+      aria-busy={isSaving}
+      className="bg-background border-border z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b shadow-sm"
+    >
+      {/* Row 1 / Top: Quiz Title + Studio Navigation Tabs + Exit / Save */}
+      <div className="editor-primary-row flex min-h-14 w-full flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:gap-4 sm:px-4">
+        {/* Title input */}
+        <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-4">
+          <Controller
+            control={control}
+            name="subject"
+            render={({ field, fieldState }) => (
+              <div className="flex min-w-0 items-center gap-2 sm:gap-4">
+                <Input
+                  {...field}
+                  variant="sm"
+                  dir="auto"
+                  disabled={isSaving || !canSave}
+                  aria-invalid={fieldState.invalid}
+                  aria-describedby={
+                    fieldState.invalid ? `${field.name}-error` : undefined
+                  }
+                  className={clsx(
+                    "w-32 shrink-0 sm:w-48 md:w-56",
+                    fieldState.invalid && "ring-2 ring-red-500",
+                  )}
+                  placeholder={t("quizz:titleQuizzPlaceholder")}
+                />
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              </div>
+            )}
+          />
+        </div>
 
-        <Controller
-          control={control}
-          name="gameMode"
-          render={({ field }) => (
-            <ToggleGroup
-              value={field.value}
-              onChange={field.onChange}
-              items={QUIZZ_MODE_LIST.map((gameMode) => ({
-                value: gameMode,
-                label: t(`quizz:gameMode.${gameMode}`),
-              }))}
-            />
-          )}
-        />
+        {/* Center: Studio Screen Navigation Tabs */}
+        <StudioHeaderNavigation />
+
+        {/* Right: Exit and Save Buttons */}
+        <div className="ms-auto flex shrink-0 items-center gap-1.5 sm:ms-0 sm:gap-2">
+          <Button
+            type="button"
+            className="bg-accent text-accent-foreground sm:text-md px-2.5 py-1.5 text-sm font-semibold sm:px-4 sm:py-2"
+            onClick={handleExit}
+            data-testid="editor-exit-btn"
+          >
+            {t("common:exit")}
+          </Button>
+          <Button
+            type="button"
+            className="bg-primary sm:text-md px-2.5 py-1.5 text-sm sm:px-4 sm:py-2"
+            onClick={handleSave}
+            disabled={isSaving || !canSave}
+            aria-busy={isSaving}
+            data-testid="editor-save-btn"
+          >
+            {t("common:save")}
+          </Button>
+        </div>
       </div>
 
-      <div className="flex gap-2">
-        <Button
-          className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
-          onClick={handleExit}
-        >
-          {t("common:exit")}
-        </Button>
-        <Button className="bg-primary text-md px-4 py-2" onClick={handleSave}>
-          {t("common:save")}
-        </Button>
-      </div>
+      {/* Row 2 / Directly below: contextual card-type ToggleGroup (Questions screen only) */}
+      <StudioCardKindBar />
+
+      <ConflictDialog
+        open={Boolean(conflict)}
+        busy={isSaving}
+        serverRevision={conflict?.serverRevision}
+        expectedRevision={conflict?.expectedRevision}
+        onReload={handleReloadConflict}
+        onOverwrite={handleForceOverwriteConflict}
+        onCancel={() => setConflict(null)}
+      />
+
+      <StudioConversionDialog />
+      <AlertDialog
+        open={navigationBlocked}
+        onOpenChange={(open) => {
+          if (!open) {
+            cancelNavigation()
+          }
+        }}
+        title={t("extensions:editor.unsavedExitTitle")}
+        description={t("extensions:editor.unsavedExitDescription")}
+        confirmLabel={t("extensions:editor.discardAndExit")}
+        confirmTestId="editor-discard-exit"
+        onConfirm={confirmNavigation}
+      />
     </header>
   )
 }

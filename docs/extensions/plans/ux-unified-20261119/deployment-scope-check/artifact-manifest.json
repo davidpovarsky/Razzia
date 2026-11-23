@@ -1,0 +1,45 @@
+{
+  "copiedByteForByte": true,
+  "customerFilesRead": false,
+  "dockerUsed": false,
+  "files": [
+    {
+      "bytes": 6950,
+      "name": "verification.json",
+      "sha256": "ea7eb8d54fb9954cd14141c96af38d5a46cf8834784738223e6d8f1e25168782",
+      "source": "work/ux-unified-20261119/deployment-scope-check/verification.json"
+    },
+    {
+      "bytes": 2267,
+      "name": "windows-contract-verification.json",
+      "sha256": "2f79bd8708e9f86b8545b5286b3ff0e1a60f2d7757d9618316855a33d6663d4c",
+      "source": "work/ux-unified-20261119/deployment-scope-check/windows-contract-verification.json"
+    },
+    {
+      "bytes": 7414,
+      "name": "check_contract.py",
+      "sha256": "d9df4816bbe00c0e125b0c86ce6cb748cbf0253b8530c5c9b7eb9f391f772c9f",
+      "source": "work/ux-unified-20261119/deployment-scope-check/check_contract.py"
+    },
+    {
+      "bytes": 7067,
+      "name": "stage-mcp-site.py.diff",
+      "sha256": "8ad88c585180fe22daba86f491f0b9d24c4b16bc194eaf61cdc8753f2a13a617",
+      "source": "work/ux-unified-20261119/deployment-scope-check/stage-mcp-site.py.diff"
+    },
+    {
+      "bytes": 6759,
+      "name": "deploy-mcp-site.py.diff",
+      "sha256": "910afb10e378305d08f8d536620d28654ea0394927fba82007d7da77a8cb283e",
+      "source": "work/ux-unified-20261119/deployment-scope-check/deploy-mcp-site.py.diff"
+    }
+  ],
+  "networkUsed": false,
+  "publicOnly": true,
+  "purpose": "deployment-five-scope-contract",
+  "scriptSha256": {
+    "deploy-mcp-site.py": "07b17a2ed71035c573cb9d945e9ed36acd8093af3b940978339fa4054cd532ba",
+    "stage-mcp-site.py": "daeb027f27a183b95fc9259fd58ea2742adf387398bd56aa995bb7f97be2538a"
+  },
+  "version": 1
+}

@@ -1,0 +1,47 @@
+{
+  "run": "after",
+  "sourceSha256": {
+    "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx": "a1740263f373097ce6f8ccef62d6959b37a32704906e78d30e59d29945daffe8",
+    "packages/web/src/features/quizz/components/studio/theme-audio-options.tsx": "5b244eccb09780ff6285979ec106cd4f8187f91b2b900f0576c6ffc5d86ece14"
+  },
+  "boundary": "Actual CardAudioConfig/ThemeAudioOptions with actual editor providers and native controls; controlled Audio events prove ownership, not audible decoding.",
+  "cases": [
+    {
+      "name": "stale-owner",
+      "mode": "legacy",
+      "status": "FAIL",
+      "checks": [
+        "No mount autoplay",
+        "Old callbacks preserve new slot",
+        "Same slot stop rewinds and detaches",
+        "Current error releases preview"
+      ],
+      "error": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 4\n+ Received  + 4\n\n  Object {\n-   \"endedDetached\": true,\n-   \"errorDetached\": true,\n-   \"paused\": true,\n-   \"time\": 0,\n+   \"endedDetached\": false,\n+   \"errorDetached\": false,\n+   \"paused\": false,\n+   \"time\": 13,\n  }"
+    },
+    {
+      "name": "card-source-change",
+      "mode": "legacy",
+      "status": "PASS",
+      "checks": [
+        "Card change stops audio and clears the old slot indicator",
+        "Same-card source change resets audio and slot state"
+      ]
+    },
+    {
+      "name": "source-owner",
+      "mode": "theme",
+      "status": "FAIL",
+      "checks": [
+        "No theme mount autoplay",
+        "Source change clears visible playback",
+        "Stale prior-source callbacks cannot clear current theme preview",
+        "Explicit theme stop detaches and resets",
+        "Current theme ended releases owner",
+        "Current rejection releases owner and reports recoverable error"
+      ],
+      "error": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 4\n+ Received  + 4\n\n  Object {\n-   \"endedDetached\": true,\n-   \"errorDetached\": true,\n-   \"paused\": true,\n-   \"time\": 0,\n+   \"endedDetached\": false,\n+   \"errorDetached\": false,\n+   \"paused\": false,\n+   \"time\": 13,\n  }"
+    }
+  ],
+  "pageErrors": [],
+  "status": "FAIL"
+}

@@ -1,0 +1,4971 @@
+{
+  "checks": [
+    "Exact Classic stage localized; numeric aspect keyboard direction matches LTR group within RTL editor",
+    "Original Razzia theme selection renders actual Hebrew native preview; responsive theme cards reviewed",
+    "Scene settings heading and duration localized; elapsed/total transport isolated LTR",
+    "Interim result empty state and scene title have no English leakage",
+    "Negative numeric input keeps -20 value and LTR sign/digit direction in Hebrew form",
+    "Hebrew RTL unsaved-exit dialog fits320; cancel preserves edited numeric draft"
+  ],
+  "errors": [],
+  "snapshots": [
+    {
+      "name": "classic-question-preview-390",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 390,
+      "scrollWidth": 390,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nחידון\nהוספת כרטיס\n\nהוסיפו תמונה, וידאו או שמע לשאלה\n\nהעלאה\n\nספריית המדיה\n\nתמונות, שמע או וידאו, עד 100 MB\n\nהוספה מכתובת\n2 תשובות\n1\nטקסט בלבד\nתמונה בלבד\nטקסט ותמונה\n2\nטקסט בלבד\nתמונה בלבד\nטקסט ותמונה\nתצוגה מקדימה חיה\nהסתרת התצוגה המקדימה\n\nמתעדכנת תוך כדי העריכה, ללא צורך בשמירה או בהפעלת משחק.\n\nשאלה\nתשובות\nתוצאות\n16:9\n4:3\nסבב 01 · שאלה 01 / 1\nהשאלה הבאה\nמה התשובה הנכונה לשאלה QA מספר 12?\n1\nעברית English 123\nבחירת הקהל\n01\n2\nEnglish עברית 456\nבחירת הקהל\n02\nאפשר לענות\nהפעלת ההנפשה מחדש\nאופן המענה\nבחירה אחת\nבחירה מרובה\nהערכה מספרית\nקטגוריה\n\nשאלות רצופות באותה קטגוריה יוצרות סבב. טבלת המובילים מוצגת רק כשהקטגוריה משתנה.\n\nניקוד\nניקוד מרבי\n(נק׳)\n\nמספר הנקודות המרבי לתשובה נכונה\n\nהפחתת ניקוד\n\nנקודות שיופחתו על תשובה שגויה. הניקוד הכולל לא ירד מתחת ל־0\n\nתזמון\nהצגת השאלה\n(שנ׳)\n\nמשך הזמן לפני הופעת התשובות\n\nזמן למענה\n(שנ׳)\n\nהזמן העומד לרשות השחקנים כדי לענות\n\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nבחירת מדיה\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nכניסת השאלה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nמוזיקה בזמן המענה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": null,
+          "dir": "rtl",
+          "value": "מה התשובה הנכונה לשאלה QA מספר 12?"
+        },
+        {
+          "id": null,
+          "type": "file",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-text-0",
+          "type": null,
+          "dir": "rtl",
+          "value": "עברית English 123"
+        },
+        {
+          "id": "answer-visual-controls-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-display-mode-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-mode-0-text",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-0-image",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-0-both",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-text-1",
+          "type": null,
+          "dir": "ltr",
+          "value": "English עברית 456"
+        },
+        {
+          "id": "answer-visual-controls-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-display-mode-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-mode-1-text",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-1-image",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-1-both",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-live-preview",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-phase-question",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-results",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-native-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-preview-viewport",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "tadazz-stage-viewport",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "tadazz-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "tadazz-backdrop",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "tadazz-question-panel",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "tadazz-card-0",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "tadazz-card-1",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "tadazz-status",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-config",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-type-single",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-multi",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-estimation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1000"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "20"
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        }
+      ]
+    },
+    {
+      "name": "theme-settings-1440",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nהגדרות הסטודיו וברירות מחדל\n\nהגדירו ברירות מחדל למופע, ליצירת כרטיסים ולהצגה.\n\nערכת הנושא של המופע\nעורך ערכות הנושא\n\nTADAZZ Classic · 1.0.0\n\nהמופע של Goldy עם ההנפשות והקבצים המקוריים שלו.\n\nפעילה\n\nRazzia המקורי · 1.0.0\n\nרכיבי המשחק והפריסה המותאמת למסכים של Razzia המקורי, עם הרחבות TADAZZ.\n\nשימוש בערכה הזו\nתצוגה מקדימה\nשימוש בברירות המחדל של הערכה\nמסכים ורקעים\nשמע\nמצב ברירת מחדל לכרטיסים חדשים\n\nכרטיסי שאלה חדשים שיתווספו לציר הזמן ישתמשו במצב הזה.\n\nחידון — עם ניקוד — נדרשת תשובה נכונה\nסקר — ללא ניקוד — התפלגות דעות\n\nהחלה על כל כרטיסי השאלה הקיימים\n\nהמרת כל השאלות במופע למצב חידון.\n\nהמרת הכול\nהצגת טבלת המובילים\n\nקבעו מתי תוצג טבלת המובילים במהלך המשחק.\n\nרק כרטיסים בציר הזמן\nאופן ההתקדמות\n\nאופן ההתקדמות המשמש כברירת מחדל בין מסכי המופע.\n\nאוטומטית בסיום הזמן\nידנית בידי המנחה",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "show-theme-settings",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-tadazz-classic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-razzia-original",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-lobby",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-answerSelected",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-answerSubmitted",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerWarning",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerExpired",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-voteLocked",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-leaderboard",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-zzTransition",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium2",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium3",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-closing",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        }
+      ]
+    },
+    {
+      "name": "theme-settings-390",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 390,
+      "scrollWidth": 390,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nהגדרות הסטודיו וברירות מחדל\n\nהגדירו ברירות מחדל למופע, ליצירת כרטיסים ולהצגה.\n\nערכת הנושא של המופע\nעורך ערכות הנושא\n\nTADAZZ Classic · 1.0.0\n\nהמופע של Goldy עם ההנפשות והקבצים המקוריים שלו.\n\nפעילה\n\nRazzia המקורי · 1.0.0\n\nרכיבי המשחק והפריסה המותאמת למסכים של Razzia המקורי, עם הרחבות TADAZZ.\n\nשימוש בערכה הזו\nתצוגה מקדימה\nשימוש בברירות המחדל של הערכה\nמסכים ורקעים\nשמע\nמצב ברירת מחדל לכרטיסים חדשים\n\nכרטיסי שאלה חדשים שיתווספו לציר הזמן ישתמשו במצב הזה.\n\nחידון — עם ניקוד — נדרשת תשובה נכונה\nסקר — ללא ניקוד — התפלגות דעות\n\nהחלה על כל כרטיסי השאלה הקיימים\n\nהמרת כל השאלות במופע למצב חידון.\n\nהמרת הכול\nהצגת טבלת המובילים\n\nקבעו מתי תוצג טבלת המובילים במהלך המשחק.\n\nרק כרטיסים בציר הזמן\nאופן ההתקדמות\n\nאופן ההתקדמות המשמש כברירת מחדל בין מסכי המופע.\n\nאוטומטית בסיום הזמן\nידנית בידי המנחה",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "show-theme-settings",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-tadazz-classic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-razzia-original",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-lobby",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-answerSelected",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-answerSubmitted",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerWarning",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerExpired",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-voteLocked",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-leaderboard",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-zzTransition",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium2",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium3",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-closing",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        }
+      ]
+    },
+    {
+      "name": "theme-settings-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nהגדרות הסטודיו וברירות מחדל\n\nהגדירו ברירות מחדל למופע, ליצירת כרטיסים ולהצגה.\n\nערכת הנושא של המופע\nעורך ערכות הנושא\n\nTADAZZ Classic · 1.0.0\n\nהמופע של Goldy עם ההנפשות והקבצים המקוריים שלו.\n\nפעילה\n\nRazzia המקורי · 1.0.0\n\nרכיבי המשחק והפריסה המותאמת למסכים של Razzia המקורי, עם הרחבות TADAZZ.\n\nשימוש בערכה הזו\nתצוגה מקדימה\nשימוש בברירות המחדל של הערכה\nמסכים ורקעים\nשמע\nמצב ברירת מחדל לכרטיסים חדשים\n\nכרטיסי שאלה חדשים שיתווספו לציר הזמן ישתמשו במצב הזה.\n\nחידון — עם ניקוד — נדרשת תשובה נכונה\nסקר — ללא ניקוד — התפלגות דעות\n\nהחלה על כל כרטיסי השאלה הקיימים\n\nהמרת כל השאלות במופע למצב חידון.\n\nהמרת הכול\nהצגת טבלת המובילים\n\nקבעו מתי תוצג טבלת המובילים במהלך המשחק.\n\nרק כרטיסים בציר הזמן\nאופן ההתקדמות\n\nאופן ההתקדמות המשמש כברירת מחדל בין מסכי המופע.\n\nאוטומטית בסיום הזמן\nידנית בידי המנחה",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "show-theme-settings",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-tadazz-classic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-razzia-original",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-lobby",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-answerSelected",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-answerSubmitted",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerWarning",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerExpired",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-voteLocked",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-leaderboard",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-zzTransition",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium2",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium3",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-closing",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        }
+      ]
+    },
+    {
+      "name": "theme-change-dialog-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nהגדרות הסטודיו וברירות מחדל\n\nהגדירו ברירות מחדל למופע, ליצירת כרטיסים ולהצגה.\n\nערכת הנושא של המופע\nעורך ערכות הנושא\n\nTADAZZ Classic · 1.0.0\n\nהמופע של Goldy עם ההנפשות והקבצים המקוריים שלו.\n\nפעילה\n\nRazzia המקורי · 1.0.0\n\nרכיבי המשחק והפריסה המותאמת למסכים של Razzia המקורי, עם הרחבות TADAZZ.\n\nשימוש בערכה הזו\nתצוגה מקדימה\nשימוש בברירות המחדל של הערכה\nמסכים ורקעים\nשמע\nמצב ברירת מחדל לכרטיסים חדשים\n\nכרטיסי שאלה חדשים שיתווספו לציר הזמן ישתמשו במצב הזה.\n\nחידון — עם ניקוד — נדרשת תשובה נכונה\nסקר — ללא ניקוד — התפלגות דעות\n\nהחלה על כל כרטיסי השאלה הקיימים\n\nהמרת כל השאלות במופע למצב חידון.\n\nהמרת הכול\nהצגת טבלת המובילים\n\nקבעו מתי תוצג טבלת המובילים במהלך המשחק.\n\nרק כרטיסים בציר הזמן\nאופן ההתקדמות\n\nאופן ההתקדמות המשמש כברירת מחדל בין מסכי המופע.\n\nאוטומטית בסיום הזמן\nידנית בידי המנחה\nלשנות את ערכת הנושא של המופע?\n\nההגדרות הנוכחיות יועברו לארכיון והערכה שנבחרה תופעל. הגדרות כרטיס שאינן תואמות יישארו לא פעילות.\n\nביטול\nשימוש בערכה הזו",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "show-theme-settings",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-tadazz-classic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-theme-razzia-original",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-lobby",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-answerSelected",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "theme-audio-answerSubmitted",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerWarning",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-timerExpired",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-voteLocked",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-leaderboard",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-zzTransition",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium2",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-podium3",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-closing",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        }
+      ]
+    },
+    {
+      "name": "razzia-question-preview-1440",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\nסוג הכרטיס:\nחידון\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nחידון\nהוספת כרטיס\n\nהוסיפו תמונה, וידאו או שמע לשאלה\n\nהעלאה\n\nספריית המדיה\n\nתמונות, שמע או וידאו, עד 100 MB\n\nהוספה מכתובת\n2 תשובות\n1\nטקסט בלבד\nתמונה בלבד\nטקסט ותמונה\n2\nטקסט בלבד\nתמונה בלבד\nטקסט ותמונה\nתצוגה מקדימה חיה\nהסתרת התצוגה המקדימה\n\nמתעדכנת תוך כדי העריכה, ללא צורך בשמירה או בהפעלת משחק.\n\nשאלה\nתשובות\nתוצאות\n16:9\n4:3\nמה התשובה הנכונה לשאלה QA מספר 12?\n1\n\nעברית English 123\n\n2\n\nEnglish עברית 456\n\nהפעלת ההנפשה מחדש\nאופן המענה\nבחירה אחת\nבחירה מרובה\nהערכה מספרית\nקטגוריה\n\nשאלות רצופות באותה קטגוריה יוצרות סבב. טבלת המובילים מוצגת רק כשהקטגוריה משתנה.\n\nניקוד\nניקוד מרבי\n(נק׳)\n\nמספר הנקודות המרבי לתשובה נכונה\n\nהפחתת ניקוד\n\nנקודות שיופחתו על תשובה שגויה. הניקוד הכולל לא ירד מתחת ל־0\n\nתזמון\nהצגת השאלה\n(שנ׳)\n\nמשך הזמן לפני הופעת התשובות\n\nזמן למענה\n(שנ׳)\n\nהזמן העומד לרשות השחקנים כדי לענות\n\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nכניסת השאלה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nמוזיקה בזמן המענה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": null,
+          "dir": "rtl",
+          "value": "מה התשובה הנכונה לשאלה QA מספר 12?"
+        },
+        {
+          "id": null,
+          "type": "file",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-text-0",
+          "type": null,
+          "dir": "rtl",
+          "value": "עברית English 123"
+        },
+        {
+          "id": "answer-visual-controls-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-display-mode-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-mode-0-text",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-0-image",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-0-both",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-text-1",
+          "type": null,
+          "dir": "ltr",
+          "value": "English עברית 456"
+        },
+        {
+          "id": "answer-visual-controls-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-display-mode-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-mode-1-text",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-1-image",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-1-both",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-live-preview",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-phase-question",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-results",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-native-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-preview-viewport",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-question-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-badge-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-badge-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-config",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-type-single",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-multi",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-estimation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1000"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "20"
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "razzia-question-preview-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nחידון\nהוספת כרטיס\n\nהוסיפו תמונה, וידאו או שמע לשאלה\n\nהעלאה\n\nספריית המדיה\n\nתמונות, שמע או וידאו, עד 100 MB\n\nהוספה מכתובת\n2 תשובות\n1\nטקסט בלבד\nתמונה בלבד\nטקסט ותמונה\n2\nטקסט בלבד\nתמונה בלבד\nטקסט ותמונה\nתצוגה מקדימה חיה\nהסתרת התצוגה המקדימה\n\nמתעדכנת תוך כדי העריכה, ללא צורך בשמירה או בהפעלת משחק.\n\nשאלה\nתשובות\nתוצאות\n16:9\n4:3\nמה התשובה הנכונה לשאלה QA מספר 12?\n1\n\nעברית English 123\n\n2\n\nEnglish עברית 456\n\nהפעלת ההנפשה מחדש\nאופן המענה\nבחירה אחת\nבחירה מרובה\nהערכה מספרית\nקטגוריה\n\nשאלות רצופות באותה קטגוריה יוצרות סבב. טבלת המובילים מוצגת רק כשהקטגוריה משתנה.\n\nניקוד\nניקוד מרבי\n(נק׳)\n\nמספר הנקודות המרבי לתשובה נכונה\n\nהפחתת ניקוד\n\nנקודות שיופחתו על תשובה שגויה. הניקוד הכולל לא ירד מתחת ל־0\n\nתזמון\nהצגת השאלה\n(שנ׳)\n\nמשך הזמן לפני הופעת התשובות\n\nזמן למענה\n(שנ׳)\n\nהזמן העומד לרשות השחקנים כדי לענות\n\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nכניסת השאלה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nמוזיקה בזמן המענה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": null,
+          "dir": "rtl",
+          "value": "מה התשובה הנכונה לשאלה QA מספר 12?"
+        },
+        {
+          "id": null,
+          "type": "file",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-text-0",
+          "type": null,
+          "dir": "rtl",
+          "value": "עברית English 123"
+        },
+        {
+          "id": "answer-visual-controls-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-display-mode-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-mode-0-text",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-0-image",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-0-both",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-text-1",
+          "type": null,
+          "dir": "ltr",
+          "value": "English עברית 456"
+        },
+        {
+          "id": "answer-visual-controls-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-display-mode-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-mode-1-text",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-1-image",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-mode-1-both",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-live-preview",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-phase-question",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-results",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-native-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-preview-viewport",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "show-question-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-badge-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-badge-1",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-config",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-type-single",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-multi",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-estimation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1000"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "20"
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "scene-opening-1440",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\nסוג הכרטיס:\nפתיחה\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nפתיחה\nהוספת כרטיס\nמסך רחב 16:9\nמסך רגיל 4:3\nתצוגת הבמה\nעריכת שכבות\nהפעלה\n00:00.0 / 00:05.0\nפתיחה\nסקירת עברית סופית QA 18.11\n5 שנ׳\n100%\n\nאוטומטית בסיום הזמן\n\n5 שנ׳\n•\nאוטומטית בסיום הזמן\nמעבר לנקודה בציר הזמן\nהגדרות פתיחה\nכותרת\nכותרת משנה\nפריסת הבמה\nמדיה על כל הבמה\nמיקום לוגו המותג\nבמרכז\nבסיום המדיה\nהשארת הפריים האחרון\nהצגת כותרת וכותרת משנה מעל המדיה\nשכבות הנפשה\n0/8\nהוספת הנפשה\n\nעדיין אין שכבות הנפשה. לחצו על הוספת הנפשה כדי למקם שכבת Lottie שקופה על הבמה.\n\nמשך בשניות (1–60)\nהתקדמות\nאוטומטית בסיום הזמן\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nפתיחה\n\nברירת המחדל של הערכה\n\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-toolbar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-aspect-16-9",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-aspect-4-3",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-preview-mode-stage",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-preview-mode-layers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-play-pause",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-time-readout",
+          "type": null,
+          "dir": "ltr",
+          "value": null
+        },
+        {
+          "id": "studio-scene-preview-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-scene-presenter",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-stack-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-behind-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-native-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-opening-overlay",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-above-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-interactive",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-progress-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-awaiting-host",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-scrub-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-scrub-slider",
+          "type": "range",
+          "dir": "ltr",
+          "value": "0"
+        },
+        {
+          "id": "scene-title-input",
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "cinema-scene-controls",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "checkbox",
+          "dir": "rtl",
+          "value": "on"
+        },
+        {
+          "id": "studio-overlay-animations-section",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-overlay-section-toggle",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-open-catalog-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-add-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-empty-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-duration-seconds-input",
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "scene-opening-390",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 390,
+      "scrollWidth": 390,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nפתיחה\nהוספת כרטיס\nמסך רחב 16:9\nמסך רגיל 4:3\nתצוגת הבמה\nעריכת שכבות\nהפעלה\n00:00.0 / 00:05.0\nפתיחה\nסקירת עברית סופית QA 18.11\n5 שנ׳\n100%\n\nאוטומטית בסיום הזמן\n\n5 שנ׳\n•\nאוטומטית בסיום הזמן\nמעבר לנקודה בציר הזמן\nהגדרות פתיחה\nכותרת\nכותרת משנה\nפריסת הבמה\nמדיה על כל הבמה\nמיקום לוגו המותג\nבמרכז\nבסיום המדיה\nהשארת הפריים האחרון\nהצגת כותרת וכותרת משנה מעל המדיה\nשכבות הנפשה\n0/8\nהוספת הנפשה\n\nעדיין אין שכבות הנפשה. לחצו על הוספת הנפשה כדי למקם שכבת Lottie שקופה על הבמה.\n\nמשך בשניות (1–60)\nהתקדמות\nאוטומטית בסיום הזמן\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nפתיחה\n\nברירת המחדל של הערכה\n\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-toolbar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-aspect-16-9",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-aspect-4-3",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-preview-mode-stage",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-preview-mode-layers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-play-pause",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-time-readout",
+          "type": null,
+          "dir": "ltr",
+          "value": null
+        },
+        {
+          "id": "studio-scene-preview-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-scene-presenter",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-stack-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-behind-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-native-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-opening-overlay",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-above-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-interactive",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-progress-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-awaiting-host",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-scrub-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-scrub-slider",
+          "type": "range",
+          "dir": "ltr",
+          "value": "0"
+        },
+        {
+          "id": "scene-title-input",
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "cinema-scene-controls",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "checkbox",
+          "dir": "rtl",
+          "value": "on"
+        },
+        {
+          "id": "studio-overlay-animations-section",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-overlay-section-toggle",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-open-catalog-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-add-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-empty-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-duration-seconds-input",
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "scene-opening-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nפתיחה\nהוספת כרטיס\nמסך רחב 16:9\nמסך רגיל 4:3\nתצוגת הבמה\nעריכת שכבות\nהפעלה\n00:00.0 / 00:05.0\nפתיחה\nסקירת עברית סופית QA 18.11\n5 שנ׳\n100%\n\nאוטומטית בסיום הזמן\n\n5 שנ׳\n•\nאוטומטית בסיום הזמן\nמעבר לנקודה בציר הזמן\nהגדרות פתיחה\nכותרת\nכותרת משנה\nפריסת הבמה\nמדיה על כל הבמה\nמיקום לוגו המותג\nבמרכז\nבסיום המדיה\nהשארת הפריים האחרון\nהצגת כותרת וכותרת משנה מעל המדיה\nשכבות הנפשה\n0/8\nהוספת הנפשה\n\nעדיין אין שכבות הנפשה. לחצו על הוספת הנפשה כדי למקם שכבת Lottie שקופה על הבמה.\n\nמשך בשניות (1–60)\nהתקדמות\nאוטומטית בסיום הזמן\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nפתיחה\n\nברירת המחדל של הערכה\n\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-toolbar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-aspect-16-9",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-aspect-4-3",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-preview-mode-stage",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-preview-mode-layers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-play-pause",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-time-readout",
+          "type": null,
+          "dir": "ltr",
+          "value": null
+        },
+        {
+          "id": "studio-scene-preview-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-scene-presenter",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-stack-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-behind-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-native-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-opening-overlay",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-above-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "cinematic-layer-interactive",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-progress-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-awaiting-host",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-scrub-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-scrub-slider",
+          "type": "range",
+          "dir": "ltr",
+          "value": "0"
+        },
+        {
+          "id": "scene-title-input",
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "cinema-scene-controls",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "checkbox",
+          "dir": "rtl",
+          "value": "on"
+        },
+        {
+          "id": "studio-overlay-animations-section",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-overlay-section-toggle",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-open-catalog-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-add-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-overlay-empty-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-duration-seconds-input",
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": "theme-audio-opening",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "scene-interim-results-1440",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\nסוג הכרטיס:\nתוצאות ביניים\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nתוצאות ביניים\n\nתוצאות ביניים\n\n5 שנ׳\nתוצאות ביניים\nהוספת כרטיס\nמסך רחב 16:9\nמסך רגיל 4:3\nתוצאות ביניים\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nעדיין אין הצבעות\n1\nעברית English 123\n0 הצבעות\n(0%)\n2\nEnglish עברית 456\n0 הצבעות\n(0%)\n0 הצבעות\n5 שנ׳\n100%\n\nאוטומטית בסיום הזמן\n\n5 שנ׳\n•\nאוטומטית בסיום הזמן\nהגדרות תוצאות ביניים\nכותרת\nמשך בשניות (1–60)\nהתקדמות\nאוטומטית בסיום הזמן\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-toolbar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-aspect-16-9",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-aspect-4-3",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-scene-preview-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-scene-presenter",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-question-text",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "no-votes-message",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "interim-option-row",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "interim-option-row",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "total-votes",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-progress-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-awaiting-host",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-title-input",
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-duration-seconds-input",
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "scene-interim-results-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nתוצאות ביניים\n\nתוצאות ביניים\n\n5 שנ׳\nתוצאות ביניים\nהוספת כרטיס\nמסך רחב 16:9\nמסך רגיל 4:3\nתוצאות ביניים\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nעדיין אין הצבעות\n1\nעברית English 123\n0 הצבעות\n(0%)\n2\nEnglish עברית 456\n0 הצבעות\n(0%)\n0 הצבעות\n5 שנ׳\n100%\n\nאוטומטית בסיום הזמן\n\n5 שנ׳\n•\nאוטומטית בסיום הזמן\nהגדרות תוצאות ביניים\nכותרת\nמשך בשניות (1–60)\nהתקדמות\nאוטומטית בסיום הזמן\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-toolbar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-preview-aspect-16-9",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-preview-aspect-4-3",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-scene-preview-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "studio-scene-presenter",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-question-text",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "no-votes-message",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "interim-option-row",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "interim-option-row",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "total-votes",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-progress-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-awaiting-host",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "audio-cue-player-state",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "scene-title-input",
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "scene-duration-seconds-input",
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "negative-estimation-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nתוצאות ביניים\n\nתוצאות ביניים\n\n5 שנ׳\nתוצאות ביניים\nהוספת כרטיס\n\nהוסיפו תמונה, וידאו או שמע לשאלה\n\nהעלאה\n\nספריית המדיה\n\nתמונות, שמע או וידאו, עד 100 MB\n\nהוספה מכתובת\nערך מזערי\nערך מרבי\nהתשובה הנכונה\nתצוגה מקדימה חיה\nהסתרת התצוגה המקדימה\n\nמתעדכנת תוך כדי העריכה, ללא צורך בשמירה או בהפעלת משחק.\n\nשאלה\nתשובות\nתוצאות\n16:9\n4:3\nמה התשובה הנכונה לשאלה QA מספר 12?\n‎-20\n100\nהפעלת ההנפשה מחדש\nאופן המענה\nבחירה אחת\nבחירה מרובה\nהערכה מספרית\nקטגוריה\n\nשאלות רצופות באותה קטגוריה יוצרות סבב. טבלת המובילים מוצגת רק כשהקטגוריה משתנה.\n\nהערכה מספרית\nסוג הקלט\nמחוון\nהקלדת מספר\n\nהשחקנים בוחרים ערך בטווח באמצעות מחוון\n\nגודל צעד\n\nרמת הדיוק של המחוון ושל התשובה הצפויה\n\nטווח סטייה\n\nתשובות בטווח זה מהתשובה הנכונה מקבלות בין 100% על תשובה מדויקת ל־50%. תשובות מחוץ לטווח אינן מקבלות נקודות.\n\nניקוד\nניקוד מרבי\n(נק׳)\n\nמספר הנקודות המרבי לתשובה נכונה\n\nהפחתת ניקוד\n\nנקודות שיופחתו על תשובה שגויה. הניקוד הכולל לא ירד מתחת ל־0\n\nתזמון\nהצגת השאלה\n(שנ׳)\n\nמשך הזמן לפני הופעת התשובות\n\nזמן למענה\n(שנ׳)\n\nהזמן העומד לרשות השחקנים כדי לענות\n\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nכניסת השאלה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nמוזיקה בזמן המענה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": null,
+          "dir": "rtl",
+          "value": "מה התשובה הנכונה לשאלה QA מספר 12?"
+        },
+        {
+          "id": null,
+          "type": "file",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "-20"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "50"
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "50"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "100"
+        },
+        {
+          "id": "question-live-preview",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-phase-question",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-results",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-native-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-preview-viewport",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-config",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-type-single",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-multi",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-estimation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "10"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1000"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "20"
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        }
+      ]
+    },
+    {
+      "name": "unsaved-exit-dialog-320",
+      "lang": "he",
+      "dir": "rtl",
+      "width": 320,
+      "scrollWidth": 320,
+      "text": "שאלות\nמשתתפים\nהגדרות\nהפעלה\nיציאה\nשמירה\nחידון\nסקר\nמדיה\nהנפשה\nמעבר\nפתיחה\nסיום\nספירה לאחור\nטבלת המובילים\nתוצאות ביניים\nסיכום תשובות\n1\n\nמה התשובה הנכונה לשאלה QA מספר 12?\n\nפתיחה\n\nסקירת עברית סופית QA 18.11\n\n5 שנ׳\nתוצאות ביניים\n\nתוצאות ביניים\n\n5 שנ׳\nתוצאות ביניים\nהוספת כרטיס\n\nהוסיפו תמונה, וידאו או שמע לשאלה\n\nהעלאה\n\nספריית המדיה\n\nתמונות, שמע או וידאו, עד 100 MB\n\nהוספה מכתובת\nערך מזערי\nערך מרבי\nהתשובה הנכונה\nתצוגה מקדימה חיה\nהסתרת התצוגה המקדימה\n\nמתעדכנת תוך כדי העריכה, ללא צורך בשמירה או בהפעלת משחק.\n\nשאלה\nתשובות\nתוצאות\n16:9\n4:3\nמה התשובה הנכונה לשאלה QA מספר 12?\n‎-20\n100\nהפעלת ההנפשה מחדש\nאופן המענה\nבחירה אחת\nבחירה מרובה\nהערכה מספרית\nקטגוריה\n\nשאלות רצופות באותה קטגוריה יוצרות סבב. טבלת המובילים מוצגת רק כשהקטגוריה משתנה.\n\nהערכה מספרית\nסוג הקלט\nמחוון\nהקלדת מספר\n\nהשחקנים בוחרים ערך בטווח באמצעות מחוון\n\nגודל צעד\n\nרמת הדיוק של המחוון ושל התשובה הצפויה\n\nטווח סטייה\n\nתשובות בטווח זה מהתשובה הנכונה מקבלות בין 100% על תשובה מדויקת ל־50%. תשובות מחוץ לטווח אינן מקבלות נקודות.\n\nניקוד\nניקוד מרבי\n(נק׳)\n\nמספר הנקודות המרבי לתשובה נכונה\n\nהפחתת ניקוד\n\nנקודות שיופחתו על תשובה שגויה. הניקוד הכולל לא ירד מתחת ל־0\n\nתזמון\nהצגת השאלה\n(שנ׳)\n\nמשך הזמן לפני הופעת התשובות\n\nזמן למענה\n(שנ׳)\n\nהזמן העומד לרשות השחקנים כדי לענות\n\nרקע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nלפי הגדרות המופע\n\nשמע\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nכניסת השאלה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nמוזיקה בזמן המענה\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nחשיפת התוצאות\nלפי הגדרות המופע\nתצוגה מקדימה\nבחירת מדיה\nתנועה\n\nהבחירות שייכות לערכת הנושא הפעילה. הגדרות הכרטיס קודמות להגדרות המופע.\n\nהתנועה והתזמון מוגדרים בידי ערכת הנושא הזו.\n\nלצאת בלי לשמור?\n\nהשינויים בשאלות, במסכים ובהגדרות המופע עדיין לא נשמרו.\n\nביטול\nיציאה בלי שמירה",
+      "controls": [
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": "סקירת עברית סופית QA 18.11"
+        },
+        {
+          "id": "studio-tab-questions",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-participants",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-settings",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-tab-launch",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-exit-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-save-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-type-bar",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-quiz",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-survey",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-media",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-media",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-effects",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-animation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-transition",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-show",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-opening",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-closing",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-countdown",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-group-divider-results",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "toggle-kind-leaderboard",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-interimResults",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "toggle-kind-answerRecap",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-timeline",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-question-card-0",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "editor-scene-card",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-scene-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-card-kind-select",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "studio-add-card-btn",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": null,
+          "dir": "rtl",
+          "value": "מה התשובה הנכונה לשאלה QA מספר 12?"
+        },
+        {
+          "id": null,
+          "type": "file",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "-20"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "50"
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "50"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "100"
+        },
+        {
+          "id": "question-live-preview",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-phase-question",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-phase-results",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "type": "button",
+          "dir": "ltr",
+          "value": ""
+        },
+        {
+          "id": "question-preview-native-stage",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "editor-preview-viewport",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "stage-fit-container",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "native-game-surface",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "product-logo",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-title",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "question-preview-replay",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "question-config",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": "answer-type-single",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-multi",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": "answer-type-estimation",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "text",
+          "dir": "rtl",
+          "value": ""
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "10"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "1000"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "5"
+        },
+        {
+          "id": null,
+          "type": "number",
+          "dir": "ltr",
+          "value": "20"
+        },
+        {
+          "id": "theme-audio-showQuestion",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.7"
+        },
+        {
+          "id": "theme-audio-answersMusic",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.35"
+        },
+        {
+          "id": "theme-audio-revealResults",
+          "type": null,
+          "dir": "rtl",
+          "value": null
+        },
+        {
+          "id": null,
+          "type": "range",
+          "dir": "rtl",
+          "value": "0.5"
+        },
+        {
+          "id": "editor-discard-exit",
+          "type": "button",
+          "dir": "rtl",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

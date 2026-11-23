@@ -1,0 +1,26 @@
+{
+  "stage": "M3A SOURCE ONLY",
+  "base": "5684ec668ad06f865d07119ca6d176bca0789d5b",
+  "acceptedSdkSource": "60d289821df631d55c91d48f4f753197d85d0041",
+  "proposalSha256": "2f0ba0b7172ca33426a10b311b40478f853a0b60fc20749ad5c2ce0a40cabceb",
+  "ownerChat": "01a1dd19-f64c-7193-8a74-9ad7b2c66e2d",
+  "approvedExclusivePaths": [
+    "extensions/src/mcp-app/first-party/**",
+    "extensions/src/mcp-app/tests/first-party/**",
+    "extensions/src/mcp-app/package.json",
+    "extensions/src/mcp-app/pnpm-lock.yaml (resolution deferred to separately granted runner)",
+    "extensions/src/mcp-app/tsconfig.json",
+    "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/**"
+  ],
+  "frozen": [
+    "server/**",
+    "contracts/**",
+    "tests/server/**",
+    "all packages/**",
+    "root configuration/lock",
+    "prior receipts"
+  ],
+  "runtimeAuthorization": "NONE: no local functional/heavy job, no install/server runner yet",
+  "nativePublication": "PENDING_C1 only; no native allocations/writes, no R2 WIP import",
+  "hostOAuth": "NOT IMPLEMENTED; distinct first-party session identity only"
+}

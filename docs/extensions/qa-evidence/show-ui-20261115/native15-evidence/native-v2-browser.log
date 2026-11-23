@@ -1,0 +1,79 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:42:1 › distinct native family switch, exact built admission and disposal (6.4s)
+  ✓  2 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:133:1 › native current-card locale/count/mode/phase and host clock projections (3.2s)
+  ✘  3 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:42:1 › distinct native family switch, exact built admission and disposal (12.9s)
+  ✘  4 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:133:1 › native current-card locale/count/mode/phase and host clock projections (24.8s)
+
+
+  1) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:42:1 › distinct native family switch, exact built admission and disposal 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByTestId('native-preview-surface')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" getByTestId('native-preview-surface') with timeout 5000ms
+      - waiting for getByTestId('native-preview-surface')
+
+
+      47 |   )
+      48 |   await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+    > 49 |   await expect(page.getByTestId("native-preview-surface")).toHaveAttribute(
+         |                                                            ^
+      50 |     "data-preview-ready",
+      51 |     "true",
+      52 |   )
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:49:60
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../out/native-v2-browser-results/qa-native-v2-distinct-nati-f929c-uilt-admission-and-disposal-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: v2-events.json (application/json) ───────────────────────────────────────────────
+    ../../out/native-v2-browser-results/qa-native-v2-distinct-nati-f929c-uilt-admission-and-disposal-webkit/attachments/v2-events-json-4e4fd655aaab4d6894aca3abdcf32ee3c9aeac86.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-v2-browser-results/qa-native-v2-distinct-nati-f929c-uilt-admission-and-disposal-webkit/error-context.md
+
+  2) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:133:1 › native current-card locale/count/mode/phase and host clock projections 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByTestId('native-razzia-question')
+    Expected: "Bạn thích màu nào? 1"
+    Received: "どの色が好きですか？ 1"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" getByTestId('native-razzia-question') with timeout 5000ms
+      - waiting for getByTestId('native-razzia-question')
+
+
+      145 |       phase: "results",
+      146 |     })
+    > 147 |     await expect(page.getByTestId("native-razzia-question")).toHaveText(
+          |                                                              ^
+      148 |       `${localizedFixtureText[locale].question} 1`,
+      149 |     )
+      150 |     await expect(
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:147:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../out/native-v2-browser-results/qa-native-v2-native-curren-5c59c--and-host-clock-projections-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: v2-events.json (application/json) ───────────────────────────────────────────────
+    ../../out/native-v2-browser-results/qa-native-v2-native-curren-5c59c--and-host-clock-projections-webkit/attachments/v2-events-json-1524145d9293916b3f302241637e268bc0d65d33.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-v2-browser-results/qa-native-v2-native-curren-5c59c--and-host-clock-projections-webkit/error-context.md
+
+  2 failed
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:42:1 › distinct native family switch, exact built admission and disposal 
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:133:1 › native current-card locale/count/mode/phase and host clock projections 
+  2 passed (1.2m)

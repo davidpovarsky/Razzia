@@ -1,0 +1,192 @@
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/src/mcp-app/server/results.ts:18:5]
+ 17 |   )
+ 18 |     throw new ToolError("INTERNAL")
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 19 | }
+    `----
+  help: Replace `throw new ToolError("INTERNAL")` with `{throw new ToolError("INTERNAL")}`.
+
+  x eslint(max-params): Function 'failureResult' has too many parameters (4). Maximum allowed is 3.
+    ,-[extensions/src/mcp-app/server/results.ts:21:30]
+ 20 |     
+ 21 | ,-> export function failureResult(
+ 22 | |     name: ToolName | undefined,
+ 23 | |     error: unknown,
+ 24 | |     config: ServerConfig,
+ 25 | |     correlationId = randomUUID(),
+ 26 | `-> ) {
+ 27 |       const failure = safeError(error)
+    `----
+  help: This rule enforces a maximum number of parameters allowed in function definitions.
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[extensions/src/mcp-app/server/results.ts:10:3]
+  9 |   const u = new URL(value)
+ 10 |   if (
+    :   ^^^^
+ 11 |     u.protocol !== "https:" ||
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[extensions/src/mcp-app/server/results.ts:28:3]
+ 27 |   const failure = safeError(error)
+ 28 |   if (failure.consentUrl) {
+    :   ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 29 |     try {
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[extensions/src/mcp-app/server/results.ts:40:3]
+ 39 |   // Every tool has this same strict failure branch. Unknown names are never echoed.
+ 40 |   const structuredContent = jsonObject.parse(
+    :   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 41 |     outputs[name ?? "get_game_draft"].parse({
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[extensions/src/mcp-app/server/results.ts:48:3]
+ 47 |   )
+ 48 |   return {
+    :   ^^^^^^^^
+ 49 |     isError: true,
+    `----
+
+  x typescript(consistent-type-definitions): Use `interface` instead of `type`.
+    ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:12:1]
+ 11 | 
+ 12 | type Option = { label: string; image?: string }
+    : ^^^^
+ 13 | type Question = {
+    `----
+  help: Replace `type Option = { label: string; image?: string }` with `interface Option { label: string; image?: string }`.
+
+  x typescript(consistent-type-definitions): Use `interface` instead of `type`.
+    ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:13:1]
+ 12 | type Option = { label: string; image?: string }
+ 13 | type Question = {
+    : ^^^^
+ 14 |   category: string
+    `----
+  help: Replace `type Question = {
+          category: string
+          title: string
+          kind: "quiz" | "survey"
+          options: readonly Option[]
+          correct?: number
+          sampleCounts?: readonly number[]
+        }` with `interface Question {
+          category: string
+          title: string
+          kind: "quiz" | "survey"
+          options: readonly Option[]
+          correct?: number
+          sampleCounts?: readonly number[]
+        }`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:99:25]
+  98 |     .sort((a, b) => totals[b] - totals[a])) {
+  99 |     if (remainder <= 0) break
+     :                         ^^^^^
+ 100 |     result[index] += 1
+     `----
+  help: Replace `break` with `{break}`.
+
+  x eslint(prefer-destructuring): Use Array destructuring.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:124:20]
+ 123 |   ].sort((a, b) => b.score - a.score || (a.me ? -1 : 1))
+ 124 |   const champion = ranks[0]
+     :                    ^^^^^^^^
+ 125 | 
+     `----
+  help: Use array destructuring rather than direct member access.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:170:22]
+ 169 |         onClick={() => {
+ 170 |           if (final) setScene("winner")
+     :                      ^^^^^^^^^^^^^^^^^^
+ 171 |           else {
+     `----
+  help: Replace `setScene("winner")` with `{setScene("winner")}`.
+
+  x eslint(no-nested-ternary): Do not nest ternary expressions.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:292:18]
+ 291 |                   <p role="status">
+ 292 | ,->                 {question.kind === "survey"
+ 293 | |                     ? "Illustrative audience percentages, including your choice."
+ 294 | |                     : selected === question.correct
+ 295 | |                       ? "Correct! +1,000 points."
+ 296 | `->                     : `The correct answer is ${question.options[question.correct ?? 0].label}.`}
+ 297 |                   </p>
+     `----
+  help: Refactor nested ternary expressions into if-else statements for better readability.
+
+  x eslint(no-nested-ternary): Do not nest ternary expressions.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:299:18]
+ 298 |                   <button className="ggo-primary" onClick={next}>
+ 299 | ,->                 {questionIndex === 3
+ 300 | |                     ? "See the leaderboard"
+ 301 | |                     : questionIndex === 4
+ 302 | |                       ? "Final results"
+ 303 | `->                     : "Next round"}
+ 304 |                     <ArrowRight size={18} />
+     `----
+  help: Refactor nested ternary expressions into if-else statements for better readability.
+
+  x eslint(no-nested-ternary): Do not nest ternary expressions.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:343:12]
+ 342 |             <span>
+ 343 | ,->           {scene === "intro"
+ 344 | |               ? "ARE YOU READY?"
+ 345 | |               : scene === "winner"
+ 346 | |                 ? "THAT'S A WRAP!"
+ 347 | `->               : "THE GREAT GUESS-OFF"}
+ 348 |             </span>
+     `----
+  help: Refactor nested ternary expressions into if-else statements for better readability.
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:100:5]
+  99 |     if (remainder <= 0) break
+ 100 |     result[index] += 1
+     :     ^^^^^^^^^^^^^^^^^^
+ 101 |     remainder -= 1
+     `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:103:3]
+ 102 |   }
+ 103 |   return result
+     :   ^^^^^^^^^^^^^
+ 104 | }
+     `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:141:5]
+ 140 |     }
+ 141 |     setAnimationKey((n) => n + 1)
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 142 |   }
+     `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:175:11]
+ 174 |           }
+ 175 |           setAnimationKey((n) => n + 1)
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 176 |         }}
+     `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[extensions/src/site/web/marketing/GreatGuessOffDemo.tsx:244:15]
+ 243 |                   : undefined
+ 244 |               return (
+     :               ^^^^^^^^
+ 245 |                 <button
+     `----
+
+Found 0 warnings and 19 errors.
+Finished in 22.1s on 49 files with 233 rules using 2 threads.

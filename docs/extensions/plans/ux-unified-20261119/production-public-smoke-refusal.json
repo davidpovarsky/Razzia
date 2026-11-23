@@ -1,0 +1,21 @@
+{
+  "kind": "public-browser-source-pin-refusal",
+  "status": "REFUSED_BEFORE_BROWSER_START",
+  "at": "2026-11-19T13:15:54.506790+00:00",
+  "jobId": "job_c3d3ec1117e2",
+  "expectedSourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "reason": "PUBLIC_ARTIFACT_HASH_MISMATCH",
+  "browserStarted": false,
+  "productionChanged": false,
+  "execution": {
+    "kind": "production-public-browser-smoke-execution",
+    "exit": 1,
+    "expectedRevision": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+    "seconds": 2.39,
+    "timedOut": false,
+    "ownedNodePid": 25828,
+    "forcedTreeCleanup": null,
+    "stdout": "",
+    "stderr": "file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/work/ux-unified-20261119/release-plan/production-public-payload-smoke.mjs:20\nconst requireThat = (condition, code) => { if (!condition) throw new Error(code); };\n                                                                 ^\n\nError: PUBLIC_ARTIFACT_HASH_MISMATCH\n    at requireThat (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/work/ux-unified-20261119/release-plan/production-public-payload-smoke.mjs:20:66)\n    at verifyPublicPayloadCandidate (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/work/ux-unified-20261119/release-plan/production-public-payload-smoke.mjs:76:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/work/ux-unified-20261119/release-plan/production-public-payload-smoke.mjs:96:18\n\nNode.js v24.22.1\n"
+  }
+}

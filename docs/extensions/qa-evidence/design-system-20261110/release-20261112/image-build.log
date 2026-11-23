@@ -1,0 +1,30 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            BuildKit is currently disabled; enable it by removing the DOCKER_BUILDKIT=0
+            environment-variable.
+
+Sending build context to Docker daemon  64.98MB
+Step 1/8 : ARG TADAZZ_BASE_IMAGE
+Step 2/8 : FROM ${TADAZZ_BASE_IMAGE}
+ ---> 8bc2c0dc7961
+Step 3/8 : ARG TADAZZ_SOURCE_REVISION
+ ---> Running in 1cbd2822c00b
+ ---> Removed intermediate container 1cbd2822c00b
+ ---> d255776ce020
+Step 4/8 : LABEL org.opencontainers.image.revision=${TADAZZ_SOURCE_REVISION}
+ ---> Running in 679b45bb18cd
+ ---> Removed intermediate container 679b45bb18cd
+ ---> bb1855a1272f
+Step 5/8 : LABEL com.tadazz.site.enabled="true"
+ ---> Running in 494d3bc8937c
+ ---> Removed intermediate container 494d3bc8937c
+ ---> a3025610d26b
+Step 6/8 : COPY web/ /app/web/
+ ---> 954680e450a5
+Step 7/8 : COPY nginx-server.conf /etc/nginx/tadazz/server.conf
+ ---> e1fe82439583
+Step 8/8 : RUN chmod -R a+rX /app/web
+ ---> Running in f474b802d599
+ ---> Removed intermediate container f474b802d599
+ ---> 417cc204da57
+Successfully built 417cc204da57
+Successfully tagged tadazz:design-system-bff12a6

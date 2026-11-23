@@ -1,0 +1,62 @@
+{
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "mode": "transport",
+  "wrapperVersion": 2,
+  "controllerSha256": "6ab6c244740f79c9475ab8009fe6b80fc650e425666cfee0c680d68f3d8f9e83",
+  "controllerBudgetSeconds": 1980,
+  "lockLeaseSeconds": 2200,
+  "startedAt": "2026-11-19T21:11:06.646928+00:00",
+  "status": "passed",
+  "productionChanged": false,
+  "cleanup": {
+    "status": "verified",
+    "reason": "Exact owned QA container stopped; container process PID is zero",
+    "activeOwnedRuns": [],
+    "run": "tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+    "container": {
+      "id": "e3914156ce37fa7a1800a4cb31f99f09199c31bddfc792d3913e0394836cfc15",
+      "name": "/tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+      "running": false,
+      "pid": 0,
+      "status": "exited",
+      "oomKilled": false
+    }
+  },
+  "acceptanceFailures": [],
+  "admission": {
+    "held": true,
+    "pid": 1814851,
+    "path": "/run/lock/tadazz-mcp-deploy.lock",
+    "heavyQa": [],
+    "productionContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "productionImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a"
+  },
+  "controllerPid": 36872,
+  "createdRunDirectories": [
+    "tadazz-codex-transport-dccfd9d22a46-2ea61b7a"
+  ],
+  "controllerExit": 0,
+  "controllerInterrupted": false,
+  "seconds": 67.11,
+  "lockHolderExit": 0,
+  "lockReleaseOutput": "{\"released\": true, \"reason\": \"release\", \"cleanupInspection\": {\"status\": \"verified\", \"reason\": \"Exact owned QA container stopped; container process PID is zero\", \"activeOwnedRuns\": [], \"run\": \"tadazz-codex-transport-dccfd9d22a46-2ea61b7a\", \"container\": {\"id\": \"e3914156ce37fa7a1800a4cb31f99f09199c31bddfc792d3913e0394836cfc15\", \"name\": \"/tadazz-codex-transport-dccfd9d22a46-2ea61b7a\", \"running\": false, \"pid\": 0, \"status\": \"exited\", \"oomKilled\": false}}}\n",
+  "lockStderr": "",
+  "ownedContainerCleanup": {
+    "status": "verified",
+    "reason": "Exact owned QA container stopped; container process PID is zero",
+    "activeOwnedRuns": [],
+    "run": "tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+    "container": {
+      "id": "e3914156ce37fa7a1800a4cb31f99f09199c31bddfc792d3913e0394836cfc15",
+      "name": "/tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+      "running": false,
+      "pid": 0,
+      "status": "exited",
+      "oomKilled": false
+    }
+  },
+  "lockContinuityVerified": true,
+  "exit": 0,
+  "finishedAt": "2026-11-19T21:12:13.886982+00:00"
+}

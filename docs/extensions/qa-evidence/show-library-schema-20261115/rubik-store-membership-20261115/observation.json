@@ -1,0 +1,898 @@
+{
+  "status": "OBSERVED_LOCAL_FONT_CAFS_MEMBERSHIP_NOT_RUNTIME_AUTHORITY",
+  "capturedUtc": "2026-11-15T19:04:13.145468+00:00",
+  "sourceCommit": "54235b49d08184d920d6e996d47f05c3096e6bd8",
+  "database": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\index.db",
+  "databaseBefore": {
+    "bytes": 4182016,
+    "sha256": "44ad356254d02b87f87b2e84871adf0a1010e17fcb69fb69a6272b16989ac282",
+    "sha512": "9c46799e5ef504dbaa64e73d2d1aca2a31f7095c6bcb5679bc84bbed31c7f0d5a34f7416b0304ee846cc63b10ac3ab0d08b03b17bdd0d52c971ec8d17036e443",
+    "mtimeNs": 1794712173056072000,
+    "inode": 1688849862082180
+  },
+  "databaseAfter": {
+    "bytes": 4182016,
+    "sha256": "44ad356254d02b87f87b2e84871adf0a1010e17fcb69fb69a6272b16989ac282",
+    "sha512": "9c46799e5ef504dbaa64e73d2d1aca2a31f7095c6bcb5679bc84bbed31c7f0d5a34f7416b0304ee846cc63b10ac3ab0d08b03b17bdd0d52c971ec8d17036e443",
+    "mtimeNs": 1794712173056072000,
+    "inode": 1688849862082180
+  },
+  "sidecarsBefore": {
+    "-wal": false,
+    "-shm": false,
+    "-journal": false
+  },
+  "sidecarsAfter": {
+    "-wal": false,
+    "-shm": false,
+    "-journal": false
+  },
+  "sqliteOpen": {
+    "mode": "ro",
+    "immutable": true,
+    "queryOnly": true
+  },
+  "sqliteSchema": [
+    [
+      "package_index",
+      "CREATE TABLE package_index (\n          key TEXT PRIMARY KEY,\n          data BLOB NOT NULL\n        ) WITHOUT ROWID\n      "
+    ],
+    [
+      "sqlite_stat1",
+      "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+    ]
+  ],
+  "modulesMetadata": {
+    "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.modules.yaml",
+    "bytes": 38406,
+    "sha256": "639664453a7bdcffc8360029b574d92fc2b0256b2bbe8919a1c4db4d2132637c",
+    "format": "JSON",
+    "fields": {
+      "storeDir": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11",
+      "virtualStoreDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm",
+      "packageManager": "pnpm@11.24.0",
+      "layoutVersion": 5,
+      "nodeLinker": "isolated"
+    },
+    "historicalInstallInvocationProven": false
+  },
+  "decoder": {
+    "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\docs\\extensions\\qa-evidence\\show-library-schema-20261115\\vendor-dd3-membership-20261115\\decode_index.py",
+    "sha256": "571abc92ecc5f227d714f6f6e9a631be68697d233003cdd2a8bb2778b6b170db",
+    "matchesGit": true
+  },
+  "indexKey": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==\t@fontsource-variable/rubik@5.3.0",
+  "indexBlobBytes": 4263,
+  "indexBlobSha256": "a09421223cbb51eadf9ac4d4bf97d05c7915c28b07a84c96f10e9dd1d60b3775",
+  "indexBlobBase64": "1HJAlK1yZXF1aXJlc0J1aWxkqG1hbmlmZXN0pGFsZ2+lZmlsZXPC1HJBkqd2ZXJzaW9upG5hbWWlNS4zLjC6QGZvbnRzb3VyY2UtdmFyaWFibGUvcnViaWumc2hhNTEy3gAYp0xJQ0VOU0XUckKUqWNoZWNrZWRBdKZkaWdlc3SkbW9kZaRzaXply0J6HMnOIyAA2YA1MzkwZGJiNDIwNjE0NzhiNjI5ODIyMGRjMDY1NTNhN2VmYzZhZWE1ODJiODMxMGRiNDNhOGNhMzliM2NlOWYzNmU2MzZlYWM0MzBmYzQ3NGZlNzAxODNlOGRlNDMxMWI3YjEyMjgzZGRkYTlmM2Q1MWQwNzBmN2YyMDAxYzJjNc0BpM0RhqlpbmRleC5jc3NCy0J6HMnOI9AA2YBkMGQyZTUwYjFmZDIxOWJkMzg0ZGJiMTBkMjEyOWE4Y2U4NGFkOGNjZDcwNzhiMzE4MWM1OGFlODcxYjMzMDlkN2JiNjllNmRmMTZmYjcxOTY2MWM2YjkyZDFkZWI3MGE4MGYyOWZlYzY3YmMzYmE5ZGQyOGQ1Mzc1NWQyZmM0Zc0BpM0KFa93Z2h0LWl0YWxpYy5jc3NCy0J6HMnOJIAA2YA4Y2I5YzFhY2U0MTlkYjYxMjg4ZjUxM2E3YjU0ZjI0OTk3OTU2NTYzNjA3NDUzODNlZDVmODhmZDE5MDgxMmNlN2QwMmU4NGZiYmJlN2QyMjZmNDVlMTYzZDlkZDhhODM0MDkwMWViNTVmZTUyNjAwM2UzOTFhZDFkNTQxY2YwY80BpM0KFah3Z2h0LmNzc0LLQnocyc4j0ADZgGQwZDJlNTBiMWZkMjE5YmQzODRkYmIxMGQyMTI5YThjZTg0YWQ4Y2NkNzA3OGIzMTgxYzU4YWU4NzFiMzMwOWQ3YmI2OWU2ZGYxNmZiNzE5NjYxYzZiOTJkMWRlYjcwYTgwZjI5ZmVjNjdiYzNiYTlkZDI4ZDUzNzU1ZDJmYzRlzQGkzQoVrW1ldGFkYXRhLmpzb25Cy0J6HMnOJTAA2YAyMzQ5ZDEzNWQ1NGU1OTAyNDY0ZTc1ZmQ5ZDNkNjZiN2Y5M2FjODNhZTk2MTM0MGYyMGRkNWY2ZmJiYWYxNGU5ZjQ0OGRkYWM4ZTQ5YjAzYWU1Y2MzNzU2NTEwOTA2YjA1YzA5NjE0YTIxNGVlYzdkZWM2ZTM2NTk1ODFiZWY4NM0BpM0DWqxwYWNrYWdlLmpzb25Cy0J6HMnOJZAA2YBjNDVjYzg2NmJjMjMxZjI4NjliMzJjMWFjNzM2ZDQ0MDMzYTFlNWU2MDUxZGMxOGEwYTMxZjEyMDM4YWE3N2VhNjM3OWE4NzQ5NWU5NGZhN2IzNGMyMjhhYWI5ZGJhZGEzZWUxNjZhNjQ3MTljOTg2MTY1ODkyOWQwMjc5Njk4NM0BpM0Fsax1bmljb2RlLmpzb25Cy0J6HMnOJiAA2YAzMDBlZDI3NGYzY2M0NDhhOTRlMDkyYTRlYzM0NzlkYzNlMmRhOGQzZWVkMTgyMTgzMDE4ODk0NDU4MGE5MGVmMGQ1MWIzOTMzMDIxZmFkMzYyZjM5M2Y5ODljMDQ5ODg1OWQyNDFjZDNjOGZmN2MyNWYxNmZiOWNjMGM3YjM3NM0BpM0Eq6xDSEFOR0VMT0cubWRCy0J6HMnOJsAA2YAwYTRkYTg5NzUxMTQ1ZmNjZjE1Y2QyYTFjZDRjMTUyZjQ0YTlmNGUyODY3Mzc1NWFkZjIwNzFhNDI5ODQ3OWVmOTc5MTE5NTc2Zjc1ZWQ1NmQ0M2YzMDY5NzBiNTZhMDBkOTdmNzk4M2RmMDA4ZjMwYTZjN2Q1MmI4YzU0MzkyYs0BpMxvqVJFQURNRS5tZELLQnocyc4nUADZgGVlZjQ4ZjlmMTUwODg1N2U2ZWZmOWRlYjgwZDA4NDBkMWJhODk1YzVhZWU1MWIyN2MyNzYzMDJlYjk3MGU1NmUxOTY0ZjQ2MGNmMzUyY2YxOWM4NDdiMmExZTE3NWZiNGUzOWRjYThiZDgxN2UyOGIyMDBmMjM0ZTkwNzYwZWFjzQGkzQogsnNjc3MvbWV0YWRhdGEuc2Nzc0LLQnocyc4oAADZgDZkZWI2Y2M5MGQ0M2QxYzBlYmVhMmI3NGIyZWFhZDdjNjYyZGM4YTJjNzcyZThmNzY4NjM0NzJhNTNjYzNmNjJiZmZmZDY3ZGQ2ODgyZWQ2ODcxMDAyNGI1ZTA5ZGZhZDUzYmViMjZlZjUyNDc3ODZiMGY4NGE1ODUzZTA5ZjY4zQGkzQcssHNjc3MvbWl4aW5zLnNjc3NCy0J6HMnOKGAA2YA5YWU2OTQzNTc1M2JlZmM3NzYyZmY5YzNkMGYxYzEzZGFjMWZjYjJiZWEyOTU2ZTQzNmFhOTA1ZjQwZjg1NDY1ZDgyY2UyYTk1N2U0YzlmYzc4ODFhYjA4MTlkZTI4ZjFmMGM1OTEwYTAzNTVjNDJlOTk1MGIxNzY0YTQ3YTZmN80BpM0Xma5pbmRleC5kLmNzcy50c0LLQnocyc4pQADZgDRlZTFjODhmOGMzZjRlNGNkMzRjYjZjMDAzMzliZjlkNmQwMzZmZjRhZGUzYWY0OWU4NzFjYzg5NjZiODRjNzI5ZDhiNzU0OTJhY2M2NDEzYzlhNjY0YWMwMGE1Nzk1ODIyM2FjMTNjNDIyOWRhOGM2MmViZTZhNTNlNGY3ODNmzQGkC9kkZmlsZXMvcnViaWstYXJhYmljLXdnaHQtaXRhbGljLndvZmYyQstCehzJzipgANmAYzA2MGIxNGRiZTU5NGVmNDgyMjEyYjU3ZDk1MmJjMDIxYjJlODdmZjM1NGFkZTAwMGE3NTYwY2YwNzU4OWRjYmRiYjBhMDM5M2Y3MmM0N2Y5ZGJmOTg2MzQ5ODhjODlhZDExMjAwMzM3ZTI1MjU1MzBkNzUzNzdkNDMyZDk2NWTNAaTNf2zZJGZpbGVzL3J1YmlrLWFyYWJpYy13Z2h0LW5vcm1hbC53b2ZmMkLLQnocyc4rgADZgDAxZTI4ZWEzNjcyYmM3ZTYxM2ZmMDQ1NzM0YmQwNTBiZTI0MTYyOTFkMjI4MGRiZTAzZDM5ZDllMjgwZjc2ZjhjMGFjMzI1NmRhYmFiZTU5ZDQwNWVhNjE5NDA3YTVlYTQyOGM0ODdmOTYyYzFhYWFmYTVlYTBmN2NiZTQ0ZTc4zQGkzX7U2SpmaWxlcy9ydWJpay1jeXJpbGxpYy1leHQtd2dodC1pdGFsaWMud29mZjJCy0J6HMnOLDAA2YAwYzhlNWU1YzE0ODBhOTA2MWEwNDVjZjhmMzNhMjEwMjk4N2FjZjEwOWRmZTkxNDY2MWYzNDc4OWUxZTU5ZWI5MjY3YjcwM2ViZjM5NmEyOWE0ZjQ2MTMwN2E4MDFjODAyYWZhN2Y5NjQxYWMyNGY3YzM2MWRkMDRjOWQxMzJmZM0BpM01bNkqZmlsZXMvcnViaWstY3lyaWxsaWMtZXh0LXdnaHQtbm9ybWFsLndvZmYyQstCehzJzizgANmANmM2Y2ViMjFlODgzZDc5OTU5YjI0ZDA1NmQ0YzAxMmQ1ZjZkNzNjMDQxMDdjNzMxNDRmNGFmODBjMGY3ZjUxYTNlZjk3MjQ4OGZjMjIwNDcxYzY2Y2IxOWQwMTNmYWM2MzQyMGUxZDRiMDdkZmQ1M2IxZDcwNWMyZGZkN2ZlOTfNAaTNMGTZJmZpbGVzL3J1YmlrLWN5cmlsbGljLXdnaHQtaXRhbGljLndvZmYyQstCehzJzi2AANmAYzMyNDE3YjhlNWZlMWJiMDEzODQ0M2EyYjBlMDBmNjc5MTI4NDQ0Y2JlZDFkODkxNmIzOTRiZmE0MzkxZDczYjkxOGIwNWUyYzlmNjkxOTc3MmJkMmY3MWZkMDEyNzBjNjMwZTZkZjBmMGJiNDY3ZDEwZTM4NmRlZmIyNzQ4ODTNAaTNQGjZJmZpbGVzL3J1YmlrLWN5cmlsbGljLXdnaHQtbm9ybWFsLndvZmYyQstCehzJzi9wANmAZWFmMGM4OWRjODYyNmJiMmQ4ZmQ3OWIxZDY2NTBlZDJiMjlkYjYwMjVhYWVkODRiNDJmNDJlM2YxYzkzZWMwMDQ2N2E4ZmNjNjYwOTFjM2RmMTBhNDhlYTA0MDI0ZDU2OWFhZjQ3M2Q5MDY2ZmExODhhMWM4OGMwZWRhNmI1NjnNAaTNOwjZJGZpbGVzL3J1YmlrLWhlYnJldy13Z2h0LWl0YWxpYy53b2ZmMkLLQnocyc4v4ADZgGFjMGU2NTY4NGE1MjgzNDFhMDA2ZTJmNDQ5OWRjZDQ5Mjg1ZDQ2MjkzZDlhZGFkYmY1ZmM0Y2MyMTk2NzY3NTZjNzc1MWVkNDEwNGQ3ODM4MWIxYzM5YzZmMDg5YWIxMDBkZmE2YjhlYTg2Y2IyMjI1MjJiYjYxOTdiNTMyODg4zQGkzSYk2SRmaWxlcy9ydWJpay1oZWJyZXctd2dodC1ub3JtYWwud29mZjJCy0J6HMnOMJAA2YAyYjlkMGZmNzhhMjc4ZmQ1MzRkOTFlOTQxNjIwOWZlMGJhM2ZkMzUxNDdmYWY3YmU1YmJiOWE4ZDBhNjQ1ODJkZGU3YTk3OWNlN2Q2MjI2YTllY2I4YWIzMTg2NjEwMzVlZGJiYzg2ZGEzZTlhY2ZhNzFiYmQ3OWY4Nzg0YTg3Ns0BpM0khNknZmlsZXMvcnViaWstbGF0aW4tZXh0LXdnaHQtaXRhbGljLndvZmYyQstCehzJzjEAANmAZGY3MTNiMjdjYWE5YzhhZGU4NTBiMTMwNzcwYjhkZGM2YzJlMDUxOTBiMDM0NDFjMWI3NzdhM2U2MWRmNjU5OGFhYjc5ZmU4MDIyYTY5ZmVlYmI1NWVjYjc1ZjRkMWFhMmRiMDRjZDBkYTRiMWI3NzBiYzczMTM2NjYzMDk1YjHNAaTNUqDZJ2ZpbGVzL3J1YmlrLWxhdGluLWV4dC13Z2h0LW5vcm1hbC53b2ZmMkLLQnocyc4x0ADZgDUyZTZmNDc3OTFiN2NiNWFkYThmNzUyNjdiYjJlYjVhYmUzZjZhNmY1MTkyZTc5Y2M5NWFlODlkOTAwM2EwNjZmNjY1NWE4YzA4MGFkZWExNjM5NjFkMTQ5OGJjYWY5ODI2MGIzNDdiMjAyY2UxNjE1YjAwNDFlNDZlNjhhNzJjzQGkzUvI2SNmaWxlcy9ydWJpay1sYXRpbi13Z2h0LWl0YWxpYy53b2ZmMkLLQnocyc4yQADZgDdiNTliNTI4MzFjYTczNjk3YmEwMDQwYWY5MTkyZDUyNjI2MTBkOTY4ZmUwZTVhM2NhYjg4NjZjY2UwOWYzM2Y3NzE5ZjNmMmVkYTYzYzc0NDYzZjU2MTg5YzM5OTQ4ZmM1MzUxYzg5MjQ3YTgwZGViY2Y5YjQzYmJlMjk5N2VhzQGkzY8I2SNmaWxlcy9ydWJpay1sYXRpbi13Z2h0LW5vcm1hbC53b2ZmMkLLQnocyc4ywADZgGQ5ZTUzZWUzYmNkZWRlMDk2NWRiMGZlNjJkZTFiNWI3OGQ1OWJhZDJiYzJmYmYxYWUzZWY5MTUyZTU4ODNjZmZkYjY5NGEzNmZmZmQwMGViY2M3MWFhZmYyYzRiNTg2MzBjODA4NzgxZTk2NjIzMWNlNGZjMTAzYjYyZGYwMDJhzQGkzYoU",
+  "decodedIndex": {
+    "requiresBuild": false,
+    "manifest": {
+      "version": "5.3.0",
+      "name": "@fontsource-variable/rubik"
+    },
+    "algo": "sha512",
+    "files": {
+      "LICENSE": {
+        "checkedAt": 1794434196018.0,
+        "digest": "5390dbb42061478b6298220dc06553a7efc6aea582b8310db43a8ca39b3ce9f36e636eac430fc474fe70183e8de4311b7b12283ddda9f3d51d070f7f2001c2c5",
+        "mode": 420,
+        "size": 4486
+      },
+      "index.css": {
+        "checkedAt": 1794434196029.0,
+        "digest": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mode": 420,
+        "size": 2581
+      },
+      "wght-italic.css": {
+        "checkedAt": 1794434196040.0,
+        "digest": "8cb9c1ace419db61288f513a7b54f2499795656360745383ed5f88fd190812ce7d02e84fbbbe7d226f45e163d9dd8a8340901eb55fe526003e391ad1d541cf0c",
+        "mode": 420,
+        "size": 2581
+      },
+      "wght.css": {
+        "checkedAt": 1794434196029.0,
+        "digest": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mode": 420,
+        "size": 2581
+      },
+      "metadata.json": {
+        "checkedAt": 1794434196051.0,
+        "digest": "2349d135d54e5902464e75fd9d3d66b7f93ac83ae961340f20dd5f6fbbaf14e9f448ddac8e49b03ae5cc3756510906b05c09614a214eec7dec6e3659581bef84",
+        "mode": 420,
+        "size": 858
+      },
+      "package.json": {
+        "checkedAt": 1794434196057.0,
+        "digest": "c45cc866bc231f2869b32c1ac736d44033a1e5e6051dc18a0a31f12038aa77ea6379a87495e94fa7b34c228aab9dbada3ee166a64719c9861658929d02796984",
+        "mode": 420,
+        "size": 1457
+      },
+      "unicode.json": {
+        "checkedAt": 1794434196066.0,
+        "digest": "300ed274f3cc448a94e092a4ec3479dc3e2da8d3eed1821830188944580a90ef0d51b3933021fad362f393f989c0498859d241cd3c8ff7c25f16fb9cc0c7b374",
+        "mode": 420,
+        "size": 1195
+      },
+      "CHANGELOG.md": {
+        "checkedAt": 1794434196076.0,
+        "digest": "0a4da89751145fccf15cd2a1cd4c152f44a9f4e28673755adf2071a4298479ef979119576f75ed56d43f306970b56a00d97f7983df008f30a6c7d52b8c54392b",
+        "mode": 420,
+        "size": 111
+      },
+      "README.md": {
+        "checkedAt": 1794434196085.0,
+        "digest": "eef48f9f1508857e6eff9deb80d0840d1ba895c5aee51b27c276302eb970e56e1964f460cf352cf19c847b2a1e175fb4e39dca8bd817e28b200f234e90760eac",
+        "mode": 420,
+        "size": 2592
+      },
+      "scss/metadata.scss": {
+        "checkedAt": 1794434196096.0,
+        "digest": "6deb6cc90d43d1c0ebea2b74b2eaad7c662dc8a2c772e8f76863472a53cc3f62bfffd67dd6882ed68710024b5e09dfad53beb26ef5247786b0f84a5853e09f68",
+        "mode": 420,
+        "size": 1836
+      },
+      "scss/mixins.scss": {
+        "checkedAt": 1794434196102.0,
+        "digest": "9ae69435753befc7762ff9c3d0f1c13dac1fcb2bea2956e436aa905f40f85465d82ce2a957e4c9fc7881ab0819de28f1f0c5910a0355c42e9950b1764a47a6f7",
+        "mode": 420,
+        "size": 6041
+      },
+      "index.d.css.ts": {
+        "checkedAt": 1794434196116.0,
+        "digest": "4ee1c88f8c3f4e4cd34cb6c00339bf9d6d036ff4ade3af49e871cc8966b84c729d8b75492acc6413c9a664ac00a57958223ac13c4229da8c62ebe6a53e4f783f",
+        "mode": 420,
+        "size": 11
+      },
+      "files/rubik-arabic-wght-italic.woff2": {
+        "checkedAt": 1794434196134.0,
+        "digest": "c060b14dbe594ef482212b57d952bc021b2e87ff354ade000a7560cf07589dcbdbb0a0393f72c47f9dbf98634988c89ad11200337e2525530d75377d432d965d",
+        "mode": 420,
+        "size": 32620
+      },
+      "files/rubik-arabic-wght-normal.woff2": {
+        "checkedAt": 1794434196152.0,
+        "digest": "01e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+        "mode": 420,
+        "size": 32468
+      },
+      "files/rubik-cyrillic-ext-wght-italic.woff2": {
+        "checkedAt": 1794434196163.0,
+        "digest": "0c8e5e5c1480a9061a045cf8f33a2102987acf109dfe914661f34789e1e59eb9267b703ebf396a29a4f461307a801c802afa7f9641ac24f7c361dd04c9d132fd",
+        "mode": 420,
+        "size": 13676
+      },
+      "files/rubik-cyrillic-ext-wght-normal.woff2": {
+        "checkedAt": 1794434196174.0,
+        "digest": "6c6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+        "mode": 420,
+        "size": 12388
+      },
+      "files/rubik-cyrillic-wght-italic.woff2": {
+        "checkedAt": 1794434196184.0,
+        "digest": "c32417b8e5fe1bb0138443a2b0e00f679128444cbed1d8916b394bfa4391d73b918b05e2c9f6919772bd2f71fd01270c630e6df0f0bb467d10e386defb274884",
+        "mode": 420,
+        "size": 16488
+      },
+      "files/rubik-cyrillic-wght-normal.woff2": {
+        "checkedAt": 1794434196215.0,
+        "digest": "eaf0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+        "mode": 420,
+        "size": 15112
+      },
+      "files/rubik-hebrew-wght-italic.woff2": {
+        "checkedAt": 1794434196222.0,
+        "digest": "ac0e65684a528341a006e2f4499dcd49285d46293d9adadbf5fc4cc219676756c7751ed4104d78381b1c39c6f089ab100dfa6b8ea86cb222522bb6197b532888",
+        "mode": 420,
+        "size": 9764
+      },
+      "files/rubik-hebrew-wght-normal.woff2": {
+        "checkedAt": 1794434196233.0,
+        "digest": "2b9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+        "mode": 420,
+        "size": 9348
+      },
+      "files/rubik-latin-ext-wght-italic.woff2": {
+        "checkedAt": 1794434196240.0,
+        "digest": "df713b27caa9c8ade850b130770b8ddc6c2e05190b03441c1b777a3e61df6598aab79fe8022a69feebb55ecb75f4d1aa2db04cd0da4b1b770bc73136663095b1",
+        "mode": 420,
+        "size": 21152
+      },
+      "files/rubik-latin-ext-wght-normal.woff2": {
+        "checkedAt": 1794434196253.0,
+        "digest": "52e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+        "mode": 420,
+        "size": 19400
+      },
+      "files/rubik-latin-wght-italic.woff2": {
+        "checkedAt": 1794434196260.0,
+        "digest": "7b59b52831ca73697ba0040af9192d5262610d968fe0e5a3cab8866cce09f33f7719f3f2eda63c74463f56189c39948fc5351c89247a80debcf9b43bbe2997ea",
+        "mode": 420,
+        "size": 36616
+      },
+      "files/rubik-latin-wght-normal.woff2": {
+        "checkedAt": 1794434196268.0,
+        "digest": "d9e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+        "mode": 420,
+        "size": 35348
+      }
+    }
+  },
+  "files": [
+    {
+      "packagePath": "CHANGELOG.md",
+      "originalIndexRow": {
+        "checkedAt": 1794434196076.0,
+        "digest": "0a4da89751145fccf15cd2a1cd4c152f44a9f4e28673755adf2071a4298479ef979119576f75ed56d43f306970b56a00d97f7983df008f30a6c7d52b8c54392b",
+        "mode": 420,
+        "size": 111
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\0a\\4da89751145fccf15cd2a1cd4c152f44a9f4e28673755adf2071a4298479ef979119576f75ed56d43f306970b56a00d97f7983df008f30a6c7d52b8c54392b",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\CHANGELOG.md",
+      "cafs": {
+        "bytes": 111,
+        "sha256": "85fdcfc37da22374dfc9bba5ea81e9bb99f7afb1f78521cd374156aef6f158fd",
+        "sha512": "0a4da89751145fccf15cd2a1cd4c152f44a9f4e28673755adf2071a4298479ef979119576f75ed56d43f306970b56a00d97f7983df008f30a6c7d52b8c54392b",
+        "mtimeNs": 1794434196076207900,
+        "inode": 1407374885438425
+      },
+      "installed": {
+        "bytes": 111,
+        "sha256": "85fdcfc37da22374dfc9bba5ea81e9bb99f7afb1f78521cd374156aef6f158fd",
+        "sha512": "0a4da89751145fccf15cd2a1cd4c152f44a9f4e28673755adf2071a4298479ef979119576f75ed56d43f306970b56a00d97f7983df008f30a6c7d52b8c54392b",
+        "mtimeNs": 1794434196076207900,
+        "inode": 1407374885438425
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "LICENSE",
+      "originalIndexRow": {
+        "checkedAt": 1794434196018.0,
+        "digest": "5390dbb42061478b6298220dc06553a7efc6aea582b8310db43a8ca39b3ce9f36e636eac430fc474fe70183e8de4311b7b12283ddda9f3d51d070f7f2001c2c5",
+        "mode": 420,
+        "size": 4486
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\53\\90dbb42061478b6298220dc06553a7efc6aea582b8310db43a8ca39b3ce9f36e636eac430fc474fe70183e8de4311b7b12283ddda9f3d51d070f7f2001c2c5",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\LICENSE",
+      "cafs": {
+        "bytes": 4486,
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c",
+        "sha512": "5390dbb42061478b6298220dc06553a7efc6aea582b8310db43a8ca39b3ce9f36e636eac430fc474fe70183e8de4311b7b12283ddda9f3d51d070f7f2001c2c5",
+        "mtimeNs": 1794434196015146300,
+        "inode": 1688849862149032
+      },
+      "installed": {
+        "bytes": 4486,
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c",
+        "sha512": "5390dbb42061478b6298220dc06553a7efc6aea582b8310db43a8ca39b3ce9f36e636eac430fc474fe70183e8de4311b7b12283ddda9f3d51d070f7f2001c2c5",
+        "mtimeNs": 1794434196015146300,
+        "inode": 1688849862149032
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "README.md",
+      "originalIndexRow": {
+        "checkedAt": 1794434196085.0,
+        "digest": "eef48f9f1508857e6eff9deb80d0840d1ba895c5aee51b27c276302eb970e56e1964f460cf352cf19c847b2a1e175fb4e39dca8bd817e28b200f234e90760eac",
+        "mode": 420,
+        "size": 2592
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\ee\\f48f9f1508857e6eff9deb80d0840d1ba895c5aee51b27c276302eb970e56e1964f460cf352cf19c847b2a1e175fb4e39dca8bd817e28b200f234e90760eac",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\README.md",
+      "cafs": {
+        "bytes": 2592,
+        "sha256": "0800717cb28e14ab554b819b5422b427e7ab107203accce06b39f50440dc9217",
+        "sha512": "eef48f9f1508857e6eff9deb80d0840d1ba895c5aee51b27c276302eb970e56e1964f460cf352cf19c847b2a1e175fb4e39dca8bd817e28b200f234e90760eac",
+        "mtimeNs": 1794434196085418800,
+        "inode": 1407374885438427
+      },
+      "installed": {
+        "bytes": 2592,
+        "sha256": "0800717cb28e14ab554b819b5422b427e7ab107203accce06b39f50440dc9217",
+        "sha512": "eef48f9f1508857e6eff9deb80d0840d1ba895c5aee51b27c276302eb970e56e1964f460cf352cf19c847b2a1e175fb4e39dca8bd817e28b200f234e90760eac",
+        "mtimeNs": 1794434196085418800,
+        "inode": 1407374885438427
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-arabic-wght-italic.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196134.0,
+        "digest": "c060b14dbe594ef482212b57d952bc021b2e87ff354ade000a7560cf07589dcbdbb0a0393f72c47f9dbf98634988c89ad11200337e2525530d75377d432d965d",
+        "mode": 420,
+        "size": 32620
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\c0\\60b14dbe594ef482212b57d952bc021b2e87ff354ade000a7560cf07589dcbdbb0a0393f72c47f9dbf98634988c89ad11200337e2525530d75377d432d965d",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-arabic-wght-italic.woff2",
+      "cafs": {
+        "bytes": 32620,
+        "sha256": "d64df39f7e37d0cfbfa2cbbc6c534d485273bb4d59c51dcfe5878b83e9e05764",
+        "sha512": "c060b14dbe594ef482212b57d952bc021b2e87ff354ade000a7560cf07589dcbdbb0a0393f72c47f9dbf98634988c89ad11200337e2525530d75377d432d965d",
+        "mtimeNs": 1794434196133851500,
+        "inode": 13510798883996711
+      },
+      "installed": {
+        "bytes": 32620,
+        "sha256": "d64df39f7e37d0cfbfa2cbbc6c534d485273bb4d59c51dcfe5878b83e9e05764",
+        "sha512": "c060b14dbe594ef482212b57d952bc021b2e87ff354ade000a7560cf07589dcbdbb0a0393f72c47f9dbf98634988c89ad11200337e2525530d75377d432d965d",
+        "mtimeNs": 1794434196133851500,
+        "inode": 13510798883996711
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-arabic-wght-normal.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196152.0,
+        "digest": "01e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+        "mode": 420,
+        "size": 32468
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\01\\e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-arabic-wght-normal.woff2",
+      "cafs": {
+        "bytes": 32468,
+        "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+        "sha512": "01e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+        "mtimeNs": 1794434196152117400,
+        "inode": 19703248371631157
+      },
+      "installed": {
+        "bytes": 32468,
+        "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+        "sha512": "01e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+        "mtimeNs": 1794434196152117400,
+        "inode": 19703248371631157
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-cyrillic-ext-wght-italic.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196163.0,
+        "digest": "0c8e5e5c1480a9061a045cf8f33a2102987acf109dfe914661f34789e1e59eb9267b703ebf396a29a4f461307a801c802afa7f9641ac24f7c361dd04c9d132fd",
+        "mode": 420,
+        "size": 13676
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\0c\\8e5e5c1480a9061a045cf8f33a2102987acf109dfe914661f34789e1e59eb9267b703ebf396a29a4f461307a801c802afa7f9641ac24f7c361dd04c9d132fd",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-cyrillic-ext-wght-italic.woff2",
+      "cafs": {
+        "bytes": 13676,
+        "sha256": "86b49c65aab61a0aa22e180c532c038f01cae4f1fc06a0801ddbb3c06ae10ce5",
+        "sha512": "0c8e5e5c1480a9061a045cf8f33a2102987acf109dfe914661f34789e1e59eb9267b703ebf396a29a4f461307a801c802afa7f9641ac24f7c361dd04c9d132fd",
+        "mtimeNs": 1794434196163526100,
+        "inode": 6473924466230338
+      },
+      "installed": {
+        "bytes": 13676,
+        "sha256": "86b49c65aab61a0aa22e180c532c038f01cae4f1fc06a0801ddbb3c06ae10ce5",
+        "sha512": "0c8e5e5c1480a9061a045cf8f33a2102987acf109dfe914661f34789e1e59eb9267b703ebf396a29a4f461307a801c802afa7f9641ac24f7c361dd04c9d132fd",
+        "mtimeNs": 1794434196163526100,
+        "inode": 6473924466230338
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-cyrillic-ext-wght-normal.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196174.0,
+        "digest": "6c6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+        "mode": 420,
+        "size": 12388
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\6c\\6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-cyrillic-ext-wght-normal.woff2",
+      "cafs": {
+        "bytes": 12388,
+        "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+        "sha512": "6c6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+        "mtimeNs": 1794434196174612900,
+        "inode": 5629499536098399
+      },
+      "installed": {
+        "bytes": 12388,
+        "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+        "sha512": "6c6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+        "mtimeNs": 1794434196174612900,
+        "inode": 5629499536098399
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-cyrillic-wght-italic.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196184.0,
+        "digest": "c32417b8e5fe1bb0138443a2b0e00f679128444cbed1d8916b394bfa4391d73b918b05e2c9f6919772bd2f71fd01270c630e6df0f0bb467d10e386defb274884",
+        "mode": 420,
+        "size": 16488
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\c3\\2417b8e5fe1bb0138443a2b0e00f679128444cbed1d8916b394bfa4391d73b918b05e2c9f6919772bd2f71fd01270c630e6df0f0bb467d10e386defb274884",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-cyrillic-wght-italic.woff2",
+      "cafs": {
+        "bytes": 16488,
+        "sha256": "e9f7ede725761fea79102f5256a581eb4693dbaff21e61db15974eec2dfb226a",
+        "sha512": "c32417b8e5fe1bb0138443a2b0e00f679128444cbed1d8916b394bfa4391d73b918b05e2c9f6919772bd2f71fd01270c630e6df0f0bb467d10e386defb274884",
+        "mtimeNs": 1794434196183946000,
+        "inode": 5910974512809063
+      },
+      "installed": {
+        "bytes": 16488,
+        "sha256": "e9f7ede725761fea79102f5256a581eb4693dbaff21e61db15974eec2dfb226a",
+        "sha512": "c32417b8e5fe1bb0138443a2b0e00f679128444cbed1d8916b394bfa4391d73b918b05e2c9f6919772bd2f71fd01270c630e6df0f0bb467d10e386defb274884",
+        "mtimeNs": 1794434196183946000,
+        "inode": 5910974512809063
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-cyrillic-wght-normal.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196215.0,
+        "digest": "eaf0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+        "mode": 420,
+        "size": 15112
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\ea\\f0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-cyrillic-wght-normal.woff2",
+      "cafs": {
+        "bytes": 15112,
+        "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+        "sha512": "eaf0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+        "mtimeNs": 1794434196214327300,
+        "inode": 5066549582677106
+      },
+      "installed": {
+        "bytes": 15112,
+        "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+        "sha512": "eaf0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+        "mtimeNs": 1794434196214327300,
+        "inode": 5066549582677106
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-hebrew-wght-italic.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196222.0,
+        "digest": "ac0e65684a528341a006e2f4499dcd49285d46293d9adadbf5fc4cc219676756c7751ed4104d78381b1c39c6f089ab100dfa6b8ea86cb222522bb6197b532888",
+        "mode": 420,
+        "size": 9764
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\ac\\0e65684a528341a006e2f4499dcd49285d46293d9adadbf5fc4cc219676756c7751ed4104d78381b1c39c6f089ab100dfa6b8ea86cb222522bb6197b532888",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-hebrew-wght-italic.woff2",
+      "cafs": {
+        "bytes": 9764,
+        "sha256": "8f5e07ecc6ab0058087b174d3275528bee0418a3f01204f5082552a3f020dc0e",
+        "sha512": "ac0e65684a528341a006e2f4499dcd49285d46293d9adadbf5fc4cc219676756c7751ed4104d78381b1c39c6f089ab100dfa6b8ea86cb222522bb6197b532888",
+        "mtimeNs": 1794434196221909100,
+        "inode": 1688849862149257
+      },
+      "installed": {
+        "bytes": 9764,
+        "sha256": "8f5e07ecc6ab0058087b174d3275528bee0418a3f01204f5082552a3f020dc0e",
+        "sha512": "ac0e65684a528341a006e2f4499dcd49285d46293d9adadbf5fc4cc219676756c7751ed4104d78381b1c39c6f089ab100dfa6b8ea86cb222522bb6197b532888",
+        "mtimeNs": 1794434196221909100,
+        "inode": 1688849862149257
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-hebrew-wght-normal.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196233.0,
+        "digest": "2b9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+        "mode": 420,
+        "size": 9348
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\2b\\9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-hebrew-wght-normal.woff2",
+      "cafs": {
+        "bytes": 9348,
+        "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+        "sha512": "2b9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+        "mtimeNs": 1794434196233550100,
+        "inode": 1970324838859920
+      },
+      "installed": {
+        "bytes": 9348,
+        "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+        "sha512": "2b9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+        "mtimeNs": 1794434196233550100,
+        "inode": 1970324838859920
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-latin-ext-wght-italic.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196240.0,
+        "digest": "df713b27caa9c8ade850b130770b8ddc6c2e05190b03441c1b777a3e61df6598aab79fe8022a69feebb55ecb75f4d1aa2db04cd0da4b1b770bc73136663095b1",
+        "mode": 420,
+        "size": 21152
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\df\\713b27caa9c8ade850b130770b8ddc6c2e05190b03441c1b777a3e61df6598aab79fe8022a69feebb55ecb75f4d1aa2db04cd0da4b1b770bc73136663095b1",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-latin-ext-wght-italic.woff2",
+      "cafs": {
+        "bytes": 21152,
+        "sha256": "51999fc7e45d93d8d34d3c0f1c32e58f85ae6e69d8dfb700771062e5c3945e49",
+        "sha512": "df713b27caa9c8ade850b130770b8ddc6c2e05190b03441c1b777a3e61df6598aab79fe8022a69feebb55ecb75f4d1aa2db04cd0da4b1b770bc73136663095b1",
+        "mtimeNs": 1794434196240947400,
+        "inode": 5348024559387801
+      },
+      "installed": {
+        "bytes": 21152,
+        "sha256": "51999fc7e45d93d8d34d3c0f1c32e58f85ae6e69d8dfb700771062e5c3945e49",
+        "sha512": "df713b27caa9c8ade850b130770b8ddc6c2e05190b03441c1b777a3e61df6598aab79fe8022a69feebb55ecb75f4d1aa2db04cd0da4b1b770bc73136663095b1",
+        "mtimeNs": 1794434196240947400,
+        "inode": 5348024559387801
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-latin-ext-wght-normal.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196253.0,
+        "digest": "52e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+        "mode": 420,
+        "size": 19400
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\52\\e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-latin-ext-wght-normal.woff2",
+      "cafs": {
+        "bytes": 19400,
+        "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+        "sha512": "52e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+        "mtimeNs": 1794434196249769600,
+        "inode": 5066549582677171
+      },
+      "installed": {
+        "bytes": 19400,
+        "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+        "sha512": "52e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+        "mtimeNs": 1794434196249769600,
+        "inode": 5066549582677171
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-latin-wght-italic.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196260.0,
+        "digest": "7b59b52831ca73697ba0040af9192d5262610d968fe0e5a3cab8866cce09f33f7719f3f2eda63c74463f56189c39948fc5351c89247a80debcf9b43bbe2997ea",
+        "mode": 420,
+        "size": 36616
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\7b\\59b52831ca73697ba0040af9192d5262610d968fe0e5a3cab8866cce09f33f7719f3f2eda63c74463f56189c39948fc5351c89247a80debcf9b43bbe2997ea",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-latin-wght-italic.woff2",
+      "cafs": {
+        "bytes": 36616,
+        "sha256": "4d9f552c4b0a7f02f231e56198d80aed8550bdfb7e7541260b2b20455b14fb88",
+        "sha512": "7b59b52831ca73697ba0040af9192d5262610d968fe0e5a3cab8866cce09f33f7719f3f2eda63c74463f56189c39948fc5351c89247a80debcf9b43bbe2997ea",
+        "mtimeNs": 1794434196260455500,
+        "inode": 5348024559387856
+      },
+      "installed": {
+        "bytes": 36616,
+        "sha256": "4d9f552c4b0a7f02f231e56198d80aed8550bdfb7e7541260b2b20455b14fb88",
+        "sha512": "7b59b52831ca73697ba0040af9192d5262610d968fe0e5a3cab8866cce09f33f7719f3f2eda63c74463f56189c39948fc5351c89247a80debcf9b43bbe2997ea",
+        "mtimeNs": 1794434196260455500,
+        "inode": 5348024559387856
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "files/rubik-latin-wght-normal.woff2",
+      "originalIndexRow": {
+        "checkedAt": 1794434196268.0,
+        "digest": "d9e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+        "mode": 420,
+        "size": 35348
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\d9\\e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-latin-wght-normal.woff2",
+      "cafs": {
+        "bytes": 35348,
+        "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+        "sha512": "d9e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+        "mtimeNs": 1794434196267014200,
+        "inode": 6192449489519828
+      },
+      "installed": {
+        "bytes": 35348,
+        "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+        "sha512": "d9e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+        "mtimeNs": 1794434196267014200,
+        "inode": 6192449489519828
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "index.css",
+      "originalIndexRow": {
+        "checkedAt": 1794434196029.0,
+        "digest": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mode": 420,
+        "size": 2581
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\d0\\d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\index.css",
+      "cafs": {
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+        "sha512": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mtimeNs": 1794434196026264400,
+        "inode": 1407374885438388
+      },
+      "installed": {
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+        "sha512": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mtimeNs": 1794434196026264400,
+        "inode": 1407374885438388
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "index.d.css.ts",
+      "originalIndexRow": {
+        "checkedAt": 1794434196116.0,
+        "digest": "4ee1c88f8c3f4e4cd34cb6c00339bf9d6d036ff4ade3af49e871cc8966b84c729d8b75492acc6413c9a664ac00a57958223ac13c4229da8c62ebe6a53e4f783f",
+        "mode": 420,
+        "size": 11
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\4e\\e1c88f8c3f4e4cd34cb6c00339bf9d6d036ff4ade3af49e871cc8966b84c729d8b75492acc6413c9a664ac00a57958223ac13c4229da8c62ebe6a53e4f783f",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\index.d.css.ts",
+      "cafs": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "sha512": "4ee1c88f8c3f4e4cd34cb6c00339bf9d6d036ff4ade3af49e871cc8966b84c729d8b75492acc6413c9a664ac00a57958223ac13c4229da8c62ebe6a53e4f783f",
+        "mtimeNs": 1794434182637215900,
+        "inode": 3377699722347411
+      },
+      "installed": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "sha512": "4ee1c88f8c3f4e4cd34cb6c00339bf9d6d036ff4ade3af49e871cc8966b84c729d8b75492acc6413c9a664ac00a57958223ac13c4229da8c62ebe6a53e4f783f",
+        "mtimeNs": 1794434182637215900,
+        "inode": 3377699722347411
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "metadata.json",
+      "originalIndexRow": {
+        "checkedAt": 1794434196051.0,
+        "digest": "2349d135d54e5902464e75fd9d3d66b7f93ac83ae961340f20dd5f6fbbaf14e9f448ddac8e49b03ae5cc3756510906b05c09614a214eec7dec6e3659581bef84",
+        "mode": 420,
+        "size": 858
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\23\\49d135d54e5902464e75fd9d3d66b7f93ac83ae961340f20dd5f6fbbaf14e9f448ddac8e49b03ae5cc3756510906b05c09614a214eec7dec6e3659581bef84",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\metadata.json",
+      "cafs": {
+        "bytes": 858,
+        "sha256": "ace225a1378779527f7121cb28dddd9efe78e32d3a2d76a4e2aaacaa9e3701c3",
+        "sha512": "2349d135d54e5902464e75fd9d3d66b7f93ac83ae961340f20dd5f6fbbaf14e9f448ddac8e49b03ae5cc3756510906b05c09614a214eec7dec6e3659581bef84",
+        "mtimeNs": 1794434196051462000,
+        "inode": 1407374885438399
+      },
+      "installed": {
+        "bytes": 858,
+        "sha256": "ace225a1378779527f7121cb28dddd9efe78e32d3a2d76a4e2aaacaa9e3701c3",
+        "sha512": "2349d135d54e5902464e75fd9d3d66b7f93ac83ae961340f20dd5f6fbbaf14e9f448ddac8e49b03ae5cc3756510906b05c09614a214eec7dec6e3659581bef84",
+        "mtimeNs": 1794434196051462000,
+        "inode": 1407374885438399
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "package.json",
+      "originalIndexRow": {
+        "checkedAt": 1794434196057.0,
+        "digest": "c45cc866bc231f2869b32c1ac736d44033a1e5e6051dc18a0a31f12038aa77ea6379a87495e94fa7b34c228aab9dbada3ee166a64719c9861658929d02796984",
+        "mode": 420,
+        "size": 1457
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\c4\\5cc866bc231f2869b32c1ac736d44033a1e5e6051dc18a0a31f12038aa77ea6379a87495e94fa7b34c228aab9dbada3ee166a64719c9861658929d02796984",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\package.json",
+      "cafs": {
+        "bytes": 1457,
+        "sha256": "10a0e96b78e2aa2810b638f056a2456fcc9eca48ec90bfd505382b98bfc6b0a9",
+        "sha512": "c45cc866bc231f2869b32c1ac736d44033a1e5e6051dc18a0a31f12038aa77ea6379a87495e94fa7b34c228aab9dbada3ee166a64719c9861658929d02796984",
+        "mtimeNs": 1794434196057529600,
+        "inode": 1407374885438405
+      },
+      "installed": {
+        "bytes": 1457,
+        "sha256": "10a0e96b78e2aa2810b638f056a2456fcc9eca48ec90bfd505382b98bfc6b0a9",
+        "sha512": "c45cc866bc231f2869b32c1ac736d44033a1e5e6051dc18a0a31f12038aa77ea6379a87495e94fa7b34c228aab9dbada3ee166a64719c9861658929d02796984",
+        "mtimeNs": 1794434196057529600,
+        "inode": 1407374885438405
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "scss/metadata.scss",
+      "originalIndexRow": {
+        "checkedAt": 1794434196096.0,
+        "digest": "6deb6cc90d43d1c0ebea2b74b2eaad7c662dc8a2c772e8f76863472a53cc3f62bfffd67dd6882ed68710024b5e09dfad53beb26ef5247786b0f84a5853e09f68",
+        "mode": 420,
+        "size": 1836
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\6d\\eb6cc90d43d1c0ebea2b74b2eaad7c662dc8a2c772e8f76863472a53cc3f62bfffd67dd6882ed68710024b5e09dfad53beb26ef5247786b0f84a5853e09f68",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\scss\\metadata.scss",
+      "cafs": {
+        "bytes": 1836,
+        "sha256": "9c68949e56fef63510b0155d4ef24e451c28c4cba41f2c05469a51929c0d8401",
+        "sha512": "6deb6cc90d43d1c0ebea2b74b2eaad7c662dc8a2c772e8f76863472a53cc3f62bfffd67dd6882ed68710024b5e09dfad53beb26ef5247786b0f84a5853e09f68",
+        "mtimeNs": 1794434196095498900,
+        "inode": 7599824373072883
+      },
+      "installed": {
+        "bytes": 1836,
+        "sha256": "9c68949e56fef63510b0155d4ef24e451c28c4cba41f2c05469a51929c0d8401",
+        "sha512": "6deb6cc90d43d1c0ebea2b74b2eaad7c662dc8a2c772e8f76863472a53cc3f62bfffd67dd6882ed68710024b5e09dfad53beb26ef5247786b0f84a5853e09f68",
+        "mtimeNs": 1794434196095498900,
+        "inode": 7599824373072883
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "scss/mixins.scss",
+      "originalIndexRow": {
+        "checkedAt": 1794434196102.0,
+        "digest": "9ae69435753befc7762ff9c3d0f1c13dac1fcb2bea2956e436aa905f40f85465d82ce2a957e4c9fc7881ab0819de28f1f0c5910a0355c42e9950b1764a47a6f7",
+        "mode": 420,
+        "size": 6041
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\9a\\e69435753befc7762ff9c3d0f1c13dac1fcb2bea2956e436aa905f40f85465d82ce2a957e4c9fc7881ab0819de28f1f0c5910a0355c42e9950b1764a47a6f7",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\scss\\mixins.scss",
+      "cafs": {
+        "bytes": 6041,
+        "sha256": "7c978d8fa8d971fc220363b404ba9e9087e0d5dd4614c29d645285c5150ad867",
+        "sha512": "9ae69435753befc7762ff9c3d0f1c13dac1fcb2bea2956e436aa905f40f85465d82ce2a957e4c9fc7881ab0819de28f1f0c5910a0355c42e9950b1764a47a6f7",
+        "mtimeNs": 1794434196102096700,
+        "inode": 5629499536098310
+      },
+      "installed": {
+        "bytes": 6041,
+        "sha256": "7c978d8fa8d971fc220363b404ba9e9087e0d5dd4614c29d645285c5150ad867",
+        "sha512": "9ae69435753befc7762ff9c3d0f1c13dac1fcb2bea2956e436aa905f40f85465d82ce2a957e4c9fc7881ab0819de28f1f0c5910a0355c42e9950b1764a47a6f7",
+        "mtimeNs": 1794434196102096700,
+        "inode": 5629499536098310
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "unicode.json",
+      "originalIndexRow": {
+        "checkedAt": 1794434196066.0,
+        "digest": "300ed274f3cc448a94e092a4ec3479dc3e2da8d3eed1821830188944580a90ef0d51b3933021fad362f393f989c0498859d241cd3c8ff7c25f16fb9cc0c7b374",
+        "mode": 420,
+        "size": 1195
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\30\\0ed274f3cc448a94e092a4ec3479dc3e2da8d3eed1821830188944580a90ef0d51b3933021fad362f393f989c0498859d241cd3c8ff7c25f16fb9cc0c7b374",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\unicode.json",
+      "cafs": {
+        "bytes": 1195,
+        "sha256": "ae9cf9910eeadf60ff53fa37d8037c4f120ed0a2d334e68ff3d9f8ad9d94cccc",
+        "sha512": "300ed274f3cc448a94e092a4ec3479dc3e2da8d3eed1821830188944580a90ef0d51b3933021fad362f393f989c0498859d241cd3c8ff7c25f16fb9cc0c7b374",
+        "mtimeNs": 1794434196065086200,
+        "inode": 1407374885438411
+      },
+      "installed": {
+        "bytes": 1195,
+        "sha256": "ae9cf9910eeadf60ff53fa37d8037c4f120ed0a2d334e68ff3d9f8ad9d94cccc",
+        "sha512": "300ed274f3cc448a94e092a4ec3479dc3e2da8d3eed1821830188944580a90ef0d51b3933021fad362f393f989c0498859d241cd3c8ff7c25f16fb9cc0c7b374",
+        "mtimeNs": 1794434196065086200,
+        "inode": 1407374885438411
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "wght-italic.css",
+      "originalIndexRow": {
+        "checkedAt": 1794434196040.0,
+        "digest": "8cb9c1ace419db61288f513a7b54f2499795656360745383ed5f88fd190812ce7d02e84fbbbe7d226f45e163d9dd8a8340901eb55fe526003e391ad1d541cf0c",
+        "mode": 420,
+        "size": 2581
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\8c\\b9c1ace419db61288f513a7b54f2499795656360745383ed5f88fd190812ce7d02e84fbbbe7d226f45e163d9dd8a8340901eb55fe526003e391ad1d541cf0c",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\wght-italic.css",
+      "cafs": {
+        "bytes": 2581,
+        "sha256": "5de96985f21918fbdf6caf26a64daff38d05cafddc1f844489afd05915461514",
+        "sha512": "8cb9c1ace419db61288f513a7b54f2499795656360745383ed5f88fd190812ce7d02e84fbbbe7d226f45e163d9dd8a8340901eb55fe526003e391ad1d541cf0c",
+        "mtimeNs": 1794434196036824200,
+        "inode": 1407374885438393
+      },
+      "installed": {
+        "bytes": 2581,
+        "sha256": "5de96985f21918fbdf6caf26a64daff38d05cafddc1f844489afd05915461514",
+        "sha512": "8cb9c1ace419db61288f513a7b54f2499795656360745383ed5f88fd190812ce7d02e84fbbbe7d226f45e163d9dd8a8340901eb55fe526003e391ad1d541cf0c",
+        "mtimeNs": 1794434196036824200,
+        "inode": 1407374885438393
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    },
+    {
+      "packagePath": "wght.css",
+      "originalIndexRow": {
+        "checkedAt": 1794434196029.0,
+        "digest": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mode": 420,
+        "size": 2581
+      },
+      "cafsPath": "C:\\Users\\DAVID\\AppData\\Local\\pnpm\\store\\v11\\files\\d0\\d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+      "installedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\wght.css",
+      "cafs": {
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+        "sha512": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mtimeNs": 1794434196026264400,
+        "inode": 1407374885438388
+      },
+      "installed": {
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+        "sha512": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+        "mtimeNs": 1794434196026264400,
+        "inode": 1407374885438388
+      },
+      "sameFile": true,
+      "installedEqualsCafs": true
+    }
+  ],
+  "packageFileCount": 24,
+  "sameFileCount": 24,
+  "priorFontObservationSha256": "8504353872d2be5a6fc507de3887e33e91d68d452fca353965c50426fd0e9844",
+  "priorUsedFontAndMetadataMatches": [
+    "package.json",
+    "LICENSE",
+    "wght.css",
+    "metadata.json",
+    "files/rubik-arabic-wght-normal.woff2",
+    "files/rubik-cyrillic-ext-wght-normal.woff2",
+    "files/rubik-cyrillic-wght-normal.woff2",
+    "files/rubik-hebrew-wght-normal.woff2",
+    "files/rubik-latin-ext-wght-normal.woff2",
+    "files/rubik-latin-wght-normal.woff2"
+  ],
+  "declaredLicense": "OFL-1.1",
+  "allInputsUnchanged": true,
+  "tarballBytesOrSignatureVerified": false,
+  "historicalRendererBuildCacheBindingVerified": false,
+  "extendsOracleFivePackageGraphReceipt": false,
+  "trustedReceiptsInstalled": false,
+  "executionOrExportAuthorized": false,
+  "networkRequests": 0,
+  "storeWrites": 0,
+  "newInstalls": 0,
+  "remoteJobs": 0
+}

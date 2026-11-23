@@ -1,0 +1,9 @@
+{
+  "status": "released",
+  "utc": "2026-11-15T05:20:06.217855+00:00",
+  "build": "completed exit 0",
+  "candidate_image": "sha256:54d162faae23681b56279d85b8dfa1243c6a9fb8fd62f5bb87c91479f7f4a79d",
+  "inspection_containers": "created, never started",
+  "production": "unchanged, running",
+  "candidate_activated": false
+}

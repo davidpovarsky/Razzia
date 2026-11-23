@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "cases": 25,
+  "sourceNoWriteWitnesses": 2,
+  "boundedRetryCopies": 2,
+  "boundedChurnCopies": 3,
+  "privateCopiesRemoved": true
+}

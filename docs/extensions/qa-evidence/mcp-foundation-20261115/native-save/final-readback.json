@@ -1,0 +1,457 @@
+{
+  "product": "605619cc5525f6a89035bbdb084ba52cc7644f42",
+  "BPin": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "bundleSha256": "6ed1b801f66d47c676a7ee049c661cd5f6157f60f2b5f2a4fc5ce0f4ea701897",
+  "runExit": 0,
+  "tests": 10,
+  "pass": 10,
+  "fail": 0,
+  "skip": 0,
+  "typeDiagnostics": 0,
+  "typeInputs": 449,
+  "sourceInputs": 29,
+  "sourceMatches": true,
+  "source": [
+    {
+      "file": "extensions/src/mcp-app/contracts/schemas.ts",
+      "bundleInputSha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656",
+      "committedSha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656",
+      "worktreeSha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656"
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/tools.ts",
+      "bundleInputSha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6",
+      "committedSha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6",
+      "worktreeSha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/errors.ts",
+      "bundleInputSha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657",
+      "committedSha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657",
+      "worktreeSha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/authorization.ts",
+      "bundleInputSha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e",
+      "committedSha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e",
+      "worktreeSha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/access-token.ts",
+      "bundleInputSha256": "a0c04e49e06d797523a2e4f4191cc9bb3fd85a15b2ad6daad4b614aca52132f7",
+      "committedSha256": "a0c04e49e06d797523a2e4f4191cc9bb3fd85a15b2ad6daad4b614aca52132f7",
+      "worktreeSha256": "a0c04e49e06d797523a2e4f4191cc9bb3fd85a15b2ad6daad4b614aca52132f7"
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/canonical.ts",
+      "bundleInputSha256": "2d5128d0c38a38ff094c0daf2631d60c5bd5218655558b7b17366dc12bd82318",
+      "committedSha256": "2d5128d0c38a38ff094c0daf2631d60c5bd5218655558b7b17366dc12bd82318",
+      "worktreeSha256": "2d5128d0c38a38ff094c0daf2631d60c5bd5218655558b7b17366dc12bd82318"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/authoring.ts",
+      "bundleInputSha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895",
+      "committedSha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895",
+      "worktreeSha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/preview.ts",
+      "bundleInputSha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e",
+      "committedSha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e",
+      "worktreeSha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/drafts.ts",
+      "bundleInputSha256": "3a15de742e0baf6fb4747d916b133dec567e168ba257be706d8281b106e709cc",
+      "committedSha256": "3a15de742e0baf6fb4747d916b133dec567e168ba257be706d8281b106e709cc",
+      "worktreeSha256": "3a15de742e0baf6fb4747d916b133dec567e168ba257be706d8281b106e709cc"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/results.ts",
+      "bundleInputSha256": "ab1eb5393a693c431688d2e2f0d4f69cc7d99c1d81f9bf5d4fafb14b68009263",
+      "committedSha256": "ab1eb5393a693c431688d2e2f0d4f69cc7d99c1d81f9bf5d4fafb14b68009263",
+      "worktreeSha256": "ab1eb5393a693c431688d2e2f0d4f69cc7d99c1d81f9bf5d4fafb14b68009263"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/dispatch.ts",
+      "bundleInputSha256": "2dc7f792dfefe3f1429f82006a608c1b12c1b3044763fb973e055a8995d75ec1",
+      "committedSha256": "2dc7f792dfefe3f1429f82006a608c1b12c1b3044763fb973e055a8995d75ec1",
+      "worktreeSha256": "2dc7f792dfefe3f1429f82006a608c1b12c1b3044763fb973e055a8995d75ec1"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/request-boundary.ts",
+      "bundleInputSha256": "da91ea678062064bea298655a48ba36178f9b13cc1987980b863b8f883219f1c",
+      "committedSha256": "da91ea678062064bea298655a48ba36178f9b13cc1987980b863b8f883219f1c",
+      "worktreeSha256": "da91ea678062064bea298655a48ba36178f9b13cc1987980b863b8f883219f1c"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/connection.ts",
+      "bundleInputSha256": "d67b8a49653561f0746e9cb7d4bd6f1f907676fbaefd638c7a714c4074b69923",
+      "committedSha256": "d67b8a49653561f0746e9cb7d4bd6f1f907676fbaefd638c7a714c4074b69923",
+      "worktreeSha256": "d67b8a49653561f0746e9cb7d4bd6f1f907676fbaefd638c7a714c4074b69923"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/factory.ts",
+      "bundleInputSha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14",
+      "committedSha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14",
+      "worktreeSha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/ingress.ts",
+      "bundleInputSha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531",
+      "committedSha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531",
+      "worktreeSha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531"
+    },
+    {
+      "file": "extensions/src/mcp-app/server/http.ts",
+      "bundleInputSha256": "08d749fc8737f52526a158fde1a102bc5b88239be7e79e857e4cdfb98bb97727",
+      "committedSha256": "08d749fc8737f52526a158fde1a102bc5b88239be7e79e857e4cdfb98bb97727",
+      "worktreeSha256": "08d749fc8737f52526a158fde1a102bc5b88239be7e79e857e4cdfb98bb97727"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/bindings.ts",
+      "bundleInputSha256": "3f6bbaa991715a14df56344431506e6e5bb67ea8e76746487b55b0fb828fdd2a",
+      "committedSha256": "3f6bbaa991715a14df56344431506e6e5bb67ea8e76746487b55b0fb828fdd2a",
+      "worktreeSha256": "3f6bbaa991715a14df56344431506e6e5bb67ea8e76746487b55b0fb828fdd2a"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-protocol.ts",
+      "bundleInputSha256": "fbfa235720773d0fc6b318f10ef933f90dd5b42154d7bb63f510f8c697b0264d",
+      "committedSha256": "fbfa235720773d0fc6b318f10ef933f90dd5b42154d7bb63f510f8c697b0264d",
+      "worktreeSha256": "fbfa235720773d0fc6b318f10ef933f90dd5b42154d7bb63f510f8c697b0264d"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-export.ts",
+      "bundleInputSha256": "cd2bd30a7d9316fe3ab99ff50d83205deb8525f33991a1cbb82d93053431e3a8",
+      "committedSha256": "cd2bd30a7d9316fe3ab99ff50d83205deb8525f33991a1cbb82d93053431e3a8",
+      "worktreeSha256": "cd2bd30a7d9316fe3ab99ff50d83205deb8525f33991a1cbb82d93053431e3a8"
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/native-save.ts",
+      "bundleInputSha256": "ce672e956524b2fe7487d778a1a1a88abf6c45b55f99bd255db4bf0e139b3b8c",
+      "committedSha256": "ce672e956524b2fe7487d778a1a1a88abf6c45b55f99bd255db4bf0e139b3b8c",
+      "worktreeSha256": "ce672e956524b2fe7487d778a1a1a88abf6c45b55f99bd255db4bf0e139b3b8c"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-native-save.ts",
+      "bundleInputSha256": "a61f64b34a459d19878b57e6d1ce1f832c45700eb44cc0eb312ff42b992a6687",
+      "committedSha256": "a61f64b34a459d19878b57e6d1ce1f832c45700eb44cc0eb312ff42b992a6687",
+      "worktreeSha256": "a61f64b34a459d19878b57e6d1ce1f832c45700eb44cc0eb312ff42b992a6687"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-grants.ts",
+      "bundleInputSha256": "20ddc521ba68690cccf6f07b94589326f1e5541e6d12960918a0893a6ef1f8ce",
+      "committedSha256": "20ddc521ba68690cccf6f07b94589326f1e5541e6d12960918a0893a6ef1f8ce",
+      "worktreeSha256": "20ddc521ba68690cccf6f07b94589326f1e5541e6d12960918a0893a6ef1f8ce"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth.ts",
+      "bundleInputSha256": "b8eba7d39697a13bc0052d05c0f8ad3d04d032863e9b06fd057322ed3ae2d044",
+      "committedSha256": "b8eba7d39697a13bc0052d05c0f8ad3d04d032863e9b06fd057322ed3ae2d044",
+      "worktreeSha256": "b8eba7d39697a13bc0052d05c0f8ad3d04d032863e9b06fd057322ed3ae2d044"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/owner.ts",
+      "bundleInputSha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae",
+      "committedSha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae",
+      "worktreeSha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/schema-manifest.ts",
+      "bundleInputSha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1",
+      "committedSha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1",
+      "worktreeSha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/schema.ts",
+      "bundleInputSha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa",
+      "committedSha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa",
+      "worktreeSha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/store.ts",
+      "bundleInputSha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9",
+      "committedSha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9",
+      "worktreeSha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9"
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/http.ts",
+      "bundleInputSha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc",
+      "committedSha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc",
+      "worktreeSha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc"
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/fixtures.ts",
+      "bundleInputSha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98",
+      "committedSha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98",
+      "worktreeSha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98"
+    }
+  ],
+  "runtime": "v26.11.1",
+  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "filesystemMagic": 61267,
+  "retainedRoot": "/home/david/tadazz-f-native-save-evidence-20261115/tadazz-m3a-synthetic-P33yqz",
+  "publicReceipts": 9,
+  "actualSigkillChildren": [
+    {
+      "phase": "after-f-outcome",
+      "killedPid": 443,
+      "signal": "SIGKILL",
+      "replayPid": 451,
+      "replayExit": 0,
+      "result": {
+        "draftId": "8K9Q18YtqC6b6pqdREdeSxn5yK_byD94",
+        "revision": 1,
+        "quizId": "0J_j6jy4gyJxKOrcnrswn",
+        "savedRevision": 1,
+        "studioUrl": "https://studio.example.invalid/manager/quizz/0J_j6jy4gyJxKOrcnrswn"
+      },
+      "nativeCountBefore": 4,
+      "nativeCountAfter": 4,
+      "finalState": "saved"
+    },
+    {
+      "phase": "after-native",
+      "killedPid": 427,
+      "signal": "SIGKILL",
+      "replayPid": 435,
+      "replayExit": 0,
+      "result": {
+        "draftId": "ycsgtoAOvAB0zoVIlIaOTswzvUC4f_8u",
+        "revision": 1,
+        "quizId": "Jv21Iq1NsVtXJLlwuYNAo",
+        "savedRevision": 1,
+        "studioUrl": "https://studio.example.invalid/manager/quizz/Jv21Iq1NsVtXJLlwuYNAo"
+      },
+      "nativeCountBefore": 3,
+      "nativeCountAfter": 4,
+      "finalState": "saved"
+    },
+    {
+      "phase": "before-native",
+      "killedPid": 411,
+      "signal": "SIGKILL",
+      "replayPid": 419,
+      "replayExit": 0,
+      "result": {
+        "draftId": "cPJeOY9Q976dM_7OCEeayduLC9lGSTfF",
+        "revision": 1,
+        "quizId": "rYfp_4dlbNfyYDBxNDLQe",
+        "savedRevision": 1,
+        "studioUrl": "https://studio.example.invalid/manager/quizz/rYfp_4dlbNfyYDBxNDLQe"
+      },
+      "nativeCountBefore": 2,
+      "nativeCountAfter": 3,
+      "finalState": "saved"
+    }
+  ],
+  "files": [
+    {
+      "file": "build-native.mjs",
+      "bytes": 4821,
+      "sha256": "b76546715c1aef078f4e663aca19551111bc78746ab8e73ee1a25a2e44d2f294"
+    },
+    {
+      "file": "input-manifest-01.json",
+      "bytes": 64321,
+      "sha256": "5341223098cd500f454d20b0452004913bcf0a5b936e5a9be331df7ee17b86db"
+    },
+    {
+      "file": "native-candidate-01.inputs.json",
+      "bytes": 105630,
+      "sha256": "e9d41a248d8273a721a01e3477ec7803e760c7e2765da4a21729a5ef48958469"
+    },
+    {
+      "file": "native-candidate-02.inputs.json",
+      "bytes": 105930,
+      "sha256": "6db8efbba4f04a0a817519873f15b6b29bc4c0e728d55a2ab40debd2bd7f6b88"
+    },
+    {
+      "file": "native-candidate-03.inputs.json",
+      "bytes": 105930,
+      "sha256": "1c9c77ba30130573ad5ee7f29658df236360b75b6da8f37fe2179c581e883726"
+    },
+    {
+      "file": "native-candidate-04.inputs.json",
+      "bytes": 105930,
+      "sha256": "c703c103e1beec056b926aa6721ae340d9d689a9bfe8f85ffd6f0a6a79f2581b"
+    },
+    {
+      "file": "native-candidate-05.inputs.json",
+      "bytes": 105930,
+      "sha256": "3fddf727856d3994c6da355bbfcc0ea1a8c2d56c51fff4c7122f2f40468a885c"
+    },
+    {
+      "file": "native-candidate-06.inputs.json",
+      "bytes": 105930,
+      "sha256": "acc2eb7b284f5a62b97160ad1e2ede354e980a929f05fb40bebfb1c69638c554"
+    },
+    {
+      "file": "native-dto-readback.json",
+      "bytes": 15373,
+      "sha256": "e390e99e446e9a863115577c5ec7978a5ef4bcc4be26b653bf65a6fac022ead6"
+    },
+    {
+      "file": "native-dto-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "native-dto.tsconfig.json",
+      "bytes": 778,
+      "sha256": "bfd7f830407ddb0b53e6f76af0159ddfa9d79fd216f818b187681891f8f83a40"
+    },
+    {
+      "file": "native-run-02.json",
+      "bytes": 668,
+      "sha256": "5e78f6fe7bb3eb87ab6f0ca6c1179038e8feb110167cc4c02ccaff367fb63db0"
+    },
+    {
+      "file": "native-run-02.log",
+      "bytes": 7204,
+      "sha256": "fe7752f85431b43ecf81f5dfeb1249b5f5ecac76cafc9a6e51dd337892cc54c5"
+    },
+    {
+      "file": "native-run-03.json",
+      "bytes": 668,
+      "sha256": "ae2a43f29c001b5eb56b8f8a991d8e650cd11a9fccce5e559307a704b27b8492"
+    },
+    {
+      "file": "native-run-03.log",
+      "bytes": 8757,
+      "sha256": "d52ddf10441119ff3e3286a4cd436cb6df21202f212d97c55bb0630fadd3ac0c"
+    },
+    {
+      "file": "native-run-04.json",
+      "bytes": 668,
+      "sha256": "e6706a1bd21f8715a7c41e76210fd0a0ea59a8152dc0ec62b4fc0ba42d938e85"
+    },
+    {
+      "file": "native-run-04.log",
+      "bytes": 8757,
+      "sha256": "73883bfc338f42fcfb9f9c5774a45462200214ac2739a7aa85deba87fc78231a"
+    },
+    {
+      "file": "native-run-05.json",
+      "bytes": 668,
+      "sha256": "44dcfb5e15ddfff1af93a0afaa8b371fd107250beb5e2a83a7167f666baadd59"
+    },
+    {
+      "file": "native-run-05.log",
+      "bytes": 9365,
+      "sha256": "5682d462762f2b98fbcade0a09102accc5994ef66a73faf83867a0cbaa99313e"
+    },
+    {
+      "file": "native-run-06-public-readback-02.json",
+      "bytes": 10179,
+      "sha256": "add73dc0b63050274e3316f7b1a5bcc94f5ee592f6da1f7d9c4259b313117415"
+    },
+    {
+      "file": "native-run-06-public-readback.json",
+      "bytes": 8954,
+      "sha256": "a223f8a1310e8fd9d100692e642d026d01ae7bfd3e06daffce2775318e522d09"
+    },
+    {
+      "file": "native-run-06.json",
+      "bytes": 714,
+      "sha256": "9277a2e8d2d45444ecf83877fc9ab7fa559a1963082834a6c89563ccda4fb4f7"
+    },
+    {
+      "file": "native-run-06.log",
+      "bytes": 9412,
+      "sha256": "066dbe337296f84a617f02a12205ab8b7abfa6f2c25042b397127ccfd5cc542d"
+    },
+    {
+      "file": "native-save-tests.before-expansion.ts",
+      "bytes": 8039,
+      "sha256": "d2b78756cedf2f4f1694ebb8832e0500896f2ade8bd59e484731797f6500893b"
+    },
+    {
+      "file": "native-save-tests.ts",
+      "bytes": 30361,
+      "sha256": "2656fc2126aff17f4a2fad192cb6a5820987b4930abaf52e1c4fec2fe8e6dc04"
+    },
+    {
+      "file": "native-smoke-01.json",
+      "bytes": 641,
+      "sha256": "fe525abf6f2c8da20e4e4a89028e87efb3d71098dbf0bdb5cdc25ee24fdd6d07"
+    },
+    {
+      "file": "native-smoke-01.log",
+      "bytes": 1762,
+      "sha256": "7f7fa2e9ab054d6a385465afd8a8182537f7ac835c6bd7549b24edf1de9736f7"
+    },
+    {
+      "file": "readback-native.mjs",
+      "bytes": 2497,
+      "sha256": "ab66269de114c640a0a2fd0837702d46c70f6a836ad6e8ce20964234e780f473"
+    },
+    {
+      "file": "run-native.mjs",
+      "bytes": 1662,
+      "sha256": "78e7be58cd92c4373e252564b68bc5ae5b32e5692dd6195490406ef276a3bfe3"
+    },
+    {
+      "file": "typecheck-native.mjs",
+      "bytes": 4740,
+      "sha256": "4f4f0d9732a2689a2c21a27673bc5a3890e14b5374a1407f89ac355b723a92de"
+    },
+    {
+      "file": "types-01.json",
+      "bytes": 695,
+      "sha256": "9192a44bf3be63108725332d04c66951c795d956e10e288db1d11ef00e8cddac"
+    },
+    {
+      "file": "types-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types-final-01.json",
+      "bytes": 554177,
+      "sha256": "a71ceddf2a3df66e1afaa7de6d21006e043b7cb833b82a6bd19431a3913875d1"
+    },
+    {
+      "file": "types-final-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types-final-02.json",
+      "bytes": 554177,
+      "sha256": "437373b0c7b15b54ee767bb9cf1280098e2c2db1ab5fc9ec0bc580d69612e4e4"
+    },
+    {
+      "file": "types-final-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types-final-03.json",
+      "bytes": 554177,
+      "sha256": "07188b5af95cb5cefdabdb9def093c7320018693553d6cadf83f04829387e9ff"
+    },
+    {
+      "file": "types-final-03.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "types-with-tests-01.json",
+      "bytes": 401926,
+      "sha256": "22d469702c4588437da9baeca3500541539c332e3bc354ce054908c719765230"
+    },
+    {
+      "file": "types-with-tests-01.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "verify-native.mjs",
+      "bytes": 2385,
+      "sha256": "de00474c227828c1e3bbfdfb5ea659531918086b1b891fde3e4e51d6162605de"
+    }
+  ],
+  "excludedUntrackedGeneratedBundles": true,
+  "noBrowserOrProductionAcceptance": true
+}

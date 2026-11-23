@@ -1,0 +1,6 @@
+{
+  "extensions/src/components/oauth-consent/OAuthConsentPage.tsx": "4f3be0450726fe4e9a6c6b3c26dc447b177b7463cb0c14cfc0138c48c7661bba",
+  "extensions/src/components/oauth-consent/client.test.ts": "6222c8a53a45315b47ba9cae70ef718cf103514d2848736746a07d4ccaf59d22",
+  "extensions/qa/theme-builder/oauth-consent.spec.ts": "b7c3b120572d921a4256517deaf86bb852fbc549ffbc65d164fd5cb762ba5ece",
+  "docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts": "440c2997f7dd2273f5b834ae5297da9200097a1ae2cd8a16f5ac16a6167c9969"
+}

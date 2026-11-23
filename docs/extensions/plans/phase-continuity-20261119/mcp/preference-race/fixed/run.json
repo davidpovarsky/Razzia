@@ -1,0 +1,15 @@
+{
+  "exitCode": 1,
+  "seconds": 10.76,
+  "entries": null,
+  "errors": null,
+  "sourceHashesUnchanged": null,
+  "widgetSha256": null,
+  "engines": [],
+  "stderrTail": "node:internal/modules/package_json_reader:331\n  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);\n        ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find package 'zod' imported from C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-preview-preference-race-20261119\\packages\\socket\\src\\env.ts\n    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:331:9)\n    at packageResolve (node:internal/modules/esm/resolve:784:25)\n    at moduleResolve (node:internal/modules/esm/resolve:873:18)\n    at defaultResolve (node:internal/modules/esm/resolve:1006:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)\n    at nextStep (node:internal/modules/customization_hooks:189:26)\n    at resolveBaseSync (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:11092)\n    at resolveDirectorySync (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:12398)\n    at resolveTsPathsSync (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:13605) {\n  code: 'ERR_MODULE_NOT_FOUND'\n}\n\nNode.js v24.22.1\n",
+  "sourceHashes": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "29bf9264ea80a877df603a5faece0fa5680629164ef9c4478c16fa35f45d4114",
+    "extensions/qa/phase3-full-show/preference-race.mjs": "ac3efd6fc2ced0815cc900d0ed008750463ae9885eb26f003bd47d25c1c6ad14"
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "fixtureRoot": "C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-m3a-synthetic-B9oCrJ",
+  "privateQaOnly": true,
+  "results": [
+    {
+      "selection": {
+        "contractVersion": "0.1.0",
+        "draftId": "ft2oA3W5oS7vEL1N4x4O3V6HCeko9DHC",
+        "expectedRevision": 1,
+        "locale": "en"
+      },
+      "result": {
+        "_meta": {
+          "tadazz/preview-candidate-v2": {
+            "version": 2,
+            "mode": "development-candidate",
+            "executableAcceptance": false,
+            "draftId": "ft2oA3W5oS7vEL1N4x4O3V6HCeko9DHC",
+            "revision": 1,
+            "projectionDigest": "f906c2c5d81bd4f36b071efc164a856ab861d88ed12e9aea080bdacdbc5d553a",
+            "inputDigest": "dd3b8e2d6c29e228c33232e0d1694d163a69584581f3fe25937e59c91a300734",
+            "input": {
+              "inputVersion": 2,
+              "frame": {
+                "phase": "voting",
+                "role": "spectator",
+                "epoch": 1,
+                "revision": 1,
+                "question": {
+                  "id": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894",
+                  "text": "Question 1",
+                  "type": "single",
+                  "mode": "quiz",
+                  "ordinal": 1,
+                  "totalQuestions": 5
+                },
+                "choices": [
+                  {
+                    "id": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894.choice.1",
+                    "label": "A"
+                  },
+                  {
+                    "id": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894.choice.2",
+                    "label": "B"
+                  }
+                ],
+                "clock": {
+                  "elapsedMs": 5000,
+                  "deadlineMs": 20000,
+                  "paused": true
+                },
+                "seconds": 20
+              },
+              "locale": "en",
+              "reducedMotion": true,
+              "themeBinding": {
+                "format": "tadazz-native-preview-theme",
+                "schemaVersion": 2,
+                "portVersion": 3,
+                "identityRuleVersion": 2,
+                "questionId": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894",
+                "role": "spectator",
+                "draftRevision": 1,
+                "theme": {
+                  "id": "tadazz-classic",
+                  "version": "1.0.0"
+                },
+                "rendererId": "tadazz-classic-stage",
+                "definitionSha256": "e75af05a88dbf7bb243f387b27f5a95a23c6545219aaf7ea93432508bf63a10e",
+                "compositionDocumentSha256": "013d9ef45360620155f819f2cd675227e3d1fc09bfaa198ec797e8225b66ddd6",
+                "slots": {
+                  "firstPaint": {
+                    "variantId": "tadazz-classic.firstPaint.default"
+                  },
+                  "opening": {
+                    "variantId": "tadazz-classic.opening.default"
+                  },
+                  "lobby": {
+                    "variantId": "tadazz-classic.lobby.default"
+                  },
+                  "question": {
+                    "variantId": "tadazz-classic.question.default"
+                  },
+                  "answerCards": {
+                    "variantId": "tadazz-classic.answerCards.default"
+                  },
+                  "voting": {
+                    "variantId": "tadazz-classic.voting.default"
+                  },
+                  "timer": {
+                    "variantId": "tadazz-classic.timer.default"
+                  },
+                  "voteLock": {
+                    "variantId": "tadazz-classic.voteLock.default"
+                  },
+                  "resultsReveal": {
+                    "variantId": "tadazz-classic.resultsReveal.default"
+                  },
+                  "leaderboard": {
+                    "variantId": "tadazz-classic.leaderboard.default"
+                  },
+                  "rankUpdate": {
+                    "variantId": "tadazz-classic.rankUpdate.default"
+                  },
+                  "zzTransition": {
+                    "variantId": "tadazz-classic.zzTransition.default"
+                  },
+                  "interlude": {
+                    "variantId": "tadazz-classic.interlude.default"
+                  },
+                  "closing": {
+                    "variantId": "tadazz-classic.closing.default"
+                  },
+                  "personalResult": {
+                    "variantId": "tadazz-classic.personalResult.default"
+                  }
+                },
+                "settings": {
+                  "stageAnimations": {
+                    "questionEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    },
+                    "answerEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    },
+                    "answerBadgeEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    },
+                    "resultsRevealEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    }
+                  },
+                  "questionDecoration": {
+                    "enabled": false,
+                    "preset": "none"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":false,\"code\":\"PREVIEW_UNAVAILABLE\"}"
+          }
+        ],
+        "structuredContent": {
+          "contractVersion": "0.1.0",
+          "ok": false,
+          "correlationId": "61cb8bd6-4b3c-475a-9907-7fe0d77be89b",
+          "error": {
+            "code": "PREVIEW_UNAVAILABLE",
+            "messageKey": "extensions:mcp.PREVIEW_UNAVAILABLE",
+            "retryable": false
+          }
+        },
+        "isError": true
+      }
+    },
+    {
+      "selection": {
+        "contractVersion": "0.1.0",
+        "draftId": "ft2oA3W5oS7vEL1N4x4O3V6HCeko9DHC",
+        "expectedRevision": 1,
+        "locale": "ja"
+      },
+      "result": {
+        "_meta": {
+          "tadazz/preview-candidate-v2": {
+            "version": 2,
+            "mode": "development-candidate",
+            "executableAcceptance": false,
+            "draftId": "ft2oA3W5oS7vEL1N4x4O3V6HCeko9DHC",
+            "revision": 1,
+            "projectionDigest": "4ba8a3bb4736a7cb2038a7ac18afd534040630be8cfc5d2fd0798a8befc1f5fa",
+            "inputDigest": "dc103e67ea8f34b4200cbe88c2b57e595af732cd4934fc5d6f382835a5291730",
+            "input": {
+              "inputVersion": 2,
+              "frame": {
+                "phase": "voting",
+                "role": "spectator",
+                "epoch": 1,
+                "revision": 1,
+                "question": {
+                  "id": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894",
+                  "text": "Question 1",
+                  "type": "single",
+                  "mode": "quiz",
+                  "ordinal": 1,
+                  "totalQuestions": 5
+                },
+                "choices": [
+                  {
+                    "id": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894.choice.1",
+                    "label": "A"
+                  },
+                  {
+                    "id": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894.choice.2",
+                    "label": "B"
+                  }
+                ],
+                "clock": {
+                  "elapsedMs": 5000,
+                  "deadlineMs": 20000,
+                  "paused": true
+                },
+                "seconds": 20
+              },
+              "locale": "ja",
+              "reducedMotion": true,
+              "themeBinding": {
+                "format": "tadazz-native-preview-theme",
+                "schemaVersion": 2,
+                "portVersion": 3,
+                "identityRuleVersion": 2,
+                "questionId": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894",
+                "role": "spectator",
+                "draftRevision": 1,
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                },
+                "rendererId": "razzia-native-stage",
+                "definitionSha256": "5456810883fc87e885f4194516bfec65c2818a9354c8f5a4f186a80a7404c033",
+                "compositionDocumentSha256": "1b68300a9632d054b0e05a7f9ffa7633847583e5dd7d31f7e2d0b23173103eb8",
+                "slots": {
+                  "firstPaint": {
+                    "variantId": "razzia-original.firstPaint.default"
+                  },
+                  "opening": {
+                    "variantId": "razzia-original.opening.default"
+                  },
+                  "lobby": {
+                    "variantId": "razzia-original.lobby.default"
+                  },
+                  "question": {
+                    "variantId": "razzia-original.question.default"
+                  },
+                  "answerCards": {
+                    "variantId": "razzia-original.answerCards.default"
+                  },
+                  "voting": {
+                    "variantId": "razzia-original.voting.default"
+                  },
+                  "timer": {
+                    "variantId": "razzia-original.timer.default"
+                  },
+                  "voteLock": {
+                    "variantId": "razzia-original.voteLock.default"
+                  },
+                  "resultsReveal": {
+                    "variantId": "razzia-original.resultsReveal.default"
+                  },
+                  "leaderboard": {
+                    "variantId": "razzia-original.leaderboard.default"
+                  },
+                  "rankUpdate": {
+                    "variantId": "razzia-original.rankUpdate.default"
+                  },
+                  "zzTransition": {
+                    "variantId": "razzia-original.zzTransition.default"
+                  },
+                  "interlude": {
+                    "variantId": "razzia-original.interlude.default"
+                  },
+                  "closing": {
+                    "variantId": "razzia-original.closing.default"
+                  },
+                  "personalResult": {
+                    "variantId": "razzia-original.personalResult.default"
+                  }
+                },
+                "settings": {
+                  "stageAnimations": {
+                    "questionEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    },
+                    "answerEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    },
+                    "answerBadgeEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    },
+                    "resultsRevealEntrance": {
+                      "preset": "none",
+                      "durationMs": 800,
+                      "timing": "simultaneous",
+                      "staggerMs": 90
+                    }
+                  },
+                  "questionDecoration": {
+                    "enabled": false,
+                    "preset": "none"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":false,\"code\":\"PREVIEW_UNAVAILABLE\"}"
+          }
+        ],
+        "structuredContent": {
+          "contractVersion": "0.1.0",
+          "ok": false,
+          "correlationId": "3a5098a5-9828-4254-8888-a03369dd4b6e",
+          "error": {
+            "code": "PREVIEW_UNAVAILABLE",
+            "messageKey": "extensions:mcp.PREVIEW_UNAVAILABLE",
+            "retryable": false
+          }
+        },
+        "isError": true
+      }
+    }
+  ]
+}

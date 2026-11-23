@@ -1,0 +1,96 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 19 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   1 [chromium] › qa/tds-host.spec.ts:107:1 › display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus (19.1s)
+[WebServer] 11:31:27 PM [vite] ws proxy error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+[WebServer] 11:31:27 PM [vite] ws proxy socket error:
+[WebServer] Error: write EPIPE
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:138:10)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:126:10)
+[WebServer]     at Socket._writeGeneric (node:net:1324:11)
+[WebServer]     at Socket._write (node:net:1336:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:574:12)
+[WebServer]     at _write (node:internal/streams/writable:503:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:512:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1031:24)
+[WebServer]     at Socket.emit (node:events:514:28)
+[WebServer]     at addChunk (node:internal/streams/readable:569:12)
+  ✓   2 [chromium] › qa/tds-host.spec.ts:243:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once (16.8s)
+  ✓   3 [chromium] › qa/tds-host.spec.ts:327:1 › restart and skip keep original confirmations and one command per explicit confirmation (12.7s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   4 [chromium] › qa/tds-host.spec.ts:367:1 › touch host controls and compact landscape dialogs keep named reachable close actions (5.0s)
+  ✓   5 [chromium] › qa/tds-host.spec.ts:418:1 › legacy settings switches use visible token thumbs and preserve a real confirmed server save (4.5s)
+  ✓   6 [chromium] › qa/tds-package-admin.spec.ts:8:1 › current Studio package administration preserves build, install, export and responsive controls (8.1s)
+  ✓   7 [chromium] › qa/tds-roster.spec.ts:75:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster (16.0s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+[WebServer] 11:32:40 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:32:40 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:32:42 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:32:42 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:32:42 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:32:42 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   8 [chromium] › qa/tds-stage-integration.spec.ts:106:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions (28.6s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   9 [chromium] › qa/tds-stage-integration.spec.ts:248:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (20.2s)
+  ✓  10 [chromium] › qa/tds-stage-integration.spec.ts:330:1 › a failed per-card image falls back to the selected full-window theme without classroom or duplicate media (9.8s)
+  ✓  11 [webkit] › qa/tds-host.spec.ts:243:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once (48.7s)
+  ✓  12 [webkit] › qa/tds-host.spec.ts:327:1 › restart and skip keep original confirmations and one command per explicit confirmation (30.7s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓  13 [webkit] › qa/tds-host.spec.ts:367:1 › touch host controls and compact landscape dialogs keep named reachable close actions (12.2s)
+  ✓  14 [webkit] › qa/tds-host.spec.ts:418:1 › legacy settings switches use visible token thumbs and preserve a real confirmed server save (13.5s)
+  ✓  15 [webkit] › qa/tds-package-admin.spec.ts:8:1 › current Studio package administration preserves build, install, export and responsive controls (17.9s)
+  ✓  16 [webkit] › qa/tds-roster.spec.ts:75:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster (54.0s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓  17 [webkit] › qa/tds-stage-integration.spec.ts:106:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions (49.0s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓  18 [webkit] › qa/tds-stage-integration.spec.ts:248:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (1.3m)
+  ✓  19 [webkit] › qa/tds-stage-integration.spec.ts:330:1 › a failed per-card image falls back to the selected full-window theme without classroom or duplicate media (18.4s)
+
+  19 passed (7.9m)

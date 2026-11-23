@@ -1,0 +1,44 @@
+{
+  "kind": "independent-readonly-finalized-consent-review",
+  "at": "2026-11-19T20:57:22.264983+00:00",
+  "review": "PASS",
+  "sourceRevision": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "receipt": {
+    "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-browser-dccfd9d22a46-bc4da0bb\\receipt.json",
+    "sha256": "0b0597a81e5ca589fa83c5cb8b9e17cbfd835c908b1d85949cc1aa5737e7b632"
+  },
+  "sourceFiles": 1873,
+  "cases": [
+    "\u2713  1 [chromium] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:621:3 \u203a phase 3 native consent Studio integration \u203a authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen (29.7s)",
+    "\u2713  2 [chromium] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:995:3 \u203a phase 3 native consent Studio integration \u203a fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift (25.1s)",
+    "\u2713  3 [chromium] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:1242:3 \u203a phase 3 native consent Studio integration \u203a renders native-save consent page across all 8 locales (14.6s)",
+    "\u2713  4 [webkit] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:621:3 \u203a phase 3 native consent Studio integration \u203a authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen (1.6m)",
+    "\u2713  5 [webkit] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:995:3 \u203a phase 3 native consent Studio integration \u203a fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift (57.5s)",
+    "\u2713  6 [webkit] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:1242:3 \u203a phase 3 native consent Studio integration \u203a renders native-save consent page across all 8 locales (32.3s)"
+  ],
+  "passed": 6,
+  "engines": {
+    "chromium": 3,
+    "webkit": 3
+  },
+  "sourceReadOnly": true,
+  "allSourceHashesVerifiedBeforeAfter": true,
+  "sdkCacheFiles": 2042,
+  "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "webArtifacts": {
+    "count": 203,
+    "equalFinalizedLaunchReceipt": true,
+    "unchanged": true
+  },
+  "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+  "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+  "widgetArtifactsEqualDirectFrozenHashes": true,
+  "widgetArtifactsUnchanged": true,
+  "network": "none",
+  "productionChanged": false,
+  "customerMountAccessed": false,
+  "releaseQualified": false,
+  "laterGates": "Standard full-show, focused transport, immutable proxy and release remain pending; no incomplete receipts inspected."
+}

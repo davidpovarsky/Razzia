@@ -1,0 +1,488 @@
+{
+  "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+  "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+  "sha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "widgetManifestSha256": "b5016791c480d583a84f1bcb4076ef5bc7054ebac8fdaa417ce30962c4aee4d4",
+  "widgetHtmlSha256": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+  "sourceHashesUnchanged": true,
+  "diagnosticMode": "frame-scheduling",
+  "productionChanged": false,
+  "customerMountAccessed": false,
+  "oauthSession": {
+    "kind": "actual-issuer-oauth-refresh",
+    "scheduler": "wall-clock",
+    "accessTokenLifetimeSeconds": 300,
+    "refreshCount": 0,
+    "rejected": false,
+    "automaticReauthorization": false,
+    "refreshes": []
+  },
+  "network": "none",
+  "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+  "outboundDenied": [],
+  "engines": [
+    {
+      "name": "webkit",
+      "version": "27.2",
+      "outcomes": [
+        {
+          "name": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+          "status": "FAIL",
+          "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+          "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+          "budgetMs": 300000,
+          "ms": 19833
+        },
+        {
+          "name": "webkit / razzia-original diagnostic workspace and logical card navigation",
+          "status": "FAIL",
+          "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+          "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+          "budgetMs": 300000,
+          "ms": 17200
+        }
+      ]
+    }
+  ],
+  "requiredChecks": [
+    "chromium / tadazz-classic native opening, five phases, transitions and closing",
+    "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+    "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+    "chromium / tadazz-classic CSP, native media resources and browser errors",
+    "chromium / razzia-original native opening, five phases, transitions and closing",
+    "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+    "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+    "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / razzia-original native pause, resume, replay and adjacent skip",
+    "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / razzia-original tamper, cancellation and tool-context teardown",
+    "chromium / razzia-original CSP, native media resources and browser errors",
+    "webkit / tadazz-classic native opening, five phases, transitions and closing",
+    "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+    "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+    "webkit / tadazz-classic CSP, native media resources and browser errors",
+    "webkit / razzia-original native opening, five phases, transitions and closing",
+    "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+    "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+    "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / razzia-original native pause, resume, replay and adjacent skip",
+    "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / razzia-original tamper, cancellation and tool-context teardown",
+    "webkit / razzia-original CSP, native media resources and browser errors"
+  ],
+  "failureCount": 2,
+  "rendererBuildId": "0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80",
+  "artifactSha256": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "status": "FAIL",
+      "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+      "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+      "budgetMs": 300000,
+      "ms": 19833
+    },
+    {
+      "name": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "status": "FAIL",
+      "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+      "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+      "budgetMs": 300000,
+      "ms": 17200
+    }
+  ],
+  "observations": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T18:22:36.334Z",
+      "reason": "workspace scenario",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T18:22:36.334Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "diagnostic failure state",
+      "reason": "check failure",
+      "file": "webkit-tadazz-classic-failure-state-1.json",
+      "at": "2026-11-19T18:22:56.167Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "diagnostic failure state",
+      "reason": "workspace scheduling completion",
+      "file": "webkit-tadazz-classic-failure-state-2.json",
+      "at": "2026-11-19T18:22:58.361Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T18:23:00.398Z",
+      "reason": "close frame-scheduling diagnostic context",
+      "url": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "status": "drained",
+      "receipt": {
+        "documentId": "8b525f01-6c1c-42d6-b724-f7133bdd3b6b",
+        "url": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+        "status": "drained",
+        "startedAt": "2026-11-19T18:23:00.446Z",
+        "finishedAt": "2026-11-19T18:23:00.450Z",
+        "elapsedMs": 4,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 1,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T18:22:38.877Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T18:22:40.111Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T18:22:41.049Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T18:22:45.735Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T18:23:00.453Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T18:23:04.592Z",
+      "reason": "workspace scenario",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T18:23:04.592Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "diagnostic failure state",
+      "reason": "check failure",
+      "file": "webkit-razzia-original-failure-state-1.json",
+      "at": "2026-11-19T18:23:21.792Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "diagnostic failure state",
+      "reason": "workspace scheduling completion",
+      "file": "webkit-razzia-original-failure-state-2.json",
+      "at": "2026-11-19T18:23:23.492Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T18:23:25.155Z",
+      "reason": "close frame-scheduling diagnostic context",
+      "url": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+      "status": "drained",
+      "receipt": {
+        "documentId": "cd22948a-2566-408f-90c6-acb10da97d24",
+        "url": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+        "status": "drained",
+        "startedAt": "2026-11-19T18:23:25.164Z",
+        "finishedAt": "2026-11-19T18:23:25.170Z",
+        "elapsedMs": 6,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 1,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T18:23:08.632Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T18:23:09.428Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T18:23:10.351Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T18:23:11.350Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T18:23:25.172Z"
+    }
+  ],
+  "rendererFixtures": [],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:22:42.360Z",
+      "inputRevision": 1,
+      "inputDigest": "3e4ada217938a5aa84046b9bfaa9c698e4a85f28027799bc1c9f08a51498731b",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "394c70b3-140e-4656-a599-9433e0c4d831",
+        "data": {
+          "draftId": "zHU0SG8McN2spxRAPw6Vp0-d9JZjBgBK",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:23:11.345Z",
+      "inputRevision": 1,
+      "inputDigest": "258592115df2ed9bda1967fa80a0f25ce1c926b2558aa0ae55a6fcbff2b26eff",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "08c765a0-a7fc-4c08-aa6d-be5b92c2db76",
+        "data": {
+          "draftId": "MbrLEXtcQnq_wNrtZlfCcuHebKExZjtE",
+          "revision": 1,
+          "summary": {
+            "title": "Full show razzia-original webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "path": "/tadazz-show/razzia-original/background.png",
+      "admitted": true
+    }
+  ],
+  "requestFailures": [],
+  "pageErrorEvents": [],
+  "qaRequestEvents": [
+    {
+      "at": "2026-11-19T18:22:38.889Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "url": "http://127.0.0.1:46637/qa/initial?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:22:40.134Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:22:41.057Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "url": "http://127.0.0.1:46637/qa/call?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:22:45.526Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:23:08.640Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+      "url": "http://127.0.0.1:46637/qa/initial?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:23:09.476Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:23:10.361Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+      "url": "http://127.0.0.1:46637/qa/call?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:23:11.382Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "requests": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/sounds/results.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/tadazz-show/razzia-original/background.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/sounds/results.mp3"
+    }
+  ]
+}

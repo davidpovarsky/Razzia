@@ -1,34 +1,76 @@
 import { createAdaptorServer } from "@hono/node-server"
-import { app, createSocketServer } from "@razzia/socket/app"
+import {
+  recoverStartupOwnerJournals,
+  recoverCreationReservations,
+} from "@razzia/extensions/server"
+import { resolveConfigRoot } from "@razzia/socket/services/config-scope"
 import { initConfig } from "@razzia/socket/services/config"
-import Registry from "@razzia/socket/services/registry"
+import {
+  checkAccountConfiguration,
+  readStartupOwnerSnapshot,
+} from "@razzia/socket/services/account-db"
 
-const WS_PORT = Number(process.env.SOCKET_PORT) || 3001
+async function startServer() {
+  const { app, createSocketServer } = await import("@razzia/socket/app")
+  const { default: Registry } = await import("@razzia/socket/services/registry")
+  const WS_PORT = Number(process.env.SOCKET_PORT) || 3001
 
-initConfig()
+  // C1 reads only its trusted private registry, including explicit tenant roots.
+  readStartupOwnerSnapshot()
+  recoverCreationReservations(resolveConfigRoot())
+  initConfig()
+  checkAccountConfiguration()
 
-process.on("uncaughtException", (error) => {
-  console.error("Uncaught exception:", error)
-})
+  // Startup journal recovery: recover pending composite-save and media-delete transactions before accepting requests
+  recoverStartupOwnerJournals(readStartupOwnerSnapshot())
 
-process.on("unhandledRejection", (reason) => {
-  console.error("Unhandled rejection:", reason)
-})
+  process.on("uncaughtException", (error) => {
+    console.error("Uncaught exception:", error)
+  })
 
-const server = createAdaptorServer({ fetch: app.fetch })
+  process.on("unhandledRejection", (reason) => {
+    console.error("Unhandled rejection:", reason)
+  })
 
-createSocketServer(server)
+  const server = createAdaptorServer({ fetch: app.fetch })
 
-server.listen(WS_PORT, () => {
-  console.log(`Server running on port ${WS_PORT}`)
-})
+  createSocketServer(server)
 
-process.on("SIGINT", () => {
-  Registry.getInstance().cleanup()
-  process.exit(0)
-})
+  server.listen(WS_PORT, () => {
+    console.log(`Server running on port ${WS_PORT}`)
+  })
 
-process.on("SIGTERM", () => {
-  Registry.getInstance().cleanup()
-  process.exit(0)
+  process.on("SIGINT", () => {
+    Registry.getInstance().cleanup()
+    process.exit(0)
+  })
+
+  process.on("SIGTERM", () => {
+    Registry.getInstance().cleanup()
+    process.exit(0)
+  })
+}
+
+async function main() {
+  if (process.argv.slice(2).includes("--managed-client-owner")) {
+    if (process.argv.length !== 3) {
+      throw new Error("Unexpected managed-client owner arguments")
+    }
+
+    checkAccountConfiguration()
+    const { runManagedClientOwnerCli } =
+      await import("@razzia/socket/services/managed-client-owner-cli")
+    await runManagedClientOwnerCli()
+
+    return
+  }
+
+  await startServer()
+}
+
+void main().catch((error: unknown) => {
+  console.error(
+    error instanceof Error ? error.message : "Server startup failed",
+  )
+  process.exitCode = 1
 })

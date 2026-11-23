@@ -1,0 +1,35 @@
+{
+  "sourceCommit": "4f4825e2382da27b7316db33b9d1f2ee88cb7b4f",
+  "checkpointKind": "C1 prototype A source only; runtime not run",
+  "updateSummary": "Updated 4 of 4 tasks.",
+  "readbackVerified": [
+    {
+      "gid": "1220109925694179",
+      "name": "P0 | Tadazz — סגירת חלון קריסה ב־Media Delete ושחזור טרנזקציוני בטוח",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 19642
+    },
+    {
+      "gid": "1220111293723790",
+      "name": "P0 | Tadazz — תיקון שחזור יומן שמירת שעשועון V2 בלי אובדן Sidecar",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 18829
+    },
+    {
+      "gid": "1219882508725158",
+      "name": "Tomer — הקשחת rollback לכשל ניקוי והתאוששות מקריסת תהליך",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 15280
+    },
+    {
+      "gid": "1220541793835278",
+      "name": "LANE-P2 | P0 שחזור Media Delete ו־Sidecar V2 בלי אובדן נתונים",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 14275
+    }
+  ]
+}

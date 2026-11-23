@@ -1,0 +1,45 @@
+{
+  "killed": {
+    "pid": 633,
+    "status": null,
+    "signal": "SIGKILL",
+    "stdout": "",
+    "stderr": ""
+  },
+  "lookup": {
+    "pid": 644,
+    "status": 0,
+    "signal": null,
+    "stdout": "{\"pid\":644,\"status\":{\"status\":\"committed\",\"result\":{\"quizId\":\"kIhaJlWdi2cuJnokcPSfy\",\"revision\":1,\"baseDigest\":\"2a5eab272523e6c7f761a4d2682f9b8c65f23f7e821dc13e816f5afdd963f344\"}},\"state\":{\".owner\":\"f0b9c5d83e39d07bc06a870eee430b87382d9ad649b81787d45ba902e5f330ac\",\".tadazz-creation-operations-v1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/operation.json\":\"662b3e7dbeb9276ad2e4f476e3d9ad97c37d9224323ba23d11ce20242e2bb517\",\"f-outcome.json\":\"7fe84643d52feb4c039129744b008a5277f8db161bd7869754c8c73fa791e710\",\"tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/kIhaJlWdi2cuJnokcPSfy.json\":\"47a2f5fbdf768145c0e19919a27b8974028639a9427cf629c98ba5d5003b6268\",\"tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt\":\"59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e\",\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-PC0re6K7.json\":\"fd7f1fb4aae588453a49886528b74f069571adb02c8bca80c1835c851714e803\",\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt\":\"aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098\",\"tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt\":\"59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e\",\"tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt\":\"aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098\"}}",
+    "stderr": ""
+  },
+  "retry": {
+    "pid": 655,
+    "status": 0,
+    "signal": null,
+    "stdout": "{\"pid\":655,\"result\":{\"quizId\":\"kIhaJlWdi2cuJnokcPSfy\",\"revision\":1,\"baseDigest\":\"2a5eab272523e6c7f761a4d2682f9b8c65f23f7e821dc13e816f5afdd963f344\"},\"state\":{\".owner\":\"f0b9c5d83e39d07bc06a870eee430b87382d9ad649b81787d45ba902e5f330ac\",\".tadazz-creation-operations-v1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/operation.json\":\"662b3e7dbeb9276ad2e4f476e3d9ad97c37d9224323ba23d11ce20242e2bb517\",\"f-outcome.json\":\"7fe84643d52feb4c039129744b008a5277f8db161bd7869754c8c73fa791e710\",\"tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/kIhaJlWdi2cuJnokcPSfy.json\":\"47a2f5fbdf768145c0e19919a27b8974028639a9427cf629c98ba5d5003b6268\",\"tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt\":\"59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e\",\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-PC0re6K7.json\":\"fd7f1fb4aae588453a49886528b74f069571adb02c8bca80c1835c851714e803\",\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt\":\"aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098\",\"tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt\":\"59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e\",\"tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt\":\"aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098\"}}",
+    "stderr": ""
+  },
+  "before": {
+    ".owner": "f0b9c5d83e39d07bc06a870eee430b87382d9ad649b81787d45ba902e5f330ac",
+    ".tadazz-creation-operations-v1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/operation.json": "662b3e7dbeb9276ad2e4f476e3d9ad97c37d9224323ba23d11ce20242e2bb517",
+    "f-outcome.json": "7fe84643d52feb4c039129744b008a5277f8db161bd7869754c8c73fa791e710",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/kIhaJlWdi2cuJnokcPSfy.json": "47a2f5fbdf768145c0e19919a27b8974028639a9427cf629c98ba5d5003b6268",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-PC0re6K7.json": "fd7f1fb4aae588453a49886528b74f069571adb02c8bca80c1835c851714e803",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098",
+    "tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098"
+  },
+  "after": {
+    ".owner": "f0b9c5d83e39d07bc06a870eee430b87382d9ad649b81787d45ba902e5f330ac",
+    ".tadazz-creation-operations-v1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/operation.json": "662b3e7dbeb9276ad2e4f476e3d9ad97c37d9224323ba23d11ce20242e2bb517",
+    "f-outcome.json": "7fe84643d52feb4c039129744b008a5277f8db161bd7869754c8c73fa791e710",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/kIhaJlWdi2cuJnokcPSfy.json": "47a2f5fbdf768145c0e19919a27b8974028639a9427cf629c98ba5d5003b6268",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-PC0re6K7.json": "fd7f1fb4aae588453a49886528b74f069571adb02c8bca80c1835c851714e803",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098",
+    "tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098"
+  }
+}

@@ -1,0 +1,11 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+Native exit diagnostic { open: true, state: 'closed', animation: 'tds-dialog-out' }
+  ✓  1 [chromium] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (8.8s)
+
+  1 passed (11.1s)

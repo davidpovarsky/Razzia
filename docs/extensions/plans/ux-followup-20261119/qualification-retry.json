@@ -1,0 +1,10 @@
+{
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "attempt": 2,
+  "sourceChanged": false,
+  "dependencyVersionsChanged": false,
+  "reason": "Restore the exact accepted SDK cache after its tmpfs was cleared by the prior cache stop/start",
+  "priorFailure": "qualification-setup-failure-34568c5c937a/receipt.json",
+  "cacheRestoration": "qa-cache-restoration.json",
+  "startedAt": "2026-11-19T14:37:40.798629+00:00"
+}

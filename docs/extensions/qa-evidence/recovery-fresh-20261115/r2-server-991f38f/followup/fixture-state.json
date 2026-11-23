@@ -1,0 +1,7 @@
+{
+  "files": [
+    "extensions/quizzes/quiz-1.json",
+    "extensions/quizzes/quiz-2.json"
+  ],
+  "quizzDirectoryExists": false
+}

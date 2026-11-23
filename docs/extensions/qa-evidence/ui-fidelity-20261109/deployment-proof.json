@@ -1,0 +1,20 @@
+{
+  "origin": "https://theme-lab-v2.132.145.25.168.sslip.io",
+  "health": "ok",
+  "runtimeSource": "4d8fa98065e7a05bcf2d98fb356dad9c4d249ba7",
+  "image": "sha256:a7d1b8510afb2a522e1c4c56ed9432283c3480f78f0022be167bcfb31cf531fd",
+  "verifiedSourceInputs": 994,
+  "beforeContainer": "6284ab2d1d8f34739179cc555e0f34931b97a6b063546e390d92cd94ccf9127b",
+  "afterContainer": "a1ce095975599c008d91d2c55460db717c05d49c1763fe17ed0af8823aee4c23",
+  "mount": "/opt/tadazz-releases/ui-fidelity-20261108/config -> /app/config",
+  "savedGamesAfterReplacement": 8,
+  "selectableFamilies": 4,
+  "publicBrowserSamples": 8,
+  "productionAndOldLabIdentityUnchanged": true,
+  "protectedContainers": {
+    "tadazz": "8227d0c96ba1cda10d4f003a51bb6465e495e64afa2f24443d82c0cd7dd5d0ec sha256:05c66d23d7c76ccd964720e672bbac001decfcfc7e670e7aafa3508a698937ac 2026-11-08T17:29:44.514365819Z",
+    "tadazz-theme-lab": "07c076e2a118ccbe47263ca451ff14a4bff2e063ba5d739d30e689ed9d4f9bbe sha256:e0bc48ecd01c6a79c63e244337e07334c85226bcb819247361ab904c4ae923b3 2026-11-08T20:52:27.108384769Z"
+  },
+  "installAccountsBilling": "off",
+  "telephonyProviders": "not configured"
+}

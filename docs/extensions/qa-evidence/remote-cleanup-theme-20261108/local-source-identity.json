@@ -1,0 +1,18 @@
+{
+  "checkedFiles": 1001,
+  "runtimeSourceMatchesRemote": true,
+  "run": "r12",
+  "documentedDeliveryArtifactChanges": [
+    {
+      "file": ".agents/skills/tadazz-theme-creator/assets/theme-template/theme-manifest.schema.json",
+      "reason": "Generated delivery artifact copied from the successful live-Zod schema command.",
+      "sha256": "1cd97072c4394e500e416d9e0f128120dd73d932a47b815249b5fece07cda0be"
+    },
+    {
+      "file": "scripts/audit-upstream.mjs",
+      "reason": "Read-only local Git audit generator updated to require the completed per-file review ledger; it is not executed or imported by the game, build or test suites.",
+      "sha256": "5777e35641acc0eed9480d399ebde4e7686e328a7f9a8c7804019a9c2c1e60a1"
+    }
+  ],
+  "verifiedSourceCommit": "5c51ca73d00374aac4f626f6c5c74d9d3a96a9a8"
+}

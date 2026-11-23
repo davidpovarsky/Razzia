@@ -1,0 +1,6 @@
+{"route":"/","profile":"desktop unthrottled","readyMs":1223,"fcpMs":1480,"lcpMs":1612,"ttfbMs":303.59999999403954,"cls":0,"blockingMs":24,"scriptDecodedBytes":1453446,"transferBytes":1150715}
+{"route":"/login","profile":"desktop unthrottled","readyMs":948,"fcpMs":960,"lcpMs":960,"ttfbMs":240,"cls":0.02749636069717721,"blockingMs":0,"scriptDecodedBytes":1244475,"transferBytes":656942}
+{"route":"/studio/games","profile":"desktop unthrottled","readyMs":910,"fcpMs":916,"lcpMs":916,"ttfbMs":244.5,"cls":0.02749636069717721,"blockingMs":3,"scriptDecodedBytes":1244475,"transferBytes":656942}
+{"route":"/","profile":"iPad 1.6Mbps/150ms RTT/4x CPU","readyMs":5182,"fcpMs":3796,"lcpMs":6064,"ttfbMs":313.09999999403954,"cls":0,"blockingMs":1107,"scriptDecodedBytes":1453446,"transferBytes":1150703}
+{"route":"/login","profile":"iPad 1.6Mbps/150ms RTT/4x CPU","readyMs":4123,"fcpMs":4092,"lcpMs":4092,"ttfbMs":313.2999999821186,"cls":0,"blockingMs":550,"scriptDecodedBytes":1244475,"transferBytes":656930}
+{"route":"/studio/games","profile":"iPad 1.6Mbps/150ms RTT/4x CPU","readyMs":4165,"fcpMs":4112,"lcpMs":4112,"ttfbMs":313.5,"cls":0,"blockingMs":607,"scriptDecodedBytes":1244475,"transferBytes":663561}

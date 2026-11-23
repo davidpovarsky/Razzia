@@ -1,0 +1,11 @@
+source-review=0
+build=0
+web-types=0
+socket-types=0
+extension-types=0
+e2e-types=0
+authoring-types=0
+root-tests=0
+extension-tests=0
+sync-browser=1
+classic-browser=0

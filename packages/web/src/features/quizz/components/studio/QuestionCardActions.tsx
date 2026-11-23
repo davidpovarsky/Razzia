@@ -1,0 +1,63 @@
+import NativeButton from "@razzia/web/components/Button"
+import AlertDialog from "@razzia/web/components/AlertDialog"
+import { Copy, Trash2 } from "lucide-react"
+import { useTranslation } from "react-i18next"
+
+export function QuestionCardActions({
+  canDelete,
+  isActive,
+  onDelete,
+  onDuplicate,
+}: {
+  canDelete: boolean
+  isActive: boolean
+  onDelete: () => void
+  onDuplicate?: () => void
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      className={`absolute end-1.5 top-1.5 flex items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex ${isActive ? "" : "lg:hidden"}`}
+    >
+      {onDuplicate && (
+        <NativeButton
+          size="sm"
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDuplicate()
+          }}
+          title={t("quizz:question.duplicateQuestion", "Duplicate question")}
+          aria-label={t(
+            "quizz:question.duplicateQuestion",
+            "Duplicate question",
+          )}
+          className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground focus:ring-primary rounded-sm p-1 focus:ring-2 focus:outline-none"
+        >
+          <Copy className="size-3.5" />
+        </NativeButton>
+      )}
+
+      {canDelete && (
+        <AlertDialog
+          trigger={
+            <NativeButton
+              size="sm"
+              type="button"
+              onClick={(e) => e.stopPropagation()}
+              aria-label={t("quizz:question.deleteQuestion")}
+              className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
+            >
+              <Trash2 className="size-3.5" />
+            </NativeButton>
+          }
+          title={t("quizz:question.deleteQuestion")}
+          description={t("quizz:question.deleteQuestionConfirm")}
+          confirmLabel={t("common:delete")}
+          onConfirm={onDelete}
+        />
+      )}
+    </div>
+  )
+}

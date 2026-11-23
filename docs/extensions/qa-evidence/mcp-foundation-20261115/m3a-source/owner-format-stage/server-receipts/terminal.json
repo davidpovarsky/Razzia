@@ -1,0 +1,20 @@
+{
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": true,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T14:56:04.106563665Z",
+    "FinishedAt": "2026-11-15T14:57:54.058468115Z"
+  },
+  "id": "bf5588720effa0994f608ec11da28416e3d6a5a5104af47c411eb2727b406992",
+  "sourcePhysicalBytes": 45056,
+  "evidencePhysicalBytes": 917504,
+  "dockerAllowanceBytes": 2097152,
+  "freeBytes": 2666172416
+}

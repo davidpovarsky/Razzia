@@ -1,0 +1,31 @@
+[WebServer] (node:28468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:29044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:19068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\cleanup-theme.spec.ts:131:1 › Classic host, player and display keep the current lobby and authoritative pause/roster (7.8s)
+  ok  2 [chromium] › tests\cleanup-theme.spec.ts:183:1 › explicit rollback uses extracted scene presenter and original Studio controls (5.0s)
+  ok  3 [chromium] › tests\cleanup-theme.spec.ts:318:1 › unknown versions preserve stored identity and warn only the manager (2.9s)
+  ok  4 [chromium] › tests\cleanup-theme.spec.ts:348:1 › blocked audio waits for a user gesture without retrying on ticks (6.5s)
+  ok  5 [chromium] › tests\cleanup-theme.spec.ts:427:1 › Studio shows only registered Classic choices, previews locally, and persists explicit mute (4.0s)
+  ok  6 [chromium] › tests\cleanup-theme.spec.ts:485:1 › live theme shares all roles, fits five viewports, and restarts voting music only for a new question (53.9s)
+(node:28504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 [webkit-ipad] › tests\cleanup-theme.spec.ts:131:1 › Classic host, player and display keep the current lobby and authoritative pause/roster (16.8s)
+  ok  8 [webkit-ipad] › tests\cleanup-theme.spec.ts:183:1 › explicit rollback uses extracted scene presenter and original Studio controls (6.4s)
+  ok  9 [webkit-ipad] › tests\cleanup-theme.spec.ts:318:1 › unknown versions preserve stored identity and warn only the manager (4.1s)
+  ok 10 [webkit-ipad] › tests\cleanup-theme.spec.ts:348:1 › blocked audio waits for a user gesture without retrying on ticks (10.5s)
+  ok 11 [webkit-ipad] › tests\cleanup-theme.spec.ts:427:1 › Studio shows only registered Classic choices, previews locally, and persists explicit mute (7.9s)
+  ok 12 [webkit-ipad] › tests\cleanup-theme.spec.ts:485:1 › live theme shares all roles, fits five viewports, and restarts voting music only for a new question (1.1m)
+[WebServer] 12:09:08 [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 12:09:08 [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+
+  12 passed (3.5m)

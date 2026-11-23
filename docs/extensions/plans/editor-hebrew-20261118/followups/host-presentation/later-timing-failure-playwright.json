@@ -1,0 +1,205 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\playwright.host-followup.config.ts"
+    ],
+    "configFile": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\playwright.host-followup.config.ts",
+    "rootDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-timer-20261118/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-timer-20261118/docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/playwright",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "msedge",
+        "name": "msedge",
+        "testDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-timer-20261118/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "host-presentation.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\followups\\host-presentation\\playwright",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "msedge",
+        "testDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests",
+        "snapshotDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests",
+        "testIgnore": [],
+        "testMatch": [
+          "host-presentation.spec.ts"
+        ],
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "locale": "en-US",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "channel": "msedge"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "msedge"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\followups\\host-presentation\\playwright.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "host-presentation.spec.ts",
+      "file": "host-presentation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "same-window host presentation hides manager UI and controls authoritative pause",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "msedge",
+              "projectName": "msedge",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 77685,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m12000\u001b[39m\nReceived:   \u001b[31m18018\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m12000\u001b[39m\nReceived:   \u001b[31m18018\u001b[39m\n    at C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests\\host-presentation.spec.ts:167:33",
+                    "location": {
+                      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests\\host-presentation.spec.ts",
+                      "column": 33,
+                      "line": 167
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 165 |\u001b[39m   \u001b[36mconst\u001b[39m displayLobbyElapsedMs \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow() \u001b[33m-\u001b[39m displayOpeningStartedAt\n \u001b[90m 166 |\u001b[39m   expect(displayLobbyElapsedMs)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m7400\u001b[39m)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 167 |\u001b[39m   expect(displayLobbyElapsedMs)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m12000\u001b[39m)\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 168 |\u001b[39m   \u001b[36mawait\u001b[39m display\u001b[33m.\u001b[39mscreenshot({\n \u001b[90m 169 |\u001b[39m     path\u001b[33m:\u001b[39m join(evidenceDir\u001b[33m,\u001b[39m \u001b[32m\"lobby-display-1920x1080.png\"\u001b[39m)\u001b[33m,\u001b[39m\n \u001b[90m 170 |\u001b[39m   })\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests\\host-presentation.spec.ts",
+                        "column": 33,
+                        "line": 167
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m12000\u001b[39m\nReceived:   \u001b[31m18018\u001b[39m\n\n  165 |   const displayLobbyElapsedMs = Date.now() - displayOpeningStartedAt\n  166 |   expect(displayLobbyElapsedMs).toBeGreaterThanOrEqual(7400)\n> 167 |   expect(displayLobbyElapsedMs).toBeLessThan(12000)\n      |                                 ^\n  168 |   await display.screenshot({\n  169 |     path: join(evidenceDir, \"lobby-display-1920x1080.png\"),\n  170 |   })\n    at C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests\\host-presentation.spec.ts:167:33"
+                    },
+                    {
+                      "message": "Error: browserContext._wrapApiCall: file data stream has unexpected number of bytes"
+                    },
+                    {
+                      "message": "Error: End of central directory record signature not found. Either not a zip file, or file is truncated."
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T15:27:45.141Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\followups\\host-presentation\\playwright\\host-presentation-same-win-421f5-ontrols-authoritative-pause-msedge\\test-failed-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\followups\\host-presentation\\playwright\\host-presentation-same-win-421f5-ontrols-authoritative-pause-msedge\\test-failed-2.png"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\e2e\\tests\\host-presentation.spec.ts",
+                    "column": 33,
+                    "line": 167
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6235676bf92e490e4b31-3eb5bdca7ae7c5388643",
+          "file": "host-presentation.spec.ts",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T15:27:38.615Z",
+    "duration": 96045.482,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

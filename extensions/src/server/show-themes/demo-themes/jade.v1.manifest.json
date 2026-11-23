@@ -1,0 +1,1270 @@
+{
+  "manifestVersion": 1,
+  "id": "tadazz-demo-jade",
+  "version": "1.0.0",
+  "nameKey": "demo.jade.name",
+  "descriptionKey": "demo.jade.description",
+  "category": "show",
+  "kind": "declarative",
+  "rendererApiVersion": 1,
+  "rendererId": "tadazz-classic-stage",
+  "posterAssetId": "classic-poster",
+  "provenance": "Operator-owned isolated demonstration. Original Canvas artwork; existing trusted Classic choreography and repository audio. Not a customer-published package.",
+  "capabilities": {
+    "playModes": ["quiz", "survey"],
+    "questionTypes": ["single", "multi", "estimation"],
+    "roles": ["manager", "player", "spectator"],
+    "minAnswers": 2,
+    "maxAnswers": 64,
+    "reducedMotion": "same-theme-static",
+    "animationPresets": [
+      "company-opening",
+      "grand-opening",
+      "representative-directory",
+      "phone-instructions",
+      "connection-readiness",
+      "round-one",
+      "story-progress",
+      "tie-break",
+      "story-assembly",
+      "story-live",
+      "round-two",
+      "grand-finale",
+      "top-pick",
+      "round-recap",
+      "interlude",
+      "z-wipe"
+    ]
+  },
+  "tokens": {
+    "background": "#03201f",
+    "foreground": "#ffffff",
+    "accent": "#9af5c9",
+    "fontId": "rubik",
+    "stageAspect": "16:9",
+    "imageSizing": "square-cover",
+    "palette": {
+      "night": "#03201f",
+      "purple": "#075449",
+      "violet": "#9af5c9",
+      "pink": "#f8d886",
+      "blue": "#9af5c9",
+      "royal": "#075449",
+      "lime": "#f8d886",
+      "gold": "#f8d886",
+      "cream": "#ffffff",
+      "ink": "#03201f"
+    },
+    "effects": "goldy-canonical-v4",
+    "contrast": "light-on-dark-with-selected-outline"
+  },
+  "slots": {
+    "firstPaint": {
+      "defaultVariantId": "tadazz-demo-jade.firstPaint.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.firstPaint.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-shell",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.firstPaint"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "opening": {
+      "defaultVariantId": "tadazz-demo-jade.opening.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.opening.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-opening",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.opening",
+          "mediaAssetId": "classic-opening-video",
+          "overlayAssetId": "classic-opening-lottie"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "lobby": {
+      "defaultVariantId": "tadazz-demo-jade.lobby.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.lobby.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-lobby",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.lobby"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "question": {
+      "defaultVariantId": "tadazz-demo-jade.question.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.question.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-question",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.question"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "answerCards": {
+      "defaultVariantId": "tadazz-demo-jade.answerCards.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.answerCards.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-cards",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.answerCards"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "voting": {
+      "defaultVariantId": "tadazz-demo-jade.voting.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.voting.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-voting",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.voting"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "timer": {
+      "defaultVariantId": "tadazz-demo-jade.timer.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.timer.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-timer",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.timer"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "voteLock": {
+      "defaultVariantId": "tadazz-demo-jade.voteLock.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.voteLock.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-lock",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.voteLock"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "resultsReveal": {
+      "defaultVariantId": "tadazz-demo-jade.resultsReveal.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.resultsReveal.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-results",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.resultsReveal"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "leaderboard": {
+      "defaultVariantId": "tadazz-demo-jade.leaderboard.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.leaderboard.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-leaderboard",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.leaderboard"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "rankUpdate": {
+      "defaultVariantId": "tadazz-demo-jade.rankUpdate.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.rankUpdate.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-rank",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.rankUpdate"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "zzTransition": {
+      "defaultVariantId": "tadazz-demo-jade.zzTransition.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.zzTransition.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-zz",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.zzTransition"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "interlude": {
+      "defaultVariantId": "tadazz-demo-jade.interlude.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.interlude.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-interlude",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.interlude"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "closing": {
+      "defaultVariantId": "tadazz-demo-jade.closing.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.closing.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-closing",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.closing"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "personalResult": {
+      "defaultVariantId": "tadazz-demo-jade.personalResult.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.personalResult.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-personal-result",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo",
+          "animationId": "classic.personalResult"
+        }
+      ],
+      "customMedia": "none"
+    }
+  },
+  "audioEvents": {
+    "opening": {
+      "defaultVariantId": "tadazz-demo-jade.audio.opening.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.opening.default",
+          "labelKey": "extensions:themes.default",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "lobby": {
+      "defaultVariantId": "tadazz-demo-jade.audio.lobby.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.lobby.default",
+          "labelKey": "extensions:themes.default",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.lobby.accent",
+          "labelKey": "extensions:themes.default",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"],
+          "assetId": "classic-confirm"
+        }
+      ],
+      "customMedia": true
+    },
+    "showQuestion": {
+      "defaultVariantId": "tadazz-demo-jade.audio.showQuestion.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.showQuestion.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-transition",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.showQuestion.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "answersMusic": {
+      "defaultVariantId": "tadazz-demo-jade.audio.answersMusic.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.answersMusic.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-voting",
+          "silent": false,
+          "volume": 0.35,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.answersMusic.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "answerSelected": {
+      "defaultVariantId": "tadazz-demo-jade.audio.answerSelected.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.answerSelected.default",
+          "labelKey": "extensions:themes.default",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["player"]
+        }
+      ],
+      "customMedia": false
+    },
+    "answerSubmitted": {
+      "defaultVariantId": "tadazz-demo-jade.audio.answerSubmitted.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.answerSubmitted.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-confirm",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["player"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.answerSubmitted.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["player"]
+        }
+      ],
+      "customMedia": false
+    },
+    "timerWarning": {
+      "defaultVariantId": "tadazz-demo-jade.audio.timerWarning.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.timerWarning.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-tick",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.timerWarning.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.timerWarning.urgent",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-urgent",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.timerWarning.final",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-final",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "timerExpired": {
+      "defaultVariantId": "tadazz-demo-jade.audio.timerExpired.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.timerExpired.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-timer",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 90,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.timerExpired.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 90,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "voteLocked": {
+      "defaultVariantId": "tadazz-demo-jade.audio.voteLocked.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.voteLocked.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-reveal",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.voteLocked.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "revealResults": {
+      "defaultVariantId": "tadazz-demo-jade.audio.revealResults.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-reveal",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.accent",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-confirm",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.music",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-results-music",
+          "silent": false,
+          "volume": 0.35,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.fallback",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-results-fallback",
+          "silent": false,
+          "volume": 0.35,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.story-mixer",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-story-mixer",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.revealResults.story-reveal",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-story-reveal",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "leaderboard": {
+      "defaultVariantId": "tadazz-demo-jade.audio.leaderboard.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.leaderboard.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-leaderboard",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.leaderboard.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "zzTransition": {
+      "defaultVariantId": "tadazz-demo-jade.audio.zzTransition.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.zzTransition.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-transition",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.zzTransition.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "podium1": {
+      "defaultVariantId": "tadazz-demo-jade.audio.podium1.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.podium1.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-first",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.podium1.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "podium2": {
+      "defaultVariantId": "tadazz-demo-jade.audio.podium2.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.podium2.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-second",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.podium2.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "podium3": {
+      "defaultVariantId": "tadazz-demo-jade.audio.podium3.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.podium3.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-third",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.podium3.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "closing": {
+      "defaultVariantId": "tadazz-demo-jade.audio.closing.default",
+      "variants": [
+        {
+          "id": "tadazz-demo-jade.audio.closing.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-first",
+          "silent": false,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "tadazz-demo-jade.audio.closing.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    }
+  },
+  "choreographyCues": {
+    "timer-ended": {
+      "event": "timerExpired",
+      "variantId": "tadazz-demo-jade.audio.timerExpired.default"
+    },
+    "vote-locked": {
+      "event": "voteLocked",
+      "variantId": "tadazz-demo-jade.audio.voteLocked.default"
+    },
+    "countdown-ended": {
+      "event": "voteLocked",
+      "variantId": "tadazz-demo-jade.audio.voteLocked.default"
+    },
+    "survey-reveal": {
+      "event": "revealResults",
+      "variantId": "tadazz-demo-jade.audio.revealResults.default"
+    },
+    "top-pick-reveal": {
+      "event": "revealResults",
+      "variantId": "tadazz-demo-jade.audio.revealResults.accent"
+    },
+    "timer-tick": {
+      "event": "timerWarning",
+      "variantId": "tadazz-demo-jade.audio.timerWarning.default"
+    },
+    "timer-urgent": {
+      "event": "timerWarning",
+      "variantId": "tadazz-demo-jade.audio.timerWarning.urgent"
+    },
+    "timer-final": {
+      "event": "timerWarning",
+      "variantId": "tadazz-demo-jade.audio.timerWarning.final"
+    },
+    "story-begin": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "wipe-covered": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "company-ident": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "tadazz-welcome": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "opening-portal": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "opening-logo": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "directory-loaded": {
+      "event": "lobby",
+      "variantId": "tadazz-demo-jade.audio.lobby.accent"
+    },
+    "phone-ready": {
+      "event": "lobby",
+      "variantId": "tadazz-demo-jade.audio.lobby.accent"
+    },
+    "readiness-grid": {
+      "event": "lobby",
+      "variantId": "tadazz-demo-jade.audio.lobby.accent"
+    },
+    "round-launch": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "story-progress-update": {
+      "event": "lobby",
+      "variantId": "tadazz-demo-jade.audio.lobby.accent"
+    },
+    "story-assembled": {
+      "event": "revealResults",
+      "variantId": "tadazz-demo-jade.audio.revealResults.default"
+    },
+    "story-live-hold": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "finale-impact": {
+      "event": "closing",
+      "variantId": "tadazz-demo-jade.audio.closing.default"
+    },
+    "curtains-closed": {
+      "event": "zzTransition",
+      "variantId": "tadazz-demo-jade.audio.zzTransition.default"
+    },
+    "story-mixer-track": {
+      "event": "revealResults",
+      "variantId": "tadazz-demo-jade.audio.revealResults.story-mixer"
+    },
+    "story-reveal-track": {
+      "event": "revealResults",
+      "variantId": "tadazz-demo-jade.audio.revealResults.story-reveal"
+    }
+  },
+  "assets": [
+    {
+      "id": "classic-backdrop",
+      "url": "/tadazz-show/demos/jade/v1/backdrop.png",
+      "kind": "image",
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148,
+      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
+      "rights": "owner-authorized",
+      "preload": "critical"
+    },
+    {
+      "id": "classic-logo",
+      "url": "/tadazz-show/demos/jade/v1/logo.png",
+      "kind": "image",
+      "sha256": "ef6eb964850cd2992416104dbf161a1d369acb5413f60fcee810c7635460ed1e",
+      "bytes": 11217,
+      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
+      "rights": "owner-authorized",
+      "preload": "critical"
+    },
+    {
+      "id": "classic-poster",
+      "url": "/tadazz-show/demos/jade/v1/backdrop.png",
+      "kind": "image",
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148,
+      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
+      "rights": "owner-authorized",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-opening-video",
+      "url": "/tadazz-show/demos/jade/v1/opening.webm",
+      "kind": "video",
+      "sha256": "2f570937511660da009fa1dcc65fd406d461bc7e027b34a99d84b0445b2bc485",
+      "bytes": 158881,
+      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
+      "rights": "owner-authorized",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-opening-lottie",
+      "url": "/tadazz-show/demos/jade/v1/opening.json",
+      "kind": "lottie",
+      "sha256": "2232e53b589b83df629dcc772c4996af010750ba37b0e6582662424d08ee048c",
+      "bytes": 1120,
+      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
+      "rights": "owner-authorized",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-transition",
+      "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+      "kind": "audio",
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "bytes": 18476,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-reveal",
+      "url": "/sounds/tadazz-reveal-bright-20261108.mp3",
+      "kind": "audio",
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "bytes": 28255,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-confirm",
+      "url": "/sounds/tadazz-confirm-20261108.mp3",
+      "kind": "audio",
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "bytes": 8193,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-voting",
+      "url": "/sounds/answersMusic.mp3",
+      "kind": "audio",
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "bytes": 1246763,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-timer",
+      "url": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "kind": "audio",
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "bytes": 25974,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-tick",
+      "url": "/sounds/tadazz-timer-tick-20261108.mp3",
+      "kind": "audio",
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "bytes": 5058,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-urgent",
+      "url": "/sounds/tadazz-timer-urgent-20261108.mp3",
+      "kind": "audio",
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "bytes": 5685,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-final",
+      "url": "/sounds/tadazz-timer-final-20261108.mp3",
+      "kind": "audio",
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "bytes": 9447,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-leaderboard",
+      "url": "/sounds/snearRoll.mp3",
+      "kind": "audio",
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-first",
+      "url": "/sounds/first.mp3",
+      "kind": "audio",
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-second",
+      "url": "/sounds/second.mp3",
+      "kind": "audio",
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "bytes": 77750,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-third",
+      "url": "/sounds/three.mp3",
+      "kind": "audio",
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "bytes": 61238,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-story-mixer",
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "kind": "audio",
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "bytes": 1222052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-story-reveal",
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "kind": "audio",
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "bytes": 91052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-results-music",
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "kind": "audio",
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "bytes": 784914,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-results-fallback",
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "kind": "audio",
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "bytes": 839514,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-0f3c7d29e913",
+      "url": "/tadazz-show/motion/logo.webp",
+      "kind": "image",
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "bytes": 151654,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-d6997d876b26",
+      "url": "/tadazz-show/second-library/creating-worlds-intro.png",
+      "kind": "image",
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-b47f49feae9c",
+      "url": "/tadazz-show/second-library/curtain-left.png",
+      "kind": "image",
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-cfc4eaa014dd",
+      "url": "/tadazz-show/second-library/curtain-right.png",
+      "kind": "image",
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-7af6b5041525",
+      "url": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "kind": "image",
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-a5b34d556931",
+      "url": "/tadazz-show/story/7ff12046cb1aac7b.png",
+      "kind": "image",
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "bytes": 412633,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-5ebee0b89664",
+      "url": "/tadazz-show/story/84acdb923677d591.webp",
+      "kind": "image",
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "bytes": 134540,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-86afffeb48f1",
+      "url": "/tadazz-show/story/b789ffb48c74e55d.webp",
+      "kind": "image",
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "bytes": 60174,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-8baa3c35f436",
+      "url": "/tadazz-show/story/fef87578b7d57eae.webp",
+      "kind": "image",
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "bytes": 178706,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-a27be4883ee9",
+      "url": "/tadazz-show/demos/jade/v1/backdrop.png",
+      "kind": "image",
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148,
+      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
+      "rights": "owner-authorized",
+      "preload": "slot"
+    }
+  ],
+  "adapterAssets": {
+    "questionBackdrop": "classic-adapter-a27be4883ee9",
+    "showBackdrop": "classic-poster",
+    "brandLogo": "classic-logo"
+  },
+  "localizations": {
+    "en": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Demonstration using Classic choreography.",
+      "extensions:themes.silent": "Silent",
+      "extensions:themes.default": "Theme default"
+    },
+    "fr": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Démonstration utilisant la chorégraphie Classic.",
+      "extensions:themes.silent": "Silence",
+      "extensions:themes.default": "Valeur du thème"
+    },
+    "de": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Demonstration mit Classic-Choreografie.",
+      "extensions:themes.silent": "Stumm",
+      "extensions:themes.default": "Designstandard"
+    },
+    "es": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Demostración con coreografía Classic.",
+      "extensions:themes.silent": "Silencio",
+      "extensions:themes.default": "Valor del tema"
+    },
+    "it": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Dimostrazione con coreografia Classic.",
+      "extensions:themes.silent": "Silenzio",
+      "extensions:themes.default": "Valore del tema"
+    },
+    "ja": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Classic の演出を使用したデモ。",
+      "extensions:themes.silent": "無音",
+      "extensions:themes.default": "テーマの既定値"
+    },
+    "tr": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Classic koreografisini kullanan demo.",
+      "extensions:themes.silent": "Sessiz",
+      "extensions:themes.default": "Tema varsayılanı"
+    },
+    "vi": {
+      "demo.jade.name": "Jade Studio",
+      "demo.jade.description": "Bản trình diễn sử dụng chuyển động Classic.",
+      "extensions:themes.silent": "Im lặng",
+      "extensions:themes.default": "Mặc định của chủ đề"
+    }
+  }
+}

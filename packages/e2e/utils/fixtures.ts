@@ -13,6 +13,14 @@ export const closePage = async (page: Page) => {
     return
   }
 
+  // Edge can expose an empty download tab before its document initializes.
+  // Running beforeunload on that tab does not reliably request its closure.
+  if (page.url() === "about:blank") {
+    await page.close()
+
+    return
+  }
+
   await Promise.all([
     page.waitForEvent("close"),
     page.close({ runBeforeUnload: true }),

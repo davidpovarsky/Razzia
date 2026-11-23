@@ -1,0 +1,110 @@
+{
+  "source": "Read-only live snapshot of failed isolated Linux fullshow c4 QA container",
+  "records": {
+    "DOCKER": {
+      "at": "2026-11-19T01:15:19.378500+00:00",
+      "id": "f4f8ecf34ccf8004268a06f37cd65e19b0f6e57f145365d24744162e084a8187",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Pid": 1677688,
+        "OOMKilled": true,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-19T01:09:55.999783297Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "limits": {
+        "Memory": 2147483648,
+        "MemorySwap": 2147483648,
+        "NanoCpus": 1000000000,
+        "ShmSize": 268435456,
+        "PidsLimit": 512
+      }
+    },
+    "CGROUP": {
+      "memory.events": "low 0\nhigh 0\nmax 79\noom 2\noom_kill 2\noom_group_kill 0\nsock_throttled 0\n",
+      "memory.events.local": "low 0\nhigh 0\nmax 79\noom 2\noom_kill 2\noom_group_kill 0\nsock_throttled 0\n",
+      "memory.current": "1101660160\n",
+      "memory.peak": "2147483648\n",
+      "memory.max": "2147483648\n",
+      "memory.swap.current": "0\n",
+      "memory.swap.max": "0\n",
+      "memory.stat": "anon 1071108096\nfile 15413248\nkernel 14950400\nkernel_stack 1228800\npagetables 9416704\nsec_pagetables 0\npercpu 2416\nsock 4096\nvmalloc 24576\nshmem 2977792\nzswap 0\nzswapped 0\nfile_mapped 1064960\nfile_dirty 0\nfile_writeback 0\nswapcached 0\nanon_thp 0\nfile_thp 0\nshmem_thp 0\ninactive_anon 411172864\nactive_anon 662802432\ninactive_file 0\nactive_file 12435456\nunevictable 32768\nslab_reclaimable 1710216\nslab_unreclaimable 2533936\nslab 4244152\nworkingset_refault_anon 0\nworkingset_refault_file 3310\nworkingset_activate_anon 0\nworkingset_activate_file 394\nworkingset_restore_anon 0\nworkingset_restore_file 0\nworkingset_nodereclaim 0\npgdemote_kswapd 0\npgdemote_direct 0\npgdemote_khugepaged 0\npgdemote_proactive 0\npgpromote_success 0\npgscan 3166\npgsteal 3017\npswpin 0\npswpout 0\npgscan_kswapd 0\npgscan_direct 3166\npgscan_khugepaged 0\npgscan_proactive 0\npgsteal_kswapd 0\npgsteal_direct 3017\npgsteal_khugepaged 0\npgsteal_proactive 0\npgfault 9487806\npgmajfault 94\npgrefill 467\npgactivate 19\npgdeactivate 0\npglazyfree 0\npglazyfreed 0\nswpin_zero 0\nswpout_zero 0\nzswpin 0\nzswpout 0\nzswpwb 0\nthp_fault_alloc 0\nthp_collapse_alloc 0\nthp_swpout 0\nthp_swpout_fallback 0\nnuma_pages_migrated 0\nnuma_pte_updates 0\nnuma_hint_faults 0\n",
+      "pids.current": "77\n",
+      "pids.events": "max 0\n"
+    },
+    "PROCESSES": [
+      {
+        "pid": "173",
+        "name": "WPEWebProcess",
+        "rss": "724484 kB"
+      },
+      {
+        "pid": "33",
+        "name": "MainThread",
+        "rss": "486376 kB"
+      },
+      {
+        "pid": "156",
+        "name": "MiniBrowser",
+        "rss": "122632 kB"
+      },
+      {
+        "pid": "171",
+        "name": "WPENetworkProce",
+        "rss": "60720 kB"
+      },
+      {
+        "pid": "22",
+        "name": "MainThread",
+        "rss": "54288 kB"
+      },
+      {
+        "pid": "47",
+        "name": "esbuild",
+        "rss": "15804 kB"
+      },
+      {
+        "pid": "41",
+        "name": "esbuild",
+        "rss": "13664 kB"
+      },
+      {
+        "pid": "209",
+        "name": "python3",
+        "rss": "9376 kB"
+      },
+      {
+        "pid": "150",
+        "name": "bash",
+        "rss": "2792 kB"
+      },
+      {
+        "pid": "15",
+        "name": "timeout",
+        "rss": "1120 kB"
+      },
+      {
+        "pid": "7",
+        "name": "sleep",
+        "rss": "1052 kB"
+      },
+      {
+        "pid": "1",
+        "name": "docker-init",
+        "rss": "604 kB"
+      }
+    ],
+    "FILESYSTEM": {
+      "/tmp": {
+        "total": 536870912,
+        "available": 534712320
+      },
+      "/dev/shm": {
+        "total": 268435456,
+        "available": 268435456
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-17",
+  "sha": "3741f5fa43b37416cc573383c6c616625e0ada5f",
+  "checkpoint": "CODEX VERIFIED NATIVE CONSENT 2026-11-17 — supersedes earlier browser failure checkpoint\nExact SHA3741f5fa43b37416cc573383c6c616625e0ada5f: Linux HTTP16/16 PASS; focused types/lint/format/site-build PASS; fresh Chromium/WebKit6/6 PASS (196.293s, no retries), all1671 source hashes and2042 SDK-cache entries unchanged. Both browsers prove real isolated UI signup/login with trapped QA mail, trusted click and rejection of synthetic DOM approval, same-revision MCP retry/native C1 save, Studio and frozen editor reopen, B isolation, frame/tamper/cancel/cross-tab/drift negatives, and all8 locales. This is genuine isolated-browser E2E, not an installed ChatGPT/Claude connector.\nA separate opt-in Nginx route file passed real TLS proxy checks in a fresh no-network container using existing production image417cc204da57 (no customer mount/installation/production change). It proves protected-service metadata/JWKS/401/JSON failures and consent GET/HEAD policy before SPA fallback; its two precommit file hashes are retained, immutable proxy qualification pending. Existing production does not include that file yet.\nEvidence: docs/extensions/plans/phase3-takeover-20261117/NATIVE_CONSENT_QUALIFICATION.md and adjacent exact receipts on codex/tadazz-phase3-takeover-20261117. Keep OPEN / NOT_READY: full-show Widget and asset/renderer acceptance, final independent security and combined immutable SHA, verified backup/rollback, safe rollout and genuine private ChatGPT/Claude installation/E2E remain pending. Recovery8/8 is separately qualified at60472d05aa14; broad TS147/freeze23 remain unresolved baselines. Owner deployment/private-hookup authorization persists; old Cezar stays stopped.",
+  "readback": [
+    {
+      "taskId": "1220539632193783",
+      "name": "P1 | Tadazz MCP App — Plugin ל־ChatGPT ול־Claude עם משחק אינטראקטיבי בתוך הצ'אט",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539638955304",
+      "name": "MCP-02 | שרת MCP מרוחק: Tools, Schemas, UI Resources ו־SDK",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539632251971",
+      "name": "MCP-03 | OAuth, account/workspace isolation, consent and permissions",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539638965463",
+      "name": "MCP-10 | QA אוטומטי + אינטראקטיבי בשתי הפלטפורמות, אבטחה וביצועים",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539769107140",
+      "name": "MCP-11 | תיעוד, handoff, staging, versioning ו־release gate",
+      "completed": false,
+      "notesExactMatch": true
+    }
+  ]
+}

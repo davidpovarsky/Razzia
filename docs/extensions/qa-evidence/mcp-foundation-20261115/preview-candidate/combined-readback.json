@@ -1,0 +1,55 @@
+{
+  "node05To06ByteIdentical": [
+    {
+      "name": "producer",
+      "identical": true
+    },
+    {
+      "name": "protocol",
+      "identical": true
+    },
+    {
+      "name": "http",
+      "identical": true
+    }
+  ],
+  "actualNode05TestCount": 15,
+  "actualBrowser06Checks": 8,
+  "dependencyFilesUnchanged": 2580,
+  "sharedEPhysicalInputs": [
+    {
+      "path": "extensions/src/core/lottie.ts",
+      "sha256": "69b3c742384732717b1679dcc488d1c4e77d8a8dccb7dbbed502388af51fe69d"
+    },
+    {
+      "path": "extensions/src/core/show-themes/selection.ts",
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723"
+    },
+    {
+      "path": "extensions/src/core/constants.ts",
+      "sha256": "bbeeb26c8d6f8a12da3621c9ab3cb5f7e2eadfd589471142918e2d1da3e7b721"
+    },
+    {
+      "path": "extensions/src/core/media.ts",
+      "sha256": "a328fc4168bed2a84e11350aca48905de1f301865c375367c671814f77924f18"
+    },
+    {
+      "path": "extensions/src/core/card-appearance.ts",
+      "sha256": "1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata-schema.ts",
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "sha256": "6a02749e4e75e5355bcaae386d188752af31a699e149cb3c3862bb843cf1ee63"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts",
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff"
+    }
+  ],
+  "actualGArtifact": false,
+  "actualInstalledHost": false
+}

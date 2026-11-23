@@ -1,0 +1,5 @@
+{
+  "boundary": "committed-visible",
+  "state": "FAIL",
+  "error": "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-9rbXTW/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+}

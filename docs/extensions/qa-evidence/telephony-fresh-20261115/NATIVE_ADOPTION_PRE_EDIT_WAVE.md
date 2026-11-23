@@ -1,0 +1,16 @@
+# Native phone adoption hooks — pre-edit ledger, 15 November 2026
+
+Lane C, thread 01a1dfa9-87af-79f3-a855-8a93c517b4f5; assigned branch codex/tadazz-hq-telephony-fresh-20261115. Owner activation and Lane C assignment authorize these minimal hooks. Existing source was read before this ledger. No UI, storage-owner, provider, customer or deployment change is intended.
+
+The six actual account/session/SQLite cases and scoped TypeScript passed at 6f02f4bd28256c8cf061a6003a6f61a30fb61dff, on immutable source and retained S02 dependencies. Gateway API09–13 is separately rechecked before applying hooks. Legacy TTL/restart/physical chronology acceptance is retained; explicit v2 server registration precedence does not prove physical chronology.
+
+| Upstream file/symbol | Intended additive hook | Reason and targeted verification |
+| --- | --- | --- |
+| packages/socket/src/services/game/index.ts / phone delegates | Check a downstream per-Game adoption fence at join/rebind, answer and disconnect | Adopted Games admit native phone writes only during the exact synchronous, live-authorized factory turn. Legacy delegates remain identical with no adoption. Exercise real factory registration/answer/hangup and denied direct delegates. |
+| Same / join, reconnectPlayer, selectAnswer, new browser identity query | Refuse phone-associated browser identity, including roster/client/name matching, before mutation/disclosure | Recheck at actual Game entry after async join-ticket verification; block omitted identity and existing phone-client reconnect/answer. Ordinary web participants and manager reconnect remain supported. Test old tickets and alias/name/roster attempts, preserved victim state, valid web control. |
+| packages/socket/src/api/routes/games.ts / POST /join | Check Game identity admission before policy, then after awaited media/ticket preparation immediately before disclosure | Adoption during either await must not disclose a browser phone join result. Test HTTP denial and adoption while actual ticket signing yields. |
+| packages/socket/src/api/extensions/game-routes.ts / POST /pilot-phone | Reject resolved adopted Game before caller lookup, registration, poll/state or answer/hangup | Shared legacy pilot secret cannot bypass v2. Test all three legacy actions return coarse version-required denial with unchanged victim/score. |
+
+Downstream scope: new phone-lifecycle-v2/native-adoption.ts; explicit exports for fence queries only from server/index.ts; factory private composition with optional nativeAdoption=true (absent/false by default). No public adopt endpoint or production mount. Only the trusted authenticated factory can install a fence on a fresh phone Game. Existing phone bindings prevent adoption. Closed authority retains the fence and denies writes; closure never downgrades a Game to legacy. The turn revalidates the actual issuer/session/Game/credential and forbids async/nested grants. Existing authority epochs and post-await checks remain.
+
+The accepted four V2-A core files remain unchanged. Wrap existing coordinator dispatch at the factory rather than duplicate/alter the facade, lifecycle store, scoring, controller, roster or wire schema. New native-source tests require fresh evidence; prior 20/20 and 3/3 remain historical unless their complete input fingerprints match.

@@ -1,0 +1,32 @@
+{
+  "source": "60472d05aa14cfdc0fd07b9fe43a003ba42bdd8f",
+  "evidenceCommit": "191bb18",
+  "phase3": "NOT_READY",
+  "readbacks": [
+    {
+      "task": "1220539632193783",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220539638965463",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220539769107140",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220109925694179",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220111293723790",
+      "verified": true,
+      "completed": false
+    }
+  ]
+}

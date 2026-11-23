@@ -1,0 +1,119 @@
+{
+  "createdAtUtc": "2026-11-17T14:43:53.096Z",
+  "runtime": {
+    "node": "v22.17.0",
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "platform": "win32"
+  },
+  "head": "34cfd464ac0bba432701b87f10f4f8388d665066",
+  "sourceState": "UNCOMMITTED_WORKTREE_BYTES_NOT_A_NEW_IMMUTABLE_SHA",
+  "sourceHashesBefore": {
+    "extensions/src/mcp-app/native-host/static-site.ts": "ae177d80bc8062dd4f1e0b48c26c5c7c71f87224383733831f45b278166272bf",
+    "extensions/src/site/oauth-consent-headers.ts": "f20a58d34ad804a3ee0aa49433bfdb974be93a2232e30b41ad944eacebb5bc25",
+    "extensions/qa/phase3-native-host-static/static-site.node.mjs": "c5df707264a6143a5040eeb412e6fc5cbaeda3815f3612452f265ba4c08542d1",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.mjs": "0ee3afa0ff582d6690dd22a31b5e3d0b4146a127000d08020d3e780cd3de2849",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.node.mjs": "06ee232b7044ab9c1ea93a76bac4c30aaae17938ed90aee852aed3e061697361",
+    "extensions/qa/phase3-native-host-static/verify.mjs": "72c77f6c639da86a9a62741af5bf9bbb7a3b694216efcab0a53fa589288a9a02"
+  },
+  "sourceHashesAfter": {
+    "extensions/src/mcp-app/native-host/static-site.ts": "ae177d80bc8062dd4f1e0b48c26c5c7c71f87224383733831f45b278166272bf",
+    "extensions/src/site/oauth-consent-headers.ts": "f20a58d34ad804a3ee0aa49433bfdb974be93a2232e30b41ad944eacebb5bc25",
+    "extensions/qa/phase3-native-host-static/static-site.node.mjs": "c5df707264a6143a5040eeb412e6fc5cbaeda3815f3612452f265ba4c08542d1",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.mjs": "0ee3afa0ff582d6690dd22a31b5e3d0b4146a127000d08020d3e780cd3de2849",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.node.mjs": "06ee232b7044ab9c1ea93a76bac4c30aaae17938ed90aee852aed3e061697361",
+    "extensions/qa/phase3-native-host-static/verify.mjs": "72c77f6c639da86a9a62741af5bf9bbb7a3b694216efcab0a53fa589288a9a02"
+  },
+  "sourceUnchangedDuringChecks": true,
+  "results": [
+    {
+      "label": "focused-tests",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "--test",
+        "extensions/qa/phase3-native-host-static/static-site.node.mjs",
+        "extensions/qa/phase3-native-host-static/endpoint-preflight.node.mjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-design",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-design-check.mjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-tokens",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-token-registry.mjs",
+        "--check"
+      ],
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-catalog",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-catalog-check.mjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-freeze",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-boundary.mjs"
+      ],
+      "exit": 1,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "protected-delta",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--exit-code",
+        "34cfd464ac0bba432701b87f10f4f8388d665066",
+        "--",
+        "packages",
+        "extensions/src/editor"
+      ],
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "whitespace",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "signal": null,
+      "error": null
+    }
+  ],
+  "scopedTestExpectation": "16 dependency-free tests; synthetic responses, no authenticated host installation",
+  "releaseDecision": "NOT_READY",
+  "ext4Recovery": "NOT_RUN",
+  "independentCombinedSecurityReview": "NOT_RUN",
+  "productionDeployment": "NOT_RUN",
+  "realChatGptConnection": "NOT_RUN"
+}

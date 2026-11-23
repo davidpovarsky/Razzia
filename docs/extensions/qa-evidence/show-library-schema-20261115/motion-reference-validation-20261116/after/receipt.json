@@ -1,0 +1,117 @@
+{
+  "stage": "after",
+  "startedUtc": "2026-11-15T22:30:50.498228+00:00",
+  "sourceBaseCommit": "2fbb4cb5a04a7be0eb417bf687b2143d7c590fd6",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "sourceBefore": {
+    "extensions/src/core/show-library/registry.ts": "dcf221801a8a285d334c2c1fed03e7553baafea57996daa55418aabfe8f0d44b",
+    "extensions/src/core/show-library/registry-motion-references.test.ts": "c0752a873925caa358f371dc39b79141d2018b80db23451e4dc4fe8810cae2bb"
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/registry-motion-references.test.ts",
+        "src/core/show-library/registry.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 441,
+          "sha256": "faa5e109ebb65af0f691095aab26056fbb127ba764d68ff7006a7d41e97d4aaf",
+          "rawBase64": "CiBSVU4gIHY1LjAuMyBDOi9Vc2Vycy9EQVZJRC9Db2RlL1JhenppYS13b3JrdHJlZXMvdGFkYXp6LWhxLXNob3ctbGlicmFyeS0yMDI2MTExNS9leHRlbnNpb25zCgoKIFRlc3QgRmlsZXMgIDIgcGFzc2VkICgyKQogICAgICBUZXN0cyAgMTggcGFzc2VkICgxOCkKICAgU3RhcnQgYXQgIDAwOjMwOjU2CiAgIER1cmF0aW9uICA5LjEycyAoaW1wb3J0IDU3JSwgdHJhbnNmb3JtIDMwJSwgdGVzdHMgMTElLCB3b3JrZXIgMiUpCgogICAgSXNvbGF0ZSAgMiB3b3JrZXJzIHNwYXduZWQgwrcgfjEuNDdzIHN0YXJ0dXAgZWFjaCAoc3Bhd24gKyBlbnZpcm9ubWVudCwgcGVyIGZpbGUpCiAgICAgICAgICAgICBhdCBsZWFzdCB+MS40N3MgZmFzdGVyIHdpdGggaXNvbGF0ZTogZmFsc2Ug4oCUIHJldXNlcyB3b3JrZXJzIGFjcm9zcyBmaWxlcyBpbnN0ZWFkIG9mIG9uZSBwZXIgZmlsZQoK"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "types",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/registry.ts",
+        "extensions/src/core/show-library/registry-motion-references.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 66,
+          "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+          "rawBase64": "Q2hlY2tpbmcgZm9ybWF0dGluZy4uLgpBbGwgbWF0Y2hlZCBmaWxlcyB1c2UgUHJldHRpZXIgY29kZSBzdHlsZSEK"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "new-test-lint",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/oxlint/bin/oxlint",
+        "--threads",
+        "1",
+        "--format",
+        "json",
+        "extensions/src/core/show-library/registry-motion-references.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 194,
+          "sha256": "881563707c80bc4769b8a0b54b7a7786eb72dfbfe6f1d51ef4e80a85ef9aabdd",
+          "rawBase64": "eyAiZGlhZ25vc3RpY3MiOiBbXSwKICAgICAgICAgICAgICAibnVtYmVyX29mX2ZpbGVzIjogMSwKICAgICAgICAgICAgICAibnVtYmVyX29mX3J1bGVzIjogMjMzLAogICAgICAgICAgICAgICJ0aHJlYWRzX2NvdW50IjogMSwKICAgICAgICAgICAgICAic3RhcnRfdGltZSI6IDM1LjI2NDIzNDQKICAgICAgICAgICAgfQogICAgICAgICAgICA="
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/registry.ts": "dcf221801a8a285d334c2c1fed03e7553baafea57996daa55418aabfe8f0d44b",
+    "extensions/src/core/show-library/registry-motion-references.test.ts": "c0752a873925caa358f371dc39b79141d2018b80db23451e4dc4fe8810cae2bb"
+  },
+  "sourceUnchangedDuringChecks": true,
+  "finishedUtc": "2026-11-15T22:31:56.259986+00:00"
+}

@@ -1,0 +1,187 @@
+{
+  "mode": "LOCAL_STATIC_AUDIT_ONLY_NO_FUNCTIONAL_TEST",
+  "createdUtc": "2026-11-15T09:35:34.032016+00:00",
+  "existingTestExactLedgerReplacementOnly": true,
+  "testedSourceSha256": "e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095",
+  "acceptedCoreFilesHashMatched": 26,
+  "rawCommandLogHashesMatched": 13,
+  "rawFailuresPreserved": true,
+  "fiveOriginalCasesReceipt": "5_PASS_0_FAIL",
+  "allThreeServerAllocationsReleased": true,
+  "hqReview": {
+    "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\reviews\\THEME_INSTALLATION_TIMEOUT_DIAG_20261115.md",
+    "sha256": "7b3ce4f57690fc3890bc814888455ec06ed25098ab6003950040d18e1610fb3a"
+  },
+  "files": [
+    {
+      "path": "byte-assertion-preedit-ledger.json",
+      "bytes": 2107,
+      "sha256": "103a6739ecdaf37d0cf057aac84049cc9675be1da75318ab6b40b90488a81353"
+    },
+    {
+      "path": "byte-equality-strength.cjs",
+      "bytes": 1221,
+      "sha256": "df5d63812c2d41fa1584c41a49db84a865749ef752a3fa8307ea08ab72cbe566"
+    },
+    {
+      "path": "fix-input.json",
+      "bytes": 11215,
+      "sha256": "9fa95f41d3184ee3085f1b3c83f1eb5bf1ba30054f2145c7b67fe41ba7fd572a"
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 2403,
+      "sha256": "4e221803d5830a0078d214f888bfdab977c77730bf4007114c459afcba184eb4"
+    },
+    {
+      "path": "initial-source-diagnosis.md",
+      "bytes": 9085,
+      "sha256": "11fc4ead4c43fe923697b42b35396a1e94839a2b5cf0c8a97d241a8f88bb8120"
+    },
+    {
+      "path": "installation.fixed.test.ts",
+      "bytes": 9816,
+      "sha256": "e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095"
+    },
+    {
+      "path": "installation.public-step-trace.test.ts",
+      "bytes": 8403,
+      "sha256": "30380d83f5b6cc9f7492b1e12c24653b1b28af58aff4b9674201ab3f7d57e7c0"
+    },
+    {
+      "path": "RESULT.json",
+      "bytes": 2374,
+      "sha256": "88413f3a2b45b0e17209d877aa04e4ab7759fe9ee4dcd41de1634faab12fb302"
+    },
+    {
+      "path": "run-assertion-fix.py",
+      "bytes": 5348,
+      "sha256": "a0075cc2673a2749c9c2bb2a227f69e44bef9b04022bcb9b94c3fa6ef3e57dcf"
+    },
+    {
+      "path": "run-assertion-types.py",
+      "bytes": 4811,
+      "sha256": "239ff093453c4c1c8a456d1d2dcfe90bc2aa2a9aebf844522ddf361f2451bb6c"
+    },
+    {
+      "path": "run-public-step-trace.py",
+      "bytes": 5285,
+      "sha256": "a1f777f7deab5bd09f3f98aa2863ea50de4ff15dcf04b93dfe4ae23dbba3c47e"
+    },
+    {
+      "path": "server-assertion-fix/byte-strength.log",
+      "bytes": 503,
+      "sha256": "00c79e6371804f006c2806840e1c91c0015c7f3c16865e933cc74c710d8c7b34"
+    },
+    {
+      "path": "server-assertion-fix/changed-file-format.log",
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "server-assertion-fix/container-create.log",
+      "bytes": 65,
+      "sha256": "91f44aae0310a4952234c6b7abcfd819a4283e293c9e6cb72ef5e4d9ed73f7fe"
+    },
+    {
+      "path": "server-assertion-fix/effective-after.log",
+      "bytes": 169,
+      "sha256": "42b8d6041395b42dbadab6b7deb8fe355612c4aba861f4ec56ea1e0a74f4e2ee"
+    },
+    {
+      "path": "server-assertion-fix/effective-before.log",
+      "bytes": 169,
+      "sha256": "42b8d6041395b42dbadab6b7deb8fe355612c4aba861f4ec56ea1e0a74f4e2ee"
+    },
+    {
+      "path": "server-assertion-fix/focused-types.log",
+      "bytes": 165,
+      "sha256": "22d754e33e5e414d820e237c9e477c81ec8db495c45ab51f7665351a89a3c783"
+    },
+    {
+      "path": "server-assertion-fix/original-five-cases.json",
+      "bytes": 2590,
+      "sha256": "a3f476bd70fc18d6f30d8f704e2dcc9d6198db5959673930bd7e96c5de1b7b25"
+    },
+    {
+      "path": "server-assertion-fix/original-five-cases.log",
+      "bytes": 58,
+      "sha256": "cf19338514ea44b8f630f912709eb7106a42e3df3aabc241121dd00d9c630c8d"
+    },
+    {
+      "path": "server-assertion-fix/receipt.json",
+      "bytes": 6415,
+      "sha256": "51fe8f147800df04c1082ba53732569b98d720b74bca67e64c8ecd0ffb8f2889"
+    },
+    {
+      "path": "server-assertion-types/container-create.log",
+      "bytes": 65,
+      "sha256": "183e25f7d8e99e0307231c7fe4957b72128355725d3ebf8b9e71ae1cf97c812d"
+    },
+    {
+      "path": "server-assertion-types/effective-after.log",
+      "bytes": 169,
+      "sha256": "42b8d6041395b42dbadab6b7deb8fe355612c4aba861f4ec56ea1e0a74f4e2ee"
+    },
+    {
+      "path": "server-assertion-types/effective-before.log",
+      "bytes": 169,
+      "sha256": "42b8d6041395b42dbadab6b7deb8fe355612c4aba861f4ec56ea1e0a74f4e2ee"
+    },
+    {
+      "path": "server-assertion-types/focused-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "server-assertion-types/receipt.json",
+      "bytes": 4713,
+      "sha256": "98bb15368884aab3a56f93a8db352067df8d5f06753c73aac3328f0cdf6995ca"
+    },
+    {
+      "path": "server-public-step-trace/container-create.log",
+      "bytes": 65,
+      "sha256": "c4b412f1606097582af2fe1a2967328ea02184f214e4fc6e6a541e52899fca52"
+    },
+    {
+      "path": "server-public-step-trace/public-step-trace.jsonl",
+      "bytes": 41943,
+      "sha256": "4667925643ab0f18d97c646b0faf5520e7757cf8a55f7c1f30186f6f5405b01d"
+    },
+    {
+      "path": "server-public-step-trace/receipt.json",
+      "bytes": 3171,
+      "sha256": "dfd9c6eaaf9a6358c02af72b28b53330641b6162c5be36e5e5b1bebbe9352546"
+    },
+    {
+      "path": "server-public-step-trace/resource-monitor.jsonl",
+      "bytes": 3225,
+      "sha256": "772434b9e12fa01e14f7814abbfcccbe9bf826e36dc29c6e0c90972363c6a681"
+    },
+    {
+      "path": "server-public-step-trace/vitest-diagnostic.json",
+      "bytes": 3305,
+      "sha256": "e9a1e1097d86a4ce0910eb5f9d7851ab5bdeb57c369e1c54ea17da53b30666fb"
+    },
+    {
+      "path": "server-public-step-trace/vitest-diagnostic.log",
+      "bytes": 56,
+      "sha256": "9b1f66a38fa32b71965f41f134316bf5da47377e57085ee6effd8826b2d05301"
+    },
+    {
+      "path": "theme-assertion-tsconfig.json",
+      "bytes": 194,
+      "sha256": "37e5a2d202042596d3689b0ece5ff0ef5da8a9a9c5710239a4306b48545196fc"
+    },
+    {
+      "path": "theme-assertion-types-retry.json",
+      "bytes": 310,
+      "sha256": "750af6d154919a788d6994564e6208723733d087f6a6c4f28dc2f84190664b70"
+    },
+    {
+      "path": "trace-input.json",
+      "bytes": 11221,
+      "sha256": "133736878ff31f059b655c7e7cd4bd11293c5ca60b7fb457d129cdee6cb6cd84"
+    }
+  ]
+}

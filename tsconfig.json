@@ -6,6 +6,8 @@
     "paths": {
       "@razzia/common/*": ["./packages/common/src/*"],
       "@razzia/e2e/*": ["./packages/e2e/*"],
+      "@razzia/extensions": ["./extensions/src/index.ts"],
+      "@razzia/extensions/*": ["./extensions/src/*"],
       "@razzia/socket/*": ["./packages/socket/src/*"],
       "@razzia/web/*": ["./packages/web/src/*"]
     },

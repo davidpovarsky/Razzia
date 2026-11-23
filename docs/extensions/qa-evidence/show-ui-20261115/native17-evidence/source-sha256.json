@@ -1,0 +1,10 @@
+{
+  "extensions/src/components/oauth-consent/client.test.ts": "1f3e12860b516c934357b6e21681296bc0c9983563d5401c0bf260b3b06fbea8",
+  "extensions/src/components/oauth-consent/client.ts": "9f3cda2cbaacf9191eab30f30da34a9f564491a0f39e25bd00027600d6aac07b",
+  "extensions/src/components/oauth-consent/login-handoff.test.ts": "269443a193aa8c1b9bb209dba944007271278aab750642bea56da25980c3e644",
+  "extensions/src/components/oauth-consent/login-handoff.ts": "55a8b35ef70b521995d29f7b75cfe73467ec5734385abb53a9e2dbb370f7b56a",
+  "extensions/src/components/oauth-consent/OAuthConsentPage.tsx": "31d9cda7c7b2bd5281e1f3fbb462139364e51710eb785d14b217b735765e66af",
+  "extensions/src/components/oauth-consent/strings.ts": "e4b3c8390b30614d109eb3bfca27c09ac8b4f8de0b3a2581c0f509907001436d",
+  "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx": "87d8a779c2fcade1bfc93b2bb455c5e081e3915b13e0a2320b8308ac08533a79",
+  "extensions/qa/theme-builder/oauth-fixture.tsx": "790e49d65c46c06582202604eee6a2ff6cc3912c5946feabc0f599db5a34b380"
+}

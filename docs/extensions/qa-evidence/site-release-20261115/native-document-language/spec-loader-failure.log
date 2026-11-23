@@ -1,0 +1,5 @@
+(node:1) Warning: Failed to load the ES module: /evidence/src/site/tests/browser/native-document-language.spec.ts. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+SyntaxError: Cannot use 'import.meta' outside a module
+Error: No tests found
+

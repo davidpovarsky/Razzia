@@ -1,0 +1,49 @@
+2026-11-19T18:22:31.724Z pw:browser <launching> /root/.cache/ms-playwright/webkit-2370/pw_run.sh --inspector-pipe --headless --no-startup-window
+2026-11-19T18:22:31.741Z pw:browser <launched> pid=62
+2026-11-19T18:22:32.969Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 78: No such file or directory [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:22:32.970Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 79: Operation not permitted [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+2026-11-19T18:22:35.289Z pw:browser [pid=62][err] 
+2026-11-19T18:22:35.289Z pw:browser [pid=62][err] ** (MiniBrowser:68): CRITICAL **: 18:22:35.286: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.
+2026-11-19T18:22:35.638Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 93: No such file or directory [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:22:35.638Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 94: Operation not permitted [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:22:35.640Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 93: Operation not permitted [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:22:35.752Z pw:browser [pid=62][err] Failed to create /root/.cache/mesa_shader_cache for shader cache (Read-only file system)---disabling.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+2026-11-19T18:22:41.566Z pw:browser [pid=62][err] 
+2026-11-19T18:22:41.566Z pw:browser [pid=62][err] ** (WPEWebProcess:85): WARNING **: 18:22:41.565: Unable to get session D-Bus address: Cannot autolaunch D-Bus without X11 $DISPLAY
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+webkit / tadazz-classic diagnostic workspace and logical card navigation: locator.click: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')
+    - locator resolved to <button type="button" title="Pause show" aria-label="Pause show" data-control-source="razzia" data-testid="full-show-pause" class="bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg">…</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+2026-11-19T18:23:03.338Z pw:browser [pid=62][err] 
+2026-11-19T18:23:03.338Z pw:browser [pid=62][err] ** (MiniBrowser:68): CRITICAL **: 18:23:03.327: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.
+2026-11-19T18:23:03.737Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 137: No such file or directory [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:23:03.748Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 138: Operation not permitted [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:23:03.748Z pw:browser [pid=62][err] [WPEWebKit:Threading:err] Failed to apply scheduling attributes to thread 137: Operation not permitted [/home/pwuser/webkit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:347 logSchedulingAttributesFailure]
+2026-11-19T18:23:03.980Z pw:browser [pid=62][err] Failed to create /root/.cache/mesa_shader_cache for shader cache (Read-only file system)---disabling.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+2026-11-19T18:23:10.769Z pw:browser [pid=62][err] 
+2026-11-19T18:23:10.769Z pw:browser [pid=62][err] ** (WPEWebProcess:130): WARNING **: 18:23:10.768: Unable to get session D-Bus address: Cannot autolaunch D-Bus without X11 $DISPLAY
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+webkit / razzia-original diagnostic workspace and logical card navigation: locator.click: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')
+    - locator resolved to <button type="button" title="Pause show" aria-label="Pause show" data-control-source="razzia" data-testid="full-show-pause" class="bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg">…</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+
+2026-11-19T18:23:25.186Z pw:browser [pid=62] <gracefully close start>
+2026-11-19T18:23:25.787Z pw:browser [pid=62] <process did exit: exitCode=0, signal=null>
+2026-11-19T18:23:25.788Z pw:browser [pid=62] starting temporary directories cleanup
+2026-11-19T18:23:25.792Z pw:browser [pid=62] finished temporary directories cleanup
+2026-11-19T18:23:25.792Z pw:browser [pid=62] <gracefully close end>

@@ -1,0 +1,650 @@
+{
+  "kind": "exact completed own fullShow evidence collection",
+  "createdUtc": "2026-11-19T21:14:24.024915+00:00",
+  "remoteRoot": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12",
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "run": "tadazz-codex-fullshow-dccfd9d22a46-f3cddd12",
+  "files": [
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/browser-resource-evidence.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/browser-resource-evidence.json",
+      "bytes": 854,
+      "remoteSha256": "5354e4777f21717a97ebb4326339521f3ef6dcc548d1852e8f01ea31be8ce49f",
+      "copiedSha256": "5354e4777f21717a97ebb4326339521f3ef6dcc548d1852e8f01ea31be8ce49f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/browser.stderr.log",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/browser.stderr.log",
+      "bytes": 141152,
+      "remoteSha256": "9c765e6895555427e219605f4be0c465b029ecb5f461c686c9e3caf754fab389",
+      "copiedSha256": "9c765e6895555427e219605f4be0c465b029ecb5f461c686c9e3caf754fab389"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/browser.stdout.log",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/browser.stdout.log",
+      "bytes": 8203,
+      "remoteSha256": "00c7c70709496cb60db9c8c1d1625f62ebf6bba6f96291057fbef71fb184e9f5",
+      "copiedSha256": "00c7c70709496cb60db9c8c1d1625f62ebf6bba6f96291057fbef71fb184e9f5"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-0.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-0.png",
+      "bytes": 274849,
+      "remoteSha256": "72492f1daac1e011759af288fa18eb04797e8df9f788c71db366f29b1bc4bd66",
+      "copiedSha256": "72492f1daac1e011759af288fa18eb04797e8df9f788c71db366f29b1bc4bd66"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-1.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-1.png",
+      "bytes": 262278,
+      "remoteSha256": "c5900168f6e7814787695ed8a386858e2e2fb5379797cb45c902e01d0140b9e2",
+      "copiedSha256": "c5900168f6e7814787695ed8a386858e2e2fb5379797cb45c902e01d0140b9e2"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-26.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-26.png",
+      "bytes": 281557,
+      "remoteSha256": "39d1b7b9453a5eca7933aa91bc2415c17858519448974c7af73dd7b41b98c639",
+      "copiedSha256": "39d1b7b9453a5eca7933aa91bc2415c17858519448974c7af73dd7b41b98c639"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-27.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-27.png",
+      "bytes": 274371,
+      "remoteSha256": "1e5c2c50c8fbd5a4a417102c6142755867e3b8635d0c997609a59267d61248bd",
+      "copiedSha256": "1e5c2c50c8fbd5a4a417102c6142755867e3b8635d0c997609a59267d61248bd"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-390-169.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-390-169.png",
+      "bytes": 30148,
+      "remoteSha256": "56bd42b6c362ca58a6c272fdfd25712d99be61f3be1514786227c0bff0336f34",
+      "copiedSha256": "56bd42b6c362ca58a6c272fdfd25712d99be61f3be1514786227c0bff0336f34"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-390-43.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-390-43.png",
+      "bytes": 35988,
+      "remoteSha256": "f226bf4bee0fa511dcdd96e809bb265a3134a0962d219275ae36739b36050858",
+      "copiedSha256": "f226bf4bee0fa511dcdd96e809bb265a3134a0962d219275ae36739b36050858"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-4.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-4.png",
+      "bytes": 272862,
+      "remoteSha256": "9489f4ebd7120d264db09083bd50033bb0f9693d36364cfae89c5cb805fd6d6f",
+      "copiedSha256": "9489f4ebd7120d264db09083bd50033bb0f9693d36364cfae89c5cb805fd6d6f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-5.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-5.png",
+      "bytes": 281567,
+      "remoteSha256": "31b97854ae7c296c8de6996b91c3863ecc51f2fbb61f7b9d7ec7c11573ad0ca0",
+      "copiedSha256": "31b97854ae7c296c8de6996b91c3863ecc51f2fbb61f7b9d7ec7c11573ad0ca0"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-browser.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-browser.json",
+      "bytes": 1942,
+      "remoteSha256": "30532f0c203c8fffe73e8f9c57b577b09a9e631dcac0b726d5f6604f2fdc89b0",
+      "copiedSha256": "30532f0c203c8fffe73e8f9c57b577b09a9e631dcac0b726d5f6604f2fdc89b0"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-five-pictures-voting.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-five-pictures-voting.png",
+      "bytes": 261937,
+      "remoteSha256": "1e331cbe7f18ba5745c28cc7e54e79c060681a5a6b99ae2eb5d0a03ba2ff0f65",
+      "copiedSha256": "1e331cbe7f18ba5745c28cc7e54e79c060681a5a6b99ae2eb5d0a03ba2ff0f65"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-five-pictures.png",
+      "bytes": 265816,
+      "remoteSha256": "85a0a057c7f7ce6d4e94fced92083bbc0d3e447d3c61439a53295086413dc4b1",
+      "copiedSha256": "85a0a057c7f7ce6d4e94fced92083bbc0d3e447d3c61439a53295086413dc4b1"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-fr-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-fr-controls.png",
+      "bytes": 30949,
+      "remoteSha256": "f730b03d5fa0365a978738db428d7a40da007cf6d11834256c3f1c876afd25ee",
+      "copiedSha256": "f730b03d5fa0365a978738db428d7a40da007cf6d11834256c3f1c876afd25ee"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-he-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-he-controls.png",
+      "bytes": 24518,
+      "remoteSha256": "bc0bb0aecf918877398178908c106fd3b7e7f2b42220200eb3e60cd142a49627",
+      "copiedSha256": "bc0bb0aecf918877398178908c106fd3b7e7f2b42220200eb3e60cd142a49627"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-host-controls-readiness.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-host-controls-readiness.json",
+      "bytes": 6044,
+      "remoteSha256": "9de56e5bc3148c3ea7353310becee7839f6a1111b138482ebc0f7587e08c50ce",
+      "copiedSha256": "9de56e5bc3148c3ea7353310becee7839f6a1111b138482ebc0f7587e08c50ce"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-host-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-host-controls.png",
+      "bytes": 258160,
+      "remoteSha256": "00eb5a4662df73100bdb4c345044f780f360df168f34edbf32d91dbda48de80c",
+      "copiedSha256": "00eb5a4662df73100bdb4c345044f780f360df168f34edbf32d91dbda48de80c"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-image-only-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-image-only-five-pictures.png",
+      "bytes": 267863,
+      "remoteSha256": "48907670cc2bfbc5f52fdf124fe722ae53b4dc49d3e3bd3940e0880a9a943bac",
+      "copiedSha256": "48907670cc2bfbc5f52fdf124fe722ae53b4dc49d3e3bd3940e0880a9a943bac"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-ja-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-ja-controls.png",
+      "bytes": 40379,
+      "remoteSha256": "729eb52b22bfac4dc1fbce86edf23e7d135166789c573c747a4bd8a5e5e0072d",
+      "copiedSha256": "729eb52b22bfac4dc1fbce86edf23e7d135166789c573c747a4bd8a5e5e0072d"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-tie-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-tie-five-pictures.png",
+      "bytes": 266543,
+      "remoteSha256": "9666998d6affd092d213d4120ec638a807c7484fa83bcebec8aa5bf0d94410fc",
+      "copiedSha256": "9666998d6affd092d213d4120ec638a807c7484fa83bcebec8aa5bf0d94410fc"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-workspace-1366.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-workspace-1366.png",
+      "bytes": 118422,
+      "remoteSha256": "dc4dc7c29924fc18e92a13726c1038de2acfb9bf5309fa167a9be41b20e0762b",
+      "copiedSha256": "dc4dc7c29924fc18e92a13726c1038de2acfb9bf5309fa167a9be41b20e0762b"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-razzia-original-workspace-390.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-razzia-original-workspace-390.png",
+      "bytes": 102533,
+      "remoteSha256": "6ea497b2af5eb8412c695e84359df2b9e92d7c0f18134b26433af63e10d6df27",
+      "copiedSha256": "6ea497b2af5eb8412c695e84359df2b9e92d7c0f18134b26433af63e10d6df27"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-0.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-0.png",
+      "bytes": 802168,
+      "remoteSha256": "61efa53c9f2536d1be383d10e05f6af855a6eb05ef599563a5a1ca58036df45f",
+      "copiedSha256": "61efa53c9f2536d1be383d10e05f6af855a6eb05ef599563a5a1ca58036df45f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-1.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-1.png",
+      "bytes": 632175,
+      "remoteSha256": "5c14bcf2fe75e809f73c99785eb76f11194e9e4011667af8c7afcb4cc6a0bf07",
+      "copiedSha256": "5c14bcf2fe75e809f73c99785eb76f11194e9e4011667af8c7afcb4cc6a0bf07"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-26.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-26.png",
+      "bytes": 1065235,
+      "remoteSha256": "6ffe039bf6ceb65aea995a78c96b61a543c09d8e6b6f578e6ba168e1a702b840",
+      "copiedSha256": "6ffe039bf6ceb65aea995a78c96b61a543c09d8e6b6f578e6ba168e1a702b840"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-27.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-27.png",
+      "bytes": 784382,
+      "remoteSha256": "8a8a402faa7c08978cb90b808430b816ac8b5532d0fdbebc336b6866354ea918",
+      "copiedSha256": "8a8a402faa7c08978cb90b808430b816ac8b5532d0fdbebc336b6866354ea918"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-390-169.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-390-169.png",
+      "bytes": 62561,
+      "remoteSha256": "4c7e4507bd362ef8a122e145c53124cf301d35688759c78cde45bcf82d96f82c",
+      "copiedSha256": "4c7e4507bd362ef8a122e145c53124cf301d35688759c78cde45bcf82d96f82c"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-390-43.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-390-43.png",
+      "bytes": 65484,
+      "remoteSha256": "c18760e07545ba58f3cc3fe48a64c12f95df0ebb30dac41ab8849b406c3aab8b",
+      "copiedSha256": "c18760e07545ba58f3cc3fe48a64c12f95df0ebb30dac41ab8849b406c3aab8b"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-4.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-4.png",
+      "bytes": 612761,
+      "remoteSha256": "c4d43beb7e21bec47813b331780e53faade12625daad34d889ef2198a71cfc72",
+      "copiedSha256": "c4d43beb7e21bec47813b331780e53faade12625daad34d889ef2198a71cfc72"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-5.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-5.png",
+      "bytes": 578926,
+      "remoteSha256": "90698e28d00490714b852177647f24c51871b16b98e2898d6baf5dac14b6025c",
+      "copiedSha256": "90698e28d00490714b852177647f24c51871b16b98e2898d6baf5dac14b6025c"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-browser.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-browser.json",
+      "bytes": 1932,
+      "remoteSha256": "048ec6db69791fcb2b13f18485bd2e6aa4008e27f7e284e91b90f002afdf28af",
+      "copiedSha256": "048ec6db69791fcb2b13f18485bd2e6aa4008e27f7e284e91b90f002afdf28af"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-five-pictures-voting.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-five-pictures-voting.png",
+      "bytes": 425650,
+      "remoteSha256": "3ddd3014c006d9c82801e8b3b9d9092cb40328c316dedcf45d55c896ffac0d62",
+      "copiedSha256": "3ddd3014c006d9c82801e8b3b9d9092cb40328c316dedcf45d55c896ffac0d62"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-five-pictures.png",
+      "bytes": 412516,
+      "remoteSha256": "fcd7157ee5e6943bd65aab263aa7b08b7661e5acff0c06f1c2055bb87928fac9",
+      "copiedSha256": "fcd7157ee5e6943bd65aab263aa7b08b7661e5acff0c06f1c2055bb87928fac9"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-fr-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-fr-controls.png",
+      "bytes": 30949,
+      "remoteSha256": "c72af60245ad9c4c0908b28ab45dd36b35ccd340231c4c30e251ed6dbc0f0584",
+      "copiedSha256": "c72af60245ad9c4c0908b28ab45dd36b35ccd340231c4c30e251ed6dbc0f0584"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-he-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-he-controls.png",
+      "bytes": 24336,
+      "remoteSha256": "2ebad200cbb3991fd1baa050a6ec74a51ee503eb7163afa1b1806199a1fb1653",
+      "copiedSha256": "2ebad200cbb3991fd1baa050a6ec74a51ee503eb7163afa1b1806199a1fb1653"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-host-controls-readiness.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-host-controls-readiness.json",
+      "bytes": 6045,
+      "remoteSha256": "ac01484d50a27c534cd5245f1b31d3fa236354adbf6ded84b7ab4262dc80c79f",
+      "copiedSha256": "ac01484d50a27c534cd5245f1b31d3fa236354adbf6ded84b7ab4262dc80c79f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-host-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-host-controls.png",
+      "bytes": 470850,
+      "remoteSha256": "d93ed5280dc9e58c3c463ac890be714f522d5d98a91848f2588a2db472c91d92",
+      "copiedSha256": "d93ed5280dc9e58c3c463ac890be714f522d5d98a91848f2588a2db472c91d92"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-image-only-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-image-only-five-pictures.png",
+      "bytes": 437926,
+      "remoteSha256": "f95a1edc22a000018b235d95ccfd5b297099c61bf326f4def427af8c30f561af",
+      "copiedSha256": "f95a1edc22a000018b235d95ccfd5b297099c61bf326f4def427af8c30f561af"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-ja-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-ja-controls.png",
+      "bytes": 40167,
+      "remoteSha256": "cd857a7202034ad11fefc186c6c9156e2ff790ffb3e3895ee36a754ad0efd771",
+      "copiedSha256": "cd857a7202034ad11fefc186c6c9156e2ff790ffb3e3895ee36a754ad0efd771"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-motion-a.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-motion-a.png",
+      "bytes": 207562,
+      "remoteSha256": "82152d627f59e5e3b971a5cc1e60699d8a7759cac7bed8a9800ec14ab35d533f",
+      "copiedSha256": "82152d627f59e5e3b971a5cc1e60699d8a7759cac7bed8a9800ec14ab35d533f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-motion-b.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-motion-b.png",
+      "bytes": 251431,
+      "remoteSha256": "704eeccdb8c462d9a5e7c5003e4b1bab703e6d92d1fef335ea38f59fdf156160",
+      "copiedSha256": "704eeccdb8c462d9a5e7c5003e4b1bab703e6d92d1fef335ea38f59fdf156160"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-tie-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-tie-five-pictures.png",
+      "bytes": 440511,
+      "remoteSha256": "054cbd799320ad2b6164026ed2cf0fe2327f2cece235d35c07462112bff6c751",
+      "copiedSha256": "054cbd799320ad2b6164026ed2cf0fe2327f2cece235d35c07462112bff6c751"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-workspace-1366.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-workspace-1366.png",
+      "bytes": 543493,
+      "remoteSha256": "57628110ee431abe0633929a97876a8b4673acd8066f37592a73e856fb561b30",
+      "copiedSha256": "57628110ee431abe0633929a97876a8b4673acd8066f37592a73e856fb561b30"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/chromium-tadazz-classic-workspace-390.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/chromium-tadazz-classic-workspace-390.png",
+      "bytes": 158063,
+      "remoteSha256": "6f1ab4d5d79ae6e2af4733b42138db9635cec4cfcb578eb2c3072fea47da8f9f",
+      "copiedSha256": "6f1ab4d5d79ae6e2af4733b42138db9635cec4cfcb578eb2c3072fea47da8f9f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/receipt.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/receipt.json",
+      "bytes": 2347892,
+      "remoteSha256": "2c5b307a570bb78621b0e83240e0e531726497cdc160265b295029a87d0f3216",
+      "copiedSha256": "2c5b307a570bb78621b0e83240e0e531726497cdc160265b295029a87d0f3216"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-0.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-0.png",
+      "bytes": 325733,
+      "remoteSha256": "6e15cd7ee2d1311a8fff618c4589b40dc19783eeee91698a7bbf04b9841ded24",
+      "copiedSha256": "6e15cd7ee2d1311a8fff618c4589b40dc19783eeee91698a7bbf04b9841ded24"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-1.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-1.png",
+      "bytes": 312602,
+      "remoteSha256": "bba97303e55491dc8d22dcb3c4284a4c182ca76f467edcc812cb7aa14ef7804c",
+      "copiedSha256": "bba97303e55491dc8d22dcb3c4284a4c182ca76f467edcc812cb7aa14ef7804c"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-26.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-26.png",
+      "bytes": 330241,
+      "remoteSha256": "1e50976f92954cd131f833a3b9c8a776044b1fa13b4ded533d9674a124432516",
+      "copiedSha256": "1e50976f92954cd131f833a3b9c8a776044b1fa13b4ded533d9674a124432516"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-27.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-27.png",
+      "bytes": 325661,
+      "remoteSha256": "f5217b121668a14f3d08595105f03f3af50aea3ee5c15e90d34d4b5d8ff7b2a8",
+      "copiedSha256": "f5217b121668a14f3d08595105f03f3af50aea3ee5c15e90d34d4b5d8ff7b2a8"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-390-169.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-390-169.png",
+      "bytes": 33373,
+      "remoteSha256": "5dfbddb1025fa88a5e3670a3a2dd8552a1d688304fb37dcf8058dd127a36d2ce",
+      "copiedSha256": "5dfbddb1025fa88a5e3670a3a2dd8552a1d688304fb37dcf8058dd127a36d2ce"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-390-43.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-390-43.png",
+      "bytes": 39142,
+      "remoteSha256": "96cf1e2d99added5835f41901964f4c4552d6566b9227d1ea3e971efbc2edc7f",
+      "copiedSha256": "96cf1e2d99added5835f41901964f4c4552d6566b9227d1ea3e971efbc2edc7f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-4.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-4.png",
+      "bytes": 324582,
+      "remoteSha256": "1cd48557000ffb9fd48237f6ebddfad4965ea59ef9fcccd2920b91cc7fa839e8",
+      "copiedSha256": "1cd48557000ffb9fd48237f6ebddfad4965ea59ef9fcccd2920b91cc7fa839e8"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-5.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-5.png",
+      "bytes": 336618,
+      "remoteSha256": "efbbddccdacf1bebc9fd89313441ed33553af556e03884f7a6728db2ba57d3cd",
+      "copiedSha256": "efbbddccdacf1bebc9fd89313441ed33553af556e03884f7a6728db2ba57d3cd"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-browser.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-browser.json",
+      "bytes": 1916,
+      "remoteSha256": "e4258619eb577f2de5f129fd8ac4b9a566daff575d2e062bc6f21c6084dbec55",
+      "copiedSha256": "e4258619eb577f2de5f129fd8ac4b9a566daff575d2e062bc6f21c6084dbec55"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-five-pictures-voting.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-five-pictures-voting.png",
+      "bytes": 286793,
+      "remoteSha256": "beea4a526a683e7e7c6ee3e691293d1ce47da830f736c68310668668293e9dbb",
+      "copiedSha256": "beea4a526a683e7e7c6ee3e691293d1ce47da830f736c68310668668293e9dbb"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-five-pictures.png",
+      "bytes": 294056,
+      "remoteSha256": "f650611d719f9a58ecc7679342dcd4d5ea3718cecb75a0421b7c038b7c4b8b94",
+      "copiedSha256": "f650611d719f9a58ecc7679342dcd4d5ea3718cecb75a0421b7c038b7c4b8b94"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-fr-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-fr-controls.png",
+      "bytes": 42490,
+      "remoteSha256": "7a422e9f5c7971387d774303e95ba27d9a2d209f8f5ea1e048ddccec61fd84bf",
+      "copiedSha256": "7a422e9f5c7971387d774303e95ba27d9a2d209f8f5ea1e048ddccec61fd84bf"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-he-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-he-controls.png",
+      "bytes": 31897,
+      "remoteSha256": "753dd2e19b0c5427276bfa09e75aba11971a4ab6ab9a548c69ee97b4c5e51733",
+      "copiedSha256": "753dd2e19b0c5427276bfa09e75aba11971a4ab6ab9a548c69ee97b4c5e51733"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-host-controls-readiness.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-host-controls-readiness.json",
+      "bytes": 5870,
+      "remoteSha256": "ee1b499387ab1fdf0d45181a994938d439e5d5a2d3f8c10b6993f6929173498f",
+      "copiedSha256": "ee1b499387ab1fdf0d45181a994938d439e5d5a2d3f8c10b6993f6929173498f"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-host-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-host-controls.png",
+      "bytes": 284216,
+      "remoteSha256": "334f82c4bc804425fcaf65ea7dccf21a9113490daedf5389ed7c044e185bf386",
+      "copiedSha256": "334f82c4bc804425fcaf65ea7dccf21a9113490daedf5389ed7c044e185bf386"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-image-only-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-image-only-five-pictures.png",
+      "bytes": 297451,
+      "remoteSha256": "4cbdd9a23ed88cc4e0eaa692a98c4323fc20e10d169d495be8010d4ab3c5d946",
+      "copiedSha256": "4cbdd9a23ed88cc4e0eaa692a98c4323fc20e10d169d495be8010d4ab3c5d946"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-ja-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-ja-controls.png",
+      "bytes": 50523,
+      "remoteSha256": "b515fe2ae9c35eeae8dc180455d8ae4f781d4610c857b63fe58ffc11f3ad01df",
+      "copiedSha256": "b515fe2ae9c35eeae8dc180455d8ae4f781d4610c857b63fe58ffc11f3ad01df"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-tie-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-tie-five-pictures.png",
+      "bytes": 280991,
+      "remoteSha256": "0468dc5390e7deaa73a67846f13368290721c5bcd6b306216b36537417316741",
+      "copiedSha256": "0468dc5390e7deaa73a67846f13368290721c5bcd6b306216b36537417316741"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-workspace-1366.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-workspace-1366.png",
+      "bytes": 149702,
+      "remoteSha256": "0c6bf5f1cbedfbe5cf8a07a48297c7d2620e835f7a0125e9851c60fc38e6e31a",
+      "copiedSha256": "0c6bf5f1cbedfbe5cf8a07a48297c7d2620e835f7a0125e9851c60fc38e6e31a"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-razzia-original-workspace-390.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-razzia-original-workspace-390.png",
+      "bytes": 139095,
+      "remoteSha256": "517ab064e2f300cff84bacb2098fc595e7ea13b7a0b4c7b7a0aba746ea0f9418",
+      "copiedSha256": "517ab064e2f300cff84bacb2098fc595e7ea13b7a0b4c7b7a0aba746ea0f9418"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-0.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-0.png",
+      "bytes": 885166,
+      "remoteSha256": "9e906493f48e5b3592fa237ccb5f776670c8cabf73522055fd7a041ec384200a",
+      "copiedSha256": "9e906493f48e5b3592fa237ccb5f776670c8cabf73522055fd7a041ec384200a"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-1.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-1.png",
+      "bytes": 640550,
+      "remoteSha256": "0832837087617ca8b8640ecd2a5a6fc502780a69d956ad4fe595e317eecb8e8a",
+      "copiedSha256": "0832837087617ca8b8640ecd2a5a6fc502780a69d956ad4fe595e317eecb8e8a"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-26.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-26.png",
+      "bytes": 1189606,
+      "remoteSha256": "73bcdbc89e9b45903a82c995025fd7cc124fb5a086029fb213c16bf876520ece",
+      "copiedSha256": "73bcdbc89e9b45903a82c995025fd7cc124fb5a086029fb213c16bf876520ece"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-27.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-27.png",
+      "bytes": 863428,
+      "remoteSha256": "a9a841d0e1ec048065bf1c963b8a21b16658c59de4adca2846dad07771e00770",
+      "copiedSha256": "a9a841d0e1ec048065bf1c963b8a21b16658c59de4adca2846dad07771e00770"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-390-169.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-390-169.png",
+      "bytes": 69064,
+      "remoteSha256": "bbb16f20acf63ac77ed319fd1976a2954bfa989a0ac75dcfe057e9616f306b93",
+      "copiedSha256": "bbb16f20acf63ac77ed319fd1976a2954bfa989a0ac75dcfe057e9616f306b93"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-390-43.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-390-43.png",
+      "bytes": 70045,
+      "remoteSha256": "f9904fc609d0fb64cc7aa6f239cc5830ca18c10646f073809d78d875a827c5b3",
+      "copiedSha256": "f9904fc609d0fb64cc7aa6f239cc5830ca18c10646f073809d78d875a827c5b3"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-4.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-4.png",
+      "bytes": 639747,
+      "remoteSha256": "28de741db266a3bb1bb0af04ab8cf364f1b4a9ed46b902aa19db03380fbbef24",
+      "copiedSha256": "28de741db266a3bb1bb0af04ab8cf364f1b4a9ed46b902aa19db03380fbbef24"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-5.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-5.png",
+      "bytes": 630735,
+      "remoteSha256": "26a272fb5b058ff4f92483a9343f8ae906e6274a156372773494ba0ed1613d85",
+      "copiedSha256": "26a272fb5b058ff4f92483a9343f8ae906e6274a156372773494ba0ed1613d85"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-browser.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-browser.json",
+      "bytes": 1908,
+      "remoteSha256": "00c8027148232e1d5de3ba7baea2282e79388e2b46d4de6e664e4f431f580244",
+      "copiedSha256": "00c8027148232e1d5de3ba7baea2282e79388e2b46d4de6e664e4f431f580244"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-five-pictures-voting.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-five-pictures-voting.png",
+      "bytes": 385699,
+      "remoteSha256": "25372a71b549d58554e0b97e29e149531a14179ac6cc0c5582362b5d3c8cfdc6",
+      "copiedSha256": "25372a71b549d58554e0b97e29e149531a14179ac6cc0c5582362b5d3c8cfdc6"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-five-pictures.png",
+      "bytes": 381960,
+      "remoteSha256": "0db84756430f5a841abec9d26b78d8bc897741ec1e06a4193c94ff9d631d2977",
+      "copiedSha256": "0db84756430f5a841abec9d26b78d8bc897741ec1e06a4193c94ff9d631d2977"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-fr-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-fr-controls.png",
+      "bytes": 43213,
+      "remoteSha256": "93ddd16b08b795e20259fc1493dc699c9a249fdbb9acc9bfe6c27ee852440ebb",
+      "copiedSha256": "93ddd16b08b795e20259fc1493dc699c9a249fdbb9acc9bfe6c27ee852440ebb"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-he-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-he-controls.png",
+      "bytes": 32419,
+      "remoteSha256": "df1bc03aa613ba00f4f4e54371cbbc6128f769ab7cf4a342686f2e0df6587dab",
+      "copiedSha256": "df1bc03aa613ba00f4f4e54371cbbc6128f769ab7cf4a342686f2e0df6587dab"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-host-controls-readiness.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-host-controls-readiness.json",
+      "bytes": 5880,
+      "remoteSha256": "c0b8aea1170f1d8057e21ec182c7966afdee2d51c936d553e700630d08c7ef6c",
+      "copiedSha256": "c0b8aea1170f1d8057e21ec182c7966afdee2d51c936d553e700630d08c7ef6c"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-host-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-host-controls.png",
+      "bytes": 482034,
+      "remoteSha256": "ad80553cbe7e44b0dd816efedd1c8d9bdd899fa6d5ef159008b7023246219adb",
+      "copiedSha256": "ad80553cbe7e44b0dd816efedd1c8d9bdd899fa6d5ef159008b7023246219adb"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-image-only-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-image-only-five-pictures.png",
+      "bytes": 396827,
+      "remoteSha256": "2860bd11ae4a372ba68eb43d8e86fbb06cff3e65824068b75c64bdd2c2443b38",
+      "copiedSha256": "2860bd11ae4a372ba68eb43d8e86fbb06cff3e65824068b75c64bdd2c2443b38"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-ja-controls.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-ja-controls.png",
+      "bytes": 51294,
+      "remoteSha256": "8050573aa518c47fd6bd1c7cd2af9c4d945a12c49671ea6e973ca458dc2bb7f2",
+      "copiedSha256": "8050573aa518c47fd6bd1c7cd2af9c4d945a12c49671ea6e973ca458dc2bb7f2"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-motion-a.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-motion-a.png",
+      "bytes": 240667,
+      "remoteSha256": "3ff73e0a7b7ba1f1585aac4b438c24ab0e2af870aaa0657efa83b2be821507d6",
+      "copiedSha256": "3ff73e0a7b7ba1f1585aac4b438c24ab0e2af870aaa0657efa83b2be821507d6"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-motion-b.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-motion-b.png",
+      "bytes": 212763,
+      "remoteSha256": "014b7fe5fbea9c2a1fcd340e038f2b0a359b9868fe8c0db102dcfaab71529e0e",
+      "copiedSha256": "014b7fe5fbea9c2a1fcd340e038f2b0a359b9868fe8c0db102dcfaab71529e0e"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-tie-five-pictures.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-tie-five-pictures.png",
+      "bytes": 399138,
+      "remoteSha256": "8e7f61cf3bfb78c6be732629da5433fb1820451cb86435eb9ce3602b472ce63d",
+      "copiedSha256": "8e7f61cf3bfb78c6be732629da5433fb1820451cb86435eb9ce3602b472ce63d"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-workspace-1366.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-workspace-1366.png",
+      "bytes": 576606,
+      "remoteSha256": "d902844119b38383b009541fffdb653a80ce0940a1d51cef6462d61d3b2b686b",
+      "copiedSha256": "d902844119b38383b009541fffdb653a80ce0940a1d51cef6462d61d3b2b686b"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/full-show/webkit-tadazz-classic-workspace-390.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/full-show/webkit-tadazz-classic-workspace-390.png",
+      "bytes": 174401,
+      "remoteSha256": "71fa94e4496274d065923ef8245d1075457aa4ff222d848d6bac3119f325ada7",
+      "copiedSha256": "71fa94e4496274d065923ef8245d1075457aa4ff222d848d6bac3119f325ada7"
+    }
+  ],
+  "outerReceipt": {
+    "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/receipt.json",
+    "sha256": "3b98b04099062aaf8e41e5e99c17a8e81994267c845237d688003bc030f7fdc5",
+    "innerEqualsCopiedReceipt": true
+  },
+  "results": {
+    "entryStatuses": {
+      "PASS": 40
+    },
+    "rendererFixtureStatuses": {
+      "PASS": 44
+    },
+    "errors": 0,
+    "pageErrorEvents": 0,
+    "requestFailures": 0,
+    "diagnosticMode": null
+  },
+  "excludedRemoteFiles": [
+    "full-show/progress.json"
+  ],
+  "exclusionReason": "Final complete receipt retained; superseded progress stays remote. No dependencies, source archives, customer configuration or private-key contents copied.",
+  "originalEvidenceModified": false,
+  "testsRunByCurator": false,
+  "productionChangedByCurator": false,
+  "deploymentClaim": false
+}

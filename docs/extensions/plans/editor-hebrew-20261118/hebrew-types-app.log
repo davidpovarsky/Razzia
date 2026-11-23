@@ -1,0 +1,12 @@
+extensions/src/core/show-library/composition-repository-base.ts(114,5): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extensions/src/core/show-library/composition-repository-base.ts(115,5): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extensions/src/server/api/account-preview-source.ts(35,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extensions/src/server/phone-lifecycle-v2/contracts.ts(20,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extensions/src/site/adapters/client.ts(11,5): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extensions/src/site/adapters/client.ts(12,5): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extensions/src/site/components/game-preview/coordinator.ts(23,29): error TS2550: Property 'withResolvers' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2024' or later.
+extensions/src/site/components/game-preview/session-owner.ts(78,29): error TS2550: Property 'withResolvers' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2024' or later.
+extensions/src/site/components/game-preview/session-owner.ts(104,5): error TS2322: Type 'Promise<void> | null' is not assignable to type 'Promise<void>'.
+  Type 'null' is not assignable to type 'Promise<void>'.
+packages/web/src/features/quizz/components/studio/header-controls.tsx(108,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.

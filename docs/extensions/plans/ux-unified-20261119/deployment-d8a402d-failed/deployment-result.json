@@ -1,0 +1,50 @@
+{
+  "backup": {
+    "archive": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/deployment-20261119T054340Z-82d0d521/production-data-private.tar.gz",
+    "bytes": 123917192,
+    "consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+    "files": 341,
+    "productionRestorePerformed": false,
+    "restoredBytesAndModesVerified": false,
+    "sha256": "8e9221127bbb31c105572204429efaafc8952562bf192655b4a42ebfcdf481d0",
+    "treeSha256": "bf6d2e353d829aeea2401611751d369f1abfff2c278eb0ba324cb61a628ace1d"
+  },
+  "currentCustomerWritesPreserved": true,
+  "customerContentPrinted": false,
+  "dataRestorePerformed": false,
+  "failureCode": "REPLACEMENT_HOST_CONFIG_CHANGED",
+  "finishedAt": "2026-11-19T05:43:48.498371+00:00",
+  "image": "sha256:ca3717033dc0206e3b64f697e74b344637eb3b197f9910c1018c74e8b22c2001",
+  "phase": "create-replacement",
+  "previousContainer": "e398d1205817bb8b19afb129a827f675062ba1fd797aedf9e2e87d759338e666",
+  "previousImage": "sha256:02578b46409fd5d346afaf69d022d9fde84ffb62960ce43737f279ce32932d55",
+  "priorRestoreBootQualification": {
+    "ageSeconds": 113,
+    "candidateCloneBootPassed": true,
+    "sha256": "a20d232084af90541c3f09dd3c1c783c2603641686623620ea5af1f33b164a16"
+  },
+  "replacementContainer": "82ef1ecceafc94d3a419cb0b85e44bf3935eb0ef126478090d8bb2a3ee330049",
+  "revision": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "rollbackBaseProbes": {
+    "packageCapabilities": {
+      "accountsEnabled": true,
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "installerEnabled": true,
+      "status": 401
+    }
+  },
+  "rollbackContainer": "tadazz-pre-mcp-d8a402dd39bf-20261119T054340Z-82d0d521",
+  "rollbackDataRestored": false,
+  "rolledBack": true,
+  "roomGate": {
+    "checkStopRaceEliminated": false,
+    "count": 0,
+    "lastCountAt": "2026-11-19T05:41:38.051655704Z",
+    "logBytes": 1042,
+    "observedAt": "2026-11-19T05:43:40.427937+00:00",
+    "source": "retained-startup-empty-registry-no-subsequent-game-events"
+  },
+  "success": false,
+  "version": 1
+}

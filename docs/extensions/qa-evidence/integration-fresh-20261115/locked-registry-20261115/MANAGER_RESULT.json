@@ -1,0 +1,121 @@
+{
+  "utc": "2026-11-15T18:04:57.110605+00:00",
+  "managerSource": "3b8b0b02c776be5cf14039259d1e995ac52708e5",
+  "producer": "21f706c672a29f20d4ee5174f49773f9bf4e388e",
+  "producerEvidence": "30d1ba883ca6a3b94f7324036ecf873e01645837",
+  "producerReview": [
+    {
+      "phase": "before",
+      "rawStreamsShaAndBytesVerified": true,
+      "checks": [
+        [
+          "tests",
+          1
+        ]
+      ]
+    },
+    {
+      "phase": "after",
+      "rawStreamsShaAndBytesVerified": true,
+      "checks": [
+        [
+          "tests",
+          0
+        ],
+        [
+          "types",
+          0
+        ],
+        [
+          "format",
+          0
+        ],
+        [
+          "new-test-lint",
+          0
+        ]
+      ]
+    }
+  ],
+  "sourceBefore": {
+    "extensions/src/core/show-library/registry.ts": "5170beb15152b30e1bb9fc8452e5ca6fd027934ae8ad9d9f125cccc5cf2424ec",
+    "extensions/src/core/show-library/registry-locked.test.ts": "193651ce2654d34b3224c149ca92e2cab02e1274eee971eb21d5aab94e99c67a"
+  },
+  "sourceAfter": {
+    "extensions/src/core/show-library/registry.ts": "5170beb15152b30e1bb9fc8452e5ca6fd027934ae8ad9d9f125cccc5cf2424ec",
+    "extensions/src/core/show-library/registry-locked.test.ts": "193651ce2654d34b3224c149ca92e2cab02e1274eee971eb21d5aab94e99c67a"
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/registry-locked.test.ts",
+        "src/core/show-library/registry.test.ts",
+        "src/core/show-library/composition-validation.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 439,
+          "sha256": "df6ee2f04e51835e36da7ec7d862d39ea25a1d52a55b9ba9a63959584ddc8193"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "types",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/registry.ts",
+        "extensions/src/core/show-library/registry-locked.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 66,
+          "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "remoteOrInstallActions": false,
+  "scope": "candidate locked-answer validation only; no executable renderer or full release acceptance"
+}
