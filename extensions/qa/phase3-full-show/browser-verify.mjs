@@ -69,6 +69,7 @@ assert(
   "Unsupported Fullshow WebKit QA backend",
 )
 const gtkWebkit = webkitQaBackend === "gtk-xvfb"
+
 if (gtkWebkit) {
   assert.equal(process.platform, "linux", "GTK Fullshow QA requires Linux")
   assert.match(

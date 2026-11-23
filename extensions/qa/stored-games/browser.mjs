@@ -1023,6 +1023,7 @@ export async function verifyStoredGameBrowser(options) {
       const button = host.getByTestId("host-next-screen-btn")
       const advanced = () => {
         const current = snapshot()
+
         return (
           current.id !== expected.id ||
           current.questionIndex !== expected.questionIndex ||
@@ -1038,17 +1039,21 @@ export async function verifyStoredGameBrowser(options) {
         expected.phase !== "scene" &&
         expected.roundAutoAdvance === true &&
         ["SHOW_RESPONSES", "SHOW_LEADERBOARD"].includes(expected.status)
+      let policy = "native-next-click"
+
+      if (automaticScene) {
+        policy = "observe-automatic-scene"
+      } else if (automaticResults) {
+        policy = "observe-automatic-results"
+      }
+
       const action = {
         stepDigest: expected.id ? digest(expected.id) : null,
         phase: expected.phase,
         questionIndex: expected.questionIndex,
         advance: expected.advance,
         authoritativeStartedAt: expected.startedAt,
-        policy: automaticScene
-          ? "observe-automatic-scene"
-          : automaticResults
-            ? "observe-automatic-results"
-            : "native-next-click",
+        policy,
         startedAt: Date.now(),
         clickStartedAt: null,
         clickCompletedAt: null,
@@ -1062,6 +1067,7 @@ export async function verifyStoredGameBrowser(options) {
           await expect
             .poll(advanced, { timeout: sceneTimeout(expected) })
             .toBe(true)
+
           return
         }
 
@@ -1069,7 +1075,7 @@ export async function verifyStoredGameBrowser(options) {
           assert.equal(expected.advance, "manual", "Declared manual scene")
         }
 
-        let nextButton
+        let nextButton = undefined
         await expect
           .poll(
             async () => {
@@ -1079,7 +1085,7 @@ export async function verifyStoredGameBrowser(options) {
 
               const buttons = await button.elementHandles()
               assert(buttons.length <= 1, "One native next control")
-              const current = buttons[0]
+              const [current] = buttons
 
               if (!current) {
                 return false
@@ -1091,6 +1097,7 @@ export async function verifyStoredGameBrowser(options) {
                   (await current.isEnabled())
                 ) {
                   nextButton = current
+
                   return true
                 }
               } finally {

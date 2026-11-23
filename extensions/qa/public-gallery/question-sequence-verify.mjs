@@ -619,6 +619,7 @@ export async function readQuestionSequence(
       `${kind} first paint follows the 2s lead-in: ${delay}`,
     )
   }
+
   if (timerExpected) {
     assert(
       Math.abs(result.answersAt - result.timerAt) <= 34,
@@ -631,6 +632,7 @@ export async function readQuestionSequence(
       "An authored untimed question never paints a timer",
     )
   }
+
   assert.equal(
     result.earlyAnswers,
     false,
