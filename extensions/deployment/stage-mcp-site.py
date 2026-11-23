@@ -34,7 +34,18 @@ MCP_SCOPES = (
 MCP_CHALLENGE = ('Bearer resource_metadata="' + ORIGIN +
                  '/.well-known/oauth-protected-resource", scope="' + " ".join(MCP_SCOPES) + '"')
 HASH = re.compile(r"[a-f0-9]{64}")
-PUBLIC_CATALOGUE_IDS = ("great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team")
+PUBLIC_CATALOGUE_IDS = (
+    "great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team",
+    "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
+    "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
+)
+NATIVE_APPLICATION_RENDERERS = ("tadazz-classic-stage", "razzia-native-stage", "tadazz-original-stage")
+ORIGINAL_THEME_IDS = (
+    "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
+    "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
+)
+ORIGINAL_QA_FILES = {"extensions/qa/original-themes/" + name for name in
+                     ("account-verify.mjs", "browser-verify.mjs", "audio-observer.mjs", "contract.mjs", "linux-browser-verify.py")}
 MAX_FILE = 64 * 1024 * 1024
 MAX_TREE = 512 * 1024 * 1024
 FULL_SHOW_CHECKS = (
@@ -194,6 +205,10 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def canonical_digest(value):
+    return digest(json.dumps(value, sort_keys=True, separators=(",", ":")).encode())
+
+
 def json_file(path):
     return json.loads(read_bytes(path, 32 * 1024 * 1024))
 
@@ -331,8 +346,9 @@ def verify_application_metadata(bundle, source_manifest, backend_artifact, web_f
     artifact_pin = digest(json.dumps(artifact, ensure_ascii=False, separators=(",", ":")).encode())
     registry_pin = digest(json.dumps(registry, ensure_ascii=False, separators=(",", ":")).encode())
     pins = native.get("pins")
-    need(isinstance(pins, list) and len(pins) == 2 and
-         {pin.get("renderer", {}).get("id") for pin in pins} == {"tadazz-classic-stage", "razzia-native-stage"},
+    need(isinstance(pins, list) and len(pins) == len(NATIVE_APPLICATION_RENDERERS) and
+         {(pin.get("renderer", {}).get("id"), pin.get("renderer", {}).get("version")) for pin in pins} ==
+         {(renderer, "1.0.0") for renderer in NATIVE_APPLICATION_RENDERERS},
          "NATIVE_APPLICATION_RENDERER_PINS_MISSING")
     for pin in pins:
         need(pin.get("portVersion") == 3 and pin.get("identityRuleVersion") == 2 and
@@ -413,6 +429,72 @@ def tap_success(output):
     need(counts["tests"] == counts["pass"] > 0 and
          all(counts[name] == 0 for name in ("fail", "cancelled", "skipped", "todo")),
          "NODE_TESTS_NOT_ALL_PASSED")
+
+
+def original_theme_checks():
+    checks = {
+        "eight-native-installs-and-isolated-two-to-five-choice-fixtures": {
+            "originals": 8, "rounds": 32, "anonymousInstallDenied": True, "crossAccountReadDenied": True},
+        "native-editor-eight-theme-round-trip-save-reload-and-history": {
+            "switches": 8, "preservedQuestionCount": 6},
+        "public-back-clears-current-and-future-votes": {
+            "retainedScore": 1000, "clearedQuestions": [2, 3], "replay": True},
+        "nine-locales-and-eight-reduced-motion-hebrew-mobile-votes": {
+            "locales": 9, "mobileRounds": 8, "storybookFinalRecapEntries": 6},
+        "native-pause-replay-previous-and-confirmed-skip": {
+            "retainedPausedTimer": True, "replayDiscardsOldVotes": True},
+        "original-browser-console-and-resource-integrity": {},
+        "immutable-public-masters-after-editor-and-live-games": {},
+    }
+    for theme in ORIGINAL_THEME_IDS:
+        checks["normal-motion-complete-public-show-" + theme] = {
+            "rounds": 6, "checkpoints": 3, "interludes": 2, "replay": True}
+        checks["reduced-motion-native-two-to-five-choices-votes-images-and-audio-" + theme] = {
+            "questions": 4, "realPlayers": 2, "tie": True, "zeroVotes": True,
+            "answerImages": 14, "questionImages": 1, "votingLayoutChecks": 4, "resultsLayoutChecks": 4}
+    return {name: {"name": name, "passed": True, **detail} for name, detail in checks.items()}
+
+
+def verify_originals(receipt, revision, source_run, manifest, artifacts):
+    need(isinstance(receipt, dict) and receipt.get("format") == "tadazz-original-themes-acceptance" and
+         type(receipt.get("version")) is int and receipt["version"] == 1 and
+         receipt.get("sha") == revision and receipt.get("sourceRun") == source_run and
+         isinstance(receipt.get("run"), str) and
+         re.fullmatch(r"tadazz-originals-" + revision[:12] + r"-[a-f0-9]{8}", receipt["run"]),
+         "ORIGINALS_IDENTITY_MISMATCH")
+    need(type(receipt.get("exit")) is int and receipt["exit"] == 0 and receipt.get("passed") is True and
+         receipt.get("oomKilled") is False and receipt.get("network") == "none" and
+         receipt.get("manualListeningPerformed") is False, "ORIGINALS_LINUX_GATE_MISSING")
+    no_live_data(receipt, "customerMountUsed")
+    for field in ("allSourceHashesVerified", "candidateSourceHashesVerifiedBeforeAfter", "sdkCacheHashesVerifiedBeforeAfter",
+                  "applicationSourcesEqualCandidate", "runtimeQaSourceEqualsCandidate", "sourceReadOnly",
+                  "readOnlyMountsVerified", "builtArtifactHashesVerifiedBeforeAfter"):
+        need(receipt.get(field) is True, "ORIGINALS_INPUT_CHANGED")
+    need(ORIGINAL_QA_FILES <= manifest.keys() and
+         all(isinstance(manifest[name], str) and HASH.fullmatch(manifest[name]) for name in ORIGINAL_QA_FILES) and
+         receipt.get("qaSourceSha256") == {name: manifest[name] for name in ORIGINAL_QA_FILES} and
+         receipt.get("sourceManifestSha256") == canonical_digest(manifest), "ORIGINALS_SOURCE_PIN_MISMATCH")
+    need(set(artifacts) == {"web", "widget", "application", "backend"} and all(artifacts.values()) and
+         receipt.get("builtArtifactsBefore") == artifacts and receipt.get("builtArtifactsAfter") == artifacts,
+         "ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    inner = receipt.get("browserReceipt")
+    need(isinstance(inner, dict) and inner.get("passed") is True and inner.get("platform") == "linux" and
+         inner.get("sourceSha") == revision and inner.get("isolatedNativeHost") is True and
+         inner.get("customerMountUsed") is False and inner.get("realEmailSent") is False and
+         inner.get("manualListeningPerformed") is False and not inner.get("error"), "ORIGINALS_BROWSER_GATE_MISSING")
+    expected = original_theme_checks()
+    results = inner.get("results")
+    need(isinstance(results, list) and len(results) == len(expected) and
+         all(isinstance(item, dict) and isinstance(item.get("name"), str) for item in results),
+         "ORIGINALS_SCENARIOS_INCOMPLETE")
+    actual = {item["name"]: item for item in results}
+    need(len(actual) == len(results) and set(actual) == set(expected), "ORIGINALS_SCENARIOS_INCOMPLETE")
+    need(canonical_digest(actual) == canonical_digest(expected), "ORIGINALS_SCENARIO_PROOF_MISMATCH")
+    return {"format": "tadazz-original-themes-release-proof", "version": 1, "passed": True,
+            "sourceSha": revision, "sourceRun": source_run, "run": receipt["run"],
+            "familyIds": list(ORIGINAL_THEME_IDS), "requiredChecks": sorted(expected),
+            "sourceManifestSha256": receipt["sourceManifestSha256"], "qaSourceSha256": receipt["qaSourceSha256"],
+            "builtArtifactsSha256": canonical_digest(artifacts)}
 
 
 def verify_fullshow(receipt, revision, manifest_pin, widget):
@@ -779,7 +861,7 @@ def qualify_inputs(args):
     source = plain(EVIDENCE_ROOT / args.source_run / "source", directory=True)
     web_source = plain(EVIDENCE_ROOT / args.web_source_run / "source", directory=True)
     receipts = {key: json_file(getattr(args, key + "_receipt"))
-                for key in ("host", "launch", "web", "browser", "full_show", "proxy")}
+                for key in ("host", "launch", "web", "browser", "full_show", "proxy", "originals")}
     required = {"native-http", "native-types", "native-lint", "native-format"}
     manifest = matrix_receipt(receipts["host"], args.revision, args.source_run, "native-launch",
                               required | {"native-widget-build", "native-launch-build", "native-site-build"} | SEMANTIC_REQUIRED_CHECKS | NATIVE_APP_CHECKS)
@@ -872,10 +954,13 @@ def qualify_inputs(args):
     verify_fullshow(receipts["full_show"], args.revision, widget_pin, widget)
     verify_proxy(receipts["proxy"], (args.revision, args.source_run, manifest, args.base_image,
                                     receipts["full_show"].get("sdkCacheManifestSha256")))
+    originals = verify_originals(receipts["originals"], args.revision, args.source_run, manifest,
+                                 {"web": web_files, "widget": tree(widget_root),
+                                  "application": tree(native_root), "backend": tree(built)})
     return {"source": source, "webSource": web_source, "manifest": manifest, "built": built,
             "artifact": artifact, "widget": widget, "widgetPin": widget_pin, "widgetRoot": widget_root,
             "webRoot": web_root, "webFiles": web_files, "receipts": receipts,
-            "nativeApplication": native_application, "nativeRoot": native_root}
+            "nativeApplication": native_application, "nativeRoot": native_root, "originalThemes": originals}
 
 
 def stage_release(args):
@@ -968,6 +1053,7 @@ RUN chmod -R a+rX /app/web && chmod 600 /app/socket/index.cjs /app/mcp/full-show
             "widgetManifestSha256": inputs["widgetPin"], "widgetHtmlSha256": inputs["widget"]["sha256"],
             "rendererBuildId": inputs["widget"]["rendererBuildId"],
             "nativeApplicationPreview": inputs["nativeApplication"],
+            "originalThemes": inputs["originalThemes"],
             "publicAssetCount": len(inputs["widget"]["publicAssets"]),
             "artifacts": {name: spec["sha256"] for name, spec in payload.items()},
             "artifactBytes": {name: spec["bytes"] for name, spec in payload.items()},
@@ -1203,7 +1289,7 @@ def self_test_application_gate():
               "pins": [{"portVersion": 3, "identityRuleVersion": 2, "registry": registry,
                         "registrySha256": digest(compact(registry)), "renderer": {"id": renderer, "version": "1.0.0"},
                         "rendererBuildSha256": digest(compact(artifact))}
-                       for renderer in ("tadazz-classic-stage", "razzia-native-stage")]}
+                       for renderer in NATIVE_APPLICATION_RENDERERS]}
     raw, artifact_raw, registry_raw = packed(native), packed(artifact), packed(registry)
     verification = {"format": "tadazz-application-preview-verification", "mode": "verify-manifest",
                     "verifiedManifest": True, "generatedSourceChanged": False, "liveAuthorityInputs": [],
@@ -1216,7 +1302,9 @@ def self_test_application_gate():
     web = {"tadazz-application-runtime/" + item["name"]: {"sha256": item["sha256"], "bytes": item["bytes"]} for item in files}
     verify_application_metadata(bundle, source, backend, web)
     witnessed = []
-    for failure in ("generation", "packaged-change", "backend-mismatch", "source-change", "live-authority"):
+    for failure in ("generation", "packaged-change", "backend-mismatch", "source-change", "live-authority",
+                    "legacy-renderers-only", "duplicate-renderer", "foreign-renderer", "renderer-version",
+                    "admission-port-version", "admission-identity-version", "admission-artifact-pin", "admission-registry-pin"):
         changed_bundle = {**bundle, "verification": json.loads(json.dumps(verification))}
         changed_source, changed_backend, changed_web = dict(source), json.loads(json.dumps(backend)), json.loads(json.dumps(web))
         if failure == "generation":
@@ -1227,11 +1315,39 @@ def self_test_application_gate():
             changed_backend["files"][0]["sha256"] = "d" * 64
         elif failure == "source-change":
             changed_source[entry] = "d" * 64
-        else:
+        elif failure == "live-authority":
             changed_bundle["verification"]["liveAuthorityInputs"] = ["packages/web/src/features/game/stores/live.ts"]
+        else:
+            changed_native = json.loads(raw)
+            if failure == "legacy-renderers-only":
+                changed_native["pins"] = [pin for pin in changed_native["pins"]
+                                          if pin["renderer"]["id"] != "tadazz-original-stage"]
+            elif failure == "duplicate-renderer":
+                changed_native["pins"][-1]["renderer"] = dict(changed_native["pins"][0]["renderer"])
+            elif failure == "foreign-renderer":
+                changed_native["pins"][-1]["renderer"]["id"] = "unreviewed-stage"
+            elif failure == "renderer-version":
+                changed_native["pins"][-1]["renderer"]["version"] = "1.0.1"
+            elif failure == "admission-port-version":
+                changed_native["pins"][-1]["portVersion"] = 2
+            elif failure == "admission-identity-version":
+                changed_native["pins"][-1]["identityRuleVersion"] = 1
+            elif failure == "admission-artifact-pin":
+                changed_native["pins"][-1]["rendererBuildSha256"] = "d" * 64
+            else:
+                changed_native["pins"][-1]["registrySha256"] = "d" * 64
+            changed_raw = packed(changed_native)
+            changed_bundle["manifestBytes"] = changed_raw
+            changed_bundle["verification"]["manifestSha256"] = digest(changed_raw)
+            changed_source[NATIVE_APP_MANIFEST] = digest(changed_raw)
+            changed_backend["files"][0].update(sha256=digest(changed_raw), bytes=len(changed_raw))
         try:
             verify_application_metadata(changed_bundle, changed_source, changed_backend, changed_web)
-        except GateError:
+        except GateError as error:
+            if failure in ("legacy-renderers-only", "duplicate-renderer", "foreign-renderer", "renderer-version"):
+                need(str(error) == "NATIVE_APPLICATION_RENDERER_PINS_MISSING", "SELFTEST_RENDERER_GATE_MISMATCH")
+            elif failure.startswith("admission-"):
+                need(str(error) == "NATIVE_APPLICATION_ADMISSION_PIN_MISMATCH", "SELFTEST_ADMISSION_GATE_MISMATCH")
             witnessed.append("native-application-" + failure)
         else:
             raise AssertionError("Unqualified native application accepted: " + failure)
@@ -1326,8 +1442,11 @@ def self_test_public_preview_gate():
             rejected.append("public-preview-missing-" + field)
         else:
             raise AssertionError("Incomplete public preview proof accepted")
-    for ids in ([], list(PUBLIC_CATALOGUE_IDS[:-1]),
-                [*PUBLIC_CATALOGUE_IDS[:-1], "unreviewed-example"]):
+    for ids in ([], list(PUBLIC_CATALOGUE_IDS[:10]), list(PUBLIC_CATALOGUE_IDS[:-1]),
+                list(reversed(PUBLIC_CATALOGUE_IDS)),
+                [*PUBLIC_CATALOGUE_IDS[:-1], PUBLIC_CATALOGUE_IDS[0]],
+                [*PUBLIC_CATALOGUE_IDS[:-1], "unreviewed-example"],
+                [*PUBLIC_CATALOGUE_IDS, "unreviewed-example"]):
         try:
             verify_native_preview_proof({**proof, "publicCatalogueIds": ids}, files)
         except GateError:
@@ -1335,6 +1454,68 @@ def self_test_public_preview_gate():
         else:
             raise AssertionError("Unreviewed public catalogue accepted")
     return ["public-preview-enabled-default-proof"] + rejected
+
+
+def self_test_originals_gate():
+    revision = "b" * 40
+    source_run = "tadazz-codex-" + revision[:12] + "-12345678"
+    source = {name: "a" * 64 for name in ORIGINAL_QA_FILES}
+    artifacts = {name: {"synthetic.bin": {"bytes": 3, "sha256": "c" * 64}}
+                 for name in ("web", "widget", "application", "backend")}
+    results = list(original_theme_checks().values())
+    receipt = {"format": "tadazz-original-themes-acceptance", "version": 1,
+               "sha": revision, "sourceRun": source_run, "run": "tadazz-originals-" + revision[:12] + "-12345678",
+               "passed": True, "exit": 0, "oomKilled": False, "network": "none",
+               "sourceReadOnly": True, "customerMountUsed": False, "productionChanged": False,
+               "manualListeningPerformed": False, "allSourceHashesVerified": True,
+               "candidateSourceHashesVerifiedBeforeAfter": True, "sdkCacheHashesVerifiedBeforeAfter": True,
+               "applicationSourcesEqualCandidate": True, "runtimeQaSourceEqualsCandidate": True,
+               "readOnlyMountsVerified": True, "builtArtifactHashesVerifiedBeforeAfter": True,
+               "sourceManifestSha256": canonical_digest(source), "qaSourceSha256": source,
+               "builtArtifactsBefore": artifacts, "builtArtifactsAfter": artifacts,
+               "browserReceipt": {"passed": True, "platform": "linux", "sourceSha": revision,
+                                  "isolatedNativeHost": True, "customerMountUsed": False,
+                                  "realEmailSent": False, "manualListeningPerformed": False, "results": results}}
+    proof = verify_originals(receipt, revision, source_run, source, artifacts)
+    need(len(proof["requiredChecks"]) == 23 and len(proof["familyIds"]) == 8, "SELFTEST_ORIGINALS_INVENTORY")
+    native_index = next(index for index, item in enumerate(results) if item["name"] ==
+                        "reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz")
+    mobile_index = next(index for index, item in enumerate(results) if item["name"] ==
+                        "nine-locales-and-eight-reduced-motion-hebrew-mobile-votes")
+    failures = (
+        ("revision", ("sha",), "c" * 40, "ORIGINALS_IDENTITY_MISMATCH"),
+        ("source-run", ("sourceRun",), source_run[:-8] + "00000000", "ORIGINALS_IDENTITY_MISMATCH"),
+        ("exit", ("exit",), 1, "ORIGINALS_LINUX_GATE_MISSING"),
+        ("oom", ("oomKilled",), True, "ORIGINALS_LINUX_GATE_MISSING"),
+        ("network", ("network",), "bridge", "ORIGINALS_LINUX_GATE_MISSING"),
+        ("customer-data", ("customerMountUsed",), True, "RECEIPT_ISOLATION_MISSING"),
+        ("qa-overlay", ("runtimeQaSourceEqualsCandidate",), False, "ORIGINALS_INPUT_CHANGED"),
+        ("source-manifest", ("sourceManifestSha256",), "d" * 64, "ORIGINALS_SOURCE_PIN_MISMATCH"),
+        ("controller-pin", ("qaSourceSha256", "extensions/qa/original-themes/linux-browser-verify.py"), "d" * 64, "ORIGINALS_SOURCE_PIN_MISMATCH"),
+        ("built-artifact", ("builtArtifactsBefore", "application", "synthetic.bin", "sha256"), "d" * 64, "ORIGINALS_BUILT_ARTIFACT_MISMATCH"),
+        ("changed-after", ("builtArtifactsAfter", "web", "synthetic.bin", "sha256"), "d" * 64, "ORIGINALS_BUILT_ARTIFACT_MISMATCH"),
+        ("non-linux", ("browserReceipt", "platform"), "win32", "ORIGINALS_BROWSER_GATE_MISSING"),
+        ("missing-family", ("browserReceipt", "results"), results[:-1], "ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("duplicate-case", ("browserReceipt", "results"), [*results[:-1], results[0]], "ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("failed-case", ("browserReceipt", "results", native_index, "passed"), False, "ORIGINALS_SCENARIO_PROOF_MISMATCH"),
+        ("missing-results-geometry", ("browserReceipt", "results", native_index, "resultsLayoutChecks"), 3, "ORIGINALS_SCENARIO_PROOF_MISMATCH"),
+        ("truncated-storybook", ("browserReceipt", "results", mobile_index, "storybookFinalRecapEntries"), 2, "ORIGINALS_SCENARIO_PROOF_MISMATCH"),
+    )
+    witnessed = ["originals-eight-families-23-exact-scenarios-and-built-artifacts"]
+    for name, path, value, expected in failures:
+        changed = json.loads(json.dumps(receipt))
+        target = changed
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = value
+        try:
+            verify_originals(changed, revision, source_run, source, artifacts)
+        except GateError as error:
+            need(str(error) == expected, "SELFTEST_ORIGINALS_WRONG_FAILURE")
+            witnessed.append("originals-rejects-" + name)
+        else:
+            raise AssertionError("Unqualified originals accepted: " + name)
+    return witnessed
 
 
 def self_test():
@@ -1393,7 +1574,7 @@ def self_test():
                 pass
             else:
                 raise AssertionError(name + " release gate accepted")
-    print(json.dumps({"selfTest": "PASS", "checks": ["traversal", "same-size-tamper", "changed-after-qualification-copy", "symlink", "tap-spec-summary"] + list(rejected) + self_test_semantic_gates() + self_test_application_gate() + self_test_proxy_gate() + self_test_public_preview_gate()}))
+    print(json.dumps({"selfTest": "PASS", "checks": ["traversal", "same-size-tamper", "changed-after-qualification-copy", "symlink", "tap-spec-summary"] + list(rejected) + self_test_semantic_gates() + self_test_application_gate() + self_test_proxy_gate() + self_test_public_preview_gate() + self_test_originals_gate()}))
 
 
 def main():
@@ -1407,7 +1588,7 @@ def main():
     parser.add_argument("--release-dir", required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--base-image", default=BASE_IMAGE)
-    for name in ("host", "launch", "web", "browser", "full-show", "proxy"):
+    for name in ("host", "launch", "web", "browser", "full-show", "proxy", "originals"):
         parser.add_argument("--" + name + "-receipt", required=True)
     args = parser.parse_args()
     args.web_source_run = args.web_source_run or args.source_run

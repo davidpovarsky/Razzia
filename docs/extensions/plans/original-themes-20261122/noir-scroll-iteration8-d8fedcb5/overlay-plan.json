@@ -1,0 +1,41 @@
+{
+  "applicationSourcesEqualCandidate": true,
+  "candidateQaHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": "f55342b0eb6fef8af9621e35eac0fabcf0652fa5d69f16ac7f0b1623834f9ca7",
+    "extensions/qa/original-themes/audio-observer.mjs": "7815dc7945d6c1b11d57e555ee90ab11857abada98411580e9f305a72d0d7117",
+    "extensions/qa/original-themes/browser-verify.mjs": "6086b95f0f32b2e75f88fa941df7ad24d872fcb0a95782a6de162ad3067fb43d",
+    "extensions/qa/original-themes/contract.mjs": "ca76fa21f782b30f258297dfe4ff5e899b04298ba328b64e34c6560a29401ca0",
+    "extensions/qa/public-gallery/question-sequence-verify.mjs": "d8bbd906b1f5e05ebb68f3e0057ddeb2b2d326d2107639121506b93cab2e72e3",
+    "extensions/qa/public-gallery/viewer-controls-verify.mjs": "fd28f2fa6d9a10aef4e81ffbf6b7ef75d11a9a50a91568c4ec8651deab8a984b"
+  },
+  "collectionPolicy": "All original assertions remain strict; passive ancestor bounds and scroll snapshots only",
+  "diagnosticOnly": true,
+  "overlayHashes": {
+    "extensions/qa/original-themes/account-verify.mjs": {
+      "bytes": 10148,
+      "sha256": "2f5210e1913e9de50841579d1060b14b5d6dca3673a3134ec651ed6d76451037"
+    },
+    "extensions/qa/original-themes/audio-observer.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/audio-observer.mjs"
+    },
+    "extensions/qa/original-themes/browser-verify.mjs": {
+      "bytes": 43165,
+      "sha256": "6bdc0285a8c6a2b1c4595b16cc1ce03a946f7506ff6cc93aea700aa16f69d13c"
+    },
+    "extensions/qa/original-themes/contract.mjs": {
+      "symlink": "/source/extensions/qa/original-themes/contract.mjs"
+    },
+    "extensions/qa/phase3-native-consent": {
+      "symlink": "/source/extensions/qa/phase3-native-consent"
+    },
+    "extensions/qa/public-gallery": {
+      "symlink": "/source/extensions/qa/public-gallery"
+    },
+    "extensions/src": {
+      "symlink": "/source/extensions/src"
+    }
+  },
+  "releaseQualified": false,
+  "runtimeQaSourceEqualsCandidate": false,
+  "scope": "Noir only, normal motion, original public example and actual answer clicks"
+}

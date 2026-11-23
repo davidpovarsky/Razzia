@@ -1,0 +1,19 @@
+{
+  "passed": false,
+  "sourceSha": "diagnostic-native-iteration5-uncommitted",
+  "isolatedNativeHost": true,
+  "customerMountUsed": false,
+  "realEmailSent": false,
+  "manualListeningPerformed": false,
+  "results": [
+    {
+      "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+      "passed": true,
+      "originals": 8,
+      "rounds": 32,
+      "anonymousInstallDenied": true,
+      "crossAccountReadDenied": true
+    }
+  ],
+  "error": "Error: expect(locator).toBeEnabled() failed\n\nLocator: locator('button').filter({ has: getByTestId('answer-badge-0') })\nExpected: enabled\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeEnabled\" locator('button').filter({ has: getByTestId('answer-badge-0') }) with timeout 15000ms\n  - waiting for locator('button').filter({ has: getByTestId('answer-badge-0') })\n\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toBeEnabled (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at select (/source/extensions/qa/original-themes/browser-verify.mjs:839:30)\n    at verifyNative (/source/extensions/qa/original-themes/browser-verify.mjs:893:17)\n    at async verifyOriginalThemeBrowser (/source/extensions/qa/original-themes/browser-verify.mjs:1092:5)\n    at async <anonymous> (/source/extensions/qa/original-themes/account-verify.mjs:249:3)"
+}

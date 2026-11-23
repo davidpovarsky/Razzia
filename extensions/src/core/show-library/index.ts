@@ -8,6 +8,13 @@ export * from "./assets"
 
 export * from "./native-library"
 
+export {
+  NATIVE_LIBRARY_PAGE_MAX_BYTES,
+  NATIVE_LIBRARY_PAGE_MAX_ITEMS,
+  type NativeLibraryPage,
+  type NativeLibraryPageRecord,
+} from "./native-library-page"
+
 export * from "./composition-document"
 
 export * from "./composition-repository"

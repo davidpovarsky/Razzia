@@ -264,6 +264,7 @@ export async function verifyPhaseContinuity({
     await page.emulateMedia({
       reducedMotion: reducedMotion ? "reduce" : "no-preference",
     })
+    await page.bringToFront()
     await prepareHostNavigation(page, `${mode} continuity case`)
     await page.goto(`${base}/host?scenario=${scenario.id}`)
     await page.locator("html[data-host-ready=true]").waitFor()
@@ -276,6 +277,7 @@ export async function verifyPhaseContinuity({
     await waitChapter(question.id)
     child = page.frames().find((frame) => frame.url().endsWith("/widget"))
     assert(child)
+    let snapshotSequence = 0
     const snapshot = async (
       step,
       {
@@ -292,33 +294,73 @@ export async function verifyPhaseContinuity({
         expectedModes = ["voting-open", "countdown", "voting"]
       }
 
-      await child.waitForFunction(
+      snapshotSequence += 1
+      const requestToken = `${name}:${snapshotSequence}`
+      const ready = await child.waitForFunction(
         (expected) => {
           const probe = window.__phaseContinuity
-          const state = probe?.capture()
 
-          return (
+          if (!probe) {
+            return false
+          }
+
+          if (probe.snapshotWait?.token !== expected.requestToken) {
+            probe.snapshotWait = {
+              token: expected.requestToken,
+              identity: null,
+              frames: 0,
+            }
+          }
+
+          const state = probe.capture()
+          const matches =
             state?.question &&
             state.text === expected.expectedQuestion &&
             expected.expectedModes.includes(state.nativeMode) &&
             (!expected.cards || state.cards.length === 5) &&
             (!expected.settled || probe.settled())
-          )
-        },
-        { cards, expectedQuestion, settled, expectedModes },
-        { timeout: 10000 },
-      )
-      // Allow browser-delivered CSS animationstart events to reach the observer.
-      await child.evaluate(async () => {
-        await new Promise(requestAnimationFrame)
-        await new Promise(requestAnimationFrame)
-      })
-      const state = await child.evaluate(() =>
-        window.__phaseContinuity.capture(),
-      )
-      witness.snapshots.push({ step, ...state })
 
-      return state
+          if (!matches) {
+            probe.snapshotWait.identity = null
+            probe.snapshotWait.frames = 0
+
+            return false
+          }
+
+          const identity = JSON.stringify([
+            state.documentId,
+            state.chapter,
+            state.epoch,
+            state.nativeMode,
+            state.question,
+            state.textNode,
+            state.text,
+            state.cards.map((card) => [card.testId, card.id]),
+          ])
+
+          if (probe.snapshotWait.identity !== identity) {
+            probe.snapshotWait.identity = identity
+            probe.snapshotWait.frames = 0
+          }
+
+          // One ready observation plus two subsequent RAF polls delivers CSS
+          // animationstart events without a later, unrelated DOM capture.
+          probe.snapshotWait.frames += 1
+
+          return probe.snapshotWait.frames >= 3 ? state : false
+        },
+        { cards, expectedQuestion, settled, expectedModes, requestToken },
+        { timeout: 10000, polling: "raf" },
+      )
+
+      try {
+        const state = await ready.jsonValue()
+        witness.snapshots.push({ step, ...state })
+
+        return state
+      } finally {
+        await ready.dispose()
+      }
     }
 
     const initial = await snapshot("question")
@@ -366,6 +408,7 @@ export async function verifyPhaseContinuity({
       "Selecting an answer must not call any server tool",
     )
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-demo-reveal").click()
     await waitChapter(results.id)
     await iframe.getByTestId("full-show-demo-result").waitFor()
@@ -398,6 +441,7 @@ export async function verifyPhaseContinuity({
       .getAttribute("data-demo-result")
     await page.screenshot({ path: path.join(evidence, `${name}-results.png`) })
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-replay").click()
     await waitChapter(question.id)
     await iframe.locator('[data-demo-selected-index=""]').waitFor()
@@ -424,6 +468,7 @@ export async function verifyPhaseContinuity({
       )
     }
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-next").click()
     await waitChapter(nextQuestion.id)
     const next = await snapshot("next-question", {
@@ -441,6 +486,7 @@ export async function verifyPhaseContinuity({
       )
     }
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-previous").click()
     await waitChapter(question.id)
     const previous = await snapshot("previous-question")
@@ -460,6 +506,7 @@ export async function verifyPhaseContinuity({
     await waitChapter(voting.id, question.duration.milliseconds + 10000)
     const again = await snapshot("second-answers", { cards: true })
     assertSameQuestion(previous, again, "previous question → answers/voting")
+    await page.bringToFront()
     await iframe.getByTestId("full-show-pause").click()
     await iframe.locator('[data-playback-paused="true"]').waitFor()
     const pausedAnswers = await snapshot("paused-answers", {
@@ -484,6 +531,7 @@ export async function verifyPhaseContinuity({
       await page.evaluate(() => window.__host.calls()),
       callsBeforePausedChoice,
     )
+    await page.bringToFront()
     await iframe.getByTestId("full-show-demo-reveal").click()
     await waitChapter(results.id)
     await iframe.getByTestId("full-show-demo-result").waitFor()
@@ -501,6 +549,7 @@ export async function verifyPhaseContinuity({
       ),
       ["preview_show"],
     )
+    await page.bringToFront()
     await iframe.getByTestId("full-show-next").click()
     await waitChapter(nextQuestion.id)
     const pausedNext = await snapshot("paused-next-question", {
@@ -510,6 +559,7 @@ export async function verifyPhaseContinuity({
     assert.equal(pausedNext.paused, "true")
     assert.notEqual(pausedNext.question, pausedResults.question)
     await iframe.locator('[data-demo-selected-index=""]').waitFor()
+    await page.bringToFront()
     await iframe.getByTestId("full-show-pause").click()
     await iframe.locator('[data-playback-paused="false"]').waitFor()
     const resumedNext = await snapshot("resumed-next-question", {

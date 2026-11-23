@@ -1,0 +1,386 @@
+AggregateError: 14 collected native geometry/sequence assertions failed
+    at verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1375:13)
+    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+  [errors]: [
+    ExpectError: All 5 image, label and result choices fit royal-quiz results
+    
+    All 5 image, label and result choices fit royal-quiz results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 0,
+    +     "problems": Array [
+    +       "og-choice-title answer-title: clipped by answer body",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    ExpectError: All 5 image, label and result choices fit retro-tv voting
+    
+    All 5 image, label and result choices fit retro-tv voting
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 0,
+    +     "problems": Array [
+    +       "og-choice-title answer-title: clipped by answer body",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1125:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    ExpectError: All 5 image, label and result choices fit retro-tv results
+    
+    All 5 image, label and result choices fit retro-tv results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 0,
+    +     "problems": Array [
+    +       "og-choice-title answer-title: clipped by answer body",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    AssertionError [ERR_ASSERTION]: Question geometry remains stable: {"phase":"voting","at":32901.10000014305,"questionAt":30876.900000095367,"changed":["y"],"baseline":{"phase":"question","at":32838.5,"heading":{"x":207.5989227294922,"y":468.2881774902344,"width":465.46600341796875,"height":103.03536987304688,"fontSize":"62px","lineHeight":"70.68px","fontWeight":"500","transform":"identity","opacity":"1"},"panel":{"x":192.01837158203125,"y":320.48260498046875,"width":496.62713623046875,"height":398.646484375,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}},"actual":{"heading":{"x":207.9776611328125,"y":499.285888671875,"width":465.466064453125,"height":103.03533935546875,"fontSize":"62px","lineHeight":"70.68px","fontWeight":"500","transform":"identity","opacity":"1"},"panel":{"x":192.3970947265625,"y":351.48028564453125,"width":496.627197265625,"height":398.646484375,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}}}
+    
+    false !== true
+    
+        at readQuestionSequence (file:///source/extensions/qa/public-gallery/question-sequence-verify.mjs:526:10)
+        at async collectNativeLayoutCheck (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:931:9)
+        at async verifyNative (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1202:24)
+        at async verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      generatedMessage: false,
+      code: 'ERR_ASSERTION',
+      actual: false,
+      expected: true,
+      operator: 'strictEqual',
+      diff: 'simple'
+    },
+    ExpectError: All 5 image, label and result choices fit magic-storybook voting
+    
+    All 5 image, label and result choices fit magic-storybook voting
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "card outside stage",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1125:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    ExpectError: All 5 image, label and result choices fit magic-storybook results
+    
+    All 5 image, label and result choices fit magic-storybook results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "card outside stage",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    AssertionError [ERR_ASSERTION]: Question geometry remains stable: {"phase":"voting","at":39572.60000014305,"questionAt":37374.40000009537,"changed":["y"],"baseline":{"phase":"question","at":39288.300000190735,"heading":{"x":205.9802703857422,"y":335.80535888671875,"width":466.6834716796875,"height":202.67999267578125,"fontSize":"56px","lineHeight":"63.84px","fontWeight":"500","transform":"identity","opacity":"1"},"panel":{"x":192.01837158203125,"y":320.48260498046875,"width":496.62713623046875,"height":398.646484375,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}},"actual":{"heading":{"x":207.1080322265625,"y":428.1095886230469,"width":466.6834716796875,"height":202.67996215820312,"fontSize":"56px","lineHeight":"63.84px","fontWeight":"500","transform":"identity","opacity":"1"},"panel":{"x":193.14613342285156,"y":412.7868347167969,"width":496.627197265625,"height":398.6465148925781,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}}}
+    
+    false !== true
+    
+        at readQuestionSequence (file:///source/extensions/qa/public-gallery/question-sequence-verify.mjs:526:10)
+        at async collectNativeLayoutCheck (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:931:9)
+        at async verifyNative (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1202:24)
+        at async verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      generatedMessage: false,
+      code: 'ERR_ASSERTION',
+      actual: false,
+      expected: true,
+      operator: 'strictEqual',
+      diff: 'simple'
+    },
+    ExpectError: All 5 image, label and result choices fit crystal-future results
+    
+    All 5 image, label and result choices fit crystal-future results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "result-percentage tz-result-number: text overflow",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    ExpectError: All 5 image, label and result choices fit carnival-pop results
+    
+    All 5 image, label and result choices fit carnival-pop results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  -  1
+    + Received  + 14
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 0,
+    +     "problems": Array [
+    +       "og-choice-title answer-title: clipped by answer body",
+    +     ],
+    +   },
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "result-percentage tz-result-number: text overflow",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    AssertionError [ERR_ASSERTION]: Question geometry remains stable: {"phase":"voting","at":33028,"questionAt":30974.89999985695,"changed":["y"],"baseline":{"phase":"question","at":32940.89999985695,"heading":{"x":165.44439697265625,"y":461.3208312988281,"width":380.26666259765625,"height":150.76980590820312,"fontSize":"64px","lineHeight":"72.96px","fontWeight":"700","transform":"identity","opacity":"1"},"panel":{"x":134.44439697265625,"y":308,"width":442.26666259765625,"height":457.4222412109375,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}},"actual":{"heading":{"x":165.44439697265625,"y":496.7986145019531,"width":380.26666259765625,"height":150.76980590820312,"fontSize":"64px","lineHeight":"72.96px","fontWeight":"700","transform":"identity","opacity":"1"},"panel":{"x":134.44439697265625,"y":308,"width":442.26666259765625,"height":528.3778076171875,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}}}
+    
+    false !== true
+    
+        at readQuestionSequence (file:///source/extensions/qa/public-gallery/question-sequence-verify.mjs:526:10)
+        at async collectNativeLayoutCheck (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:931:9)
+        at async verifyNative (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1202:24)
+        at async verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      generatedMessage: false,
+      code: 'ERR_ASSERTION',
+      actual: false,
+      expected: true,
+      operator: 'strictEqual',
+      diff: 'simple'
+    },
+    ExpectError: All 5 image, label and result choices fit sports-arena voting
+    
+    All 5 image, label and result choices fit sports-arena voting
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "card outside stage",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1125:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    ExpectError: All 5 image, label and result choices fit sports-arena results
+    
+    All 5 image, label and result choices fit sports-arena results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "card outside stage",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    },
+    AssertionError [ERR_ASSERTION]: Question geometry remains stable: {"phase":"voting","at":39119.299999952316,"questionAt":37106.700000047684,"changed":["height"],"baseline":{"phase":"question","at":39040.59999990463,"heading":{"x":165.44439697265625,"y":339,"width":380.26666259765625,"height":223.20001220703125,"fontSize":"56px","lineHeight":"63.84px","fontWeight":"700","transform":"identity","opacity":"1"},"panel":{"x":134.44439697265625,"y":308,"width":442.26666259765625,"height":457.4222412109375,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}},"actual":{"heading":{"x":165.44439697265625,"y":339,"width":380.26666259765625,"height":429.17779541015625,"fontSize":"56px","lineHeight":"63.84px","fontWeight":"700","transform":"identity","opacity":"1"},"panel":{"x":134.44439697265625,"y":308,"width":442.26666259765625,"height":663.4000244140625,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"identity","opacity":"1"},"stage":{"x":58.6666259765625,"y":122,"width":1322.666748046875,"height":744,"fontSize":"16px","lineHeight":"normal","fontWeight":"400","transform":"matrix(0.688889, 0, 0, 0.688889, -960, -540)","opacity":"1"},"root":{"x":0,"y":0,"width":1440,"height":1000,"fontSize":"16px","lineHeight":"24px","fontWeight":"400","transform":"identity","opacity":"1"},"scroll":{"x":0,"y":0,"dialogLeft":null,"dialogTop":null},"viewport":{"width":1440,"height":1000}}}
+    
+    false !== true
+    
+        at readQuestionSequence (file:///source/extensions/qa/public-gallery/question-sequence-verify.mjs:526:10)
+        at async collectNativeLayoutCheck (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:931:9)
+        at async verifyNative (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1202:24)
+        at async verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      generatedMessage: false,
+      code: 'ERR_ASSERTION',
+      actual: false,
+      expected: true,
+      operator: 'strictEqual',
+      diff: 'simple'
+    },
+    ExpectError: All 5 image, label and result choices fit mystery-noir results
+    
+    All 5 image, label and result choices fit mystery-noir results
+    
+    expect(received).toEqual(expected) // deep equality
+    
+    - Expected  - 1
+    + Received  + 8
+    
+    - Array []
+    + Array [
+    +   Object {
+    +     "index": 4,
+    +     "problems": Array [
+    +       "result-percentage tz-result-number: text overflow",
+    +     ],
+    +   },
+    + ]
+    
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+        at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+        at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)
+        at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)
+        at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)
+        at async collectNativeLayoutCheck (/overlay/extensions/qa/original-themes/browser-verify.mjs:930:9)
+        at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1201:9)
+        at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1366:5)
+        at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3) {
+      matcherResult: [Object]
+    }
+  ]
+}

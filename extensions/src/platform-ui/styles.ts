@@ -7,11 +7,30 @@ export const platformComponentCss = `
 .tds-scope[data-platform-appearance="dark"]{color-scheme:dark}
 .tds-scope[data-platform-appearance="light"]{color-scheme:light}
 .tds-scope .tds-button:not([data-variant="unstyled"]){${buttonBase};min-width:var(--tds-button-min-height)}
-.tds-scope.tds-host-control-bar > :where(button),.tds-scope.tds-host-control-bar > div > :where(button),.tds-scope.tds-host-toolbar > div > :where(button[aria-pressed]),.tds-scope.tds-host-audio-controls button{${buttonBase}}
+.tds-scope.tds-host-control-bar > :where(button),.tds-scope.tds-host-control-bar > div > :where(button),.tds-scope.tds-host-toolbar > div > :where(button[aria-pressed]),.tds-scope.tds-host-toolbar .tds-host-toolbar-session-controls > :where(button[aria-pressed]),.tds-scope.tds-host-audio-controls button{${buttonBase}}
 .tds-scope.tds-host-audio-controls input[type="range"]{accent-color:var(--tds-action);min-height:var(--tds-button-min-height);cursor:pointer}
 .tds-scope.tds-host-audio-controls{flex-shrink:0}
 .tds-scope.tds-host-control-bar :where(button):focus-visible,.tds-scope.tds-host-toolbar :where(button[aria-pressed]):focus-visible,.tds-scope.tds-host-audio-controls :where(button,input):focus-visible{outline:2px solid var(--tds-focus);outline-offset:var(--tds-space-1)}
 .tds-scope.tds-host-toolbar[data-host-lobby="true"] .tds-host-previous:disabled{display:none}
+/* Keep phase actions in a separate wrapping band. Unavailable actions and both
+   localized label widths reserve the same footprint without clipping controls. */
+.tds-scope.tds-host-toolbar .tds-host-toolbar-session-band{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--tds-space-2);min-inline-size:0;max-inline-size:100%}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-session-controls{flex:1 1 28rem;min-inline-size:min(100%,28rem);max-inline-size:100%}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-session-band > .tds-button{max-inline-size:100%}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-actions{box-sizing:border-box;min-inline-size:0;max-inline-size:100%}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-action-content{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--tds-space-2);min-inline-size:0;max-inline-size:100%;min-block-size:var(--tds-button-min-height)}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-action-content > .tds-presentation-controls{flex:0 1 auto;max-inline-size:100%}
+.tds-scope.tds-host-toolbar[data-host-skip-available="false"] .tds-host-skip-action,.tds-scope.tds-host-toolbar[data-host-next-available="false"] [data-presentation-action="next"]{visibility:hidden;pointer-events:none}
+.tds-scope.tds-host-toolbar .tds-presentation-control:is([data-presentation-action="next"],[data-presentation-action="playback"]){display:grid}
+.tds-scope.tds-host-toolbar .tds-presentation-control:is([data-presentation-action="next"],[data-presentation-action="playback"]) > .tds-button-content{grid-area:1 / 1}
+.tds-scope.tds-host-toolbar .tds-presentation-control:is([data-presentation-action="next"],[data-presentation-action="playback"])::before,.tds-scope.tds-host-toolbar .tds-presentation-control:is([data-presentation-action="next"],[data-presentation-action="playback"])::after{grid-area:1 / 1;visibility:hidden;pointer-events:none;padding-inline-start:calc(18px + var(--tds-button-gap))}
+.tds-scope.tds-host-toolbar [data-presentation-action="next"]::before{content:var(--tds-host-next-label)}
+.tds-scope.tds-host-toolbar [data-presentation-action="next"]::after{content:var(--tds-host-end-timer-label)}
+.tds-scope.tds-host-toolbar [data-presentation-action="playback"]::before{content:var(--tds-host-pause-label)}
+.tds-scope.tds-host-toolbar [data-presentation-action="playback"]::after{content:var(--tds-host-resume-label)}
+@media(max-width:40rem){.tds-scope.tds-host-toolbar .tds-presentation-control:is([data-presentation-action="next"],[data-presentation-action="playback"])::before,.tds-scope.tds-host-toolbar .tds-presentation-control:is([data-presentation-action="next"],[data-presentation-action="playback"])::after{display:none}}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-tie-actions{display:flex;flex-wrap:wrap;gap:var(--tds-space-2);min-inline-size:0;max-inline-size:100%}
+.tds-scope.tds-host-toolbar .tds-host-toolbar-tie-actions:empty{display:none}
 @media(max-width:48rem){.tds-scope .tds-host-display-label{display:none}}
 .tds-scope .tds-button[data-variant="primary"]{background:var(--tds-action);color:var(--tds-action-text);border-color:transparent}
 .tds-scope .tds-button[data-variant="destructive"]{background:var(--tds-danger);color:var(--tds-danger-text);border-color:transparent}

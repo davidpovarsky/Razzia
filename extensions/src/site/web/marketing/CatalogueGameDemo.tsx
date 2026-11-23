@@ -5,6 +5,7 @@ import { GameViewer } from "../../components/game-viewer/GameViewer"
 import { getPublicDemo } from "../../../core/show-library/public-demo-catalogue"
 import { tadaShowV1Schema } from "../../../core/show-authoring-schema"
 import { resolveShowTheme } from "../../../core/show-themes"
+import { isOriginalThemeId } from "../../../core/show-themes/original-theme-families"
 import {
   ShowThemeScope,
   showThemeStyle,
@@ -24,6 +25,7 @@ import {
   useCatalogueMobileControls,
 } from "./CatalogueMobileQuestion"
 import { siteText as t } from "../../locales"
+import mobileQuestionCss from "./catalogue-mobile-question.css?inline"
 import v4Css from "../../../presentation/tadazz-v4/tadazz-v4.css?inline"
 import v4LayoutCss from "../../../presentation/tadazz-v4/source-layout.css?inline"
 import v4FullShowCss from "../../../presentation/tadazz-v4/full-show.css?inline"
@@ -44,6 +46,8 @@ type Phase =
   | "question"
   | "voting"
   | "results"
+  | "checkpoint"
+  | "interlude"
   | "finish"
 
 const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
@@ -53,6 +57,8 @@ const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
   question: "question",
   voting: "voting",
   results: "results",
+  checkpoint: "leaderboard",
+  interlude: "roundStart",
   finish: "finale",
 }
 
@@ -86,12 +92,14 @@ function CataloguePlayer({
       resolveShowTheme({ selection: show.defaults?.showTheme, role: "player" }),
     [show],
   )
+  const originalDemo = isOriginalThemeId(demo.metadata.themeId)
   const stage = useRef<TadazzStageHandle>(null)
   const [leadIn] = useState(() => createQuestionLeadIn())
   const phaseRef = useRef<Phase>("intro")
   const [phase, setPhase] = useState<Phase>("intro")
   const [index, setIndex] = useState(0)
-  const [votes, setVotes] = useState<Record<number, number>>({})
+  const [sceneOffset, setSceneOffset] = useState(-1)
+  const [votes, setVotes] = useState<Partial<Record<number, number>>>({})
   const [seconds, setSeconds] = useState(0)
   const deadline = useRef(0)
   const busyRef = useRef(false)
@@ -104,9 +112,36 @@ function CataloguePlayer({
     Promise.resolve(),
   )
   const question = questions[index]
+  const followupScenes = useMemo(() => {
+    if (!originalDemo) {
+      return []
+    }
+
+    const position = show.cards.findIndex((card) => card.key === question.key)
+    const following = show.cards.slice(position + 1)
+    const nextQuestion = following.findIndex(
+      (card) => card.kind === "quiz" || card.kind === "survey",
+    )
+
+    return (
+      nextQuestion < 0 ? following : following.slice(0, nextQuestion)
+    ).filter(
+      (card) =>
+        card.kind === "leaderboard" ||
+        card.kind === "answerRecap" ||
+        card.kind === "transition" ||
+        card.kind === "closing",
+    )
+  }, [originalDemo, question.key, show])
+  const currentAuthoredScene =
+    sceneOffset >= 0 ? followupScenes.at(sceneOffset) : undefined
+  const closingCard = show.cards.find((card) => card.kind === "closing")
   const { playEffect, musicUrl } = useCatalogueAudio({
     enabled: sound,
-    slot: soundtrackByPhase[phase],
+    slot:
+      phase === "checkpoint" && currentAuthoredScene?.kind === "answerRecap"
+        ? "recap"
+        : soundtrackByPhase[phase],
     screenKey: [demo.metadata.id, index, phase].join(":"),
     selection: show.defaults?.showTheme,
     cardAudioCues: question.audioCues,
@@ -115,6 +150,35 @@ function CataloguePlayer({
   const showMobileQuestion =
     compactControls &&
     (phase === "question" || phase === "voting" || phase === "results")
+  // The companion reads the same recorded votes and authored range as the stage.
+  const mobileRecapScene =
+    phase === "checkpoint" && currentAuthoredScene?.kind === "answerRecap"
+      ? currentAuthoredScene
+      : undefined
+  const showMobileRecap =
+    compactControls &&
+    demo.metadata.themeId === "magic-storybook" &&
+    (mobileRecapScene !== undefined || phase === "finish")
+  const mobileRecapStart = mobileRecapScene
+    ? Math.max(
+        0,
+        questions.findIndex(
+          (card) => card.key === mobileRecapScene.startQuestionKey,
+        ),
+      )
+    : 0
+  const mobileRecapChoices = showMobileRecap
+    ? questions.slice(mobileRecapStart, index + 1).flatMap((card, offset) => {
+        const position = mobileRecapStart + offset
+        const choice = votes[position]
+        const answer =
+          choice === undefined ? undefined : card.answers.at(choice)
+
+        return answer
+          ? [{ key: card.key, number: position + 1, label: answer.text }]
+          : []
+      })
+    : []
   const quizCount = questions.filter((card) => card.kind === "quiz").length
   const score = questions.reduce(
     (sum, card, position) =>
@@ -199,7 +263,7 @@ function CataloguePlayer({
       question: card.question,
       number: position + 1,
       totalQuestions: questions.length,
-      round: Math.floor(position / 4) + 1,
+      round: Math.floor(position / (originalDemo ? 2 : 4)) + 1,
       note: card.note,
       ...(card.media?.type === "image"
         ? { questionImage: card.media.url }
@@ -225,9 +289,12 @@ function CataloguePlayer({
 
     transition("preparing")
     setIndex(position)
+    setSceneOffset(-1)
     setVotes((previous) =>
       Object.fromEntries(
-        Object.entries(previous).filter(([key]) => Number(key) !== position),
+        Object.entries(previous).filter(([key]) =>
+          originalDemo ? Number(key) < position : Number(key) !== position,
+        ),
       ),
     )
     const stageCard = stageQuestion(position)
@@ -317,6 +384,7 @@ function CataloguePlayer({
     leadIn.cancel()
     setVotes({})
     setIndex(0)
+    setSceneOffset(-1)
     transition("intro")
     await stage.current?.showIntro()
   }
@@ -333,6 +401,79 @@ function CataloguePlayer({
       return restart()
     }
 
+    if (originalDemo) {
+      const scene = followupScenes.at(sceneOffset + 1)
+
+      if (scene) {
+        setSceneOffset((previous) => previous + 1)
+
+        if (scene.kind === "leaderboard") {
+          transition("checkpoint")
+          await stage.current?.showLeaderboard(
+            [{ id: "solo-player", name: t("You"), score }],
+            t(scene.title ?? "Your score"),
+          )
+
+          return
+        }
+
+        if (scene.kind === "answerRecap") {
+          transition("checkpoint")
+          const startsAt = Math.max(
+            0,
+            questions.findIndex((card) => card.key === scene.startQuestionKey),
+          )
+          const winners = questions
+            .slice(startsAt, index + 1)
+            .flatMap((card, offset) => {
+              const choice = votes[startsAt + offset]
+              const answer =
+                choice === undefined ? undefined : card.answers.at(choice)
+
+              return answer
+                ? [
+                    {
+                      label: answer.text,
+                      ...(answer.imageUrl
+                        ? {
+                            image: answer.imageUrl,
+                            alt: answer.alt ?? answer.text,
+                          }
+                        : {}),
+                    },
+                  ]
+                : []
+            })
+
+          if (winners.length) {
+            await stage.current?.showRoundRecap?.({
+              winners,
+              round: Math.floor(index / 2) + 1,
+              title: t(scene.title ?? "Your story choices"),
+            })
+          } else {
+            await stage.current?.showInterlude?.({
+              title: t(scene.title ?? "Your story choices"),
+              subtitle: t("No choices yet"),
+            })
+          }
+
+          return
+        }
+
+        if (scene.kind === "transition") {
+          transition("interlude")
+          await stage.current?.showInterlude?.({
+            title: t(scene.title ?? "The adventure continues"),
+            subtitle: scene.description ? t(scene.description) : undefined,
+          })
+
+          return
+        }
+        // The final authored closing uses the same native finale owner below.
+      }
+    }
+
     if (index < questions.length - 1) {
       return startQuestion(index + 1)
     }
@@ -343,15 +484,26 @@ function CataloguePlayer({
       await stage.current?.showFinale({ name: t("You"), score })
     } else {
       await stage.current?.showInterlude?.({
-        title: t("Thanks for playing together!"),
-        subtitle: t("You shared {{count}} choices", {
-          count: Object.keys(votes).length,
-        }),
+        ...(originalDemo ? { eyebrow: t("Thanks for playing together!") } : {}),
+        title:
+          originalDemo && closingCard
+            ? t(closingCard.title)
+            : t("Thanks for playing together!"),
+        subtitle:
+          originalDemo && closingCard?.subtitle
+            ? t(closingCard.subtitle)
+            : t("You shared {{count}} choices", {
+                count: Object.keys(votes).length,
+              }),
       })
     }
   }
   const back = async () => {
-    if (phaseRef.current === "finish") {
+    if (
+      phaseRef.current === "finish" ||
+      phaseRef.current === "checkpoint" ||
+      phaseRef.current === "interlude"
+    ) {
       return startQuestion(index)
     }
 
@@ -368,6 +520,11 @@ function CataloguePlayer({
 
   if (phase === "intro") {
     status = t("{{count}} rounds", { count: questions.length })
+  } else if (
+    (phase === "checkpoint" || phase === "interlude") &&
+    currentAuthoredScene
+  ) {
+    status = t(currentAuthoredScene.title ?? "Your score")
   } else if (phase === "finish") {
     status = quizCount
       ? t("Your score: {{score}}", { score })
@@ -389,6 +546,7 @@ function CataloguePlayer({
         data-testid="catalogue-game-demo"
         data-catalogue-id={demo.metadata.id}
         data-game-phase={phase}
+        data-authored-scene={currentAuthoredScene?.key}
         data-audio-url={musicUrl}
         data-question-index={index}
         data-question-count={questions.length}
@@ -422,6 +580,44 @@ function CataloguePlayer({
                   }
                   onChoose={choose}
                 />
+              )}
+              {showMobileRecap && (
+                <section
+                  className="catalogue-mobile-question catalogue-mobile-recap"
+                  data-testid="catalogue-mobile-recap"
+                  data-phase={phase}
+                  aria-label={t("Your story choices")}
+                  dir="auto"
+                >
+                  <style>{mobileQuestionCss}</style>
+                  <h2 data-testid="catalogue-mobile-recap-heading" dir="auto">
+                    {t(mobileRecapScene?.title ?? "Your story choices")}
+                  </h2>
+                  {mobileRecapChoices.length ? (
+                    <ol className="catalogue-mobile-recap-list">
+                      {mobileRecapChoices.map((choice) => (
+                        <li
+                          key={choice.key}
+                          value={choice.number}
+                          data-question-key={choice.key}
+                          data-selected="true"
+                        >
+                          <span
+                            className="catalogue-mobile-recap-label"
+                            data-testid="catalogue-mobile-recap-label"
+                            dir="auto"
+                          >
+                            {choice.label}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <p data-testid="catalogue-mobile-recap-empty">
+                      {t("No choices yet")}
+                    </p>
+                  )}
+                </section>
               )}
               <PresentationControls
                 previous={{
@@ -487,13 +683,20 @@ function CataloguePlayer({
             className="catalogue-player-frame"
             data-testid="catalogue-native-stage"
             dir="ltr"
-            aria-hidden={showMobileQuestion || undefined}
+            aria-hidden={showMobileQuestion || showMobileRecap || undefined}
           >
             <TadazzV4StageAdapter
               ref={stage}
               labels={{
-                introCaption: demo.metadata.title,
-                footer: demo.metadata.title,
+                introCaption: originalDemo
+                  ? t(demo.metadata.title)
+                  : demo.metadata.title,
+                footer: originalDemo
+                  ? t(demo.metadata.title)
+                  : demo.metadata.title,
+                ...(originalDemo && closingCard
+                  ? { champion: t(closingCard.title) }
+                  : {}),
                 correctAnswer: t("Correct answer"),
                 audienceFavourite: t("Your choice"),
                 audienceResults: t("Your choice"),
@@ -506,7 +709,7 @@ function CataloguePlayer({
                 mostChosenAnswer: t("Your choice"),
               }}
               backdropUrl={themeAdapterAsset(theme, "questionBackdrop")}
-              interactive={!showMobileQuestion}
+              interactive={!showMobileQuestion && !showMobileRecap}
               onSelectOption={choose}
               onCue={onCue}
               onQuestionPresented={onQuestionPresented}

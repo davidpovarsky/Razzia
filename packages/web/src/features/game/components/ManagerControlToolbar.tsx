@@ -14,6 +14,7 @@ import {
   PlatformScope,
   HostDisplayControls,
   PresentationControls,
+  presentationControlText,
   type PresentationControlsProps,
 } from "@razzia/extensions/platform-ui"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
@@ -22,7 +23,7 @@ import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
 import { isManagedClientMode } from "@razzia/web/lib/managed-client-session"
 import { History, LogOut, SkipForward } from "lucide-react"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, type CSSProperties } from "react"
 import { useTranslation } from "react-i18next"
 
 /**
@@ -117,7 +118,7 @@ export const ManagerControlToolbar = ({
   onPresent,
   countdown,
 }: Props) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { socket } = useSocket()
   const [isPending, setIsPending] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false)
@@ -474,229 +475,263 @@ export const ManagerControlToolbar = ({
     return undefined
   }
 
+  const nextAction = resolveNextAction()
+  const reserveQuestionActions = canSkipQuestion || canRestartQuestion
+  const presentationLocale = i18n.resolvedLanguage ?? i18n.language
+  const actionLabelStyles = {
+    "--tds-host-next-label": JSON.stringify(
+      presentationControlText(presentationLocale, "next"),
+    ),
+    "--tds-host-end-timer-label": JSON.stringify(
+      presentationControlText(presentationLocale, "endTimer"),
+    ),
+    "--tds-host-pause-label": JSON.stringify(
+      presentationControlText(presentationLocale, "pause"),
+    ),
+    "--tds-host-resume-label": JSON.stringify(
+      presentationControlText(presentationLocale, "resume"),
+    ),
+  } as CSSProperties
+
   return (
     <PlatformScope
       context="platform.host"
-      className="tds-host-toolbar font-display relative z-50 box-border flex w-full max-w-full shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2"
+      className="tds-host-toolbar font-display relative z-50 box-border flex w-full max-w-full shrink-0 flex-col items-stretch gap-2 px-3 py-2"
       data-testid="manager-control-toolbar"
       data-host-lobby={isLobby ? "true" : "false"}
+      data-host-next-available={nextAction ? "true" : "false"}
+      data-host-skip-available={canSkipQuestion ? "true" : "false"}
+      style={actionLabelStyles}
     >
-      {(
-        extensionState?.extras.activeSceneData as ActiveSceneData | undefined
-      )?.fullShow?.tieCandidates?.map((option) => (
-        <Button
-          size="sm"
-          key={option.answerIndex}
-          data-testid={`host-resolve-tie-${option.answerIndex}`}
-          disabled={isPending}
-          onClick={() =>
-            sendCommand({
-              action: "RESOLVE_STORY_TIE",
-              payload: {
-                answerIndex: option.answerIndex,
-                epoch: extensionState?.epoch,
-              },
-            })
-          }
-        >
-          {option.label}
-        </Button>
-      ))}
-      {/* Left section: Progress / Question Counter & Room Lock */}
-      <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-2">
-        {questionStates && !isLobby && !isFinished && (
-          <div
-            className="flex shrink-0 items-center rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md sm:px-4 sm:py-2 sm:text-base md:text-lg"
-            data-testid="host-question-counter"
-          >
-            {`${questionStates.current} / ${questionStates.total}`}
-          </div>
-        )}
-
-        {isLobby && !isPreLobby && (
-          <RoomLockButton className="hover:bg-accent shrink-0 rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
-        )}
-
-        <HostDisplayControls
-          gameId={gameId}
-          onOpen={handleOpenDisplay}
-          onCopy={handleCopyDisplayUrl}
-          copied={copiedDisplay}
-          onPresent={onPresent}
-        />
-
-        {/* Exit Button with confirmation when game in progress */}
-        {isLobby || isFinished ? (
+      <div className="tds-host-toolbar-tie-actions">
+        {(
+          extensionState?.extras.activeSceneData as ActiveSceneData | undefined
+        )?.fullShow?.tieCandidates?.map((option) => (
           <Button
             size="sm"
-            onClick={onExit}
-            className="hover:bg-accent flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-sm font-bold text-black shadow-md sm:px-4 sm:py-2 sm:text-base"
-            data-testid="host-exit-btn"
-          >
-            <LogOut className="size-4 shrink-0" />
-            <span>{t("common:exit")}</span>
-          </Button>
-        ) : (
-          <AlertDialog
-            trigger={
-              <Button
-                size="sm"
-                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40 sm:px-4 sm:py-2 sm:text-base"
-                data-testid="host-exit-btn"
-              >
-                <LogOut className="size-4 shrink-0" />
-                <span>{t("common:exit")}</span>
-              </Button>
-            }
-            title={t("extensions:host.exitConfirmTitle")}
-            description={t("extensions:host.exitConfirmDesc")}
-            confirmLabel={t("common:exit")}
-            onConfirm={onExit}
-          />
-        )}
-
-        {/* Confirmation for authoritative previous-screen navigation. */}
-        {gameId && !isPreLobby && (
-          <>
-            <AlertDialog
-              open={reopenConfirmOpen}
-              onOpenChange={setReopenConfirmOpen}
-              title={
-                canEndTimer
-                  ? t(
-                      "extensions:host.cancelActiveVoteConfirmTitle",
-                      "Cancel Active Vote",
-                    )
-                  : t("extensions:host.reopenConfirmTitle", "Reopen Question")
-              }
-              description={
-                canEndTimer
-                  ? t(
-                      "extensions:host.cancelActiveVoteConfirmDesc",
-                      "Navigating back will cancel the current voting round and discard submitted answers. Continue?",
-                    )
-                  : t(
-                      "extensions:host.reopenConfirmDesc",
-                      "Going back will reopen this question, discard its previous votes, and replace its score. Continue?",
-                    )
-              }
-              confirmLabel={t(
-                "extensions:host.reopenConfirmButton",
-                "Continue",
-              )}
-              confirmTestId="confirm-reopen-question-btn"
-              onConfirm={() => {
-                setReopenConfirmOpen(false)
-                executePreviousScreen(true)
-              }}
-            />
-          </>
-        )}
-      </div>
-
-      {/* Right section: Control buttons */}
-      <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:ml-auto sm:gap-2">
-        {canRestartQuestion && (
-          <AlertDialog
-            open={restartConfirmOpen}
-            onOpenChange={setRestartConfirmOpen}
-            title={t("extensions:host.restartQuestion")}
-            description={t("extensions:host.restartQuestionDesc")}
-            confirmLabel={t("extensions:host.restartQuestion")}
-            confirmTestId="confirm-restart-question-btn"
-            returnFocusTo='[data-testid="host-restart-question-btn"]'
-            onConfirm={() =>
+            key={option.answerIndex}
+            data-testid={`host-resolve-tie-${option.answerIndex}`}
+            disabled={isPending}
+            onClick={() =>
               sendCommand({
-                action: "REPLAY_FROM_CHECKPOINT",
+                action: "RESOLVE_STORY_TIE",
                 payload: {
-                  questionIndex: currentQuestionIdx,
-                  epoch,
-                  confirmed: true,
+                  answerIndex: option.answerIndex,
+                  epoch: extensionState?.epoch,
                 },
               })
             }
-          />
-        )}
-
-        {/* History button (retained separately on the right) */}
-        {canViewHistory && (
-          <Button
-            size="sm"
-            onClick={handleOpenHistory}
-            disabled={isPending}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
-            data-testid="host-history-btn"
           >
-            <History className="size-4 shrink-0" />
-            <span>{t("extensions:host.history", "History")}</span>
+            {option.label}
           </Button>
-        )}
+        ))}
+      </div>
+      {/* Session controls occupy a separate band from phase-dependent actions. */}
+      <div className="tds-host-toolbar-session-band">
+        <div className="tds-host-toolbar-session-controls flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-2">
+          {questionStates && !isLobby && !isFinished && (
+            <div
+              className="flex shrink-0 items-center rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md sm:px-4 sm:py-2 sm:text-base md:text-lg"
+              data-testid="host-question-counter"
+            >
+              {`${questionStates.current} / ${questionStates.total}`}
+            </div>
+          )}
 
-        {/* Skip Question (with explicit confirmation) */}
-        {canSkipQuestion && (
-          <AlertDialog
-            trigger={
-              <Button
-                size="sm"
-                disabled={isPending}
-                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
-                data-testid="host-skip-question-btn"
-              >
-                <SkipForward className="size-4 shrink-0" />
-                <span>{t("extensions:host.skipQuestion")}</span>
-              </Button>
-            }
-            title={t("extensions:host.skipQuestionConfirmTitle")}
-            description={t("extensions:host.skipQuestionConfirmDesc")}
-            confirmLabel={t("extensions:host.skipQuestion")}
-            onConfirm={handleSkipQuestion}
+          {isLobby && !isPreLobby && (
+            <RoomLockButton className="hover:bg-accent shrink-0 rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
+          )}
+
+          <HostDisplayControls
+            gameId={gameId}
+            onOpen={handleOpenDisplay}
+            onCopy={handleCopyDisplayUrl}
+            copied={copiedDisplay}
+            onPresent={onPresent}
           />
-        )}
 
-        <PresentationControls
-          previous={
-            gameId && !isPreLobby
-              ? {
-                  onClick: handlePreviousScreen,
-                  disabled: !canPrevious || isPending,
-                  description: !canPrevious
-                    ? previousReason ||
-                      t(
-                        "extensions:host.cannotPrevious",
-                        "Cannot navigate to previous screen",
+          {/* Exit Button with confirmation when game in progress */}
+          {isLobby || isFinished ? (
+            <Button
+              size="sm"
+              onClick={onExit}
+              className="hover:bg-accent flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-sm font-bold text-black shadow-md sm:px-4 sm:py-2 sm:text-base"
+              data-testid="host-exit-btn"
+            >
+              <LogOut className="size-4 shrink-0" />
+              <span>{t("common:exit")}</span>
+            </Button>
+          ) : (
+            <AlertDialog
+              trigger={
+                <Button
+                  size="sm"
+                  className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40 sm:px-4 sm:py-2 sm:text-base"
+                  data-testid="host-exit-btn"
+                >
+                  <LogOut className="size-4 shrink-0" />
+                  <span>{t("common:exit")}</span>
+                </Button>
+              }
+              title={t("extensions:host.exitConfirmTitle")}
+              description={t("extensions:host.exitConfirmDesc")}
+              confirmLabel={t("common:exit")}
+              onConfirm={onExit}
+            />
+          )}
+
+          {/* Confirmation for authoritative previous-screen navigation. */}
+          {gameId && !isPreLobby && (
+            <>
+              <AlertDialog
+                open={reopenConfirmOpen}
+                onOpenChange={setReopenConfirmOpen}
+                title={
+                  canEndTimer
+                    ? t(
+                        "extensions:host.cancelActiveVoteConfirmTitle",
+                        "Cancel Active Vote",
                       )
-                    : undefined,
-                  testId: "host-previous-screen-btn",
+                    : t("extensions:host.reopenConfirmTitle", "Reopen Question")
                 }
-              : undefined
-          }
-          playback={
-            launch?.stage === "opening" ||
-            launch?.stage === "closing" ||
-            (!isLobby && !isFinished)
-              ? {
-                  state: isPaused ? "paused" : "playing",
-                  onClick: handlePauseToggle,
-                  disabled: isPending,
-                  testId: "host-pause-resume-btn",
+                description={
+                  canEndTimer
+                    ? t(
+                        "extensions:host.cancelActiveVoteConfirmDesc",
+                        "Navigating back will cancel the current voting round and discard submitted answers. Continue?",
+                      )
+                    : t(
+                        "extensions:host.reopenConfirmDesc",
+                        "Going back will reopen this question, discard its previous votes, and replace its score. Continue?",
+                      )
                 }
-              : undefined
-          }
-          next={resolveNextAction()}
-          replay={
-            canRestartQuestion
-              ? {
-                  question: true,
-                  onClick: () => setRestartConfirmOpen(true),
-                  disabled: isPending,
-                  testId: "host-restart-question-btn",
-                }
-              : undefined
-          }
-        />
+                confirmLabel={t(
+                  "extensions:host.reopenConfirmButton",
+                  "Continue",
+                )}
+                confirmTestId="confirm-reopen-question-btn"
+                onConfirm={() => {
+                  setReopenConfirmOpen(false)
+                  executePreviousScreen(true)
+                }}
+              />
+            </>
+          )}
+        </div>
+        <HostShortcutsDialog />
       </div>
 
-      <HostShortcutsDialog />
+      {/* Keep the same control line during question, voting and results. */}
+      <div className="tds-host-toolbar-actions" data-testid="host-action-band">
+        <div className="tds-host-toolbar-action-content">
+          {canRestartQuestion && (
+            <AlertDialog
+              open={restartConfirmOpen}
+              onOpenChange={setRestartConfirmOpen}
+              title={t("extensions:host.restartQuestion")}
+              description={t("extensions:host.restartQuestionDesc")}
+              confirmLabel={t("extensions:host.restartQuestion")}
+              confirmTestId="confirm-restart-question-btn"
+              returnFocusTo='[data-testid="host-restart-question-btn"]'
+              onConfirm={() =>
+                sendCommand({
+                  action: "REPLAY_FROM_CHECKPOINT",
+                  payload: {
+                    questionIndex: currentQuestionIdx,
+                    epoch,
+                    confirmed: true,
+                  },
+                })
+              }
+            />
+          )}
+
+          {/* History button (retained separately on the right) */}
+          {canViewHistory && (
+            <Button
+              size="sm"
+              onClick={handleOpenHistory}
+              disabled={isPending}
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
+              data-testid="host-history-btn"
+            >
+              <History className="size-4 shrink-0" />
+              <span>{t("extensions:host.history", "History")}</span>
+            </Button>
+          )}
+
+          {/* Retain the unavailable Skip footprint while showing results. */}
+          {reserveQuestionActions && (
+            <AlertDialog
+              trigger={
+                <Button
+                  size="sm"
+                  disabled={isPending || !canSkipQuestion}
+                  aria-hidden={canSkipQuestion ? undefined : true}
+                  className="tds-host-skip-action flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
+                  data-testid={
+                    canSkipQuestion ? "host-skip-question-btn" : undefined
+                  }
+                >
+                  <SkipForward className="size-4 shrink-0" />
+                  <span>{t("extensions:host.skipQuestion")}</span>
+                </Button>
+              }
+              title={t("extensions:host.skipQuestionConfirmTitle")}
+              description={t("extensions:host.skipQuestionConfirmDesc")}
+              confirmLabel={t("extensions:host.skipQuestion")}
+              onConfirm={handleSkipQuestion}
+            />
+          )}
+
+          <PresentationControls
+            previous={
+              gameId && !isPreLobby
+                ? {
+                    onClick: handlePreviousScreen,
+                    disabled: !canPrevious || isPending,
+                    description: !canPrevious
+                      ? previousReason ||
+                        t(
+                          "extensions:host.cannotPrevious",
+                          "Cannot navigate to previous screen",
+                        )
+                      : undefined,
+                    testId: "host-previous-screen-btn",
+                  }
+                : undefined
+            }
+            playback={
+              launch?.stage === "opening" ||
+              launch?.stage === "closing" ||
+              (!isLobby && !isFinished)
+                ? {
+                    state: isPaused ? "paused" : "playing",
+                    onClick: handlePauseToggle,
+                    disabled: isPending,
+                    testId: "host-pause-resume-btn",
+                  }
+                : undefined
+            }
+            next={
+              nextAction ??
+              (reserveQuestionActions
+                ? { onClick: handleNextScreen, disabled: true }
+                : undefined)
+            }
+            replay={
+              canRestartQuestion
+                ? {
+                    question: true,
+                    onClick: () => setRestartConfirmOpen(true),
+                    disabled: isPending,
+                    testId: "host-restart-question-btn",
+                  }
+                : undefined
+            }
+          />
+        </div>
+      </div>
 
       {/* History Viewer Modal */}
       <HistoryDialog

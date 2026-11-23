@@ -1,0 +1,79 @@
+{
+  "baseSourceSha": "6a858c0256ae1f5fc98d67585b7d17ab3513eda0",
+  "bytes": 3857900,
+  "excluded": [
+    "config",
+    "authentication state",
+    "temporary runtime",
+    "traces",
+    "videos"
+  ],
+  "files": [
+    {
+      "bytes": 589032,
+      "path": "diagnostic-receipt.json",
+      "sha256": "129a56d01609c3aba85a2d4204a3279f2c7fbb34c8cdf66cff0770aa6d1cd360"
+    },
+    {
+      "bytes": 445741,
+      "path": "source-before.json",
+      "sha256": "c61b0688c3bdf9a32ba2f9d20327ae2b2d11382a918cd75ec9228ede5338ff0a"
+    },
+    {
+      "bytes": 445741,
+      "path": "source-after.json",
+      "sha256": "c61b0688c3bdf9a32ba2f9d20327ae2b2d11382a918cd75ec9228ede5338ff0a"
+    },
+    {
+      "bytes": 1826,
+      "path": "container-plan.json",
+      "sha256": "2047102dfc5b3f9cd4816694aa5f9722d4dc4be6014f26268589a7d7bc8d4547"
+    },
+    {
+      "bytes": 1808,
+      "path": "execution-plan.json",
+      "sha256": "f4884d7711f9fc197431de41202a61b3db99f59f5a9f1780f91744019c2ee425"
+    },
+    {
+      "bytes": 429,
+      "path": "browser.stdout.log",
+      "sha256": "595cb9f0eacfb57fcb42e2359f5a89fbc790b5268b997c6721104ac321d92338"
+    },
+    {
+      "bytes": 3097,
+      "path": "browser.stderr.log",
+      "sha256": "1c6f0ea75f7aa2101e70bf1d8540cd412ddd2f7b22ff540bfe94ae78bc8a76a8"
+    },
+    {
+      "bytes": 557926,
+      "path": "preview-pause-seek/receipt.json",
+      "sha256": "c01c988978e60b33bd6bba335d178e54ad2348244b58b6f1d8d0844d08779d19"
+    },
+    {
+      "bytes": 56176,
+      "path": "preview-pause-seek/webkit-tadazz-classic-normal-phase-continuity.json",
+      "sha256": "66fa8244707979ea99f37f53074d7f43d1f7cec8058f7f0c54bd366266ca0999"
+    },
+    {
+      "bytes": 624923,
+      "path": "preview-pause-seek/webkit-tadazz-classic-reduced-phase-continuity-answers.png",
+      "sha256": "ad98d48443013cbfc684d0f146389f78bb597b1d896a99f9df0d35b158bfca03"
+    },
+    {
+      "bytes": 636303,
+      "path": "preview-pause-seek/webkit-tadazz-classic-reduced-phase-continuity-results.png",
+      "sha256": "b21d84828fded7f4a92e1cfa7e101deffcd2b2ef23cdf1b9225d7c4c9a8aa3a0"
+    },
+    {
+      "bytes": 468497,
+      "path": "preview-pause-seek/webkit-tadazz-classic-reduced-phase-continuity.json",
+      "sha256": "9bcd7358768495b203b0c7a9bd3c6512171b3bab4ba3f702754a02df2d7772f2"
+    },
+    {
+      "bytes": 26401,
+      "path": "observation-inputs/phase-continuity.mjs",
+      "sha256": "5f9b725164984e90a76fa21ef06a4e50d46a66ef32b3f2ad36e860a9d7e8de73"
+    }
+  ],
+  "run": "preview-pause-seek-iteration10-observe"
+}

@@ -5,15 +5,18 @@ import { createHash } from "node:crypto"
 import { readFile, mkdir, writeFile, stat, readdir } from "node:fs/promises"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import path from "node:path"
-const args = process.argv.slice(2)
+const cliArguments = process.argv.slice(2)
 
-if (args.length > 1 || (args.length === 1 && args[0] !== "--verify-manifest")) {
+if (
+  cliArguments.length > 1 ||
+  (cliArguments.length === 1 && cliArguments[0] !== "--verify-manifest")
+) {
   throw new Error(
     "Use no arguments to generate pins or --verify-manifest to reproduce committed pins",
   )
 }
 
-const verifyManifest = args[0] === "--verify-manifest"
+const verifyManifest = cliArguments[0] === "--verify-manifest"
 const root = fileURLToPath(new URL("../../", import.meta.url))
 const directory = path.join(root, "extensions/dist/application-preview")
 const manifestPath = path.join(
@@ -58,6 +61,28 @@ const result = await build({
     {
       name: "existing-native-public-resources",
       setup(bundler) {
+        // Vite's inline CSS query is a string import. Preserve that contract
+        // in the isolated esbuild renderer, including its ShadowRoot.
+        const originalStyle = path.join(
+          root,
+          "extensions/src/presentation/original-themes/original-themes.css",
+        )
+        bundler.onResolve(
+          { filter: /original-themes\.css\?inline$/ },
+          (resolveArgs) => ({
+            path: path.resolve(
+              resolveArgs.resolveDir,
+              resolveArgs.path.replace(/\?inline$/u, ""),
+            ),
+          }),
+        )
+        bundler.onLoad({ filter: /original-themes\.css$/ }, async (loadArgs) => {
+          if (loadArgs.path !== originalStyle) {
+            return
+          }
+
+          return { contents: await readFile(loadArgs.path, "utf8"), loader: "text" }
+        })
         bundler.onResolve(
           { filter: /^\/(tadazz-show|sounds)\// },
           (resolveArgs) => ({
@@ -168,6 +193,10 @@ await writeFile(
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex")
 async function collectStyleSources(sourceDirectory) {
   for (const entry of await readdir(sourceDirectory, { withFileTypes: true })) {
+    if (["node_modules", "dist", ".git"].includes(entry.name)) {
+      continue
+    }
+
     const filename = path.join(sourceDirectory, entry.name)
 
     if (entry.isDirectory() && !entry.name.startsWith(".")) {
@@ -213,6 +242,27 @@ const inputPaths = new Set([
   ...Object.keys(result.metafile.inputs),
   ...styleFiles,
 ])
+// Compile only the source-controlled first-party definitions. This is neither
+// an executable pack loader nor an admission of caller-supplied code.
+const definitionsPath = path.join(directory, "original-definitions.mjs")
+const definitionsBuild = await build({
+  absWorkingDir: root,
+  entryPoints: ["extensions/src/core/show-themes/original-themes.ts"],
+  outfile: definitionsPath,
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  target: "es2022",
+  packages: "external",
+  metafile: true,
+  tsconfig: path.join(root, "extensions/tsconfig.json"),
+})
+for (const name of Object.keys(definitionsBuild.metafile.inputs)) {
+  inputPaths.add(name)
+}
+const { bundledOriginalThemes } = await import(
+  pathToFileURL(definitionsPath).href
+)
 const source = await Promise.all(
   [...inputPaths]
     .sort((a, b) => a.localeCompare(b))
@@ -247,6 +297,7 @@ const sourceThemes = await Promise.all(
     ),
   ),
 )
+sourceThemes.push(...bundledOriginalThemes)
 const registry = {
   id: "tadazz-native-application",
   version: "1.0.0",
@@ -260,33 +311,41 @@ const registry = {
   ),
   sourceThemes,
 }
+const uniqueAssets = new Map()
+for (const asset of sourceThemes.flatMap((theme) => theme.assets)) {
+  const prior = uniqueAssets.get(asset.url)
+
+  if (prior && (prior.bytes !== asset.bytes || prior.sha256 !== asset.sha256)) {
+    throw new Error(`Conflicting intrinsic resource: ${asset.url}`)
+  }
+
+  uniqueAssets.set(asset.url, asset)
+}
 const resources = await Promise.all(
-  sourceThemes
-    .flatMap((theme) => theme.assets)
-    .map(async (asset) => {
-      if (
-        !asset.url.startsWith("/tadazz-show/") &&
-        !asset.url.startsWith("/sounds/")
-      ) {
-        throw new Error("Unexpected intrinsic resource")
-      }
+  [...uniqueAssets.values()].map(async (asset) => {
+    if (
+      !asset.url.startsWith("/tadazz-show/") &&
+      !asset.url.startsWith("/sounds/")
+    ) {
+      throw new Error("Unexpected intrinsic resource")
+    }
 
-      const bytes = await readFile(
-        path.join(root, "packages/web/public", asset.url.slice(1)),
-      )
+    const bytes = await readFile(
+      path.join(root, "packages/web/public", asset.url.slice(1)),
+    )
 
-      if (bytes.length !== asset.bytes || hash(bytes) !== asset.sha256) {
-        throw new Error(`Native resource changed: ${asset.id}`)
-      }
+    if (bytes.length !== asset.bytes || hash(bytes) !== asset.sha256) {
+      throw new Error(`Native resource changed: ${asset.id}`)
+    }
 
-      return {
-        url: asset.url,
-        bytes: bytes.length,
-        sha256: asset.sha256,
-        rights: asset.rights,
-        provenance: asset.provenance,
-      }
-    }),
+    return {
+      url: asset.url,
+      bytes: bytes.length,
+      sha256: asset.sha256,
+      rights: asset.rights,
+      provenance: asset.provenance,
+    }
+  }),
 )
 const artifact = {
   format: "tadazz-first-party-application-renderer",
@@ -303,14 +362,16 @@ const output = {
   format: "tadazz-application-preview-build",
   available: true,
   files,
-  pins: sourceThemes.map((theme) => ({
-    portVersion: 3,
-    identityRuleVersion: 2,
-    registry: { id: registry.id, version: registry.version },
-    registrySha256: hash(JSON.stringify(registry)),
-    renderer: { id: theme.rendererId, version: "1.0.0" },
-    rendererBuildSha256: hash(JSON.stringify(artifact)),
-  })),
+  pins: [...new Set(sourceThemes.map((theme) => theme.rendererId))].map(
+    (rendererId) => ({
+      portVersion: 3,
+      identityRuleVersion: 2,
+      registry: { id: registry.id, version: registry.version },
+      registrySha256: hash(JSON.stringify(registry)),
+      renderer: { id: rendererId, version: "1.0.0" },
+      rendererBuildSha256: hash(JSON.stringify(artifact)),
+    }),
+  ),
 }
 await writeFile(
   path.join(directory, "artifact.json"),

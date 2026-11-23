@@ -3,6 +3,7 @@ import { SHOW_THEME_AUDIO_EVENTS } from "../show-themes/selection"
 import { getNativeShowLibrary } from "./native-library"
 import { assertBoundedJson, freeze, type ExactRef } from "./primitives"
 import { assetReferenceSchema } from "./schemas"
+import { createNativeLibraryPager } from "./native-library-page"
 
 type Family = ReturnType<typeof getNativeShowLibrary>["families"][number]
 type Asset = Family["definition"]["assets"][number]
@@ -143,9 +144,46 @@ const audioLibrary = freeze({
   })),
 })
 
-/** Actual native metadata only; no network/media resolver, rights or delete grant. */
+const readAssetPage = createNativeLibraryPager(
+  {
+    format: assetLibrary.format,
+    schemaVersion: assetLibrary.schemaVersion,
+    version: assetLibrary.version,
+    referenceMeaning: assetLibrary.referenceMeaning,
+  },
+  [
+    ...assetLibrary.entries.map((value) => ({
+      collection: "entries" as const,
+      value,
+    })),
+    ...assetLibrary.contentAliases.map((value) => ({
+      collection: "contentAliases" as const,
+      value,
+    })),
+  ],
+)
+
+const readAudioPage = createNativeLibraryPager(
+  {
+    format: audioLibrary.format,
+    schemaVersion: audioLibrary.schemaVersion,
+    version: audioLibrary.version,
+    playbackOwner: audioLibrary.playbackOwner,
+  },
+  audioLibrary.events.map((value) => ({
+    collection: "events" as const,
+    value,
+  })),
+)
+
+/** Complete in-process metadata; no network/media resolver, rights or delete grant. */
 export function getNativeAssetLibrary(): typeof assetLibrary {
   return assetLibrary
+}
+
+/** Includes every declaration and content alias without an aggregate JSON payload. */
+export function getNativeAssetLibraryPage(input: unknown = {}) {
+  return readAssetPage(input)
 }
 
 /** Asset ID alone is ambiguous across bundled families; require the exact hash. */
@@ -158,7 +196,12 @@ export function findNativeAssetLibraryEntry(
   return assets.get(`${ref.assetId}/${ref.sha256}`)
 }
 
-/** Reuses the actual existing cue/soundtrack/event mappings; never starts playback. */
+/** Complete in-process cue/soundtrack/event mappings; never starts playback. */
 export function getNativeAudioLibrary(): typeof audioLibrary {
   return audioLibrary
+}
+
+/** Preserves all event/family mappings in bounded transfer pages. */
+export function getNativeAudioLibraryPage(input: unknown = {}) {
+  return readAudioPage(input)
 }

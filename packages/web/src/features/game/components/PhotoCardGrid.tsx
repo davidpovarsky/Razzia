@@ -536,9 +536,11 @@ export const PhotoCardGrid = ({
           </span>
         </div>
       )}
+      {/* Shrink rows to the actual answer region after the question and HUD.
+          Captions and badges keep their size; photos absorb the height change. */}
       <div
         className={clsx(
-          "mx-auto grid max-h-full min-h-0 w-full max-w-6xl auto-rows-fr grid-cols-6 content-center items-stretch gap-1.5 px-1.5 py-0.5 sm:gap-2.5 sm:px-2 md:gap-3.5",
+          "mx-auto grid min-h-0 w-full max-w-6xl auto-rows-fr grid-cols-6 content-center items-stretch gap-1.5 px-1.5 py-0.5 sm:gap-2.5 sm:px-2 md:gap-3.5",
           className,
         )}
         data-testid="photo-card-grid"
@@ -588,7 +590,7 @@ export const PhotoCardGrid = ({
                   backgroundColor: cardBg,
                 })}
                 className={clsx(
-                  "group relative flex h-full flex-col items-center justify-between overflow-hidden rounded-xl border border-black/20 text-center shadow-lg transition-all duration-300 ease-out sm:rounded-2xl",
+                  "group relative flex h-full min-h-0 flex-col items-center justify-between overflow-hidden rounded-xl border border-black/20 text-center shadow-lg transition-all duration-300 ease-out sm:rounded-2xl",
                   isUltraCompact ? "p-1" : "p-1.5 sm:p-2.5",
                   cardPreset !== "none" && `tada-entrance-${cardPreset}`,
                   !readOnly &&
@@ -598,7 +600,7 @@ export const PhotoCardGrid = ({
                 )}
               >
                 {/* Top bar inside Card */}
-                <div className="z-10 mb-1 flex w-full items-center justify-between gap-1">
+                <div className="z-10 mb-1 flex w-full shrink-0 items-center justify-between gap-1">
                   <span
                     className={clsx(
                       "flex size-5 shrink-0 items-center justify-center rounded-md border border-white/20 bg-black/35 text-xs font-black text-white shadow-md sm:size-6 sm:rounded-lg sm:text-sm md:size-7 md:text-base",
@@ -622,7 +624,7 @@ export const PhotoCardGrid = ({
 
                 {/* Photo Frame */}
                 <div
-                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/15 shadow-inner sm:rounded-xl"
+                  className="relative flex min-h-0 w-full shrink items-center justify-center overflow-hidden rounded-lg border border-black/15 shadow-inner sm:rounded-xl"
                   style={{
                     backgroundColor: cardBg,
                     height: `${votingPhotoHeightPx}px`,
@@ -674,7 +676,7 @@ export const PhotoCardGrid = ({
 
                 {/* Caption / Label Text */}
                 {showText ? (
-                  <div className="mt-1 flex w-full flex-col items-center justify-center px-0.5 sm:mt-1.5">
+                  <div className="mt-1 flex w-full shrink-0 flex-col items-center justify-center px-0.5 sm:mt-1.5">
                     <p
                       className="w-full text-center text-[11px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-xs md:text-sm"
                       data-testid={`photo-card-caption-${index}`}

@@ -1,0 +1,133 @@
+Game cleanup task started
+{"originalThemeCheck":{"name":"eight-native-installs-and-isolated-two-to-five-choice-fixtures","passed":true,"originals":8,"rounds":32,"anonymousInstallDenied":true,"crossAccountReadDenied":true,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false}}
+New game created: 269783 subject: Original acceptance royal-quiz
+Game 01a20460-1155-71af-9110-73dd597366b8 added. Total games: 1
+Game 01a20460-1155-71af-9110-73dd597366b8 marked as empty. Total empty games: 1
+A user connected: socketId: h1XotG9mwW31fpSVAAAA, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20460-1155-71af-9110-73dd597366b8 reactivated. Remaining empty games: 0
+Manager reconnected to game 269783
+A user connected: socketId: isnfz_WHcaa4J-LdAAAB, clientId: 01a20460-1f3b-71c3-ab97-fdd1bed341d9
+A user connected: socketId: IMS1U0LRY3pXkJyZAAAC, clientId: 01a20460-290c-7040-82a2-0a2d0ff06dd0
+Saved result for "Original acceptance royal-quiz"
+{"originalThemeCheck":{"name":"native-pause-replay-previous-and-confirmed-skip","passed":true,"retainedPausedTimer":true,"replayDiscardsOldVotes":true,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false}}
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["choice-layout-royal-quiz-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : isnfz_WHcaa4J-LdAAAB
+A user disconnected : IMS1U0LRY3pXkJyZAAAC
+A user disconnected : h1XotG9mwW31fpSVAAAA
+Manager disconnected from game 269783
+Game 01a20460-1155-71af-9110-73dd597366b8 marked as empty. Total empty games: 1
+New game created: 717697 subject: Original acceptance neon-arcade
+Game 01a20460-ff6e-708c-884a-610757730e2b added. Total games: 2
+Game 01a20460-ff6e-708c-884a-610757730e2b marked as empty. Total empty games: 2
+A user connected: socketId: AL6A6DpOGrBXD4JXAAAD, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20460-ff6e-708c-884a-610757730e2b reactivated. Remaining empty games: 1
+Manager reconnected to game 717697
+A user connected: socketId: Ms4U-q53fyJayn9fAAAE, clientId: 01a20461-0aeb-7543-928d-db1d0f93c5a5
+A user connected: socketId: iA2mXbJ5-3YjcXi5AAAF, clientId: 01a20461-1267-701e-8f31-4479cc031184
+Game 01a20460-1155-71af-9110-73dd597366b8 removed. Total games: 1
+Saved result for "Original acceptance neon-arcade"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-neon-arcade","passed":true,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":[],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : Ms4U-q53fyJayn9fAAAE
+A user disconnected : iA2mXbJ5-3YjcXi5AAAF
+A user disconnected : AL6A6DpOGrBXD4JXAAAD
+Manager disconnected from game 717697
+Game 01a20460-ff6e-708c-884a-610757730e2b marked as empty. Total empty games: 1
+New game created: 238739 subject: Original acceptance retro-tv
+Game 01a20461-9ca8-73b9-bb0f-db146f42d30c added. Total games: 2
+Game 01a20461-9ca8-73b9-bb0f-db146f42d30c marked as empty. Total empty games: 2
+A user connected: socketId: SgFji20Z2Yml-WniAAAG, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20461-9ca8-73b9-bb0f-db146f42d30c reactivated. Remaining empty games: 1
+Manager reconnected to game 238739
+A user connected: socketId: c8BsB-UsH39654KEAAAH, clientId: 01a20461-a85a-71a9-b819-e5b3230589bf
+A user connected: socketId: ZxN59ERr-zxw3DoMAAAI, clientId: 01a20461-afae-7124-97ed-3d703a922e7c
+Game 01a20460-ff6e-708c-884a-610757730e2b removed. Total games: 1
+Saved result for "Original acceptance retro-tv"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-retro-tv","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["choice-layout-retro-tv-5-voting","choice-layout-retro-tv-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : c8BsB-UsH39654KEAAAH
+A user disconnected : ZxN59ERr-zxw3DoMAAAI
+A user disconnected : SgFji20Z2Yml-WniAAAG
+Manager disconnected from game 238739
+Game 01a20461-9ca8-73b9-bb0f-db146f42d30c marked as empty. Total empty games: 1
+New game created: 229415 subject: Original acceptance magic-storybook
+Game 01a20462-66c0-741d-b7a5-c5c6beece095 added. Total games: 2
+Game 01a20462-66c0-741d-b7a5-c5c6beece095 marked as empty. Total empty games: 2
+A user connected: socketId: WLqOQhmvhkil55WUAAAJ, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20462-66c0-741d-b7a5-c5c6beece095 reactivated. Remaining empty games: 1
+Manager reconnected to game 229415
+A user connected: socketId: U34kVP5wLxGu4GoIAAAK, clientId: 01a20462-7285-7522-bdd7-f6f92cea94fc
+A user connected: socketId: gi0fv5ecsygcBm5eAAAL, clientId: 01a20462-7b92-775a-b9e1-c9f41d57f7d6
+Game 01a20461-9ca8-73b9-bb0f-db146f42d30c removed. Total games: 1
+Saved result for "Original acceptance magic-storybook"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-magic-storybook","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["question-sequence-magic-storybook-4-results","choice-layout-magic-storybook-5-voting","choice-layout-magic-storybook-5-results","question-sequence-magic-storybook-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : U34kVP5wLxGu4GoIAAAK
+A user disconnected : gi0fv5ecsygcBm5eAAAL
+A user disconnected : WLqOQhmvhkil55WUAAAJ
+Manager disconnected from game 229415
+Game 01a20462-66c0-741d-b7a5-c5c6beece095 marked as empty. Total empty games: 1
+New game created: 105769 subject: Original acceptance crystal-future
+Game 01a20463-3773-758a-9f95-9c19e6c016c3 added. Total games: 2
+Game 01a20463-3773-758a-9f95-9c19e6c016c3 marked as empty. Total empty games: 2
+A user connected: socketId: 9Kov9Bsl2hvOuTSUAAAM, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20463-3773-758a-9f95-9c19e6c016c3 reactivated. Remaining empty games: 1
+Manager reconnected to game 105769
+A user connected: socketId: 4oiqWYSkB06XHHKaAAAN, clientId: 01a20463-4420-71da-a14c-9c85fad2a883
+A user connected: socketId: 6NzUuXakJO2khUN1AAAO, clientId: 01a20463-4b7d-747e-88ad-aec828922cff
+Game 01a20462-66c0-741d-b7a5-c5c6beece095 removed. Total games: 1
+Saved result for "Original acceptance crystal-future"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-crystal-future","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["choice-layout-crystal-future-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : 4oiqWYSkB06XHHKaAAAN
+A user disconnected : 6NzUuXakJO2khUN1AAAO
+A user disconnected : 9Kov9Bsl2hvOuTSUAAAM
+Manager disconnected from game 105769
+Game 01a20463-3773-758a-9f95-9c19e6c016c3 marked as empty. Total empty games: 1
+New game created: 766048 subject: Original acceptance carnival-pop
+Game 01a20463-eed7-770f-b12b-1d604c122390 added. Total games: 2
+Game 01a20463-eed7-770f-b12b-1d604c122390 marked as empty. Total empty games: 2
+A user connected: socketId: iiEP6NJthZFIRErLAAAP, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20463-eed7-770f-b12b-1d604c122390 reactivated. Remaining empty games: 1
+Manager reconnected to game 766048
+A user connected: socketId: BA81IWlgCQZAGI5sAAAQ, clientId: 01a20463-fa18-75dc-89fe-64dbb4b6ec49
+A user connected: socketId: mMw5ekTTXCnEgdp7AAAR, clientId: 01a20464-0319-706c-af45-5403a47e773a
+Game 01a20463-3773-758a-9f95-9c19e6c016c3 removed. Total games: 1
+Saved result for "Original acceptance carnival-pop"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-carnival-pop","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["choice-layout-carnival-pop-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : BA81IWlgCQZAGI5sAAAQ
+A user disconnected : mMw5ekTTXCnEgdp7AAAR
+A user disconnected : iiEP6NJthZFIRErLAAAP
+Manager disconnected from game 766048
+Game 01a20463-eed7-770f-b12b-1d604c122390 marked as empty. Total empty games: 1
+New game created: 283001 subject: Original acceptance sports-arena
+Game 01a20464-9e9e-776c-8c6c-b087f8dad306 added. Total games: 2
+Game 01a20464-9e9e-776c-8c6c-b087f8dad306 marked as empty. Total empty games: 2
+A user connected: socketId: 7JGEahueGkOGShMpAAAS, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20464-9e9e-776c-8c6c-b087f8dad306 reactivated. Remaining empty games: 1
+Manager reconnected to game 283001
+A user connected: socketId: PGPJo9j4JLLDAy36AAAT, clientId: 01a20464-a9dd-74c5-9b11-e42fb64fe6d2
+A user connected: socketId: rQGhre2Nn85uJw6jAAAU, clientId: 01a20464-b472-7712-95bf-bf4864dfdfa4
+Game 01a20463-eed7-770f-b12b-1d604c122390 removed. Total games: 1
+Saved result for "Original acceptance sports-arena"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-sports-arena","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["question-sequence-sports-arena-4-results","choice-layout-sports-arena-5-voting","choice-layout-sports-arena-5-results","question-sequence-sports-arena-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : PGPJo9j4JLLDAy36AAAT
+A user disconnected : rQGhre2Nn85uJw6jAAAU
+A user disconnected : 7JGEahueGkOGShMpAAAS
+Manager disconnected from game 283001
+Game 01a20464-9e9e-776c-8c6c-b087f8dad306 marked as empty. Total empty games: 1
+New game created: 151853 subject: Original acceptance mystery-noir
+Game 01a20465-6efa-7516-b692-71b8ed2542af added. Total games: 2
+Game 01a20465-6efa-7516-b692-71b8ed2542af marked as empty. Total empty games: 2
+A user connected: socketId: 9CUaJpPjcjTY2sUwAAAV, clientId: 9adcf1c3-4925-46dc-8a63-d681eabd7a0e
+Game 01a20465-6efa-7516-b692-71b8ed2542af reactivated. Remaining empty games: 1
+Manager reconnected to game 151853
+A user connected: socketId: _QwBaZn_GVvX9PfgAAAW, clientId: 01a20465-7ab3-76a0-aaaa-e860274d9f2e
+A user connected: socketId: KO2njxoiZXI4TrMWAAAX, clientId: 01a20465-82e7-734a-81fc-93f9e5662642
+Game 01a20464-9e9e-776c-8c6c-b087f8dad306 removed. Total games: 1
+Saved result for "Original acceptance mystery-noir"
+{"originalThemeCheck":{"name":"reduced-motion-native-two-to-five-choices-votes-images-and-audio-mystery-noir","passed":false,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false,"layoutFailures":["choice-layout-mystery-noir-5-results"],"questions":4,"realPlayers":2,"tie":true,"zeroVotes":true,"answerImages":14,"questionImages":1,"votingLayoutChecks":4,"resultsLayoutChecks":4}}
+A user disconnected : _QwBaZn_GVvX9PfgAAAW
+A user disconnected : KO2njxoiZXI4TrMWAAAX
+{"originalThemeCheck":{"name":"original-browser-console-and-resource-integrity","passed":true,"diagnosticOnly":true,"releaseQualified":false,"runtimeQaSourceEqualsCandidate":false}}
+A user disconnected : 9CUaJpPjcjTY2sUwAAAV
+Manager disconnected from game 151853
+Game 01a20465-6efa-7516-b692-71b8ed2542af marked as empty. Total empty games: 1
+Game cleanup task stopped
+Game 01a20465-6efa-7516-b692-71b8ed2542af removed. Total games: 0

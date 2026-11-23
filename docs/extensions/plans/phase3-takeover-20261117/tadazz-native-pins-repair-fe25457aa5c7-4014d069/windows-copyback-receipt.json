@@ -1,0 +1,19 @@
+{
+  "headUnchanged": "fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4",
+  "sourceFiles": {
+    "extensions/qa/build-application-preview.mjs": {
+      "sha256": "3f3df7de61f85a1c3a2e57049ba14051aeeeaaf8df491e09e5a0be389c539b18",
+      "bytes": 12168
+    },
+    "extensions/qa/phase3-full-show/native-parity-fixtures.ts": {
+      "sha256": "a7b17c393cca0678082cfab2f41e2f70e03daa407d86ee1bc59c0147370ecb48",
+      "bytes": 11635
+    },
+    "extensions/src/core/show-library/application-preview-build.json": {
+      "sha256": "5ea03da86aa1b2e56c06f8a561840ec6d29c42f9521900d7d7fed96fe95e0b96",
+      "bytes": 1754
+    }
+  },
+  "repairReceiptSha256": "6598d50290cee4c753baf4fa37de7bab069cbedcfc3cd2d44bb406563188de5f",
+  "releaseQualified": false
+}

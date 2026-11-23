@@ -14,6 +14,13 @@ import {
   Heart,
   GraduationCap,
   Briefcase,
+  Crown,
+  Gamepad2,
+  Tv,
+  Diamond,
+  PartyPopper,
+  Flag,
+  Search,
   type LucideIcon,
 } from "lucide-react"
 import { useState, type CSSProperties } from "react"
@@ -41,6 +48,14 @@ const coverIcons: Record<string, LucideIcon | undefined> = {
   family: Heart,
   classroom: GraduationCap,
   team: Briefcase,
+  "royal-quiz": Crown,
+  "neon-arcade": Gamepad2,
+  "retro-tv": Tv,
+  "magic-storybook": BookOpen,
+  "crystal-future": Diamond,
+  "carnival-pop": PartyPopper,
+  "sports-arena": Flag,
+  "mystery-noir": Search,
 }
 
 export function Cover({ game }: { game: Game }) {

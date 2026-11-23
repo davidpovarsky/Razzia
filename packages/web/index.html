@@ -16,9 +16,15 @@
     />
     <meta name="theme-color" content="#08011a" />
     <title>Tadazz</title>
+    <style>
+      html[data-tadazz-game-route],
+      html[data-tadazz-game-route] body {
+        background: #08011a;
+      }
+    </style>
     <script>
       ;/^\/(party|display)(\/|$)/.test(location.pathname) &&
-        (document.documentElement.style.background = "#08011a")
+        document.documentElement.setAttribute("data-tadazz-game-route", "")
     </script>
   </head>
   <body class="font-display touch-none">

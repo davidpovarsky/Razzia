@@ -1,0 +1,127 @@
+{
+  "actualInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 22691,
+            "retry": 0,
+            "status": "failed"
+          }
+        ],
+        "status": "unexpected",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 22497,
+            "retry": 0,
+            "status": "failed"
+          }
+        ],
+        "status": "unexpected",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 22729,
+            "retry": 0,
+            "status": "failed"
+          }
+        ],
+        "status": "unexpected",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 80479.991,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "startTime": "2026-11-22T17:19:58.095Z",
+      "unexpected": 3
+    }
+  },
+  "buildBaseSha": "916c332c210ab5956f9eb134e3df4ad2982eba37",
+  "buildReceipt": "/home/ubuntu/tadazz-original-themes-preflight-20261122/iteration8-receipt.json",
+  "buildReceiptSha256": "82dc3d76a5d3a5f600b1c234385976d2812623d6fdc5890efa41ed1447e8176e",
+  "candidateSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "containerBeforeStop": {
+    "exitCode": 0,
+    "oomKilled": false,
+    "status": "running"
+  },
+  "containerStopped": true,
+  "customerMountUsed": false,
+  "exactTestCopyVerifiedBeforeAfter": true,
+  "exit": 1,
+  "expected": {
+    "media-appearance-stage-acceptance.spec.ts": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion",
+    "p0-tzila-acceptance.spec.ts": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes",
+    "tzila-public-stage-and-toolbar.spec.ts": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+  },
+  "listedInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 3380.2329999999997,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 3,
+      "startTime": "2026-11-22T17:19:53.835Z",
+      "unexpected": 0
+    }
+  },
+  "network": "none",
+  "noOom": true,
+  "passed": false,
+  "preparationOnly": true,
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "releaseQualified": false,
+  "run": "p0-iteration8-c96b96a7",
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 87.29,
+  "sourceAfterSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceAndBuiltHashesVerifiedBeforeAfter": true,
+  "sourceBeforeSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceFileCount": 2678,
+  "sourceReadOnly": true
+}

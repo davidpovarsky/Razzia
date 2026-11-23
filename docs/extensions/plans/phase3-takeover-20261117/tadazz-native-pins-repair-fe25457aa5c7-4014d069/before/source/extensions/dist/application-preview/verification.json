@@ -1,0 +1,24 @@
+{
+  "format": "tadazz-application-preview-verification",
+  "mode": "generate-manifest",
+  "verifiedManifest": false,
+  "manifestSha256": "c3c8c1f99a2903a7117cf9b47ee5a7bf2226afb526eb8410a40ba8666b31c410",
+  "artifactSha256": "a2afce757ff5731f1ad30c07c25bdd898993225b73f2618e7a89842ead1e248e",
+  "registrySha256": "424a1c3ff42aad612af9593dd8d5b15eca4eb0177a17162b87f1f61d74c9f1f8",
+  "files": [
+    {
+      "name": "renderer.mjs",
+      "bytes": 2819661,
+      "sha256": "c05abb71b8dc9c4cf0d611a6af7c534e9ac848058c488e8e4835f33b54cb2726"
+    },
+    {
+      "name": "renderer.css",
+      "bytes": 467317,
+      "sha256": "b0a57cd56feaf8ac8c873026e61c9ed88f991e9be127d9fdae5203cfa8f295de"
+    }
+  ],
+  "inputFiles": 3753,
+  "generatedSourceChanged": true,
+  "liveAuthorityInputs": [],
+  "productionChanged": false
+}

@@ -12,6 +12,7 @@ import { NativePreviewStage } from "./NativePreviewStage"
 import { NativeRazziaPreviewV2 } from "./NativeRazziaPreviewV2"
 import { ShowThemeScope } from "../show-themes/context"
 import type { TadazzStageHandle } from "../tadazz-show/TadazzStage"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families"
 
 restoreNativeCspConfiguration()
 const identities = new WeakMap<object, number>()
@@ -66,12 +67,15 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
       }
 
       const input = current
+      const { definition } = theme
       const key = `${input.frame.role}:${input.frame.revision}:${input.frame.epoch}:${input.themeBinding.theme.id}:${input.themeBinding.compositionDocumentSha256}`
       // This is the imperative host boundary. Commit the admitted snapshot before
       // returning so a deferred React task cannot leave a previous card visible.
       flushSync(() =>
         root.render(
-          theme!.definition.rendererId === "tadazz-classic-stage" ? (
+          definition.rendererId === "tadazz-classic-stage" ||
+            (definition.rendererId === "tadazz-original-stage" &&
+              isOriginalThemeId(definition.id)) ? (
             <NativePreviewStage
               key={key}
               frame={input.frame}
@@ -113,10 +117,12 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
           builtDefinitions,
         )
 
-        // Classic's native choreography has not yet adopted these optional CSS
+        // Native choreography has not adopted these optional CSS
         // presets. Never accept settings that this concrete adapter would ignore.
         if (
-          resolved.definition.rendererId === "tadazz-classic-stage" &&
+          ["tadazz-classic-stage", "tadazz-original-stage"].includes(
+            resolved.definition.rendererId,
+          ) &&
           (Object.values(parsed.themeBinding.settings.stageAnimations).some(
             (slot) => slot.preset !== "none",
           ) ||

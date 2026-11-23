@@ -6,6 +6,11 @@ import {
   type TadazzV4Data,
   type TadazzV4Scene,
 } from "./types"
+import type { OriginalThemeId } from "../../core/show-themes/original-theme-families"
+import {
+  originalThemeMotion,
+  originalThemeSparkColors,
+} from "../original-themes/theme-motion"
 
 // Native WAAPI choreography. Frame coordinates, keyframes, easings, and timings are
 // transcribed from animation library set.html, TadazzStageKit v4, not approximated.
@@ -28,6 +33,7 @@ export const V4_FRAME_SIZE = {
 } as const
 
 export interface MotionConfig {
+  originalFamily?: OriginalThemeId
   motionScale?: number
   reducedMotion?: boolean
   onCue?: (cue: TadazzV4Cue) => void
@@ -243,14 +249,15 @@ export class TadazzV4Motion {
       return null
     }
 
-    const a = node.animate(frames, {
+    const visual = originalThemeMotion(this.config.originalFamily, node, frames)
+    const a = node.animate(visual.frames, {
       duration: this.motionMs(options.duration || 650),
       delay: this.config.reducedMotion
         ? 0
         : Math.round(
             (options.delay || 0) / Math.max(0.2, this.config.motionScale ?? 1),
           ),
-      easing: options.easing || V4_EASE,
+      easing: visual.easing || options.easing || V4_EASE,
       fill: "both",
       iterations: options.iterations || 1,
     })
@@ -512,7 +519,10 @@ export class TadazzV4Motion {
       const sx = Math.cos(a) * length
       const sy = Math.sin(a) * length * 0.72
       const spark = add("spark")
-      const color = V4_FX_COLORS[i % V4_FX_COLORS.length]
+      const colors = this.config.originalFamily
+        ? originalThemeSparkColors[this.config.originalFamily]
+        : V4_FX_COLORS
+      const color = colors[i % colors.length]
       spark.style.background = color
       spark.style.color = color
       spark.style.width = `${(12 + random() * 57).toFixed(0)}px`

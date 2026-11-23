@@ -1,0 +1,5 @@
+Listing tests:
+  [chromium] › media-appearance-stage-acceptance.spec.ts:700:3 › Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage › 2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion
+  [chromium] › p0-tzila-acceptance.spec.ts:34:3 › P0: Tzila Five-Option Picture Polls & Projector Acceptance › Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes
+  [chromium] › tzila-public-stage-and-toolbar.spec.ts:431:3 › P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolbar › Gate C: Responsive Host Toolbar across Viewports & Localization
+Total: 3 tests in 3 files

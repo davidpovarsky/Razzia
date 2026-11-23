@@ -1,0 +1,5 @@
+{
+  "error": "AggregateError: 14 collected native geometry/sequence assertions failed\n    at verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1375:13)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)",
+  "errors": [],
+  "failedAssets": []
+}

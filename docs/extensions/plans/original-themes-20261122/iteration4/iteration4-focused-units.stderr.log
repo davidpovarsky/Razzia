@@ -1,0 +1,24 @@
+[90mstderr[2m | src/presentation/tadazz-v4/full-show.test.ts[2m > [22m[2mFullShowScenes: React Component Rendering & Visual Parity[2m > [22m[2mrenders GrandOpening with title, subtitle, and portal background
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+[90mstderr[2m | src/presentation/tadazz-v4/source-parity-export.test.ts[2m > [22m[2mNative React Show Source Parity & Visual Evidence Capture[2m > [22m[2mrenders all scenes into a standalone HTML harness and captures 1920x1080 evidence
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+[90mstderr[2m | src/presentation/tadazz-v4/default-event-artwork.test.ts[2m > [22m[2mNative default event artwork[2m > [22m[2mgrand opening does not inject client artwork by default
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/presentation/tadazz-show/motion-spec.test.ts[2m [ src/presentation/tadazz-show/motion-spec.test.ts ][22m
+[31m[1mError[22m: ENOENT: no such file or directory, open '/evidence/source/docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html'[39m
+[36m [2m❯[22m src/presentation/tadazz-show/motion-spec.test.ts:[2m11:19[22m[39m
+    [90m  9|[39m const here = dirname(fileURLToPath(import.meta.url))
+    [90m 10|[39m const root = resolve(here, "../../../..")
+    [90m 11|[39m const canonical = readFileSync(
+    [90m   |[39m                   [31m^[39m
+    [90m 12|[39m   resolve(
+    [90m 13|[39m     root,
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

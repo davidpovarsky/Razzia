@@ -1,0 +1,899 @@
+{
+  "baselineSha": "9e5f22c1922a5fd1ec42daab75d791e89e11fc90",
+  "method": "Same rules and dependency cache; each diagnostic label span must map to identical baseline lines",
+  "matchedInherited": 87,
+  "unmatchedExistingFiles": [
+    {
+      "file": "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts",
+      "code": "eslint(curly)",
+      "message": "Expected { after 'if' condition.",
+      "locations": [
+        110
+      ]
+    },
+    {
+      "file": "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts",
+      "code": "eslint(curly)",
+      "message": "Expected { after 'if' condition.",
+      "locations": [
+        126
+      ]
+    },
+    {
+      "file": "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts",
+      "code": "eslint(no-loop-func)",
+      "message": "Function declared in a loop contains unsafe references to variable(s)",
+      "locations": [
+        224
+      ]
+    },
+    {
+      "file": "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        111
+      ]
+    },
+    {
+      "file": "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        127
+      ]
+    },
+    {
+      "file": "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        226
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/application-live-composition.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        140
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/application-preview-input.test.ts",
+      "code": "eslint(prefer-destructuring)",
+      "message": "Use Object destructuring.",
+      "locations": [
+        114
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/application-preview-input.test.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        115
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/application-preview-input.test.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        122
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/composition-preview-v2.test.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        309
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        71
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/public-demo-catalogue.test.ts",
+      "code": "eslint(curly)",
+      "message": "Expected { after 'if' condition.",
+      "locations": [
+        108
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/public-demo-catalogue.test.ts",
+      "code": "eslint(curly)",
+      "message": "Expected { after 'if' condition.",
+      "locations": [
+        110
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/public-demo-catalogue.test.ts",
+      "code": "eslint(curly)",
+      "message": "Expected { after 'if' condition.",
+      "locations": [
+        111
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/public-demo-catalogue.test.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        109
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/public-demo-catalogue.test.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        111
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-library/public-demo-catalogue.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        673
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/definition.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        209
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/definition.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        371
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/full-show-frame.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        134
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/full-show-frame.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        139
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/native-host/reviewed-builtin-assets.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        32
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/native-host/reviewed-builtin-assets.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        35
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/native-host/reviewed-builtin-assets.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        48
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/catalog.nodecheck.ts",
+      "code": "eslint(no-await-in-loop)",
+      "message": "Unexpected `await` inside a loop.",
+      "locations": [
+        262
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/catalog.nodecheck.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        257
+      ]
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/catalog.nodecheck.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        268
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/show-library-preview/application-preview-stage.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        219
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/show-library-preview/application-preview-stage.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        622
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+      "code": "typescript(no-non-null-assertion)",
+      "message": "Forbidden non-null assertion.",
+      "locations": [
+        54
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+      "code": "typescript(no-non-null-assertion)",
+      "message": "Forbidden non-null assertion.",
+      "locations": [
+        55
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+      "code": "typescript(no-non-null-assertion)",
+      "message": "Forbidden non-null assertion.",
+      "locations": [
+        56
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        497
+      ]
+    },
+    {
+      "file": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        415
+      ]
+    },
+    {
+      "file": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+      "code": "typescript(no-unnecessary-condition)",
+      "message": "Unnecessary optional chain on a non-nullish value.",
+      "locations": [
+        140
+      ]
+    },
+    {
+      "file": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+      "code": "typescript(no-unnecessary-condition)",
+      "message": "Unnecessary conditional, value is always truthy.",
+      "locations": [
+        376
+      ]
+    },
+    {
+      "file": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+      "code": "typescript(no-unnecessary-condition)",
+      "message": "Unnecessary conditional, value is always truthy.",
+      "locations": [
+        401
+      ]
+    },
+    {
+      "file": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+      "code": "typescript(no-unnecessary-condition)",
+      "message": "Unnecessary conditional, value is always truthy.",
+      "locations": [
+        491
+      ]
+    },
+    {
+      "file": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+      "code": "typescript(no-unnecessary-condition)",
+      "message": "Unnecessary optional chain on a non-nullish value.",
+      "locations": [
+        515
+      ]
+    }
+  ],
+  "newFileDiagnostics": [
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'host' should be initialized on declaration.",
+      "locations": [
+        58
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'server' should be initialized on declaration.",
+      "locations": [
+        58
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "eslint(require-await)",
+      "message": "Async function has no `await` expression.",
+      "locations": [
+        85
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        179
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "eslint(prefer-template)",
+      "message": "Unexpected string concatenation.",
+      "locations": [
+        254
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "eslint(curly)",
+      "message": "Expected { after 'if' condition.",
+      "locations": [
+        307
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/account-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        305
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'frame' should be initialized on declaration.",
+      "locations": [
+        8
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "eslint(func-style)",
+      "message": "Expected a function declaration.",
+      "locations": [
+        13
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'attempt' should be initialized on declaration.",
+      "locations": [
+        14
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        58
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        64
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        73
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        20
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        37
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        42
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/audio-observer.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        66
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(require-await)",
+      "message": "Async function has no `await` expression.",
+      "locations": [
+        45
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        130
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(prefer-template)",
+      "message": "Unexpected string concatenation.",
+      "locations": [
+        218
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(prefer-template)",
+      "message": "Unexpected string concatenation.",
+      "locations": [
+        248
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'baselineControls' should be initialized on declaration.",
+      "locations": [
+        297
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        344
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        381
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        588
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        632
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        696
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        698
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(prefer-template)",
+      "message": "Unexpected string concatenation.",
+      "locations": [
+        716
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'activePage' should be initialized on declaration.",
+      "locations": [
+        840
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "eslint(no-empty-function)",
+      "message": "Unexpected empty function",
+      "locations": [
+        897
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        60
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        67
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        70
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        76
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        86
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        92
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        144
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        335
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        379
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        388
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        423
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        645
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        660
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        677
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        719
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        729
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/browser-verify.mjs",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        782
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/generate-artwork.ts",
+      "code": "eslint(max-params)",
+      "message": "Arrow function has too many parameters (5). Maximum allowed is 3.",
+      "locations": [
+        33
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/generate-artwork.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        111
+      ]
+    },
+    {
+      "file": "extensions/qa/original-themes/generate-artwork.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        118
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.test.ts",
+      "code": "eslint(init-declarations)",
+      "message": "Variable 'scoped' should be initialized on declaration.",
+      "locations": [
+        224
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.test.ts",
+      "code": "eslint(no-plusplus)",
+      "message": "Unary operator '++' used.",
+      "locations": [
+        261
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.test.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        43
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        234
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        200
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        211
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        214
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        217
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        221
+      ]
+    },
+    {
+      "file": "extensions/src/core/show-themes/original-themes.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        242
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        259
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        261
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        344
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        397
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        475
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        477
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        479
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "eslint(no-nested-ternary)",
+      "message": "Do not nest ternary expressions.",
+      "locations": [
+        481
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/OriginalThemeScene.tsx",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        452
+      ]
+    },
+    {
+      "file": "extensions/src/presentation/original-themes/theme-motion.ts",
+      "code": "@stylistic(padding-line-between-statements)",
+      "message": "Expected blank line before this statement.",
+      "locations": [
+        76
+      ]
+    }
+  ],
+  "unchangedRules": true,
+  "productionChanged": false
+}

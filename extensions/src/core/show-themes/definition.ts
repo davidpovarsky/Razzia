@@ -1,6 +1,10 @@
 import { z } from "zod"
 import { runtimePinSchema, sandboxDefinitionSchema } from "../packages/protocol"
 import {
+  isOriginalThemeId,
+  ORIGINAL_SLOT_RENDERERS,
+} from "./original-theme-families"
+import {
   SHOW_THEME_AUDIO_EVENTS,
   SHOW_THEME_ROLES,
   SHOW_THEME_SLOTS,
@@ -13,6 +17,7 @@ export const TRUSTED_THEME_RENDERERS = [
   "tadazz-classic-stage",
   "razzia-native-stage",
   "tadazz-sandbox-stage",
+  "tadazz-original-stage",
 ] as const
 
 export const TRUSTED_SLOT_RENDERERS = [
@@ -41,7 +46,7 @@ const id = z
 const variant = z.strictObject({
   id,
   labelKey: z.string().min(1).max(160),
-  rendererId: z.enum(TRUSTED_SLOT_RENDERERS),
+  rendererId: z.enum([...TRUSTED_SLOT_RENDERERS, ...ORIGINAL_SLOT_RENDERERS]),
   backgroundAssetId: id.optional(),
   logoAssetId: id.optional(),
   mediaAssetId: id.optional(),
@@ -171,7 +176,7 @@ export const showThemeDefinitionSchema = z
         cream: color,
         ink: color,
       }),
-      effects: z.literal("goldy-canonical-v4"),
+      effects: z.enum(["goldy-canonical-v4", "original-theme-v1"]),
       contrast: z.literal("light-on-dark-with-selected-outline"),
     }),
     slots: z.record(z.enum(SHOW_THEME_SLOTS), slot),
@@ -188,6 +193,20 @@ export const showThemeDefinitionSchema = z
     assets: z.array(asset).min(1).max(256),
   })
   .superRefine((theme, ctx) => {
+    if (
+      theme.rendererId === "tadazz-original-stage" &&
+      (!isOriginalThemeId(theme.id) ||
+        theme.version !== "1.0.0" ||
+        theme.kind !== "code-backed")
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "Original Tadazz renderers are finite compiled first-party families",
+        path: ["rendererId"],
+      })
+    }
+
     if (
       (theme.kind === "sandboxed-react") !==
         (theme.rendererId === "tadazz-sandbox-stage") ||
@@ -346,7 +365,12 @@ export const showThemeDefinitionSchema = z
               key as (typeof SHOW_THEME_SLOTS)[number],
             )
 
-            if (choice.rendererId !== TRUSTED_SLOT_RENDERERS[slotIndex]) {
+            const slotRenderers =
+              theme.rendererId === "tadazz-original-stage"
+                ? ORIGINAL_SLOT_RENDERERS
+                : TRUSTED_SLOT_RENDERERS
+
+            if (choice.rendererId !== slotRenderers[slotIndex]) {
               ctx.addIssue({
                 code: "custom",
                 message: "Renderer does not support this slot",

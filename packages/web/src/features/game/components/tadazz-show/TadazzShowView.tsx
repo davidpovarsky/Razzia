@@ -9,6 +9,7 @@ import {
   EXTENSION_EVENTS,
   resolveThemeEffect,
   isCreatingWorldsPreset,
+  isOriginalThemeId,
   type CardAudioOverrides,
   type CueId,
   type ExtensionStateEnvelope,
@@ -361,12 +362,18 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     }
   }
 
-  // TADAZZ v4 design kit is the default stage; goldy-20261105 / legacy stay available as rollback.
+  const originalFamily =
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+  // Compiled first-party families own their visual layout. Existing motion-kit
+  // rollback settings still apply to the other native themes.
   const useV4 =
+    originalFamily ||
     compositionRoot?.component.id === "native.cinematic-stage" ||
     isTadazzV4Active(extensionState)
   const v4Labels = useTadazzV4Labels()
-  const guessOffLook = useV4 && extensionState?.extras.stageLook === "guess-off"
+  const guessOffLook =
+    useV4 && !originalFamily && extensionState?.extras.stageLook === "guess-off"
   const guessOffTextAnswers =
     guessOffLook &&
     (scene.kind === "question" ||
@@ -512,7 +519,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     const media = showRootRef.current?.querySelectorAll("video, audio") ?? []
 
     if (isPaused) {
-      stage?.pauseAnimations?.(pausedCountdownRemainingMs)
+      if (!useV4) {
+        stage?.pauseAnimations?.(pausedCountdownRemainingMs)
+      }
+
       media.forEach((element) => {
         ;(element as HTMLMediaElement).pause()
       })
@@ -520,7 +530,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       return
     }
 
-    stage?.resumeAnimations?.()
+    if (!useV4) {
+      stage?.resumeAnimations?.()
+    }
+
     media.forEach((element) => {
       const mediaElement = element as HTMLMediaElement
 
@@ -528,7 +541,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         void mediaElement.play().catch(() => undefined)
       }
     })
-  }, [isPaused, pausedCountdownRemainingMs])
+  }, [isPaused, pausedCountdownRemainingMs, useV4])
   // ── Director: authoritative scene → reference animation methods ────────
   const prevSceneRef = useRef<ShowScene | null>(null)
   const pendingRef = useRef<ShowScene | null>(null)
@@ -674,8 +687,15 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
     const handle = stageRef.current
 
-    if (handle?.mode === "voting") {
-      void handle.openVoting(scene.seconds, deadline)
+    if (
+      handle?.mode === "voting" &&
+      (!useV4 || handle.questionKey === scene.question.key)
+    ) {
+      void handle.openVoting(
+        scene.seconds,
+        deadline,
+        useV4 ? scene.question : undefined,
+      )
     }
   })
   useEffect(() => {
@@ -687,17 +707,28 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     }
   }, [isPaused])
   const votingSeconds = scene.kind === "voting" ? scene.seconds : 0
+  const votingQuestion =
+    useV4 && scene.kind === "voting" ? scene.question : undefined
   useEffect(() => {
-    if (votingEndsAt === undefined) {
+    if (votingEndsAt === undefined && !votingQuestion) {
       return
     }
 
-    deadlineRef.current = votingEndsAt
-
-    if (stageRef.current?.mode === "voting") {
-      void stageRef.current.openVoting(votingSeconds, votingEndsAt)
+    if (votingEndsAt !== undefined) {
+      deadlineRef.current = votingEndsAt
     }
-  }, [votingEndsAt, votingSeconds])
+
+    const handle = stageRef.current
+
+    if (
+      handle?.mode === "voting" &&
+      (!votingQuestion || handle.questionKey === votingQuestion.key)
+    ) {
+      // Status and answer media arrive separately. Patch the current native
+      // question even while paused, without starting another scene or clock.
+      void handle.openVoting(votingSeconds, votingEndsAt, votingQuestion)
+    }
+  }, [votingEndsAt, votingSeconds, votingQuestion])
 
   // ── Player answering (same socket contract as the registry components) ──
   const isPlayer = role === "player" && Boolean(player)
@@ -1650,6 +1681,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                     underlay={underlay}
                     overlay={overlay}
                     reducedMotion={reduced}
+                    livePlayback={{
+                      paused: isPaused,
+                      countdownRemainingMs: pausedCountdownRemainingMs,
+                    }}
                     fitRevision={isHostPresenting ? 1 : 0}
                   />
                 ) : (

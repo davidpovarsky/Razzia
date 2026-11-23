@@ -123,7 +123,9 @@ if q.returncode:
 report=json.loads(q.stdout)
 generated=report.pop("generatedManifest")
 assert report["sourceSha"]==SHA and report["sourceUnchangedExceptGeneratedManifest"]
-assert json.loads(generated)["available"] is True and len(json.loads(generated)["pins"])==2
+generated_value=json.loads(generated)
+assert generated_value["available"] is True
+assert len(generated_value["pins"])==3 and {pin["renderer"]["id"] for pin in generated_value["pins"]}=={"tadazz-classic-stage","razzia-native-stage","tadazz-original-stage"}
 assert subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()==SHA
 subprocess.run(["git","diff","--exit-code","HEAD","--","extensions","packages"],cwd=ROOT,check=True,stdout=subprocess.DEVNULL)
 (ROOT/"extensions/src/core/show-library/application-preview-build.json").write_text(generated,encoding="utf8",newline="\n")

@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { computeShowScene, type ShowEnvelope } from "./presentation-scene"
-import { showSceneTransitionIdentity } from "./show-director"
+import {
+  computeShowScene,
+  type ShowEnvelope,
+  type ShowScene,
+} from "./presentation-scene"
+import { planTransition, showSceneTransitionIdentity } from "./show-director"
 
 const snapshot = (overrides: Partial<ShowEnvelope> = {}): ShowEnvelope => ({
   gameId: "authored-scene-test",
@@ -31,6 +35,89 @@ const identity = (envelope: ShowEnvelope) =>
   )
 
 describe("authored scene transition identity", () => {
+  it("keeps editor recap content stable across fresh payloads and clock ticks", () => {
+    const scene: Extract<ShowScene, { kind: "scene" }> = {
+      kind: "scene",
+      key: "editor-recap",
+      scene: {
+        id: "editor-recap",
+        kind: "answerRecap",
+        title: "Authored recap title",
+        subtitle: "Authored recap subtitle",
+      },
+      activeSceneData: {
+        answerRecap: {
+          mode: "correctAnswer",
+          totalQuestionsInRange: 2,
+          completedQuestionsCount: 0,
+          maxItemsPerPage: 4,
+          showCounts: true,
+          showPercentages: true,
+          items: [
+            {
+              questionId: "survey",
+              questionNumber: 1,
+              questionText: "Which theme do you prefer?",
+              playMode: "survey",
+              totalResponders: 0,
+              badgeType: "noResponses",
+              winningOptions: [],
+              correctOptions: [],
+            },
+            {
+              questionId: "quiz",
+              questionNumber: 2,
+              questionText: "Which planet is red?",
+              playMode: "quiz",
+              totalResponders: 0,
+              winningOptions: [],
+              correctOptions: [
+                {
+                  answerIndex: 1,
+                  label: "Mars",
+                  count: 0,
+                  percentage: 0,
+                  isCorrect: true,
+                },
+              ],
+            },
+          ],
+        },
+      },
+      elapsedMs: 0,
+      paused: true,
+    }
+    const key = showSceneTransitionIdentity(scene)
+    const tick = { ...structuredClone(scene), elapsedMs: 1250, paused: false }
+    expect(showSceneTransitionIdentity(tick)).toBe(key)
+    expect(
+      planTransition(null, scene, { mode: "idle", questionKey: null }),
+    ).toEqual([
+      {
+        op: "showRoundRecap",
+        title: "Authored recap title",
+        subtitle: "Authored recap subtitle",
+        winners: [
+          {
+            label: "Which theme do you prefer?",
+            alt: "Which theme do you prefer?",
+            image: undefined,
+          },
+          { label: "Mars", alt: "Mars", image: undefined },
+        ],
+      },
+    ])
+    expect(
+      showSceneTransitionIdentity({ ...tick, activeSceneData: {} }),
+    ).not.toBe(key)
+    expect(
+      showSceneTransitionIdentity({
+        ...tick,
+        scene: { ...scene.scene, title: "Updated authored recap" },
+      }),
+    ).not.toBe(key)
+  })
+
   it("ignores elapsed-only broadcasts and pause clock re-anchoring", () => {
     const first = snapshot()
     const key = identity(first)

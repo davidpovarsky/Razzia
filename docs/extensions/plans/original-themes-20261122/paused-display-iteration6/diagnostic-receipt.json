@@ -1,0 +1,19 @@
+{
+  "diagnosticOnly": true,
+  "preparationOnly": true,
+  "releaseQualified": false,
+  "candidateBaseSha": "2e9ee96541baf8f0ea16bd4b6b7bd9d89f2eba04",
+  "sourceState": "iteration6-uncommitted",
+  "exit": 1,
+  "seconds": 55.03,
+  "passed": false,
+  "sourceFiles": 2669,
+  "allSourceAndBuildBytesUnchanged": true,
+  "sdkCacheUnchanged": true,
+  "sourceReadOnly": true,
+  "network": "none",
+  "productionChanged": false,
+  "customerMountUsed": false,
+  "oomKilled": false,
+  "browserReceipt": null
+}

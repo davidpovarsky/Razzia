@@ -1,0 +1,36 @@
+{
+  "format": "tadazz-theme-continuation-merge-v1",
+  "createdAt": "2026-11-23T00:20:18.254636+00:00",
+  "owner": "/root/theme_inventory",
+  "branch": "codex/tadazz-themes-continuation-20261123",
+  "parents": [
+    "d7f5709cdb0754143bfddd9b2766576a13e28615",
+    "faa953fb1b45312b1ac78edcd263045ba9d18cae"
+  ],
+  "restoredSource": "/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-original-themes-20261122",
+  "windowsSource": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-original-themes-20261122",
+  "provenance": "All seven source SHA-256 values independently matched between the Windows staged merge checkout and the transferred Oracle working files before copying. Original Windows and transferred Oracle checkouts were not modified.",
+  "sourceSha256": {
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "f4f085c88e8622fa3f2f5752d50b5047b1883c5fcaf4027650f0f547c10c44fd",
+    "extensions/src/presentation/scene-presenter.tsx": "950ccab25d92c062b6c18a80d5aa5608137b16d117f422be19cb3a83c1ccda9c",
+    "packages/e2e/tests/tadazz-full-show-parity.spec.ts": "939781dfc87760952af537b46a8495429bacfd051a20f01ad2b811340d2f54bc",
+    "packages/web/src/features/game/components/GameWrapper.tsx": "a3296feb230520571fdceb972cfccf1acb1aae1c80a22a99b3793384ce062970",
+    "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx": "a8c747ad15f3fcaaca9b86972d3edd083dc08413a78229982adfeb3795d31ee4",
+    "packages/web/src/features/manager/components/packages/PackageSaveConsent.tsx": "ba120bf56e73c24a50a14ce8275810fd056220b577937fa9be955e5c45e9298e",
+    "packages/web/src/features/quizz/components/QuestionEditor/QuestionLivePreview.tsx": "0bc7526a073c6335bc7e0870cdc2d953eec05cc0a96b8f9f674d3fad2b77841e"
+  },
+  "mergeConflictResolution": "Restored the seven already-reviewed transferred contents; no new product design or behavior change was authored here.",
+  "checks": {
+    "THEME-TRANSFER-SOURCE-HASHES": "PASSED: seven exact SHA-256 matches",
+    "THEME-MERGE-UNRESOLVED": "PASSED: no unresolved paths",
+    "THEME-MERGE-DIFF-CHECK": "PASSED",
+    "productSuites": "NOT_RUN: assigned to final integration owner",
+    "releaseAcceptance": "INCOMPLETE"
+  },
+  "excluded": [
+    "b88dc058f770044d9d7f8bd8948f34b7d2cfa7bd",
+    "wave91-296-file-candidate"
+  ],
+  "productionChanged": false,
+  "pushed": false
+}

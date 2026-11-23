@@ -1,0 +1,2 @@
+packages/e2e/scripts/generate-theme-lab.ts(336,5): error TS2740: Type 'Record<string, Record<string, string>>' is missing the following properties from type '{ en: Record<string, string>; fr: Record<string, string>; de: Record<string, string>; es: Record<string, string>; it: Record<string, string>; ja: Record<string, string>; tr: Record<string, string>; vi: Record<string, string>; he?: Record<string, string> | undefined; }': en, fr, de, es, and 4 more.
+packages/e2e/tests/theme-installation-preview.spec.ts(222,21): error TS2532: Object is possibly 'undefined'.

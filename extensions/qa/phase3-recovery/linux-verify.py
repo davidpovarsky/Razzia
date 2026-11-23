@@ -35,6 +35,16 @@ SOURCE_PATHS = ["extensions", "packages", "package.json", "tsconfig.json",
                 "pnpm-workspace.yaml", "pnpm-lock.yaml", "oxlint.config.ts",
                 ".gitignore", ".prettierignore",
                 ".prettierrc.json", ".prettierrc", "prettier.config.mjs"]
+# Pin the maintained test selector, worker inputs and Motion reference to this exact commit.
+# Keep these as individual archive leaves: expanding their top-level roots
+# would copy unrelated historical evidence and private delivery artifacts.
+EXTRA_QA_INPUTS = [
+    "scripts/qa/ci-e2e-routing.py",
+    "scripts/qa/package-build-worker.py",
+    "scripts/qa/start-package-server.ts",
+    "scripts/tadazz/extract-motion-assets.mjs",
+    "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html",
+]
 tracked = subprocess.check_output(["git", "ls-files", *SOURCE_PATHS], cwd=ROOT, text=True).splitlines()
 LINT_BASELINE = None
 if SUITE in ("native-launch", "full-show-selection"):
@@ -57,7 +67,7 @@ if REUSE:
     manifest = previous_input["files"]
 else:
     subprocess.run(["git", "archive", "--format=tar.gz", "-o", str(ARCHIVE), SHA,
-                    "--", *sorted({p.split('/')[0] for p in tracked})], cwd=ROOT, check=True)
+                    "--", *sorted({p.split('/')[0] for p in tracked}), *EXTRA_QA_INPUTS], cwd=ROOT, check=True)
     with tarfile.open(ARCHIVE, "r:gz") as archive:
         manifest = {}
         source_bytes = 0

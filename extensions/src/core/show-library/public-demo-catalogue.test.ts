@@ -9,6 +9,7 @@ import {
 } from "../show-themes/registry"
 import { resolveShowTheme } from "../show-themes/resolve"
 import { bundledGalleryThemes } from "../show-themes/bundled-gallery-themes"
+import { ORIGINAL_THEME_IDS } from "../show-themes/original-theme-families"
 import { normalizeApplicationPreviewDraft } from "./application-preview-input"
 import { getPublicDemo, publicDemoCatalogue } from "./public-demo-catalogue"
 
@@ -25,6 +26,7 @@ describe("published gallery games", () => {
       "family",
       "classroom",
       "team",
+      ...ORIGINAL_THEME_IDS,
     ])
     const audiences = new Set(
       publicDemoCatalogue.flatMap((game) => game.audience),
@@ -80,6 +82,58 @@ describe("published gallery games", () => {
     },
   )
 
+  it("preserves the legacy catalogue and adds eight original six-round shows", () => {
+    expect(
+      publicDemoCatalogue
+        .slice(0, 10)
+        .reduce((total, item) => total + item.questionCount, 0),
+    ).toBe(77)
+    expect(publicDemoCatalogue.slice(10).map((item) => item.id)).toEqual(
+      ORIGINAL_THEME_IDS,
+    )
+    expect(
+      publicDemoCatalogue.slice(10).every((item) => item.questionCount === 6),
+    ).toBe(true)
+  })
+
+  it.each(ORIGINAL_THEME_IDS)(
+    "%s has real checkpoints after each third and preserves the public master",
+    (id) => {
+      const demo = getPublicDemo(id)!
+      const show = tadaShowV1Schema.parse(demo.show)
+      let answered = 0
+      const checkpoints: number[] = []
+      const transitions: number[] = []
+      for (const card of show.cards) {
+        if (card.kind === "quiz" || card.kind === "survey") {
+          answered += 1
+        }
+
+        if (card.kind === "leaderboard" || card.kind === "answerRecap") {
+          checkpoints.push(answered)
+        }
+
+        if (card.kind === "transition") {
+          transitions.push(answered)
+        }
+      }
+      expect(checkpoints).toEqual([2, 4, 6])
+      expect(transitions).toEqual([2, 4])
+      expect(new Set(show.cards.map((card) => card.key)).size).toBe(
+        show.cards.length,
+      )
+      expect(demo.metadata.coverUrl).toBe(
+        `/tadazz-show/originals/${id}/poster.png`,
+      )
+      expect(show.defaults?.showTheme?.id).toBe(id)
+      expect(show.defaults?.showTheme?.version).toBe("1.0.0")
+      demo.show.cards.splice(1, 3)
+      demo.show.title = "Private edits"
+      expect(getPublicDemo(id)?.show.cards).toHaveLength(13)
+      expect(getPublicDemo(id)?.show.title).not.toBe("Private edits")
+    },
+  )
+
   it("gives each editor/import caller an independent copy of the public master", () => {
     const first = getPublicDemo("family")
 
@@ -130,7 +184,7 @@ describe("site-wide gallery themes", () => {
         .size,
     ).toBe(9)
     const registry = createShowThemeRegistry()
-    expect(registry.list()).toHaveLength(11)
+    expect(registry.list()).toHaveLength(19)
     for (const definition of bundledGalleryThemes) {
       for (const role of ["manager", "player", "spectator"] as const) {
         const theme = resolveShowTheme({
