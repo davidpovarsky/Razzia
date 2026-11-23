@@ -58,6 +58,13 @@ const summary = {
   diagnostics: [],
 }
 
+const questionRefs = [
+  {
+    questionNumber: 1,
+    publicQuestionId: `preview-question-${"a".repeat(64)}`,
+  },
+]
+
 function makeResult(data: Record<string, unknown>) {
   return {
     content: [] as Array<{ type: "text"; text: string }>,
@@ -302,6 +309,7 @@ test("candidate-first handling on preview() avoids intermediate unavailable stat
             revision: 1,
             summary,
             authoredShowJson: '{"title":"Original"}',
+            questionRefs,
           })
         }
 
@@ -366,6 +374,7 @@ test("non-candidate REVISION_CONFLICT and V1 ready preview_game responses are no
             revision: 1,
             summary,
             authoredShowJson: '{"title":"Original"}',
+            questionRefs,
           })
         }
 
@@ -419,6 +428,7 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
         revision: 1,
         summary,
         authoredShowJson: '{"title":"Original"}',
+        questionRefs,
       })
     }
 
@@ -521,6 +531,7 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
           revision: serverRevision,
           summary,
           authoredShowJson: `{"title":"Rev ${serverRevision}"}`,
+          questionRefs,
         })
       }
 
@@ -591,6 +602,7 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
             revision: serverRevision,
             summary,
             authoredShowJson: '{"title":"Original"}',
+            questionRefs,
           })
         }
 
@@ -647,6 +659,7 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
           revision: 2,
           summary,
           authoredShowJson: '{"title":"Rev 2"}',
+          questionRefs,
         })
       }
 
