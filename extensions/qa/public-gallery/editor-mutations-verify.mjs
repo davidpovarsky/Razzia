@@ -380,6 +380,11 @@ export async function verifyEditorMutations(options) {
       .fill("Editor mutation player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
     await expect(player).toHaveURL(`${options.origin}/party/${room.gameId}`)
+    // The room route mounts before its socket login reaches the host.
+    await expect(page.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+      { timeout: 30_000 },
+    )
     await toolbar.getByRole("button", { name: "Start", exact: true }).click()
     const stage = page.getByTestId("tadazz-show")
     for (const [index, question] of stored.questions.entries()) {
