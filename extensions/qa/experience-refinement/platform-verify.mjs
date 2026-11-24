@@ -415,10 +415,11 @@ export async function verifyPlatformDefaults(options) {
       await expect(owner).toHaveAttribute(name, value)
     }
     // Keep the successful snapshot: the curtain cue can start between reads.
-    let state
+    let state = null
     await expect
       .poll(async () => {
         state = await mediaState(page)
+
         return state.active.map((item) => item.url)
       })
       .toEqual([FINALE])
