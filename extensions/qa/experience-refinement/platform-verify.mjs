@@ -414,8 +414,14 @@ export async function verifyPlatformDefaults(options) {
     })) {
       await expect(owner).toHaveAttribute(name, value)
     }
-    await expect.poll(() => activeUrls(page)).toEqual([FINALE])
-    const state = await mediaState(page)
+    // Keep the successful snapshot: the curtain cue can start between reads.
+    let state
+    await expect
+      .poll(async () => {
+        state = await mediaState(page)
+        return state.active.map((item) => item.url)
+      })
+      .toEqual([FINALE])
     assert.equal(state.active.length, 1, "Exactly one active finale element")
     const [audio] = state.active
     assert.equal(audio.url, FINALE)
