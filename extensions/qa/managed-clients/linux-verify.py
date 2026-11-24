@@ -210,7 +210,7 @@ export default {
   })),
 }
 """
-(owned/'managed-client.playwright.config.ts').write_text(overlay)
+(owned/'managed-client.playwright.config.mts').write_text(overlay)
 # A real loopback proxy overwrites the dedicated address header with its TCP
 # peer. This qualifies the native trust contract, not the deployed Caddy config.
 probe=r"""import assert from 'node:assert/strict'
@@ -314,7 +314,7 @@ prefix=['docker','exec','-w','/source']
 for key,value in env.items():prefix+=['-e',key+'='+value]
 probe_out=(owned/'proxy.stdout.log').open('wb');probe_err=(owned/'proxy.stderr.log').open('wb')
 probe_process=subprocess.Popen(prefix+[name,'node','/evidence/proxy-probe.mjs'],stdout=probe_out,stderr=probe_err)
-command=prefix+[name,'nice','-n','19','timeout','-k','5','900','node','/cleanup/extensions/node_modules/@playwright/test/cli.js','test','--config=/evidence/managed-client.playwright.config.ts','managed-clients.spec.ts','--project=chromium','--project=webkit','--workers=1','--output=/evidence/test-results']
+command=prefix+[name,'nice','-n','19','timeout','-k','5','900','node','/cleanup/extensions/node_modules/@playwright/test/cli.js','test','--config=/evidence/managed-client.playwright.config.mts','managed-clients.spec.ts','--project=chromium','--project=webkit','--workers=1','--output=/evidence/test-results']
 started=time.time();result_code=1;probe_code=1
 try:
  with (owned/'browser.stdout.log').open('wb') as out,(owned/'browser.stderr.log').open('wb') as err:
