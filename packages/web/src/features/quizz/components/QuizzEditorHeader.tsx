@@ -4,6 +4,9 @@ import {
   StudioConversionDialog,
 } from "./studio/header-controls"
 import { useCompositeQuizzSave } from "./studio/use-composite-quizz-save"
+import { StudioDraftDialog } from "./studio/studio-draft-dialog"
+import { StudioHistoryControls } from "./studio/studio-history-controls"
+import { useStudioEditor } from "./studio/studio-editor-context"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import FieldError from "@razzia/web/components/forms/FieldError"
@@ -28,6 +31,7 @@ const QuizzEditorHeader = () => {
     handleReloadConflict,
     handleForceOverwriteConflict,
   } = useCompositeQuizzSave()
+  const { storageIssue } = useStudioEditor()
   const { t } = useTranslation()
 
   return (
@@ -74,6 +78,7 @@ const QuizzEditorHeader = () => {
 
         {/* Right: Exit and Save Buttons */}
         <div className="ms-auto flex shrink-0 items-center gap-1.5 sm:ms-0 sm:gap-2">
+          <StudioHistoryControls disabled={isSaving || !canSave} />
           <Button
             type="button"
             className="bg-accent text-accent-foreground sm:text-md px-2.5 py-1.5 text-sm font-semibold sm:px-4 sm:py-2"
@@ -109,6 +114,16 @@ const QuizzEditorHeader = () => {
       />
 
       <StudioConversionDialog />
+      <StudioDraftDialog />
+      {storageIssue && (
+        <p
+          role="status"
+          className="px-4 py-2 text-sm text-amber-700 dark:text-amber-300"
+          data-testid="studio-draft-warning"
+        >
+          {t("extensions:editor.draftStorageUnavailable")}
+        </p>
+      )}
       <AlertDialog
         open={navigationBlocked}
         onOpenChange={(open) => {

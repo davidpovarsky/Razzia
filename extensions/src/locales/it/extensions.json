@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Cambia modalità",
     "unsavedExitTitle": "Uscire senza salvare?",
     "unsavedExitDescription": "Le modifiche alle domande, alle scene e alle impostazioni dello spettacolo non sono state salvate.",
-    "discardAndExit": "Esci senza salvare"
+    "discardAndExit": "Esci senza salvare",
+    "undo": "Annulla modifica alla sequenza",
+    "redo": "Ripeti modifica alla sequenza",
+    "draftRecoveryTitle": "Recuperare le modifiche non salvate?",
+    "draftRecoveryDescription": "Questo browser contiene modifiche non salvate del {{time}}. Ripristinale per continuare a modificare.",
+    "draftServerChanged": "La versione sul server è cambiata. Il ripristino mantiene separata la bozza; per salvare occorre risolvere il conflitto di versioni.",
+    "restoreDraft": "Ripristina bozza",
+    "discardDraft": "Elimina questa bozza",
+    "draftStorageUnavailable": "Il backup della bozza nel browser non è disponibile o non è leggibile. Salva le modifiche prima di uscire.",
+    "savedWithNewerEdits": "Salvato. Le modifiche più recenti non sono ancora salvate."
   },
   "preview": {
     "badge": "Anteprima editor",

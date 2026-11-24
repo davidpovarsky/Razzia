@@ -1,3 +1,4 @@
+import { getClientId } from "@razzia/web/lib/session"
 import { useQuizzExtras } from "./extensions/use-quizz-extras"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -94,7 +95,14 @@ type QuizzEditorProviderProps = PropsWithChildren<{
   initialData?: QuizzWithId
 }>
 
-export const QuizzEditorProvider = ({
+export const QuizzEditorProvider = (props: QuizzEditorProviderProps) => (
+  <QuizzEditorSession
+    key={`${getClientId()}:${props.initialData?.id ?? "new"}`}
+    {...props}
+  />
+)
+
+const QuizzEditorSession = ({
   children,
   initialData,
 }: QuizzEditorProviderProps) => {

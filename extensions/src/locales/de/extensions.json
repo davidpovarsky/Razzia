@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Modus ändern",
     "unsavedExitTitle": "Ohne Speichern verlassen?",
     "unsavedExitDescription": "Deine Änderungen an Fragen, Szenen und Show-Einstellungen wurden noch nicht gespeichert.",
-    "discardAndExit": "Ohne Speichern verlassen"
+    "discardAndExit": "Ohne Speichern verlassen",
+    "undo": "Zeitleistenänderung rückgängig machen",
+    "redo": "Zeitleistenänderung wiederholen",
+    "draftRecoveryTitle": "Ungespeicherte Änderungen wiederherstellen?",
+    "draftRecoveryDescription": "Dieser Browser enthält ungespeicherte Änderungen vom {{time}}. Stelle sie wieder her, um weiterzuarbeiten.",
+    "draftServerChanged": "Die Serverversion hat sich geändert. Der wiederhergestellte Entwurf bleibt getrennt; vor dem Speichern muss der Versionskonflikt gelöst werden.",
+    "restoreDraft": "Entwurf wiederherstellen",
+    "discardDraft": "Diesen Entwurf verwerfen",
+    "draftStorageUnavailable": "Die Entwurfssicherung im Browser ist nicht verfügbar oder konnte nicht gelesen werden. Speichere deine Änderungen vor dem Verlassen.",
+    "savedWithNewerEdits": "Gespeichert. Neuere Änderungen sind noch nicht gespeichert."
   },
   "preview": {
     "badge": "Editor-Vorschau",

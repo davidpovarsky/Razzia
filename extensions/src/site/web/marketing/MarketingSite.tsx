@@ -6,6 +6,9 @@ import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
 import { ContactForm } from "./ContactForm"
 import { Pricing } from "./Pricing"
+import { LegalPolicyLinks, LegalPolicyPage } from "./LegalPolicies"
+import { resolveLegalPolicy } from "./legal-policies"
+import { publishedLegalPolicies } from "./legal-policies.public"
 import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
 import { CatalogueGameDemo } from "./CatalogueGameDemo"
 import catalogueStyles from "./catalogue.css?inline"
@@ -68,7 +71,7 @@ export function MarketingSite() {
     const requested = new URLSearchParams(window.location.search).get("view")
 
     return requested &&
-      [
+      ([
         "store",
         "how",
         "pricing",
@@ -76,7 +79,8 @@ export function MarketingSite() {
         "demo",
         "preview",
         "product",
-      ].includes(requested)
+      ].includes(requested) ||
+        resolveLegalPolicy(requested, publishedLegalPolicies))
       ? requested
       : "home"
   })
@@ -108,7 +112,7 @@ export function MarketingSite() {
       const requested = new URLSearchParams(searchString).get("view")
       setView(
         requested &&
-          [
+          ([
             "store",
             "how",
             "pricing",
@@ -116,7 +120,8 @@ export function MarketingSite() {
             "demo",
             "preview",
             "product",
-          ].includes(requested)
+          ].includes(requested) ||
+            resolveLegalPolicy(requested, publishedLegalPolicies))
           ? requested
           : "home",
       )
@@ -199,6 +204,7 @@ export function MarketingSite() {
       setInstalling(null)
     }
   }
+  const legalView = resolveLegalPolicy(view, publishedLegalPolicies)
   const demonstration = previewText(previewLocale(i18n))
   const useGameLabel = installing ? "Adding your game…" : "Use this game"
   const nav = (
@@ -300,6 +306,12 @@ export function MarketingSite() {
           )}
         </header>
         <main id="view">
+          {legalView && publishedLegalPolicies && (
+            <LegalPolicyPage
+              policies={publishedLegalPolicies}
+              kind={legalView}
+            />
+          )}
           {view === "home" && (
             <>
               <div className="cinema-home">
@@ -798,6 +810,7 @@ export function MarketingSite() {
                 {t("Try a round")}
               </SiteButton>
               <SiteLink href="/studio">{t("My Studio")}</SiteLink>
+              <LegalPolicyLinks policies={publishedLegalPolicies} />
             </div>
           </div>
           <div className="wrap footer-bottom">

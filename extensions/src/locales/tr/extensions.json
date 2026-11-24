@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Modu değiştir",
     "unsavedExitTitle": "Kaydetmeden çıkılsın mı?",
     "unsavedExitDescription": "Soru, sahne ve gösteri ayarlarında yaptığınız değişiklikler kaydedilmedi.",
-    "discardAndExit": "Kaydetmeden çık"
+    "discardAndExit": "Kaydetmeden çık",
+    "undo": "Zaman çizelgesi değişikliğini geri al",
+    "redo": "Zaman çizelgesi değişikliğini yinele",
+    "draftRecoveryTitle": "Kaydedilmemiş değişiklikler kurtarılsın mı?",
+    "draftRecoveryDescription": "Bu tarayıcıda {{time}} tarihinden kaydedilmemiş değişiklikler var. Düzenlemeye devam etmek için geri yükleyin.",
+    "draftServerChanged": "Sunucudaki sürüm değişti. Geri yüklenen taslak ayrı tutulur; kaydetmek için sürüm çakışmasını çözmeniz gerekir.",
+    "restoreDraft": "Taslağı geri yükle",
+    "discardDraft": "Bu taslağı sil",
+    "draftStorageUnavailable": "Tarayıcıdaki taslak yedeği kullanılamıyor veya okunamadı. Ayrılmadan önce değişikliklerinizi kaydedin.",
+    "savedWithNewerEdits": "Kaydedildi. Daha yeni değişiklikler henüz kaydedilmedi."
   },
   "preview": {
     "badge": "Düzenleyici Önizlemesi",

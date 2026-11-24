@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Changer de mode",
     "unsavedExitTitle": "Quitter sans enregistrer ?",
     "unsavedExitDescription": "Les modifications des questions, des scènes et des paramètres du spectacle n’ont pas été enregistrées.",
-    "discardAndExit": "Quitter sans enregistrer"
+    "discardAndExit": "Quitter sans enregistrer",
+    "undo": "Annuler la modification de la chronologie",
+    "redo": "Rétablir la modification de la chronologie",
+    "draftRecoveryTitle": "Récupérer les modifications non enregistrées ?",
+    "draftRecoveryDescription": "Ce navigateur contient des modifications non enregistrées du {{time}}. Restaurez-les pour continuer à modifier.",
+    "draftServerChanged": "La version du serveur a changé. La restauration conserve votre brouillon séparément ; l’enregistrement nécessite de résoudre le conflit de versions.",
+    "restoreDraft": "Restaurer le brouillon",
+    "discardDraft": "Supprimer ce brouillon",
+    "draftStorageUnavailable": "La sauvegarde du brouillon dans le navigateur est indisponible ou illisible. Enregistrez vos modifications avant de quitter.",
+    "savedWithNewerEdits": "Enregistré. Les modifications plus récentes ne sont pas encore enregistrées."
   },
   "preview": {
     "badge": "Aperçu de l'éditeur",

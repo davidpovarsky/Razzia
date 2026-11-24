@@ -1,0 +1,183 @@
+{
+  "status": "draft",
+  "version": "{{approved_policy_version}}",
+  "effectiveDate": "{{YYYY-MM-DD}}",
+  "approvedAt": "{{owner_approval_timestamp_UTC}}",
+  "approvedBy": "{{owner_name}}",
+  "locale": "en",
+  "seller": {
+    "name": "{{real_seller_or_approved_sole_trader_identity}}",
+    "address": "{{public_business_address_or_remove_if_not_applicable}}",
+    "contactEmail": "hello@tadazz.com"
+  },
+  "documents": {
+    "terms": {
+      "title": "Terms and conditions",
+      "sections": [
+        {
+          "id": "service",
+          "heading": "Using Tadazz",
+          "paragraphs": [
+            "Tadazz provides tools for creating, editing and running interactive gameshows. You can explore example games, prepare your own shows and manage your games through your account.",
+            "These terms are between you and {{seller_name}}. They take effect on the date shown above. {{territories_audience_and_minimum_age_terms}}"
+          ]
+        },
+        {
+          "id": "account",
+          "heading": "Your account and your shows",
+          "paragraphs": [
+            "Keep your sign-in details private and contact hello@tadazz.com if you believe your account has been used without permission.",
+            "Use content that you own or have permission to use. You remain responsible for the questions, answers, images, audio and other material you add to a show, and for obtaining any permissions required for your event.",
+            "{{account_responsibility_organiser_authority_and_acceptable_use_terms}}"
+          ]
+        },
+        {
+          "id": "plans",
+          "heading": "Plans and purchases",
+          "paragraphs": [
+            "Before buying, review the price, billing period and included allowances shown for your chosen plan. The confirmation for your purchase identifies what you bought.",
+            "{{approved_plan_entitlements_credit_expiry_participant_and_telephone_allowances}}",
+            "{{subscription_renewal_cancellation_upgrade_and_effective_date_terms}}",
+            "{{approved_paddle_merchant_of_record_and_payment_wording}}"
+          ]
+        },
+        {
+          "id": "running-shows",
+          "heading": "Running a show",
+          "paragraphs": [
+            "Prepare and preview your show before the event. Check the equipment and connection you intend to use, including any telephone participation you enable.",
+            "{{service_availability_device_network_telephone_and_event_support_commitments}}"
+          ]
+        },
+        {
+          "id": "content-and-licence",
+          "heading": "Content and use of the service",
+          "paragraphs": [
+            "{{customer_content_licence_and_permitted_use_of_tadazz_games_templates_and_service}}",
+            "Open-source software notices and licences apply to their respective components. These service terms do not remove rights granted by those licences.",
+            "{{content_removal_account_suspension_and_termination_terms}}"
+          ]
+        },
+        {
+          "id": "refunds-and-responsibility",
+          "heading": "Refunds and responsibility",
+          "paragraphs": [
+            "Read the Refund policy for how to ask about a charge or request a refund. Contact hello@tadazz.com with your purchase reference and the email used to buy.",
+            "{{mandatory_rights_liability_limits_and_dispute_terms_for_actual_jurisdiction}}"
+          ]
+        },
+        {
+          "id": "changes-and-contact",
+          "heading": "Changes and contact",
+          "paragraphs": [
+            "{{policy_change_notice_and_applicable_law}}",
+            "For questions about these terms, contact hello@tadazz.com."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "sections": [
+        {
+          "id": "responsibility",
+          "heading": "Who is responsible for your information",
+          "paragraphs": [
+            "{{real_data_controller_identity_address_and_privacy_contact}}",
+            "For privacy enquiries relating to Tadazz, contact hello@tadazz.com."
+          ]
+        },
+        {
+          "id": "information",
+          "heading": "Information used by Tadazz",
+          "paragraphs": [
+            "{{actual_account_authentication_content_event_participant_contact_and_technical_data_categories}}",
+            "{{whether_children_use_the_service_and_how_organisers_handle_participant_information}}"
+          ]
+        },
+        {
+          "id": "purposes",
+          "heading": "How information is used",
+          "paragraphs": [
+            "{{specific_purposes_and_applicable_legal_bases_for_accounts_shows_support_billing_and_operational_logs}}"
+          ]
+        },
+        {
+          "id": "providers",
+          "heading": "Service providers and payments",
+          "paragraphs": [
+            "{{actual_hosting_email_telephony_and_other_processors_and_their_roles}}",
+            "{{paddle_payment_data_roles_and_link_or_description_of_their_separate_privacy_information}}",
+            "{{international_transfers_locations_and_applicable_safeguards}}"
+          ]
+        },
+        {
+          "id": "storage",
+          "heading": "Storage and retention",
+          "paragraphs": [
+            "{{actual_retention_periods_or_criteria_for_accounts_games_participants_enquiries_logs_and_backups}}",
+            "{{actual_account_deletion_and_backup_retention_process}}"
+          ]
+        },
+        {
+          "id": "browser-storage",
+          "heading": "Cookies and browser storage",
+          "paragraphs": [
+            "{{actual_cookies_local_storage_session_storage_purposes_durations_and_any_optional_analytics_or_marketing}}"
+          ]
+        },
+        {
+          "id": "choices",
+          "heading": "Your choices and requests",
+          "paragraphs": [
+            "You can contact hello@tadazz.com about the information associated with your use of Tadazz. Include enough information to identify your account or event, and avoid sending unnecessary sensitive information.",
+            "{{applicable_access_correction_deletion_objection_portability_and_complaint_rights_and_how_to_exercise_them}}"
+          ]
+        },
+        {
+          "id": "updates",
+          "heading": "Updates to this policy",
+          "paragraphs": [
+            "{{policy_change_notice_process}}"
+          ]
+        }
+      ]
+    },
+    "refunds": {
+      "title": "Refund policy",
+      "sections": [
+        {
+          "id": "requests",
+          "heading": "Requesting a refund",
+          "paragraphs": [
+            "Contact hello@tadazz.com if you have a question about a charge or want to request a refund. Include your order reference, the email used to purchase and a short explanation. Do not send your full payment card details.",
+            "{{paddle_customer_portal_or_billing_support_route_and_responsibilities}}"
+          ]
+        },
+        {
+          "id": "eligibility",
+          "heading": "When a refund is available",
+          "paragraphs": [
+            "{{approved_refund_window_eligibility_and_any_conditions_for_unused_or_partly_used_credits}}",
+            "{{policy_for_failed_shows_service_faults_duplicate_charges_cancelled_events_and_custom_work}}",
+            "This policy does not replace any mandatory rights that apply to your purchase."
+          ]
+        },
+        {
+          "id": "subscriptions",
+          "heading": "Subscriptions and cancellation",
+          "paragraphs": [
+            "{{whether_subscriptions_are_offered_how_to_cancel_when_cancellation_takes_effect_and_renewal_refund_rules}}"
+          ]
+        },
+        {
+          "id": "processing",
+          "heading": "Refund processing",
+          "paragraphs": [
+            "{{actual_refund_decision_process_payment_method_timing_and_effect_on_licences_or_unused_credits}}"
+          ]
+        }
+      ]
+    }
+  }
+}

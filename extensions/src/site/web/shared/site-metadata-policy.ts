@@ -1,3 +1,10 @@
+import {
+  isLegalPolicyKind,
+  resolveLegalPolicy,
+  type LegalPolicyBundle,
+} from "../marketing/legal-policies"
+import { publishedLegalPolicies } from "../marketing/legal-policies.public"
+
 export interface MetadataProduct {
   id: string
   title: string
@@ -9,23 +16,27 @@ export function resolveSiteMetadata({
   origin,
   products,
   tenantName,
+  legalPolicies = publishedLegalPolicies,
 }: {
   pathname: string
   search: string
   origin: string
   products: readonly MetadataProduct[]
   tenantName?: string
+  legalPolicies?: LegalPolicyBundle | null
 }) {
   const path = pathname.replace(/\/$/u, "") || "/"
   const params = new URLSearchParams(search)
   const requestedView = params.get("view")
+  const legalView = resolveLegalPolicy(requestedView, legalPolicies)
   const view =
-    requestedView &&
+    legalView ??
+    (requestedView &&
     ["store", "how", "pricing", "custom", "demo", "product"].includes(
       requestedView,
     )
       ? requestedView
-      : "home"
+      : "home")
   const native = /^\/(?:manager|party|display|game)(?:\/|$)/u.test(path)
   const brand =
     native && tenantName?.trim() && !/^tadazz$/iu.test(tenantName.trim())
@@ -72,6 +83,10 @@ export function resolveSiteMetadata({
   }
 
   let titleKey = native ? label : (labels[label] ?? "Home")
+
+  if (legalPolicies && isLegalPolicyKind(label)) {
+    titleKey = legalPolicies.documents[label].title
+  }
 
   if (label === "product") {
     titleKey = product?.title ?? "Home"
