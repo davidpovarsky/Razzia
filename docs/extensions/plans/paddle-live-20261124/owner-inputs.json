@@ -1,0 +1,54 @@
+{
+  "status": "awaiting_owner_details",
+  "publicSite": "https://tadazz.com",
+  "supportEmail": "hello@tadazz.com",
+  "seller": {
+    "legalName": null,
+    "tradingName": "Tadazz",
+    "businessType": null,
+    "businessCountry": null,
+    "publicAddress": null
+  },
+  "commercialDecisions": {
+    "plans": [],
+    "requiredFieldsPerPlan": [
+      "name",
+      "billingPeriod_or_oneTime",
+      "currency_and_approved_amount",
+      "games_per_purchase_or_paid_period",
+      "maxParticipants",
+      "phoneMinutes_per_game",
+      "credit_expiry",
+      "upgrade_rules"
+    ],
+    "pilotEntitlements": []
+  },
+  "policies": {
+    "refundWindow": null,
+    "refundConditions": null,
+    "subscriptionCancellation": null,
+    "dataCategories": null,
+    "dataRetention": null,
+    "processorsAndLocations": null,
+    "browserStorage": null,
+    "applicableJurisdiction": null,
+    "plannedBrowserDraftRecovery": {
+      "status": "parallel_source_work_not_verified_as_deployed",
+      "scope": "account and quiz",
+      "storage": "browser-local draft persistence",
+      "retention": null,
+      "publicationAction": "Describe actual storage, scope, persistence and deletion behavior if the recovery branch is shipped."
+    }
+  },
+  "paddle": {
+    "liveAccountVerified": null,
+    "approvedDomains": [],
+    "defaultPaymentLink": "https://tadazz.com/manager/checkout",
+    "notificationUrl": "https://tadazz.com/api/billing/webhooks/paddle",
+    "secretValuesStoredOnlyInExistingSecretChannel": true
+  },
+  "approval": {
+    "owner": null,
+    "approvedAt": null
+  }
+}
