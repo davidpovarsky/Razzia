@@ -21,4 +21,5 @@ await i18n.use(initReactI18next).init({
 })
 document.documentElement.lang = i18n.language
 document.documentElement.dir = i18n.dir()
+
 export default i18n

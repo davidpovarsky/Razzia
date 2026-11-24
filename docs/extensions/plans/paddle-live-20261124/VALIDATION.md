@@ -4,16 +4,16 @@ Base: `142c178de33737b6fdfff87fefa466fe6652363d`.
 Branch: `codex/tadazz-paddle-policy-prep-20261124`.
 Validation date: 24 November 2026 (UTC).
 
-## Accepted results
+## Recorded results and remaining gate
 
-| Check                                               | Result                                       | Scope                                                                                                                                          |
-| --------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Policy publication and existing metadata unit tests | 28/28 passed                                 | Complete/draft/partial bundles, approval and dates, unfinished text, contact URL injection, duplicate anchors, routes and clean canonical URLs |
-| Typed lint                                          | 0 errors, 0 warnings                         | Six changed TypeScript/TSX source and test files, 233 project rules                                                                            |
-| Browser                                             | 22 assertion groups passed, zero page errors | Actual policy components, SiteLink, TanStack router and ReferenceCanvas with synthetic approved content; Chromium, 1440 and 390 pixels         |
-| Browser harness lint                                | 0 errors, 0 warnings                         | Standalone reproducible check script                                                                                                           |
-| Repository formatter                                | Passed                                       | All ten supported changed files; two documentation JSON files excluded by the repository ignore rules                                          |
-| Visual review                                       | Passed                                       | Desktop and phone Terms screenshots inspected; readable wrapping, hierarchy, spacing and links                                                 |
+| Check                                               | Result                                            | Scope                                                                                                                                          |
+| --------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Policy publication and existing metadata unit tests | Historical 28/28 passed; final-head check pending | Complete/draft/partial bundles, approval and dates, unfinished text, contact URL injection, duplicate anchors, routes and clean canonical URLs |
+| Typed lint                                          | 0 errors, 0 warnings                              | Six changed TypeScript/TSX source and test files, 233 project rules                                                                            |
+| Browser                                             | 22 assertion groups passed, zero page errors      | Actual policy components, SiteLink, TanStack router and ReferenceCanvas with synthetic approved content; Chromium, 1440 and 390 pixels         |
+| Browser harness lint                                | 0 errors, 0 warnings                              | Standalone reproducible check script                                                                                                           |
+| Repository formatter                                | Passed                                            | All ten supported changed files; two documentation JSON files excluded by the repository ignore rules                                          |
+| Visual review                                       | Passed                                            | Desktop and phone Terms screenshots inspected; readable wrapping, hierarchy, spacing and links                                                 |
 
 The browser checks covered direct policy URLs, plain-text rendering, English
 language/direction, horizontal overflow, client-side footer navigation, title and
@@ -47,9 +47,18 @@ findings were fixed; exact base-commit source dependencies were hydrated (about
 12.7 MB) and the focused typed check passed. No gameplay source was changed.
 The harness style findings were fixed without dropping assertions.
 
-The unit evidence was reused after whitespace/destructuring changes and an
-equivalent metadata ternary-to-if rewrite. The browser ran after those product
-source fixes. After the browser pass, only the reusable harness's formatting,
+The 28-case unit run started at 00:34:00.478 UTC on 24 November 2026, using base
+142c178 plus the uncommitted policy patch. It preceded four lint fixes within the
+unit dependency closure: one property-read-to-destructuring change and two blank
+lines before continue in `legal-policies.ts`, and a nested-ternary-to-if rewrite in
+`site-metadata-policy.ts`. No complete source snapshot or input-hash manifest from
+that run was retained. The 00:51 `source-map.json` records the later precommit
+source, so it does not establish exact final-source unit acceptance. The existing
+28/28 receipt is preserved as historical evidence. B owns one required focused
+28-case run on the final combined head, with a new source-pinned receipt, before
+this unit gate is closed.
+
+The browser ran after those product source fixes. After the browser pass, only the reusable harness's formatting,
 sequential viewport function extraction and temporary-directory placement changed;
 its assertion set/order and the tested product source remained unchanged.
 
@@ -76,10 +85,11 @@ Receipts in the existing evidence directory:
   files. Every file other than this validation document is byte-identical to
   `afa20359`.
 
-The original `source-map.json`, unit, lint, browser and screenshot receipts
-remain unchanged. Product source, tests and harness are byte-identical to that
-accepted commit, so the existing functional evidence is reused without running
-the unit or browser suites again.
+The original `source-map.json`, unit, lint, browser and screenshot receipts remain
+unchanged. The formatter follow-up changes no product, test or harness bytes
+relative to `afa20359`. That later byte equivalence does not establish the earlier
+unit-run inputs; the historical 28/28 result still requires the final-head check
+described above. This documentation-only correction does not change browser inputs.
 
 ## Reproduction
 

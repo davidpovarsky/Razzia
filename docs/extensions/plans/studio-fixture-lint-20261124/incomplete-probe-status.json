@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-11-24T02:54:58.575285+00:00",
+  "status": "INCOMPLETE",
+  "resultFileExists": false,
+  "matchingLiveNodeProcesses": [],
+  "note": "The earlier standalone adapter/equivalence probe exited without a completed report; no success is claimed. Its diagnostic source and emitted artifacts are retained. The original tool output was not saved as a raw file. The approved existing browser flow run is the runtime gate."
+}

@@ -26,6 +26,32 @@ import { EditorEditingModeProvider } from "@razzia/web/features/quizz/components
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
 import type { QuizzWithId } from "@razzia/common/types/game"
+import { quizzValidator } from "@razzia/common/validators/quizz"
+import type { StudioDraft } from "@razzia/web/features/quizz/components/studio/studio-draft-storage"
+
+declare global {
+  interface Window {
+    fixtureLateEdit: () => void
+    fixtureDraftWrites: StudioDraft[]
+  }
+}
+
+async function loadFixture(quizzId: string): Promise<QuizzWithId> {
+  const response = await fetch(`/fixture/${quizzId}`)
+  const payload: unknown = await response.json()
+
+  if (
+    !quizzValidator.safeParse(payload).success ||
+    !payload ||
+    typeof payload !== "object" ||
+    !("id" in payload) ||
+    payload.id !== quizzId
+  ) {
+    throw new Error("The browser fixture returned an invalid quiz")
+  }
+
+  return payload as QuizzWithId
+}
 
 function Controls() {
   const studio = useStudioEditor()
@@ -37,11 +63,29 @@ function Controls() {
         setValue("subject", "Newer edit during create", { shouldDirty: true }),
     })
   }, [setValue])
+  const editAudio = () => {
+    editor.setExtras((value) => {
+      if (!value) {
+        return value
+      }
+
+      const { start } = value.audio.cues
+
+      return {
+        ...value,
+        audio: {
+          ...value.audio,
+          cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+        },
+      }
+    })
+  }
   const scene =
     studio.selectedTimelineItem?.kind !== "question" &&
     studio.selectedTimelineItem
       ? studio.scenes[studio.selectedTimelineItem.sceneId]
       : null
+
   return (
     <>
       <QuizzEditorHeader />
@@ -104,25 +148,7 @@ function Controls() {
           >
             Convert to quiz
           </Button>
-          <Button
-            data-testid="edit-audio"
-            onClick={() =>
-              editor.setExtras((value) =>
-                value
-                  ? {
-                      ...value,
-                      audio: {
-                        ...value.audio,
-                        cues: {
-                          ...value.audio.cues,
-                          start: { ...value.audio.cues.start!, volume: 0.17 },
-                        },
-                      },
-                    }
-                  : value,
-              )
-            }
-          >
+          <Button data-testid="edit-audio" onClick={editAudio}>
             Audio edit
           </Button>
         </div>
@@ -204,17 +230,24 @@ function EditorFixture() {
   useEffect(() => {
     let active = true
     setBase(null)
-    if (quizzId !== "new")
-      fetch(`/fixture/${quizzId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (active) setBase(data)
-        })
+
+    if (quizzId !== "new") {
+      void loadFixture(quizzId).then((data) => {
+        if (active) {
+          setBase(data)
+        }
+      })
+    }
+
     return () => {
       active = false
     }
   }, [quizzId])
-  if (quizzId !== "new" && !base) return <p>Loading fixture</p>
+
+  if (quizzId !== "new" && !base) {
+    return <p>Loading fixture</p>
+  }
+
   return (
     <QuizzEditorProvider initialData={base ?? undefined}>
       <StudioEditorProvider>
@@ -249,7 +282,13 @@ const configRoute = createRoute({
 const router = createRouter({
   routeTree: rootRoute.addChildren([editorRoute, configRoute]),
 })
-createRoot(document.getElementById("root")!).render(
+const container = document.getElementById("root")
+
+if (!container) {
+  throw new Error("The browser fixture requires its root element")
+}
+
+createRoot(container).render(
   <QueryClientProvider
     client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
   >

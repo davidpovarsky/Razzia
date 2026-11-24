@@ -10,8 +10,11 @@ import { createRequire } from "node:module"
 const here = dirname(fileURLToPath(import.meta.url))
 const repo = resolve(here, "../../../..")
 const output = process.env.STUDIO_DIAGNOSTICS
-if (!output)
+
+if (!output) {
   throw new Error("Set STUDIO_DIAGNOSTICS to an owned scratch directory")
+}
+
 await mkdir(output, { recursive: true })
 const require = createRequire(join(repo, "extensions/package.json"))
 const { build } = require("esbuild")
@@ -31,7 +34,17 @@ const sourcePaths = [
         path.startsWith("extensions/") ||
         /browser-(check\.mjs|fixture\.tsx|i18n\.ts)$/.test(path)),
   )
-  .sort()
+  .sort((left, right) => {
+    if (left < right) {
+      return -1
+    }
+
+    if (left > right) {
+      return 1
+    }
+
+    return 0
+  })
 const sourceReceipt = {
   checkedAt: new Date().toISOString(),
   baseCommit: git("rev-parse", "HEAD"),
@@ -58,6 +71,7 @@ const alias = {
 }
 await build({
   entryPoints: [join(here, "browser-fixture.tsx")],
+  tsconfig: join(repo, "packages/web/tsconfig.app.json"),
   bundle: true,
   format: "esm",
   platform: "browser",
@@ -131,7 +145,7 @@ const database = new Map([[base.id, { base, extras }]])
 let failNextSave = false
 let deferCreate = false
 let releaseCreate = null
-let saves = []
+const saves = []
 let created = 0
 const errors = []
 const cases = []
@@ -143,18 +157,24 @@ const server = createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://fixture")
     const path = url.pathname
+
     if (path === "/fixture.js") {
       response.writeHead(200, { "content-type": "text/javascript" })
       response.end(await readFile(join(output, "fixture.js")))
+
       return
     }
+
     if (path.startsWith("/fixture/") || path.startsWith("/api/quizz/")) {
       const data = database.get(path.split("/").at(-1))
       json(response, data ? 200 : 404, data?.base ?? {})
+
       return
     }
+
     if (path.startsWith("/api/extensions/quizzes")) {
-      const id = path.split("/")[4]
+      const [, , , , id] = path.split("/")
+
       if (request.method === "GET") {
         const data = database.get(id)
         json(
@@ -169,28 +189,37 @@ const server = createServer(async (request, response) => {
               }
             : {},
         )
+
         return
       }
+
       let text = ""
-      for await (const chunk of request) text += chunk
+      for await (const chunk of request) {
+        text += chunk
+      }
       const payload = JSON.parse(text)
       saves.push({
         method: request.method,
         id,
         expectedRevision: payload.expectedRevision,
       })
+
       if (failNextSave) {
         failNextSave = false
         json(response, 503, { error: "fixture outage" })
+
         return
       }
+
       if (request.method === "POST" && deferCreate) {
         deferCreate = false
         await new Promise((done) => {
           releaseCreate = done
         })
       }
+
       const existing = database.get(id)
+
       if (
         existing &&
         payload.expectedRevision !== null &&
@@ -200,18 +229,27 @@ const server = createServer(async (request, response) => {
           currentRevision: existing.extras.revision,
           expectedRevision: payload.expectedRevision,
         })
+
         return
       }
+
       const validated = quizzValidator.safeParse(payload.quizz)
       const validatedExtras = quizExtrasV2Schema.safeParse(payload.extras)
+
       if (!validated.success || !validatedExtras.success) {
         json(response, 422, {
           validation: validated.error?.issues,
           extras: validatedExtras.error?.issues,
         })
+
         return
       }
-      const targetId = id || `created-${++created}`
+
+      if (!id) {
+        created += 1
+      }
+
+      const targetId = id || `created-${created}`
       const revision = existing ? existing.extras.revision + 1 : 1
       const baseDigest = computeCanonicalBaseDigest(payload.quizz)
       database.set(targetId, {
@@ -223,12 +261,16 @@ const server = createServer(async (request, response) => {
         revision,
         baseDigest,
       })
+
       return
     }
+
     if (path.startsWith("/api/")) {
       json(response, 200, [])
+
       return
     }
+
     response.writeHead(200, { "content-type": "text/html" })
     response.end(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>
       *{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#f7f7f8;color:#222}
@@ -244,7 +286,9 @@ const server = createServer(async (request, response) => {
     json(response, 500, { error: String(error) })
   }
 })
-await new Promise((done) => server.listen(0, "127.0.0.1", done))
+await new Promise((done) => {
+  server.listen(0, "127.0.0.1", done)
+})
 const origin = `http://127.0.0.1:${server.address().port}`
 const browser = await chromium.launch({
   headless: true,
@@ -256,33 +300,47 @@ const context = await browser.newContext({
 await context.addInitScript(() => {
   window.fixtureDraftWrites = []
   const original = Storage.prototype.setItem
-  Storage.prototype.setItem = function (key, value) {
+  Storage.prototype.setItem = function setItem(key, value) {
     original.call(this, key, value)
-    if (key.startsWith("tadazz:studio-draft:"))
+
+    if (key.startsWith("tadazz:studio-draft:")) {
       window.fixtureDraftWrites.push(JSON.parse(value))
+    }
   }
 })
 const inspect = async (page) =>
   JSON.parse(await page.getByTestId("inspector").textContent())
 const check = async (page, condition, message) => {
   const start = Date.now()
-  while (Date.now() - start < 6000) {
+  const poll = async () => {
+    if (Date.now() - start >= 6000) {
+      throw new Error(`${message} | ${JSON.stringify(await inspect(page))}`)
+    }
+
     try {
-      if (condition(await inspect(page))) return
-    } catch {}
+      if (condition(await inspect(page))) {
+        return
+      }
+    } catch {
+      // The fixture may not have mounted its inspector yet.
+    }
+
     await page.waitForTimeout(30)
+
+    return poll()
   }
-  throw new Error(message + " | " + JSON.stringify(await inspect(page)))
+
+  await poll()
 }
-const recordCount = async (page, owner = "owner-one", quiz = "quiz-one") =>
+const recordCount = (page, ownerId = "owner-one", quizId = "quiz-one") =>
   page.evaluate(
     ({ owner, quiz }) =>
       Object.keys(localStorage).filter((key) =>
         key.startsWith(
-          `tadazz:studio-draft:v1:${owner}:${quiz === null ? "new" : "quiz-" + quiz}:`,
+          `tadazz:studio-draft:v1:${owner}:${quiz === null ? "new" : `quiz-${quiz}`}:`,
         ),
       ).length,
-    { owner, quiz },
+    { owner: ownerId, quiz: quizId },
   )
 const open = async (page, id = "quiz-one", extra = "") => {
   await page.goto(`${origin}/manager/quizz/${id}${extra}`)
@@ -299,6 +357,17 @@ const attach = (page) => {
 }
 const page = await context.newPage()
 attach(page)
+
+async function waitForCreate() {
+  if (releaseCreate) {
+    return
+  }
+
+  await page.waitForTimeout(20)
+
+  return waitForCreate()
+}
+
 try {
   await open(page)
   const initial = (await inspect(page)).snapshot
@@ -413,7 +482,7 @@ try {
   assert.equal(snap.extras.audio.cues.start.volume, 0.17)
   assert.equal((await inspect(page)).dirty, true)
   await page.screenshot({
-    path: join(here, "browser-recovered-existing.png"),
+    path: join(output, "browser-recovered-existing.png"),
     fullPage: true,
   })
   cases.push(
@@ -519,7 +588,8 @@ try {
   await page.getByTestId("answer-b").fill("Two")
   deferCreate = true
   await page.getByTestId("editor-save-btn").click()
-  while (!releaseCreate) await page.waitForTimeout(20)
+
+  await waitForCreate()
   await page.evaluate(() => window.fixtureLateEdit())
   await check(
     page,
@@ -642,9 +712,11 @@ try {
   })
   await deniedContext.addInitScript(() => {
     const original = Storage.prototype.setItem
-    Storage.prototype.setItem = function (key, value) {
-      if (key.startsWith("tadazz:studio-draft:"))
+    Storage.prototype.setItem = function setItem(key, value) {
+      if (key.startsWith("tadazz:studio-draft:")) {
         throw new DOMException("Fixture quota", "QuotaExceededError")
+      }
+
       return original.call(this, key, value)
     }
   })
@@ -658,7 +730,7 @@ try {
     "אפשר להמשיך לערוך",
   )
   await denied.screenshot({
-    path: join(here, "browser-storage-warning-he-mobile.png"),
+    path: join(output, "browser-storage-warning-he-mobile.png"),
     fullPage: true,
   })
   await deniedContext.close()
@@ -672,8 +744,8 @@ try {
     .digest("hex")
   sourceReceipt.browserReceipt = "browser-result.json"
   await writeFile(
-    join(here, "source-receipt.json"),
-    JSON.stringify(sourceReceipt, null, 2) + "\n",
+    join(output, "source-receipt.json"),
+    `${JSON.stringify(sourceReceipt, null, 2)}\n`,
   )
 
   const report = {
@@ -686,14 +758,16 @@ try {
       "Isolated fixture server; real QuizzEditorProvider, StudioEditorProvider, native header/recovery/history controls and composite save hook. Not production or a full Studio visual qualification.",
   }
   await writeFile(
-    join(here, "browser-result.json"),
-    JSON.stringify(report, null, 2) + "\n",
+    join(output, "browser-result.json"),
+    `${JSON.stringify(report, null, 2)}\n`,
   )
   console.log(JSON.stringify(report, null, 2))
 } catch (error) {
   await page
     .screenshot({ path: join(output, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      // Keep the original assertion failure when a closed page cannot be captured.
+    })
   const report = {
     status: "FAIL",
     cases,
@@ -702,12 +776,14 @@ try {
     saves,
   }
   await writeFile(
-    join(here, "browser-result.json"),
-    JSON.stringify(report, null, 2) + "\n",
+    join(output, "browser-result.json"),
+    `${JSON.stringify(report, null, 2)}\n`,
   )
   console.error(JSON.stringify(report, null, 2))
   process.exitCode = 1
 } finally {
   await browser.close()
-  await new Promise((done) => server.close(done))
+  await new Promise((done) => {
+    server.close(done)
+  })
 }
