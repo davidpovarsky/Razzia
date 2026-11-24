@@ -41,7 +41,7 @@ export function isStudioSnapshot(value: unknown): value is StudioSnapshot {
         typeof question.question === "string" &&
         typeof question.type === "string" &&
         strings(question.answers) &&
-        Array.isArray(question.solutions),
+        (question.solutions === undefined || Array.isArray(question.solutions)),
     ) ||
     extras.schemaVersion !== 2 ||
     typeof extras.quizId !== "string" ||

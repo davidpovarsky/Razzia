@@ -3,6 +3,7 @@ import {
   createDefaultQuizExtrasV2,
   type QuizExtrasV2,
 } from "@razzia/extensions/core"
+import { quizzValidator } from "@razzia/common/validators/quizz"
 import { describe, expect, it } from "vitest"
 import {
   createStudioHistory,
@@ -121,6 +122,69 @@ describe("Studio composite structural history", () => {
     expect(isStudioSnapshot(incomplete)).toBe(true)
     incomplete.questionIds.reverse()
     expect(isStudioSnapshot(incomplete)).toBe(false)
+  })
+
+  it("retains omitted solutions in valid survey drafts through storage and history", () => {
+    const captured = fixture()
+    captured.values.gameMode = "survey"
+    for (const question of captured.values.questions) {
+      delete question.solutions
+    }
+    captured.extras.baseDigest = computeCanonicalBaseDigest(captured.values)
+    expect(quizzValidator.safeParse(captured.values).success).toBe(true)
+    expect(isStudioSnapshot(captured)).toBe(true)
+
+    const local = storage()
+    const draft = record({
+      snapshot: captured,
+      baseline: {
+        revision: captured.extras.revision,
+        baseDigest: captured.extras.baseDigest,
+      },
+    })
+    writeStudioDraft(local, draft)
+    const recovered = readStudioDrafts(local, draft.scope)
+    expect(recovered.invalid).toBe(false)
+    expect(recovered.drafts).toHaveLength(1)
+    const restored = recovered.drafts[0].snapshot as StudioSnapshot & {
+      extras: QuizExtrasV2
+    }
+    expect(restored).toEqual(captured)
+    expect(isStudioSnapshot(restored)).toBe(true)
+    expect(
+      restored.values.questions.every(
+        (question) => !Object.hasOwn(question, "solutions"),
+      ),
+    ).toBe(true)
+
+    const after = structuredClone(restored)
+    after.values.questions.reverse()
+    after.questionIds.reverse()
+    after.extras.questionIds.reverse()
+    after.extras.timeline = [
+      after.extras.timeline[1],
+      after.extras.timeline[0],
+      after.extras.timeline[2],
+    ]
+    const history = recordStudioEdit(createStudioHistory(), restored, after)
+    const edited = structuredClone(after)
+    edited.values.questions[1].question = "Keep later survey text"
+    const undo = moveStudioHistory(history, edited, "undo")!
+    expect(undo.snapshot.questionIds).toEqual(ids)
+    expect(undo.snapshot.values.questions[0].question).toBe(
+      "Keep later survey text",
+    )
+    const redo = moveStudioHistory(undo.history, undo.snapshot, "redo")!
+    expect(redo.snapshot.questionIds).toEqual(after.questionIds)
+    expect(redo.snapshot.values.questions).toEqual(edited.values.questions)
+    for (const result of [undo.snapshot, redo.snapshot]) {
+      expect(isStudioSnapshot(result)).toBe(true)
+      expect(
+        result.values.questions.every(
+          (question) => !Object.hasOwn(question, "solutions"),
+        ),
+      ).toBe(true)
+    }
   })
 
   it("undoes mixed reorder atomically while retaining later text, audio and accepted revision", () => {
