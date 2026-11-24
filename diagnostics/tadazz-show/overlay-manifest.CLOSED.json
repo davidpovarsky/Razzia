@@ -1,0 +1,63 @@
+{
+  "applicationRevision": "1ec7dc5c9549651f1618390a21f8db7efae4ea6f",
+  "applicationTree": "4343a6217310a6d0b5977dcc4f9ad3bbc18ed341",
+  "defaultCaseTimeoutMs": 120000,
+  "diagnosticOnly": true,
+  "dispatchAuthorized": false,
+  "expectTimeoutMs": 20000,
+  "files": {
+    "packages/e2e/tests/tadazz-full-show-parity.spec.ts": {
+      "original": {
+        "bytes": 46709,
+        "sha256": "939781dfc87760952af537b46a8495429bacfd051a20f01ad2b811340d2f54bc"
+      },
+      "overlay": {
+        "bytes": 47082,
+        "sha256": "6a8079b346ae5a2d41a7881c8ef6421c78a0bc3df4885f7b609de025233ac5af"
+      }
+    },
+    "packages/e2e/utils/tadazz-show-diagnostic.ts": {
+      "original": null,
+      "overlay": {
+        "bytes": 15454,
+        "sha256": "21650b2dcd29934b0a6ada4ce93a458d9a9f8d9e7ff498d62e0518b646c40429"
+      }
+    }
+  },
+  "firstCaseTimeoutMs": 180000,
+  "futureExecution": null,
+  "futureResult": null,
+  "kind": "TADAZZ_SHOW_DIAGNOSTIC_ONLY_OVERLAY",
+  "outputEnvironmentVariable": "TADAZZ_SHOW_DIAGNOSTIC_DIR",
+  "postFailureProbeBudgetMs": 2000,
+  "probeIsAcceptanceGate": false,
+  "probesConcurrent": true,
+  "projects": [
+    "chromium",
+    "webkit-ipad"
+  ],
+  "qualificationClaimed": false,
+  "retries": 0,
+  "sixCaseSequencePreserved": true,
+  "sourceTestTitles": [
+    "A01, A02, A03, A04, A05, A06, A07, A08, A11, A12, A15: Live 5-Image Show (Shared Lobby -> 3 Players + Phone Vote -> Question -> Vote -> Lock -> Reveal -> Tie -> Zero Votes -> Next Question -> Finale & Projector Parity)",
+    "A09, A10, A12, A14, A17: Scored Quiz â€” Correct/Incorrect Badges, Leaderboard + Rank Change (updateLeaderboard), 2â€“4 Options Monogram Fallback, Finale with Real Winner & Confetti",
+    "A20 & A21: Studio Editor Untouched + Side-by-Side Frame Sampling (0s, 0.25s, 0.5s, 1.0s, 3.0s) vs Canonical HTML"
+  ],
+  "unchangedSourceDependencies": {
+    "packages/e2e/playwright.tadazz-show.config.ts": {
+      "bytes": 2235,
+      "sha256": "914d80aca079d9db93b54c66768a858ea65702a9a027cb161eef9b561a4b4791"
+    },
+    "packages/e2e/utils/extension-manager.ts": {
+      "bytes": 6815,
+      "sha256": "022d709644bf727abd0399c5f610fd49b651491965fab7b545500a72cd2515f0"
+    },
+    "packages/e2e/utils/fixtures.ts": {
+      "bytes": 1259,
+      "sha256": "285dc7ebb5a5b39a85ac748c3fd691c904e8855d86cc7eafbdc45ca9db3112a4"
+    }
+  },
+  "version": 1,
+  "workers": 1
+}

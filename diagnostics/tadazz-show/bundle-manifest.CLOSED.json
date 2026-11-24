@@ -1,0 +1,109 @@
+{
+  "application": {
+    "head": "1ec7dc5c9549651f1618390a21f8db7efae4ea6f",
+    "tree": "4343a6217310a6d0b5977dcc4f9ad3bbc18ed341"
+  },
+  "bundleFiles": {
+    "overlay-manifest.CLOSED.json": {
+      "bytes": 2387,
+      "sha256": "e612152a28dc9d6fa33bc1272c1e8babfff94d6af256652e1f8b412045e27af6"
+    },
+    "overlay/packages/e2e/tests/tadazz-full-show-parity.spec.ts": {
+      "bytes": 47082,
+      "sha256": "6a8079b346ae5a2d41a7881c8ef6421c78a0bc3df4885f7b609de025233ac5af"
+    },
+    "overlay/packages/e2e/utils/tadazz-show-diagnostic.ts": {
+      "bytes": 15454,
+      "sha256": "21650b2dcd29934b0a6ada4ce93a458d9a9f8d9e7ff498d62e0518b646c40429"
+    },
+    "process-capture.CLOSED.py": {
+      "bytes": 13035,
+      "sha256": "2d21304893f6e862dfc6ed04e844e4ca0215e67898af98172f209a89e9aebb6d"
+    },
+    "run-original-cases.sh": {
+      "bytes": 180,
+      "sha256": "7a69a49d7b96b85a0627e7b40a8047c9a6d83904f34c9600e0e5ba2ccd7f7f40"
+    },
+    "verify-overlay.CLOSED.py": {
+      "bytes": 9869,
+      "sha256": "9f1caac346c1b70d4dcf0a2869a048f6d0aa609e4db30e9cda0ad786778ef239"
+    }
+  },
+  "ciQualification": false,
+  "diagnosticOnly": true,
+  "kind": "ONE_1EC_SHOW_DIAGNOSTIC_SOURCE_BUNDLE",
+  "originalInputs": {
+    ".github/actions/setup/action.yml": {
+      "bytes": 522,
+      "sha256": "a22d840fd1f7e3a9e8da67f320de35bb6f021db1a009de50357bf799c467d465"
+    },
+    ".github/workflows/ci.yml": {
+      "bytes": 9608,
+      "sha256": "c5389aeea1dc02dd0771be64bb038f906b5b60f835b1c331fbd9d5e1a14fd04b"
+    },
+    "extensions/site.vite.config.ts": {
+      "bytes": 7180,
+      "sha256": "54bc638b86de70e1de6163790ccc98db4da66f585924fe84f4f055e650acf833"
+    },
+    "package.json": {
+      "bytes": 1284,
+      "sha256": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd"
+    },
+    "packages/e2e/ci-case-routing.json": {
+      "bytes": 38143,
+      "sha256": "c17bb3699001f7ec21754e0dc8d04af5a4389a7220617d5b6a7fdd52de437a97"
+    },
+    "packages/e2e/package.json": {
+      "bytes": 276,
+      "sha256": "f0cc6cf3af222a3223839a2aa810171ab4f743ce8262a044bf9b09e3a07be84b"
+    },
+    "packages/e2e/playwright.config.ts": {
+      "bytes": 1933,
+      "sha256": "01cd177e8e6fd438fbb49a2d5716392a28e2e738aa02e35e73dc044e012f6d4d"
+    },
+    "packages/e2e/playwright.tadazz-show.config.ts": {
+      "bytes": 2235,
+      "sha256": "914d80aca079d9db93b54c66768a858ea65702a9a027cb161eef9b561a4b4791"
+    },
+    "packages/e2e/tests/tadazz-full-show-parity.spec.ts": {
+      "bytes": 46709,
+      "sha256": "939781dfc87760952af537b46a8495429bacfd051a20f01ad2b811340d2f54bc"
+    },
+    "packages/e2e/utils/constants.ts": {
+      "bytes": 438,
+      "sha256": "c9f65d412c64d6d058b79ff617392afe0c3a146ae73a87a45a8b6a708dd91203"
+    },
+    "pnpm-lock.yaml": {
+      "bytes": 238795,
+      "sha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952"
+    },
+    "pnpm-workspace.yaml": {
+      "bytes": 407,
+      "sha256": "a7a9125e9b0bd614032e1c0df1b9dafc754788ac9bb6c6d3b84c10751626565a"
+    },
+    "scripts/qa/ci-e2e-routing.py": {
+      "bytes": 9646,
+      "sha256": "4513b2f5b6cb4a44265e289fbb5df98b6b46a52737bbc6433392067e79a60e78"
+    }
+  },
+  "overlay": {
+    "packages/e2e/tests/tadazz-full-show-parity.spec.ts": {
+      "original": {
+        "bytes": 46709,
+        "sha256": "939781dfc87760952af537b46a8495429bacfd051a20f01ad2b811340d2f54bc"
+      },
+      "replacement": {
+        "bytes": 47082,
+        "sha256": "6a8079b346ae5a2d41a7881c8ef6421c78a0bc3df4885f7b609de025233ac5af"
+      }
+    },
+    "packages/e2e/utils/tadazz-show-diagnostic.ts": {
+      "original": null,
+      "replacement": {
+        "bytes": 15454,
+        "sha256": "21650b2dcd29934b0a6ada4ce93a458d9a9f8d9e7ff498d62e0518b646c40429"
+      }
+    }
+  },
+  "schemaVersion": 1
+}
