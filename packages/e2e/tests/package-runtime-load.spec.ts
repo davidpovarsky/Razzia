@@ -25,12 +25,15 @@ test("concurrent package displays keep authoritative pause, results and reconnec
     installed.token,
   )
   await page.goto(`/party/manager/${installed.gameId}`)
+  await page.getByTestId("platform-opening-start").click()
+  await page.getByTestId("platform-opening-skip").click()
   // Forty real Chromium clients qualify fanout. Forty WPE tabs exceed this
   // shared host's 8 GiB cap even at 400x300; retain that failed capacity probe
   // in evidence and qualify twenty WebKit clients at full 800x600 instead.
   const target = browserName === "webkit" ? 20 : 40
   const viewport = { width: 800, height: 600 }
   const viewers = await browser.newContext({
+    ignoreHTTPSErrors: true,
     viewport,
     reducedMotion: "reduce",
   })
@@ -174,7 +177,10 @@ test("bounded heavy TSX stays responsive and missing renderer heartbeat falls ba
     installed.token,
   )
   await page.goto(`/party/manager/${installed.gameId}`)
+  await page.getByTestId("platform-opening-start").click()
+  await page.getByTestId("platform-opening-skip").click()
   const context = await browser.newContext({
+    ignoreHTTPSErrors: true,
     viewport: { width: 800, height: 600 },
   })
   const participant = await joinIdleRuntimePlayer(browser, installed.inviteCode)
