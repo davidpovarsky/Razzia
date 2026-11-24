@@ -6,13 +6,14 @@ Validation date: 24 November 2026 (UTC).
 
 ## Accepted results
 
-| Check | Result | Scope |
-| --- | --- | --- |
-| Policy publication and existing metadata unit tests | 28/28 passed | Complete/draft/partial bundles, approval and dates, unfinished text, contact URL injection, duplicate anchors, routes and clean canonical URLs |
-| Typed lint | 0 errors, 0 warnings | Six changed TypeScript/TSX source and test files, 233 project rules |
-| Browser | 22 assertion groups passed, zero page errors | Actual policy components, SiteLink, TanStack router and ReferenceCanvas with synthetic approved content; Chromium, 1440 and 390 pixels |
-| Browser harness lint | 0 errors, 0 warnings | Standalone reproducible check script |
-| Visual review | Passed | Desktop and phone Terms screenshots inspected; readable wrapping, hierarchy, spacing and links |
+| Check                                               | Result                                       | Scope                                                                                                                                          |
+| --------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Policy publication and existing metadata unit tests | 28/28 passed                                 | Complete/draft/partial bundles, approval and dates, unfinished text, contact URL injection, duplicate anchors, routes and clean canonical URLs |
+| Typed lint                                          | 0 errors, 0 warnings                         | Six changed TypeScript/TSX source and test files, 233 project rules                                                                            |
+| Browser                                             | 22 assertion groups passed, zero page errors | Actual policy components, SiteLink, TanStack router and ReferenceCanvas with synthetic approved content; Chromium, 1440 and 390 pixels         |
+| Browser harness lint                                | 0 errors, 0 warnings                         | Standalone reproducible check script                                                                                                           |
+| Repository formatter                                | Passed                                       | All ten supported changed files; two documentation JSON files excluded by the repository ignore rules                                          |
+| Visual review                                       | Passed                                       | Desktop and phone Terms screenshots inspected; readable wrapping, hierarchy, spacing and links                                                 |
 
 The browser checks covered direct policy URLs, plain-text rendering, English
 language/direction, horizontal overflow, client-side footer navigation, title and
@@ -28,15 +29,15 @@ Paddle checkout, real commercial approval or LIVE activation. No messages were s
 Directory:
 `/mnt/development/projects/diagnostics/tadazz-paddle-policy-prep-20261124`.
 
-| File | SHA256 |
-| --- | --- |
-| `unit-results.json` | `25478d681e7b71d2b2b21b5a7a7750e916875143b7dfafb2e5090602196638da` |
-| `lint-final.log` | `f3bfb0a4b8f670cb069e63894653b8c38eb1330cad384f7f7853d50677f56f40` |
-| `browser-result.json` | `225402a19604eab915c7fbbbdf02ef2efa5f1ca5901acc1239621e9256c28c28` |
-| `terms-1440.png` | `cf8e4e3705ccd5112b74c264b20c7400efe89aa87f93acff3faedf160f362833` |
-| `terms-390.png` | `079fb0e5c1d214559cec0da30b5a528aadda9194d20ec4fa44c81227b866811b` |
+| File                         | SHA256                                                             |
+| ---------------------------- | ------------------------------------------------------------------ |
+| `unit-results.json`          | `25478d681e7b71d2b2b21b5a7a7750e916875143b7dfafb2e5090602196638da` |
+| `lint-final.log`             | `f3bfb0a4b8f670cb069e63894653b8c38eb1330cad384f7f7853d50677f56f40` |
+| `browser-result.json`        | `225402a19604eab915c7fbbbdf02ef2efa5f1ca5901acc1239621e9256c28c28` |
+| `terms-1440.png`             | `cf8e4e3705ccd5112b74c264b20c7400efe89aa87f93acff3faedf160f362833` |
+| `terms-390.png`              | `079fb0e5c1d214559cec0da30b5a528aadda9194d20ec4fa44c81227b866811b` |
 | `refunds-rtl-shell-1440.png` | `57672a44eb8b0ac3e6fe925275d7336479661542ab56090ca7dcd0292fe7000b` |
-| `refunds-rtl-shell-390.png` | `fd2244659d3ff5290ee49d6263ac90b1de332dcc65c13871a70473211fc84b06` |
+| `refunds-rtl-shell-390.png`  | `fd2244659d3ff5290ee49d6263ac90b1de332dcc65c13871a70473211fc84b06` |
 
 `source-map.json` in the same directory records the final source file hashes.
 Raw initial failures remain in `lint-initial.log` and
@@ -51,6 +52,34 @@ equivalent metadata ternary-to-if rewrite. The browser ran after those product
 source fixes. After the browser pass, only the reusable harness's formatting,
 sequential viewport function extraction and temporary-directory placement changed;
 its assertion set/order and the tested product source remained unchanged.
+
+## Final formatter gate and evidence equivalence
+
+The final repository Prettier check used the existing dependency checkout,
+the committed `.prettierrc.json` and `.prettierignore`, and the twelve files
+changed by `afa20359b7a117820b22d93fc8c23ccdd274829f`. The two documentation
+JSON files are excluded by the repository's existing
+`docs/extensions/**/*.json` ignore rule.
+
+The initial check reported only this validation document's Markdown table
+alignment. All product TypeScript/TSX/CSS, test code, the browser harness and
+the README already passed. This follow-up adds the missing result here and
+applies Prettier only to this document; the same bounded final check then passed.
+
+Receipts in the existing evidence directory:
+
+- `format-final-initial.json` and `format-final-initial.log`: original command,
+  base commit, file hashes and the single reported formatting failure.
+- `format-final.json` and `format-final.log`: successful final check using the
+  same repository configuration and file list.
+- `format-equivalence.json`: original and final SHA256 hashes for all twelve
+  files. Every file other than this validation document is byte-identical to
+  `afa20359`.
+
+The original `source-map.json`, unit, lint, browser and screenshot receipts
+remain unchanged. Product source, tests and harness are byte-identical to that
+accepted commit, so the existing functional evidence is reused without running
+the unit or browser suites again.
 
 ## Reproduction
 
