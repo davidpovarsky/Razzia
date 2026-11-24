@@ -261,13 +261,42 @@ try:
 finally:
  subprocess.run(['docker','rm','-f',probe_name],capture_output=True,timeout=20)
 view_receipt={'root':str(source_view),'privateParentMode':stat.S_IMODE(view_parent.stat().st_mode),'originalRootMode':source_inventory['metadata']['.']['mode'],'viewRootMode':stat.S_IMODE(source_view.stat().st_mode),'sourceInventorySha256':hashlib.sha256(inventory_bytes).hexdigest(),'uidProbeSha256':hashlib.sha256(uid_probe.encode()).hexdigest(),'uidReadProof':uid_receipt,'uidProbeMountsSha256':probe_mounts_sha,'uidProbeStopped':not probe_state['Running'],'uidProbeOomKilled':probe_state['OOMKilled'],'outsideAllWritableMounts':True,'regularFilesHardlinked':True,'originalFileContentAndPermissionsUnchanged':True,'fileChmodPerformed':False,'mountReadOnly':True}
+def admit_resources():
+ observed_at=time.time_ns()
+ meminfo_path=owned/'resource-admission.meminfo.txt'
+ meminfo=pathlib.Path('/proc/meminfo').read_bytes()
+ assert 0<len(meminfo)<=64*1024,'Unexpected memory observation size'
+ rows=[line.split() for line in meminfo.decode('ascii').splitlines() if line.startswith('MemAvailable:')]
+ assert len(rows)==1 and len(rows[0])==3 and rows[0][1].isdigit() and rows[0][2]=='kB','MemAvailable must be an exact byte-convertible observation'
+ memory_available=int(rows[0][1])*1024
+ free_bytes=shutil.disk_usage(base).free
+ observed_until=time.time_ns()
+ memory_floor=6*1024**3;disk_floor=700*1024**2
+ observation={'kind':'MANAGED_FRESH_RESOURCE_ADMISSION','run':c['run'],'sha':c['sha'],'sourceRun':c['sourceRun'],
+  'observedAtUnixNs':observed_at,'observationCompletedAtUnixNs':observed_until,
+  'memoryAvailableBytes':memory_available,'freeDiskBytes':free_bytes,'diskPath':str(base),
+  'requiredMemoryAvailableBytes':memory_floor,'requiredFreeDiskBytes':disk_floor,
+  'meminfo':{'path':str(meminfo_path),'bytes':len(meminfo),'sha256':hashlib.sha256(meminfo).hexdigest()},
+  'plannedResources':{'mainMemoryBytes':4*1024**3,'mainMemorySwapBytes':4*1024**3,
+   'serialBuilderMemoryBytes':768*1024**2,'serialBuilderMemorySwapBytes':768*1024**2,
+   'reservedHeadroomBytes':1280*1024**2,'maximumConcurrentHeavyCpus':2,'nodeOldSpaceMiB':1200},
+  'preBrowserUidProbeStopped':not probe_state['Running'],'preBrowserUidProbeOomKilled':probe_state['OOMKilled'],
+  'freshCgroupReadPerformed':False,'passed':memory_available>=memory_floor and free_bytes>=disk_floor}
+ admission_path=owned/'resource-admission.json'
+ admission_bytes=(json.dumps(observation,sort_keys=True,indent=2)+'\n').encode()
+ for path,raw in [(meminfo_path,meminfo),(admission_path,admission_bytes)]:
+  with path.open('xb') as stream:
+   stream.write(raw);stream.flush();os.fsync(stream.fileno())
+ assert observation['passed'],'Fresh Managed capacity admission failed'
+ return {'path':str(admission_path),'bytes':len(admission_bytes),'sha256':hashlib.sha256(admission_bytes).hexdigest(),'observation':observation}
 name=c['run'];config_name='package-staging-managed-'+c['run'].rsplit('-',1)[1]
 store=owned/config_name/'extensions/packages'
 mounts=[(source,'/source',True),(owned,'/evidence',False),(cleanup,'/cleanup',True),(browsers,'/root/.cache/ms-playwright',True),(mcp,'/tmp/phase3-999ed90c/deps',True)]
 mounts.append((browser_e2e,'/source/packages/e2e',True))
-argv=['docker','run','--detach','--pull=never','--init','--read-only','--name',name,'--network','none','--cpus','1','--memory','2g','--memory-swap','2g','--pids-limit','512','--shm-size','256m','--tmpfs','/tmp:rw,nosuid,nodev,size=805306368','--label','com.tadazz.qa=managed-clients']
+argv=['docker','run','--detach','--pull=never','--init','--read-only','--name',name,'--network','none','--cpus','1','--memory','4g','--memory-swap','4g','--pids-limit','512','--shm-size','256m','--tmpfs','/tmp:rw,nosuid,nodev,size=805306368','--label','com.tadazz.qa=managed-clients']
 for origin,target,readonly in mounts:argv+=['--mount','type=bind,source='+str(origin)+',target='+target+(',readonly' if readonly else '')]
 argv+=['--entrypoint','/bin/sleep',image,'infinity']
+resource_admission=admit_resources()
 subprocess.run(argv,check=True,stdout=subprocess.DEVNULL)
 atexit.register(lambda:subprocess.run(['docker','stop','--time','10',name],check=True,stdout=subprocess.DEVNULL,timeout=25))
 browser_owner=json.loads(subprocess.check_output(['docker','inspect',name],timeout=15))[0]
@@ -418,9 +447,11 @@ stats=playwright.get('stats',{}) if playwright else {}
 projects={project['name'] for project in playwright.get('config',{}).get('projects',[])} if playwright else set()
 passed=result_code==0 and probe_code==0 and proxy and proxy.get('passed') is True and not builder_errors and len(builder_receipts)==2 and all(item['exit']==0 for item in builder_receipts) and projects=={'chromium','webkit'} and stats.get('expected')==2 and stats.get('unexpected')==0 and stats.get('skipped')==0 and stats.get('flaky')==0
 state=json.loads(subprocess.check_output(['docker','inspect',name]))[0]['State']
+passed=bool(passed) and state.get('OOMKilled') is False
 report={'sha':c['sha'],'sourceRun':c['sourceRun'],'run':c['run'],'passed':bool(passed),'exit':result_code,'seconds':round(time.time()-started,2),'sourceReadOnly':True,'allSourceHashesVerified':True,'builtArtifactsUnchanged':True,'webArtifactsDigest':hashlib.sha256(json.dumps(web_before,sort_keys=True).encode()).hexdigest(),'productionMountUsed':False,'productionChanged':False,'network':'none','browserImage':image,'oomKilled':state.get('OOMKilled',False),'projects':sorted(projects),'stats':stats,'overlaySha256':hashlib.sha256(overlay.encode()).hexdigest(),'proxyProbeSha256':hashlib.sha256(probe.encode()).hexdigest(),'proxy':proxy,'proxyExit':probe_code,'builder':builder_receipts,'builderErrors':builder_errors,'runtimeTopology':{'web':'http://127.0.0.1:3190','nativeSocket':'http://127.0.0.1:3191','runtimeTls':'https://localhost:3192','runtimeBackend':'http://127.0.0.1:3194','trustedIngress':'synthetic loopback3193; header overwritten from actual TCP peer','deployedCaddyQualified':False},'command':command}
 report['harness']=c['harness'];report['builderReadView']=view_receipt;report['browserMountsSha256']=browser_mounts_sha
 report['browserE2eView']=e2e_view_receipt
+report['resourceAdmission']=resource_admission
 (owned/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({'run':c['run'],'passed':report['passed'],'seconds':report['seconds'],'receipt':str(owned/'receipt.json')}),flush=True)
 '''
