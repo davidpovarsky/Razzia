@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-11-24T01:11:01.471Z",
+  "baseCommit": "142c178de33737b6fdfff87fefa466fe6652363d",
+  "node": "v26.13.1",
+  "esbuild": "0.28.2",
+  "playwright": "1.64.0",
+  "fileSHA256": {
+    "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs": "3be474bb6240e3aa9197cdf9e5a5e28f4d0a2ab23a26697335faa6ccf5970592",
+    "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx": "891704057c4b4abde1fcc0c10d723dffff995709c79b3fa204cb1556a92d2b23",
+    "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts": "df73076e6c2a189b4f33baef6fefed571fe91b867ae4d8f0ce90b4cb3b354723",
+    "extensions/src/locales/de/extensions.json": "61b9923dc86b01ace033ffbe10b983e9891c4d18bbc38898ce25081f394b6678",
+    "extensions/src/locales/en/extensions.json": "51d6755e8783b256472892770b6dfd480e960fd3f25734d9a3e8fb89d8fadae8",
+    "extensions/src/locales/es/extensions.json": "1507004fc1c0e176f895e39d755efda8f59a6595144b5715a8a5093a85148b37",
+    "extensions/src/locales/fr/extensions.json": "6433014be576cc72ec026847c292237209199780c475f1ee2ea40231aba3c508",
+    "extensions/src/locales/he/extensions.json": "edfde82c6006b025596a0b8e3d1a3bd44c86951d0695127a0c84bdeed0e1bb84",
+    "extensions/src/locales/it/extensions.json": "1c5f6e7f3e08659270cd0d3965ef3141f0fd43f359bccf3b65721d2f9ecb9eab",
+    "extensions/src/locales/ja/extensions.json": "876f8beea1a1f736baddb1873caa93f0dc62b5d5027f3b922c52ae6433b22dd1",
+    "extensions/src/locales/tr/extensions.json": "fb4fc6ca31b1aee0bf40de4912c9dcb746fb8b4781cd4c0109e4c9106c2503b4",
+    "extensions/src/locales/vi/extensions.json": "dd766d7dac0b9239eb8b1f1c74956f98f791df59e6379c41e21e7adb32f03a30",
+    "packages/web/src/features/quizz/components/QuizzEditorHeader.tsx": "57cfc47abd4a3581628c77532dafbd339d4b1ce393496080b0de5e388b04b7c2",
+    "packages/web/src/features/quizz/components/studio/studio-draft-dialog.tsx": "20cadc03fb5383140ed216d2daecec7d3d14a55923d567d9d15d81d7c71bff7f",
+    "packages/web/src/features/quizz/components/studio/studio-draft-storage.ts": "b82c03ab3fc2463b981f17e1bf33375bf8b237f630936e03fc47f6209d029831",
+    "packages/web/src/features/quizz/components/studio/studio-editor-context.tsx": "a051e33103375f90c09f39c72c3659e613fae18f0bc5b7cbc2c09543096f4c66",
+    "packages/web/src/features/quizz/components/studio/studio-history-controls.tsx": "42decb238d25805949473b417684ac70ff70912e02170053bdabc93a67fe87ee",
+    "packages/web/src/features/quizz/components/studio/studio-history-draft.test.ts": "492ea1c76f715c0411b1b7fe1426f4360f97890154ffe4c71ead08ec22c26292",
+    "packages/web/src/features/quizz/components/studio/studio-snapshot.ts": "cc0d9b5075738168429ccd6ebfbce6a392263bf199f22df062ba6a9e2a2f417a",
+    "packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts": "0318b997e873a5eed05da78b4787f590d33f344cbad7b08d810da3a019aacad7",
+    "packages/web/src/features/quizz/components/studio/use-studio-draft.ts": "910c82f554de24019b8fdcb7db33a9329ba2c1b0121bab71ccc9d37af56c2d6d",
+    "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx": "3166904c60e18d266a38a371617df5f162db39ef17f34ad74b59ca34dc3bc558"
+  },
+  "browserBundleSHA256": "d193026f1e528c59ec8949181dc4c268d7182ddffede03c77b0e1538125e5c14",
+  "browserReceipt": "browser-result.json"
+}

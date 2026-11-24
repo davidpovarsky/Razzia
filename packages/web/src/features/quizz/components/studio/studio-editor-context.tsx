@@ -2,6 +2,7 @@
 import { QUESTION_LEAD_IN_SECONDS, QUIZZ_MODES } from "@razzia/common/constants"
 import type { Question } from "@razzia/common/types/game"
 import {
+  computeCanonicalBaseDigest,
   createDefaultRosterExtras,
   createDefaultQuizExtrasV2,
   cloneApplicationCardScope,
@@ -25,9 +26,20 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type PropsWithChildren,
 } from "react"
+import {
+  createStudioHistory,
+  isStudioSnapshot,
+  moveStudioHistory,
+  recordStudioEdit,
+  studioContent,
+  type StudioHistory,
+  type StudioSnapshot,
+} from "./studio-snapshot"
+import { useStudioDraft, type StudioDraftState } from "./use-studio-draft"
 import { useFormContext, useWatch } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
@@ -38,7 +50,13 @@ import {
 
 export type StudioTab = "questions" | "participants" | "settings" | "launch"
 
-interface StudioEditorContextType {
+interface StudioEditorContextType extends StudioDraftState {
+  canUndo: boolean
+  canRedo: boolean
+  undo: () => void
+  redo: () => void
+  clearStudioHistory: () => void
+  captureStudioSnapshot: () => StudioSnapshot | null
   activeTab: StudioTab
   setActiveTab: (tab: StudioTab) => void
   timeline: TimelineItem[]
@@ -88,10 +106,32 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     extras,
     setExtras,
     acceptExtrasBaseline,
+    isExtrasDirty,
+    extrasStatus,
     currentIndex,
     setCurrentIndex,
   } = useQuizzEditor()
-  const { control, getValues, setValue } = useFormContext<QuizzFormValues>()
+  const {
+    control,
+    getValues,
+    setValue,
+    formState: { isDirty },
+  } = useFormContext<QuizzFormValues>()
+  const formValues = useWatch({ control })
+  const [initialBaseDigest] = useState(() =>
+    computeCanonicalBaseDigest(getValues()),
+  )
+  const [history, setHistory] = useState(createStudioHistory)
+  const historyRef = useRef(history)
+  const lastHistoryContent = useRef("")
+  const updateHistory = useCallback((next: StudioHistory) => {
+    historyRef.current = next
+    setHistory(next)
+  }, [])
+  const clearStudioHistory = useCallback(() => {
+    updateHistory(createStudioHistory())
+    lastHistoryContent.current = ""
+  }, [updateHistory])
   const questions = useWatch({
     control,
     name: "questions",
@@ -518,8 +558,142 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     },
     [],
   )
+  const captureStudioSnapshot = useCallback((): StudioSnapshot | null => {
+    if (!extras || !isQuizExtrasV2(extras)) {
+      return null
+    }
+
+    const snapshot: StudioSnapshot = {
+      values: structuredClone(getValues()),
+      questionIds: [...questionIds],
+      extras: structuredClone({
+        ...extras,
+        questionIds,
+        timeline,
+        scenes,
+        defaults,
+      }),
+      selectedTimelineId,
+      currentIndex,
+    }
+
+    return isStudioSnapshot(snapshot) ? snapshot : null
+  }, [
+    extras,
+    getValues,
+    questionIds,
+    timeline,
+    scenes,
+    defaults,
+    selectedTimelineId,
+    currentIndex,
+  ])
+
+  const restoreStudioSnapshot = useCallback(
+    (snapshot: StudioSnapshot) => {
+      const restored = structuredClone(snapshot)
+
+      if (!isQuizExtrasV2(restored.extras)) {
+        return
+      }
+
+      if (replaceQuestions) {
+        replaceQuestions(restored.values.questions, restored.questionIds)
+      } else {
+        setValue("questions", restored.values.questions, { shouldDirty: true })
+        setQuestionIds?.(restored.questionIds)
+      }
+
+      setValue("subject", restored.values.subject, { shouldDirty: true })
+      setValue("gameMode", restored.values.gameMode, { shouldDirty: true })
+      setExtras(restored.extras)
+      setTimeline(restored.extras.timeline)
+      setScenes(restored.extras.scenes)
+      setDefaults(restored.extras.defaults)
+      setSelectedTimelineId(restored.selectedTimelineId)
+      setCurrentIndex(
+        Math.max(
+          0,
+          Math.min(restored.currentIndex, restored.questionIds.length - 1),
+        ),
+      )
+      setPendingConversion(null)
+      lastHistoryContent.current = studioContent(restored)
+    },
+    [replaceQuestions, setQuestionIds, setValue, setExtras, setCurrentIndex],
+  )
+
+  const restoreDraftSnapshot = useCallback(
+    (snapshot: StudioSnapshot) => {
+      clearStudioHistory()
+      restoreStudioSnapshot(snapshot)
+    },
+    [clearStudioHistory, restoreStudioSnapshot],
+  )
+  const draft = useStudioDraft({
+    quizzId,
+    snapshot: captureStudioSnapshot(),
+    ready: extrasStatus === "ready",
+    dirty: isDirty || isExtrasDirty,
+    initialBaseDigest,
+    restore: restoreDraftSnapshot,
+  })
+
+  const travelHistory = useCallback(
+    (direction: "undo" | "redo") => {
+      const current = captureStudioSnapshot()
+
+      if (!current || extrasStatus !== "ready" || draft.pendingDraft) {
+        return
+      }
+
+      const result = moveStudioHistory(historyRef.current, current, direction)
+
+      if (!result) {
+        return
+      }
+
+      updateHistory(result.history)
+      restoreStudioSnapshot(result.snapshot)
+    },
+    [
+      captureStudioSnapshot,
+      extrasStatus,
+      draft.pendingDraft,
+      updateHistory,
+      restoreStudioSnapshot,
+    ],
+  )
+  const undo = useCallback(() => travelHistory("undo"), [travelHistory])
+  const redo = useCallback(() => travelHistory("redo"), [travelHistory])
+
+  /* oxlint-disable react/set-state-in-effect -- Clear local history at accepted server/document boundaries. */
+  useEffect(() => {
+    clearStudioHistory()
+  }, [quizzId, extras?.revision, clearStudioHistory])
+  useEffect(() => {
+    const snapshot = captureStudioSnapshot()
+
+    if (!snapshot) {
+      return
+    }
+
+    const content = studioContent(snapshot)
+
+    if (
+      content !== lastHistoryContent.current &&
+      historyRef.current.future.length
+    ) {
+      updateHistory({ ...historyRef.current, future: [] })
+    }
+
+    lastHistoryContent.current = content
+  }, [formValues, captureStudioSnapshot, updateHistory])
+  /* oxlint-enable react/set-state-in-effect */
+
   const applyStudioMutation = useCallback(
     (result: StudioMutationResult) => {
+      const before = captureStudioSnapshot()
       const normalizedScenes = normalizeRecapSceneStartRefs(
         result.nextTimeline,
         result.nextScenes,
@@ -555,8 +729,30 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         targetQuestionIds: result.nextQuestionIds,
         targetPerQuestion: result.nextPerQuestion,
       })
+
+      if (before) {
+        const after: StudioSnapshot = {
+          ...before,
+          values: { ...before.values, questions: result.nextQuestions },
+          questionIds: result.nextQuestionIds,
+          extras: {
+            ...before.extras,
+            questionIds: result.nextQuestionIds,
+            timeline: result.nextTimeline,
+            scenes: normalizedScenes,
+            defaults: result.nextDefaults ?? defaults,
+            perQuestion: result.nextPerQuestion ?? before.extras.perQuestion,
+          } as QuizExtrasV2,
+          selectedTimelineId: result.nextSelectedId,
+          currentIndex: result.nextCurrentIndex,
+        }
+        lastHistoryContent.current = studioContent(after)
+        updateHistory(recordStudioEdit(historyRef.current, before, after))
+      }
     },
     [
+      captureStudioSnapshot,
+      updateHistory,
       normalizeRecapSceneStartRefs,
       replaceQuestions,
       setValue,
@@ -597,13 +793,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             idx === qIndex ? updatedQ : q,
           )
 
-          if (replaceQuestions) {
-            replaceQuestions(nextQuestions, currentQIds)
-          } else {
-            setValue("questions", nextQuestions, {
-              shouldDirty: true,
-            })
-          }
+          applyStudioMutation({
+            nextQuestions,
+            nextQuestionIds: currentQIds,
+            nextTimeline: currentTimeline,
+            nextScenes: currentScenes,
+            nextSelectedId: item.id,
+            nextCurrentIndex: qIndex,
+          })
         }
 
         return
@@ -791,8 +988,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       scenes,
       createDefaultScene,
       t,
-      replaceQuestions,
-      setValue,
       applyStudioMutation,
       currentIndex,
       extras,
@@ -1301,15 +1496,36 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     (mode: "quiz" | "survey") => {
       const currentQuestions = getValues("questions")
       const updated = currentQuestions.map((q) => withQuestionPlayMode(q, mode))
-      setValue("questions", updated, {
-        shouldDirty: true,
+      applyStudioMutation({
+        nextQuestions: updated,
+        nextQuestionIds: questionIds,
+        nextTimeline: timeline,
+        nextScenes: scenes,
+        nextSelectedId: selectedTimelineId ?? timeline[0]?.id ?? "",
+        nextCurrentIndex: currentIndex,
       })
       toast.success(t("extensions:studio.settings.bulkSuccess"))
     },
-    [getValues, setValue, t],
+    [
+      getValues,
+      applyStudioMutation,
+      questionIds,
+      timeline,
+      scenes,
+      selectedTimelineId,
+      currentIndex,
+      t,
+    ],
   )
   const value = useMemo<StudioEditorContextType>(
     () => ({
+      ...draft,
+      canUndo: history.past.length > 0,
+      canRedo: history.future.length > 0,
+      undo,
+      redo,
+      clearStudioHistory,
+      captureStudioSnapshot,
       activeTab,
       setActiveTab,
       timeline,
@@ -1333,6 +1549,12 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       cancelPendingConversion,
     }),
     [
+      draft,
+      history,
+      undo,
+      redo,
+      clearStudioHistory,
+      captureStudioSnapshot,
       activeTab,
       timeline,
       selectedTimelineId,

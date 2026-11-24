@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Cambiar modo",
     "unsavedExitTitle": "¿Salir sin guardar?",
     "unsavedExitDescription": "Los cambios en las preguntas, las escenas y los ajustes del espectáculo no se han guardado.",
-    "discardAndExit": "Salir sin guardar"
+    "discardAndExit": "Salir sin guardar",
+    "undo": "Deshacer cambio en la línea de tiempo",
+    "redo": "Rehacer cambio en la línea de tiempo",
+    "draftRecoveryTitle": "¿Recuperar los cambios sin guardar?",
+    "draftRecoveryDescription": "Este navegador tiene cambios sin guardar del {{time}}. Restáuralos para seguir editando.",
+    "draftServerChanged": "La versión del servidor ha cambiado. Al restaurar, el borrador sigue separado; para guardar hay que resolver el conflicto de versiones.",
+    "restoreDraft": "Restaurar borrador",
+    "discardDraft": "Descartar este borrador",
+    "draftStorageUnavailable": "La copia del borrador en el navegador no está disponible o no se pudo leer. Guarda los cambios antes de salir.",
+    "savedWithNewerEdits": "Guardado. Los cambios más recientes siguen sin guardar."
   },
   "preview": {
     "badge": "Vista previa del editor",

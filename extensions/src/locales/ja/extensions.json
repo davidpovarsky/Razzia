@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "モードを変更",
     "unsavedExitTitle": "保存せずに終了しますか？",
     "unsavedExitDescription": "質問、シーン、ショー設定の変更は保存されていません。",
-    "discardAndExit": "保存せずに終了"
+    "discardAndExit": "保存せずに終了",
+    "undo": "タイムラインの編集を元に戻す",
+    "redo": "タイムラインの編集をやり直す",
+    "draftRecoveryTitle": "未保存の変更を復元しますか？",
+    "draftRecoveryDescription": "このブラウザーには {{time}} の未保存の変更があります。復元すると編集を続けられます。",
+    "draftServerChanged": "サーバー上のバージョンが変更されています。復元した下書きは別に保持されます。保存するにはバージョンの競合を解決する必要があります。",
+    "restoreDraft": "下書きを復元",
+    "discardDraft": "この下書きを破棄",
+    "draftStorageUnavailable": "ブラウザーの下書きバックアップを利用できないか、読み込めませんでした。終了する前に変更を保存してください。",
+    "savedWithNewerEdits": "保存しました。より新しい変更はまだ保存されていません。"
   },
   "preview": {
     "badge": "エディタープレビュー",

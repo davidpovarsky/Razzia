@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Change mode",
     "unsavedExitTitle": "Leave without saving?",
     "unsavedExitDescription": "Your question, scene and show setting changes have not been saved.",
-    "discardAndExit": "Leave without saving"
+    "discardAndExit": "Leave without saving",
+    "undo": "Undo timeline edit",
+    "redo": "Redo timeline edit",
+    "draftRecoveryTitle": "Recover unsaved changes?",
+    "draftRecoveryDescription": "This browser has unsaved changes from {{time}}. Restore them to continue editing.",
+    "draftServerChanged": "The server version has changed. Restoring keeps your draft separate; saving requires resolving the revision conflict.",
+    "restoreDraft": "Restore draft",
+    "discardDraft": "Discard this draft",
+    "draftStorageUnavailable": "Browser draft backup is unavailable or could not be read. Save your changes before leaving.",
+    "savedWithNewerEdits": "Saved. Newer changes remain unsaved."
   },
   "preview": {
     "badge": "Editor Preview",

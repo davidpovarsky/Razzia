@@ -268,7 +268,16 @@
     "confirmAnswerTypeChange": "Đổi chế độ",
     "unsavedExitTitle": "Thoát mà không lưu?",
     "unsavedExitDescription": "Các thay đổi về câu hỏi, cảnh và cài đặt chương trình chưa được lưu.",
-    "discardAndExit": "Thoát mà không lưu"
+    "discardAndExit": "Thoát mà không lưu",
+    "undo": "Hoàn tác chỉnh sửa dòng thời gian",
+    "redo": "Làm lại chỉnh sửa dòng thời gian",
+    "draftRecoveryTitle": "Khôi phục thay đổi chưa lưu?",
+    "draftRecoveryDescription": "Trình duyệt này có thay đổi chưa lưu từ {{time}}. Khôi phục để tiếp tục chỉnh sửa.",
+    "draftServerChanged": "Phiên bản trên máy chủ đã thay đổi. Bản nháp được khôi phục sẽ được giữ riêng; cần giải quyết xung đột phiên bản trước khi lưu.",
+    "restoreDraft": "Khôi phục bản nháp",
+    "discardDraft": "Xóa bản nháp này",
+    "draftStorageUnavailable": "Bản sao lưu nháp trong trình duyệt không khả dụng hoặc không đọc được. Hãy lưu thay đổi trước khi rời đi.",
+    "savedWithNewerEdits": "Đã lưu. Những thay đổi mới hơn vẫn chưa được lưu."
   },
   "preview": {
     "badge": "Xem trước trình chỉnh sửa",
