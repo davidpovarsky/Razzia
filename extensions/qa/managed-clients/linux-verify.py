@@ -124,6 +124,67 @@ def verify_read_view(original,view,before):
     assert (src.stat().st_dev,src.stat().st_ino)==(target.stat().st_dev,target.stat().st_ino)
  assert view.stat().st_mode&0o005==0o005
  return actual
+def verify_browser_e2e_view(original,view,before):
+ assert view_inventory(original)==before,'Original E2E source content/permissions changed'
+ actual=view_inventory(view)
+ assert actual['content'].get('node_modules')=={'kind':'symlink','target':'/cleanup/packages/e2e/node_modules'}
+ assert actual['metadata'].get('node_modules')=={'mode':0o777,'uid':0,'gid':0}
+ content={k:v for k,v in actual['content'].items() if k!='node_modules'}
+ assert content==before['content'],'Private E2E view must preserve every original byte and symlink'
+ assert set(actual['metadata'])==set(before['metadata'])|{'node_modules'}
+ for relative,entry in before['content'].items():
+  src=original/relative;target=view/relative;observed=actual['metadata'][relative]
+  if entry['kind']=='directory':
+   expected_mode=0o755 if relative=='.' else before['metadata'][relative]['mode']|0o005
+   assert observed['mode']==expected_mode
+   assert (src.stat().st_dev,src.stat().st_ino)!=(target.stat().st_dev,target.stat().st_ino)
+  else:
+   assert observed==before['metadata'][relative],'No E2E file/link permission or owner change'
+   if entry['kind']=='file':
+    assert (src.stat().st_dev,src.stat().st_ino)==(target.stat().st_dev,target.stat().st_ino)
+ assert not view.is_relative_to(owned) and not owned.is_relative_to(view),'No writable E2E evidence ancestor'
+ return actual
+def browser_dependency_identity():
+ cache=cleanup/'packages/e2e/node_modules'
+ assert cache.is_dir() and not cache.is_symlink()
+ observed=view_inventory(cache);metadata=observed['metadata']['.']
+ assert metadata=={'mode':0o755,'uid':0,'gid':0}
+ entries={}
+ for relative,item in observed['content'].items():
+  if relative=='.':continue
+  row=dict(observed['metadata'][relative])
+  if item['kind']=='symlink':row.update(type='link',target=item['target'])
+  elif item['kind']=='directory':row.update(type='directory')
+  else:row.update(type='file',bytes=item['bytes'],sha256=item['sha256'])
+  entries[relative]=row
+ assert set(entries)=={'.bin','.bin/playwright','@playwright','@playwright/test','@types','@types/node','i18next'}
+ cache_value={'root':str(cache),'rootMode':0o755,'rootUid':0,'rootGid':0,'entries':entries}
+ cache_bytes=(json.dumps(cache_value,sort_keys=True,indent=2)+'\n').encode()
+ assert hashlib.sha256(cache_bytes).hexdigest()=='091bcd925709ff3d032c2dc3b32b5efa33c95e6efa5c61c3ee163fbb78f9d50a'
+ cli=(cleanup/'extensions/node_modules/@playwright/test').resolve(strict=True)
+ library=(cache/'@playwright/test').resolve(strict=True)
+ assert cli==library and library.is_relative_to(cleanup),'CLI and E2E must resolve one Playwright package'
+ def dependency(parent,name):
+  for candidate in (parent,*parent.parents):
+   if candidate!=cleanup and not candidate.is_relative_to(cleanup):break
+   if candidate.name=='node_modules':continue
+   path=candidate/'node_modules'/name
+   if path.is_dir():
+    resolved=path.resolve(strict=True)
+    assert resolved.is_relative_to(cleanup)
+    return resolved
+  raise AssertionError('Existing Playwright dependency missing: '+name)
+ playwright=dependency(library,'playwright');core=dependency(playwright,'playwright-core')
+ packages={}
+ for name,path in [('@playwright/test',library),('playwright',playwright),('playwright-core',core)]:
+  raw=(path/'package.json').read_bytes();package=json.loads(raw)
+  assert package['name']==name and package['version']=='1.64.0'
+  packages[name]={'containerPath':'/cleanup/'+path.relative_to(cleanup).as_posix(),'version':package['version'],'packageJsonSha256':hashlib.sha256(raw).hexdigest()}
+ test_entries={}
+ for leaf,expected in [('index.js','499da5dd8585212108a1443793de31ebc061ca7db02343f107955f261180cdfc'),('index.mjs','ec8997c2e5cea26befc76e7bf990750e96babb16977673a9ff3b5c0575d01e48')]:
+  raw=(library/leaf).read_bytes();observed=hashlib.sha256(raw).hexdigest();assert observed==expected
+  test_entries[leaf]={'bytes':len(raw),'sha256':observed}
+ return {'cacheInventorySha256':hashlib.sha256(cache_bytes).hexdigest(),'cacheEntries':len(entries),'cliAndE2eResolveSamePlaywright':True,'packages':packages,'testEntryFiles':test_entries},cache_bytes
 assert cleanup.stat().st_mode&0o005==0o005
 view_parent=base/(c['run']+'-builder-view');view_parent.mkdir(mode=0o700,exist_ok=False)
 assert stat.S_IMODE(view_parent.stat().st_mode)==0o700,'Read view must stay behind its private parent'
@@ -132,6 +193,19 @@ assert not source_view.is_relative_to(owned) and not owned.is_relative_to(source
 source_inventory=create_read_view(source,source_view)
 inventory_bytes=(json.dumps(source_inventory,sort_keys=True,indent=2)+'\n').encode()
 (owned/'read-view-source-inventory.json').write_bytes(inventory_bytes)
+# Preserve canonical source and the full builder view; only the browser gets
+# a private exact-byte E2E subtree with one explicit read-only cache link.
+e2e_original=source/'packages/e2e';browser_e2e=view_parent/'browser-e2e'
+assert not os.path.lexists(e2e_original/'node_modules') and not os.path.lexists(browser_e2e)
+e2e_inventory=create_read_view(e2e_original,browser_e2e)
+(browser_e2e/'node_modules').symlink_to('/cleanup/packages/e2e/node_modules',target_is_directory=True)
+e2e_view_inventory=verify_browser_e2e_view(e2e_original,browser_e2e,e2e_inventory)
+dependency_identity,dependency_inventory_bytes=browser_dependency_identity()
+e2e_inventory_bytes=(json.dumps({'source':e2e_inventory,'view':e2e_view_inventory},sort_keys=True,indent=2)+'\n').encode()
+(owned/'browser-e2e-view-inventory.json').write_bytes(e2e_inventory_bytes)
+(owned/'e2e-dependency-inventory.json').write_bytes(dependency_inventory_bytes)
+(owned/'browser-dependency-identity.json').write_text(json.dumps(dependency_identity,sort_keys=True,indent=2)+'\n')
+e2e_view_receipt={'root':str(browser_e2e),'originalRoot':str(e2e_original),'privateParentMode':0o700,'viewRootMode':0o755,'containerTarget':'/source/packages/e2e','mountReadOnly':True,'regularFilesHardlinked':True,'originalNodeModulesAbsent':True,'addedDependencySymlink':{'relativePath':'node_modules','target':'/cleanup/packages/e2e/node_modules'},'outsideAllWritableMounts':True,'inventorySha256':hashlib.sha256(e2e_inventory_bytes).hexdigest(),'dependencyIdentity':dependency_identity,'originalCanonicalAndBuilderViewsPreserved':True,'allOriginalBytesSymlinksAndPermissionsVerifiedBeforeAfter':False,'dependencyIdentityUnchangedBeforeAfter':False}
 mcp=base/'tadazz-codex-browser-c4125d58a746-8e0c29d3/mcp-deps'
 entries={str(p.relative_to(mcp)):('link:'+str(p.readlink()) if p.is_symlink() else hashlib.sha256(p.read_bytes()).hexdigest()) for p in mcp.rglob('*') if p.is_file() or p.is_symlink()}
 assert len(entries)==2042 and hashlib.sha256(json.dumps(entries,sort_keys=True).encode()).hexdigest()=='0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de'
@@ -190,12 +264,15 @@ view_receipt={'root':str(source_view),'privateParentMode':stat.S_IMODE(view_pare
 name=c['run'];config_name='package-staging-managed-'+c['run'].rsplit('-',1)[1]
 store=owned/config_name/'extensions/packages'
 mounts=[(source,'/source',True),(owned,'/evidence',False),(cleanup,'/cleanup',True),(browsers,'/root/.cache/ms-playwright',True),(mcp,'/tmp/phase3-999ed90c/deps',True)]
+mounts.append((browser_e2e,'/source/packages/e2e',True))
 argv=['docker','run','--detach','--pull=never','--init','--read-only','--name',name,'--network','none','--cpus','1','--memory','2g','--memory-swap','2g','--pids-limit','512','--shm-size','256m','--tmpfs','/tmp:rw,nosuid,nodev,size=805306368','--label','com.tadazz.qa=managed-clients']
 for origin,target,readonly in mounts:argv+=['--mount','type=bind,source='+str(origin)+',target='+target+(',readonly' if readonly else '')]
 argv+=['--entrypoint','/bin/sleep',image,'infinity']
 subprocess.run(argv,check=True,stdout=subprocess.DEVNULL)
 atexit.register(lambda:subprocess.run(['docker','stop','--time','10',name],check=True,stdout=subprocess.DEVNULL,timeout=25))
-browser_mounts_sha=verify_source_mounts(json.loads(subprocess.check_output(['docker','inspect',name],timeout=15))[0],source)
+browser_owner=json.loads(subprocess.check_output(['docker','inspect',name],timeout=15))[0]
+browser_mounts_sha=verify_source_mounts(browser_owner,source)
+assert [(m['Source'],m['RW']) for m in browser_owner['Mounts'] if m['Destination']=='/source/packages/e2e']==[(str(browser_e2e),False)]
 # Reuse the committed three-server topology. Only output paths and explicit
 # trusted-ingress settings are overlaid; tests and all application code are exact.
 overlay="""import base from '/source/packages/e2e/playwright.package-runtime.config.ts'
@@ -329,6 +406,10 @@ assert source_hashes()==c['manifest'],'Managed browser changed source'
 assert web_hashes()==web_before,'Managed browser changed built application'
 verify_read_view(source,source_view,source_inventory)
 view_receipt['allBytesSymlinksAndSourcePermissionsVerifiedBeforeAfter']=True
+assert verify_browser_e2e_view(e2e_original,browser_e2e,e2e_inventory)==e2e_view_inventory
+assert browser_dependency_identity()==(dependency_identity,dependency_inventory_bytes)
+e2e_view_receipt['allOriginalBytesSymlinksAndPermissionsVerifiedBeforeAfter']=True
+e2e_view_receipt['dependencyIdentityUnchangedBeforeAfter']=True
 report_path=owned/'package-browser-report.json'
 playwright=json.loads(report_path.read_text()) if report_path.is_file() else None
 proxy_path=owned/'proxy-receipt.json'
@@ -339,6 +420,7 @@ passed=result_code==0 and probe_code==0 and proxy and proxy.get('passed') is Tru
 state=json.loads(subprocess.check_output(['docker','inspect',name]))[0]['State']
 report={'sha':c['sha'],'sourceRun':c['sourceRun'],'run':c['run'],'passed':bool(passed),'exit':result_code,'seconds':round(time.time()-started,2),'sourceReadOnly':True,'allSourceHashesVerified':True,'builtArtifactsUnchanged':True,'webArtifactsDigest':hashlib.sha256(json.dumps(web_before,sort_keys=True).encode()).hexdigest(),'productionMountUsed':False,'productionChanged':False,'network':'none','browserImage':image,'oomKilled':state.get('OOMKilled',False),'projects':sorted(projects),'stats':stats,'overlaySha256':hashlib.sha256(overlay.encode()).hexdigest(),'proxyProbeSha256':hashlib.sha256(probe.encode()).hexdigest(),'proxy':proxy,'proxyExit':probe_code,'builder':builder_receipts,'builderErrors':builder_errors,'runtimeTopology':{'web':'http://127.0.0.1:3190','nativeSocket':'http://127.0.0.1:3191','runtimeTls':'https://localhost:3192','runtimeBackend':'http://127.0.0.1:3194','trustedIngress':'synthetic loopback3193; header overwritten from actual TCP peer','deployedCaddyQualified':False},'command':command}
 report['harness']=c['harness'];report['builderReadView']=view_receipt;report['browserMountsSha256']=browser_mounts_sha
+report['browserE2eView']=e2e_view_receipt
 (owned/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({'run':c['run'],'passed':report['passed'],'seconds':report['seconds'],'receipt':str(owned/'receipt.json')}),flush=True)
 '''
