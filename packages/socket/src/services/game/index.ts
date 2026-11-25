@@ -290,11 +290,12 @@ class Game {
       },
       onGameFinished: (result) => {
         this.presentationLaunch?.close()
+        const savedResult = quizzId ? { ...result, quizId: quizzId } : result
 
         if (accountsEnabled()) {
-          void withAccount(this.contentOwnerId, () => saveResult(result))
+          void withAccount(this.contentOwnerId, () => saveResult(savedResult))
         } else {
-          saveResult(result)
+          saveResult(savedResult)
         }
       },
       getSettings: () => this._settings,

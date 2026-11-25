@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { gamePosterUrlSchema } from "./game-poster"
 import { applicationCompositionPinSchema } from "./show-library/application-composition-pin"
 import {
   createDefaultShowTheme,
@@ -527,6 +528,7 @@ export function createStudioDefaults(
 
 export const authoringMetadataSchema = z.strictObject({
   showNote: z.string().max(2000).optional(),
+  posterUrl: gamePosterUrlSchema.optional(),
 })
 
 export type AuthoringMetadata = z.infer<typeof authoringMetadataSchema>

@@ -698,6 +698,7 @@ function makeShow(metadata: PublicDemoMetadata): TadaShowV1 {
     format: "tada-show",
     version: 1,
     title: metadata.title,
+    posterUrl: metadata.coverUrl,
     baseGameMode: allSurvey ? "survey" : "quiz",
     settings: [],
     defaults: {

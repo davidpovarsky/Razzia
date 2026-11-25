@@ -220,6 +220,19 @@ describe("quizz storage", () => {
     ])
   })
 
+  it("includes the saved quiz timestamp and carries a result's quiz identity", () => {
+    const file = join(quizzDir(), "edited-show.json")
+    const editedAt = new Date("2026-11-25T08:00:00.000Z")
+    writeJson(file, { id: "edited", ...createQuizz([createQuestion()]) })
+    fs.utimesSync(file, editedAt, editedAt)
+    saveResult(createResult({ quizId: "edited" }))
+
+    expect(getQuizzMeta().find((quiz) => quiz.id === "edited")).toMatchObject({
+      updatedAt: editedAt.toISOString(),
+    })
+    expect(getResultsMeta()[0]?.quizId).toBe("edited")
+  })
+
   it("skips invalid files and assigns an id to files without one", () => {
     writeJson(join(quizzDir(), "broken.json"), { subject: "" })
     fs.writeFileSync(join(quizzDir(), "unreadable.json"), "{")

@@ -51,6 +51,28 @@ describe("Show Authoring Schema & Converters", () => {
     const parsed = tadaShowV1Schema.safeParse(minimalValidShow)
     expect(parsed.success).toBe(true)
   })
+  it("retains the game poster through the native bundle and rejects remote URLs", () => {
+    const posterUrl = "/media/game-cover.webp"
+    const { bundleDraft } = authoredShowToNativeBundleDraft({
+      ...minimalValidShow,
+      posterUrl,
+    })
+
+    expect(bundleDraft).toBeDefined()
+
+    if (!bundleDraft) {
+      throw new Error("Expected a native bundle")
+    }
+
+    expect(bundleDraft.extras.authoring?.posterUrl).toBe(posterUrl)
+    expect(nativeBundleToAuthoredShow(bundleDraft).posterUrl).toBe(posterUrl)
+    expect(
+      tadaShowV1Schema.safeParse({
+        ...minimalValidShow,
+        posterUrl: "https://foreign.example/game-cover.webp",
+      }).success,
+    ).toBe(false)
+  })
   it("rejects show with duplicate card keys", () => {
     const invalidShow = {
       ...minimalValidShow,

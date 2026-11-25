@@ -2,9 +2,61 @@ import { describe, expect, it } from "vitest"
 import {
   chapterKeyTarget,
   isSeekableMediaTime,
+  previewNavigation,
 } from "../components/game-preview/timeline-input"
+import type {
+  PreviewChapter,
+  PreviewSource,
+} from "../components/game-preview/contracts"
 
 describe("chapter input, no fictional elapsed-time conversion", () => {
+  it("jumps to voting in public demos and preserves the editor's exact phases", () => {
+    const chapters: PreviewChapter[] = [
+      ["intro", "opening"],
+      ["q1", "question"],
+      ["q1", "answerCards"],
+      ["q1", "voting"],
+      ["q1", "results"],
+      ["q2", "question"],
+      ["q2", "answerCards"],
+      ["q2", "voting"],
+    ].map(([authoredKey, phase]) => ({
+      authoredKey,
+      phase,
+      id: `${authoredKey}:${phase}`,
+      title: authoredKey,
+      duration: { kind: "manual" },
+      seek: "chapter-only",
+    }))
+    const demo: PreviewSource = {
+      kind: "published-demo",
+      catalogueId: "great-guessoff",
+      immutableRevision: "test",
+    }
+    const publicNavigation = previewNavigation({ chapters, source: demo })
+
+    expect(publicNavigation.stops.map(({ id }) => id)).toEqual([
+      "intro:opening",
+      "q1:voting",
+      "q1:results",
+      "q2:voting",
+    ])
+    expect(publicNavigation.indexOf("q1:question")).toBe(1)
+    expect(publicNavigation.indexOf("q2:answerCards")).toBe(3)
+    expect(publicNavigation.indexOf("q1:results")).toBe(2)
+
+    const ownerNavigation = previewNavigation({
+      chapters,
+      source: {
+        kind: "account-owned",
+        quizId: "owner",
+        immutableRevision: "test",
+      },
+    })
+    expect(ownerNavigation.stops).toBe(chapters)
+    expect(ownerNavigation.indexOf("q2:question")).toBe(5)
+  })
+
   it.each([
     ["ArrowLeft", 2, 1],
     ["ArrowRight", 2, 3],

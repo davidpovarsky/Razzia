@@ -191,7 +191,11 @@ const imageDecode = async (page, preloadCatalogue = false) => {
     .toEqual([])
 }
 
-const readyPreview = async (page, chapterIndex, questionText) => {
+const readyPreview = async (
+  page,
+  chapterIndex,
+  { questionText, authoredIndex = chapterIndex } = {},
+) => {
   await expect(page.locator(".game-preview-bottom").first()).toBeVisible({
     timeout: 30_000,
   })
@@ -210,7 +214,7 @@ const readyPreview = async (page, chapterIndex, questionText) => {
   await expect(stage).toBeVisible({ timeout: 30_000 })
   await expect(stage).toHaveAttribute(
     "data-preview-chapter-index",
-    String(chapterIndex),
+    String(authoredIndex),
   )
 
   if (questionText || chapterIndex === 0) {
@@ -620,6 +624,13 @@ try {
         .first()
       await expect(slider).toBeEnabled()
       const last = await slider.getAttribute("max")
+      const authoredCards = previews.get(game.id).show.cards
+      const lastAuthoredIndex =
+        authoredCards.reduce(
+          (count, card) =>
+            count + (["quiz", "survey"].includes(card.kind) ? 5 : 1),
+          0,
+        ) - 1
       assert(
         Number(last) >= game.questionCount,
         `Actual authored chapter timeline: ${game.id}`,
@@ -627,22 +638,37 @@ try {
       await slider.focus()
       await page.keyboard.press("End")
       await expect(slider).toHaveValue(last)
-      await readyPreview(page, Number(last))
+      await readyPreview(page, Number(last), {
+        authoredIndex: lastAuthoredIndex,
+      })
       await page.keyboard.press("Home")
       await expect(slider).toHaveValue("0")
       await readyPreview(page, 0)
-      const firstQuestion = previews
-        .get(game.id)
-        .show.cards.find((card) => ["quiz", "survey"].includes(card.kind))
+      const firstQuestion = authoredCards.find((card) =>
+        ["quiz", "survey"].includes(card.kind),
+      )
       await slider.focus()
       await page.keyboard.press("ArrowRight")
-      await readyPreview(page, 1, firstQuestion.question)
+      await readyPreview(page, 1, {
+        questionText: firstQuestion.question,
+        authoredIndex: 3,
+      })
+      const votingStage = page
+        .locator("[data-native-application-preview]")
+        .first()
+      await expect(votingStage).toHaveAttribute("data-preview-phase", "voting")
+      await expect(
+        votingStage.locator('[data-v4="answer-cards"]').first(),
+      ).toBeVisible()
       await expect(
         page.getByTestId("tadazz-question-panel").first(),
       ).toContainText(firstQuestion.question)
       await page.keyboard.press("ArrowRight")
       await expect(slider).toHaveValue("2")
-      await readyPreview(page, 2, firstQuestion.question)
+      await readyPreview(page, 2, {
+        questionText: firstQuestion.question,
+        authoredIndex: 4,
+      })
       await verifyNativePalette({
         page,
         themeId: game.themeId,

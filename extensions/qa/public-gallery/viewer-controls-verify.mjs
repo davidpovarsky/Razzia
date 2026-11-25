@@ -606,7 +606,7 @@ export async function verifyPublicViewers({
         await retainedViewer(dialog, handles)
         await expand.click()
         await expect(dialog).toHaveAttribute("data-expanded", "true")
-        await dialog.getByTestId("game-viewer-close").click()
+        await expand.click()
         await expect(dialog).toHaveAttribute("data-expanded", "false")
         await expect(expand).toBeFocused()
         await retainedViewer(dialog, handles)
@@ -636,6 +636,11 @@ export async function verifyPublicViewers({
         for (const handle of Object.values(handles)) {
           await handle.dispose()
         }
+        await dialog.getByTestId("game-viewer-close").click()
+        await expect(dialog).toBeHidden()
+        await expect
+          .poll(() => new URL(page.url()).searchParams.get("view"))
+          .toBe("product")
         const detail = {
           locale,
           game: id,
@@ -818,6 +823,10 @@ export async function verifyStudioViewer(options) {
         await expect(cards).toHaveCount(PUBLIC_GALLERY_IDS.length, {
           timeout: 30_000,
         })
+        await expect(cards.first()).toHaveAttribute(
+          "data-catalogue-card",
+          "royal-quiz",
+        )
         assert.equal(
           await cards.locator(".catalogue-studio-details[open]").count(),
           0,
@@ -840,6 +849,14 @@ export async function verifyStudioViewer(options) {
           "dir",
           locale === "he" ? "rtl" : "ltr",
         )
+        const resize = openDialog(page).getByTestId("game-viewer-expand")
+        await resize.click()
+        await expect(openDialog(page)).toHaveAttribute("data-expanded", "false")
+        await expect(
+          openDialog(page).getByTestId("game-viewer-close"),
+        ).toBeVisible()
+        await resize.click()
+        await expect(openDialog(page)).toHaveAttribute("data-expanded", "true")
         await page.screenshot({
           path: join(evidence, `preview-${locale}-${viewport.width}.png`),
         })

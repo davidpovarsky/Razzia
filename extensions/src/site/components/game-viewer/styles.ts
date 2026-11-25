@@ -38,6 +38,16 @@ export const gameViewerCss = `
   border-radius: 16px;
   box-shadow: var(--tds-shadow-dialog, 0 24px 80px #0009);
 }
+.game-viewer-dialog[open][data-modal="true"][data-expanded="false"] {
+  position: fixed;
+  inset: 0;
+  inline-size: min(64rem, calc(100vw - 24px));
+  block-size: fit-content;
+  max-block-size: calc(100dvh - 24px);
+  margin: auto;
+  overflow: auto;
+  border-radius: 16px;
+}
 .game-viewer-dialog::backdrop {
   background: var(--tds-overlay, #070312b3);
   backdrop-filter: blur(5px);

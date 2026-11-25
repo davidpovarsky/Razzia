@@ -1,5 +1,6 @@
 import { scopedThemeOverridesSchema } from "./show-themes/selection"
 import { z } from "zod"
+import { gamePosterUrlSchema } from "./game-poster"
 import {
   cardAudioOverridesSchema,
   cardBackgroundOverrideSchema,
@@ -677,6 +678,7 @@ export const tadaShowV1Schema = z
     version: z.literal(TADA_SHOW_VERSION),
     title: z.string().min(1, "errors:quizz.subjectEmpty"),
     note: z.string().optional(),
+    posterUrl: gamePosterUrlSchema.optional(),
     baseGameMode: z.enum(["quiz", "survey"]).default("quiz"),
     defaults: studioDefaultsSchema.partial().optional(),
     cards: z.array(authoredCardSchema).min(1, "errors:quizz.noQuestions"),

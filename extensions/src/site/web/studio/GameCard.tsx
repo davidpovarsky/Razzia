@@ -13,6 +13,7 @@ import { useRef, useState } from "react"
 import { useSiteText } from "../../locales"
 import { SiteLink } from "../shared/SiteLink"
 import type { QuizMeta } from "./MyGames"
+import { GamePoster } from "./GamePoster"
 import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
 
 export interface GameCardProps {
@@ -68,13 +69,10 @@ export function GameCard({
           label={game.subject}
           disabled={busy}
         >
-          <img
-            className="site-game-cover"
-            data-cover-source="fallback"
-            src="/tadazz-design-reference/marketing-stage.webp"
-            alt=""
-          />
-          <span className="site-cover-label">{t("Default cover")}</span>
+          <GamePoster className="site-game-cover" posterUrl={game.posterUrl} />
+          {!game.posterUrl && (
+            <span className="site-cover-label">{t("Default cover")}</span>
+          )}
         </GamePreviewSurface>
       </div>
       <div className="site-game-body">

@@ -136,6 +136,7 @@ export interface GameResultPlayer {
 
 export interface GameResult {
   id: string
+  quizId?: string
   gameMode: QuizzMode
   subject: string
   date: string
@@ -145,6 +146,7 @@ export interface GameResult {
 
 export interface GameResultMeta {
   id: string
+  quizId?: string
   gameMode: QuizzMode
   subject: string
   date: string

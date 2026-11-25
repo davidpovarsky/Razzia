@@ -417,7 +417,28 @@ describe("portable package trust boundary", () => {
   it("installs ten five-image questions/audio, persists and reimports in another tenant without manual upload", () => {
     const { store, dir } = setup(),
       fixture = createPackageFixture("game")
-    const draft = preparedUpload(store, author, fixture.bytes)
+    const posterPath = fixture.manifest.files[0].path
+    const withPoster = {
+      ...fixture.manifest,
+      contents: fixture.manifest.contents.map((game) => ({
+        ...game,
+        posterPath,
+      })),
+    }
+    expect(
+      packageManifestSchema.safeParse({
+        ...withPoster,
+        contents: withPoster.contents.map((game) => ({
+          ...game,
+          posterPath: "games/game-1.json",
+        })),
+      }).success,
+    ).toBe(false)
+    const draft = preparedUpload(
+      store,
+      author,
+      packPackage(withPoster, fixture.files),
+    )
     const result = store.install(author, draft.uploadId, draft.revision, [
       "demo-game-1",
     ])
@@ -446,6 +467,7 @@ describe("portable package trust boundary", () => {
       Object.values(sidecar.perQuestion).flatMap((q) => q.answerVisuals ?? []),
     ).toHaveLength(50)
     const asset = `/media/pkg_${draft.sourceDigest.slice(0, 24)}_${fixture.manifest.files[0].sha256}.png`
+    expect(sidecar.authoring?.posterUrl).toBe(asset)
     expect(
       store.readMedia(author.tenantId, asset.split("/").at(-1)!),
     ).not.toBeNull()
@@ -473,6 +495,7 @@ describe("portable package trust boundary", () => {
     })
     const exported = inspectPackage(currentExport)
     expect(exported.report.type).toBe("game")
+    expect(exported.report.manifest.contents[0].posterPath).toBe(posterPath)
     expect(exported.report.games[0].summary?.answerImageCount).toBe(50)
   })
   it.each(["authored", "enhanced"] as const)(

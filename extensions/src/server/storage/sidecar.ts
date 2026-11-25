@@ -62,14 +62,26 @@ export const sidecarExists = (
 export const readSidecar = (
   getPath: (subPath?: string) => string,
   quizId: string,
+  { readOnly = false }: { readOnly?: boolean } = {},
 ): AnyQuizExtras | null => {
-  const filePath = getSidecarFilePath(getPath, quizId)
-
-  if (!fs.existsSync(filePath)) {
+  if (readOnly && !/^[A-Za-z0-9_-]+$/u.test(quizId)) {
     return null
   }
 
+  const cleanId = path.basename(quizId).replace(/\.json$/i, "")
+  const filePath = readOnly
+    ? getPath(`extensions/quizzes/${cleanId}.json`)
+    : getSidecarFilePath(getPath, quizId)
+
   try {
+    if (
+      !(readOnly
+        ? fs.lstatSync(filePath, { throwIfNoEntry: false })?.isFile()
+        : fs.existsSync(filePath))
+    ) {
+      return null
+    }
+
     const raw = fs.readFileSync(filePath, "utf-8")
     const parsed = JSON.parse(raw) as unknown
 

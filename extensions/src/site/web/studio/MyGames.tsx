@@ -13,6 +13,8 @@ import { PackageTools } from "./PackageTools"
 export interface QuizMeta {
   id: string
   subject: string
+  updatedAt?: string
+  posterUrl?: string
 }
 
 export function MyGames({
@@ -62,13 +64,16 @@ export function MyGames({
       setBusy(false)
     }
   }
-  const filtered = games
-    .filter((game) =>
-      game.subject.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-    )
-    .sort(
+  const filtered = games.filter((game) =>
+    game.subject.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+  )
+
+  if (limit === undefined) {
+    filtered.sort(
       (a, b) => (sort === "asc" ? 1 : -1) * a.subject.localeCompare(b.subject),
     )
+  }
+
   const duplicate = (game: QuizMeta) =>
     run(async () => {
       const client = new CompositeApiClient()

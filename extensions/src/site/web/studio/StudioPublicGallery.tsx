@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { presentationControlText } from "../../../platform-ui"
 import { ArrowRight, Play, Pencil } from "lucide-react"
 import { publicDemoCatalogue } from "../../../core/show-library/public-demo-catalogue"
+import { isOriginalThemeId } from "../../../core/show-themes/original-theme-families"
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
 import { InlineGamePreviewBoundary } from "../../components/game-preview/boundary"
 import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
@@ -19,12 +20,23 @@ export function StudioPublicGallery({ search }: { search: string }) {
   const provider = useMemo(createPublicPreviewProvider, [])
   const [installing, setInstalling] = useState<string | null>(null)
   const [error, setError] = useState("")
-  const games = publicDemoCatalogue.filter((game) =>
-    [t(game.title), t(game.themeName), ...game.audience.map((item) => t(item))]
-      .join(" ")
-      .toLocaleLowerCase()
-      .includes(search.trim().toLocaleLowerCase()),
-  )
+  const query = search.trim().toLocaleLowerCase()
+  const games = publicDemoCatalogue
+    .filter((game) =>
+      [
+        t(game.title),
+        t(game.themeName),
+        ...game.audience.map((item) => t(item)),
+      ]
+        .join(" ")
+        .toLocaleLowerCase()
+        .includes(query),
+    )
+    .sort(
+      (first, second) =>
+        Number(isOriginalThemeId(second.themeId)) -
+        Number(isOriginalThemeId(first.themeId)),
+    )
   const customise = async (id: string) => {
     if (installing) {
       return

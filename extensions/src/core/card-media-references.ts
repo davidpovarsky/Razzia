@@ -17,6 +17,7 @@ type MediaExtras = Partial<
 
 export type MediaReferenceField =
   | "show.themeAsset"
+  | "show.poster"
   | "question.media"
   | "question.answerVisual"
   | "question.background"
@@ -455,6 +456,14 @@ export const collectQuizMediaReferences = (
     }
   }
 
+  addRef(
+    "show-poster",
+    "global",
+    quizTitle,
+    "show.poster",
+    show.extras?.authoring?.posterUrl,
+  )
+
   return refs
 }
 
@@ -592,6 +601,12 @@ export const detachMediaFromShowData = <
   }
 
   let nextExtras = structuredClone(extras)
+
+  if (nextExtras.authoring && matchesTarget(nextExtras.authoring.posterUrl)) {
+    delete nextExtras.authoring.posterUrl
+    modified = true
+  }
+
   for (const url of collectThemeExtrasMedia(nextExtras).filter(matchesTarget)) {
     nextExtras = detachThemeExtrasMedia(nextExtras, url)
     modified = true

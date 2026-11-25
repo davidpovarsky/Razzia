@@ -1,7 +1,11 @@
 import { requireLibraryValue } from "../../../core/show-library/required"
 // oxlint-disable typescript/no-unnecessary-condition -- Chapter navigation indexes may be absent at runtime.
 import { canSeekChapter } from "./contracts"
-import { chapterKeyTarget, isSeekableMediaTime } from "./timeline-input"
+import {
+  chapterKeyTarget,
+  isSeekableMediaTime,
+  previewNavigation,
+} from "./timeline-input"
 import type { GamePreviewController } from "./use-game-preview"
 import { useEffect, useRef, useState } from "react"
 
@@ -11,12 +15,10 @@ export function PreviewTimeline({
   controller: GamePreviewController
 }) {
   const { session, state, text, run } = controller
+  const navigation = session ? previewNavigation(session) : null
   const index =
-    session && state.status === "ready"
-      ? Math.max(
-          0,
-          session.chapters.findIndex((c) => c.id === state.snapshot.chapterId),
-        )
+    navigation && state.status === "ready"
+      ? navigation.indexOf(state.snapshot.chapterId)
       : 0
   const requested = useRef(index)
   const intent = useRef(0),
@@ -33,7 +35,7 @@ export function PreviewTimeline({
     }
   }, [session])
 
-  if (!session || state.status !== "ready" || !text) {
+  if (!session || !navigation || state.status !== "ready" || !text) {
     return null
   }
 
@@ -45,9 +47,15 @@ export function PreviewTimeline({
     )
   }
 
-  const chapter = session.chapters[index]
+  const { stops } = navigation
+  const chapter = stops[index]
+
+  if (!chapter) {
+    return null
+  }
+
   const seek = (target: number) => {
-    const next = session.chapters[target]
+    const next = stops[target]
 
     if (next && canSeekChapter(session, next)) {
       intent.current += 1
@@ -67,24 +75,24 @@ export function PreviewTimeline({
     }
   }
   const inputIndex = pendingIndex ?? index
-  const inputChapter = session.chapters[inputIndex]
+  const inputChapter = stops[inputIndex] ?? chapter
 
   return (
     <div className="game-preview-timeline">
       <div className="game-preview-segments" aria-hidden="true">
-        {session.chapters.map((item, n) => (
+        {stops.map((item, n) => (
           <span key={item.id} data-passed={n <= index || undefined} />
         ))}
       </div>
       <input
         type="range"
         min={0}
-        max={session.chapters.length - 1}
+        max={stops.length - 1}
         step={1}
         value={inputIndex}
         aria-busy={controller.pending}
         aria-label={text("chapters")}
-        aria-valuetext={`${controller.pending ? `${text("loading")} ` : ""}${text("chapter", { number: inputIndex + 1, count: session.chapters.length, title: inputChapter.title })}`}
+        aria-valuetext={`${controller.pending ? `${text("loading")} ` : ""}${text("chapter", { number: inputIndex + 1, count: stops.length, title: inputChapter.title })}`}
         disabled={!canSeekChapter(session, chapter)}
         onPointerDown={(event) => {
           event.stopPropagation()
@@ -97,17 +105,8 @@ export function PreviewTimeline({
           // Keep the user's latest in-flight intent until that exact seek settles.
           const current = seeking.current
             ? requested.current
-            : Math.max(
-                0,
-                session.chapters.findIndex(
-                  (item) => item.id === session.snapshot().chapterId,
-                ),
-              )
-          const target = chapterKeyTarget(
-            event.key,
-            current,
-            session.chapters.length,
-          )
+            : navigation.indexOf(session.snapshot().chapterId)
+          const target = chapterKeyTarget(event.key, current, stops.length)
 
           if (target !== null) {
             event.preventDefault()
@@ -117,7 +116,7 @@ export function PreviewTimeline({
         }}
       />
       <output>
-        {chapter.title} · {index + 1}/{session.chapters.length}
+        {chapter.title} · {index + 1}/{stops.length}
       </output>
       {session.seekMedia &&
         state.snapshot.media &&

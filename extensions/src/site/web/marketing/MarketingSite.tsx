@@ -685,12 +685,13 @@ export function MarketingSite() {
                   </GamePreviewSurface>
                 )}
                 {view === "demo" && selected.id === "great-guessoff" && (
-                  <GreatGuessOffDemo />
+                  <GreatGuessOffDemo onClose={() => open(selected)} />
                 )}
                 {view === "demo" && selected.id !== "great-guessoff" && (
                   <CatalogueGameDemo
                     key={selected.id}
                     catalogueId={selected.id}
+                    onClose={() => open(selected)}
                   />
                 )}
               </div>

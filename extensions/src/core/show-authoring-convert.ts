@@ -729,9 +729,10 @@ export function authoredShowToNativeBundleDraft(
     perQuestion,
     roster: rosterExtras,
     authoring:
-      show.note !== undefined
+      show.note !== undefined || show.posterUrl !== undefined
         ? {
             showNote: show.note,
+            posterUrl: show.posterUrl,
           }
         : undefined,
     ...(mediaCatalogExtras
@@ -1425,6 +1426,9 @@ export function nativeBundleToAuthoredShow(
     version: 1,
     title: legacyText(quizz.subject ?? "Untitled Show"),
     note: showNote,
+    ...(extrasV2.authoring?.posterUrl
+      ? { posterUrl: extrasV2.authoring.posterUrl }
+      : {}),
     baseGameMode: (quizz.gameMode as "quiz" | "survey") ?? "quiz",
     defaults: extrasV2.defaults?.showComposition
       ? {

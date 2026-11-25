@@ -173,7 +173,7 @@ function useReducedMotion() {
   return reduced
 }
 
-export function GreatGuessOffDemo() {
+export function GreatGuessOffDemo({ onClose }: { onClose: () => void }) {
   const stage = useRef<TadazzStageHandle>(null)
   const [leadIn] = useState(() => createQuestionLeadIn())
   const mounted = useRef(true)
@@ -575,6 +575,7 @@ export function GreatGuessOffDemo() {
     >
       <style>{nativeStageCss}</style>
       <GameViewer
+        onClose={onClose}
         title="The Great Guess-off"
         status={captions[phase]}
         controls={

@@ -28,6 +28,7 @@ export const packageContentSchema = z.strictObject({
   kind: z.enum(["declarative-theme", "sandboxed-react-theme", "game"]),
   id: themeIdSchema,
   path: packagePathSchema,
+  posterPath: packagePathSchema.optional(),
   themeRef: z
     .string()
     .max(160)
@@ -102,6 +103,18 @@ export const packageManifestSchema = z
 
       if (content.kind !== "game" && content.themeRef) {
         issue("Only games reference themes")
+      }
+
+      if (content.posterPath) {
+        const poster = files.get(packagePathKey(content.posterPath))
+
+        if (
+          content.kind !== "game" ||
+          poster?.kind !== "image" ||
+          poster.path !== content.posterPath
+        ) {
+          issue("A game poster must reference an inventoried image")
+        }
       }
 
       if (

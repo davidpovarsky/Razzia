@@ -16,6 +16,7 @@ import type { QuizMeta } from "./MyGames"
 
 export interface ResultMeta {
   id: string
+  quizId?: string
   subject: string
   date: string
   playerCount: number

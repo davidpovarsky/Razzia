@@ -65,20 +65,28 @@ const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
 
 // Public solo play consumes the same authored questions and global theme as
 // installation. It uses the production stage; votes and score live in this tab.
-export function CatalogueGameDemo({ catalogueId }: { catalogueId: string }) {
+export function CatalogueGameDemo({
+  catalogueId,
+  onClose,
+}: {
+  catalogueId: string
+  onClose: () => void
+}) {
   const demo = getPublicDemo(catalogueId)
 
   if (!demo) {
     return <p role="alert">{t("This game is unavailable.")}</p>
   }
 
-  return <CataloguePlayer key={catalogueId} demo={demo} />
+  return <CataloguePlayer key={catalogueId} demo={demo} onClose={onClose} />
 }
 
 function CataloguePlayer({
   demo,
+  onClose,
 }: {
   demo: NonNullable<ReturnType<typeof getPublicDemo>>
+  onClose: () => void
 }) {
   const { i18n } = useTranslation()
   const show = useMemo(() => tadaShowV1Schema.parse(demo.show), [demo])
@@ -563,6 +571,7 @@ function CataloguePlayer({
       >
         <style>{nativeStageCss}</style>
         <GameViewer
+          onClose={onClose}
           title={t(demo.metadata.title)}
           status={`${status}${phase === "voting" ? ` · ${seconds}s` : ""}`}
           controls={

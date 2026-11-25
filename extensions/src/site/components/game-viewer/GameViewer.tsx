@@ -42,8 +42,8 @@ export function GameViewer({
 }: GameViewerProps) {
   const { i18n } = useTranslation()
   const dialog = useRef<HTMLDialogElement>(null)
-  const [expanded, setExpanded] = useState(false)
-  const isExpanded = modal || expanded
+  const [expanded, setExpanded] = useState(modal)
+  const inModalLayer = modal || expanded
 
   useLayoutEffect(() => {
     const element = dialog.current
@@ -57,25 +57,25 @@ export function GameViewer({
         element.close()
       }
 
-      setExpanded(false)
+      setExpanded(modal)
 
       return
     }
 
     const currentlyModal = element.matches(":modal")
 
-    if (element.open && currentlyModal !== isExpanded) {
+    if (element.open && currentlyModal !== inModalLayer) {
       element.close()
     }
 
     if (!element.open) {
-      if (isExpanded) {
+      if (inModalLayer) {
         element.showModal()
       } else {
         element.show()
       }
     }
-  }, [open, isExpanded])
+  }, [open, inModalLayer, modal])
 
   useLayoutEffect(() => {
     const element = dialog.current
@@ -101,7 +101,8 @@ export function GameViewer({
       <dialog
         ref={dialog}
         className="game-viewer-dialog"
-        data-expanded={isExpanded}
+        data-expanded={expanded}
+        data-modal={modal}
         data-testid="game-viewer-dialog"
         aria-label={title}
         aria-busy={busy || undefined}
@@ -111,7 +112,11 @@ export function GameViewer({
           dismiss()
         }}
         onKeyDown={(event) => {
-          if (isExpanded && event.key === "Escape" && !event.defaultPrevented) {
+          if (
+            inModalLayer &&
+            event.key === "Escape" &&
+            !event.defaultPrevented
+          ) {
             event.preventDefault()
             event.stopPropagation()
             dismiss()
@@ -120,7 +125,7 @@ export function GameViewer({
         onClick={(event) => {
           if (
             event.target !== event.currentTarget ||
-            !isExpanded ||
+            !inModalLayer ||
             !dismissOnOutside
           ) {
             return
@@ -138,26 +143,22 @@ export function GameViewer({
           }
         }}
       >
-        <section className="game-viewer" data-expanded={isExpanded}>
+        <section className="game-viewer" data-expanded={expanded}>
           <header className="game-viewer-header">
             <div className="game-viewer-heading">
               <h2>{title}</h2>
               {status && <div role="status">{status}</div>}
             </div>
             <PresentationControls
-              expand={
-                modal
-                  ? undefined
-                  : {
-                      expanded: isExpanded,
-                      onClick: () => setExpanded((value) => !value),
-                      testId: "game-viewer-expand",
-                    }
-              }
+              expand={{
+                expanded,
+                onClick: () => setExpanded((value) => !value),
+                testId: "game-viewer-expand",
+              }}
               close={
-                onClose || isExpanded
+                onClose
                   ? {
-                      onClick: dismiss,
+                      onClick: onClose,
                       ref: closeRef,
                       testId: "game-viewer-close",
                     }

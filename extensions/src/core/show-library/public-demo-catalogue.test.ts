@@ -54,6 +54,7 @@ describe("published gallery games", () => {
       }
 
       const show = tadaShowV1Schema.parse(demo.show)
+      expect(show.posterUrl).toBe(demo.metadata.coverUrl)
       const questions = show.cards.filter(
         (card) => card.kind === "quiz" || card.kind === "survey",
       )

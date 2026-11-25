@@ -36,6 +36,8 @@ import {
 import { useSiteText } from "../../locales"
 import { useManagedClientText } from "../../locales/clients"
 import { AccountPanel } from "./AccountPanel"
+import { GamePoster } from "./GamePoster"
+import { recentStudioGames } from "./recent-games"
 import type { QuizMeta } from "./MyGames"
 import type { ResultMeta } from "./Events"
 import { browserConsentLoginHandoff } from "../../../components/oauth-consent/login-handoff"
@@ -271,6 +273,11 @@ function StudioWorkspace({ account }: { account: Account }) {
   const refreshResults = () =>
     queryClient.invalidateQueries({ queryKey: siteKey(account.id, "results") })
   const games = quizzes.data?.quizz ?? []
+  const dashboardGames =
+    section === "dashboard"
+      ? recentStudioGames(games, results.data?.results ?? [])
+      : games
+  const recentGame = dashboardGames.at(0)
   useEffect(() => {
     const check = () => {
       if (!hasManagerSession() || getClientId() !== account.id) {
@@ -523,20 +530,17 @@ function StudioWorkspace({ account }: { account: Account }) {
                           </SiteLink>
                         </div>
                       </article>
-                      {games[0] && (
+                      {recentGame && (
                         <article className="spotlight editing">
                           <div className="thumb">
-                            <img
-                              src="/tadazz-design-reference/marketing-stage.webp"
-                              alt=""
-                            />
+                            <GamePoster posterUrl={recentGame.posterUrl} />
                           </div>
                           <div className="spotlight-info">
-                            <h3>{games[0].subject}</h3>
+                            <h3>{recentGame.subject}</h3>
                             <p>{t("Pick up where you left off")}</p>
                             <SiteLink
                               className="spotlight-action"
-                              href={`/manager/quizz/${encodeURIComponent(games[0].id)}`}
+                              href={`/manager/quizz/${encodeURIComponent(recentGame.id)}`}
                             >
                               {t("Continue editing")} →
                             </SiteLink>
@@ -591,7 +595,7 @@ function StudioWorkspace({ account }: { account: Account }) {
                       return (
                         <MyGames
                           key={section}
-                          games={games}
+                          games={dashboardGames}
                           search={search}
                           limit={section === "dashboard" ? 3 : undefined}
                           refresh={refreshGames}

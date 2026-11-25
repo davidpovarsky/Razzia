@@ -16,6 +16,7 @@ import {
 import { invalidInput, notFound } from "@razzia/socket/services/errors"
 import { normalizeFilename } from "@razzia/socket/utils/file"
 import { resolveConfigFile } from "@razzia/socket/services/config-scope"
+import { readSidecar } from "@razzia/extensions/server"
 import { accountsEnabled, activeAccount } from "./account-scope"
 import { createHash } from "node:crypto"
 import fs from "fs"
@@ -178,8 +179,16 @@ const subjectCollator = new Intl.Collator(undefined, {
 })
 
 export const getQuizzMeta = () =>
-  getQuizz()
-    .map(({ id, subject }) => ({ id, subject }))
+  readQuizzEntries()
+    .map(({ quiz: { id, subject }, updatedAt }) => {
+      const extras = readSidecar(getPath, id, { readOnly: true })
+      const posterUrl =
+        extras?.schemaVersion === 2 && extras.quizId === id
+          ? extras.authoring?.posterUrl
+          : undefined
+
+      return { id, subject, updatedAt, ...(posterUrl ? { posterUrl } : {}) }
+    })
     .sort((a, b) => subjectCollator.compare(a.subject, b.subject))
 
 export const getQuizzById = (id: string): QuizzWithId => {
@@ -192,7 +201,10 @@ export const getQuizzById = (id: string): QuizzWithId => {
   return quizz
 }
 
-export const getQuizz = (): QuizzWithId[] => {
+const readQuizzEntries = (): Array<{
+  quiz: QuizzWithId
+  updatedAt: string
+}> => {
   const isExists = fs.existsSync(getPath("quizz"))
 
   if (!isExists) {
@@ -202,8 +214,15 @@ export const getQuizz = (): QuizzWithId[] => {
   try {
     const files = listJsonFiles(getPath("quizz"))
 
-    const quizz: QuizzWithId[] = files.flatMap((file) => {
+    return files.flatMap((file) => {
       const filePath = getPath(`quizz/${file}`)
+      const stat = fs.lstatSync(filePath, { throwIfNoEntry: false })
+
+      if (!stat?.isFile()) {
+        return []
+      }
+
+      const updatedAt = stat.mtime.toISOString()
       const data = readJson(filePath)
 
       if (!data) {
@@ -221,7 +240,7 @@ export const getQuizz = (): QuizzWithId[] => {
       }
 
       if (typeof data.id === "string") {
-        return [{ id: data.id, ...result.data }]
+        return [{ quiz: { id: data.id, ...result.data }, updatedAt }]
       }
 
       const id = nanoid()
@@ -231,16 +250,17 @@ export const getQuizz = (): QuizzWithId[] => {
         JSON.stringify({ id, ...result.data }, null, 2),
       )
 
-      return [{ id, ...result.data }]
+      return [{ quiz: { id, ...result.data }, updatedAt }]
     })
-
-    return quizz
   } catch (error) {
     console.error("Failed to read quizz config:", error)
 
     return []
   }
 }
+
+export const getQuizz = (): QuizzWithId[] =>
+  readQuizzEntries().map(({ quiz }) => quiz)
 
 export const updateQuizz = (id: string, data: unknown): { id: string } => {
   const result = quizzValidator.safeParse(data)
@@ -304,6 +324,9 @@ export const getResultsMeta = (): GameResultMeta[] => {
     try {
       return {
         id: data.id,
+        ...(typeof data.quizId === "string" && data.quizId
+          ? { quizId: data.quizId }
+          : {}),
         gameMode: data.gameMode ?? QUIZZ_MODES.QUIZ,
         subject: data.subject,
         date: data.date,

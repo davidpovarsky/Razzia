@@ -581,7 +581,13 @@ export class PackageStore {
           }
         }
 
-        return stagePackageGame(doc, path.join(stage, content.id))
+        return stagePackageGame(
+          doc,
+          path.join(stage, content.id),
+          content.posterPath
+            ? `/media/${packageMediaName(pkg, content.posterPath)}`
+            : undefined,
+        )
       })
     const files = games.flatMap((g) => g.files)
 
@@ -713,17 +719,26 @@ export class PackageStore {
       urls.set(`/media/${packageMediaName(source, file.path)}`, file.path)
     }
     const documentPath = "games/export.json"
-    const portable = relativizeDocument(
-      nativeBundleToAuthoredShow(bundle, { includePrivateRoster: false }),
-      documentPath,
-      urls,
-    )
+    const authored = nativeBundleToAuthoredShow(bundle, {
+      includePrivateRoster: false,
+    })
+    const posterPath = authored.posterUrl
+      ? urls.get(authored.posterUrl)
+      : undefined
+    const portable = relativizeDocument(authored, documentPath, urls)
     const bytes = Buffer.from(JSON.stringify(portable))
     files.set(documentPath, bytes)
     const manifest = packageManifestSchema.parse({
       ...source.manifest,
       id: `game-${row.source.slice(0, 12)}-${bundle.extras.quizId.slice(0, 8)}`,
-      contents: [{ kind: "game", id: "exported-game", path: documentPath }],
+      contents: [
+        {
+          kind: "game",
+          id: "exported-game",
+          path: documentPath,
+          ...(posterPath ? { posterPath } : {}),
+        },
+      ],
       files: [
         ...assets,
         {

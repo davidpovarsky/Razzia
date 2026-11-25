@@ -1,4 +1,38 @@
-import type { PreviewSnapshot } from "./contracts"
+import type { GamePreviewSession, PreviewSnapshot } from "./contracts"
+
+export function previewNavigation(
+  session: Pick<GamePreviewSession, "chapters" | "source">,
+) {
+  const { chapters, source } = session
+  const stops =
+    source.kind === "published-demo"
+      ? chapters.filter(
+          (chapter) =>
+            chapter.phase !== "question" && chapter.phase !== "answerCards",
+        )
+      : chapters
+
+  return {
+    stops,
+    indexOf(chapterId: PreviewSnapshot["chapterId"]) {
+      const direct = stops.findIndex(({ id }) => id === chapterId)
+
+      if (direct >= 0) {
+        return direct
+      }
+
+      const current = chapters.find(({ id }) => id === chapterId)
+
+      // While the lead-in plays, keep the thumb on this question's voting stop.
+      return Math.max(
+        0,
+        stops.findIndex(
+          ({ authoredKey }) => authoredKey === current?.authoredKey,
+        ),
+      )
+    },
+  }
+}
 
 /** Chapter keyboard input, never an authored timeline compiler or playback clock. */
 export function chapterKeyTarget(

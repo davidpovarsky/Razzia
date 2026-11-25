@@ -10,6 +10,7 @@ import { canSeekChapter, type PreviewSelection } from "./contracts"
 import { useGamePreview } from "./use-game-preview"
 import { usePreviewActivation } from "./use-preview-activation"
 import { PreviewTimeline } from "./preview-timeline"
+import { previewNavigation } from "./timeline-input"
 import { gamePreviewCss } from "./styles"
 import type { ApplicationPreviewFrame } from "../../../core/show-library/application-preview-schema"
 import type { ShowThemeAudioEvent } from "../../../core/show-themes/selection"
@@ -163,18 +164,19 @@ export function GamePreviewSurface({
   }
 
   const snapshot = state.status === "ready" ? state.snapshot : null
-  // Transport follows authored cards; phase snapshots remain available in the timeline.
+  const publishedDemo = session?.source.kind === "published-demo"
+  const stops = session ? previewNavigation(session).stops : []
+  // Previous and Next choose the first useful stop for each authored card.
   const authoredKeys = new Set<string>()
-  const cardChapters =
-    session?.chapters.filter((chapter) => {
-      if (authoredKeys.has(chapter.authoredKey)) {
-        return false
-      }
+  const cardChapters = stops.filter((chapter) => {
+    if (authoredKeys.has(chapter.authoredKey)) {
+      return false
+    }
 
-      authoredKeys.add(chapter.authoredKey)
+    authoredKeys.add(chapter.authoredKey)
 
-      return true
-    }) ?? []
+    return true
+  })
   const selectedChapter =
     snapshot?.screenPhase === "lobby"
       ? undefined
@@ -185,7 +187,25 @@ export function GamePreviewSurface({
       )
     : -1
   const previous = cardIndex > 0 ? cardChapters[cardIndex - 1] : undefined
-  const next = cardIndex >= 0 ? cardChapters[cardIndex + 1] : undefined
+  const timedVote =
+    publishedDemo &&
+    selectedChapter?.phase === "voting" &&
+    selectedChapter.duration.kind === "known"
+  const votingResult = timedVote
+    ? stops.find(
+        (chapter) =>
+          chapter.authoredKey === selectedChapter.authoredKey &&
+          chapter.phase === "results",
+      )
+    : undefined
+  const next =
+    votingResult ?? (cardIndex >= 0 ? cardChapters[cardIndex + 1] : undefined)
+  const pausedState =
+    publishedDemo &&
+    selectedChapter === stops[0] &&
+    snapshot?.clock.elapsedMs === 0
+      ? "start"
+      : "paused"
   const seek = (chapter: typeof previous) => {
     if (session && chapter && canSeekChapter(session, chapter)) {
       void controller.run((current, signal) =>
@@ -262,7 +282,7 @@ export function GamePreviewSurface({
                       : undefined
                   }
                   playback={{
-                    state: snapshot.clock.paused ? "paused" : "playing",
+                    state: snapshot.clock.paused ? pausedState : "playing",
                     disabled:
                       controller.pending || snapshot.screenPhase === "lobby",
                     onClick: () =>
@@ -279,6 +299,7 @@ export function GamePreviewSurface({
                             !next ||
                             !canSeekChapter(session, next),
                           onClick: () => seek(next),
+                          state: votingResult ? "endTimer" : "next",
                           testId: "game-preview-next",
                         }
                       : undefined
