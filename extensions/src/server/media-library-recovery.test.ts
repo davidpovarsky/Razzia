@@ -208,6 +208,92 @@ describe("media-delete deterministic restart snapshots", () => {
 
     return journals()[0]
   }
+  it.skipIf(process.platform !== "linux").each(["staged", "committed"])(
+    "keeps quarantine when a durability fence fails with a %s marker",
+    (status) => {
+      const { getPath } = requireInitializedFixture()
+      const journalDirectory = getMediaDeleteJournalDirectory(getPath)
+      const quarantineDirectory = getMediaQuarantineDirectory(getPath)
+      const publicBase = getPath("quizz/show-a.json")
+      const binaryHash = fileDigest(mediaPath())
+      const before = transactionState()
+      const nativeSync = fs.fsyncSync.bind(fs)
+      let failedFence = false
+      const fence = vi.spyOn(fs, "fsyncSync").mockImplementation((fd) => {
+        if (!failedFence && !fs.existsSync(mediaPath())) {
+          const [journal] = journals()
+          const marker = requireMediaRecord(
+            JSON.parse(fs.readFileSync(journal, "utf8")),
+          )
+          const target = status === "committed" ? journalDirectory : publicBase
+          const expected = fs.statSync(target, { bigint: true })
+          const opened = fs.fstatSync(fd, { bigint: true })
+
+          if (
+            marker.status === status &&
+            expected.dev === opened.dev &&
+            expected.ino === opened.ino
+          ) {
+            failedFence = true
+            throw new Error("Injected fsync failure")
+          }
+        }
+
+        nativeSync(fd)
+      })
+
+      expect(transaction()).toMatchObject({
+        allowed: false,
+        error: expect.stringContaining("Injected fsync failure"),
+      })
+      expect(failedFence).toBe(true)
+
+      if (status === "committed") {
+        failedFence = false
+        expect(recoverMediaDeleteJournals(getPath)).toMatchObject({
+          recoveredCount: 0,
+          unresolvedCount: 1,
+        })
+        expect(failedFence).toBe(true)
+      }
+
+      fence.mockRestore()
+      expect(transactionState().journals).toEqual([{ status }])
+      const [quarantineFile] = fs.readdirSync(quarantineDirectory)
+      expect(fileDigest(path.join(quarantineDirectory, quarantineFile))).toBe(
+        binaryHash,
+      )
+      expect(transaction()).toMatchObject({
+        allowed: false,
+        error: expect.stringContaining("requires recovery"),
+      })
+
+      expect(recoverMediaDeleteJournals(getPath)).toMatchObject({
+        recoveredCount: 1,
+        unresolvedCount: 0,
+      })
+      expect(recoverMediaDeleteJournals(getPath)).toMatchObject({
+        recoveredCount: 0,
+        unresolvedCount: 0,
+      })
+      expect(transactionState()).toMatchObject({
+        journals: [],
+        quarantine: [],
+      })
+      if (status === "staged") {
+        expect(transactionState()).toEqual(before)
+      } else {
+        expect(fs.existsSync(mediaPath())).toBe(false)
+        expect(
+          findMediaReferencesAcrossShows(
+            MEDIA_NAME,
+            loadAllShowsHealth(getPath).records,
+          ),
+        ).toEqual([])
+      }
+    },
+  )
+
   it.each([
     "quarantine-copy",
     "staged-journal",

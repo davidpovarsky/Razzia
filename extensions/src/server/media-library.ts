@@ -26,6 +26,16 @@ import {
 import { recoverJournals, type RecoveryReport } from "./storage/journal"
 import { createNativeRecoveryAdapter } from "./storage/native-recovery-adapter"
 import {
+  ensureDurableDirectory,
+  readDurableFile,
+  requireLinuxFences,
+  sameDurableImage,
+  syncDirectory,
+  syncOwnedFile,
+  writeDurableExclusive,
+} from "./storage/durable-files"
+import {
+  assertPhysicalBinding,
   assertPhysicalGroup,
   assertPhysicalRestoreGroup,
   binaryFingerprint,
@@ -55,8 +65,89 @@ const sameBinary = (
     (actual.dev === expected.dev && actual.ino === expected.ino))
 function persistMediaJournal(file: string, entry: MediaDeleteJournalEntry) {
   const temporary = `${file}.tmp.${uuidv7()}`
-  fs.writeFileSync(temporary, JSON.stringify(entry, null, 2), "utf8")
+  const raw = JSON.stringify(entry, null, 2)
+  if (entry.durability !== "linux-fsync-v1") {
+    fs.writeFileSync(temporary, raw, "utf8")
+    fs.renameSync(temporary, file)
+    return
+  }
+
+  const prepared = writeDurableExclusive(temporary, raw)
   fs.renameSync(temporary, file)
+  syncDirectory(path.dirname(file))
+  const published = readDurableFile(file)
+
+  if (!published || !sameDurableImage(published, prepared)) {
+    throw new Error("Media journal changed during publication")
+  }
+}
+
+// Media can be too large for the UTF-8 record helper. Bind the fence to the
+// inode already checked by the streaming binary fingerprint.
+function syncMediaBinary(file: string, expected: BinarySnapshot) {
+  requireLinuxFences()
+  const parent = path.dirname(file)
+  const fd = fs.openSync(file, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW)
+  const matches = (stat: fs.BigIntStats) =>
+    stat.isFile() &&
+    String(stat.dev) === expected.dev &&
+    String(stat.ino) === expected.ino &&
+    stat.size === BigInt(expected.length)
+
+  try {
+    if (!matches(fs.fstatSync(fd, { bigint: true }))) {
+      throw new Error("Media binary changed before durability fence")
+    }
+
+    fs.fsyncSync(fd)
+    syncDirectory(parent)
+
+    if (!matches(fs.lstatSync(file, { bigint: true }))) {
+      throw new Error("Media binary changed during durability fence")
+    }
+  } finally {
+    fs.closeSync(fd)
+  }
+}
+
+function syncMediaReferences(
+  getPath: (subPath?: string) => string,
+  bindings: PhysicalBinding[],
+) {
+  const directories = new Set<string>()
+  for (const binding of bindings) {
+    const file = getPath(binding.relativePath)
+    const verified = assertPhysicalBinding(getPath, binding)
+
+    if (verified) {
+      syncOwnedFile(file, verified)
+    }
+
+    directories.add(path.dirname(file))
+  }
+
+  for (const directory of directories) {
+    syncDirectory(directory)
+  }
+}
+
+function syncCommittedMediaDelete(
+  getPath: (subPath?: string) => string,
+  bindings: PhysicalBinding[],
+  mediaFile: string,
+) {
+  syncMediaReferences(getPath, bindings)
+  syncDirectory(path.dirname(mediaFile))
+}
+
+function syncRolledBackMediaDelete(
+  getPath: (subPath?: string) => string,
+  bindings: PhysicalBinding[],
+  mediaName: string,
+) {
+  const binary = binaryFingerprint(getPath, `media/${mediaName}`)
+  syncMediaBinary(getPath(`media/${mediaName}`), binary)
+  syncMediaReferences(getPath, bindings)
 }
 
 export interface LoadedShowRecord extends InspectableQuizShow {
@@ -266,6 +357,7 @@ export interface MediaDeleteJournalEntry {
   quarantinePath?: string | null
   createdAt: number
   status: "staged" | "committed"
+  durability?: "linux-fsync-v1"
   binary?: BinarySnapshot
   quarantineBinary?: BinarySnapshot
   restoredBinary?: BinarySnapshot
@@ -306,8 +398,10 @@ export interface ExecuteMediaDeleteOptions {
  *   3. Detaches references via atomic temp-file + rename.
  *   4. Verifies post-condition: zero surviving references and zero unreadable files.
  *   5. Calls `deleteMediaFn()` if provided, ensuring physical binary deletion.
- *   6. Cleans up quarantine and journal ONLY after verified commit postconditions.
- *   7. On failure: rolls back all changes, restores binary from quarantine, and preserves journal if rollback fails.
+ *   6. For referenced binary deletion, fences the affected files, deletion
+ *      and commit record on Linux before cleaning up quarantine.
+ *   7. An uncertain durability fence preserves the journal and quarantine
+ *      for restart. Other pre-commit failures attempt verified rollback.
  */
 export function executeMediaDeleteTransaction(
   getPath: (subPath?: string) => string,
@@ -364,6 +458,26 @@ export function executeMediaDeleteTransaction(
     }
   }
 
+  const journalParent = getPath("extensions/quizzes/.journal/media-delete")
+  const journalPrefix = `media-${cleanMediaName}-`
+  if (
+    fs.existsSync(journalParent) &&
+    fs.readdirSync(journalParent).some(
+      (file) =>
+        file.startsWith(journalPrefix) &&
+        /^[a-f0-9-]{36}\.media-journal\.json$/iu.test(
+          file.slice(journalPrefix.length),
+        ),
+    )
+  ) {
+    return {
+      allowed: false,
+      references,
+      detachedFromShows: [],
+      error: "Pending media delete journal requires recovery",
+    }
+  }
+
   if (references.length === 0) {
     if (options?.deleteMediaFn) {
       options.deleteMediaFn()
@@ -381,7 +495,13 @@ export function executeMediaDeleteTransaction(
     references.some((r) => r.quizId === show.id),
   )
 
+  const durable = mediaExists && options?.deleteMediaFn !== undefined
   try {
+    if (durable) {
+      requireLinuxFences()
+      syncDirectory(path.dirname(mediaFilePath))
+    }
+
     for (const show of affectedShows) {
       if (
         show.physicalKind === "sidecar-only" ||
@@ -410,9 +530,13 @@ export function executeMediaDeleteTransaction(
     : null
   let quarantineBinary: BinarySnapshot | undefined = undefined
 
-  // 1. Quarantine media binary if it exists
+  // 1. Quarantine media binary if it exists.
   if (mediaExists && quarantinePath) {
     try {
+      if (durable) {
+        ensureDurableDirectory(quarantineDir)
+      }
+
       fs.copyFileSync(mediaFilePath, quarantinePath, fs.constants.COPYFILE_EXCL)
       const copied = binaryFingerprint(
         getPath,
@@ -427,6 +551,10 @@ export function executeMediaDeleteTransaction(
         throw new Error("Quarantine does not match original binary")
       }
 
+      if (durable) {
+        syncMediaBinary(quarantinePath, copied)
+      }
+
       quarantineBinary = copied
     } catch (qErr) {
       return {
@@ -438,7 +566,7 @@ export function executeMediaDeleteTransaction(
     }
   }
 
-  // 2. Stage the process-recovery journal; filesystem fencing is separately gated.
+  // 2. Persist the restore images and staged journal before mutating public files.
   const journalShows = affectedShows.map((show) => {
     const originalBaseRaw = fs.existsSync(show.filePath)
       ? fs.readFileSync(show.filePath, "utf-8")
@@ -488,6 +616,7 @@ export function executeMediaDeleteTransaction(
     quarantinePath,
     createdAt: Date.now(),
     status: "staged",
+    ...(durable ? { durability: "linux-fsync-v1" } : {}),
     shows: journalShows,
     ...(originalBinary ? { binary: originalBinary } : {}),
     ...(quarantineBinary ? { quarantineBinary } : {}),
@@ -497,13 +626,28 @@ export function executeMediaDeleteTransaction(
     journalDir,
     `media-${cleanMediaName}-${journalId}.media-journal.json`,
   )
-  const tmpJournal = `${journalFilePath}.tmp.${Date.now()}`
-  fs.writeFileSync(tmpJournal, JSON.stringify(journalEntry, null, 2), "utf-8")
-  fs.renameSync(tmpJournal, journalFilePath)
   const physicalBindings = journalShows.flatMap((show) => [
     show.bindings.base,
     show.bindings.sidecar,
   ])
+  if (durable) {
+    const prepared = physicalBindings.flatMap((binding) => [
+      binding.preparedTarget,
+      ...(binding.preparedBackup ? [binding.preparedBackup] : []),
+    ])
+    const directories = new Set<string>()
+    for (const image of prepared) {
+      const file = getPath(image.relativePath)
+      syncOwnedFile(file, image)
+      directories.add(path.dirname(file))
+    }
+
+    for (const directory of directories) {
+      ensureDurableDirectory(directory)
+    }
+  }
+
+  persistMediaJournal(journalFilePath, journalEntry)
   const rollback = (): boolean => {
     let allSucceeded = true
 
@@ -550,6 +694,10 @@ export function executeMediaDeleteTransaction(
 
           if (!sameBinary(restored, journalEntry.binary, false)) {
             throw new Error("Restored binary bytes mismatch")
+          }
+
+          if (durable) {
+            syncMediaBinary(mediaFilePath, restored)
           }
 
           journalEntry.restoredBinary = restored
@@ -662,6 +810,14 @@ export function executeMediaDeleteTransaction(
 
     if (allSucceeded) {
       try {
+        if (durable) {
+          syncRolledBackMediaDelete(
+            getPath,
+            physicalBindings,
+            cleanMediaName,
+          )
+        }
+
         if (quarantinePath && fs.existsSync(quarantinePath)) {
           fs.unlinkSync(quarantinePath)
         }
@@ -697,6 +853,7 @@ export function executeMediaDeleteTransaction(
     return record
   }
   const detachedFromShows: string[] = []
+  let commitFencePending = false
 
   try {
     if (options?.faultInjection?.failBeforeShowWrite) {
@@ -800,20 +957,22 @@ export function executeMediaDeleteTransaction(
       throw new Error("Simulated failure before committed marker write")
     }
 
-    const tmpCommitted = `${journalFilePath}.tmp.${Date.now()}`
-    fs.writeFileSync(
-      tmpCommitted,
-      JSON.stringify({ ...journalEntry, status: "committed" }, null, 2),
-      "utf-8",
-    )
-    fs.renameSync(tmpCommitted, journalFilePath)
+    commitFencePending = durable
+    if (durable) {
+      syncCommittedMediaDelete(getPath, physicalBindings, mediaFilePath)
+    }
+
+    persistMediaJournal(journalFilePath, {
+      ...journalEntry,
+      status: "committed",
+    })
     journalEntry.status = "committed"
+    commitFencePending = false
 
     if (options?.faultInjection?.failAfterCommittedWrite) {
       throw new Error("Simulated failure after committed marker write")
     }
 
-    // The committed marker is visible. Filesystem fencing remains a separate gate.
     if (options?.faultInjection?.failBeforeQuarantineUnlink) {
       throw new Error("Simulated failure before quarantine unlink")
     }
@@ -850,6 +1009,16 @@ export function executeMediaDeleteTransaction(
       detachedFromShows,
     }
   } catch (error) {
+    if (commitFencePending) {
+      return {
+        allowed: false,
+        references,
+        detachedFromShows,
+        error: `Could not durably commit media delete. Journal and quarantine preserved for recovery: ${(error as Error).message}`,
+        journalId,
+      }
+    }
+
     if (journalEntry.status === "committed") {
       // Point of no return already reached. Do NOT roll back to old references!
       // Preserve the committed journal and any remaining quarantine on cleanup
@@ -983,7 +1152,9 @@ export function recoverMediaDeleteJournals(
       // 1. Fail-closed invariant: ignore/preserve unknown or incompatible journals
       if (
         entry.kind !== "media-delete" ||
-        (entry.version !== 1 && entry.version !== 2)
+        (entry.version !== 1 && entry.version !== 2) ||
+        (entry.durability !== undefined &&
+          entry.durability !== "linux-fsync-v1")
       ) {
         console.warn(
           `[MediaJournal] Unknown or incompatible journal ${file}, preserving for manual inspection`,
@@ -1035,6 +1206,14 @@ export function recoverMediaDeleteJournals(
 
           continue
         }
+      }
+
+      // Older journals can still own the last recoverable binary after an upgrade.
+      const durable =
+        entry.durability === "linux-fsync-v1" || targetQuarantinePath !== null
+      if (durable) {
+        requireLinuxFences()
+        entry.durability = "linux-fsync-v1"
       }
 
       // Validate show IDs & paths
@@ -1138,6 +1317,22 @@ export function recoverMediaDeleteJournals(
           continue
         }
 
+        if (durable) {
+          // A failed directory fence can leave the committed rename visible
+          // to this process without making it durable. Re-fence before cleanup.
+          syncCommittedMediaDelete(getPath, bindings, targetMediaFilePath)
+          const marker = readDurableFile(journalPath)
+
+          if (!marker || marker.raw !== raw) {
+            throw new Error(
+              "Committed media journal changed before recovery fence",
+            )
+          }
+
+          syncOwnedFile(journalPath, marker)
+          syncDirectory(journalDir)
+        }
+
         // Unlink quarantine binary if still present
         if (targetQuarantinePath && fs.existsSync(targetQuarantinePath)) {
           const current = binaryFingerprint(
@@ -1232,6 +1427,10 @@ export function recoverMediaDeleteJournals(
 
             if (!sameBinary(restored, entry.binary, false)) {
               throw new Error("Restored binary differs from original bytes")
+            }
+
+            if (durable) {
+              syncMediaBinary(targetMediaFilePath, restored)
             }
 
             entry.restoredBinary = restored
@@ -1399,6 +1598,14 @@ export function recoverMediaDeleteJournals(
           unresolvedJournals.push(file)
 
           continue
+        }
+
+        if (durable) {
+          syncRolledBackMediaDelete(
+            getPath,
+            bindings,
+            cleanMediaName,
+          )
         }
 
         cleanupPhysicalBindings(getPath, bindings)
