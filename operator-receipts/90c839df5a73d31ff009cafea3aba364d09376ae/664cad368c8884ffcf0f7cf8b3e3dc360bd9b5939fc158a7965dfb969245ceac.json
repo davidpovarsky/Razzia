@@ -1,0 +1,41 @@
+{
+  "aggregateControllerSha256": "a2c8836948b3ee6a89e20802bdeb5084aaa9b851e70cd62e149833d44422160f",
+  "caseInventorySha256": "f37e25bbbf58433f82441d6f80fcb7ed59e073c166c9465c35fc264280073fb2",
+  "head": "90c839df5a73d31ff009cafea3aba364d09376ae",
+  "kind": "tadazz-operator-public-receipt",
+  "legs": [
+    {
+      "actualPassed": 6,
+      "mode": "package",
+      "project": "chromium"
+    },
+    {
+      "actualPassed": 6,
+      "mode": "package",
+      "project": "webkit"
+    },
+    {
+      "actualPassed": 1,
+      "mode": "sequence",
+      "project": "chromium"
+    },
+    {
+      "actualPassed": 1,
+      "mode": "staged",
+      "project": "chromium"
+    }
+  ],
+  "operatorStatusContext": "Tadazz / operator E2E",
+  "originalTimeoutsPreserved": true,
+  "passed": true,
+  "privateAggregateSha256": "7a27f54aa5b64372b2d1b1f6cfc49516f2aa1f1f104cecf8b4dddb3dcdcbea3b",
+  "productionChanged": false,
+  "projectExecutionsPassed": 14,
+  "rawEvidencePublished": false,
+  "requiredProjectExecutions": 14,
+  "requiredSourceIdentities": 8,
+  "schemaVersion": 1,
+  "sequentialPackageProjectsVerified": true,
+  "sourceIdentitiesPassed": 8,
+  "sourceOverlayCount": 0
+}
