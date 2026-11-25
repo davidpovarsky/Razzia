@@ -142,6 +142,7 @@ export function PackageStage({
           }
         : { kind: "other" },
   )
+
   if (selectedFrame !== frame) {
     setSelectedFrame(frame)
   }

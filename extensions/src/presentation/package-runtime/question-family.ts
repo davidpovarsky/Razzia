@@ -54,6 +54,7 @@ export function selectPackageFrame(
   }
 
   const previous = current.scene
+
   if (
     (previous.kind === "other" && scene.kind === "other") ||
     (previous.kind === "prepared" &&
