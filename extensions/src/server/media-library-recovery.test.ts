@@ -938,7 +938,9 @@ describe("media-delete deterministic restart snapshots", () => {
           if (
             fault === "binary" &&
             rollingBack &&
-            String(destination).endsWith(".restore")
+            (process.platform === "linux"
+              ? String(destination).endsWith(".restore")
+              : String(destination) === mediaPath())
           ) {
             injected += 1
             const corrupted = fs.readFileSync(destination)
@@ -978,7 +980,7 @@ describe("media-delete deterministic restart snapshots", () => {
       renameSpy.mockRestore()
       copySpy.mockRestore()
       chmod.mockRestore()
-      if (fault === "binary") {
+      if (fault === "binary" && process.platform === "linux") {
         // Corruption of the private restore copy must never reach the media path.
         expect(fs.existsSync(mediaPath())).toBe(false)
       } else {
@@ -989,6 +991,12 @@ describe("media-delete deterministic restart snapshots", () => {
           }),
         ).toThrow("startup blocked")
         expect(transactionState()).toStrictEqual(blocked)
+      }
+
+      if (fault === "binary" && process.platform !== "linux") {
+        // Remove only the intentionally corrupted public file in this fixture.
+        fs.unlinkSync(mediaPath())
+      } else if (fault !== "binary") {
         const entry = requireMediaJournal(
           JSON.parse(fs.readFileSync(journals()[0], "utf8")),
         )

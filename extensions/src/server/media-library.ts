@@ -33,6 +33,7 @@ import {
   syncDirectory,
   syncOwnedFile,
   writeDurableExclusive,
+  type DurableImage,
 } from "./storage/durable-files"
 import {
   assertPhysicalBinding,
@@ -63,23 +64,55 @@ const sameBinary = (
   actual.length === expected.length &&
   (!objectIdentity ||
     (actual.dev === expected.dev && actual.ino === expected.ino))
-function persistMediaJournal(file: string, entry: MediaDeleteJournalEntry) {
+class StagedMediaJournalPreserved extends Error {}
+
+function hasSameMediaJournal(file: string, expected: DurableImage) {
+  try {
+    const current = readDurableFile(file)
+    return current !== null && sameDurableImage(current, expected)
+  } catch {
+    return false
+  }
+}
+
+function persistMediaJournal(
+  file: string,
+  entry: MediaDeleteJournalEntry,
+  previous?: DurableImage | null,
+): DurableImage | null {
   const temporary = `${file}.tmp.${uuidv7()}`
   const raw = JSON.stringify(entry, null, 2)
   if (entry.durability !== "linux-fsync-v1") {
     fs.writeFileSync(temporary, raw, "utf8")
     fs.renameSync(temporary, file)
-    return
+    return null
   }
 
-  const prepared = writeDurableExclusive(temporary, raw)
-  fs.renameSync(temporary, file)
+  let prepared: DurableImage
+  try {
+    prepared = writeDurableExclusive(temporary, raw)
+    fs.renameSync(temporary, file)
+  } catch (error) {
+    // Only the original, previously fenced staged inode and bytes permit
+    // rollback. A visible replacement or an unreadable marker is uncertain.
+    if (previous && hasSameMediaJournal(file, previous)) {
+      throw new StagedMediaJournalPreserved((error as Error).message, {
+        cause: error,
+      })
+    }
+
+    throw error
+  }
+
+  // Errors here are after publication. The caller must retain quarantine.
   syncDirectory(path.dirname(file))
   const published = readDurableFile(file)
 
   if (!published || !sameDurableImage(published, prepared)) {
     throw new Error("Media journal changed during publication")
   }
+
+  return published
 }
 
 // Media can be too large for the UTF-8 record helper. Bind the fence to the
@@ -532,7 +565,12 @@ export function executeMediaDeleteTransaction(
     references.some((r) => r.quizId === show.id),
   )
 
-  const durable = mediaExists && options?.deleteMediaFn !== undefined
+  // Windows retains process-crash recovery. The existing filesystem fences
+  // are qualified on Linux only.
+  const durable =
+    process.platform === "linux" &&
+    mediaExists &&
+    options?.deleteMediaFn !== undefined
   try {
     if (durable) {
       requireLinuxFences()
@@ -684,7 +722,7 @@ export function executeMediaDeleteTransaction(
     }
   }
 
-  persistMediaJournal(journalFilePath, journalEntry)
+  const stagedImage = persistMediaJournal(journalFilePath, journalEntry)
   const rollback = (): boolean => {
     let allSucceeded = true
 
@@ -1008,10 +1046,11 @@ export function executeMediaDeleteTransaction(
       syncCommittedMediaDelete(getPath, physicalBindings, mediaFilePath)
     }
 
-    persistMediaJournal(journalFilePath, {
-      ...journalEntry,
-      status: "committed",
-    })
+    persistMediaJournal(
+      journalFilePath,
+      { ...journalEntry, status: "committed" },
+      stagedImage,
+    )
     journalEntry.status = "committed"
     commitFencePending = false
 
@@ -1055,7 +1094,7 @@ export function executeMediaDeleteTransaction(
       detachedFromShows,
     }
   } catch (error) {
-    if (commitFencePending) {
+    if (commitFencePending && !(error instanceof StagedMediaJournalPreserved)) {
       return {
         allowed: false,
         references,
@@ -1256,7 +1295,8 @@ export function recoverMediaDeleteJournals(
 
       // Older journals can still own the last recoverable binary after an upgrade.
       const durable =
-        entry.durability === "linux-fsync-v1" || targetQuarantinePath !== null
+        entry.durability === "linux-fsync-v1" ||
+        (process.platform === "linux" && targetQuarantinePath !== null)
       if (durable) {
         requireLinuxFences()
         entry.durability = "linux-fsync-v1"
