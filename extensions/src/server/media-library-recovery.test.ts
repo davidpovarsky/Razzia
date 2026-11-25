@@ -248,15 +248,31 @@ describe("media-delete deterministic restart snapshots", () => {
       })
       expect(failedFence).toBe(true)
 
-      if (status === "committed") {
-        failedFence = false
-        expect(recoverMediaDeleteJournals(getPath)).toMatchObject({
-          recoveredCount: 0,
-          unresolvedCount: 1,
+      failedFence = false
+      if (status === "staged") {
+        const directory = fs.statSync(path.dirname(mediaPath()), {
+          bigint: true,
         })
-        expect(failedFence).toBe(true)
+        fence.mockImplementation((fd) => {
+          const opened = fs.fstatSync(fd, { bigint: true })
+          if (
+            fs.existsSync(mediaPath()) &&
+            opened.dev === directory.dev &&
+            opened.ino === directory.ino
+          ) {
+            failedFence = true
+            throw new Error("Injected restored-media namespace fence failure")
+          }
+
+          nativeSync(fd)
+        })
       }
 
+      expect(recoverMediaDeleteJournals(getPath)).toMatchObject({
+        recoveredCount: 0,
+        unresolvedCount: 1,
+      })
+      expect(failedFence).toBe(true)
       fence.mockRestore()
       expect(transactionState().journals).toEqual([{ status }])
       const [quarantineFile] = fs.readdirSync(quarantineDirectory)
@@ -922,7 +938,7 @@ describe("media-delete deterministic restart snapshots", () => {
           if (
             fault === "binary" &&
             rollingBack &&
-            String(destination) === mediaPath()
+            String(destination).endsWith(".restore")
           ) {
             injected += 1
             const corrupted = fs.readFileSync(destination)
@@ -962,19 +978,17 @@ describe("media-delete deterministic restart snapshots", () => {
       renameSpy.mockRestore()
       copySpy.mockRestore()
       chmod.mockRestore()
-      const blocked = transactionState()
-      expect(() =>
-        recoverStartupJournals({
-          getPath: requireInitializedFixture().getPath,
-        }),
-      ).toThrow("startup blocked")
-      expect(transactionState()).toStrictEqual(blocked)
-
       if (fault === "binary") {
-        // A present but different binary may be a concurrent replacement. Startup
-        // preserves both copies until this disposable corrupted fixture is removed.
-        fs.unlinkSync(mediaPath())
+        // Corruption of the private restore copy must never reach the media path.
+        expect(fs.existsSync(mediaPath())).toBe(false)
       } else {
+        const blocked = transactionState()
+        expect(() =>
+          recoverStartupJournals({
+            getPath: requireInitializedFixture().getPath,
+          }),
+        ).toThrow("startup blocked")
+        expect(transactionState()).toStrictEqual(blocked)
         const entry = requireMediaJournal(
           JSON.parse(fs.readFileSync(journals()[0], "utf8")),
         )
@@ -1065,6 +1079,7 @@ describe("media-delete deterministic restart snapshots", () => {
       const spy = vi.spyOn(fs, "unlinkSync").mockImplementation((file) => {
         if (
           (fault === "quarantine" &&
+            !String(file).endsWith(".restore") &&
             String(file).startsWith(
               getMediaQuarantineDirectory(requireInitializedFixture().getPath),
             )) ||

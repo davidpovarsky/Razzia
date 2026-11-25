@@ -110,6 +110,43 @@ function syncMediaBinary(file: string, expected: BinarySnapshot) {
   }
 }
 
+function restoreDurableMediaBinary({
+  getPath,
+  quarantine,
+  media,
+  journal,
+  entry,
+}: {
+  getPath: (subPath?: string) => string
+  quarantine: string
+  media: string
+  journal: string
+  entry: MediaDeleteJournalEntry
+}) {
+  const temporary = quarantine + "." + uuidv7() + ".restore"
+  fs.copyFileSync(quarantine, temporary, fs.constants.COPYFILE_EXCL)
+
+  try {
+    const restored = binaryFingerprint(
+      getPath,
+      path.relative(getPath(), temporary).split(path.sep).join("/"),
+    )
+    if (!sameBinary(restored, entry.binary, false)) {
+      throw new Error("Restored binary differs from original bytes")
+    }
+
+    // A retry can recognize the public inode even if its directory fence
+    // fails after publication. The staged quarantine remains independent.
+    syncMediaBinary(temporary, restored)
+    entry.restoredBinary = restored
+    persistMediaJournal(journal, entry)
+    fs.linkSync(temporary, media)
+    syncMediaBinary(media, restored)
+  } finally {
+    fs.unlinkSync(temporary)
+  }
+}
+
 function syncMediaReferences(
   getPath: (subPath?: string) => string,
   bindings: PhysicalBinding[],
@@ -685,23 +722,32 @@ export function executeMediaDeleteTransaction(
         )
 
         if (!current) {
-          fs.copyFileSync(
-            quarantinePath,
-            mediaFilePath,
-            fs.constants.COPYFILE_EXCL,
-          )
-          const restored = binaryFingerprint(getPath, `media/${cleanMediaName}`)
-
-          if (!sameBinary(restored, journalEntry.binary, false)) {
-            throw new Error("Restored binary bytes mismatch")
-          }
-
           if (durable) {
-            syncMediaBinary(mediaFilePath, restored)
-          }
+            restoreDurableMediaBinary({
+              getPath,
+              quarantine: quarantinePath,
+              media: mediaFilePath,
+              journal: journalFilePath,
+              entry: journalEntry,
+            })
+          } else {
+            fs.copyFileSync(
+              quarantinePath,
+              mediaFilePath,
+              fs.constants.COPYFILE_EXCL,
+            )
+            const restored = binaryFingerprint(
+              getPath,
+              "media/" + cleanMediaName,
+            )
 
-          journalEntry.restoredBinary = restored
-          persistMediaJournal(journalFilePath, journalEntry)
+            if (!sameBinary(restored, journalEntry.binary, false)) {
+              throw new Error("Restored binary bytes mismatch")
+            }
+
+            journalEntry.restoredBinary = restored
+            persistMediaJournal(journalFilePath, journalEntry)
+          }
         } else if (
           !sameBinary(current, journalEntry.binary) &&
           !sameBinary(current, journalEntry.restoredBinary)
@@ -1415,26 +1461,32 @@ export function recoverMediaDeleteJournals(
         // 1. Restore media binary from quarantine if missing
         if (!mediaExists && quarantineExists && targetQuarantinePath) {
           try {
-            fs.copyFileSync(
-              targetQuarantinePath,
-              targetMediaFilePath,
-              fs.constants.COPYFILE_EXCL,
-            )
-            const restored = binaryFingerprint(
-              getPath,
-              `media/${cleanMediaName}`,
-            )
-
-            if (!sameBinary(restored, entry.binary, false)) {
-              throw new Error("Restored binary differs from original bytes")
-            }
-
             if (durable) {
-              syncMediaBinary(targetMediaFilePath, restored)
-            }
+              restoreDurableMediaBinary({
+                getPath,
+                quarantine: targetQuarantinePath,
+                media: targetMediaFilePath,
+                journal: journalPath,
+                entry: entry as MediaDeleteJournalEntry,
+              })
+            } else {
+              fs.copyFileSync(
+                targetQuarantinePath,
+                targetMediaFilePath,
+                fs.constants.COPYFILE_EXCL,
+              )
+              const restored = binaryFingerprint(
+                getPath,
+                "media/" + cleanMediaName,
+              )
 
-            entry.restoredBinary = restored
-            persistMediaJournal(journalPath, entry as MediaDeleteJournalEntry)
+              if (!sameBinary(restored, entry.binary, false)) {
+                throw new Error("Restored binary differs from original bytes")
+              }
+
+              entry.restoredBinary = restored
+              persistMediaJournal(journalPath, entry as MediaDeleteJournalEntry)
+            }
 
             if (!restoredMediaNames.includes(cleanMediaName)) {
               restoredMediaNames.push(cleanMediaName)
