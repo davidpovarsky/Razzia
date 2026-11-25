@@ -6,6 +6,7 @@ import { PlatformButton } from "../platform-controls"
 import { themeAdapterAsset, useOptionalShowTheme } from "../show-themes/context"
 import { FullShowSceneView, isFullShowScene } from "../tadazz-v4/FullShowScenes"
 import { labelsFor } from "../tadazz-v4/components"
+import { CountdownValue } from "../tadazz-v4/countdown-value"
 import { presentationNote } from "../tadazz-v4/presentation-note"
 import {
   percentagesFor,
@@ -474,7 +475,15 @@ function Answers({
   )
 }
 
-function Clock({ data, scene }: { data: TadazzV4Data; scene: TadazzV4Scene }) {
+function Clock({
+  data,
+  scene,
+  motionOwnsCountdownText = false,
+}: {
+  data: TadazzV4Data
+  scene: TadazzV4Scene
+  motionOwnsCountdownText?: boolean
+}) {
   if (scene !== "countdown") {
     return null
   }
@@ -490,11 +499,13 @@ function Clock({ data, scene }: { data: TadazzV4Data; scene: TadazzV4Scene }) {
           <circle className="timer-progress" cx="85" cy="85" r="73" />
         </svg>
       </span>
-      <span className="countdown-value" data-testid="tadazz-timer">
-        {pad(
+      <CountdownValue
+        as="span"
+        value={pad(
           Math.ceil(Math.max(0, data.remainingSeconds ?? data.seconds ?? 0)),
         )}
-      </span>
+        motionOwned={motionOwnsCountdownText}
+      />
     </div>
   )
 }
@@ -705,10 +716,12 @@ export function OriginalThemeScene({
   family,
   scene,
   data,
+  motionOwnsCountdownText = false,
 }: {
   family: OriginalThemeId
   scene: TadazzV4Scene
   data: TadazzV4Data
+  motionOwnsCountdownText?: boolean
 }) {
   const World = worlds[family]
 
@@ -720,7 +733,13 @@ export function OriginalThemeScene({
         answers={
           scene === "question" ? null : <Answers data={data} scene={scene} />
         }
-        clock={<Clock data={data} scene={scene} />}
+        clock={
+          <Clock
+            data={data}
+            scene={scene}
+            motionOwnsCountdownText={motionOwnsCountdownText}
+          />
+        }
         status={<Status data={data} scene={scene} />}
       />
     )

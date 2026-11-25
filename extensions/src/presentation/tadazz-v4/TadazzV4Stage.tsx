@@ -518,9 +518,15 @@ export const TadazzV4Stage = forwardRef<
         family={originalFamily}
         scene={view.scene}
         data={sceneData}
+        motionOwnsCountdownText
       />
     ) : (
-      <StageSceneV4 scene={view.scene} data={sceneData} assetBase={assetBase} />
+      <StageSceneV4
+        scene={view.scene}
+        data={sceneData}
+        assetBase={assetBase}
+        motionOwnsCountdownText
+      />
     )
   }
 

@@ -80,6 +80,7 @@ export class TadazzV4Motion {
   private scene: TadazzV4Scene = "question"
   private countdownSweep: Animation | null = null
   private countdownTotal = 0
+  private countdownUsesDeadlineAnchor = false
   private pausedCountdownRemainingMs: number | undefined = undefined
   private stage: HTMLElement
   private config: MotionConfig
@@ -100,6 +101,7 @@ export class TadazzV4Motion {
     }
     this.active = []
     this.countdownSweep = null
+    this.countdownUsesDeadlineAnchor = false
     this.pausedCountdownRemainingMs = undefined
     this.finalizers = []
     for (const id of this.tickerFrames) {
@@ -181,13 +183,29 @@ export class TadazzV4Motion {
     }
 
     const now = Date.now()
+    const timelineNow = performance.now()
     const opensAt = data.deadlineMs - this.countdownTotal * 1000
+    const useDeadlineAnchor =
+      typeof sweep.timeline?.currentTime === "number" &&
+      sweep.playState !== "paused"
+
     sweep.effect?.updateTiming({
       duration: this.countdownTotal * 1000,
-      delay: Math.max(0, opensAt - now),
+      // A future absolute start already holds the clock before it opens.
+      delay: useDeadlineAnchor ? 0 : Math.max(0, opensAt - now),
       fill: "both",
     })
-    sweep.currentTime = Math.max(0, now - opensAt)
+
+    if (useDeadlineAnchor) {
+      // This sweep uses the default document timeline at playbackRate 1.
+      // Its sampled currentTime can lag wall time during a busy task. Seeking
+      // against that sample would add the lag again on the next frame.
+      sweep.startTime = timelineNow + (opensAt - now)
+      this.countdownUsesDeadlineAnchor = true
+    } else {
+      // A paused/preview seek must preserve its hold instead of resuming it.
+      sweep.currentTime = Math.max(0, now - opensAt)
+    }
   }
   private paintCountdown() {
     const value = query(this.root(), ".countdown-value")
@@ -197,7 +215,27 @@ export class TadazzV4Motion {
       return
     }
 
-    const progress = sweep.effect?.getComputedTiming().progress ?? 0
+    let progress = sweep.effect?.getComputedTiming().progress ?? 0
+    const { startTime } = sweep
+
+    if (
+      this.countdownUsesDeadlineAnchor &&
+      sweep.playState !== "paused" &&
+      typeof startTime === "number"
+    ) {
+      // The same absolute anchor drives the ring and the digits. Read its
+      // fresh time for synchronous initial paint, before the timeline samples
+      // another frame; paused, unresolved and local preview clocks stay native.
+      const delay = sweep.effect?.getTiming().delay ?? 0
+      progress = Math.min(
+        1,
+        Math.max(
+          0,
+          (performance.now() - startTime - delay) / (this.countdownTotal * 1000),
+        ),
+      )
+    }
+
     const seconds =
       this.pausedCountdownRemainingMs === undefined
         ? this.countdownTotal * (1 - progress)
@@ -720,11 +758,15 @@ export class TadazzV4Motion {
       this.syncCountdown(data)
     }
 
-    if (value) {
-      this.finalizers.push(() => {
+    const finalizeCountdown = () => {
+      if (value) {
         value.textContent = "00"
         value.classList.add("timer-low")
-      })
+      }
+    }
+
+    if (value) {
+      this.finalizers.push(finalizeCountdown)
     }
 
     const { token } = this
@@ -742,7 +784,14 @@ export class TadazzV4Motion {
     }
     tick()
     void sweep?.finished
-      .then(() => this.cue("countdown-ended"))
+      .then(() => {
+        if (token !== this.token || this.countdownSweep !== sweep) {
+          return
+        }
+
+        finalizeCountdown()
+        this.cue("countdown-ended")
+      })
       .catch(() => undefined)
   }
   private chosen(data: TadazzV4Data) {

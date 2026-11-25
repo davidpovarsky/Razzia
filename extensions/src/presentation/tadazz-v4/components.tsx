@@ -1,6 +1,7 @@
 import { PlatformButton } from "../platform-controls"
 import { FullShowSceneView, isFullShowScene } from "./FullShowScenes"
 import type { CSSProperties } from "react"
+import { CountdownValue } from "./countdown-value"
 import { presentationNote } from "./presentation-note"
 import { themeAdapterAsset, useOptionalShowTheme } from "../show-themes/context"
 import {
@@ -474,7 +475,13 @@ export function VoteStatusV4({
   )
 }
 
-export function CountdownFloaterV4({ data }: { data: TadazzV4Data }) {
+export function CountdownFloaterV4({
+  data,
+  motionOwnsCountdownText = false,
+}: {
+  data: TadazzV4Data
+  motionOwnsCountdownText?: boolean
+}) {
   const tx = labelsFor(data)
   const total = Math.max(0, data.remainingSeconds ?? data.seconds ?? 0)
   const value = id2(Math.ceil(total))
@@ -488,9 +495,11 @@ export function CountdownFloaterV4({ data }: { data: TadazzV4Data }) {
           <circle className="timer-progress" cx="85" cy="85" r="73" />
         </svg>
       </div>
-      <div className="countdown-value" data-testid="tadazz-timer">
-        {value}
-      </div>
+      <CountdownValue
+        as="div"
+        value={value}
+        motionOwned={motionOwnsCountdownText}
+      />
     </div>
   )
 }
@@ -755,10 +764,12 @@ export function StageSceneV4({
   scene,
   data,
   assetBase,
+  motionOwnsCountdownText = false,
 }: {
   scene: TadazzV4Scene
   data: TadazzV4Data
   assetBase: string
+  motionOwnsCountdownText?: boolean
 }) {
   if (isFullShowScene(scene)) {
     return (
@@ -849,7 +860,12 @@ export function StageSceneV4({
         </div>
       )}
       {scene === "chosen" && <VoteStatusV4 data={data} chosen />}
-      {scene === "countdown" && <CountdownFloaterV4 data={data} />}
+      {scene === "countdown" && (
+        <CountdownFloaterV4
+          data={data}
+          motionOwnsCountdownText={motionOwnsCountdownText}
+        />
+      )}
       {scene === "top-pick" && <TopPickV4 data={data} />}
       {(scene === "question-image" || (data.photoLayout && showFrame)) && (
         <QuestionImageV4 data={data} />
