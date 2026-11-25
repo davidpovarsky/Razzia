@@ -1254,6 +1254,10 @@
 }
 
 /* Sports Arena: an overhead scoreboard and split competition lanes. */
+.tzv4-stage[data-original-family="sports-arena"] .og-sports {
+  /* Keep rotated field lines inside the world and out of the stage scroll range. */
+  overflow: clip;
+}
 .tzv4-stage[data-original-family] .og-scoreboard-header {
   position: absolute;
   left: 80px;
