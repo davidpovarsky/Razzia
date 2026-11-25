@@ -7,6 +7,7 @@ import {
   createPackageQuestionAdmission,
   packageQuestionContentSupported,
   packageUsesSandboxForPhase,
+  selectPackageFrame,
 } from "./question-family"
 import { STATUS } from "@razzia/common/types/game/status"
 import { computeShowScene } from "../tadazz-show/presentation-scene"
@@ -29,6 +30,45 @@ function completeSlots(): Record<
     RUNTIME_PHASES.map((phase) => [phase, "implemented"]),
   ) as Record<RuntimeSnapshot["phase"], "implemented" | "classic">
 }
+
+describe("package question document lifetime", () => {
+  it("retains the matching prepared frame through voting and results", () => {
+    const lobby = selectPackageFrame(null, "host", { kind: "other" })
+    const prepared = selectPackageFrame(lobby, "host", {
+      kind: "prepared",
+      number: 1,
+    })
+    expect(prepared.generation).not.toBe(lobby.generation)
+    const question = { kind: "question", number: 1, identity: "q1" } as const
+    const reading = selectPackageFrame(prepared, "host", question)
+    expect(reading.generation).toBe(prepared.generation)
+    expect(selectPackageFrame(reading, "host", question)).toBe(reading)
+    expect(
+      selectPackageFrame(reading, "host", { kind: "question", identity: "q1" }),
+    ).toBe(reading)
+  })
+
+  it("does not carry a document to a different question, replay, or room role", () => {
+    const prepared = selectPackageFrame(null, "host", {
+      kind: "prepared",
+      number: 1,
+    })
+    const question = { kind: "question", number: 2, identity: "q2" } as const
+    const reading = selectPackageFrame(prepared, "host", question)
+    expect(reading.generation).not.toBe(prepared.generation)
+    expect(
+      selectPackageFrame(reading, "host", { kind: "prepared", number: 2 })
+        .generation,
+    ).not.toBe(reading.generation)
+    expect(
+      selectPackageFrame(reading, "host", { kind: "question", identity: "q3" })
+        .generation,
+    ).not.toBe(reading.generation)
+    expect(selectPackageFrame(reading, "spectator", question).scope).toBe(
+      "spectator",
+    )
+  })
+})
 
 describe("package question renderer admission", () => {
   it("keeps a complete sandbox package for the whole question and its results", () => {

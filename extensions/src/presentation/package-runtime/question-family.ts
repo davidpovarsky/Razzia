@@ -32,6 +32,52 @@ export function packageUsesSandboxForPhase(
   )
 }
 
+type PackageFrameScene =
+  | { kind: "other" }
+  | { kind: "prepared"; number: number }
+  | { kind: "question"; identity: string; number?: number }
+
+interface PackageFrame {
+  scope: string
+  generation: number
+  scene: PackageFrameScene
+}
+
+/** Reuse a prepared document only for the question it was prepared to display. */
+export function selectPackageFrame(
+  current: PackageFrame | null,
+  scope: string,
+  scene: PackageFrameScene,
+): PackageFrame {
+  if (current?.scope !== scope) {
+    return { scope, generation: 0, scene }
+  }
+
+  const previous = current.scene
+  if (
+    (previous.kind === "other" && scene.kind === "other") ||
+    (previous.kind === "prepared" &&
+      scene.kind === "prepared" &&
+      previous.number === scene.number) ||
+    (previous.kind === "question" &&
+      scene.kind === "question" &&
+      previous.identity === scene.identity)
+  ) {
+    return current
+  }
+
+  const preparedForQuestion =
+    previous.kind === "prepared" &&
+    scene.kind === "question" &&
+    previous.number === scene.number
+
+  return {
+    scope,
+    generation: current.generation + (preparedForQuestion ? 0 : 1),
+    scene,
+  }
+}
+
 export interface PackageQuestionContent {
   questionType?: string
   mediaType?: string

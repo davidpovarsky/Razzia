@@ -17,6 +17,7 @@ import {
   packageUsesSandboxForPhase,
   projectPackageClock,
   projectPackageScene,
+  selectPackageFrame,
   useShowTheme,
   type ShowScene,
 } from "@razzia/extensions/presentation"
@@ -86,26 +87,24 @@ export function PackageStage({
   const pin = theme.definition.runtime
   const sourceDigest = pin?.sourceDigest
   const [continuity] = useState(() => createPackageSceneContinuity())
-  const { presentation, holding } = continuity.select(
-    JSON.stringify([
-      roomId,
-      role,
-      theme.definition.id,
-      sourceDigest,
-      pin?.buildDigest,
-    ]),
-    {
-      scene: incomingScene,
-      questionId: incomingQuestionId,
-      epoch: incomingEpoch,
-      sequence: incomingSequence,
-      remainingMs: incomingRemainingMs,
-      deadline: incomingDeadline,
-      backgroundUrl: incomingBackgroundUrl,
-      phaseElapsedMs: incomingPhaseElapsedMs,
-      revealStage: incomingRevealStage,
-    },
-  )
+  const frameScope = JSON.stringify([
+    roomId,
+    role,
+    theme.definition.id,
+    sourceDigest,
+    pin?.buildDigest,
+  ])
+  const { presentation, holding } = continuity.select(frameScope, {
+    scene: incomingScene,
+    questionId: incomingQuestionId,
+    epoch: incomingEpoch,
+    sequence: incomingSequence,
+    remainingMs: incomingRemainingMs,
+    deadline: incomingDeadline,
+    backgroundUrl: incomingBackgroundUrl,
+    phaseElapsedMs: incomingPhaseElapsedMs,
+    revealStage: incomingRevealStage,
+  })
   const {
     scene,
     questionId,
@@ -125,12 +124,31 @@ export function PackageStage({
     scene.kind === "results" ||
     scene.kind === "player-result" ||
     (scene.kind === "wait" && phase === "voteLocked")
-  // A capability authenticates the initial document load, not every phase.
-  // Renew only at a real scene boundary; replacing src during a question reloads
-  // its whole React tree and repeats its question/answer entrances.
-  const capabilityLifetime = questionFamily
-    ? `question:${questionId}`
-    : scene.key
+  const question = "question" in scene ? scene.question : null
+  const questionIdentity = JSON.stringify([frameScope, questionId])
+  const [selectedFrame, setSelectedFrame] = useState<ReturnType<
+    typeof selectPackageFrame
+  > | null>(null)
+  const frame = selectPackageFrame(
+    selectedFrame,
+    frameScope,
+    scene.kind === "prepared"
+      ? { kind: "prepared", number: scene.questionNumber }
+      : questionFamily
+        ? {
+            kind: "question",
+            identity: questionIdentity,
+            number: question?.number,
+          }
+        : { kind: "other" },
+  )
+  if (selectedFrame !== frame) {
+    setSelectedFrame(frame)
+  }
+
+  const frameKey = JSON.stringify([frame.scope, frame.generation])
+  // Keep the already loaded document and ticket through preparation and reading.
+  const capabilityLifetime = frame.scene.kind === "other" ? scene.key : frameKey
   const capabilityKey = `${roomId}/${sourceDigest}/${theme.definition.id}`
   const [capabilityState, setCapability] = useState<CapabilityState>(() => ({
     key: capabilityKey,
@@ -165,7 +183,6 @@ export function PackageStage({
     key: string
     unavailable: boolean
   } | null>(null)
-  const question = "question" in scene ? scene.question : null
   const questionImage =
     question?.questionImage ??
     ((scene.kind === "question" || scene.kind === "voting") &&
@@ -337,14 +354,6 @@ export function PackageStage({
           mediaType: scene.questionMediaType,
         }
       : undefined
-  const questionIdentity = JSON.stringify([
-    roomId,
-    questionId,
-    theme.definition.id,
-    sourceDigest,
-    pin?.buildDigest,
-    role,
-  ])
   const [runtimeFailure, setRuntimeFailure] = useState<string | null>(null)
 
   if (
@@ -485,7 +494,7 @@ export function PackageStage({
   return (
     <div className="relative h-full w-full">
       <ThemeSandboxHost
-        key={questionFamily ? questionIdentity : roomId}
+        key={frameKey}
         url={url}
         snapshot={snapshot}
         title={t("extensions:packages.theme")}

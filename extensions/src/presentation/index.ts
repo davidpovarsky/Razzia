@@ -100,6 +100,7 @@ export {
   createPackageQuestionAdmission,
   packageQuestionContentSupported,
   packageUsesSandboxForPhase,
+  selectPackageFrame,
 } from "./package-runtime/question-family"
 
 export {
