@@ -1,0 +1,176 @@
+$ tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.nodecheck.ts
+✔ real signature and exact resource-bound grant produce an immutable principal (88.286707ms)
+✔ signed wrong issuer/audience, expiry, lifetime, nbf and scope are rejected (10.882427ms)
+✔ algorithm, kid, token key references and forged signature never reach grant storage (86.203846ms)
+✔ revocation and account disable are rechecked for every access, with no token cache (2.526625ms)
+✔ signed account/client/subject substitution and changed stored grant are denied (3.717917ms)
+✔ cancellation and private storage errors yield a fixed safe error (0.844968ms)
+✔ two real SDK sessions retain account isolation and revoked replay is denied (507.035057ms)
+✔ invalid principal fails before account store: issuer (85.154916ms)
+✔ invalid principal fails before account store: audience (3.177311ms)
+✔ invalid principal fails before account store: accountId (2.756588ms)
+✔ invalid principal fails before account store: active (2.054501ms)
+✔ invalid principal fails before account store: accountsEnabled (2.380224ms)
+✔ invalid principal fails before account store: expiresAt (2.257502ms)
+✔ invalid principal fails before account store: scopes (2.260822ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (195.358278ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (95.456217ms)
+✔ invalid authored/schema/settings/media rejected without mutation (394.26263ms)
+✔ scoped ordinary export delegates without adding a new consent stage (199.788281ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (4.318723ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (1.270252ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (603.569644ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (99.691098ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (102.496246ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ official HTTP client negotiates, discovers eight strict tools and reads the honest placeholder (1098.792986ms)
+✔ HTTP draft CAS preserves tenant boundaries, revoked token denial and safe missing preview (595.685287ms)
+✔ metadata advertises the exact protected resource and least initial scope without a private token (1.535055ms)
+✔ origin/host/TLS/query/proxy/session/body and method attacks fail before private tool dispatch (4.148641ms)
+✔ allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected (1.138012ms)
+✖ aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles (94.343686ms)
+✔ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (1200.534544ms)
+✔ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (4.352722ms)
+✔ denied or missing ingress guard fails closed before token verification and schema work (93.053554ms)
+✔ inconsistent repository summary fails closed on read (592.066611ms)
+✔ inconsistent repository summary fails closed on create (12.22156ms)
+✔ inconsistent repository summary fails closed on replace (97.987042ms)
+✔ SDK cancellation during pending authorization restores capacity only after real work settles (502.814495ms)
+✔ cancelled unsettled admission stays bounded at32; another factory remains unaffected (102.86525ms)
+✔ normal SDK running-handler cancellation releases all32 slots after handlers settle (290.29221ms)
+✔ duplicate tool/public active IDs close only their owning connection (6.375063ms)
+✔ close while authorization is pending suppresses late rejection, dispatch and send (2.750627ms)
+✔ same wire ID reuse is independently authorized after a cancelled lifetime settles (4.715646ms)
+✔ supported SDK abort signal is preserved; cancellation does not roll back settled work (84.221587ms)
+✔ rejected send/close reports safe errors and makes the connection terminal (3.990519ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (312.77911ms)
+✔ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (693.973413ms)
+✔ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (197.940263ms)
+✔ new save still requires exact-revision consent; ordinary export does not (98.371885ms)
+✔ 32 cancelled response writes retain the budget until public send promises settle (509.223598ms)
+✔ a cancelled in-flight response reserves its wire ID before public send completion (88.118865ms)
+✔ overlapping response/related owner releases once after send settles and reuse reauthorizes (108.350024ms)
+✔ rejected delayed response write terminates only its connection with safe errors (95.157974ms)
+✔ pending related progress keeps its parent reserved: duplicate denied (6.246741ms)
+✔ pending related progress keeps its parent reserved: settled reuse reauthorizes (86.184126ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 52
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 68104.774322
+
+✖ failing tests:
+
+test at tests/server/http.nodecheck.ts:1:6428
+✖ aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles (94.343686ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401,
+  +   401
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400,
+  -   400
+    ]
+  
+      at TestContext.<anonymous> (/ram/work/extensions/src/mcp-app/tests/server/http.nodecheck.ts:293:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [
+      401, 401, 401, 401, 401, 401,
+      401, 401, 401, 401, 401, 401,
+      401, 401, 401, 401, 401, 401,
+      401, 401, 401, 401, 401, 401,
+      401, 401, 401, 401, 401, 401,
+      401, 401
+    ],
+    expected: [
+      400, 400, 400, 400, 400, 400,
+      400, 400, 400, 400, 400, 400,
+      400, 400, 400, 400, 400, 400,
+      400, 400, 400, 400, 400, 400,
+      400, 400, 400, 400, 400, 400,
+      400, 400
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+[ELIFECYCLE] Test failed. See above for more details.

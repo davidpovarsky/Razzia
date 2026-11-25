@@ -1,0 +1,962 @@
+[
+  {
+    "family": "royal-quiz",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/voting-bed.wav",
+    "bytes": 4032044,
+    "sha256": "56dd2eaa69186e3430580f4f6e6127348cd91a2f2bcfcb19083da23b7d5b2029",
+    "durationSeconds": 22.857143,
+    "peak": 0.224149
+  },
+  {
+    "family": "royal-quiz",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/transition.wav",
+    "bytes": 132344,
+    "sha256": "6084c8956d384409c5f1589e1f2d384a8bd68abf89235191dbe3ddb42b29ecd5",
+    "durationSeconds": 0.75,
+    "peak": 0.313079
+  },
+  {
+    "family": "royal-quiz",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/confirm.wav",
+    "bytes": 60020,
+    "sha256": "27c9381a3fab0072aebbc41851080649da2babc4bc1f7bef649171a5a3dc8ced",
+    "durationSeconds": 0.34,
+    "peak": 0.262662
+  },
+  {
+    "family": "royal-quiz",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/tick.wav",
+    "bytes": 21212,
+    "sha256": "1d31b72174afa03c125b27a6e29f68dd51506a1e425b9c1702d07a3cd3b69cab",
+    "durationSeconds": 0.12,
+    "peak": 0.150506
+  },
+  {
+    "family": "royal-quiz",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/urgent.wav",
+    "bytes": 28268,
+    "sha256": "18fa66452c713fce66a2508fac434c37198bd95515a011d27a1a7d17e17b644b",
+    "durationSeconds": 0.16,
+    "peak": 0.147378
+  },
+  {
+    "family": "royal-quiz",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/final.wav",
+    "bytes": 40616,
+    "sha256": "f9ae91e68b1dd4c145792134bc539e87b6515a3eb334052051dbb17707546767",
+    "durationSeconds": 0.23,
+    "peak": 0.152049
+  },
+  {
+    "family": "royal-quiz",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "1bd840e813495ae4b0117e409b42c4483903ec30e9bc878a458a82537b209131",
+    "durationSeconds": 0.85,
+    "peak": 0.260829
+  },
+  {
+    "family": "royal-quiz",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/lock.wav",
+    "bytes": 88244,
+    "sha256": "9b2c15a8a2ac8035de01e1221738d6644ca4635dd077382cfcb877dd8a3dfd97",
+    "durationSeconds": 0.5,
+    "peak": 0.258712
+  },
+  {
+    "family": "royal-quiz",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/reveal.wav",
+    "bytes": 291104,
+    "sha256": "00d81a0031aace27927bb6ce166a494def7961a38aa0dfc5a496366165d3d17f",
+    "durationSeconds": 1.65,
+    "peak": 0.313767
+  },
+  {
+    "family": "royal-quiz",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "99630ea453519e5c755c18faa677a8ba5572d503513325f5742761b4ec6ec57d",
+    "durationSeconds": 2.6,
+    "peak": 0.487343
+  },
+  {
+    "family": "royal-quiz",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/podium.wav",
+    "bytes": 670364,
+    "sha256": "bb386f56bb426537c6321096ed1f81435f0749bea1515c1eddb69fb04f2b2d32",
+    "durationSeconds": 3.8,
+    "peak": 0.374551
+  },
+  {
+    "family": "royal-quiz",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/royal-quiz/closing.wav",
+    "bytes": 846764,
+    "sha256": "f1b6a07691cef91513781da209315487b11f28edafb8d5516de4105488726a5c",
+    "durationSeconds": 4.8,
+    "peak": 0.384094
+  },
+  {
+    "family": "neon-arcade",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/voting-bed.wav",
+    "bytes": 3024044,
+    "sha256": "5065e072b6f140131f0b8bf3fea3fc3d62bb47d1af6889fb6c6301da0d271022",
+    "durationSeconds": 17.142857,
+    "peak": 0.247764
+  },
+  {
+    "family": "neon-arcade",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/transition.wav",
+    "bytes": 132344,
+    "sha256": "676846cf3ad90240bc938651d6884881281c2f40d491f11f135072abb99d8dd1",
+    "durationSeconds": 0.75,
+    "peak": 0.323532
+  },
+  {
+    "family": "neon-arcade",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/confirm.wav",
+    "bytes": 60020,
+    "sha256": "14516c75d63229cc57e6450286a576df3022ff95ecc758b5d592e3220884ee29",
+    "durationSeconds": 0.34,
+    "peak": 0.209299
+  },
+  {
+    "family": "neon-arcade",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/tick.wav",
+    "bytes": 21212,
+    "sha256": "6062bf7714866bfdd6f8d95d08de15a57f4cf64739b041ea70327acf26b7f85e",
+    "durationSeconds": 0.12,
+    "peak": 0.126083
+  },
+  {
+    "family": "neon-arcade",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/urgent.wav",
+    "bytes": 28268,
+    "sha256": "cf5d78ddda62c2e1cb8d3c0ead51b98fa18b16182e2137a6f21da6438937b24e",
+    "durationSeconds": 0.16,
+    "peak": 0.13038
+  },
+  {
+    "family": "neon-arcade",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/final.wav",
+    "bytes": 40616,
+    "sha256": "4c1ead6756e7d52be621b997c1f759cb3f1f966659f9c9b6c53ca9799b6ad0b4",
+    "durationSeconds": 0.23,
+    "peak": 0.132262
+  },
+  {
+    "family": "neon-arcade",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "19b3afd3e784c331a0a15bef9f83beb86ea8a2830ef72c1a239d573982104954",
+    "durationSeconds": 0.85,
+    "peak": 0.241493
+  },
+  {
+    "family": "neon-arcade",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/lock.wav",
+    "bytes": 88244,
+    "sha256": "1196455d3e76f55119d770b0b2c24cb12cdaac3292082183cb0f84da45992bee",
+    "durationSeconds": 0.5,
+    "peak": 0.246563
+  },
+  {
+    "family": "neon-arcade",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/reveal.wav",
+    "bytes": 291104,
+    "sha256": "d3bcc98ed85dd1b0babe8a60a9046651368ba3ca264526d55655d8c428ccaac9",
+    "durationSeconds": 1.65,
+    "peak": 0.345605
+  },
+  {
+    "family": "neon-arcade",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "42dc45f04a23a81f1fa57b5593507a40e08dd8a54588ecb6ec45ee734d2163b1",
+    "durationSeconds": 2.6,
+    "peak": 0.407422
+  },
+  {
+    "family": "neon-arcade",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/podium.wav",
+    "bytes": 670364,
+    "sha256": "1651c3ccd893d69eba37fc23ea320bbb75856008124b8f8a46dde364db80eeaa",
+    "durationSeconds": 3.8,
+    "peak": 0.406609
+  },
+  {
+    "family": "neon-arcade",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/neon-arcade/closing.wav",
+    "bytes": 846764,
+    "sha256": "c18ddd684e77174f2ccc825708db7fb3506bb8485b17ceb0cdfb11e747120f7e",
+    "durationSeconds": 4.8,
+    "peak": 0.339157
+  },
+  {
+    "family": "retro-tv",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/voting-bed.wav",
+    "bytes": 3386924,
+    "sha256": "82ca6fc5bcec14199fb56bbe8147af801f3392014b9e86f1f3256395ff5e8b39",
+    "durationSeconds": 19.2,
+    "peak": 0.256594
+  },
+  {
+    "family": "retro-tv",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/transition.wav",
+    "bytes": 132344,
+    "sha256": "f1dc9a2bb0c5a8dec7010cf99c966f1fa9289d9a7220280a79266b18d6570f2f",
+    "durationSeconds": 0.75,
+    "peak": 0.368807
+  },
+  {
+    "family": "retro-tv",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/confirm.wav",
+    "bytes": 60020,
+    "sha256": "4f3cdcb1e00d49eb7cf2b020ac280a65d1e7cd7e2684e951dc35e6620b860b70",
+    "durationSeconds": 0.34,
+    "peak": 0.284196
+  },
+  {
+    "family": "retro-tv",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/tick.wav",
+    "bytes": 21212,
+    "sha256": "1430b8c2268a9476e466c7c9519258db334f530f16af4aa33e0c4fb3f3827184",
+    "durationSeconds": 0.12,
+    "peak": 0.151175
+  },
+  {
+    "family": "retro-tv",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/urgent.wav",
+    "bytes": 28268,
+    "sha256": "0ab54808d3c36e18e7fb35b875536e5df37dc60717e86f05adce115766e0d931",
+    "durationSeconds": 0.16,
+    "peak": 0.161908
+  },
+  {
+    "family": "retro-tv",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/final.wav",
+    "bytes": 40616,
+    "sha256": "310e4d5ee5c177531a0775c83acbe377e3796f0453784335a622bafcdf7dc16d",
+    "durationSeconds": 0.23,
+    "peak": 0.16702
+  },
+  {
+    "family": "retro-tv",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "0a4e5c7b73ce3671f863c60cc9cbc872ba0a6e67f327efc6a2554d3d0a3dbbe9",
+    "durationSeconds": 0.85,
+    "peak": 0.295336
+  },
+  {
+    "family": "retro-tv",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/lock.wav",
+    "bytes": 88244,
+    "sha256": "e769c135f9ee803582304facd4e423bcb98d3f04aa9ef6e70224068ff173cabf",
+    "durationSeconds": 0.5,
+    "peak": 0.277539
+  },
+  {
+    "family": "retro-tv",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/reveal.wav",
+    "bytes": 291104,
+    "sha256": "32fe780121a18bdfd9ea3f8b68abf5a40b58ecad08f85d7dea2e509ab8cd5cb2",
+    "durationSeconds": 1.65,
+    "peak": 0.31983
+  },
+  {
+    "family": "retro-tv",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "b219a97d59c19712b09890d4c763e9afd1648b5b468d7a09f82fcba00b9010d9",
+    "durationSeconds": 2.6,
+    "peak": 0.524451
+  },
+  {
+    "family": "retro-tv",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/podium.wav",
+    "bytes": 670364,
+    "sha256": "00bc2d651b11ee8f48fad477c298381b9af534b8b68a5a4a38517d314b45269f",
+    "durationSeconds": 3.8,
+    "peak": 0.352899
+  },
+  {
+    "family": "retro-tv",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/retro-tv/closing.wav",
+    "bytes": 846764,
+    "sha256": "3d8823b633c9a21bad6d94177ea8207f8ea78d7f00cc6ca2d6da7911e4abaaee",
+    "durationSeconds": 4.8,
+    "peak": 0.352899
+  },
+  {
+    "family": "magic-storybook",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/voting-bed.wav",
+    "bytes": 4704044,
+    "sha256": "7eed15bb7b0870973e5b8c8624328b5a69de5842839e70bf450f7743a0b08c45",
+    "durationSeconds": 26.666667,
+    "peak": 0.204854
+  },
+  {
+    "family": "magic-storybook",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/transition.wav",
+    "bytes": 132344,
+    "sha256": "60cd8041bba4e9486625612f6141799ecb4a45da29b029de5daee6ed8ca68f79",
+    "durationSeconds": 0.75,
+    "peak": 0.29349
+  },
+  {
+    "family": "magic-storybook",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/confirm.wav",
+    "bytes": 60020,
+    "sha256": "8d4da399ca5d0a684301b8615828eb1d7d3dd6d92d0ef06217e7b3429287d40a",
+    "durationSeconds": 0.34,
+    "peak": 0.276956
+  },
+  {
+    "family": "magic-storybook",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/tick.wav",
+    "bytes": 21212,
+    "sha256": "debe2efa90bc1ee78eb2341bd05472815ded39a4977bf8f4eb4696b26727abac",
+    "durationSeconds": 0.12,
+    "peak": 0.15685
+  },
+  {
+    "family": "magic-storybook",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/urgent.wav",
+    "bytes": 28268,
+    "sha256": "b7d8fc05f906d1252a4240df8a6e3692d21dc804459240bf2e74b031b2a798a5",
+    "durationSeconds": 0.16,
+    "peak": 0.15781
+  },
+  {
+    "family": "magic-storybook",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/final.wav",
+    "bytes": 40616,
+    "sha256": "997321f3f18f0ccb986db0803f67a76cc81426161210712feed285ff20f23e73",
+    "durationSeconds": 0.23,
+    "peak": 0.158591
+  },
+  {
+    "family": "magic-storybook",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "b928d99f1d49922e03f40b52399e4b373bca311bf31f4c3bf2ea41f54e6686f2",
+    "durationSeconds": 0.85,
+    "peak": 0.238323
+  },
+  {
+    "family": "magic-storybook",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/lock.wav",
+    "bytes": 88244,
+    "sha256": "29d2c91aa2b88e6614dea8bb849d94c4e89aa4f68523275df9fa6d6d1208756d",
+    "durationSeconds": 0.5,
+    "peak": 0.266663
+  },
+  {
+    "family": "magic-storybook",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/reveal.wav",
+    "bytes": 291104,
+    "sha256": "493b512bf5e0fc752d8b114eafa81e69353a18611ebfc6a52db57e496497e114",
+    "durationSeconds": 1.65,
+    "peak": 0.318278
+  },
+  {
+    "family": "magic-storybook",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "864a44711a1d3a8af4fa1a5614f79204d587b4e642b00564ac73902b707f032f",
+    "durationSeconds": 2.6,
+    "peak": 0.374829
+  },
+  {
+    "family": "magic-storybook",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/podium.wav",
+    "bytes": 670364,
+    "sha256": "f3a2306433768f52271f8829a6c8923480c0fb3bec25c0c0a1defb2b675b8d5f",
+    "durationSeconds": 3.8,
+    "peak": 0.365663
+  },
+  {
+    "family": "magic-storybook",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/magic-storybook/closing.wav",
+    "bytes": 846764,
+    "sha256": "38c8a0efe1bb911194867cae4161e884fbb49dc2222ef9f62cfbcee53f17f13b",
+    "durationSeconds": 4.8,
+    "peak": 0.275922
+  },
+  {
+    "family": "crystal-future",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/voting-bed.wav",
+    "bytes": 4233644,
+    "sha256": "1218a114752cb3dfdc758942ec3725747f3b952a1654feb4fee04ebc87e3f97a",
+    "durationSeconds": 24.0,
+    "peak": 0.227153
+  },
+  {
+    "family": "crystal-future",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/transition.wav",
+    "bytes": 132344,
+    "sha256": "4be02a7bce643025f003119bc118c308727627da1c19134a69794b0739f2e8d4",
+    "durationSeconds": 0.75,
+    "peak": 0.324908
+  },
+  {
+    "family": "crystal-future",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/confirm.wav",
+    "bytes": 60020,
+    "sha256": "2441858b03752c84b5e029aebf15775b6e709d0fa8501d0650fa56fc939cb648",
+    "durationSeconds": 0.34,
+    "peak": 0.240076
+  },
+  {
+    "family": "crystal-future",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/tick.wav",
+    "bytes": 21212,
+    "sha256": "96e7c8edbe37cc557e9eed9a6046436afe6601e901b40a44280397d94ea4efa2",
+    "durationSeconds": 0.12,
+    "peak": 0.157091
+  },
+  {
+    "family": "crystal-future",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/urgent.wav",
+    "bytes": 28268,
+    "sha256": "d6981597679528c3dfbc6cbe8bfbccf6d032bc61212622655630e932d9d5b0a0",
+    "durationSeconds": 0.16,
+    "peak": 0.157602
+  },
+  {
+    "family": "crystal-future",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/final.wav",
+    "bytes": 40616,
+    "sha256": "fb7f0d8a1676139f979c88674ec103073b3e2a78ff1940ffeaf94031894d9c2f",
+    "durationSeconds": 0.23,
+    "peak": 0.160181
+  },
+  {
+    "family": "crystal-future",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "4cfab8e521061f271101c0ce76668e4b4838a66b25986143a27e39e08e1405a0",
+    "durationSeconds": 0.85,
+    "peak": 0.253643
+  },
+  {
+    "family": "crystal-future",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/lock.wav",
+    "bytes": 88244,
+    "sha256": "7693cf82cc39d4d652c52e7978c46aee40c60db6497145da4746284842e0ad3f",
+    "durationSeconds": 0.5,
+    "peak": 0.267907
+  },
+  {
+    "family": "crystal-future",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/reveal.wav",
+    "bytes": 291104,
+    "sha256": "bd19b4c17e3d27b66797dc026d9b37034104cbc011e6fc6f228e3477475f39c8",
+    "durationSeconds": 1.65,
+    "peak": 0.314771
+  },
+  {
+    "family": "crystal-future",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "b03d7cbea0b1b6035e87350734b69ed9a09635a496c946783aea53de46ecb4fc",
+    "durationSeconds": 2.6,
+    "peak": 0.414544
+  },
+  {
+    "family": "crystal-future",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/podium.wav",
+    "bytes": 670364,
+    "sha256": "2b203d8743beaaf2a16cface35fdf0ea75766c55297bdc566143353f871dc3d5",
+    "durationSeconds": 3.8,
+    "peak": 0.37468
+  },
+  {
+    "family": "crystal-future",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/crystal-future/closing.wav",
+    "bytes": 846764,
+    "sha256": "5322ed3ecedd9bb5686a15eac37406a0b28aeba997e85f060563344eeba18641",
+    "durationSeconds": 4.8,
+    "peak": 0.355505
+  },
+  {
+    "family": "carnival-pop",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/voting-bed.wav",
+    "bytes": 3136044,
+    "sha256": "47c4e2ef2f880bf7499a9b8fc0d5e130369de161d0c2588c4ee2290aeeca4f1e",
+    "durationSeconds": 17.777778,
+    "peak": 0.250489
+  },
+  {
+    "family": "carnival-pop",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/transition.wav",
+    "bytes": 132344,
+    "sha256": "05311c1b871c3b98846c6e97e1f3014ee0060d828a909f74a791c76261a4e1a2",
+    "durationSeconds": 0.75,
+    "peak": 0.336353
+  },
+  {
+    "family": "carnival-pop",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/confirm.wav",
+    "bytes": 60020,
+    "sha256": "859504a36618071c1bc335e29e9379fcbe6856dcf01bd6039be429b2f34f0fc2",
+    "durationSeconds": 0.34,
+    "peak": 0.291397
+  },
+  {
+    "family": "carnival-pop",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/tick.wav",
+    "bytes": 21212,
+    "sha256": "3041466c7977dcdad62af136822243e4347b5a736ba21e0c41e355007ebf6281",
+    "durationSeconds": 0.12,
+    "peak": 0.176991
+  },
+  {
+    "family": "carnival-pop",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/urgent.wav",
+    "bytes": 28268,
+    "sha256": "aeb01d3a385ed79e8825b4c3ea791d36c9e37f497d8a2427ea710de64b240c7c",
+    "durationSeconds": 0.16,
+    "peak": 0.176841
+  },
+  {
+    "family": "carnival-pop",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/final.wav",
+    "bytes": 40616,
+    "sha256": "0c1a3d726d44096405c42ac861a7110d171f28d02c025f966787bdae312d0c9e",
+    "durationSeconds": 0.23,
+    "peak": 0.177259
+  },
+  {
+    "family": "carnival-pop",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "4df52cc3f6105adcd089619a8132aa6be0b1253c8a0750723329f59d8e01e474",
+    "durationSeconds": 0.85,
+    "peak": 0.217129
+  },
+  {
+    "family": "carnival-pop",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/lock.wav",
+    "bytes": 88244,
+    "sha256": "2be59a52363c80a7b4795129f65c77311e9ec50f2d97ded95c4c250e98076ea6",
+    "durationSeconds": 0.5,
+    "peak": 0.266171
+  },
+  {
+    "family": "carnival-pop",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/reveal.wav",
+    "bytes": 291104,
+    "sha256": "d342ddae4fd735f27afcd015c954e6c30f09a94f23f2f437cd8a12774b52f3c2",
+    "durationSeconds": 1.65,
+    "peak": 0.299781
+  },
+  {
+    "family": "carnival-pop",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "70b34c5f032fe18ef9275d258316e5da0cb23027d5b997778b7e4c4be44b01d2",
+    "durationSeconds": 2.6,
+    "peak": 0.386184
+  },
+  {
+    "family": "carnival-pop",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/podium.wav",
+    "bytes": 670364,
+    "sha256": "2a58b01a2a2ad8d77d4e957a6fb37567704929213b606a562982da392f88aa6d",
+    "durationSeconds": 3.8,
+    "peak": 0.359088
+  },
+  {
+    "family": "carnival-pop",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/carnival-pop/closing.wav",
+    "bytes": 846764,
+    "sha256": "3d1cd6b7a0ae9b108ef93cb82cbd7fae95b2d68e16ba9845703fc01d7d23b0f2",
+    "durationSeconds": 4.8,
+    "peak": 0.298582
+  },
+  {
+    "family": "sports-arena",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/voting-bed.wav",
+    "bytes": 2919768,
+    "sha256": "671791c6ff070aff2272b6d2890af594f2fead79ad520e53de2703599621b277",
+    "durationSeconds": 16.551724,
+    "peak": 0.240362
+  },
+  {
+    "family": "sports-arena",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/transition.wav",
+    "bytes": 132344,
+    "sha256": "2924f6d13472fe399c45e75365c607d49517540fd7b070d2791e0e67ef45f0d3",
+    "durationSeconds": 0.75,
+    "peak": 0.375371
+  },
+  {
+    "family": "sports-arena",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/confirm.wav",
+    "bytes": 60020,
+    "sha256": "a39a03e221a8676e81ad61ac015b92160e2d15f7fb7249fc8a5ed63e65e5b5e9",
+    "durationSeconds": 0.34,
+    "peak": 0.285683
+  },
+  {
+    "family": "sports-arena",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/tick.wav",
+    "bytes": 21212,
+    "sha256": "d81e0887d3158b385c5c7d9f7ff0f2961e1a747d7b941c7ebd0070f5c5ad200b",
+    "durationSeconds": 0.12,
+    "peak": 0.154234
+  },
+  {
+    "family": "sports-arena",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/urgent.wav",
+    "bytes": 28268,
+    "sha256": "a197783811b277f219ee974efb3730063c1bb233714d990b0a42172d2897bd1f",
+    "durationSeconds": 0.16,
+    "peak": 0.162991
+  },
+  {
+    "family": "sports-arena",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/final.wav",
+    "bytes": 40616,
+    "sha256": "518c9bd0ab2c37724b5e0930a29bffae0ac1ceae447e2f209f8600e85874c134",
+    "durationSeconds": 0.23,
+    "peak": 0.158644
+  },
+  {
+    "family": "sports-arena",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "93efcb32e53dd4ca1a847d5974f37a816bc5cc7eecf2ec588e8668fb43c8d594",
+    "durationSeconds": 0.85,
+    "peak": 0.260308
+  },
+  {
+    "family": "sports-arena",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/lock.wav",
+    "bytes": 88244,
+    "sha256": "3b6fe417bfdb4788a294e6d7173c4cd396d619e40bee74f00907caf6f7828bc7",
+    "durationSeconds": 0.5,
+    "peak": 0.277323
+  },
+  {
+    "family": "sports-arena",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/reveal.wav",
+    "bytes": 291104,
+    "sha256": "f8ca5669177c94261f6f72a5558d37e07cb7140e8c4e479ea29a2b64b0d02d9c",
+    "durationSeconds": 1.65,
+    "peak": 0.39648
+  },
+  {
+    "family": "sports-arena",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "2cb7fcc5ae7d3bf54a17f822abcd6592ffaef274b687c420218abd43213930f9",
+    "durationSeconds": 2.6,
+    "peak": 0.435596
+  },
+  {
+    "family": "sports-arena",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/podium.wav",
+    "bytes": 670364,
+    "sha256": "c3b76eee4b6d8122742f218fd7953ab1f9976465dde171d52a767643472e6374",
+    "durationSeconds": 3.8,
+    "peak": 0.382125
+  },
+  {
+    "family": "sports-arena",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/sports-arena/closing.wav",
+    "bytes": 846764,
+    "sha256": "69f2b22ff06d133b18c0f0fc084e73beb0deabc35b180d0e1eff81574fa0daa8",
+    "durationSeconds": 4.8,
+    "peak": 0.329197
+  },
+  {
+    "family": "mystery-noir",
+    "name": "voting-bed",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/voting-bed.wav",
+    "bytes": 4838444,
+    "sha256": "5ee3f05bab720a670bed53a2d5c0d88994314cf7891fc237f52c4f0f27efc00a",
+    "durationSeconds": 27.428571,
+    "peak": 0.177902
+  },
+  {
+    "family": "mystery-noir",
+    "name": "transition",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/transition.wav",
+    "bytes": 132344,
+    "sha256": "a84a419f17db1dcd0c3dbfc6606796eff76d3c819e4445aae0f80cc5bb72e8fe",
+    "durationSeconds": 0.75,
+    "peak": 0.308374
+  },
+  {
+    "family": "mystery-noir",
+    "name": "confirm",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/confirm.wav",
+    "bytes": 60020,
+    "sha256": "646240679dcbc5326b8585a8354a49825002cf8b04c3d635a7cbd219f12a0a42",
+    "durationSeconds": 0.34,
+    "peak": 0.25098
+  },
+  {
+    "family": "mystery-noir",
+    "name": "tick",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/tick.wav",
+    "bytes": 21212,
+    "sha256": "6fb0d5e6d2b15c41ea1406010d4d93a8b33d888b62f1bb6d6a7fa847ff414748",
+    "durationSeconds": 0.12,
+    "peak": 0.153618
+  },
+  {
+    "family": "mystery-noir",
+    "name": "urgent",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/urgent.wav",
+    "bytes": 28268,
+    "sha256": "229aecd00ccbbd9bac81c871d81b55e84469913170633cf9e04c3cbc23d930eb",
+    "durationSeconds": 0.16,
+    "peak": 0.154101
+  },
+  {
+    "family": "mystery-noir",
+    "name": "final",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/final.wav",
+    "bytes": 40616,
+    "sha256": "cce4012fe25d8cd32804f3510c09d935f6dcf7685b82cb35dc2f314335ad15fd",
+    "durationSeconds": 0.23,
+    "peak": 0.154587
+  },
+  {
+    "family": "mystery-noir",
+    "name": "timer-end",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/timer-end.wav",
+    "bytes": 149984,
+    "sha256": "c8c8473bb217cf455abd0da2505904089df62d93c6a001d5e85db4fe4f79770b",
+    "durationSeconds": 0.85,
+    "peak": 0.218722
+  },
+  {
+    "family": "mystery-noir",
+    "name": "lock",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/lock.wav",
+    "bytes": 88244,
+    "sha256": "85293bf50992a0b995ec45a9b7b12e6e94089437691648529cf8765648910293",
+    "durationSeconds": 0.5,
+    "peak": 0.24138
+  },
+  {
+    "family": "mystery-noir",
+    "name": "reveal",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/reveal.wav",
+    "bytes": 291104,
+    "sha256": "e7e81e415c5c5803c5e62c340588580f3144c76ff100df25c09691fe2aa3a84f",
+    "durationSeconds": 1.65,
+    "peak": 0.27639
+  },
+  {
+    "family": "mystery-noir",
+    "name": "leaderboard",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/leaderboard.wav",
+    "bytes": 458684,
+    "sha256": "04924998782cec6ad5ac09bd68631f82ae67f1e0b9d26041dff9a7f566cdfa11",
+    "durationSeconds": 2.6,
+    "peak": 0.327112
+  },
+  {
+    "family": "mystery-noir",
+    "name": "podium",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/podium.wav",
+    "bytes": 670364,
+    "sha256": "9ca81fa686721d12de1ac44442cc5c62843e7ec5dea33c76903c992e6620b6f7",
+    "durationSeconds": 3.8,
+    "peak": 0.329486
+  },
+  {
+    "family": "mystery-noir",
+    "name": "closing",
+    "kind": "audio",
+    "url": "/tadazz-show/originals/mystery-noir/closing.wav",
+    "bytes": 846764,
+    "sha256": "a5c9519a0533964f24c17d83a7e35952957c67e1778f7f281520e6fc3059d228",
+    "durationSeconds": 4.8,
+    "peak": 0.267116
+  }
+]

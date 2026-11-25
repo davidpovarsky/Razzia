@@ -2,9 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link id="favicon" rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link
+      id="favicon"
+      rel="icon"
+      type="image/png"
+      href="/tadazz-favicon-z-20261108.png"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Razzia</title>
+    <meta name="application-name" content="Tadazz" />
+    <meta
+      name="description"
+      content="Tadazz live interactive gameshow manager"
+    />
+    <meta name="theme-color" content="#08011a" />
+    <title>Tadazz</title>
+    <style>
+      html[data-tadazz-game-route],
+      html[data-tadazz-game-route] body {
+        background: #08011a;
+      }
+    </style>
+    <script>
+      ;/^\/(party|display)(\/|$)/.test(location.pathname) &&
+        document.documentElement.setAttribute("data-tadazz-game-route", "")
+    </script>
   </head>
   <body class="font-display touch-none">
     <div id="root"></div>

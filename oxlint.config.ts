@@ -1,6 +1,64 @@
-import { defineConfig } from "oxlint"
+import { defineConfig, type OxlintConfig } from "oxlint"
 
-export default defineConfig({
+const config: OxlintConfig = defineConfig({
+  // Imported artifacts are evidence, not maintained source. Keep their bytes intact.
+  ignorePatterns: [
+    "docs/design-reference/handoff-20261110/**",
+    "docs/design-reference/upstream/**",
+    "docs/extensions/references/**",
+    "docs/extensions/qa-evidence/**",
+    "docs/extensions/package-runtime-evidence/**",
+    // Supplied canvas choreography is vendored with @ts-nocheck; adapters stay checked.
+    "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+    "extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+    // Retain exact historical reproduction scripts; active counterparts stay checked.
+    "docs/extensions/plans/editor-hebrew-20261118/host-roster/browser.mjs",
+    "docs/extensions/plans/editor-hebrew-20261118/host-roster/fixture.tsx",
+    "docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/browser-configs.mjs",
+    "docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/browser.mjs",
+    "docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/fixture.tsx",
+    "docs/extensions/plans/editor-hebrew-20261118/native-he-scenes.config.ts",
+    "docs/extensions/plans/editor-hebrew-20261118/native-he-scenes.fixture.test.ts",
+    "docs/extensions/plans/phase-continuity-20261119/ggo/20261119T172039Z-d4b213df/executed-warmup.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/scheduling-browser-verify.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07/browser-verify.overlay.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/browser-verify.overlay.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/preference-race/baseline/browser-verify.original.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/browser-verify.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/preference-race.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/transport-race.mjs",
+    "docs/extensions/plans/phase3-takeover-20261117/operator-capabilities-fix-20261118-25557ce6/synthetic-clone.cjs",
+    "docs/extensions/plans/phase3-takeover-20261117/operator-capabilities-fix-20261118-25557ce6/synthetic-stage.cjs",
+    "docs/extensions/plans/ux-followup-20261119/billing/harness/public-browser-check.mjs",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/original-production-public-smoke.mjs",
+    "docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke.mjs",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs",
+    // Preserve exact historical producer bytes; active counterparts stay checked.
+    "extensions/src/mcp-app/tests/first-party/ad895-producer/first-party/schema.ts",
+    "extensions/src/mcp-app/tests/first-party/ad895-producer/server/errors.ts",
+    "extensions/src/mcp-app/tests/first-party/ad895-producer/contracts/schemas.ts",
+    // Preserve original-theme reproduction scripts and pinned producer snapshots.
+    "docs/extensions/plans/original-themes-20261122/native-browser-iteration5/native-only-browser-verify.mjs",
+    "docs/extensions/plans/original-themes-20261122/native-browser-iteration6/native-only-browser-verify.mjs",
+    "docs/extensions/plans/original-themes-20261122/native-browser-iteration6b/native-only-browser-verify.mjs",
+    "docs/extensions/plans/original-themes-20261122/native-browser-iteration7/native-only-browser-verify.mjs",
+    "docs/extensions/plans/original-themes-20261122/paused-countdown-iteration8/diagnostics/paused-countdown-late-display-diagnostic.mjs",
+    "docs/extensions/plans/original-themes-20261122/paused-countdown-iteration8b/diagnostics/paused-countdown-late-display-diagnostic.mjs",
+    "docs/extensions/plans/original-themes-20261122/paused-countdown-iteration9/diagnostics/paused-countdown-late-display-diagnostic.mjs",
+    "docs/extensions/plans/original-themes-20261122/paused-display-iteration6/paused-results-late-display-diagnostic.mjs",
+    "docs/extensions/plans/original-themes-20261122/paused-display-iteration6b/diagnostics/paused-results-late-display-diagnostic.mjs",
+    "docs/extensions/plans/original-themes-20261122/paused-display-iteration8/diagnostics/paused-results-late-display-diagnostic.mjs",
+    "docs/extensions/plans/original-themes-20261122/preview-pause-seek-iteration10-foreground/qa-inputs/phase-continuity-observe.mjs",
+    "docs/extensions/plans/original-themes-20261122/preview-pause-seek-iteration10-observe/observation-inputs/phase-continuity.mjs",
+    "docs/extensions/plans/original-themes-20261122/worker-base-inventory-fe25457aa5c7-381ec4f3/final-package-worker-driver.mts",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-native-pins-repair-fe25457aa5c7-4014d069/before/source/extensions/qa/build-application-preview.mjs",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-native-pins-repair-fe25457aa5c7-4014d069/before/source/extensions/qa/phase3-full-show/native-parity-fixtures.ts",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-native-pins-repair-fe25457aa5c7-4014d069/source-copyback/extensions/qa/build-application-preview.mjs",
+    "docs/extensions/plans/phase3-takeover-20261117/tadazz-native-pins-repair-fe25457aa5c7-4014d069/source-copyback/extensions/qa/phase3-full-show/native-parity-fixtures.ts",
+    "**/dist/**",
+    "**/test-results/**",
+  ],
   env: {
     browser: true,
     builtin: true,
@@ -13,6 +71,43 @@ export default defineConfig({
   },
   plugins: ["typescript"],
   overrides: [
+    {
+      files: ["**/*.{ts,tsx,mts,cts}"],
+      rules: {
+        // The typed extension understands returned promises and replaces this base rule.
+        "require-await": "off",
+        // The typed extension checks thrown values; keep the base rule for JavaScript.
+        "no-throw-literal": "off",
+      },
+    },
+    {
+      files: [
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/*.nodecheck.ts",
+        "extensions/qa/**",
+        "extensions/scripts/**",
+        "packages/e2e/**",
+      ],
+      rules: {
+        // Game actions, timer probes and fixture setup depend on preceding steps.
+        "no-await-in-loop": "off",
+        // Describe/test/evaluate callbacks add structural nesting in browser tests.
+        "max-nested-callbacks": ["error", 6],
+      },
+    },
+    {
+      files: ["**/*.spec.ts", "**/*.test.ts"],
+      rules: {
+        // Runtime expect/assert calls establish fixture presence; TS cannot infer
+        // narrowing from every matcher (especially serialized browser callbacks).
+        "typescript/no-non-null-assertion": "off",
+        // These are deliberate injection fixtures, never navigation targets.
+        "no-script-url": "off",
+        // No-op callbacks model disabled observers and mocked browser APIs.
+        "no-empty-function": ["error", { allow: ["arrowFunctions"] }],
+      },
+    },
     {
       files: ["packages/web/**/*.{ts,tsx}"],
       plugins: ["react"],
@@ -119,7 +214,9 @@ export default defineConfig({
     "no-dupe-else-if": "error",
     "no-dupe-keys": "error",
     "no-duplicate-case": "error",
-    "no-duplicate-imports": ["error", { includeExports: true }],
+    // Oxlint 1.90 reports each specifier in a single export list as a duplicate.
+    // Import deduplication and the parser still reject duplicate bindings.
+    "no-duplicate-imports": "error",
     "no-else-return": "error",
     "no-empty": "error",
     "no-empty-character-class": "error",
@@ -132,7 +229,7 @@ export default defineConfig({
     "no-extend-native": "error",
     "no-extra-boolean-cast": "error",
     "no-extra-label": "error",
-    "no-fallthrough": "error",
+    "no-fallthrough": ["error", { allowEmptyCase: true }],
     "no-func-assign": "error",
     "no-global-assign": "error",
     "no-implicit-coercion": "error",
@@ -293,7 +390,18 @@ export default defineConfig({
     "typescript/prefer-includes": "error",
     "typescript/prefer-literal-enum-member": "error",
     "typescript/prefer-namespace-keyword": "error",
-    "typescript/prefer-nullish-coalescing": "error",
+    // Empty names/URLs and zero durations intentionally select existing defaults.
+    "typescript/prefer-nullish-coalescing": [
+      "error",
+      {
+        ignorePrimitives: {
+          string: true,
+          number: true,
+          boolean: true,
+          bigint: true,
+        },
+      },
+    ],
     "typescript/prefer-optional-chain": "error",
     "typescript/prefer-promise-reject-errors": "error",
     "typescript/prefer-reduce-type-parameter": "error",
@@ -326,3 +434,16 @@ export default defineConfig({
     yoda: "error",
   },
 })
+
+// Untyped JS utilities still receive every JavaScript correctness/style rule.
+// TypeScript-only guarantees apply to TS projects, not inferred `any` in JS probes.
+config.overrides?.push({
+  files: ["**/*.{js,mjs,cjs}"],
+  rules: Object.fromEntries(
+    Object.keys(config.rules ?? {})
+      .filter((rule) => rule.startsWith("typescript/"))
+      .map((rule) => [rule, "off" as const]),
+  ),
+})
+
+export default config

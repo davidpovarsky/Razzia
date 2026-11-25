@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-11-19T13:48:31.566251+00:00",
+  "parentSha": "9318a764bd922b2c7970e4866b91d62ade9a1d40",
+  "sourceHashes": {
+    "extensions/src/site/web/marketing/ContactForm.tsx": "dcbf30ba7cb5944cc1f8faa491fa1919973e3af12ccfd1f006c349ab72204d2e",
+    "extensions/src/site/web/marketing/MarketingSite.tsx": "48025e1bf2c630f0149c8a948e9a69f4bff442ffc4930c1882cec09236f454df",
+    "extensions/src/site/web/studio/Events.tsx": "8bee6c2667c6aba51a016af188ff0983f2df55b78402fef37a598f9a4bc117f4",
+    "packages/socket/src/services/contact-mail.ts": "55e149da8c1b3d30a4671430c2b1891949c83f1d49f0e6a23e0fab93325a4026",
+    "packages/socket/src/services/mail-provider.ts": "2f1d721c286f9e6e403e97bac5062dd6c7b9e9ef1d2920638b7368f00384d118",
+    "packages/socket/src/services/account-mail.ts": "7c16d5c030f7449a2c083fc53aa928b8e2275b6147d6b32f4ab6d32318691b8f",
+    "packages/socket/src/api/routes/contact.ts": "73fe1874912f2996e11f2cbf11df008159cae5fdc824b4e0fb77a4bfcd653e6b",
+    "packages/socket/src/api/index.ts": "499cb39393535f49067813e70d135d0eaa221a54a60775300a332fa19e55e214",
+    "packages/socket/src/api/contact.test.ts": "cf1203ea56252563ef0f2b25f35d1dc39e50f6b52bcc3a092bece9364abd6788",
+    "extensions/qa/ux-followup-site-smoke.mjs": "b3616c96777c0ba2d747dd79c18b673df960645efe565044299d5d0deac301c7"
+  },
+  "siteBrowserReceipt": "site-browser/receipt.json",
+  "serverTests": {
+    "passed": 18,
+    "files": 3,
+    "providerTransport": "mocked Resend fetch; no real email"
+  },
+  "visualReview": [
+    "contact320 narrow layout and field design",
+    "contactHebrew390 RTL layout"
+  ],
+  "postBrowserChange": "Removed stale static marketing footer purchase-unavailable label; no contact/Prepare behavior change"
+}

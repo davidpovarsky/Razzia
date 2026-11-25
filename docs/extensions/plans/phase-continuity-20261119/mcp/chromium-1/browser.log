@@ -1,0 +1,19 @@
+{"evidence":"C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\chromium-1","results":[],"errors":[]}
+C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\extensions\src\mcp-app\server\authoring.ts:93
+      throw new ToolError("VALIDATION_FAILED")
+            ^
+
+ToolError: VALIDATION_FAILED
+    at policyCheck (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\extensions\src\mcp-app\server\authoring.ts:93:13)
+    at policyCheck (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\extensions\src\mcp-app\server\authoring.ts:96:5)
+    at policyCheck (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\extensions\src\mcp-app\server\authoring.ts:96:5)
+    at normalize (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\extensions\src\mcp-app\server\authoring.ts:189:5)
+    at normalizeDraft (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\extensions\src\mcp-app\server\authoring.ts:251:10)
+    at scenarioFor (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:489:22)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:672:30 {
+  code: 'VALIDATION_FAILED',
+  details: {},
+  retryable: false
+}
+
+Node.js v24.22.1

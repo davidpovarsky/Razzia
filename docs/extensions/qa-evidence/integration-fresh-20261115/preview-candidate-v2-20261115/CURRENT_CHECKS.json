@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-15T21:08:55.643862+00:00",
+  "managerSource": "e4087f683f42fc9844341b0b33ef555010a6c64b",
+  "checks": [
+    {
+      "label": "build",
+      "command": [
+        "C:/Program Files/nodejs/node.exe",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\build-candidate-current.mjs"
+      ],
+      "exit": 0,
+      "stdoutSha256": "cffc8d000568d09c28eafec0f7c9eadb4f0375ddd02c6e4257cc68135e76f751",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "types",
+      "command": [
+        "C:/Program Files/nodejs/node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\typescript\\lib\\tsc.js",
+        "--noEmit",
+        "-p",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\candidate-combined-local-01\\candidate-focused.tsconfig.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "http17",
+      "command": [
+        "C:/Program Files/nodejs/node.exe",
+        "--test",
+        "--test-concurrency=1",
+        "--test-reporter=tap",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\candidate-combined-local-01\\out\\producer.mjs",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\candidate-combined-local-01\\out\\protocol.mjs",
+        "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\candidate-combined-local-01\\out\\http.mjs"
+      ],
+      "exit": 0,
+      "stdoutSha256": "296c516cc8acac1c2d0f4d46d6ca07aef5e7946f8674703b70cb28e631fa19a3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "allCurrentSourceInputsUnchanged": 312,
+  "all2580ExistingPackageBodiesUnchanged": true,
+  "nativeSave605Excluded": true,
+  "graph": "Genuine existing private QA npm graph, not normalrootpnpm; real current rootsource snapshot/no install/no Shim",
+  "browserScope": "Producer8 Edge-to-exact-E-native21 proof not rerun; exact pure109 current graph/output bridge is checked separately. No G Apps installedhost/pin/font/rights acceptance."
+}

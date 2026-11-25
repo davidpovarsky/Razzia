@@ -1,0 +1,66 @@
+{
+  "tenants": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181726077120"
+  },
+  "tenants/760318fc-d0b9-4afb-a62e-613e6c245c63": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181634076221"
+  },
+  "tenants/760318fc-d0b9-4afb-a62e-613e6c245c63/extensions": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181634301543"
+  },
+  "tenants/760318fc-d0b9-4afb-a62e-613e6c245c63/extensions/mcp-first-party": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181640076280"
+  },
+  "tenants/760318fc-d0b9-4afb-a62e-613e6c245c63/extensions/mcp-first-party/drafts.sqlite": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738181640076280",
+    "sha256": "1c79f526d4bf2e41c49373b5172616ba45ac4b755b06af44bf9c8dfacb0aeb8e"
+  },
+  "tenants/760318fc-d0b9-4afb-a62e-613e6c245c63/native-sentinels": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181140071392"
+  },
+  "tenants/760318fc-d0b9-4afb-a62e-613e6c245c63/native-sentinels/quiz.json": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738181140071392",
+    "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+  },
+  "tenants/d006b5f8-909a-4bbd-b9af-b09750c9e0f7": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181227072243"
+  },
+  "tenants/d006b5f8-909a-4bbd-b9af-b09750c9e0f7/native-sentinels": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181227072243"
+  },
+  "tenants/d006b5f8-909a-4bbd-b9af-b09750c9e0f7/native-sentinels/quiz.json": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738181227072243",
+    "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+  },
+  "native-sentinels": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738181227072243"
+  },
+  "native-sentinels/quiz.json": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738181227072243",
+    "sha256": "0ddcd7929fbfd542aa0f670b270d6051a4094670f785e7e7bab1706d244bfb86"
+  }
+}

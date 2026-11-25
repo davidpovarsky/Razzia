@@ -1,0 +1,19 @@
+[WebServer] (node:27036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:21840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › tests\billing.spec.ts:33:1 › original manager UI, all locales, narrow and desktop layouts (22.7s)
+  ok 2 [chromium] › tests\billing.spec.ts:79:1 › four currencies and access granted only after signed server notification (8.3s)
+  ok 3 [chromium] › tests\billing.spec.ts:164:1 › a second authenticated account sees no other account's allowance (3.8s)
+(node:4944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 [webkit] › tests\billing.spec.ts:33:1 › original manager UI, all locales, narrow and desktop layouts (33.7s)
+  ok 5 [webkit] › tests\billing.spec.ts:79:1 › four currencies and access granted only after signed server notification (21.7s)
+  ok 6 [webkit] › tests\billing.spec.ts:164:1 › a second authenticated account sees no other account's allowance (8.0s)
+
+  6 passed (2.1m)

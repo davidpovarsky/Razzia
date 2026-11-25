@@ -1,0 +1,3 @@
+(node:25280) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Failed to find tsgolint executable. You may need to add the `oxlint-tsgolint` package to your project?

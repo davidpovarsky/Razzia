@@ -1,0 +1,82 @@
+[
+  {
+    "package": "i18next@26.4.3",
+    "licensePath": "LICENSE",
+    "bytes": 1082,
+    "sha256": "1cd0a2b02a6cc40ef8ee16310d13eeffdd7b5de4a562fd3ee7c921d8eb54f60a",
+    "sha512": "b274a1c7a9be813025b50e0e5d14843286210432632efad4109526dd0d022f3fe4b69585693df56d849a2a30cad4bb53fe006db11348a2f208def94db027597b",
+    "observedHeader": "The MIT License (MIT)",
+    "copyrightNotices": [
+      "Copyright (c) 2011-present i18next"
+    ],
+    "metadataDeclaredLicense": "MIT",
+    "noticeInclusionConditionObserved": true,
+    "rawBodyLocation": "observed-membership.json packages[].files[LICENSE].bodyBase64",
+    "packagingStatus": "Not included in frozen emitted dd3 output",
+    "rightsAuthority": "No image or executable rights granted by this observation"
+  },
+  {
+    "package": "react-dom@19.3.0",
+    "licensePath": "LICENSE",
+    "bytes": 1088,
+    "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "sha512": "3b8288e5dac996da44bd81b0eb1d96905c4b90ad9154f3d29d073c96890b75cd281fa03af0b77f331dbec239d341363b5f9b328bafea0d4b8d0a3e900d150f80",
+    "observedHeader": "MIT License",
+    "copyrightNotices": [
+      "Copyright (c) Meta Platforms, Inc. and affiliates."
+    ],
+    "metadataDeclaredLicense": "MIT",
+    "noticeInclusionConditionObserved": true,
+    "rawBodyLocation": "observed-membership.json packages[].files[LICENSE].bodyBase64",
+    "packagingStatus": "Not included in frozen emitted dd3 output",
+    "rightsAuthority": "No image or executable rights granted by this observation"
+  },
+  {
+    "package": "react@19.3.0",
+    "licensePath": "LICENSE",
+    "bytes": 1088,
+    "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "sha512": "3b8288e5dac996da44bd81b0eb1d96905c4b90ad9154f3d29d073c96890b75cd281fa03af0b77f331dbec239d341363b5f9b328bafea0d4b8d0a3e900d150f80",
+    "observedHeader": "MIT License",
+    "copyrightNotices": [
+      "Copyright (c) Meta Platforms, Inc. and affiliates."
+    ],
+    "metadataDeclaredLicense": "MIT",
+    "noticeInclusionConditionObserved": true,
+    "rawBodyLocation": "observed-membership.json packages[].files[LICENSE].bodyBase64",
+    "packagingStatus": "Not included in frozen emitted dd3 output",
+    "rightsAuthority": "No image or executable rights granted by this observation"
+  },
+  {
+    "package": "scheduler@0.28.0",
+    "licensePath": "LICENSE",
+    "bytes": 1088,
+    "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "sha512": "3b8288e5dac996da44bd81b0eb1d96905c4b90ad9154f3d29d073c96890b75cd281fa03af0b77f331dbec239d341363b5f9b328bafea0d4b8d0a3e900d150f80",
+    "observedHeader": "MIT License",
+    "copyrightNotices": [
+      "Copyright (c) Meta Platforms, Inc. and affiliates."
+    ],
+    "metadataDeclaredLicense": "MIT",
+    "noticeInclusionConditionObserved": true,
+    "rawBodyLocation": "observed-membership.json packages[].files[LICENSE].bodyBase64",
+    "packagingStatus": "Not included in frozen emitted dd3 output",
+    "rightsAuthority": "No image or executable rights granted by this observation"
+  },
+  {
+    "package": "zod@4.6.6",
+    "licensePath": "LICENSE",
+    "bytes": 1072,
+    "sha256": "3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8",
+    "sha512": "1b5c94caa9658b0a3af559622556bc73737115cd9cf18fac4c2fa48b66aae38ad84dd4a5dde2af72580a82f6c336d846951401557d80b515b1c858562d5d7ca0",
+    "observedHeader": "MIT License",
+    "copyrightNotices": [
+      "Copyright (c) 2025 Colin McDonnell"
+    ],
+    "metadataDeclaredLicense": "MIT",
+    "noticeInclusionConditionObserved": true,
+    "rawBodyLocation": "observed-membership.json packages[].files[LICENSE].bodyBase64",
+    "packagingStatus": "Not included in frozen emitted dd3 output",
+    "rightsAuthority": "No image or executable rights granted by this observation"
+  }
+]

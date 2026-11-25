@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-19T18:20:29.247905+00:00",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "sourceCommit": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "source": "extensions/qa/phase3-full-show/browser-verify.mjs",
+  "originalSha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+  "previousDiagnosticSha256": "68250f4a6919907f5a5e02444b07911f9a30f3884a36f766d6c00775477a33be",
+  "sha256": "16e47f76b66b0275a85e0d6d3515ddb07272b60e8df1ade1144ccfe6a0912579",
+  "bytes": 128009,
+  "formatExit": 0,
+  "syntaxExit": 0,
+  "diffSha256": "bb1187f58a47201554ab99056f3bc8e16efc2e4e1ffde24896ec7ba3080f8bf5",
+  "environment": {
+    "TADAZZ_FULL_SHOW_DIAGNOSTIC": "frame-scheduling",
+    "TADAZZ_FULL_SHOW_BROWSERS": "webkit",
+    "TADAZZ_FULL_SHOW_THEMES": "tadazz-classic,razzia-original"
+  },
+  "timeoutsChanged": false,
+  "widgetRebuilt": false,
+  "scope": "exact initial workspace results load and ordinary pause only, both themes; no further workspace navigation, phase matrix, title or semantic workflows",
+  "observation": "native rAF and100msinterval counters top/widget, native ShadowRoot mutation timestamps, passive input events"
+}

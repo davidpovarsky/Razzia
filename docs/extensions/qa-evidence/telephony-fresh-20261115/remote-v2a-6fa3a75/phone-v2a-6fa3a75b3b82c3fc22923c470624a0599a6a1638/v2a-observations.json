@@ -1,0 +1,726 @@
+{
+  "tested_sha": "6fa3a75b3b82c3fc22923c470624a0599a6a1638",
+  "scope": "unmounted synthetic prototype; real Game and SQLite; injected authority is NOT actual authentication",
+  "observations": [
+    {
+      "case": "V2A-10",
+      "before": {
+        "activeCallId": "e15db9f1-b0b9-4ed1-b1c2-db943fdef3fa",
+        "clientId": "phone-client-01a1de33-df8a-7076-8183-391cfa4394e0",
+        "status": "connected",
+        "lastSeenAt": 1794729303946,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "after": {
+        "activeCallId": "e15db9f1-b0b9-4ed1-b1c2-db943fdef3fa",
+        "clientId": "phone-client-01a1de33-df8a-7076-8183-391cfa4394e0",
+        "status": "connected",
+        "lastSeenAt": 1794729303946,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "precedence": "accepted server registration; physical order unknown",
+      "state": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-11",
+      "cachedRegistrationDenied": true,
+      "cachedPollDenied": true
+    },
+    {
+      "case": "V2A-01",
+      "checks": 19,
+      "deniedScopes": 6,
+      "revokedReplayDenied": true,
+      "state": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-02",
+      "before": {
+        "activeCallId": "395d6604-c2d6-4239-9b86-014daeea3af0",
+        "clientId": "phone-client-01a1de33-e195-703b-8540-02e67d6acd67",
+        "status": "connected",
+        "lastSeenAt": 1794729315491,
+        "points": 1000,
+        "epoch": 2,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "after": {
+        "activeCallId": "d381d6f1-e4db-4152-824e-2c2e3dc88c50",
+        "clientId": "phone-client-01a1de33-e195-703b-8540-02e67d6acd67",
+        "status": "connected",
+        "lastSeenAt": 1794729321552,
+        "points": 1000,
+        "epoch": 2,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "disconnectCalls": 0,
+      "answerCalls": 1,
+      "billingBefore": {
+        "calls": {
+          "n": 0
+        },
+        "usage": {
+          "n": 0
+        }
+      },
+      "billingAfter": {
+        "calls": {
+          "n": 0
+        },
+        "usage": {
+          "n": 0
+        }
+      },
+      "state": {
+        "registrations": [
+          {
+            "state": "RETIRED",
+            "generation": 1,
+            "hasReceipt": 1
+          },
+          {
+            "state": "ACTIVE",
+            "generation": 2,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "APPLIED",
+            "hasReceipt": 1
+          },
+          {
+            "state": "APPLIED",
+            "hasReceipt": 1
+          },
+          {
+            "state": "REJECTED",
+            "hasReceipt": 1
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 2
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-03",
+      "foreignAuthoritiesDenied": 4,
+      "legacyBefore": {
+        "activeCallId": "legacy-foreign-call",
+        "clientId": "phone-client-01a1de34-2512-7166-b75e-8dc4c9478888",
+        "status": "connected",
+        "lastSeenAt": 1794729321746,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "legacyAfter": {
+        "activeCallId": "legacy-foreign-call",
+        "clientId": "phone-client-01a1de34-2512-7166-b75e-8dc4c9478888",
+        "status": "connected",
+        "lastSeenAt": 1794729321746,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "state": {
+        "registrations": [
+          {
+            "state": "REJECTED",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "BLOCKED",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-04",
+      "players": 0,
+      "state": {
+        "registrations": [
+          {
+            "state": "RESERVED",
+            "generation": 1,
+            "hasReceipt": 0
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "RESERVED",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-05",
+      "actualBillingReservationAbsent": true,
+      "players": 0,
+      "roster": 0,
+      "phoneCallRows": 0,
+      "externalAttempts": 0,
+      "result": {
+        "ok": false,
+        "status": "admission_outcome_unknown"
+      },
+      "state": {
+        "registrations": [
+          {
+            "state": "RESERVED",
+            "generation": 1,
+            "hasReceipt": 0
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "RESERVED",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-06",
+      "before": {
+        "activeCallId": "77de5664-dd3b-4e31-827d-bc97327d481c",
+        "clientId": "phone-client-01a1de34-25fa-73ea-b0e5-8d3e1c345781",
+        "status": "connected",
+        "lastSeenAt": 1794729321978,
+        "points": 0,
+        "epoch": 1,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "after": {
+        "activeCallId": "77de5664-dd3b-4e31-827d-bc97327d481c",
+        "clientId": "phone-client-01a1de34-25fa-73ea-b0e5-8d3e1c345781",
+        "status": "connected",
+        "lastSeenAt": 1794729332993,
+        "points": 0,
+        "epoch": 1,
+        "answered": true,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "answerCalls": 1,
+      "sqliteFinalizationAborted": true,
+      "state": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "PENDING",
+            "hasReceipt": 0
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-07",
+      "decisions": [
+        {
+          "kind": "reserved",
+          "status": "RESERVED"
+        },
+        {
+          "kind": "receipt",
+          "status": "binding_pending_unknown"
+        }
+      ],
+      "actualGamePlayers": 0,
+      "state": {
+        "registrations": [
+          {
+            "state": "RESERVED",
+            "generation": 1,
+            "hasReceipt": 0
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "RESERVED",
+            "generation": 1
+          }
+        ]
+      }
+    },
+    {
+      "case": "V2A-08",
+      "window": "register-reserved",
+      "signal": "SIGKILL",
+      "observedActualGame": null,
+      "actualResult": null,
+      "reopened": {
+        "registrations": [
+          {
+            "state": "RESERVED",
+            "generation": 1,
+            "hasReceipt": 0
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "RESERVED",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "register-projected",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "f29da076-4c86-40f4-9e23-77186ef1a8df",
+        "clientId": "phone-client-01a1de34-997a-7588-b89d-cc38c389820e",
+        "status": "connected",
+        "lastSeenAt": 1794729351546,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "actualResult": {
+        "ok": true,
+        "status": "active",
+        "registrationId": "f29da076-4c86-40f4-9e23-77186ef1a8df",
+        "generation": 1,
+        "rosterPlayerId": "01a1de34-997a-7588-b89d-cc38c389820e",
+        "clientId": "phone-client-01a1de34-997a-7588-b89d-cc38c389820e"
+      },
+      "reopened": {
+        "registrations": [
+          {
+            "state": "RESERVED",
+            "generation": 1,
+            "hasReceipt": 0
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "RESERVED",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "register-committed",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "157dad35-9d86-4190-bf8d-84ddeabe8128",
+        "clientId": "phone-client-01a1de34-b7f9-702f-8d0d-dd52e9a71951",
+        "status": "connected",
+        "lastSeenAt": 1794729359353,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "actualResult": {
+        "ok": true,
+        "status": "active",
+        "registrationId": "157dad35-9d86-4190-bf8d-84ddeabe8128",
+        "generation": 1,
+        "rosterPlayerId": "01a1de34-b7f9-702f-8d0d-dd52e9a71951",
+        "clientId": "phone-client-01a1de34-b7f9-702f-8d0d-dd52e9a71951"
+      },
+      "reopened": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "answer-reserved",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "9b5233ae-2d4f-4560-8bc9-a304c8357841",
+        "clientId": "phone-client-01a1de34-d733-746c-b573-c08ae78dcdfe",
+        "status": "connected",
+        "lastSeenAt": 1794729367347,
+        "points": 0,
+        "epoch": 1,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "actualResult": null,
+      "reopened": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "PENDING",
+            "hasReceipt": 0
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "answer-projected",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "b885685c-9476-49bb-b2bb-9988f93cee6e",
+        "clientId": "phone-client-01a1de35-210a-7665-ba24-07376dd8ea72",
+        "status": "connected",
+        "lastSeenAt": 1794729397280,
+        "points": 0,
+        "epoch": 1,
+        "answered": true,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "actualResult": {
+        "ok": true,
+        "status": "accepted",
+        "accepted": true,
+        "epoch": 1
+      },
+      "reopened": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "PENDING",
+            "hasReceipt": 0
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "answer-committed",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "a28309a2-8244-40bc-b08c-f1a2fac32e3b",
+        "clientId": "phone-client-01a1de35-6ae6-7256-8437-9203bf0b6208",
+        "status": "connected",
+        "lastSeenAt": 1794729416274,
+        "points": 0,
+        "epoch": 1,
+        "answered": true,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "actualResult": {
+        "ok": true,
+        "status": "accepted",
+        "accepted": true,
+        "epoch": 1
+      },
+      "reopened": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "APPLIED",
+            "hasReceipt": 1
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "hangup-reserved",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "3a24b4b4-860c-4606-b7d8-acb7faae58a8",
+        "clientId": "phone-client-01a1de35-b51c-76a6-9a63-bd5bee7ff98e",
+        "status": "connected",
+        "lastSeenAt": 1794729424156,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "actualResult": null,
+      "reopened": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "PENDING",
+            "hasReceipt": 0
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "hangup-projected",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "8bb85ea1-e0c6-4a6a-b8bc-9a55c44cf13f",
+        "clientId": "phone-client-01a1de35-d263-7125-9b5d-3cc220679484",
+        "status": "disconnected",
+        "lastSeenAt": 1794729431660,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 0
+      },
+      "actualResult": {
+        "ok": true,
+        "status": "disconnected"
+      },
+      "reopened": {
+        "registrations": [
+          {
+            "state": "ACTIVE",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "PENDING",
+            "hasReceipt": 0
+          }
+        ],
+        "bindings": [
+          {
+            "state": "ACTIVE",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-08",
+      "window": "hangup-committed",
+      "signal": "SIGKILL",
+      "observedActualGame": {
+        "activeCallId": "f177a336-549e-42e9-959f-fbf3acc8e172",
+        "clientId": "phone-client-01a1de35-f018-74f1-9197-f648b5dcd497",
+        "status": "disconnected",
+        "lastSeenAt": 1794729439264,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 0
+      },
+      "actualResult": {
+        "ok": true,
+        "status": "disconnected"
+      },
+      "reopened": {
+        "registrations": [
+          {
+            "state": "RETIRED",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "APPLIED",
+            "hasReceipt": 1
+          }
+        ],
+        "bindings": [
+          {
+            "state": "TERMINAL",
+            "generation": 1
+          }
+        ]
+      },
+      "missingGameDenied": true,
+      "unrelatedPlayers": 0
+    },
+    {
+      "case": "V2A-09",
+      "state": {
+        "registrations": [
+          {
+            "state": "RETIRED",
+            "generation": 1,
+            "hasReceipt": 1
+          }
+        ],
+        "operations": [
+          {
+            "state": "APPLIED",
+            "hasReceipt": 1
+          }
+        ],
+        "bindings": [
+          {
+            "state": "TERMINAL",
+            "generation": 1
+          }
+        ]
+      },
+      "terminalAfterReopen": true
+    }
+  ]
+}

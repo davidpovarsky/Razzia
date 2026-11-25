@@ -1,0 +1,19 @@
+{
+  "events": [],
+  "evidence": {
+    "csp": [],
+    "diagnostics": {
+      "disposed": false,
+      "handleId": 1,
+      "lifecycle": [
+        {
+          "event": "mounted",
+          "handleId": 1
+        }
+      ],
+      "jitlessBefore": false,
+      "jitlessAfter": false
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36"
+  }
+}

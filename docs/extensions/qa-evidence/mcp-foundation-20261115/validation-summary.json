@@ -1,0 +1,60 @@
+{
+  "status": "FOUNDATION_VALIDATED_REAL_INTEGRATIONS_GATED",
+  "dateUTC": "2026-11-15",
+  "branch": "codex/tadazz-hq-mcp-20261115",
+  "applicationBase": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "researchCommit": "80f4bb286ac431a235771ab4c4b1a7802ea7e13f",
+  "sourceCommit": "The commit containing this receipt; validated source bytes are bound by final-input-manifest.json",
+  "inputs": {
+    "files": 118,
+    "moduleFiles": 21,
+    "manifestSha256": "c4dc04deb2d80953e13fe1771686c1e00e293048c66f8b7a0365879643ee8d68",
+    "archiveSha256": "6d73388846e5bec32d0b0e1147078db9b0d50f469b2d9234ca07cb3c5d309897",
+    "isolatedLockSha256": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe",
+    "allHashesVerifiedBeforeExtractionAndAfterTests": true,
+    "finalInputManifestStatus": "Historical pre-run status deliberately preserved; actual results are in this receipt and attempt-02 logs"
+  },
+  "runner": {
+    "container": "tadazz-hq-mcp-foundation-20261115",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "node": "24.22.2",
+    "pnpm": "12.18.0",
+    "uid": "1001:1001",
+    "cpu": 0.25,
+    "memoryBytes": 2147483648,
+    "networkDuringFinalInstallAndTests": "none",
+    "inputs": "Exact delivered branch source, isolated dependency store and isolated empty npm configs; image used for tools only",
+    "portsProductionMountsCredentials": "NONE",
+    "allocation": "RELEASED: owned container stopped; Running=false; OOMKilled=false",
+    "stopExitCode": 137,
+    "stopExplanation": "Explicit docker stop after completed checks terminated the idle container; not a test failure or OOM",
+    "releaseReceipt": "attempt-02/12-allocation-released.json"
+  },
+  "checks": [
+    { "name": "Frozen offline install, scripts disabled", "exit": 0, "log": "attempt-02/07-frozen-retry.log" },
+    { "name": "TypeScript noEmit", "exit": 0, "log": "attempt-02/08-typecheck.log" },
+    { "name": "Real SDK linked-transport focused tests", "exit": 0, "tests": 18, "pass": 18, "fail": 0, "skipped": 0, "cancelled": 0, "log": "attempt-02/09-tests.log" },
+    { "name": "Scoped Prettier check", "exit": 0, "log": "attempt-02/10-format.log" },
+    { "name": "Post-run source hashes", "files": 118, "changed": 0, "log": "attempt-02/11-final-source-recheck.json" },
+    { "name": "Static protected-source preservation and lease inspection", "protectedFiles": 602, "unchanged": 593, "preexistingApprovedSeams": 9, "unexpectedMismatches": 0, "unleasedTrackedChanges": 0, "rootLockUnchanged": true, "log": "freeze-lease-inspection.json" },
+    { "name": "Unmodified historical TDS freeze guard", "exit": 1, "result": "FAIL: allowlist rejects exactly 21 newly leased MCP module paths; protected mismatches empty; no waiver or guard edit", "log": "legacy-freeze-guard.stderr" }
+  ],
+  "dependencyProvenance": "dependency-provenance.json; public registry dist/integrities match isolated lock; MCP server/client/core2.4.0 and ext-apps2.1.0",
+  "failedAttemptsRetained": [
+    "attempt-01: initial mount UID mismatch; resolved with matching UID1001, without permission/system changes",
+    "attempt-01: tests18 PASS but tsc callback/context and unknown-output annotations failed; corrected before final source export",
+    "attempt-02: cold offline install lacked isolated pnpm metadata cache; implicit pnpm script install was blocked by network none; source118 unchanged",
+    "attempt-02: copied only this job's earlier public-registry cache to its own isolated HOME; explicit successful offline install then direct compiler/test binaries"
+  ],
+  "notRunOrUnavailable": [
+    "Full ui:check, full build/lint and project CI",
+    "Streamable HTTP mounting, HTTPS/Origin/body boundary, Inspector or real ChatGPT/Claude host",
+    "Real OAuth/identity, private account persistence, durable consent/CAS/collision/crash recovery",
+    "Accepted SB port2 producer import, real renderer/projection/director/audio, interactive UI",
+    "Real download delivery, Studio save/reopen, device or stage acceptance"
+  ],
+  "taskDisposition": {
+    "MCP01": "DONE research only, prior commit80f4bb2",
+    "MCP02_MCP03_MCP04_MCP05_HQ": "OPEN; validated foundation is partial progress, not original integration acceptance"
+  }
+}

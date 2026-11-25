@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "helperSha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+  "admissionSha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+  "passed": [
+    "accepted exact canonical release records",
+    "virtual negative-case harness accepts unchanged records",
+    "outer deployment failure rejected",
+    "remote child failure rejected",
+    "failed deployment core rejected",
+    "wrong qualified app image rejected",
+    "stale accepted observation rejected",
+    "changed stage or runtime pin rejected",
+    "deeper package-store mount override rejected",
+    "unrelated timer target rejected"
+  ],
+  "count": 10,
+  "executionScope": "Pure admission checks with exact local canonical records and mocked metadata only; each negative case asserts its intended failure",
+  "linuxCommandExecuted": false,
+  "sourceChanged": false,
+  "serviceChanged": false
+}

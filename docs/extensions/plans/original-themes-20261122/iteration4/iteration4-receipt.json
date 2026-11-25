@@ -1,0 +1,70 @@
+{
+  "candidateSha": "2e9ee96541baf8f0ea16bd4b6b7bd9d89f2eba04",
+  "baselineSha": "53c2d04fea97096622204858affe94a614637fca",
+  "preparationOnly": true,
+  "releaseQualified": false,
+  "productionChanged": false,
+  "checks": [
+    {
+      "label": "format",
+      "exit": 0,
+      "seconds": 6.95
+    },
+    {
+      "label": "theme-engine-units",
+      "exit": 124,
+      "seconds": 300.1
+    },
+    {
+      "label": "web-types",
+      "exit": 0,
+      "seconds": 13.05
+    },
+    {
+      "label": "widget-types",
+      "exit": 0,
+      "seconds": 5.71
+    },
+    {
+      "label": "native-types",
+      "exit": 0,
+      "seconds": 7.18
+    },
+    {
+      "label": "extensions-types",
+      "exit": 0,
+      "seconds": 19.86
+    },
+    {
+      "label": "e2e-types",
+      "exit": 1,
+      "seconds": 5.2
+    },
+    {
+      "label": "source-lint",
+      "exit": 1,
+      "seconds": 10.78
+    },
+    {
+      "label": "baseline-lint",
+      "exit": 1,
+      "seconds": 9.28
+    },
+    {
+      "label": "source-lint-new-diagnostics",
+      "exit": 1,
+      "inherited": 85,
+      "new": 2
+    },
+    {
+      "label": "native-preview-build",
+      "exit": 0,
+      "seconds": 4.07
+    },
+    {
+      "label": "site-build",
+      "exit": 0,
+      "seconds": 6.91
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "tadazz": {
+      "type": "streamable-http",
+      "url": "https://tadazz.com/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth",
+            "client": {
+              "mode": "provided",
+              "clientId": "tadazz-chatgpt-private-20261118",
+              "tokenEndpointAuthMethod": "none"
+            },
+            "baseScopes": [
+              "tadazz.catalog.read",
+              "tadazz.drafts.read",
+              "tadazz.drafts.write",
+              "tadazz.library.write",
+              "tadazz.exports.read"
+            ],
+            "defaultScopes": [
+              "tadazz.catalog.read",
+              "tadazz.drafts.read",
+              "tadazz.drafts.write",
+              "tadazz.library.write",
+              "tadazz.exports.read"
+            ],
+            "oidcEnabled": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "checkedAt": "2026-11-08T22:28:37.760Z",
+  "environment": "sandbox",
+  "providerClient": "Actual application PaddleClient; no mock fetch",
+  "catalogSchema": "Actual billingCatalogSchema",
+  "prices": [
+    {
+      "planId": "sandbox-single",
+      "currency": "ILS",
+      "priceId": "pri_01m6ym5aq9gsdhprg56jmpz4gh",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-single",
+      "currency": "GBP",
+      "priceId": "pri_01m6ym5b3abg72gkar6cqmggyc",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-single",
+      "currency": "USD",
+      "priceId": "pri_01m6ym5bfg6qap4nmr65zk29w3",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-single",
+      "currency": "EUR",
+      "priceId": "pri_01m6ym5bv4cb2tt8d7eavqc6cp",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-monthly",
+      "currency": "ILS",
+      "priceId": "pri_01m6ym5d0ww0kd9t2bjwmnm09x",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-monthly",
+      "currency": "GBP",
+      "priceId": "pri_01m6ym5dcasff26k89rjebmqxm",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-monthly",
+      "currency": "USD",
+      "priceId": "pri_01m6ym5dr32pv2f17vkeprdkk2",
+      "amountMinor": 1000,
+      "status": "passed"
+    },
+    {
+      "planId": "sandbox-monthly",
+      "currency": "EUR",
+      "priceId": "pri_01m6ym5e3m5m2bcaj8373kwnj9",
+      "amountMinor": 1000,
+      "status": "passed"
+    }
+  ]
+}

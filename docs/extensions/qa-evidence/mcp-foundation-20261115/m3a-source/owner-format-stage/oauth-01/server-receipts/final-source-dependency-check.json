@@ -1,0 +1,80 @@
+{
+  "sourceInputs": 170,
+  "manifestSha256": "2cc91c71fff05d7d3a967b4a3212a4a563c4190a19459ff36835614ef8a8451b",
+  "packages": {
+    "@modelcontextprotocol/server": {
+      "version": "2.4.0",
+      "packageJsonSha256": "c82767fbf0247c56e39a2b757245d56109a538a12ea0b6162fd65a1d3c0a3c52",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/package.json",
+      "entrySha256": "1736e3a4e6b2598e50fefdb678ac13acc990bcc2f57d757d4a06022b1bc8b288"
+    },
+    "@modelcontextprotocol/client": {
+      "version": "2.4.0",
+      "packageJsonSha256": "a93ec75fda93a16032c092b30a36d16c7ade5eab6306ef429dce3e80ae53af45",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+client@2.4.0/node_modules/@modelcontextprotocol/client/package.json",
+      "entrySha256": "a77f4641ef2138baac0aa10c899e1a56e3f0c86369392a6197153ca75d61bf05"
+    },
+    "@modelcontextprotocol/core": {
+      "version": "2.4.0",
+      "packageJsonSha256": "b98e66c50eae2a8bf234d929cd6114e091fd5027be201a4ad9057628efa449a9",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+core@2.4.0/node_modules/@modelcontextprotocol/core/package.json",
+      "entrySha256": "4c186dade865b174472854450699e57d8f527f2e5c38cef4bbbd669800ae930d"
+    },
+    "@modelcontextprotocol/ext-apps": {
+      "version": "2.1.0",
+      "packageJsonSha256": "9e07f52b3b55e80f3c87a41cc7ef3454ccff9e4063ba37ca1ae96aed76c02599",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+ext-apps@2.1.0_@modelcontextprotocol+client@2.4.0_@modelcontextpr_a3a71b0a1bfc7f994bd03a92d4b4ed40/node_modules/@modelcontextprotocol/ext-apps/package.json",
+      "entrySha256": "4f7e96f9390a0e21ef065d1ab7f1b18716cd0a117a02d9e6458b43262f6c5e82"
+    },
+    "zod": {
+      "version": "4.6.6",
+      "packageJsonSha256": "cff7e142055a9dd9bc2947a71ca3fb5e3aacdfda966d7728993ff3656245b94a",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/zod@4.6.6/node_modules/zod/package.json",
+      "entrySha256": "32e7efd49a94a765f6d10a1a0a3c02c50c246def17c80c6f0225f85525d98505"
+    },
+    "typescript": {
+      "version": "5.9.3",
+      "packageJsonSha256": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/package.json",
+      "entrySha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675"
+    },
+    "tsx": {
+      "version": "4.21.0",
+      "packageJsonSha256": "6e764b21991c21595441f82387c1451ccd10a3e7a3f0973cc5e3649a12dea7d2",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/package.json"
+    },
+    "hono": {
+      "version": "4.13.13",
+      "packageJsonSha256": "169a02072e32d85aacb089ad14b62b027d975479d811f741771fbd0f559fb5c9",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/hono@4.13.13/node_modules/hono/package.json",
+      "entrySha256": "a18108f10e31afeda6c1489a3dc6588c45966d4800ff6361f7cc77e0159154be"
+    },
+    "uuid": {
+      "version": "14.0.3",
+      "packageJsonSha256": "da6bb61e393eb364b83daab9e897e88acbf4c32e7d1d2af20597cbeff866b429",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/package.json"
+    },
+    "socket.io": {
+      "version": "4.8.4",
+      "packageJsonSha256": "6ecffdc4e5b6e9b3495c5262c11d5c1188e15d542dc0b657896218a2a7ae67d6",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/socket.io@4.8.4/node_modules/socket.io/package.json",
+      "entrySha256": "1012c78a94721e00d85b674934560c3420abfeebfbd2943599d45d3da6d3358c"
+    },
+    "http-status-codes": {
+      "version": "2.3.0",
+      "packageJsonSha256": "98d6da60c21baffd8d71779edfdf67424e92332edead59b84191dbd8977895ea",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/package.json",
+      "entrySha256": "ccce730278e4ab88c726eb1cda67373457d1c604f58fa62f4e18c6b1f0c29a4e"
+    },
+    "@types/node": {
+      "version": "26.6.5",
+      "packageJsonSha256": "e9bf302124358d90ec233c509c4f9fb2223129b988da8147b5c1bf835f652e86",
+      "resolved": "/ram/work/extensions/src/mcp-app/node_modules/.pnpm/@types+node@26.6.5/node_modules/@types/node/package.json"
+    }
+  },
+  "privateLockSha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838",
+  "directNodeFinalCommands": true,
+  "finalFunctionalTests": 55,
+  "firstPartyAndOAuthTests": 43,
+  "actualHostInstallation": false
+}

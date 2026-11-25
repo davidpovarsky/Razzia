@@ -1,0 +1,128 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 10 tests using 1 worker
+
+[WebServer] 9:24:11 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:11 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:11 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:11 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:14 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:14 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:14 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:14 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:15 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:15 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✘   1 [chromium] › tests/package-runtime-load.spec.ts:14:1 › concurrent package displays keep authoritative pause, results and reconnect (48.6s)
+[WebServer] 9:24:54 AM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 9:24:54 AM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   2 [chromium] › tests/package-runtime-load.spec.ts:164:1 › bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room (37.2s)
+  ✓   3 [chromium] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation (7.5s)
+  ✘   4 [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary (20.7s)
+  ✓   5 [chromium] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks (14.1s)
+  ✘   6 [webkit] › tests/package-runtime-load.spec.ts:14:1 › concurrent package displays keep authoritative pause, results and reconnect (1.0m)
+  ✓   7 [webkit] › tests/package-runtime-load.spec.ts:164:1 › bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room (46.0s)
+  ✓   8 [webkit] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation (10.8s)
+  ✘   9 [webkit] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary (21.4s)
+  ✓  10 [webkit] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks (12.0s)
+
+
+  1) [chromium] › tests/package-runtime-load.spec.ts:14:1 › concurrent package displays keep authoritative pause, results and reconnect
+
+    Error: page.evaluate: Target crashed
+
+      60 |     const health = await Promise.all(
+      61 |       [page, ...displays].map((surface) =>
+    > 62 |         surface.evaluate(() => ({
+         |                 ^
+      63 |           visibility: document.visibilityState,
+      64 |           failure:
+      65 |             document
+        at map (/cleanup/packages/e2e/tests/package-runtime-load.spec.ts:62:17)
+        at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:61:27
+
+    Error Context: test-results/package-runtime/package-runtime-load-concu-63ed5-pause-results-and-reconnect-chromium/error-context.md
+
+  2) [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary
+
+    TimeoutError: locator.click: Timeout 20000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Quizz', exact: true })
+
+
+      164 |     fixture = createPackageFixture("complete", style, version)
+      165 |   await page.goto("/manager/config")
+    > 166 |   await page.getByRole("button", { name: "Quizz", exact: true }).click()
+          |                                                                  ^
+      167 |   await page.getByTestId("package-file-input").setInputFiles({
+      168 |     name: "complete.tadazz",
+      169 |     mimeType: "application/zip",
+        at /cleanup/packages/e2e/tests/package-runtime.spec.ts:166:66
+
+    Error Context: test-results/package-runtime/package-runtime-one-file-c-20e4c-e-core-and-sandbox-boundary-chromium/error-context.md
+
+  3) [webkit] › tests/package-runtime-load.spec.ts:14:1 › concurrent package displays keep authoritative pause, results and reconnect
+
+    Error: page.evaluate: Target crashed
+
+      60 |     const health = await Promise.all(
+      61 |       [page, ...displays].map((surface) =>
+    > 62 |         surface.evaluate(() => ({
+         |                 ^
+      63 |           visibility: document.visibilityState,
+      64 |           failure:
+      65 |             document
+        at map (/cleanup/packages/e2e/tests/package-runtime-load.spec.ts:62:17)
+        at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:61:27
+
+    Error Context: test-results/package-runtime/package-runtime-load-concu-63ed5-pause-results-and-reconnect-webkit/error-context.md
+
+  4) [webkit] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary
+
+    TimeoutError: locator.click: Timeout 20000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Quizz', exact: true })
+
+
+      164 |     fixture = createPackageFixture("complete", style, version)
+      165 |   await page.goto("/manager/config")
+    > 166 |   await page.getByRole("button", { name: "Quizz", exact: true }).click()
+          |                                                                  ^
+      167 |   await page.getByTestId("package-file-input").setInputFiles({
+      168 |     name: "complete.tadazz",
+      169 |     mimeType: "application/zip",
+        at /cleanup/packages/e2e/tests/package-runtime.spec.ts:166:66
+
+    Error Context: test-results/package-runtime/package-runtime-one-file-c-20e4c-e-core-and-sandbox-boundary-webkit/error-context.md
+
+  4 failed
+    [chromium] › tests/package-runtime-load.spec.ts:14:1 › concurrent package displays keep authoritative pause, results and reconnect
+    [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary
+    [webkit] › tests/package-runtime-load.spec.ts:14:1 › concurrent package displays keep authoritative pause, results and reconnect
+    [webkit] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary
+  6 passed (4.8m)

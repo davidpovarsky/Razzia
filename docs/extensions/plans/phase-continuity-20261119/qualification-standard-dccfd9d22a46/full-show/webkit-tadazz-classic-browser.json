@@ -1,0 +1,67 @@
+{
+  "browserVersion": "27.2",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 138690
+    },
+    {
+      "name": "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 3472
+    },
+    {
+      "name": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 61736
+    },
+    {
+      "name": "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 26593
+    },
+    {
+      "name": "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 16477
+    },
+    {
+      "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 8811
+    },
+    {
+      "name": "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 39279
+    },
+    {
+      "name": "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 28014
+    },
+    {
+      "name": "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 6146
+    },
+    {
+      "name": "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 937
+    }
+  ]
+}

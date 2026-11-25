@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-24T02:58:22.775084+00:00",
+  "baseCommit": "c5028c4cb9fc839aa514edec47cae2a8a8bff1b0",
+  "command": [
+    "/mnt/development/tooling/tadazz/node-v26.13.1-linux-arm64/bin/node",
+    "/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-studio-recovery-20261124/node_modules/prettier/bin/prettier.cjs",
+    "--check",
+    "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx",
+    "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts",
+    "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs",
+    "docs/extensions/plans/studio-recovery-20261124/tsconfig.json",
+    "docs/extensions/plans/paddle-live-20261124/VALIDATION.md",
+    "docs/extensions/plans/studio-fixture-lint-20261124/VALIDATION.md",
+    "--log-level",
+    "warn"
+  ],
+  "returncode": 0,
+  "status": "PASS",
+  "repositoryIgnores": "docs/extensions/**/*.json remains excluded by the unchanged repository .prettierignore",
+  "fileSHA256": {
+    "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx": "26d607acc5495df98ebc113775bee219c32d6c58f6dcced3de183a8255bbde54",
+    "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts": "087c5cabf68719451c9a989f0b05e9f8541a9f2eb6ba2c5a1106179827c7baf4",
+    "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs": "b9ca3a2a3b2955b89f9607d2c906b55ceecf1ce624111809d7a38b36a062b2bb",
+    "docs/extensions/plans/studio-recovery-20261124/tsconfig.json": "139bcd26ed1aeef0deb430f388471f780a8c15332184fb847ccc7f1dbb341ef7",
+    "docs/extensions/plans/paddle-live-20261124/VALIDATION.md": "c5d578d32d8e528dffd1e28f6ed9fa722235f56b6dcba026b14c1ccef403af98",
+    "docs/extensions/plans/studio-fixture-lint-20261124/VALIDATION.md": "be215029d368ad19768eae0b7a706dd26de873723cb34dcbe0f9ac25354664b6"
+  },
+  "configSHA256": {
+    ".prettierrc.json": "1659852a5b2108a7aa3f898ea39e1f55455364a236cce62f81b8d50d82bc3f97",
+    ".prettierignore": "ca62794644e7587b1847b2471510ddaa7de0ca5ce61a5183fa0d243f08a59c57"
+  }
+}

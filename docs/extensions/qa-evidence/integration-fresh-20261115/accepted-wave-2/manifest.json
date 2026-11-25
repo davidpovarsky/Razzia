@@ -1,0 +1,5704 @@
+{
+  "head": "58cfb5c7a734518c715ae56d74666441f0743f5d",
+  "parent_frozen_product": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+  "entries": [
+    {
+      "path": "Dockerfile",
+      "mode": "100644",
+      "blob": "651e60e24d2a060630a1fcc76bfd3d49d248c7b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/package.json",
+      "mode": "100644",
+      "blob": "83a03c2818c3ad1d018d551da9b7c45e6e1aa726",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/qa/site-touch.ts",
+      "mode": "100644",
+      "blob": "7cc2a7e02d5b81b67cd8a1f1a700491770d0093c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/site.baseline.playwright.config.ts",
+      "mode": "100644",
+      "blob": "c98f421fe52e40e766dcbc59e9ce1e50338c9256",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/site.playwright.config.ts",
+      "mode": "100644",
+      "blob": "49068625e1d5d589901ea529e074e21c5662a613",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/audio-catalog.test.ts",
+      "mode": "100644",
+      "blob": "e4bf800ebec03078322e105aa56a9d102f19999d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/audio-catalog.ts",
+      "mode": "100644",
+      "blob": "6202c8bb7da5975e4d1d2dd1a3b4dd652ac9f448",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/billing/contracts.ts",
+      "mode": "100644",
+      "blob": "1ebc33142dc1e5d8bff010c99bcfbb78f7a64227",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/billing/index.ts",
+      "mode": "100644",
+      "blob": "5ae97b31eef498cf1eb235473071a227dbb72151",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/billing/locales.test.ts",
+      "mode": "100644",
+      "blob": "d89e3c4435bdbfc8684d2c61f8ac71f0d1e083e0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/bundle.ts",
+      "mode": "100644",
+      "blob": "15b908d110b1182e98ab15a19ee7ef47e9bc998b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/card-appearance.test.ts",
+      "mode": "100644",
+      "blob": "35e441baf50b12267175f615f672bf1b6a875728",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/card-appearance.ts",
+      "mode": "100644",
+      "blob": "4cde7d74d700cf4e45dc4e63d779064dbfa50efd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/card-media-references.ts",
+      "mode": "100644",
+      "blob": "a1c1593d161698683145af1967aed27827ab01bf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/cinematic-overlays.test.ts",
+      "mode": "100644",
+      "blob": "f7712f9c462e8fe8455ebd96ca026bc00b65df03",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/cinematic-overlays.ts",
+      "mode": "100644",
+      "blob": "8989c05d19818624f7899f7b67a55e0e2f10b976",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/commands.ts",
+      "mode": "100644",
+      "blob": "e5806f0f3357d2a0ce5827815ddd997e10affd7c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/constants.ts",
+      "mode": "100644",
+      "blob": "98cc4beaaff73d232d0770f3032bd3208f00d688",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/core.test.ts",
+      "mode": "100644",
+      "blob": "ad2d2ba100cf6e1e58472936b4422b90111ec7c5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/creating-worlds-show.test.ts",
+      "mode": "100644",
+      "blob": "f3b4f08b4833126c2293162229be7cd99795831b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/creating-worlds-show.ts",
+      "mode": "100644",
+      "blob": "428bfe15e21bdbbcd17852a52dd34fd02dfb23a5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/digest.ts",
+      "mode": "100644",
+      "blob": "6798e89ff9811340c190e4c8104252917449525a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/imports.test.ts",
+      "mode": "100644",
+      "blob": "57a8756e058042b65b92bcd195fa7263bf1724cd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/index.ts",
+      "mode": "100644",
+      "blob": "621bcfdce65d600b94bb0da216b7f24322c35cc5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/lottie.test.ts",
+      "mode": "100644",
+      "blob": "35767c229b5c931b096aa7a712175989c7a0b97b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/lottie.ts",
+      "mode": "100644",
+      "blob": "6809d1c0ff0a5c90bf701c481b6a8064062a8751",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/media-selection.ts",
+      "mode": "100644",
+      "blob": "3e9b2aa6f03f4aa0f1f46b2b87fecfcb28575eb1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/media.ts",
+      "mode": "100644",
+      "blob": "36281626d3ae41353a87549544a2e7b4515ef7e9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/packages/index.ts",
+      "mode": "100644",
+      "blob": "4f914727ea5d30e1f7783ee8dd7adcdb19d667a7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/packages/manifest.ts",
+      "mode": "100644",
+      "blob": "14c0ad865349abb6e3be48c07410a42b6675cf5d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/packages/paths.ts",
+      "mode": "100644",
+      "blob": "4e8618d4fccdbbd547e63da20bbc4f0b0c8654e7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/packages/protocol.ts",
+      "mode": "100644",
+      "blob": "2318a6e797c34299363ce344871a7120135a0048",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/packages/zip-detection.ts",
+      "mode": "100644",
+      "blob": "7490c87f9eeb0849d89759bb66a23e43c2270e4a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/phone-roster.ts",
+      "mode": "100644",
+      "blob": "3feda33144f14e7b4f6d215a8ce9771313cf41d8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/product-branding.ts",
+      "mode": "100644",
+      "blob": "c2d2ff3d3d5d781348555b6b60f5c92c664ac707",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/question-play-mode.ts",
+      "mode": "100644",
+      "blob": "fcd6e7b20e46dcf4f5937c676df4314e277f3ce1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/questions.ts",
+      "mode": "100644",
+      "blob": "43f85f24c2be3b3c82b7b76fb9499e0892218c00",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/quiz-extras.ts",
+      "mode": "100644",
+      "blob": "68d22fa1ef26828c15e7207fe7cc71c2600851a3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/reveal.ts",
+      "mode": "100644",
+      "blob": "7201d526f07cb6df7db35e288211a4ee75060caf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/revisions.ts",
+      "mode": "100644",
+      "blob": "7ab1173bf4d2dcfb14de965ed776b2e9efbf0275",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/roster-import.ts",
+      "mode": "100644",
+      "blob": "4af6fbaee615b192561baff80a670ce493519479",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/roster.test.ts",
+      "mode": "100644",
+      "blob": "3b627960a68ecc82ed7597d2f57a65ef33ea9165",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-authoring-convert.ts",
+      "mode": "100644",
+      "blob": "0bbf6317b25e2c43e7d570c9427b356865e2aa0d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-authoring-schema.ts",
+      "mode": "100644",
+      "blob": "2cde63d412b70bdce1f813ec4c4c97f134024d31",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-authoring.test.ts",
+      "mode": "100644",
+      "blob": "8120a7a1ceef5b70968b707366bf4fd1a90057fc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-import-preflight.test.ts",
+      "mode": "100644",
+      "blob": "52c96666762fd32ef42efc9df4364989ee06995b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-import-preflight.ts",
+      "mode": "100644",
+      "blob": "18ade37466415be35f43d74519cc4ef0e727665d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/assets.ts",
+      "mode": "100644",
+      "blob": "e6ba68b7e1e1220704d660503b44dbc10b594d77",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/binding-policy.ts",
+      "mode": "100644",
+      "blob": "c2fcf400dc44b7f203f845e135a7e6e3df5e82fe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/digest.ts",
+      "mode": "100644",
+      "blob": "fd6c719f2ef126a1812a4275281fec62ae198736",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity-rule.ts",
+      "mode": "100644",
+      "blob": "6f74f56282409eeed20b43b7d40b4c6fdeee15c0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity-rule2-vectors.json",
+      "mode": "100644",
+      "blob": "c5c1058f365b3523b0265acd2080e602fad3c860",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.test.ts",
+      "mode": "100644",
+      "blob": "33f05a54181ada29033d256166cd13b70f19de85",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.ts",
+      "mode": "100644",
+      "blob": "9e3649b63571b6cbbd0ee1ee418194249ca1718a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/index.ts",
+      "mode": "100644",
+      "blob": "aed4639b036ee8474c844293bf6de5bdd0fd5ce4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "mode": "100644",
+      "blob": "63f424919a2e38c7a9dedec50f9bc3a2e85d09de",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-fixtures.ts",
+      "mode": "100644",
+      "blob": "ba4e73ecb8ee568c74972977a0b480c38bd9266c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.test.ts",
+      "mode": "100644",
+      "blob": "bc2bd9bf1ae03c50e74de8e38a21c04a02ec4ba2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.ts",
+      "mode": "100644",
+      "blob": "d660f9fa165105086f80c646ef6e7fe4a4bcb4af",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-resolve.ts",
+      "mode": "100644",
+      "blob": "abb7deabf3f0a570a30d84eec4c154533b1e58a2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "mode": "100644",
+      "blob": "aafdbbab98f03b871192b1bb1211d1998da95488",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/primitives.ts",
+      "mode": "100644",
+      "blob": "8163df7ec9323648b4e852465c02c130885c678b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection-assets.test.ts",
+      "mode": "100644",
+      "blob": "7f142b8657f74056fc2acce0a7562a50f4f68568",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection-schema.ts",
+      "mode": "100644",
+      "blob": "a776627b4b4a414d07779b6518986a120c8998ff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.test.ts",
+      "mode": "100644",
+      "blob": "5d262b435d0c024089f5e4437fd42bcdbc9e7422",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.ts",
+      "mode": "100644",
+      "blob": "0c0f1e5a5bc969f25c8948afc373990263d4d36f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.test.ts",
+      "mode": "100644",
+      "blob": "8b1c403de2fdcd24d15038562fa08ca0a15fb8d1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.ts",
+      "mode": "100644",
+      "blob": "7290090310b2530a513fa23a5782deb2ef640c97",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/schemas.ts",
+      "mode": "100644",
+      "blob": "85612320210c869a97d4ba4c21507c62746c1a59",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata-schema.ts",
+      "mode": "100644",
+      "blob": "9b379a992d9bd2b9f69bc7d43fec9d77fab311be",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata.test.ts",
+      "mode": "100644",
+      "blob": "0911e7fc564bb4380f3b06772e8c61acc15484fd",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata.ts",
+      "mode": "100644",
+      "blob": "3596890bed38b6581b922fee4381bd887f9f2eba",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/core/show-library/tsconfig.focused.json",
+      "mode": "100644",
+      "blob": "96aa9741f28f55ccb1de6ca21b8e0906275b5204",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/audio.ts",
+      "mode": "100644",
+      "blob": "7f6da7dd20d7bbd4ebb984065e480daf7e55f7ce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/classic.manifest.json",
+      "mode": "100644",
+      "blob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/definition.ts",
+      "mode": "100644",
+      "blob": "c4ce9bf15dc62a9869b66b02a0106b19f58250bf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/history-audio.test.ts",
+      "mode": "100644",
+      "blob": "bb342266e79f79543750caf63ace77f814cf4276",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/index.ts",
+      "mode": "100644",
+      "blob": "15b480fd4a818c1476ce79f458274451e3230f98",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/media.ts",
+      "mode": "100644",
+      "blob": "12c958400dd3b08a1043cd568bd516827a3ad3ee",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/product-brand.test.ts",
+      "mode": "100644",
+      "blob": "02be04fd0d2db1b2e4981db7e75186f59c2dcce5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/razzia.manifest.json",
+      "mode": "100644",
+      "blob": "fb43db8e115f42d751b111520fc0e1ae7caedca8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/registry.ts",
+      "mode": "100644",
+      "blob": "48f63a96dfb581d04ea403224f58896167d7ab49",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/resolve.ts",
+      "mode": "100644",
+      "blob": "3437fdb3e9814d1e654a577c7e7d6c4ab54461ec",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/roundtrip.test.ts",
+      "mode": "100644",
+      "blob": "95299db2738828e64b96eb7ba78cc9d04b687d64",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/selection.ts",
+      "mode": "100644",
+      "blob": "7d64d663dcc99568d6e0e70f04bb8c38e9d2649e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-themes/show-themes.test.ts",
+      "mode": "100644",
+      "blob": "9e1a89741be08d6d6c546b3e3776626a24512193",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-workbook.test.ts",
+      "mode": "100644",
+      "blob": "4da577f5330950cbe2d426e67a1bcae5c93862e5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/show-workbook.ts",
+      "mode": "100644",
+      "blob": "1dc2f6cd085138c786fdcd98983a332dc9d3a5b5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/soundtrack-media-references.test.ts",
+      "mode": "100644",
+      "blob": "2e319c03f25e3fc187ddfc5126b0af581447c406",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/state.ts",
+      "mode": "100644",
+      "blob": "8cae77e001f646c69534b995665f03a0f730a884",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/studio-migrate.ts",
+      "mode": "100644",
+      "blob": "99c5a771ea42d63410590a2a0b40eb900a666777",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/studio-timeline-schema.test.ts",
+      "mode": "100644",
+      "blob": "d2c08f9bda977da9c6601657de0f52c89b321843",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/studio-timeline-schema.ts",
+      "mode": "100644",
+      "blob": "755344ac191e540cdb3d03dfe011ee9b1c4ab551",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/studio-timeline.test.ts",
+      "mode": "100644",
+      "blob": "0056d2bdf3adb983132b10e3415e04f54e73ae18",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/tadazz-appearance.test.ts",
+      "mode": "100644",
+      "blob": "7e1148a4221fc18cdbb4a31082d09ab7f27ae6df",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/tadazz-appearance.ts",
+      "mode": "100644",
+      "blob": "cb0b299f96df00e64b8ff2c07c77b2021b0f4188",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/tadazz-studio-defaults.test.ts",
+      "mode": "100644",
+      "blob": "1b53a2fad74b085a86f5ba9409b0342036ff60b9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/tadazz-workbook.test.ts",
+      "mode": "100644",
+      "blob": "2029e55a5f728d1ad03f744b5518aedabcc551e5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/core/tzila-show-acceptance.test.ts",
+      "mode": "100644",
+      "blob": "a3eaf27300a930f95f39660feac146501421fcd9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/billing/index.ts",
+      "mode": "100644",
+      "blob": "fd2f7028fd2169630143e4836459fce949798bbe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/billing/panel.tsx",
+      "mode": "100644",
+      "blob": "27d17a64e3502c34d10909d841a3af9ca7da8917",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/billing/plan-list.tsx",
+      "mode": "100644",
+      "blob": "ebc9e245152ecaa38957c071ca6e9a0c486de027",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/billing/types.ts",
+      "mode": "100644",
+      "blob": "3cee23364fe54ae6d4177a2df5f7204ac623b4ce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/client.ts",
+      "mode": "100644",
+      "blob": "5af8c12b8555fb833fc7dafbe928cf33e4b66929",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/AudioCuesSection.tsx",
+      "mode": "100644",
+      "blob": "2f728451850089a2f4d2e67694bdef49006af5ea",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/InterludeSection.tsx",
+      "mode": "100644",
+      "blob": "8d0c393be6550b2b4388b887aeb882a655ccd675",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/LeaderboardSection.tsx",
+      "mode": "100644",
+      "blob": "6902dc1464417cec8088f069fc7ebdccc6f24e39",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/PreviewSection.tsx",
+      "mode": "100644",
+      "blob": "ac64b837ff513858cd3a8d27959dbda7354b7ffe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/RevealSection.tsx",
+      "mode": "100644",
+      "blob": "2104122f026e6d27cf17986c1f01065f7334de44",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/RosterSection.tsx",
+      "mode": "100644",
+      "blob": "40068a5d10dc70935e99dc179744c0a9aa66321e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/TeamsSection.tsx",
+      "mode": "100644",
+      "blob": "d21b86f404a11057f1c0f16aa95ff293822d7cc3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/TimelineSceneCard.tsx",
+      "mode": "100644",
+      "blob": "c94196131546d713832e02e8e9fe0c52609a0555",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/VisualAnswersSection.tsx",
+      "mode": "100644",
+      "blob": "984a1581ce576b954cd2fee39cf75f69aa1021b5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/components/utils.ts",
+      "mode": "100644",
+      "blob": "38870ce4b4273ad4bf5a13d9785533312edf4413",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/conflict-modal.tsx",
+      "mode": "100644",
+      "blob": "120755da9489ed408f06cc4f1e77531fa7de2ea6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/editor-enhancement-panel.tsx",
+      "mode": "100644",
+      "blob": "0ef0e6e38c8f1ec3e4545c4ef975e5edfdc83b04",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/editor-state.ts",
+      "mode": "100644",
+      "blob": "060c494ecb21ccc9061b8926a0fc4f60bd3b914e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/editor.test.ts",
+      "mode": "100644",
+      "blob": "afd3468d34ae88cad22af7ff43d26d471c0bd514",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/index.ts",
+      "mode": "100644",
+      "blob": "de1826aef553ff5f216a63c79eb7dce365e6f6e1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/media-reconciliation.ts",
+      "mode": "100644",
+      "blob": "1998d02e7619ecc96cf98257aa3a60916a45cce5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/media-urls.ts",
+      "mode": "100644",
+      "blob": "cd723169946838f095967e9c60ed727667dd5023",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/editor/timeline-kinds.ts",
+      "mode": "100644",
+      "blob": "7e2e6554922688efdfdceeb6acf91d40ec53919e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/gameplay.test.ts",
+      "mode": "100644",
+      "blob": "584826d96f09310bbdf475f09f652921e07153c6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/index.ts",
+      "mode": "100644",
+      "blob": "c7e9778c0a75b463ed5d3bdbf627a487e1a81e98",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/leaderboard.ts",
+      "mode": "100644",
+      "blob": "c903210534a96b91f00c87fd2bf74f2c4f1a8cc3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/round-navigation.ts",
+      "mode": "100644",
+      "blob": "4e4dbaa5e3b6605cbd1aaeb50c940a001ab30376",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/teams.ts",
+      "mode": "100644",
+      "blob": "b3c99ea44e11fe16186ad4a2bc87964bd749428c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/timeline-runner.test.ts",
+      "mode": "100644",
+      "blob": "d736a0875a722bf0d7d9bf32c73f9bc0c4384f5d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/gameplay/timeline-runner.ts",
+      "mode": "100644",
+      "blob": "06e9fe1a72ae8a020c607cfc8665dc389b69399b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/index.ts",
+      "mode": "100644",
+      "blob": "2d0b11170c2f8f4e9784699e38bf76df6f434350",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/billing.json",
+      "mode": "100644",
+      "blob": "e2a764d846b3a9e5317a3fe273b391e63847c63c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/de/extensions.json",
+      "mode": "100644",
+      "blob": "0ccc1abb42f3fbd0c610e0f00c5a88865114d372",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/en/extensions.json",
+      "mode": "100644",
+      "blob": "1ff1497eadfebaa5b7ad4a69c2e6ddbcba9b983a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/es/extensions.json",
+      "mode": "100644",
+      "blob": "351bb79760bfbb98fefb2ec88088e022a25320a4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/fr/extensions.json",
+      "mode": "100644",
+      "blob": "bc4aea4c7001e9f4faf8fc49b1d4fec4816f6a8d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/host-additions.json",
+      "mode": "100644",
+      "blob": "74f0e8cc0538ac98ac56b047328adcaa7eccd237",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/host-additions.test.ts",
+      "mode": "100644",
+      "blob": "1b7ee587e65b1b6ebc3a8f2712b6f0cb63259c38",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/host-additions.ts",
+      "mode": "100644",
+      "blob": "9a477cdefdf7277ba5275d8eb66bf0f328605e49",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/index.ts",
+      "mode": "100644",
+      "blob": "f360c9679417ca00e774e85fa8cc2f5212595e71",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/it/extensions.json",
+      "mode": "100644",
+      "blob": "b70bfda970b51b1e34e8f3198349b61c7905fdaa",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/ja/extensions.json",
+      "mode": "100644",
+      "blob": "1d5de2b0b11defee1d8411e1d2f912aeb2d38a39",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/locales.test.ts",
+      "mode": "100644",
+      "blob": "f1d7f626494d2f50b2ec4c1b5bb572203f9de8f0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/packages.json",
+      "mode": "100644",
+      "blob": "ba402cc9d9b8f55d28d275289e77d49d604cd664",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/tr/extensions.json",
+      "mode": "100644",
+      "blob": "350e771782220ef9b4a153f20c7d48bc8b46c877",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/locales/vi/extensions.json",
+      "mode": "100644",
+      "blob": "ccab4f47c2f119850cd77d914915d315cbe92373",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/canonical.ts",
+      "mode": "100644",
+      "blob": "6d79b73b1a11ba694b143fd4bc7ffaa6b427cf7f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/index.ts",
+      "mode": "100644",
+      "blob": "363509e348094be1ada4f19e96fffa9b5a4cd078",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/schemas.ts",
+      "mode": "100644",
+      "blob": "8956231761975fd375fda441359443ea946353e7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/tools.ts",
+      "mode": "100644",
+      "blob": "d9022690c3dba7df46271469fae8343ba86bfa2d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/package.json",
+      "mode": "100644",
+      "blob": "ad78782739f903a3da2e14c3309d3df4eeca3191",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/pnpm-lock.yaml",
+      "mode": "100644",
+      "blob": "683467888ce6a5fd5ad3ec2ae6581df89f88152a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/README.md",
+      "mode": "100644",
+      "blob": "63b5e7926e88f246b41eca9fa02d386c86232b65",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authoring.ts",
+      "mode": "100644",
+      "blob": "734a825bca32efe5ad294291d65893c5832b80d7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authorization.ts",
+      "mode": "100644",
+      "blob": "e3d1b3439974311caf0739514fc6e830c0909c7c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/connection.ts",
+      "mode": "100644",
+      "blob": "e1fa1e59432700771609c68d87f3bcbd6f3052b9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dependencies.ts",
+      "mode": "100644",
+      "blob": "639a6853816840df17d6a16b55d57c693819f79b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dispatch.ts",
+      "mode": "100644",
+      "blob": "98f2a018ac16f76e94f1f6f4aba44c8108b488b5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/drafts.ts",
+      "mode": "100644",
+      "blob": "5659520e088598a8f880ff9956f740c986259a20",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/errors.ts",
+      "mode": "100644",
+      "blob": "626c968dde34204c2cedf4f1f4a9d19c2a8ff519",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/factory.ts",
+      "mode": "100644",
+      "blob": "a9c6d6694fbe34011ff1712bf9d43e3b2dd68568",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/preview.ts",
+      "mode": "100644",
+      "blob": "a18e046863479552b2a2bc7a3cbe7bf4ec297c67",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/request-boundary.ts",
+      "mode": "100644",
+      "blob": "a85a20d16a3480244298abc463adc3823fdb111b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/results.ts",
+      "mode": "100644",
+      "blob": "21c7a2486fda8685e2432c21a73f27d54e681a66",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/authorization.nodecheck.ts",
+      "mode": "100644",
+      "blob": "b13ceaf64126270c944ce6ec2f978ba8808387b4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts",
+      "mode": "100644",
+      "blob": "cfa93447291c0e478f95f183ee8c8adeeeb57c93",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/canonical.nodecheck.ts",
+      "mode": "100644",
+      "blob": "3e4d04a08cc7b40434712f9dca08857907e9a5df",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/delivery-fixture.ts",
+      "mode": "100644",
+      "blob": "c385755bca5ff3858477f205baf71fe079427486",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/drafts.nodecheck.ts",
+      "mode": "100644",
+      "blob": "05f95333e29c804b380b430734402d424489f1e0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/fixtures.ts",
+      "mode": "100644",
+      "blob": "3d956c5e26e2874444245f5863fa288d3f996197",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/ingress.nodecheck.ts",
+      "mode": "100644",
+      "blob": "9d045c65d021e2fd3b36e854726a5a60087fe665",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/integrity.nodecheck.ts",
+      "mode": "100644",
+      "blob": "e4aea9be0435aa9fc50901ba6dd5d7cea1280793",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/lifecycle-fixture.ts",
+      "mode": "100644",
+      "blob": "157f3c57428da52fba20a33f6f205bf65f11c0c3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts",
+      "mode": "100644",
+      "blob": "f5764f0e6ff2ac51d3e22f8fbdabb893de9318e5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+      "mode": "100644",
+      "blob": "6508848274f1755df6ac45b60e3517b81ecba6ad",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/replay.nodecheck.ts",
+      "mode": "100644",
+      "blob": "5aa7eff95dfce5a4a3e1a0b6fe0a530a295d4a37",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/send.nodecheck.ts",
+      "mode": "100644",
+      "blob": "fb9f7831516d577abcd2fdb7bdf80ef1ab59771f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/mcp-app/tsconfig.json",
+      "mode": "100644",
+      "blob": "514b01049ddef569a9a06e8b7182961476733d26",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/media/answer-button-presentation.tsx",
+      "mode": "100644",
+      "blob": "fb76b9894ab9cb7a3d8f20364e7b3eb81b319bff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/media/index.ts",
+      "mode": "100644",
+      "blob": "7ecaeeb7eadd1d1a14339f8a10ed4f5a5003d9f9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/media/media.test.ts",
+      "mode": "100644",
+      "blob": "e593ad41bb56471d6acbcce4a7b8a3ebee5bf46c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/media/reveal-media.tsx",
+      "mode": "100644",
+      "blob": "8fab2829cb7b46485178b781db64f156e58b63bf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/media/rich-answer-card.tsx",
+      "mode": "100644",
+      "blob": "60476683dd3a7962ad11b53e34a8065b8d1d4812",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/alert-dialog.tsx",
+      "mode": "100644",
+      "blob": "d878cac5b2594fa1d67426d6331ccd3025bdf2b3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/button.tsx",
+      "mode": "100644",
+      "blob": "c263d19fa00db0caabd2eacdb25b87d23e87d440",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/catalog.tsx",
+      "mode": "100644",
+      "blob": "21db31b179f5901ad8625bfa6cc32ab417637ac2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/foundations.tsx",
+      "mode": "100644",
+      "blob": "980dbf6fe79f4513c6c92d815e1d8616984fb817",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/i18n.ts",
+      "mode": "100644",
+      "blob": "1b8674bd64333b0fd3b4d989f41061929288f971",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/index.html",
+      "mode": "100644",
+      "blob": "c095fb9c6341b40e73694fb6ff11d48cf79448a4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/interaction-stories.tsx",
+      "mode": "100644",
+      "blob": "cc10ae53daf0a0416d047a29a39841950c7ee7d2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/layouts.tsx",
+      "mode": "100644",
+      "blob": "39cfae4c252a84e801d14d86155c7fc73a9624b5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/main.tsx",
+      "mode": "100644",
+      "blob": "e9862ffa82af86110c38d4e10c774f9de21973d3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/registry.ts",
+      "mode": "100644",
+      "blob": "11c724b70c26b0bf7bd2078a11b66ff1a6637e86",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/stories.tsx",
+      "mode": "100644",
+      "blob": "05b32d4f821a7d69d9f2982001b100188abaed81",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/story.tsx",
+      "mode": "100644",
+      "blob": "ebea6909804d452ffb825f313ee2300c9d346790",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/styles.ts",
+      "mode": "100644",
+      "blob": "e112e12e309ca78d931fb71ce3cc2f3d21a4312c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/components.test.ts",
+      "mode": "100644",
+      "blob": "d825067423bb57f15ef18b4790e9d98ddacd3a2e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/dialog.tsx",
+      "mode": "100644",
+      "blob": "3b5521876c04428a0f2143114083131b5cc62746",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/fields.tsx",
+      "mode": "100644",
+      "blob": "373519f3183668e9ff2f4ea8f399c70180828e9c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/host-controls.tsx",
+      "mode": "100644",
+      "blob": "ebe08dfeb6bbc6f85ad074a6f6ae6bea71f1b4ed",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/index.ts",
+      "mode": "100644",
+      "blob": "c019c6aab928d184bf5bc02fdd7623c9c2893eee",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/menus.tsx",
+      "mode": "100644",
+      "blob": "030bc625cbc68b5884ad0bb1d8459d98d504a7ec",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/native-primitives.json",
+      "mode": "100644",
+      "blob": "5d114c274d2e5d346ba8fe7292d30983574b0dc6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/portal.tsx",
+      "mode": "100644",
+      "blob": "c6c34e8f6cc2736fc596ab370e8c4cba9443dc66",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/roster-controls.test.ts",
+      "mode": "100644",
+      "blob": "025d41e414d53651312d1812e17f6a12e906f6fd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/roster-controls.tsx",
+      "mode": "100644",
+      "blob": "1062ff550638d2646a33e3748b4d12549a71d0e6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/scope.tsx",
+      "mode": "100644",
+      "blob": "dedd3edd5c7a75ec188b8be2b0680feb6bdd0d51",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/shadow-focus.ts",
+      "mode": "100644",
+      "blob": "d765a093bec58f57d612f81aa634982afc5c866f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/styles.ts",
+      "mode": "100644",
+      "blob": "844f62f15de5f4cebc7cfccca0efdea2f35f9bff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/surfaces.tsx",
+      "mode": "100644",
+      "blob": "71a2e93998882d4804f2c4df341d6b9ce15c4602",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/tokens.test.ts",
+      "mode": "100644",
+      "blob": "b89ef676a80a861d6238d2083be6d12bc2369ab7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/platform-ui/tokens.ts",
+      "mode": "100644",
+      "blob": "b8a238155b9d1e1c1924119b0e0d9d93650c3c23",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/audio-cue-player.tsx",
+      "mode": "100644",
+      "blob": "22024e06b13160de0d1d649e75b797f78ec010d4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/cinematic-clock.ts",
+      "mode": "100644",
+      "blob": "cc2a71e8e1f4e7e4b012de58903d6c40e44a021c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/cinematic-geometry.ts",
+      "mode": "100644",
+      "blob": "8362994d4c34cc065034e7d4be7c76f3b9932c6a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/cinematic-layer-stack.tsx",
+      "mode": "100644",
+      "blob": "4aa76ebeedd34a85e9854a029de41a28033ed626",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/cinematic-overlay.tsx",
+      "mode": "100644",
+      "blob": "72365db63bd827c4ececb14780832e11c11cb9ac",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/extension-stage-content.tsx",
+      "mode": "100644",
+      "blob": "75b6b617a9c55a44c1d7e1af3ffe583284fb827e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/history-helper.ts",
+      "mode": "100644",
+      "blob": "958be0e3269b1a46a36c1aec78f33063d095205d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/index.ts",
+      "mode": "100644",
+      "blob": "a20e63d9813459f2306de805ea12459ff2a33382",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/interlude-presenter.tsx",
+      "mode": "100644",
+      "blob": "64bf6c2a76bb7ddb67d5b529b5f6146e53dad14d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/interlude-preview.tsx",
+      "mode": "100644",
+      "blob": "8c029c84ee693552879ac05be65e10558d6ad3a5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/interlude-state.ts",
+      "mode": "100644",
+      "blob": "b69491408d5d374cd9192e79f9c29d5e0a69bdc7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/legacy-effects.css",
+      "mode": "100644",
+      "blob": "f1baccaa4dd95602968b41f2ddebae86a3789117",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/lobby-team-assignment.tsx",
+      "mode": "100644",
+      "blob": "a62bd775176315bdfc74af342555613cdae83e1b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/lottie-player.tsx",
+      "mode": "100644",
+      "blob": "8fee36f7cd189294e71fd57ceeccd79dab68aeca",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/native-button-primitives.json",
+      "mode": "100644",
+      "blob": "7f18ca174ef707479513b08122a41168e69b44ac",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/package-runtime/ThemeSandboxHost.tsx",
+      "mode": "100644",
+      "blob": "32357d4b58e44f4a90c0deb41665cd00c234fb3e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/package-runtime/sdk.tsx",
+      "mode": "100644",
+      "blob": "52a9e932d9e851fd21d83a5f757e99d5fb57d14a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/platform-controls.test.ts",
+      "mode": "100644",
+      "blob": "8e01d2b74b3dcebe1e287fd61fae9ed765728c2e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/platform-controls.tsx",
+      "mode": "100644",
+      "blob": "af0e39862a7b84da8ba7d67605cb7dcd12ec511c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/poll-ranking.test.ts",
+      "mode": "100644",
+      "blob": "d80f7ef152b45f4647d7bba70257592c4ce1534f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/poll-ranking.ts",
+      "mode": "100644",
+      "blob": "f5a5197b7811dd9c7a5f8876f6a400eb0e3ca9e6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/presentation.test.ts",
+      "mode": "100644",
+      "blob": "5a6658724dbcd9f2f187ac2e19c317ab86f9edab",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/question-underline.tsx",
+      "mode": "100644",
+      "blob": "89f10b0f3e6bee693e4b5bc39450ba62fde92714",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/reveal-timeline.test.ts",
+      "mode": "100644",
+      "blob": "830770249e80b4e048df71a8b63c42f6a71cb953",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/reveal-timeline.ts",
+      "mode": "100644",
+      "blob": "bffc74ce7154b3ea964beefd6bedbf3a2fe996ad",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/room-join/contract.test.ts",
+      "mode": "100644",
+      "blob": "94ef58f523fa1bb22c93a7075d85850ca1398058",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/room-join/contract.ts",
+      "mode": "100644",
+      "blob": "80d3db73813ae398d458aad8a20cdf2cee33286e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/room-join/index.ts",
+      "mode": "100644",
+      "blob": "59ff201edac957a94edd6b60e113b8ef0cd727b6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/room-join/native-compact.css",
+      "mode": "100644",
+      "blob": "21b6d65c109cc2c7ed49e6d4bd4f656b84a8eaa1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/room-join/use-room-join.ts",
+      "mode": "100644",
+      "blob": "91c0b2efff0bad6ca4e958530c45fc6333290e87",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/room-join/view.tsx",
+      "mode": "100644",
+      "blob": "7d03e75a42a55f5d07826c86650350c82735193f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/scene-labels.ts",
+      "mode": "100644",
+      "blob": "a12af7769a63537124e8275ad65fb717ec2836b0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/scene-presenter.tsx",
+      "mode": "100644",
+      "blob": "70306c915d696a7fe47b17f1c36641d1943f50c7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/context.tsx",
+      "mode": "100644",
+      "blob": "376d9a02f91944624a6e5fb27d48f650dc2f773a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/scene.ts",
+      "mode": "100644",
+      "blob": "5b5325e987510987d23be7e47b40b374d4d7037a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/timer-events.test.ts",
+      "mode": "100644",
+      "blob": "67d49d56e84bfb99d4e94ca2975b5d584097d745",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/timer-events.ts",
+      "mode": "100644",
+      "blob": "232a8b8ff85971c372f7382dbd50c1d853124944",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/viewport.test.ts",
+      "mode": "100644",
+      "blob": "3cc6ba58a759668e7c33bba1fcf5c03bc8dd99d6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/viewport.tsx",
+      "mode": "100644",
+      "blob": "9deff0a0e48db7ce2c4c426b3b4e7eb784d6a347",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/stage-fit.test.ts",
+      "mode": "100644",
+      "blob": "f0a87078a2c981afa5961e6304db1613e2b71b2a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/stage-fit.tsx",
+      "mode": "100644",
+      "blob": "fc7ea003ef6324d88e6391e26c8bfe0e9e6b17b6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-answer-cards.css",
+      "mode": "100644",
+      "blob": "e655408c77604c79f1b530cb5620d9c241c5f2e5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-answer-cards.test.ts",
+      "mode": "100644",
+      "blob": "9c0bf49f85b61ef70501ccaf33fd6684d06bd5eb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-answer-cards.tsx",
+      "mode": "100644",
+      "blob": "1aa4d4d4dc88f26b5ac82420bca3cea03fd43bbf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-audio-policy.test.ts",
+      "mode": "100644",
+      "blob": "ca4b968ea7fe30c0723874726ecccc7e74b84bac",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-audio-policy.ts",
+      "mode": "100644",
+      "blob": "91825609721fd001142ed21477c886a7c85a7c7e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-backdrop.css",
+      "mode": "100644",
+      "blob": "9b57303bec644bf2a30a11d6d12f8d1755db9a92",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-backdrop.test.ts",
+      "mode": "100644",
+      "blob": "f010fbec85f3560095e75a53edc2d2e4c3ee8d91",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-backdrop.tsx",
+      "mode": "100644",
+      "blob": "f31a9f649baa5dc0f1ee77f2f82684f8704a6aad",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-css.d.ts",
+      "mode": "100644",
+      "blob": "5de9faaf857a1ebed65b5265eb1ba4dca2fed0a0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-leaderboard.css",
+      "mode": "100644",
+      "blob": "fc7866baef2dc55076dd9ae6fb1e102f6d7fc4df",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-leaderboard.tsx",
+      "mode": "100644",
+      "blob": "9dbadd88d961d4f123641c6cb08d1652506b190c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-sfx-policy.test.ts",
+      "mode": "100644",
+      "blob": "8a0544eb98b91552cd54eff600755ddb98b70f37",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-sfx-policy.ts",
+      "mode": "100644",
+      "blob": "a8093929859663fcab72014d6853ca0c51dbd38b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/TadazzOpening.tsx",
+      "mode": "100644",
+      "blob": "dd275a3035d1d0e90461545fc63178d7ad6fefce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+      "mode": "100644",
+      "blob": "964812654e97a0656c6264a5ceedcd4cbb9458f4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "mode": "100644",
+      "blob": "70784818264ddfb367a8162f28b81e207460fe41",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/index.ts",
+      "mode": "100644",
+      "blob": "718971472889b81d55e147b99df7efde5e43a98f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/labels.ts",
+      "mode": "100644",
+      "blob": "804ac499f907612bc5a8ce3dbf5378dd9c70c81e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/lottie-plate.ts",
+      "mode": "100644",
+      "blob": "b82daca184bc7adb5bdfed88a56542ef12e3643e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/motion-assets.provenance.json",
+      "mode": "100644",
+      "blob": "ad284096b480e42951a5dad65369b8129b451ad1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/motion-engine.ts",
+      "mode": "100644",
+      "blob": "d0e63b5431d14effbfef4e94a56afeaa878f6e91",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/motion-spec.test.ts",
+      "mode": "100644",
+      "blob": "bfd7d38de0444c870ebaa905267dbaa1de99ad81",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/motion-spec.ts",
+      "mode": "100644",
+      "blob": "b007135dec8f6b06a031739e4b2227507825e370",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/navigation-clock.test.ts",
+      "mode": "100644",
+      "blob": "0333fbf5d77c776d8318f65da088d13bd73b3d02",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/opening-and-engine.test.ts",
+      "mode": "100644",
+      "blob": "21bb6c2e59fafea19e5667a4e074b578e6c97d95",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/opening-private-cache.test.ts",
+      "mode": "100644",
+      "blob": "5e6b30030d0f3577e85b05fcaa2098811277d1a3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/opening-watermark.test.ts",
+      "mode": "100644",
+      "blob": "56bdf8ec6e8cf9f9125cdfe30be4fbdb969c8838",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/presentation-scene.test.ts",
+      "mode": "100644",
+      "blob": "8c84820bf84bdf2b48f6b935af83dc97ea230951",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/presentation-scene.ts",
+      "mode": "100644",
+      "blob": "987a502fec87b682a8714e71e816c1ce4c47d719",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/question-identity.test.ts",
+      "mode": "100644",
+      "blob": "487ae45df3a499107368d6796bc413c4a37db57c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/show-director.ts",
+      "mode": "100644",
+      "blob": "81c6e23b08388529c26d3528e949904d44be3ea7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "mode": "100644",
+      "blob": "81eb5fecd834456f16063d6f51e5457d061c0287",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "mode": "100644",
+      "blob": "7abe9293ef476d7d63fee322f65c67e1db74e1fb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/voting-presentation.ts",
+      "mode": "100644",
+      "blob": "f31053dbd3030728e8d2ca4b95ddc6adedad2b99",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+      "mode": "100644",
+      "blob": "7213bcd1018b2f431007ed2d563b3b6c080ee0a0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "mode": "100644",
+      "blob": "56591a491bfd8392613d479c283a6056c72b4323",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/components.tsx",
+      "mode": "100644",
+      "blob": "fbcde757366c085082faff07a3d298ea785cb3a3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/full-show.css",
+      "mode": "100644",
+      "blob": "2c16f0e148b36b9b6ab754f596770fbe242ad339",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/full-show.test.ts",
+      "mode": "100644",
+      "blob": "564b08eabfcc49e353786910fd3bc24734a0bbfa",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/index.ts",
+      "mode": "100644",
+      "blob": "852bf132bb1aaa7909f403814df6653b062740f7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/motion-spec-v4.json",
+      "mode": "100644",
+      "blob": "0c7121d252dacd0e0d024a5381e236f95a9b051e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+      "mode": "100644",
+      "blob": "f9c512e4c59ffbe218fc0de654281cc9c0a10999",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/presentation-note.ts",
+      "mode": "100644",
+      "blob": "f9c97a63a3ddc7a386c35ccc9ad66dac78ead7b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/HostQuickGuide.tsx",
+      "mode": "100644",
+      "blob": "50519d5a4ace14bb18687e59178385db2d2f42d3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/README.md",
+      "mode": "100644",
+      "blob": "b6f62be2e55da3d1dbdfad58f8bf27606986fe1f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+      "mode": "100644",
+      "blob": "02a06bab8a66cca736775b95c4c3f959b1f9d5ce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/SeatingPlan.tsx",
+      "mode": "100644",
+      "blob": "2fb5336bf6ea88678944fd11e4f5f81335a3517f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/assets.ts",
+      "mode": "100644",
+      "blob": "53790b0b1d8cd94a3975ebf607e2bd6c9b2035cb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+      "mode": "100644",
+      "blob": "cf568481c05aca935b59af066330afa48e869835",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+      "mode": "100644",
+      "blob": "1527bf6546ff37a00c0c879a2eda5004ade0357e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "mode": "100644",
+      "blob": "7ea5c05d3ba6b446cbe1f446cec0ef7605cf85ef",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+      "mode": "100644",
+      "blob": "ceb2dc9f0014d47419ad7be3993ccaad26228455",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+      "mode": "100644",
+      "blob": "1d32dc1cffee5232aaadd99d2269c3a1ab684619",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/seating-layout.ts",
+      "mode": "100644",
+      "blob": "f8966b71ac428e003402819a9696b2cad42414e8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/seating-presence.test.ts",
+      "mode": "100644",
+      "blob": "755f01007a2279e864167ca94949886af8f6ebcb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/story-clock.test.ts",
+      "mode": "100644",
+      "blob": "b9b8684dc7b34da94c74da04f98eeec6639b20b4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+      "mode": "100644",
+      "blob": "aebc37a11f9da5f5780c2a79827d310a1c70ac98",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/story-labels.ts",
+      "mode": "100644",
+      "blob": "4fdaf317b7f1b36af041dd24fa6ce9252f6fddb7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/scenes.test.ts",
+      "mode": "100644",
+      "blob": "5fff7183650379da96f397a1e6139476bc90c1d6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/source-layout.css",
+      "mode": "100644",
+      "blob": "804adbfabe1480e9a9881b1803f07812392f07dd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/source-parity-export.test.ts",
+      "mode": "100644",
+      "blob": "2dcb878585beaffef51cf768b03dc2c4fd37533d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+      "mode": "100644",
+      "blob": "e77a38349fc73445c18c03b561046e51e7b88cd4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/types.test.ts",
+      "mode": "100644",
+      "blob": "ce9d12ec89f218ba4bced0d5c30e4e30168ce9cb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/types.ts",
+      "mode": "100644",
+      "blob": "1895a1177458058153dcf59cbb1dfa51b2da23ed",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-zz-transition.css",
+      "mode": "100644",
+      "blob": "88460de3abf37bfc1fc2c28e9b52dad891f201a5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-zz-transition.tsx",
+      "mode": "100644",
+      "blob": "1c6c4c1cf10e9f1e921d06150d0ee7701252619a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/team-leaderboard-panel.tsx",
+      "mode": "100644",
+      "blob": "f4461d294a4c97f326f5910f30d0ab1b6f0c0a60",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/team-scoring.ts",
+      "mode": "100644",
+      "blob": "abcff3402a4ac30fe5109c0ba419d49366388977",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/timer-end-cue.test.ts",
+      "mode": "100644",
+      "blob": "dc879e9716f864c875aa0ec18d788bbf04ae695b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/presentation/timer-end-cue.ts",
+      "mode": "100644",
+      "blob": "f41a1fb9be47a466a8b7037a498a5561a54714d6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/api/routes.test.ts",
+      "mode": "100644",
+      "blob": "e3828dc6e72f48636227d65c61e297026f8d4fd6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/api/routes.ts",
+      "mode": "100644",
+      "blob": "6fa1585085f70e980537e56447559e4e11aef62e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/checkout.test.ts",
+      "mode": "100644",
+      "blob": "b840b50b7deaf4de8697dec4e689f68ffa753088",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/checkout.ts",
+      "mode": "100644",
+      "blob": "d33dd40354d23e1d71e666a83f3a6084cc8411d8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/config.ts",
+      "mode": "100644",
+      "blob": "8498f137bddd55bc8c678fb02a999a1bc8ace6b6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/database.ts",
+      "mode": "100644",
+      "blob": "958cecd5f2111b111bfe6092a81cdbdb0caec520",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/entitlements.test.ts",
+      "mode": "100644",
+      "blob": "31bb33c483343939f115c1674fbc7a275157f868",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/entitlements.ts",
+      "mode": "100644",
+      "blob": "724553c5c90e67a1508fcbf221fbeee73d1b33a2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/errors.ts",
+      "mode": "100644",
+      "blob": "56dc7bfe502e0401347e2e0ac6be0c5dafe421a2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/grants.ts",
+      "mode": "100644",
+      "blob": "8eefdc44cebcf80288ed92310b5485d8163eb9f8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/index.ts",
+      "mode": "100644",
+      "blob": "ff8084b6929c2d45f7b0201780cb28228119a021",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/join-rejected.ts",
+      "mode": "100644",
+      "blob": "b54309a36c6d6ddb8406ac1c733d15f124ebcecc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/maintenance.ts",
+      "mode": "100644",
+      "blob": "16f14f35cc0b721350394837c847a2624159d665",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/client.ts",
+      "mode": "100644",
+      "blob": "433b199659d2d0d700b5a4315935e91fbbc3ac5a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/event.ts",
+      "mode": "100644",
+      "blob": "0edb030d7c3075b5e0452470259fca1beb8a03ea",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/inbox.ts",
+      "mode": "100644",
+      "blob": "edce6beab28cc9efd4a3c1f09a0b07deffb04547",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/lifecycle.ts",
+      "mode": "100644",
+      "blob": "a2de159734287e051eb7556336f495a6ebc81df1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/signature.ts",
+      "mode": "100644",
+      "blob": "7cff62044a4662261fc2a50f3e33552c762479c2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/subscriptions.test.ts",
+      "mode": "100644",
+      "blob": "bb0c66143646fd94684a148be32237abefbe61dc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/transactions.ts",
+      "mode": "100644",
+      "blob": "30254008a0ba4912714fb7d64d11c4fe8dab8804",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/paddle/webhooks.test.ts",
+      "mode": "100644",
+      "blob": "d7c0f89ce7e9f3cecac6e8e2a531a1c9c0133c9e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/phone-meter.ts",
+      "mode": "100644",
+      "blob": "9a68f00c87b40a5bb7b1de5c251e62cc47b586d9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/purchases.ts",
+      "mode": "100644",
+      "blob": "0b16dc3c0ff0dd8bc236fdfad3afbc8c6c6cc0b6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/reconcile.ts",
+      "mode": "100644",
+      "blob": "58a698c2d15b236bdbea42e1958f0e81dcab5292",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/service.ts",
+      "mode": "100644",
+      "blob": "b8e1f18631ce333f1d275a3b53ce8aaced8afd24",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/test-fixture.ts",
+      "mode": "100644",
+      "blob": "51c2967a48bab6532dd9bcb6abff8bfdb1c710e9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/billing/upgrades.test.ts",
+      "mode": "100644",
+      "blob": "b25caea0b14d4fac81a56b4655af4ee2efc491af",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/answer-recap.ts",
+      "mode": "100644",
+      "blob": "19b7812897e92febd224e4395b606de0f74171cd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/audience.ts",
+      "mode": "100644",
+      "blob": "c9e77b3772e046c9a518ec57c5642c8de9a4ad79",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/authored-coordinator.ts",
+      "mode": "100644",
+      "blob": "5906d8f1db65a42479502985f2d1fc242b4fd150",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/creating-worlds-lobby.test.ts",
+      "mode": "100644",
+      "blob": "fa447c50ee92c693d9b2a0a88a698247722aa18c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/extraction-contracts.test.ts",
+      "mode": "100644",
+      "blob": "d7ce1f0c3914845f407d23506f087480473340a8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/interim-results.ts",
+      "mode": "100644",
+      "blob": "fb719e7509221dd6da17a254ec7db1c1b10fac59",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/participation.test.ts",
+      "mode": "100644",
+      "blob": "0ad6ae5e5e6140c01a654cd60bd78ff4f4e1e1d0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/pausable-countdown.ts",
+      "mode": "100644",
+      "blob": "b822b16d6112e6d43c12b44a586b241674bf271c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/phone-controller.ts",
+      "mode": "100644",
+      "blob": "80d6db7537a5085c096c325c80cf64fada2937c1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/presentation-launch.ts",
+      "mode": "100644",
+      "blob": "5f4117f0b94929984dea42cc7bbbea92b75c5cfb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/public-directory.test.ts",
+      "mode": "100644",
+      "blob": "9ddf32dcd74bbf57b99d5741269883c32bab957e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/public-directory.ts",
+      "mode": "100644",
+      "blob": "664fdb9b4b061813dfec2435dcd86f8456063fa2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/reveal-distribution.ts",
+      "mode": "100644",
+      "blob": "ac4015ad3ccf1b9b868e8d7f1fdc3102cd33b227",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/roster/browser-identity.ts",
+      "mode": "100644",
+      "blob": "0de15baa717fecb571172957d947ef0201e371d5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/roster/index.ts",
+      "mode": "100644",
+      "blob": "c80b5532ce1a2cd18efc5217144eddb6651169e5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/roster/participants.ts",
+      "mode": "100644",
+      "blob": "464660e543758f15be015ae4d4d22554f56d0ff3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/roster/presence.ts",
+      "mode": "100644",
+      "blob": "90c304b0946d23c054b56859355343d34b83075b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/roster/types.ts",
+      "mode": "100644",
+      "blob": "135679059a2bc728f7f7009b3ac6801f973cef8f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/round-checkpoints.ts",
+      "mode": "100644",
+      "blob": "126733cb641cc1923b4779a359f606220e4dc5c6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/round-policy.ts",
+      "mode": "100644",
+      "blob": "7ebbffea2c129e597802b81f05d03c2f1168b134",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/round-scheduling.ts",
+      "mode": "100644",
+      "blob": "5519a0f971735e49fd7294923ff684db73e7470a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/runtime-policy.ts",
+      "mode": "100644",
+      "blob": "e2786ea6e8a9e8953ee551c68b13d8367c851ffe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/score-ledger.ts",
+      "mode": "100644",
+      "blob": "9f5c9411af214ebe5edddb2814dae5bc3aa08f06",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/session-bridge.ts",
+      "mode": "100644",
+      "blob": "7496e2d5d8772f6109765093c82b2d11735ecde4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/session.ts",
+      "mode": "100644",
+      "blob": "9ae07c0d5137c63e82d608603886615ce4e4f3ad",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/story-tie.test.ts",
+      "mode": "100644",
+      "blob": "b7918f1b82912ffa05ee4301085bd571461d8d3e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/studio-show-coordinator.test.ts",
+      "mode": "100644",
+      "blob": "e7995151ce995555761719d4546aff0f5c1170e7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/game/studio-show-coordinator.ts",
+      "mode": "100644",
+      "blob": "2c855606a5bbda3b153f6f601219ad2ca6f449c9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/gameplay-phase-a.test.ts",
+      "mode": "100644",
+      "blob": "a86a16757a0b0ecc8939f1f14cddc5d8d44e658d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "mode": "100644",
+      "blob": "5b790fffcb4c60976568db805af9c7c3ab4537a5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/integration.test.ts",
+      "mode": "100644",
+      "blob": "bfac709122117ec7cf58d563cd4a6d903069f89b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/media-library-recovery.test.ts",
+      "mode": "100644",
+      "blob": "efd190e3b288c86641a8c072922c23e801a38a84",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/media-library.test.ts",
+      "mode": "100644",
+      "blob": "6e1ce616d6f2e7b6904a618140d2e9b0406edff8",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/media-library.ts",
+      "mode": "100644",
+      "blob": "d5d0ed9652828dbb1e3db0568e0d8132ee24e0d3",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/p0-telephony-roster.test.ts",
+      "mode": "100644",
+      "blob": "dfb997bc5f17c24db2c8652cf6b9ea7619e1fa0d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/archive.ts",
+      "mode": "100644",
+      "blob": "2c47040777e4b0d8d67fd94d0c87460c6ca9efe8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/error.ts",
+      "mode": "100644",
+      "blob": "b91d842f86e68c75a7b1776e4d1b9a97acb91390",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/game-stage.ts",
+      "mode": "100644",
+      "blob": "4e096ffc61c268135822d9f2965541ef698ef5c6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/index.ts",
+      "mode": "100644",
+      "blob": "bf5bd8f653e244f3ceafbbdf008001498b71bcd7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/package-runtime.test.ts",
+      "mode": "100644",
+      "blob": "34678f92f75358dbf2c35f21b14d1d21a54f01a7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/preflight.ts",
+      "mode": "100644",
+      "blob": "3a490ef76a5240ed571eb69a16479bc8f7178fbc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/references.ts",
+      "mode": "100644",
+      "blob": "77084eef452940e9ce014a443170c9c0485ac1d9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/runtime-access.ts",
+      "mode": "100644",
+      "blob": "72c7ab8b2d6baaf9895d71a597649c40548c1c5b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/storage-budget.ts",
+      "mode": "100644",
+      "blob": "4596241c8a4e8be016f85d7cbaf721b11146caab",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/packages/store.ts",
+      "mode": "100644",
+      "blob": "b2c414f6a12ba24a1f3ba1db8c028c5692440159",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/real-telephony-e2e.test.ts",
+      "mode": "100644",
+      "blob": "d3fe0d805283eef65e3fc160c8371f9ec8884416",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/real-transport.ts",
+      "mode": "100644",
+      "blob": "5764abe8cc14cda3a52527914c17cbc4115d5b07",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/session.test.ts",
+      "mode": "100644",
+      "blob": "6dc4784e335ce724159fff8c5185f307167166a8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/authoring.test.ts",
+      "mode": "100644",
+      "blob": "af910d0aa5e5d8965ac3c47fab42baabf8faec21",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/demo-catalog.ts",
+      "mode": "100644",
+      "blob": "8f298b1c908e8af24b384ed781e3c0d38d865ccf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/demo-themes/cosmic.manifest.json",
+      "mode": "100644",
+      "blob": "c6e89d9d43df83d0e79befd5502d159d665b075b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/demo-themes/cosmic.v1.manifest.json",
+      "mode": "100644",
+      "blob": "88331c7ae9c2b1dd44fc3ac2f3a1a4931080e100",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/demo-themes/jade.manifest.json",
+      "mode": "100644",
+      "blob": "673904d94e6ace4ddd10e620c713ef30503e4eb6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/demo-themes/jade.v1.manifest.json",
+      "mode": "100644",
+      "blob": "874801cd5c69f9fe50064f0047afe83b495c5f87",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.fixture.ts",
+      "mode": "100644",
+      "blob": "135646d3034bc5f4bd9829b3daaed7c873c2d588",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.test.ts",
+      "mode": "100644",
+      "blob": "1855fe5692b8d3cba7a6cb57fa2e06987a2be4be",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.ts",
+      "mode": "100644",
+      "blob": "fbe937b354291404c1eb039f687ae4ec3d8b8e11",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/review.ts",
+      "mode": "100644",
+      "blob": "ae418532119b0ed99cc92d07721d9b40842e2b24",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/upload-security.test.ts",
+      "mode": "100644",
+      "blob": "d4535de1031978ad26e040a434a9269ec7b76d3b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/show-themes/validate-package.ts",
+      "mode": "100644",
+      "blob": "b2f2b8f948c591ad9dd408a03cfa5efdbbbbbbe4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/storage.test.ts",
+      "mode": "100644",
+      "blob": "fc5b609b449b8b942acdfa3787460864d043f3cd",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/create-recovery.test.ts",
+      "mode": "100644",
+      "blob": "71a74895fe6c6465a863ef4dc7aef762a91b5748",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/error.ts",
+      "mode": "100644",
+      "blob": "5f2308c45cc971f02cc7b463f8613839129e8df1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/server/storage/journal-recovery.test.ts",
+      "mode": "100644",
+      "blob": "8a1d628c9882b666409d9d8a1d51432711d3a842",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/journal.ts",
+      "mode": "100644",
+      "blob": "d3afe86d1880e223aac4ff625e52ce0915193f64",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding-child.ts",
+      "mode": "100644",
+      "blob": "9a5a24f9d5844545b7bdcc33aed0970733d98bfc",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding-fixture.ts",
+      "mode": "100644",
+      "blob": "437960f962b367f7bc2a99117a949f5e9e68f178",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding-r2.test.ts",
+      "mode": "100644",
+      "blob": "221d3916d8cf4b0cd7abd560aed77b28b3607eaf",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding.test.ts",
+      "mode": "100644",
+      "blob": "29f2d113f8c9b402c001958ee380d849663a8b97",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/native-recovery-adapter.ts",
+      "mode": "100644",
+      "blob": "f235f4bdb6e6d0442a977b04c5bc5700632762ad",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/package-stage-r2.test.ts",
+      "mode": "100644",
+      "blob": "e0f9c09ca291b9a7c8742b79ae439420f9ad3654",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/physical-binding.ts",
+      "mode": "100644",
+      "blob": "28624a3788d01de148cf002abf6ada426299562c",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/process-interruption-child.ts",
+      "mode": "100644",
+      "blob": "74fb3e95dd23b08d11052a59b8012d26525084c3",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/process-interruption-state.ts",
+      "mode": "100644",
+      "blob": "f28867731fd5f654a3e19fc83eec56d5dcef3912",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/process-interruption.test.ts",
+      "mode": "100644",
+      "blob": "92c578427260a0a8d0160aa6d2a4206653092254",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/recovery-fixture.ts",
+      "mode": "100644",
+      "blob": "d0477ba3764b1d9c3fd7816786e595bf40060bfd",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/recovery-state.ts",
+      "mode": "100644",
+      "blob": "8c84e97eb835401ccaac70b63800b584398117d0",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/review-binding-child.ts",
+      "mode": "100644",
+      "blob": "cea3724c5a114d8aeb09cd2db9008dc3c4cc73ff",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/review-binding-state.ts",
+      "mode": "100644",
+      "blob": "89893fe78ef5ef73345b85f6cf7823188c191cdd",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/review-binding.test.ts",
+      "mode": "100644",
+      "blob": "048857b1bc46fa68d781143ee901241e4094240e",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/service.ts",
+      "mode": "100644",
+      "blob": "53f927db5cc14eec0ec08977361e45abb3936eea",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/server/storage/sidecar.ts",
+      "mode": "100644",
+      "blob": "262a0974ce2befdb262c8ed5565beefecc04a3a0",
+      "input": "overlay"
+    },
+    {
+      "path": "extensions/src/site/adapters/client.ts",
+      "mode": "100644",
+      "blob": "f0b8aa888b7bfe99d18f7f05a5a6c146376675f4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/bootstrap.tsx",
+      "mode": "100644",
+      "blob": "07498048c894e6ba3f064be7eb6c11860a96fdf3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/components/HoverDevTiltCard.tsx",
+      "mode": "100644",
+      "blob": "b38298f46aec72db11ebab0d54877a3aa3340150",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/components/LICENSE-MagicUI.txt",
+      "mode": "100644",
+      "blob": "30efc351ba9c469535dc012930ba6ee30c23f957",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/components/MagicBorderBeam.tsx",
+      "mode": "100644",
+      "blob": "25da1c8ae5d669c4b6de75b0c1b6761422804733",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/env.d.ts",
+      "mode": "100644",
+      "blob": "11f02fe2a0061d6e6e1f271b21da95423b448b32",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/index.ts",
+      "mode": "100644",
+      "blob": "72656a807e667d5b9311ec3ac5d572fd6d3e3e6f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/de.json",
+      "mode": "100644",
+      "blob": "ebdd900b026c241bccefd761d578c497d90c2f0e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/en.json",
+      "mode": "100644",
+      "blob": "c07e0a3628a44c05dc5ca5e595f1a53d468f4aea",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/es.json",
+      "mode": "100644",
+      "blob": "c83e9438b7fa20d3b82e0401e25246afd8f5c182",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/fr.json",
+      "mode": "100644",
+      "blob": "0d33e6af22fe5b24ec68093f198e07e8d4e27e96",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/index.ts",
+      "mode": "100644",
+      "blob": "7af1f08fb1ebd31278ed79450839ac6c4c91e03c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/it.json",
+      "mode": "100644",
+      "blob": "bb62db34f459f7878038d1f6867843100d297735",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/ja.json",
+      "mode": "100644",
+      "blob": "fd37293503cc2cda767dad41b7765f6e9b77dcbe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/tr.json",
+      "mode": "100644",
+      "blob": "9c747d6dff6705e07c719f1f175d2ced9a2be582",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/locales/vi.json",
+      "mode": "100644",
+      "blob": "f899022aec44b4744849ac98771f65ac0f92ebae",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/browser/marketing-locales.spec.ts",
+      "mode": "100644",
+      "blob": "95154ac9759afff7f0e211620d5342579e2c8a5f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/browser/site.spec.ts",
+      "mode": "100644",
+      "blob": "68fe340af708655665da37a02b89e9695f29b04a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/catalogue-search.test.ts",
+      "mode": "100644",
+      "blob": "0c780df9af302b05dbd48a38d7b40555beb3464c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/client.test.ts",
+      "mode": "100644",
+      "blob": "656378ebb4f4a15cc2bee43576b984dc9887d8b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/delete-boundary.test.ts",
+      "mode": "100644",
+      "blob": "16c124569a88c7ae751fc1bafcf7dc029068ecae",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/locales.test.ts",
+      "mode": "100644",
+      "blob": "4f28993888ea6060c5613b900f0ebbfcc7550a90",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/metadata-policy.test.ts",
+      "mode": "100644",
+      "blob": "1bdd923dab04dd83f73a5790553b360aed0ce7fc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/tests/naming-compatibility.test.ts",
+      "mode": "100644",
+      "blob": "b2d68468438adc2cc82217c5123530d5de0fe0b5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/themes/account.ts",
+      "mode": "100644",
+      "blob": "56740b076e82a40c800a2f74a005e72995d0ed05",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/themes/corrections.ts",
+      "mode": "100644",
+      "blob": "79f1a074646f5ab4d887a8c570d468063f031367",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/themes/native.css",
+      "mode": "100644",
+      "blob": "734381ea1f1818eef652434fd2339da1e3b3a889",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/themes/packages.ts",
+      "mode": "100644",
+      "blob": "ba8167260423c7c45fb23522b105bdce22d56d46",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/themes/platform.ts",
+      "mode": "100644",
+      "blob": "2f657ae773b7f2118cec165ffaef1b860053fff3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/themes/studio.ts",
+      "mode": "100644",
+      "blob": "90aec637d9c3c24307f334d1d452623261e29c76",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/account/AccountGateway.tsx",
+      "mode": "100644",
+      "blob": "a893f160a58feedb0aca15d58e69b7b9772a2f6f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/Catalogue.tsx",
+      "mode": "100644",
+      "blob": "574c4bcf078d59d26423e83e35aa088b0e888139",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/MarketingSite.tsx",
+      "mode": "100644",
+      "blob": "734e7beafe8b3da2a570c7aa57929eb448926ff9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/Pricing.tsx",
+      "mode": "100644",
+      "blob": "22118480c86eecc0c1e29fc6768d0b2371726e85",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/catalogue-search.ts",
+      "mode": "100644",
+      "blob": "5bc5f9371c48d524675beae7f15bf371c702a672",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/Dialog.tsx",
+      "mode": "100644",
+      "blob": "eeb5c52e4e3f14dc44d4ad28dd8756082255d844",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/ReferenceCanvas.tsx",
+      "mode": "100644",
+      "blob": "5edebb05cc91e1477a604b0e957d8157c3178df8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/SiteButton.tsx",
+      "mode": "100644",
+      "blob": "9f38189a7ddb84dcf781d92f4f8cd5e792909152",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/SiteLink.tsx",
+      "mode": "100644",
+      "blob": "1dd6fef2f80a0eac071dcb1f57fe67e7ddcee8fd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/SiteLoading.tsx",
+      "mode": "100644",
+      "blob": "666565732ef761fb57e1cc1011b284e837d71696",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/SiteMetadata.tsx",
+      "mode": "100644",
+      "blob": "2189ac41e1a50719c4726908c64b17bdca5834df",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/shared/site-metadata-policy.ts",
+      "mode": "100644",
+      "blob": "3995c5b30136a3ca4ef7019c3167f083c5399b8a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/AccountPanel.tsx",
+      "mode": "100644",
+      "blob": "7864a0057f78eaaf215d0c5423404ee2609e2774",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/Events.tsx",
+      "mode": "100644",
+      "blob": "17216808d02ee21ab79e4e1aeb62499d18e41356",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/GameCard.tsx",
+      "mode": "100644",
+      "blob": "e77e113a2b0c4f265a4df35e26044cffaa3c2795",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/LegacyTools.tsx",
+      "mode": "100644",
+      "blob": "ea5daaa78c73222e1e6f8af96d3f042a1b04061a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/MyGames.tsx",
+      "mode": "100644",
+      "blob": "dc489c5bb68974e47560c955591781a5bc512bbb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/PackageTools.tsx",
+      "mode": "100644",
+      "blob": "4add0b6cdbbfd295b5c3f0d19f8573e3d831888b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/Studio.tsx",
+      "mode": "100644",
+      "blob": "eda4a17ed3b692f2cadaa9a2c238a66c88b52004",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/site/web/studio/StudioLoading.tsx",
+      "mode": "100644",
+      "blob": "c101f829655932bb8410a5f1ebdfdcb862d5c26e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/KeypadSimulator.tsx",
+      "mode": "100644",
+      "blob": "79aa76e92236cc70f8921fd8f9c885d5de785ee3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/bridge.ts",
+      "mode": "100644",
+      "blob": "e573063049bd2fe8e58a6d7a19d7e25c4672f1ce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/index.ts",
+      "mode": "100644",
+      "blob": "882820ede909c06d4e4d2269ba5305202caacde5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/mock-provider.ts",
+      "mode": "100644",
+      "blob": "a85b9bc25a94cf195e0530f8de569772df150159",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/mock-socket-connection.ts",
+      "mode": "100644",
+      "blob": "c699da57f328927a0bd2dfddf8877b3abd4f1d61",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/README.md",
+      "mode": "100644",
+      "blob": "61a7c0bb83129a27cc283e43e80af942ecd21e06",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/diagnose-pilot.cjs",
+      "mode": "100644",
+      "blob": "6c535ddab74b9269904df67a1c8dc3344c54cbc6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/phone-gateway-qa-child.cjs",
+      "mode": "100644",
+      "blob": "1c32fb9aaece6fcd7e4a3793bd85a8a38991e081",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts",
+      "mode": "100644",
+      "blob": "9b0dec4f041310e6bb9166b7911fed7dce263b08",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/phone-route-typecheck.mjs",
+      "mode": "100644",
+      "blob": "96ab3ba7229edfed4f9cb47b7deb087dac36b7c3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/phone-route-typecheck.tsconfig.json",
+      "mode": "100644",
+      "blob": "818fc4240ab2d37c4f4e385ead6b145cc3bc3d7d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/phone-safe-extract.py",
+      "mode": "100644",
+      "blob": "7013d16ece522f34c4319e8feddfa12772493614",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/phone-safe-extract.test.py",
+      "mode": "100644",
+      "blob": "15361f8fa0733bc3122e0eec63a3961556600f21",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/prepare-phone-api-package.mjs",
+      "mode": "100644",
+      "blob": "337137b9cd3c50a43df1bd83107d2be7b55b2eb2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/run-phone-api-qa.sh",
+      "mode": "100644",
+      "blob": "beba1d37fa7a62008e45d4049dce998f46a751b6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/tada-audio-logic.cjs",
+      "mode": "100644",
+      "blob": "3a5fdc7484b9a5f5953d532837272137b1ba3bf2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/tada-audio-logic.test.cjs",
+      "mode": "100644",
+      "blob": "1dfbcf243f6ff7b37517a69e3ba2e0f0fe7b2e06",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/tada-pilot-gateway.cjs",
+      "mode": "100644",
+      "blob": "7c3b22c22b392d6615e7bbf469ec9d181663dd1a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/tada-pilot-gateway.faults.test.cjs",
+      "mode": "100644",
+      "blob": "0b876883cf814e9ef49aea019658e3d927099d82",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/tada-pilot-gateway.test.cjs",
+      "mode": "100644",
+      "blob": "78989bba9aaf9497b4bfd5524e3e77b00f4a8eda",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/verify-phone-api-source.mjs",
+      "mode": "100644",
+      "blob": "0bc1909e637e62bab3f65550296804ea6b897847",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/provider.ts",
+      "mode": "100644",
+      "blob": "1b21d41e9883e3790abba73d02617043f3a44800",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/react.d.ts",
+      "mode": "100644",
+      "blob": "3a565b43f8d5c47b9fbf3dc4532b86d17b96125f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/simulator.ts",
+      "mode": "100644",
+      "blob": "05d4142080455503f3841eac44216dbf352c7776",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/socket-client.ts",
+      "mode": "100644",
+      "blob": "23d955f4b60f26640c3bf40521ca8226c4aeedec",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/telephony.test.ts",
+      "mode": "100644",
+      "blob": "d58cc96a530b3fa36f49a98517184c016ce9d66d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/transport.ts",
+      "mode": "100644",
+      "blob": "33db1cac6379d9c33876e66b7a6f3bef19139d81",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/types.ts",
+      "mode": "100644",
+      "blob": "22fa0b0bbe650dff53f591bf4197636bcb0b9024",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/telephony/yemot-translator.ts",
+      "mode": "100644",
+      "blob": "ec3e7ab0d8f8ca262de40a74229c30bf7792caff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/testkit/index.ts",
+      "mode": "100644",
+      "blob": "ab3d966c8248286f7afea6569d9d33a4253b27fd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/src/testkit/package-fixtures.ts",
+      "mode": "100644",
+      "blob": "1a545648682160ddf57749c52ef67e1b08bfa53a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.acceptance.playwright.config.ts",
+      "mode": "100644",
+      "blob": "b54ba732edb7e0d4611730ee1e821cb753985f22",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.catalog.playwright.config.ts",
+      "mode": "100644",
+      "blob": "049141a660e57d13046bd376c96672002ccc134e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.catalog.vite.config.ts",
+      "mode": "100644",
+      "blob": "31696ae875db9da1dcc5d7b9e1263c63fab3bf75",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.components.playwright.config.ts",
+      "mode": "100644",
+      "blob": "6bbb15b4d8ba3afef3bce54d928eabfcc30a2592",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.fixture.vite.config.ts",
+      "mode": "100644",
+      "blob": "b4d391b4527e9cceee8899e05c84b45208f068d6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.host.playwright.config.ts",
+      "mode": "100644",
+      "blob": "3c5286d9a08b4ac138c9163dc523b8620a1031f7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.legacy-acceptance.playwright.config.ts",
+      "mode": "100644",
+      "blob": "086a116c5f8ae74691c769a384048141fe0c768e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.live-acceptance.playwright.config.ts",
+      "mode": "100644",
+      "blob": "40a47a4c9c7c72d90a91621a1a159a645b3574d1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.motion-site.playwright.config.ts",
+      "mode": "100644",
+      "blob": "81516e7da39e7b5ed662ea09ab5c3489b7067de4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.motion.playwright.config.ts",
+      "mode": "100644",
+      "blob": "b4a2805823c951e71b552271dc7fd71a9b93009e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.native-acceptance.playwright.config.ts",
+      "mode": "100644",
+      "blob": "3c2d1af3fc4b25b8c731464a2c476ed6121a3220",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.package-admin.playwright.config.ts",
+      "mode": "100644",
+      "blob": "e90f4274a98167cc61478a16791503ea7471306a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.playwright.config.ts",
+      "mode": "100644",
+      "blob": "ddfbaeff8f7f43b3297cb01298ffe123b5ce3b99",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.roster.playwright.config.ts",
+      "mode": "100644",
+      "blob": "db7657b9dca40d215fd2677272b770a2a761efe4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.site-regression.playwright.config.ts",
+      "mode": "100644",
+      "blob": "380ca0429f794e0e28425756b29eb5800d976751",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.site.playwright.config.ts",
+      "mode": "100644",
+      "blob": "6526e7785b96152bb18660319146419d580c9603",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.stage.playwright.config.ts",
+      "mode": "100644",
+      "blob": "05505c06c5dd40a3cfb00ea190e095c82c784a31",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tds.tokens.playwright.config.ts",
+      "mode": "100644",
+      "blob": "9b0ef65a720f4e5112cc5cff80a63ce104177a54",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/tsconfig.json",
+      "mode": "100644",
+      "blob": "97a17997cf271eb078d6c58b13538f622e2ad5b4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "extensions/vitest.config.ts",
+      "mode": "100644",
+      "blob": "a74fe7bea654c873a3682ab2588ee088965250bb",
+      "input": "prior47e"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "blob": "a321e255775dcddf9237f6ebe4d04215341e1bef",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/package.json",
+      "mode": "100644",
+      "blob": "cd43760c7ff5cfd2b1f004f96c2dbed34db54c67",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/constants.ts",
+      "mode": "100644",
+      "blob": "c9c9bafaa412a1795f2c1c5e69ee76c9c0564669",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/questions/estimation.test.ts",
+      "mode": "100644",
+      "blob": "fa2b66e45cacb07fb39e7f49775019d49eee244d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/questions/estimation.ts",
+      "mode": "100644",
+      "blob": "70eabb62884240c59e9a3a2c4ee446e67ce7ed32",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/questions/options.ts",
+      "mode": "100644",
+      "blob": "b4f5460797f63f4d34446ccd636e27944c13cd9b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/types/auth.ts",
+      "mode": "100644",
+      "blob": "d46210c0e2a010bf45e2fb91e1e3e98cca65a03c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/types/game/index.ts",
+      "mode": "100644",
+      "blob": "6be5fe32ef1057b43b99fae978d3c4379fce62a7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/types/game/socket.ts",
+      "mode": "100644",
+      "blob": "27fc1f1fcdc4e317f36b4d0a3528ebc364e307de",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/types/game/status.ts",
+      "mode": "100644",
+      "blob": "96b29f5aba41231bc08a95bae2331a20cbd09252",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/auth.ts",
+      "mode": "100644",
+      "blob": "49f57df1c641ef220e9bf5999f068e34f2114e70",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/game.test.ts",
+      "mode": "100644",
+      "blob": "9df3754faf5c709eb186be3d789b5509f47292f8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/game.ts",
+      "mode": "100644",
+      "blob": "71eda12ae88b5b2cda73e4cc7d23a90bcc6987ed",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/questions/choice.ts",
+      "mode": "100644",
+      "blob": "e45f122eb21890a8e2d1620652b1d62a063684a4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/questions/estimation.ts",
+      "mode": "100644",
+      "blob": "f82d7707ca76addda290b41ee615b9374ad43c53",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/questions/index.ts",
+      "mode": "100644",
+      "blob": "6783ca2ffd94f3d47edcb8d05942761c8ded467b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/quizz.test.ts",
+      "mode": "100644",
+      "blob": "f95ae32c2aec7bc4fdf0a6fa420bc0820c52cb09",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/quizz.ts",
+      "mode": "100644",
+      "blob": "f8a7e4b434a377208d6255b48098819162780778",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/src/validators/socket.ts",
+      "mode": "100644",
+      "blob": "32550f6f9d67559329c59043cd62c05703f80fb4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/common/tsconfig.json",
+      "mode": "100644",
+      "blob": "74a77b206c2a2c1992e971a20f5db0f0e6fc7889",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/package.json",
+      "mode": "100644",
+      "blob": "bef705c644fcadfd25ed482b4837b3591d809e97",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/tsconfig.json",
+      "mode": "100644",
+      "blob": "b476cd4cc13e6d072da7048c5f96e7aaf8252eea",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/constants.ts",
+      "mode": "100644",
+      "blob": "7d92bf5b150a304f9bbc018913a435da393317c9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/editor.ts",
+      "mode": "100644",
+      "blob": "380b84766b3c31ff49f1aacc0dc49ee744d1dd73",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/extension-manager.ts",
+      "mode": "100644",
+      "blob": "cf6c6daf54afb7e24856947fa9732c92f20d6609",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/fixtures.ts",
+      "mode": "100644",
+      "blob": "6d1e316469169b83d9ae2cf175b05e4b40748676",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/i18n.ts",
+      "mode": "100644",
+      "blob": "cefa328c8dd421b9d36c37814652179fb0ab0053",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/manager.ts",
+      "mode": "100644",
+      "blob": "941ed6c16d50aae058df5b486189e4ce7bc7b4ac",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/media.ts",
+      "mode": "100644",
+      "blob": "73b682b09e292d16b6fbb3ba8782182cb10e91b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/package-install.ts",
+      "mode": "100644",
+      "blob": "d0e391f47b752c5c4291675a1abd2e96d2778417",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/player.ts",
+      "mode": "100644",
+      "blob": "1f27ee471c6510356c19eb846badc765e669d7ca",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/playwright-types.ts",
+      "mode": "100644",
+      "blob": "8747859052532c308e5afb515b9a4847446d5343",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/e2e/utils/results.ts",
+      "mode": "100644",
+      "blob": "bb69090509f100b96bc88904bf771ec3004f281d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/package.json",
+      "mode": "100644",
+      "blob": "23dfc178caa15a62b1f23748e89faeafc06ccfb5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/accounts-isolation.test.ts",
+      "mode": "100644",
+      "blob": "aecdc27a0844fa89503f879776bb93faa474497c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/api.test.ts",
+      "mode": "100644",
+      "blob": "599266799598c2fa5649d26a27e4bab4ed4d8c42",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/billing.test.ts",
+      "mode": "100644",
+      "blob": "694f19e5a50e3a3a245af126c44d597d676d4331",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/billing-routes.ts",
+      "mode": "100644",
+      "blob": "2fed02ef9346dd30d5b772257230068a04e2124d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/demo-catalog.test.ts",
+      "mode": "100644",
+      "blob": "06c67e2120cd615fd7bb03058e5f8cb81de4f337",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "mode": "100644",
+      "blob": "4c4a806b15b2eace7f93d52c75ab53a09b48d783",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/join-policy.test.ts",
+      "mode": "100644",
+      "blob": "b566894e5a1f3d199a30a0e5e83b8df0805befc0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/join-policy.ts",
+      "mode": "100644",
+      "blob": "2f986d879ffbbde22a59652017e929596147e406",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/media-routes.ts",
+      "mode": "100644",
+      "blob": "60efb611fba1e2b56458a63ce555ae68de071812",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/package-routes.ts",
+      "mode": "100644",
+      "blob": "5942c09d443717177407fc88a36a394f7546a4ef",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/theme-media-response.ts",
+      "mode": "100644",
+      "blob": "41339102b8d0af34ef061ba69a0758a9ba5e64c5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/theme-routes.test.ts",
+      "mode": "100644",
+      "blob": "7b924d349dad88faad4cad9ee0032dc4d7baecb1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/theme-routes.ts",
+      "mode": "100644",
+      "blob": "c9faa1456dce0a0f115492ea69f1b7d01c180fd8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/factory.ts",
+      "mode": "100644",
+      "blob": "3f28174bad087b06469776323a9a9875e8f62e75",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/index.ts",
+      "mode": "100644",
+      "blob": "c65e8e1ff2d4f55dd268382fd5af8bdc1a9d5e92",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/middleware.ts",
+      "mode": "100644",
+      "blob": "be93e9b357f86fcc39ce738fd0d7ca95be463d97",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/pilot-phone.test.ts",
+      "mode": "100644",
+      "blob": "9a63b33189461d1d35df129c2079083a6276b37d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/routes/accounts.ts",
+      "mode": "100644",
+      "blob": "cba15394598a242a23b36483709b0bf5f44a71e0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/routes/auth.ts",
+      "mode": "100644",
+      "blob": "db0d86a238d66c9a4f11397df30a755604b14811",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "mode": "100644",
+      "blob": "13d8a0de05d66853051fe9fbd915dbaa4e3fa80c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/routes/media.ts",
+      "mode": "100644",
+      "blob": "624c9058c0fce60c9a07f12f6d327de306d2338e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/routes/quizz.ts",
+      "mode": "100644",
+      "blob": "a897e39ae87e78400f99c5581088c16c2d4727b0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/routes/results.ts",
+      "mode": "100644",
+      "blob": "0fbc125116d649483d492540518fe0b0dc149414",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/api/validation.ts",
+      "mode": "100644",
+      "blob": "6d66309b854e5f7bd8b3b7c31486f1ea047fa9ad",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/app.ts",
+      "mode": "100644",
+      "blob": "96021bb0f82a4e53422d849e00313b6dcb0c15c3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/env.ts",
+      "mode": "100644",
+      "blob": "e08cdb04ae1b5502f5a0211b2aa2cf553d97bc86",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/handlers/game-extensions.ts",
+      "mode": "100644",
+      "blob": "8b62553a23fe72d1511c1e10aa07dcaef933842c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/handlers/game.test.ts",
+      "mode": "100644",
+      "blob": "5b2ebba89954fd89a8c2715f83603f90c1006c43",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/handlers/game.ts",
+      "mode": "100644",
+      "blob": "4abe7288f2e14adf30cee1cdfc6d96389a5851ab",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/handlers/types.ts",
+      "mode": "100644",
+      "blob": "25d526d66e7522cd4485bf1b4f298542f2ee2c39",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/index.ts",
+      "mode": "100644",
+      "blob": "df14ba16e544fe3305d6a9e6b4552a37290c7e48",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-auth.test.ts",
+      "mode": "100644",
+      "blob": "ae426f8f02ac3352c7feeb235dc513f8c4721970",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-auth.ts",
+      "mode": "100644",
+      "blob": "04ccf52e64779ceb84bcc5116402895d1c34a1f0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "mode": "100644",
+      "blob": "262f6b5191e230e2a16802adf1f2758bb9117a55",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-directory.ts",
+      "mode": "100644",
+      "blob": "9d2bb55fa1a26daa94cdcc270d2b2af929a11d1c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-mail.ts",
+      "mode": "100644",
+      "blob": "f5336195971122d72a0bca7fb41ad756520ed018",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-scope.ts",
+      "mode": "100644",
+      "blob": "b4694b1eaf4e6b613bd183a2ff8e8a565087f3b4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/account-session-policy.ts",
+      "mode": "100644",
+      "blob": "72eaa18296dd1506758ac286920fd3f64e0c1a97",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/auth.test.ts",
+      "mode": "100644",
+      "blob": "5d537e6ea2d7a4ec199ba1abb6bc52035e327718",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/auth.ts",
+      "mode": "100644",
+      "blob": "c3bd5d455f28d3e6bb180ac1646a4cfe9d9b8f84",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/billing.ts",
+      "mode": "100644",
+      "blob": "1aae1db99245ab963b7b9ab86b4f35bdb28b98ec",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/config-scope.ts",
+      "mode": "100644",
+      "blob": "c6f7f777d1f8ed9e17f4c5f9913a8e487b60f6dd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/config.test.ts",
+      "mode": "100644",
+      "blob": "12072819512e2165abb676608fccb3807ccec89b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/config.ts",
+      "mode": "100644",
+      "blob": "d3ed3490596607333052bacd5dec9d06ad45abe0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/errors.ts",
+      "mode": "100644",
+      "blob": "c30a23b72304818a8ac471ca494347c22cb892d4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/cooldown-timer.pause.test.ts",
+      "mode": "100644",
+      "blob": "4da97c415aedcc9e76dbab3a557acd241de9c3e0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/cooldown-timer.ts",
+      "mode": "100644",
+      "blob": "12e21a0d42e4cba183ccd2d3d548aaba18d1ff45",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/creating-worlds-repair.test.ts",
+      "mode": "100644",
+      "blob": "b774e92a0c705107fd5f0d39f7c9fed97a0778b2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/downstream-game.test.ts",
+      "mode": "100644",
+      "blob": "edc8c3b83e6c526478a0535b3c6953b7fd22fd37",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/game.test.ts",
+      "mode": "100644",
+      "blob": "8071e28d38b8bb673f41f3fb253de2da1977b0fe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "mode": "100644",
+      "blob": "8ada6d82e336c135850ebae075fea685f6e909c1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/pilot-dial-target.test.ts",
+      "mode": "100644",
+      "blob": "98a8b51a30af5343adb02fbf6273e0b81d859262",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/pilot-dial-target.ts",
+      "mode": "100644",
+      "blob": "6d5f48643e21e69078b96e498dbc63b30b7ecf9d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/pilot-target.test.ts",
+      "mode": "100644",
+      "blob": "73b6e5f8adff56ca8831789e0bbfb8b0bce1e5ab",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/pilot-target.ts",
+      "mode": "100644",
+      "blob": "19438c108331686ec3f0b2b0739729ee1cae4459",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/player-manager.ts",
+      "mode": "100644",
+      "blob": "9c70b1fdaed67b1cfda8c49d9b8005701bf80d7f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/round-manager.ts",
+      "mode": "100644",
+      "blob": "1ee0be4ad1c2dbd729ad4a99f1719a2f781dd2f8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/game/theme-vote-completion.test.ts",
+      "mode": "100644",
+      "blob": "44e2477ee77c4dc15dbfd58e28206f842ab39a1b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/io.ts",
+      "mode": "100644",
+      "blob": "d6e0115a1ded88971959815d75bda720b4f7aa4c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/media-access.ts",
+      "mode": "100644",
+      "blob": "28b916c964da5482fc8a905b45cbf4c1606d1a2f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/media-read.ts",
+      "mode": "100644",
+      "blob": "90bdab646f053cf40f69046aaf8125843d112086",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/media.test.ts",
+      "mode": "100644",
+      "blob": "c84a5664f79e5f48a05a024d622cb34618eef8dd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/media.ts",
+      "mode": "100644",
+      "blob": "fb30914deae84587f676682c87c7a508892df05d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/package-installation.ts",
+      "mode": "100644",
+      "blob": "4bcc28d761a2acc8303bb2b7de5f00720f285d5c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/registry.test.ts",
+      "mode": "100644",
+      "blob": "cb0c66c6a3b9a0fc6b5f0aeb8e5979df28c2c24e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/registry.ts",
+      "mode": "100644",
+      "blob": "4f175d6c9e1c83f02684cd10cc0dbf0fbfeff6e9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/estimation.ts",
+      "mode": "100644",
+      "blob": "8a5408395d876f0eaf4b969317b09364fee6c157",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/index.ts",
+      "mode": "100644",
+      "blob": "d01429fcebf118e8344d1be6f24fbae9b34707da",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/multi.ts",
+      "mode": "100644",
+      "blob": "60418b1b24b95071ec1d2d70ca631a826ec685c6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/round.test.ts",
+      "mode": "100644",
+      "blob": "ceadbffd4d3f212d2d3b68bbca39942fc6732853",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/round.ts",
+      "mode": "100644",
+      "blob": "1b10281f70756ef6388008b7aa436198a700da27",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/score-ledger.test.ts",
+      "mode": "100644",
+      "blob": "d76cb083e52bf936a3386a53a7ee103b0be293d0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/scoring.test.ts",
+      "mode": "100644",
+      "blob": "e2ca3bc0d218908b3117b26417ce1767f27015b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/scoring/single.ts",
+      "mode": "100644",
+      "blob": "28edd581f2d0a49e0cbecc49abeb95f81c3ab56b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/services/theme-installation.ts",
+      "mode": "100644",
+      "blob": "1df3f22746af439ab59718b72ae5b3f0ed4ddf33",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/test/fake-io.ts",
+      "mode": "100644",
+      "blob": "4c8bf3e135c263f743f7af8d44a71b4ebf5dd8ab",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/test/fixtures.ts",
+      "mode": "100644",
+      "blob": "ab8061325d1e092748dfe40ca6ace7c571c87f6c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/test/game-setup.ts",
+      "mode": "100644",
+      "blob": "27c538ef9e574ff0c68ad2916c9ba7030a4d366d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/test/setup.ts",
+      "mode": "100644",
+      "blob": "e4482ba7d886098abb5b7a8bd0e7c274fe464da4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/utils/file.ts",
+      "mode": "100644",
+      "blob": "6c3c7615b3dd333adcd0cd013565d810462a99b2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/utils/game.ts",
+      "mode": "100644",
+      "blob": "433c148229fdc297919fca0757d74b910e5f4f1c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/utils/nickname.ts",
+      "mode": "100644",
+      "blob": "439ffdf9aa6348ad33afbc7636ba369635a9204c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/utils/sleep.ts",
+      "mode": "100644",
+      "blob": "344aa83123e0f37f6bfa7508e7414dc715c8e012",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/utils/socket.ts",
+      "mode": "100644",
+      "blob": "1ed0483aff0e59273877bb141321aabc258006e4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/src/utils/utils.test.ts",
+      "mode": "100644",
+      "blob": "b108904da67b4a465806efd9ba614395cf7a8701",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/socket/tsconfig.json",
+      "mode": "100644",
+      "blob": "10d46cbd60babb71d73f1cedc99495c870bcd224",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/package.json",
+      "mode": "100644",
+      "blob": "415997f404ead6574ce8fbed61d1cf4365eef827",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/public/sounds/answersMusic.mp3",
+      "mode": "100644",
+      "blob": "c182028b7a55428da9684539c4926cd6cf6cd963",
+      "input": "prior47e"
+    },
+    {
+      "path": "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png",
+      "mode": "100644",
+      "blob": "3100afcd466c060ea8de1c8d1f41665b897d952b",
+      "input": "prior47e"
+    },
+    {
+      "path": "packages/web/src/assets/background.png",
+      "mode": "100644",
+      "blob": "8ed76ec5013fd0e77b3cb2aabc7d259456af9ee5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/assets/logo.svg",
+      "mode": "100644",
+      "blob": "71c4d158fb7e073c6c7e53fa01ba9925fab29763",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/branding.ts",
+      "mode": "100644",
+      "blob": "1bf5b998c857b23314f8da61a86b7d77d9c8e758",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/AlertDialog.tsx",
+      "mode": "100644",
+      "blob": "e2178b59c63434faf0e6c01b8a70d91fd7f0ba14",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Background.tsx",
+      "mode": "100644",
+      "blob": "320334934b8dd74be3a33db49e625339305bc1bd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Button.tsx",
+      "mode": "100644",
+      "blob": "0c877dd8a52aeb0b96f59e9a346cc8d9a266ae90",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Card.tsx",
+      "mode": "100644",
+      "blob": "a9582b9bb8dc3b8ee086c339c2cf37c0e5ffd19a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Combobox.tsx",
+      "mode": "100644",
+      "blob": "efe91c17e1ee23238cf4bc4a6601ff459db1ffc4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/ErrorPage.tsx",
+      "mode": "100644",
+      "blob": "6fccf08a78ab32522fa4e3683b22dae9a359354f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/GameBackground.tsx",
+      "mode": "100644",
+      "blob": "72733eb7b14068d67b1df46344629cb32bdf5b0f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/GithubIcon.tsx",
+      "mode": "100644",
+      "blob": "26ab84eeb29b61b634a742c1af368a8c3769651f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Input.tsx",
+      "mode": "100644",
+      "blob": "d5727e2b315bb505b4b9dc9e747548252ed19fe8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/LanguageSwitcher.tsx",
+      "mode": "100644",
+      "blob": "86a4944ffcbc9fed10d2c170fa70b047e171db02",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Loader.tsx",
+      "mode": "100644",
+      "blob": "0733cebf25709baac4a4c4d7a588d4c8d02c4a28",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/NotFound.tsx",
+      "mode": "100644",
+      "blob": "3508443f760efd206884f30528fc4b23f8a88e3b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/PinInput.tsx",
+      "mode": "100644",
+      "blob": "d1530d48b74066ed4231489eb773f7c647ac578d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/QuestionMedia.tsx",
+      "mode": "100644",
+      "blob": "0d61776ec6b8065c04d927bde567c906f6fd3ae7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Select.tsx",
+      "mode": "100644",
+      "blob": "750b1f2db62285ac956042c5191692f925138280",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Skeleton.tsx",
+      "mode": "100644",
+      "blob": "b863d6ad0ad94a781f95a94f2cba2416d26f2575",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Switch.tsx",
+      "mode": "100644",
+      "blob": "196664f9afbf927b6cee2cf544fa7410c18c395e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Toaster.tsx",
+      "mode": "100644",
+      "blob": "325c95ab61d46328fa2171e662501bd51cb51a4b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/ToggleGroup.tsx",
+      "mode": "100644",
+      "blob": "7388de02955ee940032f585fa6960d552747072b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/Tooltip.tsx",
+      "mode": "100644",
+      "blob": "2ab6cc75a7e8a361a2dfaa562c2057decf38e731",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/forms/FieldError.tsx",
+      "mode": "100644",
+      "blob": "4bc5df56bdb8aac306a305b1f990601dd0487d6a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/components/forms/NumberField.tsx",
+      "mode": "100644",
+      "blob": "62aad902b1c79bf7d3ff48fdccd2534a03cf47b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/AnswerButton.tsx",
+      "mode": "100644",
+      "blob": "42c2c20b6de96b3e44ea0cf9b5c4e19df35abe41",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/AnswerCountdown.tsx",
+      "mode": "100644",
+      "blob": "15f7950c755d33c5d0f5edfeb437ef67497d4c11",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/AnswerNote.tsx",
+      "mode": "100644",
+      "blob": "0508dc30275ff4892e3afd203702312e469c9bb1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/AnswersOnly.tsx",
+      "mode": "100644",
+      "blob": "6f8b5f0a5d139b67c438cda44ab7d915f957f2bc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/AutoAdvance.tsx",
+      "mode": "100644",
+      "blob": "3d1917d8fc0d0110e980fec520dddd231591365c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/ExtensionSettings.tsx",
+      "mode": "100644",
+      "blob": "d725bcee333bc7c1da6fd6e591af319c80533a23",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/GeneratedUsernames.tsx",
+      "mode": "100644",
+      "blob": "ce1b798e722aa67097e432fbacce160c011e4aaf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/SettingRow.tsx",
+      "mode": "100644",
+      "blob": "d1ab2d7e814e0c8f67c33e986a6908f41ed38450",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+      "mode": "100644",
+      "blob": "4ba2041097aa6de87143653d41e00479ff844e43",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameWrapper.tsx",
+      "mode": "100644",
+      "blob": "4fb9e647c767984fc7edaae5e8920192d1b6b91a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/HistoryDialog.tsx",
+      "mode": "100644",
+      "blob": "ecade1f896421e520a46d8a770a422b0aa88b80d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/HostPlayersModal.tsx",
+      "mode": "100644",
+      "blob": "30802c5b39881a0df393cc486ff06c525eaf72d0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/HostShortcutsDialog.tsx",
+      "mode": "100644",
+      "blob": "4f1dc49cfe1df6855d29cf30db786897938ce69e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+      "mode": "100644",
+      "blob": "5cd2e4dc1538589f89450057446ce06d9e23eb19",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/PhotoCardGrid.tsx",
+      "mode": "100644",
+      "blob": "241db7f18f436fe7e7efb8aaf775a76ab7541765",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/PlayerConnectionStatus.tsx",
+      "mode": "100644",
+      "blob": "fb6837a59d4fb0b90239124181b9e03aa6239f5e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/PlayerGameView.tsx",
+      "mode": "100644",
+      "blob": "2a31b137f2eb047c838a95a4abed65b0319976a4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/PreparedAnswers.tsx",
+      "mode": "100644",
+      "blob": "7ccfbf193cb631156031ab6982296030fd321a9b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/QuestionDialog.tsx",
+      "mode": "100644",
+      "blob": "f5f5ee04c7fd49818e13361e80bc2d4e8fc39f05",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/QuestionEntrance.tsx",
+      "mode": "100644",
+      "blob": "864760b20932fb13b2530ae34b05a08d79fb51b6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/RoomLockButton.tsx",
+      "mode": "100644",
+      "blob": "c5c89414d9e394c1b79430ed22c21b6969e51645",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/TadazzMotionStage.tsx",
+      "mode": "100644",
+      "blob": "cffcd4321167a759efa8b37544145c271f5bd483",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/game-controls.test.ts",
+      "mode": "100644",
+      "blob": "ba9bc2dc65fdcc2b2fd8a1afe0f781f92fc9542b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/host-presentation-controller.test.ts",
+      "mode": "100644",
+      "blob": "0408e9ed266e39c1e2b7bdd950891df24ad3d3dd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/host-presentation-controller.ts",
+      "mode": "100644",
+      "blob": "6fe44b3c70da9095c682318f5b8d43a177c9c809",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/icons/CricleCheck.tsx",
+      "mode": "100644",
+      "blob": "4caec62c41f5ca480aaff7f75ab78cf27050f28e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/icons/CricleXmark.tsx",
+      "mode": "100644",
+      "blob": "8f7d6fa47f4c4c95a6ced8424f9db012579d0c7f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/icons/Fire.tsx",
+      "mode": "100644",
+      "blob": "450085304de3b8d1b31989074dd288c38b647581",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/join/Reconnect.tsx",
+      "mode": "100644",
+      "blob": "47c000f4d38a1a16710415412b4fc0c37207b8fb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/join/Room.tsx",
+      "mode": "100644",
+      "blob": "d82f6c4ed3795dc28d8198aea7745801437259b0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/join/Username.tsx",
+      "mode": "100644",
+      "blob": "3cc897b47826f2f67144b754176568478e95e664",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/p1-timer-entrance.test.ts",
+      "mode": "100644",
+      "blob": "bd1b4dd35f83ab731fee303ceec5b651496f2a28",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Answers.tsx",
+      "mode": "100644",
+      "blob": "a9120ea9adfd7cd80b86ed5cab74608db588baf7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Leaderboard.tsx",
+      "mode": "100644",
+      "blob": "1d06b625baa2b39c48e93a4c7a73d79e7763e606",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/PlayerFinished.tsx",
+      "mode": "100644",
+      "blob": "714280d844c14419f55cc52386151de0be0bc2db",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Podium.tsx",
+      "mode": "100644",
+      "blob": "1067778f1c69bda71107d443b369f674ff7737d2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Prepared.tsx",
+      "mode": "100644",
+      "blob": "9cc1358700124ae30d5e7e8e9330b2f456eea098",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Question.tsx",
+      "mode": "100644",
+      "blob": "50293174ea541a730564c18028a96f8640f18828",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Responses.tsx",
+      "mode": "100644",
+      "blob": "01ea9c022331421a2a1c56bdce137662e632ddef",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Result.tsx",
+      "mode": "100644",
+      "blob": "9f5b2ccd31e49fb87026b8d1051a39a394fc8bcb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Room.tsx",
+      "mode": "100644",
+      "blob": "b712c843cf3ea349fc84e1ef841065d8dc7795b3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Start.tsx",
+      "mode": "100644",
+      "blob": "559807db77bc91d434476266bd5f8deb293403f6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Summary.tsx",
+      "mode": "100644",
+      "blob": "e9b472a240e7b4cfd22e9092c89f931b483d9a22",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Wait.tsx",
+      "mode": "100644",
+      "blob": "f8f530344f35bde962e419fe77672b4a5f601774",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/ClassicShowThemePreview.tsx",
+      "mode": "100644",
+      "blob": "19dd887734d432e13b0cc4e0171a97f154741d45",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/LiveParticipation.tsx",
+      "mode": "100644",
+      "blob": "5919ce9ede8938d5d80ad6c3c3310a30e795601e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/NativeAudioCuePlayer.tsx",
+      "mode": "100644",
+      "blob": "35fd2a11391036e7a6c807bb3fc67ef1cf125bed",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/NativeGameLayout.tsx",
+      "mode": "100644",
+      "blob": "8e3811c074fd22cc971cb451aaeef39a98559da6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/NativePublicContent.tsx",
+      "mode": "100644",
+      "blob": "658cb4f8b1a5f409266e3e0cc1d6e18375f09a98",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/NativeShowThemeView.tsx",
+      "mode": "100644",
+      "blob": "709a55cf32ef1d78dca8a4eabe24ae8f408a60ce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx",
+      "mode": "100644",
+      "blob": "8cb799af2b8b95c3547c9046d376796df67f04c6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/SandboxShowThemePreview.tsx",
+      "mode": "100644",
+      "blob": "14471fbf5426ee29587f8f3f479f80b3c4e5fb99",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/TadazzAnswerPad.tsx",
+      "mode": "100644",
+      "blob": "f699d7e7f6ef3875fb85d572a43373fb97a2e31a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx",
+      "mode": "100644",
+      "blob": "c41508d8373fecc5e681ab21f6756c4b1d1852fa",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx",
+      "mode": "100644",
+      "blob": "50477a2febbc8b5428fa4c1b40274521c06ebaa4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/answer-stage-elements.tsx",
+      "mode": "100644",
+      "blob": "aa8f989ee281a54bfefd767ff794e2a19b77d46a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/choice-results-view.tsx",
+      "mode": "100644",
+      "blob": "e9002c8a225eb163e4df9b4889a24204344c601b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/cooldown-sync.test.ts",
+      "mode": "100644",
+      "blob": "2a24f37107d7196accab49d4af11310e6d38131b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/cooldown-sync.ts",
+      "mode": "100644",
+      "blob": "601d75908d0c8d53b9c44b00e9fded5f5a8ae460",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/legacy-stage-elements.tsx",
+      "mode": "100644",
+      "blob": "e310bd7aa56f64613fa972a3cb511f981ca8fb17",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/raw-status-context.ts",
+      "mode": "100644",
+      "blob": "41ea03ce1dec379d541f7d3ff5e405585986bd1f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/show-theme-adapters.ts",
+      "mode": "100644",
+      "blob": "c8cba1ce85c059b1eb6f2e66e8fcc1b42b612d59",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/team-adapters.tsx",
+      "mode": "100644",
+      "blob": "62c75307e8b7868c5906f4de721165be5ab64c0b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/use-game-extension-connection.ts",
+      "mode": "100644",
+      "blob": "073887baf5478ccd523bc29908acacd83019a5dd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/use-legacy-presentation.ts",
+      "mode": "100644",
+      "blob": "d5c2395bd5d3249bb225058ec267c4cd437c6061",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/use-question-presentation.ts",
+      "mode": "100644",
+      "blob": "ad1d398a5f0721ce17c1b9dd67dd969edcc41e3f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/use-response-reveal.ts",
+      "mode": "100644",
+      "blob": "6afc75b889f4802f979e159000f28eb8de5ace19",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/use-timer-beeps.ts",
+      "mode": "100644",
+      "blob": "9d2e28a1bce71b206565357cab80496fdcc8c82a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/useTadazzLabels.ts",
+      "mode": "100644",
+      "blob": "978b9c09a6e6e07fdf84fbeb2c287c251437ad83",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/contexts/extension-state-context.tsx",
+      "mode": "100644",
+      "blob": "747686e36dab73780f46a873377604281307cb59",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/contexts/socket-context.tsx",
+      "mode": "100644",
+      "blob": "41148a4d33ec99948a09c73323bcc2ef8063b8e1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/contexts/view-role-context.tsx",
+      "mode": "100644",
+      "blob": "6697ed5c2fa1ff1199d4d6adf7e52e44327aeba0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/hooks/useSocketConnection.ts",
+      "mode": "100644",
+      "blob": "95e7f4110633dc6e0290792246d289a060b2d8cd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/phase-a-flow.browser.test.ts",
+      "mode": "100644",
+      "blob": "58f3e6c2c57d7c47ecffd902dedad0170825fe82",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/queries.ts",
+      "mode": "100644",
+      "blob": "69d980ad52fce302f054116c7ca0ddb22e628687",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/stores/manager.tsx",
+      "mode": "100644",
+      "blob": "9d93a57155346ee6cf1f80c4441fbfa114768708",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/stores/player.tsx",
+      "mode": "100644",
+      "blob": "31cadcba8422014eb4f809a9fff2e43eb2d14ed0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/stores/question.tsx",
+      "mode": "100644",
+      "blob": "eacc119ae48e915138bc574f304838373d8b0d4b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/utils/constants.ts",
+      "mode": "100644",
+      "blob": "01793508414cc7589520dd3a69ed6d3ab4b19e15",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/utils/createStatus.ts",
+      "mode": "100644",
+      "blob": "8c9dba4a62c59dc50e47046c8f46c80eb7eb8f20",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/game/utils/score.ts",
+      "mode": "100644",
+      "blob": "ea1b1a19834b7802e72ce45cfa8fe0720a7d7578",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/account-route-guard.ts",
+      "mode": "100644",
+      "blob": "c50423301750db4686ca3d120e89e0b9cf06b6f4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/billing/api.ts",
+      "mode": "100644",
+      "blob": "23348980b3e782ea0b94b13dbb3be058f4a0f29c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/billing/checkout-intent.ts",
+      "mode": "100644",
+      "blob": "8cb2501f5820ce52e063fad15e60ef1e30f1107f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/billing/checkout-page.tsx",
+      "mode": "100644",
+      "blob": "d72239c314044b63908813bf693e6f722b7ccda5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/billing/index.tsx",
+      "mode": "100644",
+      "blob": "9b522a796292163e9b1c7902e94e35eea0022776",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/billing/paddle-checkout.ts",
+      "mode": "100644",
+      "blob": "48a624791028d5d366ef9d2f0c3588d0b4264008",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/billing/ui.tsx",
+      "mode": "100644",
+      "blob": "3435bf41a58dd399e8f54edb77f7f8c5d26e703c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/AccountLogin.tsx",
+      "mode": "100644",
+      "blob": "771ee17a5ca655ab32c43e2a3c9c385c583d6c61",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ManagerAuthBackground.tsx",
+      "mode": "100644",
+      "blob": "0adb4d9b790cdf27b876bbffc679216905ca65f0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ManagerAuthPage.tsx",
+      "mode": "100644",
+      "blob": "345ba30c7466a627944187f7e0d9426f3702fe99",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ManagerPassword.tsx",
+      "mode": "100644",
+      "blob": "608acfa7caddc70f9a72ae5ee48462a95367f154",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ResultModal/ResultModalAnswers.tsx",
+      "mode": "100644",
+      "blob": "43d059650febafdfbbaab7455bc8bd3f7bae83dd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ResultModal/ResultModalHeader.tsx",
+      "mode": "100644",
+      "blob": "1dcb3cb1799fa434e05c4638d14b84b00d4a4beb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ResultModal/ResultModalStats.tsx",
+      "mode": "100644",
+      "blob": "d2e6db90313133fc0e18a488b076c6c1f8416e4a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ResultModal/ResultModalTable.tsx",
+      "mode": "100644",
+      "blob": "fe56af689eabb8b8d4deb752d0839321ec28146b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ResultModal/index.tsx",
+      "mode": "100644",
+      "blob": "37c50ea22320c8abc4a8b0c5aa468e64ce1d7afd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/ThemeInstallationPreview.tsx",
+      "mode": "100644",
+      "blob": "b7139d83d037c623806e89febc538aadee66117c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx",
+      "mode": "100644",
+      "blob": "e433beb59efcda56ac81e613e266667a7b579e16",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/ConfigResults.tsx",
+      "mode": "100644",
+      "blob": "8f6d9600bdbe9147e5f1c6e9bfbdaea8dbffa703",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/ConfigSelectQuizz.tsx",
+      "mode": "100644",
+      "blob": "ef4c29d4b6c98444f073ef61c379a2d7121c02a0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/ConfigTabButton.tsx",
+      "mode": "100644",
+      "blob": "0abf8d2410a52be645fdd9978d2d0021a3030692",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/ShowExportActions.tsx",
+      "mode": "100644",
+      "blob": "68aeb299771854296dcbe9acac5f426440bdec30",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/ShowImportModal.tsx",
+      "mode": "100644",
+      "blob": "d71160e196e756ab25191a7a773eebb8817c75c8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/index.tsx",
+      "mode": "100644",
+      "blob": "cd623b82eab76561669f2906e2d37f36d1be5c91",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/configurations/use-show-file-actions.ts",
+      "mode": "100644",
+      "blob": "61d7e797e211507a27668a673f9c273b881b226a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/packages/PackageDeclarativePreview.tsx",
+      "mode": "100644",
+      "blob": "06a3f96e669765484ee1f24aff6481cb323fac42",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/packages/PackageManager.tsx",
+      "mode": "100644",
+      "blob": "ce9b9d47b67acedf6ecf9ac26fdc0e0f3adcbb14",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/packages/PackageRuntimePreview.tsx",
+      "mode": "100644",
+      "blob": "dc36825a82640abcba512fdc804dcf1e5777f316",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/components/packages/package-api.ts",
+      "mode": "100644",
+      "blob": "1712d835a483dd3f2d660c10841c0c0a774b8e67",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/contexts/result-modal-context.tsx",
+      "mode": "100644",
+      "blob": "f6ea782f9701e0ffdb240cea25d327f86d341aa7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/queries.ts",
+      "mode": "100644",
+      "blob": "7f0423564b89c3efb5f16932fc6f1c9271e4557d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/manager/roster-queries.ts",
+      "mode": "100644",
+      "blob": "5a1fac0771e517096cfc9e9b3707ebbe8cd7f434",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/components/EstimationAnswers.tsx",
+      "mode": "100644",
+      "blob": "4c674e9c99360b1082c01e6427d2be1e0c9ad469",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/components/EstimationConfig.tsx",
+      "mode": "100644",
+      "blob": "a5afbd44a4c43d91312e539792295e194d0f5ebc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/components/EstimationEditor.tsx",
+      "mode": "100644",
+      "blob": "dcd6cb3dba609c39fc3efed93ad0886ea0e30ce6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/components/EstimationPrepared.tsx",
+      "mode": "100644",
+      "blob": "5bb6d44fe8b57b41ddc547338a567e4968ff6410",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/components/EstimationResponses.tsx",
+      "mode": "100644",
+      "blob": "1b9465f6af0c06df52fbe52181aab54777ef81d7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/components/EstimationScale.tsx",
+      "mode": "100644",
+      "blob": "370208bf8cdabb7b2adb1b9704f881be0e17532c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/index.ts",
+      "mode": "100644",
+      "blob": "7407dc7e7871eac9e7df664d6ea8440770a1b1fe",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/estimation/utils.ts",
+      "mode": "100644",
+      "blob": "4cde1525a900d8035daf0ea9862bb243eef442dc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/index.ts",
+      "mode": "100644",
+      "blob": "4cd093c52936c21d88a1441a3edd8ad607de8936",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/multi/components/MultiAnswers.tsx",
+      "mode": "100644",
+      "blob": "86fe1c5b5c1eff6e4e35c2075b2eed830e6b7e29",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/multi/components/MultiConfig.tsx",
+      "mode": "100644",
+      "blob": "35d116cb84cef48607cc65e7d6c4aa5f913fdc9b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/multi/components/MultiPicker.tsx",
+      "mode": "100644",
+      "blob": "24996d0eef8eecca0c335f9e6a08109d5f95eaa5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/multi/index.ts",
+      "mode": "100644",
+      "blob": "d867a91b573a0a938313c3c1b35a56b3a0666836",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/questions.test.ts",
+      "mode": "100644",
+      "blob": "43e1fe7fb8f8aed4aaf8b718870c9823a7b68926",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/single/components/SingleAnswers.tsx",
+      "mode": "100644",
+      "blob": "968e96ba79518624e6c526344224fbf4a4e36a1f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/single/components/SingleConfig.tsx",
+      "mode": "100644",
+      "blob": "313e7aa346e75357d7ee10fc23cf06e78ae3dbdc",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/single/components/SinglePicker.tsx",
+      "mode": "100644",
+      "blob": "4067b4e14a119cb1a9e269253a5fc8b89fb86d89",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/single/index.ts",
+      "mode": "100644",
+      "blob": "cb0445efd010436676d9afb98c6db2631c6816af",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/types.ts",
+      "mode": "100644",
+      "blob": "d2fd5fd5dcd98299dcba1c16a445b927879b0014",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/questions/utils.ts",
+      "mode": "100644",
+      "blob": "41a2997dc0807f266151348910ac80232034b828",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/ConflictDialog.tsx",
+      "mode": "100644",
+      "blob": "a0ae5fce0b6f40411ebd4f223c54e9b6ccb9a96e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx",
+      "mode": "100644",
+      "blob": "170294425e73fc3730fe53e14c727ba33599fe45",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaCard.tsx",
+      "mode": "100644",
+      "blob": "2093c4d2b054e3647da9b964888c56376a92942a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaDeleteButton.tsx",
+      "mode": "100644",
+      "blob": "3e4a6812c01d52a085c15213ba9d1dcb9a27b42b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaDropOverlay.tsx",
+      "mode": "100644",
+      "blob": "03ac2f8069e51078099c1bb0a6bdaa325e682430",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryEmpty.tsx",
+      "mode": "100644",
+      "blob": "56ad5b340b3beabab13427c0a0e7574fff392868",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx",
+      "mode": "100644",
+      "blob": "d842c01081f3e7f7c444e1158da9d78f5080a96a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaRow.tsx",
+      "mode": "100644",
+      "blob": "effd208e6ed0c403b040e03cdf1bad28202963d2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaThumbnail.tsx",
+      "mode": "100644",
+      "blob": "8e44d0fe81e13397d3a1456c221383ea02ac7623",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/extension-panels.tsx",
+      "mode": "100644",
+      "blob": "22940d4d10df5e64cb6895e72fd3b138abd83648",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx",
+      "mode": "100644",
+      "blob": "c0b135e5932d0cf5e3c59532adf73f3ea2802ccd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/use-media-library-extensions.ts",
+      "mode": "100644",
+      "blob": "7e4eed39376ae854cd234d9a5e4b2dbfa15defe9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx",
+      "mode": "100644",
+      "blob": "e00486738d5777daebe1888e330069334e00946c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx",
+      "mode": "100644",
+      "blob": "5f0960df4693ce626827fa479a2b901b3b1cd9e5",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx",
+      "mode": "100644",
+      "blob": "5ced1198f5c022d33b328755d48e69dd74f215ff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig.tsx",
+      "mode": "100644",
+      "blob": "a26396893db34fe28128afc244ac4de2c5a2e034",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CategoryField.tsx",
+      "mode": "100644",
+      "blob": "3e809c69025b062648068dba5a2924d768dbbf98",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField.tsx",
+      "mode": "100644",
+      "blob": "c0dbc65f516bba73728b1ea51144a23293d404b8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigNumberInput.tsx",
+      "mode": "100644",
+      "blob": "f4be709d3b82d753290fc2644162973b9b4cc8d1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection.tsx",
+      "mode": "100644",
+      "blob": "c29c029cbf339364edf0819e50b0be846b2c8bf7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig.tsx",
+      "mode": "100644",
+      "blob": "34f8f3eed9e3a30070fb90ef106974f32a166608",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx",
+      "mode": "100644",
+      "blob": "c2a33293b68e43932a7b1179c745e4599f0e37ff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorMedia.tsx",
+      "mode": "100644",
+      "blob": "731d663399f6ceb158fc76d0594f16149db7ca3a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorNote.tsx",
+      "mode": "100644",
+      "blob": "414b9cbfea346dff2e5f8597add4c93f580c4d4c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorTitle.tsx",
+      "mode": "100644",
+      "blob": "ce338682f26ec41f4216e4894109c7874afd5037",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/extension-adornments.tsx",
+      "mode": "100644",
+      "blob": "bb702ef77e6e572707d873d93ebfee58a638be02",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/index.tsx",
+      "mode": "100644",
+      "blob": "a6b12e964db835fa759e7070e5ea01067e288f16",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuestionEditor/use-answer-visual-editor.ts",
+      "mode": "100644",
+      "blob": "02d1a99314108b7fb931abc40fa53a694ea5a78f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuizzEditorCard.tsx",
+      "mode": "100644",
+      "blob": "da57cabe48e0f4dda33f9efc69ac1bf9f7719f33",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuizzEditorHeader.tsx",
+      "mode": "100644",
+      "blob": "ab35ac59185f23c8cb84e583e5a7657b5f9276a6",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx",
+      "mode": "100644",
+      "blob": "e2d0f3820eff90efb4d05eb159a0592777466d0b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/GroupedToggleGroup.tsx",
+      "mode": "100644",
+      "blob": "dcd2bace8198afcabf342b36da6912d54d3785d7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/QuestionCardActions.tsx",
+      "mode": "100644",
+      "blob": "9d4774c643afd5c852f10a9554879a7d1ddbaae1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/header-controls.tsx",
+      "mode": "100644",
+      "blob": "4dea233311bf4e49588287afe8ae289f9efd5a68",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/index.ts",
+      "mode": "100644",
+      "blob": "7c293bd9589484a5644998646c9e3339c4ab0813",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/installed-theme-catalog.tsx",
+      "mode": "100644",
+      "blob": "2e2ca8a684fefdf6d9b615bed6ac666b12f73d61",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/show-theme-preview.tsx",
+      "mode": "100644",
+      "blob": "da69b9041bd53ea3c1338ae8faf75a4a31f8b9a4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/show-theme-settings.tsx",
+      "mode": "100644",
+      "blob": "73d5f153b06c251b244296e1e602c80f7b0cb806",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-editor-context.tsx",
+      "mode": "100644",
+      "blob": "af0286fa5849b8fd4cd3db3d009aa24f679d8203",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-launch-page.tsx",
+      "mode": "100644",
+      "blob": "2b081170ffd9d7087edf038f594a74510aedbd1f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-participants-page.tsx",
+      "mode": "100644",
+      "blob": "e0450cc585e7b4dd621d7e5062892ab5c1d7b084",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-scene-editor.tsx",
+      "mode": "100644",
+      "blob": "0e6e76b7e46e2d9e607981a2c32fc9e90b6f6d8f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-select.tsx",
+      "mode": "100644",
+      "blob": "be990032017c464d0eb3558a77b819bc95bf6996",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-settings-page.tsx",
+      "mode": "100644",
+      "blob": "4da40aae38a0bec0d835d7c2ea6716a49a03d7d2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/studio-shell.tsx",
+      "mode": "100644",
+      "blob": "29f8e7dda145b05b9df8de79b8a201277ce72620",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/theme-audio-options.tsx",
+      "mode": "100644",
+      "blob": "132213a177825163c0951c1b04034d0fdb878c54",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx",
+      "mode": "100644",
+      "blob": "9be93acb6af42a00dbc94363fbd9c06dec1d2272",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts",
+      "mode": "100644",
+      "blob": "a33e94b911d853a137c93d99b8e538a06ab3e99e",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/components/studio/use-studio-timeline-sidebar.tsx",
+      "mode": "100644",
+      "blob": "894444e085137ff63c71ba4bc55cc3669c58adfd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts",
+      "mode": "100644",
+      "blob": "48bc202fc263199a1d3aefc7c1cd4bc325ab5bd2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx",
+      "mode": "100644",
+      "blob": "3de2b934209e7290a4e489d6e259ce729822e66c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/extensions-ui.test.ts",
+      "mode": "100644",
+      "blob": "e0aa656a737bec8eb025fd868615f4746b6046c2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/hooks/useUploadMedia.ts",
+      "mode": "100644",
+      "blob": "0756866a346155bc675b1ebae0e87fcd9834cc1a",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/features/quizz/queries.ts",
+      "mode": "100644",
+      "blob": "39b4f07e0879fdb852f8e2b4b7920a75d35bf057",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/hooks/useFullscreen.ts",
+      "mode": "100644",
+      "blob": "e7695f5cf056f52911b171d9e85cd930adfdd732",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/hooks/useOnClickOutside.ts",
+      "mode": "100644",
+      "blob": "98f645565622aaea0073457f2e838f3891a3079c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/hooks/useScreenSize.ts",
+      "mode": "100644",
+      "blob": "b031b3fbd9f73562f4c9d2cfb5844dc9e786eb0f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/i18n.ts",
+      "mode": "100644",
+      "blob": "ff073b07e04fb856a6c312f47fcd1cbd62ad7d6d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/index.css",
+      "mode": "100644",
+      "blob": "fe221bdfa691be9c9ba06bca872b4db646c98d68",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/lib/api.ts",
+      "mode": "100644",
+      "blob": "18aad94e98bb93e4c46a44a60f67d903f043aee7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/lib/session.test.ts",
+      "mode": "100644",
+      "blob": "956c27c7c539071891608ea9ee1d0e367afac1da",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/lib/session.ts",
+      "mode": "100644",
+      "blob": "e9b614367a9c14b8e176576a8b514c889245e0e9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/de/common.json",
+      "mode": "100644",
+      "blob": "ce92559b2d7693b7e7836e1fa9ed7bdcc4ae98ea",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/de/errors.json",
+      "mode": "100644",
+      "blob": "2cd3a6878e84f8d3053ed344a981fb1839a5d40d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/de/game.json",
+      "mode": "100644",
+      "blob": "706a7ba11ea892001055ebabe15f291b5028dbbd",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/de/manager.json",
+      "mode": "100644",
+      "blob": "32b33ec39f4fd105d9242be6fbabd513b64ced60",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/de/quizz.json",
+      "mode": "100644",
+      "blob": "fa2291aca38049d370d618eded2a7356e99649e1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/en/common.json",
+      "mode": "100644",
+      "blob": "e5707057fec7261d025d79ac90b263340017708f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/en/errors.json",
+      "mode": "100644",
+      "blob": "d5dd5d687ae99165ce6cc5aa8403444b1e4bd159",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/en/game.json",
+      "mode": "100644",
+      "blob": "a27f61cf5612181cddf47dd069664b37f8125740",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/en/manager.json",
+      "mode": "100644",
+      "blob": "b600ba36d674967f16e88a3823e842f4c4859f37",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/en/quizz.json",
+      "mode": "100644",
+      "blob": "e34584b168f2779c51016f71d5403c4ef835d60f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/es/common.json",
+      "mode": "100644",
+      "blob": "70e8af40406a18bfdeea5ba686e4c4addd0e13b9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/es/errors.json",
+      "mode": "100644",
+      "blob": "59f13a10c2ab832f409b2b2ef94426efeee5f0ba",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/es/game.json",
+      "mode": "100644",
+      "blob": "b41dae8b92e155e2207eeb8c1343e435ec28beba",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/es/manager.json",
+      "mode": "100644",
+      "blob": "11a2c9457c8f290514fcbff5b9211777d054e324",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/es/quizz.json",
+      "mode": "100644",
+      "blob": "e39171fa2834529144ec25c53670ce810622338d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/fr/common.json",
+      "mode": "100644",
+      "blob": "18a2a07113d15a5d39df6ae2454b663c271bd4b4",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/fr/errors.json",
+      "mode": "100644",
+      "blob": "757fb9884271c21b80af29b0eb726a5ee2a5f965",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/fr/game.json",
+      "mode": "100644",
+      "blob": "74e8892125608aed38c9a4d31d7ac3b543d9bcf7",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/fr/manager.json",
+      "mode": "100644",
+      "blob": "121698726550e0bfb64568d4c76735763f5c45cb",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/fr/quizz.json",
+      "mode": "100644",
+      "blob": "f616c420c379480540403f89933b36490e018467",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/it/common.json",
+      "mode": "100644",
+      "blob": "20cb75a97bac7770f4c9b4de064ab7222c09b77d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/it/errors.json",
+      "mode": "100644",
+      "blob": "2c903c628e220917ec7bf6a28bcc8b6510d44c40",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/it/game.json",
+      "mode": "100644",
+      "blob": "a022bf99bf58254444633f61aa12a430baf1e29b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/it/manager.json",
+      "mode": "100644",
+      "blob": "c1f43e9048d3a9eadaa18feda15da75ebb9b4e1d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/it/quizz.json",
+      "mode": "100644",
+      "blob": "71c35eebfb27ddc6c771964b7269fd969f055f48",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/ja/common.json",
+      "mode": "100644",
+      "blob": "21ff0e2af8dfd4334038add538913f92451098b3",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/ja/errors.json",
+      "mode": "100644",
+      "blob": "4ea2b2e39ea19476e69effd5b849b87145547086",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/ja/game.json",
+      "mode": "100644",
+      "blob": "2df3308cd8409b8bd583036d6e7160e441274922",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/ja/manager.json",
+      "mode": "100644",
+      "blob": "fe78850c17bb083d080cdbf3c0332ed099f48c1f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/ja/quizz.json",
+      "mode": "100644",
+      "blob": "27c0279a652191d089e97ba0aa506937847ca455",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/locales.test.ts",
+      "mode": "100644",
+      "blob": "8cc1f4cd03d4b4dd0fc2290ef0eec617f9581608",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/ranks.test.ts",
+      "mode": "100644",
+      "blob": "195535dd38d6485313a66666380f5fb2935fa0e9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/tr/common.json",
+      "mode": "100644",
+      "blob": "3416690fbf45b762d92a4601a8b43daea120fb4c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/tr/errors.json",
+      "mode": "100644",
+      "blob": "4c3e445ec1f99ea9aa933536bec430ef28d329e2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/tr/game.json",
+      "mode": "100644",
+      "blob": "0b14edb1bd8e5de6ab2c8ca6af5151d3271fa14d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/tr/manager.json",
+      "mode": "100644",
+      "blob": "d35be334ae548de505c788f7582494e8b8bbc44d",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/tr/quizz.json",
+      "mode": "100644",
+      "blob": "646c92142fc4eeadbb831accbdff068743729a85",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/vi/common.json",
+      "mode": "100644",
+      "blob": "605b152e30d7b1355e1228918386e64b0dca7580",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/vi/errors.json",
+      "mode": "100644",
+      "blob": "c78e17d1c324c1bc90e8e6a48c6f6afc1ecf98b1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/vi/game.json",
+      "mode": "100644",
+      "blob": "468bb0749dd076aab752e294707f6126a8ead612",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/vi/manager.json",
+      "mode": "100644",
+      "blob": "e46b4dca0bf820dda8857ab630e5650bb28271e2",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/locales/vi/quizz.json",
+      "mode": "100644",
+      "blob": "1226e24da775cff32de7602a8062a4fbe0e7a49f",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/main.tsx",
+      "mode": "100644",
+      "blob": "d8d77e0f70f30c5216d679aea496138b2c47a9e9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/(auth)/game.tsx",
+      "mode": "100644",
+      "blob": "4f0feb6ac90d854bfbd71acb53186178f94b2ce1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/(auth)/index.tsx",
+      "mode": "100644",
+      "blob": "213cd905a38c78ec04c204740674d708a6f33c60",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/(auth)/layout.tsx",
+      "mode": "100644",
+      "blob": "73397ecc4bff9c0151c931f54d28b42288363477",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/(auth)/manager/index.tsx",
+      "mode": "100644",
+      "blob": "2f20e74e9da2d47a4f38b0496e41b20933316e55",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/__root.tsx",
+      "mode": "100644",
+      "blob": "0ed5e6947647380fae1aa72847e52d318a59c159",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/display/$gameId.tsx",
+      "mode": "100644",
+      "blob": "8f7f9f866555a709cab6636b80a9fb5fd44a4cc9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/manager/checkout.tsx",
+      "mode": "100644",
+      "blob": "63d1dc7c13939275fcc92725487db25661094544",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/manager/config.tsx",
+      "mode": "100644",
+      "blob": "7af02b492257cb8d28cf61883174a04a126063c1",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/manager/quizz/$quizzId.tsx",
+      "mode": "100644",
+      "blob": "6166a41e400a0d5c2e92c619ddbdcca0ec962031",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/manager/quizz/index.tsx",
+      "mode": "100644",
+      "blob": "afde2a4f81fa440c10e835de60e70710ed0ad757",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/manager/quizz/layout.tsx",
+      "mode": "100644",
+      "blob": "5fa735a1eb1d6fcf1c045093ab5a20c7a49fb8b0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/manager/themes/$tenantId/$artifactId.tsx",
+      "mode": "100644",
+      "blob": "3ecbf430d3d9ca7901ecff71ad71cecb7d68ef26",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/party/$gameId.tsx",
+      "mode": "100644",
+      "blob": "d04032021e03f51fc5b7815865634b558d90acdf",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/pages/party/manager/$gameId.tsx",
+      "mode": "100644",
+      "blob": "a678f12f4ffced2254a0849d005695f05ec4c12b",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/route.gen.ts",
+      "mode": "100644",
+      "blob": "92fc06f7cf101f3c24a1cab5b40255a85d485521",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/src/vite-env.d.ts",
+      "mode": "100644",
+      "blob": "54eaa072227719a2d343c5a0a6d2ab54ff9405d0",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/tsconfig.app.json",
+      "mode": "100644",
+      "blob": "ec4f29680a72e18f8619f7ca72f3ec65fbf46c52",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/tsconfig.json",
+      "mode": "100644",
+      "blob": "1ffef600d959ec9e396d5a260bd3f5b927b2cef8",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/tsconfig.node.json",
+      "mode": "100644",
+      "blob": "52ceaf1ffd0d9e08bda7f4663034927c36aabf3c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/vite.config.ts",
+      "mode": "100644",
+      "blob": "10aebff510dea3bf16f89e0feff4a3544ed059ff",
+      "input": "prior-complete"
+    },
+    {
+      "path": "packages/web/vite/private-media.ts",
+      "mode": "100644",
+      "blob": "b6ebe9f851e6bcac8b7b2fb76191720c7c72f686",
+      "input": "prior-complete"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "mode": "100644",
+      "blob": "991105db74df01801f4365f14ace2bd3ba6183ce",
+      "input": "prior-complete"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "mode": "100644",
+      "blob": "83767511b81966538c73f4721d45d6a080e35f0c",
+      "input": "prior-complete"
+    },
+    {
+      "path": "tsconfig.json",
+      "mode": "100644",
+      "blob": "a75970d4b605bf6975cae3a5f9ac0bde86b533a9",
+      "input": "prior-complete"
+    },
+    {
+      "path": "vitest.config.ts",
+      "mode": "100644",
+      "blob": "feb4cc0df4b71df780f9134f1ec08f41c25c38b9",
+      "input": "prior47e"
+    }
+  ],
+  "overlay": [
+    "extensions/src/core/show-library/preview-port.ts",
+    "extensions/src/core/show-library/stage-metadata-schema.ts",
+    "extensions/src/core/show-library/stage-metadata.test.ts",
+    "extensions/src/core/show-library/stage-metadata.ts",
+    "extensions/src/server/media-library-recovery.test.ts",
+    "extensions/src/server/media-library.test.ts",
+    "extensions/src/server/media-library.ts",
+    "extensions/src/server/show-themes/installation.test.ts",
+    "extensions/src/server/storage.test.ts",
+    "extensions/src/server/storage/create-recovery.test.ts",
+    "extensions/src/server/storage/journal-recovery.test.ts",
+    "extensions/src/server/storage/journal.ts",
+    "extensions/src/server/storage/native-binding-child.ts",
+    "extensions/src/server/storage/native-binding-fixture.ts",
+    "extensions/src/server/storage/native-binding-r2.test.ts",
+    "extensions/src/server/storage/native-binding.test.ts",
+    "extensions/src/server/storage/native-recovery-adapter.ts",
+    "extensions/src/server/storage/package-stage-r2.test.ts",
+    "extensions/src/server/storage/physical-binding.ts",
+    "extensions/src/server/storage/process-interruption-child.ts",
+    "extensions/src/server/storage/process-interruption-state.ts",
+    "extensions/src/server/storage/process-interruption.test.ts",
+    "extensions/src/server/storage/recovery-fixture.ts",
+    "extensions/src/server/storage/recovery-state.ts",
+    "extensions/src/server/storage/review-binding-child.ts",
+    "extensions/src/server/storage/review-binding-state.ts",
+    "extensions/src/server/storage/review-binding.test.ts",
+    "extensions/src/server/storage/service.ts",
+    "extensions/src/server/storage/sidecar.ts"
+  ],
+  "overlay_bytes": 389120,
+  "overlay_sha256": "54611ccce2605eb74fe0a90b82d5b1a6bc47fbba9b48d81f9329de38612cadb4",
+  "asset_and_config_inputs": [
+    "extensions/vitest.config.ts",
+    "packages/web/public/sounds/answersMusic.mp3",
+    "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png",
+    "vitest.config.ts"
+  ],
+  "scope": "No docs/.git/deps/store clone. Only exact tracked source/config/test assets; immutable old inputs hardlinked, changed files own overlay."
+}

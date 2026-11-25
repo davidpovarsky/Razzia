@@ -1,0 +1,11 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+ ✓ src/core/show-library/native-media-library.test.ts (6 tests) 32ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  17:27:52
+   Duration  1.54s (import 64%, transform 32%, tests 3%, worker 1%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/docs/extensions/qa-evidence/show-library-schema-20261115/native-media-library-20261115/final/tests.json

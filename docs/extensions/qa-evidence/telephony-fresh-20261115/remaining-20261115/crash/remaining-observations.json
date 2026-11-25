@@ -1,0 +1,84 @@
+{
+  "scope": "new actual unmounted authority acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "case": "R-CRASH-01",
+      "action": "initialize",
+      "edge": "before",
+      "actualSignal": "SIGKILL",
+      "observedRealCommitEdge": true,
+      "markerRetained": true,
+      "publicReopenDenied": true,
+      "readDidNotRecoverOrMutate": true,
+      "knownCommittedMetadataState": null,
+      "credentialResponseNeverCompleted": true
+    },
+    {
+      "case": "R-CRASH-01",
+      "action": "initialize",
+      "edge": "after",
+      "actualSignal": "SIGKILL",
+      "observedRealCommitEdge": true,
+      "markerRetained": true,
+      "publicReopenDenied": true,
+      "readDidNotRecoverOrMutate": true,
+      "knownCommittedMetadataState": null,
+      "credentialResponseNeverCompleted": true
+    },
+    {
+      "case": "R-CRASH-01",
+      "action": "issue",
+      "edge": "before",
+      "actualSignal": "SIGKILL",
+      "observedRealCommitEdge": true,
+      "markerRetained": true,
+      "publicReopenDenied": true,
+      "readDidNotRecoverOrMutate": true,
+      "knownCommittedMetadataState": null,
+      "credentialResponseNeverCompleted": true
+    },
+    {
+      "case": "R-CRASH-01",
+      "action": "issue",
+      "edge": "after",
+      "actualSignal": "SIGKILL",
+      "observedRealCommitEdge": true,
+      "markerRetained": true,
+      "publicReopenDenied": true,
+      "readDidNotRecoverOrMutate": true,
+      "knownCommittedMetadataState": "PENDING_DELIVERY",
+      "credentialResponseNeverCompleted": true
+    },
+    {
+      "case": "R-CRASH-01",
+      "action": "rotate",
+      "edge": "before",
+      "actualSignal": "SIGKILL",
+      "observedRealCommitEdge": true,
+      "markerRetained": true,
+      "publicReopenDenied": true,
+      "readDidNotRecoverOrMutate": true,
+      "knownCommittedMetadataState": null,
+      "credentialResponseNeverCompleted": true
+    },
+    {
+      "case": "R-CRASH-01",
+      "action": "rotate",
+      "edge": "after",
+      "actualSignal": "SIGKILL",
+      "observedRealCommitEdge": true,
+      "markerRetained": true,
+      "publicReopenDenied": true,
+      "readDidNotRecoverOrMutate": true,
+      "knownCommittedMetadataState": "PENDING_DELIVERY",
+      "credentialResponseNeverCompleted": true
+    },
+    {
+      "case": "R-CRASH-01-budget",
+      "actualSelfKillWindows": 6,
+      "cgroupOomKillDelta": 0,
+      "hardwarePowerLossTested": false,
+      "automaticRecoveryImplemented": false
+    }
+  ]
+}

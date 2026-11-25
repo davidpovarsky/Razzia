@@ -1,8 +1,6 @@
+import { StudioShell } from "@razzia/web/features/quizz/components/studio"
 import Skeleton from "@razzia/web/components/Skeleton"
 import { quizzQuery } from "@razzia/web/features/manager/queries"
-import QuestionEditor from "@razzia/web/features/quizz/components/QuestionEditor"
-import QuizzEditorHeader from "@razzia/web/features/quizz/components/QuizzEditorHeader"
-import QuizzEditorSidebar from "@razzia/web/features/quizz/components/QuizzEditorSidebar"
 import { QuizzEditorProvider } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { ApiError } from "@razzia/web/lib/api"
 import { useQuery } from "@tanstack/react-query"
@@ -63,13 +61,7 @@ const QuizzEditPage = () => {
 
   return (
     <QuizzEditorProvider initialData={quizz}>
-      <div className="bg-muted relative flex h-svh flex-col">
-        <QuizzEditorHeader />
-        <div className="flex flex-1 overflow-hidden">
-          <QuizzEditorSidebar />
-          <QuestionEditor />
-        </div>
-      </div>
+      <StudioShell />
     </QuizzEditorProvider>
   )
 }

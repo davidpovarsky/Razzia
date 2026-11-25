@@ -1,0 +1,88 @@
+[
+  {
+    "label": "format",
+    "exit": 0,
+    "seconds": 9.26
+  },
+  {
+    "label": "theme-engine-units",
+    "exit": 1,
+    "seconds": 43.85
+  },
+  {
+    "label": "web-types",
+    "exit": 0,
+    "seconds": 13.49
+  },
+  {
+    "label": "widget-types",
+    "exit": 0,
+    "seconds": 5.45
+  },
+  {
+    "label": "native-types",
+    "exit": 0,
+    "seconds": 8.0
+  },
+  {
+    "label": "extensions-types",
+    "exit": 137,
+    "seconds": 20.5
+  },
+  {
+    "label": "e2e-types",
+    "exit": 0,
+    "seconds": 5.11
+  },
+  {
+    "label": "source-lint",
+    "exit": 1,
+    "seconds": 13.44
+  },
+  {
+    "label": "baseline-lint",
+    "exit": 1,
+    "seconds": 11.82
+  },
+  {
+    "label": "source-lint-new-diagnostics",
+    "exit": 0,
+    "inherited": 85,
+    "new": 0
+  },
+  {
+    "label": "stage-release-self-test",
+    "exit": 0,
+    "seconds": 0.14
+  },
+  {
+    "label": "deploy-release-self-test",
+    "exit": 1,
+    "seconds": 0.18
+  },
+  {
+    "label": "deployment-runtime-operators",
+    "exit": 0,
+    "seconds": 0.22
+  },
+  {
+    "label": "builtin-and-signed-catalog-policy",
+    "exit": 1,
+    "seconds": 5.37
+  },
+  {
+    "label": "native-preview-build",
+    "exit": 0,
+    "seconds": 3.97
+  },
+  {
+    "label": "widget-build",
+    "exit": 0,
+    "seconds": 9.36
+  },
+  {
+    "label": "site-build",
+    "exit": 0,
+    "seconds": 6.9
+  }
+]

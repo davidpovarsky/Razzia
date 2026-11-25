@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "questions": 2,
+  "strict": true,
+  "mixedNaturalManualEnd": false,
+  "rows": [
+    {
+      "question": 1,
+      "timerPlaying": true,
+      "timerSamples": 53,
+      "resultsSamples": 79,
+      "effectStarts": {
+        "timer-ended": 1,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      },
+      "effectCompletions": {
+        "timer-ended": 1,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 2,
+      "timerPlaying": true,
+      "timerSamples": 54,
+      "resultsSamples": 78,
+      "effectStarts": {
+        "timer-ended": 1,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      },
+      "effectCompletions": {
+        "timer-ended": 1,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    }
+  ],
+  "pageErrors": []
+}

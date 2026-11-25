@@ -1,0 +1,208 @@
+{
+  "passed": true,
+  "checks": [
+    "Actual question and answer edits update the native stage",
+    "Compact editor preserves edits across drawers and focus wraps inside drawer",
+    "Media library opens above its drawer and closes back to editing",
+    "Timeline adds a real second question and a scene without losing the first",
+    "Changing the actual theme updates the editor backdrop",
+    "Actual Save and fresh reload preserve questions, answers, scene and theme",
+    "RTL native editor remains bounded and drawers are reachable"
+  ],
+  "errors": [],
+  "httpErrors": [
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    }
+  ],
+  "metrics": [
+    {
+      "label": "media-dialog-return-focus",
+      "focus": {
+        "tag": "BUTTON",
+        "testId": null,
+        "text": "Media library",
+        "withinDrawer": true
+      }
+    },
+    {
+      "label": "opening-scene",
+      "width": 390,
+      "height": 844,
+      "aspect": "16:9",
+      "document": {
+        "width": 390,
+        "height": 844,
+        "bodyWidth": 390,
+        "bodyHeight": 844
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 844
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 749
+      },
+      "frame": {
+        "top": 101,
+        "bottom": 838,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 737
+      },
+      "stage": {
+        "top": 390.1875,
+        "bottom": 548.8125,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 158.625
+      },
+      "viewport": null,
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "theme-backdrop-change",
+      "from": "tadazz-classic",
+      "to": "razzia-original",
+      "beforeImage": "url(\"http://127.0.0.1:4371/tadazz-show/motion/backdrop.webp\")",
+      "afterImage": "url(\"http://127.0.0.1:4371/src/assets/background.png\")"
+    },
+    {
+      "label": "actual-composite-save-reload",
+      "quizId": "oV8lO8T_SCpCwoMW2xAgD",
+      "createStatus": 201,
+      "updateStatus": 200,
+      "questions": 2,
+      "scenes": 1,
+      "theme": "razzia-original",
+      "background": "url(\"http://127.0.0.1:4371/src/assets/background.png\")"
+    },
+    {
+      "label": "rtl-question",
+      "width": 320,
+      "height": 640,
+      "aspect": "16:9",
+      "document": {
+        "width": 320,
+        "height": 640,
+        "bodyWidth": 320,
+        "bodyHeight": 640
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 640
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 545
+      },
+      "frame": {
+        "top": 195,
+        "bottom": 596,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 401
+      },
+      "stage": {
+        "top": 335.875,
+        "bottom": 455.125,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 119.25
+      },
+      "viewport": {
+        "top": 335.875,
+        "bottom": 455.125,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 119.25
+      },
+      "layout": "compact",
+      "direction": "rtl"
+    }
+  ]
+}

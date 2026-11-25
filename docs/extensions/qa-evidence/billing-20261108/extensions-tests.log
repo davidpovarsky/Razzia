@@ -1,0 +1,4 @@
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-billing-20261108/docs/extensions/qa-evidence/billing-20261108/extensions-tests.json
+undefined
+C:\Users\DAVID\Code\Razzia-worktrees\tadazz-billing-20261108\extensions:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run "--maxWorkers=2" "--reporter=json" "--outputFile=../docs/extensions/qa-evidence/billing-20261108/extensions-tests.json"

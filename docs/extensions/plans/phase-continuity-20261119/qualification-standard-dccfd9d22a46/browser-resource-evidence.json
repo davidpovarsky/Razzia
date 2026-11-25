@@ -1,0 +1,43 @@
+{
+  "before": {
+    "memoryLimitBytes": 3221225472,
+    "memoryCurrentBytes": 5640192,
+    "memoryPeakBytes": 5640192,
+    "memorySwapLimitBytes": 0,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "cpuMax": [
+      200000,
+      100000
+    ]
+  },
+  "after": {
+    "memoryLimitBytes": 3221225472,
+    "memoryCurrentBytes": 78860288,
+    "memoryPeakBytes": 2732019712,
+    "memorySwapLimitBytes": 0,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "cpuMax": [
+      200000,
+      100000
+    ]
+  },
+  "configuredMemoryLimitBytes": 3221225472,
+  "configuredNanoCpus": 2000000000,
+  "dockerOOMKilled": false
+}

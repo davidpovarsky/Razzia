@@ -1,0 +1,32 @@
+{
+  "verifiedAt": "2026-11-24T01:13:54.379343+00:00",
+  "sourceFilesMatchedBrowserReceipt": 22,
+  "sourceMismatches": [],
+  "localeKeys": [
+    "undo",
+    "redo",
+    "draftRecoveryTitle",
+    "draftRecoveryDescription",
+    "draftServerChanged",
+    "restoreDraft",
+    "discardDraft",
+    "draftStorageUnavailable",
+    "savedWithNewerEdits"
+  ],
+  "localeCoverage": {
+    "en": true,
+    "he": true,
+    "de": true,
+    "fr": true,
+    "es": true,
+    "it": true,
+    "ja": true,
+    "tr": true,
+    "vi": true
+  },
+  "focusedUnit": "18/18 PASS",
+  "browser": "9/9 PASS; first stored post-create identity assertion included",
+  "lint": "10 files; 0 warnings; 0 errors",
+  "format": "PASS",
+  "review": "Paddle read-only recheck accepted immutable per-write keys and persisted identity; root post-create immediate persistence finding fixed and browser-asserted"
+}

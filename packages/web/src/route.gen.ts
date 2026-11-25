@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as authLayoutRouteImport } from './pages/(auth)/layout'
 import { Route as authIndexRouteImport } from './pages/(auth)/index'
+import { Route as authGameRouteImport } from './pages/(auth)/game'
+import { Route as DisplayGameIdRouteImport } from './pages/display/$gameId'
+import { Route as ManagerCheckoutRouteImport } from './pages/manager/checkout'
 import { Route as ManagerConfigRouteImport } from './pages/manager/config'
 import { Route as ManagerQuizzLayoutRouteImport } from './pages/manager/quizz/layout'
 import { Route as PartyGameIdRouteImport } from './pages/party/$gameId'
@@ -18,6 +21,7 @@ import { Route as authManagerIndexRouteImport } from './pages/(auth)/manager/ind
 import { Route as ManagerQuizzIndexRouteImport } from './pages/manager/quizz/index'
 import { Route as ManagerQuizzQuizzIdRouteImport } from './pages/manager/quizz/$quizzId'
 import { Route as PartyManagerGameIdRouteImport } from './pages/party/manager/$gameId'
+import { Route as ManagerThemesTenantIdArtifactIdRouteImport } from './pages/manager/themes/$tenantId/$artifactId'
 
 const authLayoutRoute = authLayoutRouteImport.update({
   id: '/(auth)',
@@ -27,6 +31,21 @@ const authIndexRoute = authIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => authLayoutRoute,
+} as any)
+const authGameRoute = authGameRouteImport.update({
+  id: '/game',
+  path: '/game',
+  getParentRoute: () => authLayoutRoute,
+} as any)
+const DisplayGameIdRoute = DisplayGameIdRouteImport.update({
+  id: '/display/$gameId',
+  path: '/display/$gameId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagerCheckoutRoute = ManagerCheckoutRouteImport.update({
+  id: '/manager/checkout',
+  path: '/manager/checkout',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ManagerConfigRoute = ManagerConfigRouteImport.update({
   id: '/manager/config',
@@ -63,9 +82,18 @@ const PartyManagerGameIdRoute = PartyManagerGameIdRouteImport.update({
   path: '/party/manager/$gameId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManagerThemesTenantIdArtifactIdRoute =
+  ManagerThemesTenantIdArtifactIdRouteImport.update({
+    id: '/manager/themes/$tenantId/$artifactId',
+    path: '/manager/themes/$tenantId/$artifactId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
+  '/game': typeof authGameRoute
+  '/display/$gameId': typeof DisplayGameIdRoute
+  '/manager/checkout': typeof ManagerCheckoutRoute
   '/manager/config': typeof ManagerConfigRoute
   '/party/$gameId': typeof PartyGameIdRoute
   '/': typeof authIndexRoute
@@ -73,8 +101,12 @@ export interface FileRoutesByFullPath {
   '/party/manager/$gameId': typeof PartyManagerGameIdRoute
   '/manager/': typeof authManagerIndexRoute
   '/manager/quizz/': typeof ManagerQuizzIndexRoute
+  '/manager/themes/$tenantId/$artifactId': typeof ManagerThemesTenantIdArtifactIdRoute
 }
 export interface FileRoutesByTo {
+  '/game': typeof authGameRoute
+  '/display/$gameId': typeof DisplayGameIdRoute
+  '/manager/checkout': typeof ManagerCheckoutRoute
   '/manager/config': typeof ManagerConfigRoute
   '/party/$gameId': typeof PartyGameIdRoute
   '/': typeof authIndexRoute
@@ -82,11 +114,15 @@ export interface FileRoutesByTo {
   '/party/manager/$gameId': typeof PartyManagerGameIdRoute
   '/manager': typeof authManagerIndexRoute
   '/manager/quizz': typeof ManagerQuizzIndexRoute
+  '/manager/themes/$tenantId/$artifactId': typeof ManagerThemesTenantIdArtifactIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(auth)': typeof authLayoutRouteWithChildren
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
+  '/(auth)/game': typeof authGameRoute
+  '/display/$gameId': typeof DisplayGameIdRoute
+  '/manager/checkout': typeof ManagerCheckoutRoute
   '/manager/config': typeof ManagerConfigRoute
   '/party/$gameId': typeof PartyGameIdRoute
   '/(auth)/': typeof authIndexRoute
@@ -94,11 +130,15 @@ export interface FileRoutesById {
   '/party/manager/$gameId': typeof PartyManagerGameIdRoute
   '/(auth)/manager/': typeof authManagerIndexRoute
   '/manager/quizz/': typeof ManagerQuizzIndexRoute
+  '/manager/themes/$tenantId/$artifactId': typeof ManagerThemesTenantIdArtifactIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/manager/quizz'
+    | '/game'
+    | '/display/$gameId'
+    | '/manager/checkout'
     | '/manager/config'
     | '/party/$gameId'
     | '/'
@@ -106,8 +146,12 @@ export interface FileRouteTypes {
     | '/party/manager/$gameId'
     | '/manager/'
     | '/manager/quizz/'
+    | '/manager/themes/$tenantId/$artifactId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/game'
+    | '/display/$gameId'
+    | '/manager/checkout'
     | '/manager/config'
     | '/party/$gameId'
     | '/'
@@ -115,10 +159,14 @@ export interface FileRouteTypes {
     | '/party/manager/$gameId'
     | '/manager'
     | '/manager/quizz'
+    | '/manager/themes/$tenantId/$artifactId'
   id:
     | '__root__'
     | '/(auth)'
     | '/manager/quizz'
+    | '/(auth)/game'
+    | '/display/$gameId'
+    | '/manager/checkout'
     | '/manager/config'
     | '/party/$gameId'
     | '/(auth)/'
@@ -126,14 +174,18 @@ export interface FileRouteTypes {
     | '/party/manager/$gameId'
     | '/(auth)/manager/'
     | '/manager/quizz/'
+    | '/manager/themes/$tenantId/$artifactId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   authLayoutRoute: typeof authLayoutRouteWithChildren
   ManagerQuizzLayoutRoute: typeof ManagerQuizzLayoutRouteWithChildren
+  DisplayGameIdRoute: typeof DisplayGameIdRoute
+  ManagerCheckoutRoute: typeof ManagerCheckoutRoute
   ManagerConfigRoute: typeof ManagerConfigRoute
   PartyGameIdRoute: typeof PartyGameIdRoute
   PartyManagerGameIdRoute: typeof PartyManagerGameIdRoute
+  ManagerThemesTenantIdArtifactIdRoute: typeof ManagerThemesTenantIdArtifactIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -151,6 +203,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof authIndexRouteImport
       parentRoute: typeof authLayoutRoute
+    }
+    '/(auth)/game': {
+      id: '/(auth)/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof authGameRouteImport
+      parentRoute: typeof authLayoutRoute
+    }
+    '/display/$gameId': {
+      id: '/display/$gameId'
+      path: '/display/$gameId'
+      fullPath: '/display/$gameId'
+      preLoaderRoute: typeof DisplayGameIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manager/checkout': {
+      id: '/manager/checkout'
+      path: '/manager/checkout'
+      fullPath: '/manager/checkout'
+      preLoaderRoute: typeof ManagerCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/manager/config': {
       id: '/manager/config'
@@ -201,15 +274,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartyManagerGameIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manager/themes/$tenantId/$artifactId': {
+      id: '/manager/themes/$tenantId/$artifactId'
+      path: '/manager/themes/$tenantId/$artifactId'
+      fullPath: '/manager/themes/$tenantId/$artifactId'
+      preLoaderRoute: typeof ManagerThemesTenantIdArtifactIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface authLayoutRouteChildren {
+  authGameRoute: typeof authGameRoute
   authIndexRoute: typeof authIndexRoute
   authManagerIndexRoute: typeof authManagerIndexRoute
 }
 
 const authLayoutRouteChildren: authLayoutRouteChildren = {
+  authGameRoute: authGameRoute,
   authIndexRoute: authIndexRoute,
   authManagerIndexRoute: authManagerIndexRoute,
 }
@@ -234,9 +316,12 @@ const ManagerQuizzLayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   authLayoutRoute: authLayoutRouteWithChildren,
   ManagerQuizzLayoutRoute: ManagerQuizzLayoutRouteWithChildren,
+  DisplayGameIdRoute: DisplayGameIdRoute,
+  ManagerCheckoutRoute: ManagerCheckoutRoute,
   ManagerConfigRoute: ManagerConfigRoute,
   PartyGameIdRoute: PartyGameIdRoute,
   PartyManagerGameIdRoute: PartyManagerGameIdRoute,
+  ManagerThemesTenantIdArtifactIdRoute: ManagerThemesTenantIdArtifactIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

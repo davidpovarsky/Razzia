@@ -1,0 +1,280 @@
+{
+  "DPin": "8efd26a52de41928a7ac1fadafb3315770858127",
+  "node": "v22.17.0",
+  "kind": "IMMUTABLE_EXACT_GIT_D_AND_F_CANDIDATE_LOCAL_OVERLAY",
+  "aliasesOnly": true,
+  "noSchemaShim": true,
+  "noOracleJob": true,
+  "files": [
+    {
+      "path": "extensions/src/core/show-library/composition-preview-v2.ts",
+      "bytes": 4803,
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/composition-document-v2.ts",
+      "bytes": 1873,
+      "sha256": "3734d3332faf00e4f965c5f8197278261ffd0ddbcf83075854083df2c56e57ae",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/composition-document.ts",
+      "bytes": 1926,
+      "sha256": "bf40600a45fcfd97c75d5ed08cdfdd55c3166d9814f081dda6ecb36f70dba64b",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-themes/selection.ts",
+      "bytes": 6727,
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/digest.ts",
+      "bytes": 3614,
+      "sha256": "48da5947c15856d8f71f9ecff1542f20c661e2c583a690090817560e72c82021",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/primitives.ts",
+      "bytes": 3649,
+      "sha256": "60fcf76917d34f7e73257638fa7b1c33e2ec6c1e12bacc27c133ebe437fff5c5",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/packages/protocol.ts",
+      "bytes": 5468,
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/packages/manifest.ts",
+      "bytes": 3577,
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/packages/paths.ts",
+      "bytes": 1981,
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity-rule.ts",
+      "bytes": 824,
+      "sha256": "2ff70d052ba199a44a9e7c2c1b2a04d7bdbcfa7193d597da14f14e3fcf6532f4",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/schemas.ts",
+      "bytes": 7174,
+      "sha256": "a2728c29c81ef4f6d88d25338bf357e1a08fe3867d41a5c445a833366bdebf18",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-presentation-settings.ts",
+      "bytes": 3222,
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/card-appearance.ts",
+      "bytes": 20335,
+      "sha256": "1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/constants.ts",
+      "bytes": 2748,
+      "sha256": "bbeeb26c8d6f8a12da3621c9ab3cb5f7e2eadfd589471142918e2d1da3e7b721",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/lottie.ts",
+      "bytes": 43171,
+      "sha256": "69b3c742384732717b1679dcc488d1c4e77d8a8dccb7dbbed502388af51fe69d",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/media.ts",
+      "bytes": 11212,
+      "sha256": "a328fc4168bed2a84e11350aca48905de1f301865c375367c671814f77924f18",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/cinematic-overlays.ts",
+      "bytes": 10293,
+      "sha256": "3799f40fd3fb9d5ca22bafdc3a71e93da4b144c6a60e3c6107497d5eab6e30a8",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.ts",
+      "bytes": 4890,
+      "sha256": "3687dbfa8e1d7e9a9ad938ca0818f1606d42c73f1605214be33c5cec95d8d501",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-authoring-schema.ts",
+      "bytes": 26630,
+      "sha256": "04a193fce8b3a9a775f69d24ea255a0ad64e5a2e8b858e4e1e57b504190596df",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/studio-timeline-schema.ts",
+      "bytes": 21670,
+      "sha256": "082c17efbfbf4015b0c3983faf1fb25713208c9af4604aebc6bfbd0893dd666d",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/tadazz-appearance.ts",
+      "bytes": 2670,
+      "sha256": "4f65c9a46d3fc3f23ab4efd11854d6ec85a85273ac92d30267679e449a9baa23",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/quiz-extras.ts",
+      "bytes": 8612,
+      "sha256": "cff2c8bc7ec7f10f960a8b017f94e362c967de9c9f0646866f4353b471ce6e72",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/phone-roster.ts",
+      "bytes": 7405,
+      "sha256": "438a39f8cd9848c6c517a91cdb3cc2e8dc8f8875c5216b318973baa7cafe75f8",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/validators/quizz.ts",
+      "bytes": 3967,
+      "sha256": "8cd1ff3ce886aab0fabae58557f8053102b318fdbddfac37a4275487ac61ecbf",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/constants.ts",
+      "bytes": 4231,
+      "sha256": "efe3bce19f2b96e7cd9730735a341e4de64a10b6307f509f3e6f5f1de97a279f",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/types/game/index.ts",
+      "bytes": 2973,
+      "sha256": "ec550e1f3aa050c3eb5538c1e3c2abfaaf4444a5a5c09778ba4676d3c7dfbb1d",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/validators/questions/index.ts",
+      "bytes": 713,
+      "sha256": "4ef73f27053887f2d29c884fec0a053f059a6934d13b86de0fae306859be44b9",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/validators/questions/choice.ts",
+      "bytes": 788,
+      "sha256": "eacaa560ef536901de065be4355365578a4131797f5679b00b8f5bd48af8127e",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/validators/questions/estimation.ts",
+      "bytes": 1253,
+      "sha256": "0080ddfc62fdb7d4410b097b89d2c8b3534adcf6e4c31169ce13f40c7f5329d4",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "packages/common/src/questions/options.ts",
+      "bytes": 447,
+      "sha256": "5478f57ce25ca226751d46fb530fab9ccef5f109cbebf68b5a9a53063e25cede",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-themes/registry.ts",
+      "bytes": 2006,
+      "sha256": "6f980606571688cb3e2fc653d77f047d7043ca1a06488edd0d3464afcd3e2e55",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-themes/razzia.manifest.json",
+      "bytes": 45192,
+      "sha256": "ff910bf226e39af78de8240b81671c089ec0c81c48a57538708d0c0caf93eb51",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-themes/classic.manifest.json",
+      "bytes": 41813,
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-themes/definition.ts",
+      "bytes": 13409,
+      "sha256": "babeb6762eeb80c70c4c54b98083ddcbe49239b04bfdc2faf05e9d2f01820134",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "bytes": 6158,
+      "sha256": "42fc1d5411b60626bec1a9022b64b21c1dba34eccff0973762b7dc9a89bc7095",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-resolve.ts",
+      "bytes": 3032,
+      "sha256": "e90aebcedfb22a4814a616f4ecfebc76677f6a0bd0d213b39a17537d1c41d80d",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-themes/resolve.ts",
+      "bytes": 7201,
+      "sha256": "867529ee357fffdf315bcfba570ebf50ce1ccf0178b9131ff69197f11243ece5",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/product-branding.ts",
+      "bytes": 258,
+      "sha256": "f6a8447cd41a2d81b5d25968455dea9ad119b10dfa77ba38cbae87cd8110fad9",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "bytes": 3360,
+      "sha256": "76e97c2343a36681a4c8a64af383c6989bd2040abbc60e3c8ff9a19a252324a3",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-fixtures.ts",
+      "bytes": 3824,
+      "sha256": "e1150d837215e16650260e2c484c8972edebf70d416182870e5da5c12b385a09",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/core/digest.ts",
+      "bytes": 5232,
+      "sha256": "7f49ad1f3ee9eb3b13bb8064d11646a9120c32d925f396c87cc892d44df1df4d",
+      "source": "git:8efd26a52de41928a7ac1fadafb3315770858127"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/canonical.ts",
+      "bytes": 3555,
+      "sha256": "2d5128d0c38a38ff094c0daf2631d60c5bd5218655558b7b17366dc12bd82318",
+      "source": "F candidate worktree"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/composition-preview-v2.ts",
+      "bytes": 2080,
+      "sha256": "376adb3bc723375898d30cd01e759219344c52d884945fe393f9c66bbc01af4d",
+      "source": "F candidate worktree"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/canonical-v2.nodecheck.ts",
+      "bytes": 3751,
+      "sha256": "ffdf5a2d0840522a81c2c70979da773c7dc6da6846062689f531e1c42140fc41",
+      "source": "F candidate worktree"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/composition-preview-v2.nodecheck.ts",
+      "bytes": 6374,
+      "sha256": "9ce6be624441f2720d4a4764cc881290c4e5abb87d4fc3b7a30dfb097e392ea3",
+      "source": "F candidate worktree"
+    }
+  ]
+}

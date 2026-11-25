@@ -1,0 +1,133 @@
+{
+  "kind": "local-public-evidence-read-integrity",
+  "status": "PASS",
+  "at": "2026-11-19T13:12:34.251678+00:00",
+  "python": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+  "cases": [
+    {
+      "name": "stable-window-stat-and-fstat-ctime-semantics",
+      "passed": true
+    },
+    {
+      "name": "reject-1-st_dev",
+      "passed": true
+    },
+    {
+      "name": "reject-1-st_ino",
+      "passed": true
+    },
+    {
+      "name": "reject-1-st_mode",
+      "passed": true
+    },
+    {
+      "name": "reject-1-st_nlink",
+      "passed": true
+    },
+    {
+      "name": "reject-1-st_size",
+      "passed": true
+    },
+    {
+      "name": "reject-1-st_mtime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-2-st_dev",
+      "passed": true
+    },
+    {
+      "name": "reject-2-st_ino",
+      "passed": true
+    },
+    {
+      "name": "reject-2-st_mode",
+      "passed": true
+    },
+    {
+      "name": "reject-2-st_nlink",
+      "passed": true
+    },
+    {
+      "name": "reject-2-st_size",
+      "passed": true
+    },
+    {
+      "name": "reject-2-st_mtime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-3-st_dev",
+      "passed": true
+    },
+    {
+      "name": "reject-3-st_ino",
+      "passed": true
+    },
+    {
+      "name": "reject-3-st_mode",
+      "passed": true
+    },
+    {
+      "name": "reject-3-st_nlink",
+      "passed": true
+    },
+    {
+      "name": "reject-3-st_size",
+      "passed": true
+    },
+    {
+      "name": "reject-3-st_mtime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-within-api-2-st_ctime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-within-api-2-st_birthtime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-within-api-3-st_ctime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-within-api-3-st_birthtime_ns",
+      "passed": true
+    },
+    {
+      "name": "reject-truncated-read",
+      "passed": true
+    },
+    {
+      "name": "reject-extra-byte-read",
+      "passed": true
+    },
+    {
+      "name": "reject-file-over-limit",
+      "passed": true
+    }
+  ],
+  "caseCount": 26,
+  "actualCoordinatorReads": [
+    {
+      "file": "stage-execution.json",
+      "bytes": 1474,
+      "sha256": "d97b168bd0818e766e0e478b7d5e39613cdcf915fc49dd34af4529d3c0efc82c"
+    },
+    {
+      "file": "deployment-qualify-backup-execution.json",
+      "bytes": 6853,
+      "sha256": "a51b6e669b351db47ff07d836ee4269ca09635f507b50d67a29666888c0c8f1e"
+    },
+    {
+      "file": "deployment-deploy-execution.json",
+      "bytes": 7056,
+      "sha256": "f80b1aaf9b7782b1b266beb472a1788fd38b4660e5a3d5edec538ba071ed22ee"
+    }
+  ],
+  "collectorSha256": "62b70708a90f3afd9e02bf7befc8fb6095ff9b380280252f02cfe32cacf3b325",
+  "networkUsed": false,
+  "productChanged": false
+}

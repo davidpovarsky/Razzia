@@ -1,0 +1,29 @@
+TAP version 13
+# Subtest: baseline: optional trusted seam is present only when selected
+ok 1 - baseline: optional trusted seam is present only when selected
+  ---
+  duration_ms: 24.387603
+  type: 'test'
+  ...
+# Error: Test "baseline: optional trusted seam is present only when selected" at docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/baseline.mjs:27088:3 generated asynchronous activity after the test ended. This activity created the error "AssertionError [ERR_ASSERTION]: undefined == true" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+# Subtest: /mnt/c/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/baseline.mjs
+not ok 1 - /mnt/c/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/baseline.mjs
+  ---
+  duration_ms: 342.804145
+  type: 'test'
+  location: '/mnt/c/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/baseline.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 382.442322

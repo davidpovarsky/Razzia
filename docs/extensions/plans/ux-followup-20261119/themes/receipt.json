@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "checks": [
+    "Native theme drawer opens from deep link and changes the actual editor backdrop",
+    "Save and reload preserve versioned selection; switching back restores theme overrides",
+    "Theme drawer stays within desktop, tablet and phone viewports with keyboard return",
+    "Theme import rejects invalid files without submitting or changing the game",
+    "Themes-only package import preserves games, picks no game content, and uses actual install API",
+    "Catalog failure reports retry and retains the installed theme and open drawer",
+    "Scene editor exposes the same theme picker",
+    "Studio themes page keeps site chrome and links to the exact editor theme drawer",
+    "Hebrew theme drawer fits a narrow screen"
+  ],
+  "errors": [],
+  "dimensions": [
+    {
+      "width": 1440,
+      "height": 900,
+      "bounds": {
+        "x": 1072,
+        "y": 114.0916519165039,
+        "width": 360,
+        "height": 783.0000228881836
+      },
+      "document": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "bounds": {
+        "x": 656,
+        "y": 111,
+        "width": 360,
+        "height": 657
+      },
+      "document": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "bounds": {
+        "x": 24,
+        "y": 109.48112487792969,
+        "width": 358,
+        "height": 733.0000152587891
+      },
+      "document": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "bounds": {
+        "x": 24,
+        "y": 109.48138427734375,
+        "width": 288,
+        "height": 529
+      },
+      "document": {
+        "width": 320,
+        "height": 640
+      }
+    }
+  ],
+  "syntheticAccountsOnly": true,
+  "customerDataModified": false,
+  "sourceMode": "current-checkout-vite-dev",
+  "packageWorker": "explicit synthetic declarative fixture receipt; Linux worker not rerun",
+  "packageInstallApi": "actual"
+}

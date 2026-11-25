@@ -1,0 +1,13 @@
+{
+  "combined_source_head": "58cfb5c7a734518c715ae56d74666441f0743f5d",
+  "accepted_source_paths": 29,
+  "source_blob_mode_mismatches": [],
+  "protected_packages_tree_unchanged": true,
+  "unaccepted_c1_not_ancestor": true,
+  "locks": {
+    "pnpm-lock.yaml": "ef4c7513fd4f9e56e9e38a8d7b1555d3c00f84650b400b1e8280c8d49ed37df2",
+    "pnpm-workspace.yaml": "a7a9125e9b0bd614032e1c0df1b9dafc754788ac9bb6c6d3b84c10751626565a",
+    "extensions/src/mcp-app/pnpm-lock.yaml": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe"
+  },
+  "new_boundary": "85e fresh-root proof retained at9f7bfde; combined source requires separate focused runtime validation"
+}

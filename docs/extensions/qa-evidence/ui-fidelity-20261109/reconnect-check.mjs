@@ -1,0 +1,13 @@
+import {chromium,request,expect as baseExpect} from '@playwright/test';import fs from 'node:fs';
+const expect=baseExpect.configure({timeout:20000});const origin='https://theme-lab-v2.132.145.25.168.sslip.io';
+const sample=JSON.parse(fs.readFileSync('/evidence/samples.json','utf8')).samples.find(s=>s.themeId==='razzia-original'&&s.mode==='quiz');
+const api=await request.newContext({baseURL:origin});const login=await api.post('/api/auth/manager',{data:{password:process.env.MANAGER_PASSWORD}});expect(login.ok()).toBe(true);const {token}=await login.json();
+const created=await api.post('/api/games',{headers:{Authorization:`Bearer ${token}`},data:{quizzId:sample.quizId}});expect(created.ok()).toBe(true);const game=await created.json();
+const browser=await chromium.launch({headless:true});try{
+ const hostCtx=await browser.newContext({locale:'en-US'});await hostCtx.addInitScript(v=>localStorage.setItem('token',v),token);const host=await hostCtx.newPage();await host.goto(origin+'/party/manager/'+game.gameId);
+ const playerCtx=await browser.newContext({viewport:{width:768,height:1024},isMobile:true,hasTouch:true,locale:'en-US'});const player=await playerCtx.newPage();await player.goto(origin+'/game?pin='+game.inviteCode);await player.getByPlaceholder('Username here').fill('Reconnection QA');await player.getByRole('button',{name:'Submit',exact:true}).click();await expect(host.getByTestId('host-connected-counter')).toHaveText('1 / 1');
+ await host.reload();await expect(host.getByTestId('host-connected-counter')).toHaveText('1 / 1');await host.getByRole('button',{name:'Start',exact:true}).click();await expect(host.getByTestId('tadazz-show')).toHaveAttribute('data-voting-open','true');
+ await host.reload();await expect(host.getByTestId('tadazz-show')).toHaveAttribute('data-voting-open','true');await expect(host.getByTestId('tadazz-show')).toHaveAttribute('data-show-theme','razzia-original');await expect(host.getByTestId('manager-control-toolbar')).toBeVisible();
+ await player.reload();await expect(player.getByRole('button',{name:/Mars/})).toBeVisible();await expect(host.getByTestId('host-connected-counter')).toHaveText('1 / 1');await player.getByRole('button',{name:/Mars/}).click();await host.getByTestId('host-end-timer-btn').click();await expect(player.getByText('Nice!',{exact:true})).toBeVisible();
+ fs.writeFileSync('/evidence/reconnect-browser.json',JSON.stringify({origin,theme:'razzia-original',hostReloadInLobby:true,hostReloadWhileVoting:true,iPadPlayerReload:true,noDuplicatePlayer:true,voteAndScoreAfterReload:true},null,2));console.log('Host lobby/voting reload and iPad player rejoin preserve the game and scoring');
+}finally{await browser.close();await api.dispose()}

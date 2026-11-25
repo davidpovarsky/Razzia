@@ -1,0 +1,232 @@
+{
+  "kind": "FROZEN_PROPOSAL_NOT_EXECUTABLE_PACKET_OR_GRANT",
+  "applicationSourceBase": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "nodeOnlyObserverCandidate": "a4bd884db05a3368a1842d357cd9f173600bcf11",
+  "runtimePermission": false,
+  "newRuntimeExecuted": false,
+  "newNamespaceSuffix": "recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet3-process",
+  "profile": {
+    "cpu": 0.25,
+    "memoryBytes": 2147483648,
+    "memorySwapBytes": 2147483648,
+    "pidsLimit": 96,
+    "newPhysicalDiskCapBytes": 67108864,
+    "uid": 1001,
+    "gid": 1001,
+    "capDrop": "ALL",
+    "noNewPrivileges": true,
+    "network": "none",
+    "ports": [],
+    "rootAndInputsReadOnly": true,
+    "persistentSameDeviceScratch": true,
+    "dockerInitInitially": false
+  },
+  "environmentDelta": {
+    "GOMAXPROCS": "1",
+    "C1_PROCESS_OBSERVER_ROOT": "/qa/receipts/process-observations"
+  },
+  "jobs": [
+    {
+      "name": "failed-startup-witness",
+      "cwd": "/work",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--project",
+        "socket",
+        "packages/socket/src/services/quiz-creation-reservation.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=verbose",
+        "--reporter=json",
+        "-t",
+        "uses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change",
+        "--outputFile=/qa/results/failed-startup-witness.results.json"
+      ],
+      "selectedCaseCount": 1,
+      "explicitlyDeselectedNativeCases": 10,
+      "mustPassBeforeNextJob": true
+    },
+    {
+      "name": "actual-native",
+      "cwd": "/work",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--project",
+        "socket",
+        "packages/socket/src/services/quiz-creation-reservation.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=verbose",
+        "--reporter=json",
+        "--outputFile=/qa/results/actual-native.results.json"
+      ],
+      "expectedPassCount": 11,
+      "allowedFailureOrPendingCount": 0
+    }
+  ],
+  "processObservation": {
+    "implementation": "pid_observer.proposed.py",
+    "hostOnlyNoContainerExec": true,
+    "fields": [
+      "pids.current",
+      "pids.max",
+      "pids.events",
+      "pids.events.local",
+      "pids.peak when available",
+      "cgroup.procs",
+      "owned PID/PPID/NSpid/State/Threads/startTicks",
+      "owned Max processes / Max open files limits",
+      "parent transitions",
+      "ancestor PID limits/counters only"
+    ],
+    "sampleIntervalSeconds": 2,
+    "requiredSamples": [
+      "before source preflight",
+      "before/after each job",
+      "every running sample",
+      "terminal sample",
+      "quiescent gate",
+      "before Docker stop"
+    ],
+    "newMaxEventStopsBeforeNextJob": true,
+    "quiescentGate": {
+      "maxHarnessWaitSeconds": 5,
+      "requiresOriginalSupervisorProcessIdentitiesOnly": true,
+      "requiresZeroZombies": true,
+      "noSignalsToDrainOrResetCounters": true
+    }
+  },
+  "conditionalInitProposal": {
+    "availableExistingBinary": "/usr/bin/docker-init",
+    "sha256": "57d92dde938e0b0e7399eb4e2f0ef6bc38f5c4e2ae904db83964450405dd98d2",
+    "activateAutomatically": false,
+    "requiresMeasuredPersistentAdoptionOrZombiesAndNewReviewedPacketGrant": true,
+    "noInstallOrCapabilities": true
+  },
+  "applicationTestFiles": [
+    {
+      "path": "packages/socket/src/services/quiz-creation-reservation.test.ts",
+      "bytes": 10674,
+      "sha256": "5ffde110654bec01805040f01dad9b1738d03bfb641374e1cabb9b424c588e13",
+      "unchangedFromApplicationBase": true
+    },
+    {
+      "path": "extensions/src/server/storage/durable-files.test.ts",
+      "bytes": 4985,
+      "sha256": "6614b6b44e5beb1704c77b22a2a28b49957ce7f6f19202318826f337d79965ae",
+      "unchangedFromApplicationBase": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-scope.test.ts",
+      "bytes": 4481,
+      "sha256": "e89d0d710d757ea0f96a62a4422a9dbba44c678657a636e33b3bcc369cfdfe60",
+      "unchangedFromApplicationBase": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-reservation.test.ts",
+      "bytes": 17493,
+      "sha256": "b4de60c9a87c348d9f1a918f1b475a71409828871b252aa3454741f7ca21c5fe",
+      "unchangedFromApplicationBase": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-review.test.ts",
+      "bytes": 12104,
+      "sha256": "31f50189c711656dd282422b2b7c1c27bf65cc99ade13301841adec48ea05ed2",
+      "unchangedFromApplicationBase": true
+    }
+  ],
+  "nodeOnlyFiles": [
+    {
+      "path": "extensions/src/server/storage/creation-process.ts",
+      "bytes": 3173,
+      "sha256": "b7c18b62c74438caf918676500117e53b0d6bba91b8a0e345c172d6435cd8983"
+    },
+    {
+      "path": "extensions/src/server/storage/creation-process-observer.ts",
+      "bytes": 4896,
+      "sha256": "07905184e9232c1d8f9ba33afe39dbd7ac1e895ad85ff0958d60c84e38a82a54"
+    }
+  ],
+  "prior37Evidence": [
+    {
+      "group": "primitives-scope",
+      "passed": 9,
+      "rawResultSha256": "061b95517a596542416e1e623ea2f863be52523794299c2338ce05917e71eceb",
+      "caseNames": [
+        "C1 explicit creation scope rejects missing enabled owner before fallback path lookup or allocation",
+        "C1 explicit creation scope preserves exact tenant spelling and rejects a flag or owner switch",
+        "C1 explicit creation scope discovers only explicit private families without scanning customer tenant directories",
+        "C1 explicit creation scope does not create an absent family and rejects symlinked registry components",
+        "C1 real Linux fence primitives creates exact private bytes and refuses to replace an existing leaf",
+        "C1 real Linux fence primitives preserves private evidence when its first file fence fails",
+        "C1 real Linux fence primitives rejects linked parents and does not repair their modes or touch their target",
+        "C1 real Linux fence primitives does not adopt a same-byte replacement inode after its exclusive write",
+        "C1 real Linux fence primitives retains the visible new intent and last witness after rename succeeds but its directory fence fails"
+      ]
+    },
+    {
+      "group": "reservation",
+      "passed": 16,
+      "rawResultSha256": "b92f8d90326a2e52d3711ddae9c2c8d31b61d12792abce27d54e0ae856e07dfb",
+      "caseNames": [
+        "C1 private creation ownership and uncertainty preserves native create/export/enhanced-import semantics for V1 with fresh question/timeline IDs",
+        "C1 private creation ownership and uncertainty preserves native create/export/enhanced-import semantics for V2 with fresh question/timeline IDs",
+        "C1 private creation ownership and uncertainty preserves authored-show note and opening metadata through the native reservation path",
+        "C1 private creation ownership and uncertainty publishes zero public files when the first intent file fence fails",
+        "C1 private creation ownership and uncertainty fails EXDEV without publication and reports a verified complete rollback",
+        "C1 private creation ownership and uncertainty catches an enhanced sidecar EEXIST race before base publication and retains foreign bytes plus intent",
+        "C1 private creation ownership and uncertainty freezes one actual preparation and full V2 bytes and rejects foreign/reentrant/consumed capabilities",
+        "C1 private creation ownership and uncertainty rejects root storage-ID mismatch before preparation, allocation or filesystem changes",
+        "C1 private creation ownership and uncertainty denies a pre-existing orphan sidecar before legacy base publication and retains exact foreign bytes",
+        "C1 private creation ownership and uncertainty expiry rejects publication and preserves intent without using the timer as cleanup authority",
+        "C1 private creation ownership and uncertainty retains BOTH siblings and complete evidence on base-replacement in two fresh replays",
+        "C1 private creation ownership and uncertainty retains BOTH siblings and complete evidence on sidecar-in-place in two fresh replays",
+        "C1 private creation ownership and uncertainty retains BOTH siblings and complete evidence on missing-witness in two fresh replays",
+        "C1 private creation ownership and uncertainty retains BOTH siblings and complete evidence on newer-intent in two fresh replays",
+        "C1 private creation ownership and uncertainty qualifies null-sidecar external interference honestly: an uncontrolled insertion can race a base link, and then the WHOLE pair is retained",
+        "C1 private creation ownership and uncertainty re-fences warm-visible committed intent and retains all witnesses when a fresh process repeats the fence failure"
+      ]
+    },
+    {
+      "group": "review-regressions",
+      "passed": 12,
+      "rawResultSha256": "548a316fcae895a837254f7b35d2f4debe315e521e1d871282c357f8cea06bac",
+      "caseNames": [
+        "C1 independent review regressions re-fences warm absent base parent before releasing witnesses",
+        "C1 independent review regressions re-fences warm absent sidecar parent before releasing witnesses",
+        "C1 independent review regressions re-establishes both move parents at active-committed and retries twice",
+        "C1 independent review regressions re-establishes both move parents at resolved-committed and retries twice",
+        "C1 independent review regressions re-establishes both move parents at active-empty and retries twice",
+        "C1 independent review regressions re-establishes both move parents at resolved-empty and retries twice",
+        "C1 independent review regressions refuses an unknown phase without changing any evidence",
+        "C1 independent review regressions refuses nonprivate registry intermediate before replay",
+        "C1 independent review regressions refuses nonprivate tenants intermediate before replay",
+        "C1 independent review regressions refuses nonprivate owner intermediate before replay",
+        "C1 independent review regressions leaves a supported legacy symlink root alone when C1 is absent",
+        "C1 independent review regressions denies a linked quiz lookup before preparation and performs zero target reads"
+      ]
+    }
+  ],
+  "prior37ReuseBoundary": {
+    "priorRuntimeResultRelabeled": false,
+    "old37ClaimedUnderNewObserverProfile": false,
+    "applicationAndTestBytesUnchanged": true,
+    "defaultOffOriginalHelperErasureVerified": true,
+    "enabledObserverAddsPipeAndReceiptIO": true,
+    "firstWitnessMustValidateClosure": true,
+    "repeatAffectedSubsetOnlyIfBoundaryConcernDemonstratedAndRootGrants": true
+  },
+  "beforeExecution": [
+    "ROOT approves exact proposal and observer delta",
+    "assemble and independently review/hash exact executable packet",
+    "fresh isolated namespace only",
+    "ROOT supplies fresh exact admission/ledger",
+    "actual PID/UID/access/hash/binary preflight succeeds"
+  ],
+  "noAutomaticRepeatOf37Or48": true,
+  "original41Pass7FailPreserved": true
+}

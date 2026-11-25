@@ -1,0 +1,87 @@
+{
+  "sourceSha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "sourceRun": "tadazz-codex-730cb4579d22-d298324d",
+  "status": "failed",
+  "serialCpuBudget": true,
+  "fullShowMemoryLimitBytes": 3221225472,
+  "completed": [
+    {
+      "check": "native-launch",
+      "exit": 0,
+      "seconds": 213.4,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-native-launch-730cb4579d22.log"
+    },
+    {
+      "check": "native-consent",
+      "exit": 0,
+      "seconds": 272.6,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-native-consent-730cb4579d22.log"
+    },
+    {
+      "check": "full-show",
+      "exit": 1,
+      "seconds": 1332.213,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\release-resume-730cb4579d22-651b0eed\\full-show.log",
+      "attempt": 2
+    }
+  ],
+  "reusedReceipts": {
+    "native": {
+      "path": "tadazz-codex-730cb4579d22-d298324d/receipt.json",
+      "sha256": "9acb0e86abf6e731dff95d8ce7b09d2075f5bb5f1b49b7fdc13cbdfa292794b7"
+    },
+    "launch": {
+      "path": "tadazz-codex-launch-730cb4579d22-b62a2567/receipt.json",
+      "sha256": "d15f931e43ac355802b16efc6cf340dcca57343766b0a44c3c4b7144db11c670"
+    },
+    "native-consent": {
+      "path": "tadazz-codex-browser-730cb4579d22-afa1ade8/receipt.json",
+      "sha256": "f8576b7319e04e181d5b40a1b859c725120e0f2c8f36a65f89bff1f372c84198"
+    }
+  },
+  "attemptHistory": [
+    {
+      "status": "failed",
+      "failedCheck": "full-show",
+      "originalProgressSha256": "3a2e720781abc79be53d2c8f3c204d348b84c0060a40562beb285b6ba341b04f",
+      "archivedProgress": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\release-resume-730cb4579d22-651b0eed\\previous-release-gates-progress.json",
+      "originalFullShowRun": "tadazz-codex-fullshow-730cb4579d22-1587d04d",
+      "originalCompleted": [
+        {
+          "check": "native-launch",
+          "exit": 0,
+          "seconds": 213.4,
+          "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-native-launch-730cb4579d22.log"
+        },
+        {
+          "check": "native-consent",
+          "exit": 0,
+          "seconds": 272.6,
+          "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-native-consent-730cb4579d22.log"
+        },
+        {
+          "check": "full-show",
+          "exit": 1,
+          "seconds": 914.8,
+          "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-full-show-730cb4579d22.log"
+        }
+      ]
+    }
+  ],
+  "resumeRun": "release-resume-730cb4579d22-651b0eed",
+  "runnerCorrection": {
+    "controllerSha256": "b1a7563155042939649f064228a5f04243d8c46a4bbf641fa5415679a58638cc",
+    "evidenceRun": "tadazz-phase-continuity-scheduling-730cb4579d22-56930064",
+    "change": "Remove taskset -c0; retain nice19, Docker1CPU and all assertions/limits",
+    "productSourceChanged": false,
+    "widgetRebuilt": false
+  },
+  "current": "full-show",
+  "stepStartedAt": 1795112975.188761,
+  "failedCheck": "full-show",
+  "finishedAt": 1795114307.4125645,
+  "resumeError": {
+    "type": "RuntimeError",
+    "message": "full-show failed with exit 1"
+  }
+}

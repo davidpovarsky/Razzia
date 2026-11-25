@@ -1,0 +1,50 @@
+$ tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.nodecheck.ts
+✔ two real SDK sessions retain account isolation and revoked replay is denied (281.955772ms)
+✔ invalid principal fails before account store: issuer (2.686187ms)
+✔ invalid principal fails before account store: audience (2.224062ms)
+✔ invalid principal fails before account store: accountId (2.405023ms)
+✔ invalid principal fails before account store: active (1.706337ms)
+✔ invalid principal fails before account store: accountsEnabled (1.899059ms)
+✔ invalid principal fails before account store: expiresAt (1.919699ms)
+✔ invalid principal fails before account store: scopes (69.375362ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (25.780334ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (73.915887ms)
+✔ invalid authored/schema/settings/media rejected without mutation (190.771436ms)
+✔ scoped ordinary export delegates without adding a new consent stage (99.305097ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (9.496533ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (1.271813ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (302.725017ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (85.024556ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (24.944965ms)
+✔ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (493.804215ms)
+✔ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (4.240522ms)
+✔ denied or missing ingress guard fails closed before token verification and schema work (70.11245ms)
+✔ inconsistent repository summary fails closed on read (275.779632ms)
+✔ inconsistent repository summary fails closed on create (11.335632ms)
+✔ inconsistent repository summary fails closed on replace (82.933176ms)
+✔ SDK cancellation during pending authorization restores capacity only after real work settles (315.36826ms)
+✔ cancelled unsettled admission stays bounded at32; another factory remains unaffected (86.366409ms)
+✔ normal SDK running-handler cancellation releases all32 slots after handlers settle (100.562189ms)
+✔ duplicate tool/public active IDs close only their owning connection (6.755586ms)
+✔ close while authorization is pending suppresses late rejection, dispatch and send (2.818467ms)
+✔ same wire ID reuse is independently authorized after a cancelled lifetime settles (4.667125ms)
+✔ supported SDK abort signal is preserved; cancellation does not roll back settled work (3.447714ms)
+✔ rejected send/close reports safe errors and makes the connection terminal (9.841017ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (180.865018ms)
+✔ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (308.841156ms)
+✔ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (96.766351ms)
+✔ new save still requires exact-revision consent; ordinary export does not (86.855014ms)
+✔ 32 cancelled response writes retain the budget until public send promises settle (382.804643ms)
+✔ a cancelled in-flight response reserves its wire ID before public send completion (7.063709ms)
+✔ overlapping response/related owner releases once after send settles and reuse reauthorizes (91.069456ms)
+✔ rejected delayed response write terminates only its connection with safe errors (7.966118ms)
+✔ pending related progress keeps its parent reserved: duplicate denied (4.540005ms)
+✔ pending related progress keeps its parent reserved: settled reuse reauthorizes (3.331993ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27122.664793

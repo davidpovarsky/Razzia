@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-08T22:39:47.203Z",
+  "origin": "https://billing-sandbox.132.145.25.168.sslip.io",
+  "sandboxOnly": true,
+  "confirmation": [
+    {
+      "transactionId": "txn_01m6ymy9508rn79z8s6v428cpe",
+      "ownerCompleted": true,
+      "otherAccountStatus": 404
+    },
+    {
+      "transactionId": "txn_01m6ymzyrgwtp1zqpznz7nf1xf",
+      "ownerCompleted": true,
+      "otherAccountStatus": 404
+    }
+  ],
+  "grants": [
+    {
+      "planId": "sandbox-monthly",
+      "remainingGames": 5,
+      "participants": 20
+    },
+    {
+      "planId": "sandbox-single",
+      "remainingGames": 1,
+      "participants": 20
+    }
+  ],
+  "subscriptionStatus": "active",
+  "otherAccountGrants": 0,
+  "otherAccountPortalStatus": 404,
+  "portalHost": "sandbox-customer-portal.paddle.com",
+  "canonicalReconciliationStatus": 200,
+  "noDuplicateGrants": true
+}

@@ -1,0 +1,31 @@
+{
+  "grant": "hq-mcp-bfb-87ffbfdbe45d43fdbe5e7f799c18036d",
+  "productSource": "bfb796c72495f0f9d99442066f825a74ebd054d4",
+  "manifestSha256": "4c02c37421191cd8ea2fe46e35c0b8a37467a7d89708a11bf8cd68047bac29ab",
+  "phases": {
+    "typecheck": 0,
+    "firstParty34": 0,
+    "actualProducerCompatibility": 0,
+    "format": 1
+  },
+  "firstFailure": {
+    "phase": "05-format",
+    "exit": 1
+  },
+  "firstPartyDeclarations": 34,
+  "separateCompatibilityObservation": 1,
+  "sdk41": "REUSED_NOT_RERUN",
+  "resources": {
+    "newPhysicalUpperBoundBytes": 3174400,
+    "diskCapBytes": 8388608,
+    "dockerAllowanceBytes": 2097152,
+    "freeBytes": 2688479232,
+    "requiredRemainingReserveBytes": 2429521920,
+    "absoluteFloorBytes": 2147483648,
+    "ownTmpfsUsedBytes": 155549696,
+    "ownTmpfsCapBytes": 268435456
+  },
+  "sourceInputsUnchanged": 160,
+  "nativeOrOAuthMount": false,
+  "syscallZeroWriteProof": false
+}

@@ -1,0 +1,28 @@
+{
+  "format": "tadazz-owned-qa-process-audit-v1",
+  "checkedAt": "2026-11-19T01:57:51.830786+00:00",
+  "ownQaServersLingering": false,
+  "ports": {
+    "4371": {
+      "acceptsConnection": false
+    },
+    "4372": {
+      "acceptsConnection": false
+    }
+  },
+  "ownPreviewMarkers": [],
+  "formerOwnedPidsAbsent": [
+    30188,
+    33328,
+    25696
+  ],
+  "reusedFormerPid": {
+    "processId": 8616,
+    "creationUnixMs": 1795053469022,
+    "observedCommandLine": "git.exe push origin HEAD:codex/hanlin-product-completion-20261117",
+    "classification": "New unrelated Git process reusing a former QA PID; not a QA backend.",
+    "action": "Left untouched."
+  },
+  "method": "Read-only Win32_Process command-line/creation-time inspection and loopback connection probes.",
+  "noSignalsSent": true
+}

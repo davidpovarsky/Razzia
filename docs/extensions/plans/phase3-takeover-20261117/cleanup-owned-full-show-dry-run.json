@@ -1,0 +1,23 @@
+{
+  "apply": false,
+  "preservedEvidenceCommit": "47592663ba5bea497325a7ec91b7b550aa56ed3e",
+  "targets": [
+    {
+      "target": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-77d211873e13-9ccc472c/source",
+      "sourceSha": "77d211873e1329f783459334ad758d1678c976af",
+      "verifiedFiles": 1678,
+      "generatedSiteFiles": {}
+    },
+    {
+      "target": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-65bf41f7c47b-f2258c12/source",
+      "sourceSha": "65bf41f7c47bfa58bbf5c313e0f6b3e72c51224e",
+      "verifiedFiles": 1681,
+      "generatedSiteFiles": {}
+    }
+  ],
+  "preservedTraceDirectories": [],
+  "freeBefore": 169676800,
+  "freeAfter": 169676800,
+  "fixturesAndLogsPreserved": true,
+  "oldWorkersAndCustomerDataAccessed": false
+}

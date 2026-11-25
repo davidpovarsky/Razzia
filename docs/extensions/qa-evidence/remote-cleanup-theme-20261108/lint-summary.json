@@ -1,0 +1,21 @@
+{
+  "exitCode": 1,
+  "totalDiagnostics": 7677,
+  "severity": {
+    "error": 7630,
+    "warning": 47
+  },
+  "diagnosticsInFilesAddedSinceContinuationBaseline": 0,
+  "newFileFindings": [],
+  "largestSources": {
+    "docs/extensions/references/tadazz-v4/motion-runtime-reference.js": 1358,
+    "extensions/qa/tadazz-navigation-participation.cjs": 606,
+    "extensions/qa/tadazz-audio-flow.cjs": 576,
+    "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts": 359,
+    "extensions/src/core/show-workbook.ts": 215
+  },
+  "focusedInstallerThemeLint": {
+    "files": 28,
+    "diagnostics": 0
+  }
+}

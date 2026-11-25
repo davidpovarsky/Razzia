@@ -1,0 +1,52 @@
+{
+  "sourceHead": "398b8ad5e40e8d4b6ec7d9f5dbd96b247e42356b",
+  "remoteRoot": "/home/ubuntu/tadazz-cleanup-theme-20261108-ae0692a",
+  "run": "r12",
+  "platform": "linux/arm64",
+  "reports": {
+    "theme-installation-report.json": {
+      "startTime": "2026-11-08T17:52:52.922Z",
+      "duration": 285666.902,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "billing-report.json": {
+      "startTime": "2026-11-08T18:03:38.337Z",
+      "duration": 37065.854,
+      "expected": 6,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cleanup-theme-report.json": {
+      "startTime": "2026-11-08T17:57:39.411Z",
+      "duration": 358024.552,
+      "expected": 28,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "theme-installation/theme-installation-flow-pa-8ac6e-nce-and-all-real-game-roles-chromium/complete-preview-matrix/report.json": {
+      "startTime": "2026-11-08T17:53:07.409Z",
+      "duration": 132951.14700000003,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "units": {
+    "root-tests": {
+      "numTotalTests": 363,
+      "numPassedTests": 363,
+      "numFailedTests": 0
+    },
+    "extension-tests": {
+      "numTotalTests": 615,
+      "numPassedTests": 615,
+      "numFailedTests": 0
+    }
+  }
+}

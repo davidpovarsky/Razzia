@@ -2,6 +2,7 @@ import {
   MAX_MEDIA_SIZE,
   MEDIA_TYPES,
   MEDIA_URL_PREFIX,
+  QUESTION_LEAD_IN_SECONDS,
   QUESTION_TYPES,
   QUIZZ_MODES,
   SCORING_MODES,
@@ -32,6 +33,7 @@ export const mediaUploadValidator = z.object({
 
 const questionSchema = z.object({
   type: z.enum(QUESTION_TYPES),
+  playMode: z.enum(["quiz", "survey"]).optional(),
   question: z.string().min(1, "errors:quizz.questionEmpty"),
   category: z.string().optional(),
   note: z.string().optional(),
@@ -41,7 +43,7 @@ const questionSchema = z.object({
   cooldown: z
     .number()
     .int()
-    .min(3, "errors:quizz.cooldownTooShort")
+    .min(QUESTION_LEAD_IN_SECONDS, "errors:quizz.cooldownTooShort")
     .max(15, "errors:quizz.cooldownTooLong"),
   time: z.number().int().min(-1),
   maxPoints: z
@@ -68,11 +70,15 @@ export const quizzValidator = z
     questions: z.array(questionValidator).min(1, "errors:quizz.noQuestions"),
   })
   .superRefine((quizz, ctx) => {
-    if (quizz.gameMode !== QUIZZ_MODES.QUIZ) {
-      return
-    }
-
     quizz.questions.forEach((question, index) => {
+      const effectiveMode =
+        question.playMode ??
+        (quizz.gameMode === QUIZZ_MODES.SURVEY ? "survey" : "quiz")
+
+      if (effectiveMode !== "quiz") {
+        return
+      }
+
       if (question.solutions && question.solutions.length > 0) {
         return
       }

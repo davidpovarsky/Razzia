@@ -1,0 +1,19 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/presentation/show-library-preview/preview-candidate.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 312[2mms[22m[39m
+ [32m✓[39m src/components/theme-builder/document.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1209[2mms[22m[39m
+   [32m✓[39m Theme Builder atomic bounded authoring [2m(7)[22m
+     [33m[2m✓[22m[39m bounds history and preserves the save fingerprint when editing after save begins[33m 809[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/builder-host.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1804[2mms[22m[39m
+   [33m[2m✓[22m[39m uses actual verified account auth, tenant assignment, atomic CAS and the existing OFF gate[33m 1095[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 15:57:18
+[2m   Duration [22m 17.70s[2m (transform 53%, import 26%, tests 21%)[22m
+
+[2m  Transform [22m [33mtransforming modules took 8.20s[39m[2m · 53% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m
+

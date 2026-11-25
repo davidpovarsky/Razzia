@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/site/adapters/client-return.test.ts > consent sign-in return target > allows the exact query-free first-party consent page
+AssertionError: expected '/studio' to be '/studio/oauth-consent' // Object.is equality
+
+Expected: "/studio/oauth-consent"
+Received: "/studio"
+
+ ❯ src/site/adapters/client-return.test.ts:6:51
+      4| describe("consent sign-in return target", () => {
+      5|   it("allows the exact query-free first-party consent page", () => {
+      6|     expect(safeReturnTo("/studio/oauth-consent")).toBe("/studio/oauth-…
+       |                                                   ^
+      7|   })
+      8|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

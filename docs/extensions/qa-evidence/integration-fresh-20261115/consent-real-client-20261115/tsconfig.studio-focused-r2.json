@@ -1,0 +1,16 @@
+{
+  "extends": "../../../../../extensions/tsconfig.json",
+  "include": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\site\\web\\studio\\Studio.tsx",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\site\\adapters\\client.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\site\\oauth-consent-headers.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\site\\env.d.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\presentation\\tadazz-css.d.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\src\\vite-env.d.ts"
+  ],
+  "compilerOptions": {
+    "typeRoots": [
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@types"
+    ]
+  }
+}

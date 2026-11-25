@@ -1,0 +1,5 @@
+{
+  "exit": 0,
+  "initialExitCapture": "True: invalid PowerShell interpolation, preserved; this direct child status is authoritative",
+  "driverSha256": "25958fd436a55367ef802b6481fd9bdc04a23f557d44419af376955ee312e678"
+}

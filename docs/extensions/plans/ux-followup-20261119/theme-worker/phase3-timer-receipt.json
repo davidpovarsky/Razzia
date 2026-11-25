@@ -1,0 +1,97 @@
+{
+  "status": "FAIL",
+  "phase": 3,
+  "asanaTaskId": "1220708526935641",
+  "startedAt": "2026-11-19T15:51:08.643032+00:00",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "workerImage": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+  "admissionSha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+  "unitBeforeSha256": "64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053",
+  "unitAfterSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+  "beforeService": {
+    "Type": "oneshot",
+    "TimeoutStartUSec": "10min",
+    "TimeoutStopUSec": "1min 30s",
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "CPUQuotaPerSecUSec": "infinity",
+    "MemoryMax": "infinity",
+    "TasksMax": "13008",
+    "WorkingDirectory": "",
+    "RootDirectory": "",
+    "CapabilityBoundingSet": "cap_chown cap_dac_override cap_dac_read_search cap_fowner cap_fsetid cap_kill cap_setgid cap_setuid cap_setpcap cap_linux_immutable cap_net_bind_service cap_net_broadcast cap_net_admin cap_net_raw cap_ipc_lock cap_ipc_owner cap_sys_module cap_sys_rawio cap_sys_chroot cap_sys_ptrace cap_sys_pacct cap_sys_admin cap_sys_boot cap_sys_nice cap_sys_resource cap_sys_time cap_sys_tty_config cap_mknod cap_lease cap_audit_write cap_audit_control cap_setfcap cap_mac_override cap_mac_admin cap_syslog cap_wake_alarm cap_block_suspend cap_audit_read cap_perfmon cap_bpf cap_checkpoint_restore",
+    "User": "root",
+    "Group": "root",
+    "ReadWritePaths": "",
+    "ReadOnlyPaths": "",
+    "PrivateTmp": "no",
+    "ProtectHome": "no",
+    "ProtectSystem": "no",
+    "NoNewPrivileges": "yes",
+    "RuntimeDirectory": "",
+    "KillMode": "control-group",
+    "ActiveState": "inactive",
+    "SubState": "dead",
+    "FragmentPath": "/etc/systemd/system/tadazz-package-builder.service",
+    "DropInPaths": "",
+    "UnitFileState": "static",
+    "store": "/var/lib/tadazz-release-5312660/config/extensions/packages",
+    "image": "sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5"
+  },
+  "beforeTimer": {
+    "Unit": "tadazz-package-builder.service",
+    "LastTriggerUSec": "Thu 2026-11-19 15:51:00 UTC",
+    "LastTriggerUSecMonotonic": "2w 1d 13h 19min 8.755471s",
+    "Triggers": "tadazz-package-builder.service",
+    "ActiveState": "active",
+    "SubState": "waiting",
+    "UnitFileState": "enabled"
+  },
+  "beforeBinding": {
+    "app": {
+      "id": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+      "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+      "workingDir": "/",
+      "running": true,
+      "restarts": 0
+    },
+    "gateway": {
+      "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+      "running": true
+    },
+    "configPath": "/app/config",
+    "mount": {
+      "type": "bind",
+      "source": "/var/lib/tadazz-release-5312660/config",
+      "destination": "/app/config",
+      "rw": true
+    },
+    "mappedStore": "/var/lib/tadazz-release-5312660/config/extensions/packages"
+  },
+  "tenant": "975cf0bc96ad9d54014b0cb115ae3a841ff1f80a72511a3ea428083ce3da4639",
+  "uploadId": "c1869a7e-4587-4edd-acc8-c28244723d52",
+  "customerDataAccessed": false,
+  "runtimeFlagsChanged": false,
+  "cleanup": {
+    "removed": false,
+    "retainedForSafeFollowUp": true,
+    "reason": "Published job outcome is incomplete or failed; no active inputs removed"
+  },
+  "serviceImageChanged": true,
+  "timerStopRequested": true,
+  "requestPublishedLast": true,
+  "publishedAt": "2026-11-19T15:51:09.144870+00:00",
+  "timerStoppedForCompletionProof": true,
+  "error": "ValueError: invalid literal for int() with base 10: '2w 1d 13h 19min 21.755332s'",
+  "rollback": {
+    "attempted": true,
+    "runningBrokerKilled": false,
+    "customerJobsTouched": false,
+    "unitRestored": true,
+    "timerLeftStopped": true,
+    "oldImageStillMissing": true,
+    "serviceState": "inactive",
+    "ownedFixtureRetained": true
+  },
+  "finishedAt": "2026-11-19T15:51:26.500678+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "apply": false,
+  "target": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-7141211d6932-0be4fb77/mcp-deps",
+  "files": 2042,
+  "sha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "freeBefore": 536379392,
+  "freeAfter": 536379392,
+  "originalCacheAndAllLogsPreserved": true
+}

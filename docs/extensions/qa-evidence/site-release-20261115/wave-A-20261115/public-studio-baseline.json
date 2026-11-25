@@ -1,0 +1,40 @@
+{
+  "origin": "https://tadazz.com",
+  "scope": "public-unauthenticated-GET-only",
+  "observations": [
+    {
+      "browser": "chromium",
+      "requested": "/studio",
+      "status": 200,
+      "path": "/login",
+      "title": "Tadazz",
+      "lang": "en",
+      "dir": "",
+      "applicationName": "TADAZZ",
+      "description": "TADAZZ live interactive gameshow manager",
+      "ogTitle": null,
+      "canonical": null,
+      "visibleText": ""
+    },
+    {
+      "browser": "webkit",
+      "requested": "/studio",
+      "status": 200,
+      "path": "/login",
+      "title": "Tadazz",
+      "lang": "en",
+      "dir": "",
+      "applicationName": "TADAZZ",
+      "description": "TADAZZ live interactive gameshow manager",
+      "ogTitle": null,
+      "canonical": null,
+      "visibleText": ""
+    }
+  ],
+  "errors": [],
+  "publicShell": {
+    "status": 200,
+    "sha256": "81a5fbe942c74398e002a17205bba112b9e021cef416b83756aa8fd2e76fdf6e",
+    "staticTitle": "TADAZZ"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "extends": "/workspace/extensions/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "typeRoots": [
+      "/workspace/extensions/node_modules/@types",
+      "/workspace/node_modules/@types"
+    ]
+  },
+  "files": [
+    "/workspace/extensions/src/core/show-library/compiled-index-authority.ts",
+    "/workspace/extensions/src/core/show-library/compiled-index-schema.ts",
+    "/workspace/extensions/src/core/show-library/compiled-index-validation.ts",
+    "/workspace/extensions/src/core/show-library/compiled-index.test.ts"
+  ],
+  "include": [],
+  "exclude": []
+}

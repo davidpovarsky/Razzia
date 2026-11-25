@@ -1,0 +1,112 @@
+{
+  "kind": "anonymous-public-smoke-harness-diagnosis-and-narrow-policy-correction",
+  "status": "PREPARED_AND_NO_NETWORK_POLICY_TESTS_PASS",
+  "createdAt": "2026-11-19T15:51:20.084785+00:00",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "sourceChanged": false,
+  "browserOrNetworkExecuted": false,
+  "originalFailure": {
+    "directory": "docs/extensions/plans/ux-followup-20261119/production-public-smoke",
+    "casesFailed": 4,
+    "preservedFileSha256": {
+      "execution.json": "4d7656c75b0fc978d4aca8c62e948a29581e121f3e5372f00e1ded8becf0f091",
+      "forgot-1440-failure.png": "d717aea9645799ec56eaf8cbb444720a2b7c840d0207e10d0683332052ce6678",
+      "forgot-390-failure.png": "382ff94fa388dc9ad4a1406bca62fd4454b03d884e4c4a9d5a61e4a922fa7cbf",
+      "home-1440-failure.png": "2eb4bf243e272e02263bdce6d6c7f8daa4914fc370cd9ba12c4b9181846cc8d7",
+      "home-390-failure.png": "feb38d3a36e5b04d90ade1aac41866455d3c1287f746edf3cc6aab33b6823757",
+      "receipt.json": "6196d8a2b73dd6bdcfe22f9448df0d79d251c52cab781b2d1c0f7f891a3487cd"
+    },
+    "cause": "The original blanket non-GET/HEAD rule aborted the normal public SocketProvider session bootstrap. The bootstrap promise rejected with Failed to fetch. All four pages and built-in assets had rendered before the pageErrors assertion failed.",
+    "separateExpectedResponse": "Exact GET /branding/theme.json returned 404. Source explicitly treats absent optional branding as null and renders built-in branding."
+  },
+  "bootstrapSourceProof": {
+    "httpStatus": 200,
+    "requestBody": "{}",
+    "requestContentType": "application/json",
+    "role": "player",
+    "persistence": "The no-token branch generates a UUIDv7 and signs a PLAYER JWT. The account-session persistence call is gated to MANAGER and is not reached. The fresh browser context writes only its temporary localStorage token.",
+    "notA401": true,
+    "sockets": "The Socket.IO client autoConnect is false. All WebSockets and the actual /ws HTTP polling path remain blocked."
+  },
+  "correctedPolicy": {
+    "bootstrapCountPerFreshContext": 1,
+    "requiresNoCookieOrAuthorization": true,
+    "requiresExactUrlWithoutQuery": true,
+    "requiresMainFrameFetch": true,
+    "requiresExactEmptyObjectBody": true,
+    "validatesActual200JsonPlayerResponse": true,
+    "rejectsSetCookie": true,
+    "credentialsRecorded": false,
+    "unrelatedWritesBlocked": true,
+    "pageErrorsRemainFatal": true,
+    "optionalBranding404Recorded": true,
+    "optionalBrandingConsoleRequiresExactSourceAndResponseCorrelation": true,
+    "optionalBrandingRequiresDecodedBuiltInLogoAndLoadedFont": true
+  },
+  "helper": {
+    "path": "work/ux-followup-20261119/release-plan/production-public-smoke.mjs",
+    "originalSha256": "6f3a295f48861c4e4831d22d9d133afea272646fcb4640943393ace0a483d615",
+    "correctedSha256": "8eb521e3178599246acaf6927735a61e458bc092ea4fcab10b82b8ec1b43f384",
+    "diff": "helper.diff"
+  },
+  "validation": {
+    "nodeSyntaxExit": 0,
+    "policySelfTestExit": 0,
+    "checksPassed": 31,
+    "policySelfTest": "policy-self-test.json"
+  },
+  "sourcePins": [
+    {
+      "path": "packages/socket/src/api/routes/auth.ts",
+      "sha256": "fc8621a4278f710f47db50c6d6d740bb9863b81301a1d3ef12d3f0173fb0658e",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/services/auth.ts",
+      "sha256": "ff586db579912ad16e5db544a4908671fa9bad7665eb46bfca4d32034bc59fbe",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/services/account-session-policy.ts",
+      "sha256": "4cdbfa13db820f33744af57f1fc997b0db52578e18130477f5214f96e1a4492a",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/api/index.ts",
+      "sha256": "499cb39393535f49067813e70d135d0eaa221a54a60775300a332fa19e55e214",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/app.ts",
+      "sha256": "eb9a859847fd79cf8aa43a5f31b31161a304d116c565c16094334ac96cf2cf83",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/web/src/lib/session.ts",
+      "sha256": "b5011f21d4a9a2672b7d34995d92c41c99a17a6d8472fd7b9cd4506015c1e2fb",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/web/src/features/game/contexts/socket-context.tsx",
+      "sha256": "b595191d4358d9e50c29dd0ea94790a0e95c4ff03abd5c791b7d880e31080d25",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/web/src/main.tsx",
+      "sha256": "4881927d6aad6ed45eac371968120cdc94a7c3ff586ba76e8d6556a680dc974f",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/web/src/branding.ts",
+      "sha256": "f53cdcfaf3fbd421dea79da9e3cb993b68e07957a372a9f48382f240159f444e",
+      "matchesApplicationRevision": true
+    }
+  ],
+  "nextRun": {
+    "status": "PENDING_ROOT_REVIEW_AND_EXECUTION",
+    "distinctOutputDirectory": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session",
+    "runnerUnchanged": true,
+    "runnerRequiresExplicitOut": true,
+    "noProductionPassClaimed": true
+  }
+}

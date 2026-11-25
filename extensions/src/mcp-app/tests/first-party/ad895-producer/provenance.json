@@ -1,0 +1,66 @@
+{
+  "kind": "EXACT_COMPLETE_PRODUCER_MODULES_NOT_EXECUTED",
+  "producerCommit": "ad8955327a56213b3a437379fcc7ccc6e05a261a",
+  "applicationGuardCommit": "c3226b6683c4d12b45fd553e090928092e1881b9",
+  "modules": [
+    {
+      "producerPath": "extensions/src/mcp-app/first-party/schema.ts",
+      "fixturePath": "first-party/schema.ts",
+      "gitBlobSha1": "1413d9927f05cb0f5d9e1890c5e4219ec716b761",
+      "sha256": "19c73e2a850515bb5bbef078aafbad4185306f7741f78a194a365716de929986",
+      "bytes": 2420
+    },
+    {
+      "producerPath": "extensions/src/mcp-app/server/errors.ts",
+      "fixturePath": "server/errors.ts",
+      "gitBlobSha1": "626c968dde34204c2cedf4f1f4a9d19c2a8ff519",
+      "sha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657",
+      "bytes": 880
+    },
+    {
+      "producerPath": "extensions/src/mcp-app/contracts/schemas.ts",
+      "fixturePath": "contracts/schemas.ts",
+      "gitBlobSha1": "8956231761975fd375fda441359443ea946353e7",
+      "sha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656",
+      "bytes": 3415
+    }
+  ],
+  "runtimeImportEdges": [
+    [
+      "first-party/schema.ts",
+      "../server/errors.ts",
+      "server/errors.ts"
+    ],
+    [
+      "server/errors.ts",
+      "../contracts/schemas.ts",
+      "contracts/schemas.ts"
+    ],
+    [
+      "contracts/schemas.ts",
+      "zod",
+      "zod@4.6.6"
+    ]
+  ],
+  "typeOnlyEdges": [
+    [
+      "first-party/schema.ts",
+      "node:sqlite",
+      "DatabaseSync"
+    ],
+    [
+      "server/errors.ts",
+      "../contracts/schemas.ts",
+      "ErrorCode/ToolFailure"
+    ]
+  ],
+  "privateLockSha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838",
+  "runtime": {
+    "node": "24.22.2",
+    "platform": "linux",
+    "arch": "arm64",
+    "pnpm": "12.18.0"
+  },
+  "databaseOwner": "fresh synthetic actual manager account, UUID recorded during observation",
+  "compatibilityObservation": "NOT_RUN"
+}

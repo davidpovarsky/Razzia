@@ -1,0 +1,7 @@
+{
+  "extensions/src/server/game/pausable-countdown.ts": "499d8239069159be656c78c274c9dddb5a2e21f5218e161fede69a3d651abaec",
+  "packages/socket/src/services/game/round-manager.ts": "669aa97a325fca5195366a4b5d6ebee22af7c1e6f4e672303cd77e77191c5c00",
+  "extensions/src/server/end-answer-timer.test.ts": "b2b50e7ae50ab3836233a169e0ecd1327625d8226514d652c8d9e4f592b8e4f5",
+  "extensions/src/server/gameplay-phase-a.test.ts": "517585b04a9615f806de8f7626335c1d0c2aba73822cd41aaa8077e4540cd520",
+  "packages/socket/src/handlers/end-answer-timer.test.ts": "74b6fcc52ddb829bea1f9b291112e847cc42bcd2ce236d79de1486f131da679b"
+}

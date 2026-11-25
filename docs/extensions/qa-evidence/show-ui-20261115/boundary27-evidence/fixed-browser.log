@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response (5.0s)
+  ✓  2 [chromium] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates reading draft and late response (3.7s)
+  ✓  3 [chromium] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates saving draft and late response (4.7s)
+  ✓  4 [webkit] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response (11.0s)
+  ✓  5 [webkit] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates reading draft and late response (10.6s)
+  ✓  6 [webkit] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates saving draft and late response (16.2s)
+
+  6 passed (1.1m)

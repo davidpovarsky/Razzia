@@ -7,6 +7,9 @@ export interface SessionClaims {
   role: SessionRole
   iat: number
   exp: number
+  sid?: string
+  /** Play-only delegated principal, never an owner account or general manager. */
+  managedClientId?: string
 }
 
 export interface SessionResponse {
@@ -20,6 +23,9 @@ export interface JoinTicketClaims {
   sub: string
   gameId: string
   username?: string
+  rosterPlayerId?: string
+  phoneE164?: string
+  source?: "web" | "phone"
   iat: number
   exp: number
 }

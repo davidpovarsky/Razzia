@@ -1,0 +1,38 @@
+{
+  "document": "/manager/quizz",
+  "scriptEntries": [
+    "/assets/index-BrEcA7Ie.js"
+  ],
+  "htmlSha256": "e966f25b4ea40814042768403d12468e4b2220302dbb919258b6c36c00d27726",
+  "previewServer": true,
+  "devRuntimeLoaded": false,
+  "scripts": [
+    {
+      "path": "/assets/index-BrEcA7Ie.js",
+      "bytes": 222213,
+      "sha256": "2c85708e97e2c0a57a5cf36383348b376932423999a380882508c49548f87a2b"
+    }
+  ],
+  "repairedSource": [
+    {
+      "path": "packages/web/src/features/questions/single/components/SingleAnswers.tsx",
+      "sha256": "83c31f7e89f1510ba12f25362d76f28b2837eeab8ad609b3885eb669f8aed2ef"
+    },
+    {
+      "path": "packages/web/src/features/questions/multi/components/MultiAnswers.tsx",
+      "sha256": "2f8112bf94d2d9bf21d45f3d9d957345b20e9299be735425e476efe587752025"
+    },
+    {
+      "path": "packages/web/src/features/questions/single/components/SinglePicker.tsx",
+      "sha256": "c5d3cde550f28d99a7aa219e2b1d454f1e17b3284fa8c61a2d16b004f74d8b02"
+    },
+    {
+      "path": "packages/web/src/features/questions/multi/components/MultiPicker.tsx",
+      "sha256": "81d24683cbf90d726fdba291532b255146a51102bef77c80e81fb5d5c8f191bd"
+    },
+    {
+      "path": "packages/web/src/features/game/components/PhotoCardGrid.tsx",
+      "sha256": "b6c935227c560324eaa526c2a6a4f7b66fcd3f7711ccc24da7eccd9ef7f32648"
+    }
+  ]
+}

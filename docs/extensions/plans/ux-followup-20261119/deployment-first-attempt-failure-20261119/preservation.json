@@ -1,0 +1,71 @@
+{
+  "capturedAt": "2026-11-19T15:24:32.550274+00:00",
+  "files": [
+    {
+      "path": "deployment-deploy-execution.json",
+      "sha256": "07cba776d9c7a55f5b92bd77b43b0aa00570b15b08089623f9ec8bd21afc8d3f",
+      "bytes": 3348
+    },
+    {
+      "path": "deployment-preflight-execution.json",
+      "sha256": "fb48df8eedf4a9c52186a3f8b6d4c08dd275edf92ce8e6749038ecd102fef783",
+      "bytes": 2128
+    },
+    {
+      "path": "deployment-qualify-backup-execution.json",
+      "sha256": "205ea4486c4daa2085767d4255ee333f565986447905f067ee51091cb0baa6ec",
+      "bytes": 6854
+    },
+    {
+      "path": "backup-qualification-reference.json",
+      "sha256": "d88cfd049085e3797963f12935840032c22631797bc14a7df2623024020b9c67",
+      "bytes": 461
+    },
+    {
+      "path": "current-release-source.json",
+      "sha256": "3eb1a6ce6b1aaf6f1ef9551a60c0a059b368f50f1b25c7424a9f9596b2f38734",
+      "bytes": 782
+    }
+  ],
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "failedExit": 1,
+  "observedContainers": {
+    "tadazz": {
+      "id": "ce2deee99d7ba30717b8609a2138456d4834bee33cc2263031253d22d57c3081",
+      "image": "sha256:4489e57b83be163dfa8fc312a6ed38df277e48fa0016263f807ae8266ee30344",
+      "running": true,
+      "startedAt": "2026-11-19T15:16:01.597786728Z",
+      "restartCount": 0
+    },
+    "tadazz-phone-gateway": {
+      "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+      "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e",
+      "running": true,
+      "startedAt": "2026-11-08T11:37:09.544011462Z",
+      "restartCount": 0
+    }
+  },
+  "coreKeys": [
+    "backup",
+    "currentCustomerWritesPreserved",
+    "customerContentPrinted",
+    "dataRestorePerformed",
+    "failureCode",
+    "finishedAt",
+    "image",
+    "phase",
+    "previousContainer",
+    "previousImage",
+    "priorRestoreBootQualification",
+    "probeFailure",
+    "replacementContainer",
+    "revision",
+    "rollbackBaseProbes",
+    "rollbackContainer",
+    "rollbackDataRestored",
+    "rolledBack",
+    "roomGate",
+    "success",
+    "version"
+  ]
+}

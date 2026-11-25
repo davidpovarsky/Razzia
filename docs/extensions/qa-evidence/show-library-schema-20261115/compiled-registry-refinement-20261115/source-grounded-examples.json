@@ -1,0 +1,630 @@
+{
+  "format": "tadazz-compiled-index-refinement-example",
+  "proposalRevision": 2,
+  "status": "non-executable-source-inventory",
+  "uiSourceCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+  "inventoryCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+  "candidateTwoFileIndex": {
+    "source": {
+      "kind": "git-tracked",
+      "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/artifact-index-d095.json",
+      "gitBlob": "100d5694be2c93a28789b07c2ac713191f69ee41",
+      "sha256": "07b72f09185b629c0aee8a73e1c0a523b8963c33af4b920bbfeb2c744d274d90"
+    },
+    "sha256": "07b72f09185b629c0aee8a73e1c0a523b8963c33af4b920bbfeb2c744d274d90",
+    "status": "reported-emitted-file-hashes-not-byte-reverified-here"
+  },
+  "reportedEmittedFiles": [
+    {
+      "path": "renderer.css",
+      "kind": "style",
+      "mime": "text/css",
+      "bytes": 148376,
+      "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+    },
+    {
+      "path": "renderer.js",
+      "kind": "module",
+      "mime": "text/javascript",
+      "bytes": 1604790,
+      "sha256": "1fa5ca2b9f163ecc52b61ad54faf2656bbca612b3a67ab26ffbc6d375b6503eb"
+    }
+  ],
+  "knownNativeImageInventory": [
+    {
+      "artifactPath": "tadazz-show/motion/backdrop.webp",
+      "requestPath": "/tadazz-show/motion/backdrop.webp",
+      "usage": "stage-fixed",
+      "kind": "image",
+      "mime": "image/webp",
+      "bytes": 94502,
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",
+      "source": {
+        "kind": "git-tracked",
+        "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+        "path": "packages/web/public/tadazz-show/motion/backdrop.webp",
+        "gitBlob": "3b9c1176f617b79fce215d2c7ccf6f64bea279eb",
+        "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+      },
+      "catalogRef": {
+        "assetId": "classic-backdrop",
+        "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+      },
+      "emissionStatus": "not-exported-in-d095",
+      "dimensionsEvidence": {
+        "width": 1920,
+        "height": 1080,
+        "decodedPixels": 2073600,
+        "status": "reported-local-inspection-not-server-or-browser",
+        "evidence": {
+          "kind": "git-tracked",
+          "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+          "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+          "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+          "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+        }
+      },
+      "licenseEvidence": [
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "LICENSE",
+          "gitBlob": "4f4b8786a10f0a1946fa67fc3d7d8b203a16d4a1",
+          "sha256": "b851eb2bffdb9cf640bb16ce0e7c520143a6b862a803c032d5a8f8e3241534b9"
+        },
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "extensions/src/core/show-themes/classic.manifest.json",
+          "gitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+          "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+        }
+      ],
+      "rights": {
+        "status": "unknown",
+        "provenance": "repository-existing",
+        "reviewReceipt": null
+      }
+    },
+    {
+      "artifactPath": "tadazz-show/story/84acdb923677d591.webp",
+      "requestPath": "/tadazz-show/story/84acdb923677d591.webp",
+      "usage": "stage-fixed",
+      "kind": "image",
+      "mime": "image/webp",
+      "bytes": 134540,
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "source": {
+        "kind": "git-tracked",
+        "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+        "path": "packages/web/public/tadazz-show/story/84acdb923677d591.webp",
+        "gitBlob": "d4931fe81d28df401085c57d25de86e68b245170",
+        "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+      },
+      "catalogRef": {
+        "assetId": "classic-adapter-5ebee0b89664",
+        "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+      },
+      "emissionStatus": "not-exported-in-d095",
+      "dimensionsEvidence": {
+        "width": 1920,
+        "height": 1080,
+        "decodedPixels": 2073600,
+        "status": "reported-local-inspection-not-server-or-browser",
+        "evidence": {
+          "kind": "git-tracked",
+          "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+          "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+          "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+          "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+        }
+      },
+      "licenseEvidence": [
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "LICENSE",
+          "gitBlob": "4f4b8786a10f0a1946fa67fc3d7d8b203a16d4a1",
+          "sha256": "b851eb2bffdb9cf640bb16ce0e7c520143a6b862a803c032d5a8f8e3241534b9"
+        },
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "extensions/src/core/show-themes/classic.manifest.json",
+          "gitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+          "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+        }
+      ],
+      "rights": {
+        "status": "unknown",
+        "provenance": "repository-existing",
+        "reviewReceipt": null
+      }
+    },
+    {
+      "artifactPath": "tadazz-show/v4/question-bg.webp",
+      "requestPath": "/tadazz-show/v4/question-bg.webp",
+      "usage": "stage-fixed",
+      "kind": "image",
+      "mime": "image/webp",
+      "bytes": 87904,
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "source": {
+        "kind": "git-tracked",
+        "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+        "path": "packages/web/public/tadazz-show/v4/question-bg.webp",
+        "gitBlob": "39e3e2c6a0e569a1e84c807e1af5e78134c0515f",
+        "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+      },
+      "catalogRef": {
+        "assetId": "classic-adapter-a27be4883ee9",
+        "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+      },
+      "emissionStatus": "not-exported-in-d095",
+      "dimensionsEvidence": {
+        "width": 1920,
+        "height": 1080,
+        "decodedPixels": 2073600,
+        "status": "reported-local-inspection-not-server-or-browser",
+        "evidence": {
+          "kind": "git-tracked",
+          "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+          "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+          "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+          "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+        }
+      },
+      "licenseEvidence": [
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "LICENSE",
+          "gitBlob": "4f4b8786a10f0a1946fa67fc3d7d8b203a16d4a1",
+          "sha256": "b851eb2bffdb9cf640bb16ce0e7c520143a6b862a803c032d5a8f8e3241534b9"
+        },
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "extensions/src/core/show-themes/classic.manifest.json",
+          "gitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+          "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+        }
+      ],
+      "rights": {
+        "status": "unknown",
+        "provenance": "repository-existing",
+        "reviewReceipt": null
+      }
+    },
+    {
+      "artifactPath": "tadazz-show/v4/show-stage.webp",
+      "requestPath": "/tadazz-show/v4/show-stage.webp",
+      "usage": "stage-fixed",
+      "kind": "image",
+      "mime": "image/webp",
+      "bytes": 261066,
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "source": {
+        "kind": "git-tracked",
+        "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+        "path": "packages/web/public/tadazz-show/v4/show-stage.webp",
+        "gitBlob": "15d0884fde20bdec61afe23bb8ad8210e8d3e52f",
+        "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+      },
+      "catalogRef": {
+        "assetId": "classic-poster",
+        "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+      },
+      "emissionStatus": "not-exported-in-d095",
+      "dimensionsEvidence": {
+        "width": 1920,
+        "height": 1080,
+        "decodedPixels": 2073600,
+        "status": "reported-local-inspection-not-server-or-browser",
+        "evidence": {
+          "kind": "git-tracked",
+          "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+          "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+          "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+          "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+        }
+      },
+      "licenseEvidence": [
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "LICENSE",
+          "gitBlob": "4f4b8786a10f0a1946fa67fc3d7d8b203a16d4a1",
+          "sha256": "b851eb2bffdb9cf640bb16ce0e7c520143a6b862a803c032d5a8f8e3241534b9"
+        },
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "extensions/src/core/show-themes/classic.manifest.json",
+          "gitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+          "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+        }
+      ],
+      "rights": {
+        "status": "unknown",
+        "provenance": "repository-existing",
+        "reviewReceipt": null
+      }
+    },
+    {
+      "artifactPath": "tadazz-show/v4/tadazz-brand-logo.png",
+      "requestPath": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "usage": "product-logo",
+      "kind": "image",
+      "mime": "image/png",
+      "bytes": 1976726,
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "source": {
+        "kind": "git-tracked",
+        "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+        "path": "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png",
+        "gitBlob": "3100afcd466c060ea8de1c8d1f41665b897d952b",
+        "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+      },
+      "catalogRef": {
+        "assetId": "classic-logo",
+        "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+      },
+      "emissionStatus": "not-exported-in-d095",
+      "dimensionsEvidence": {
+        "width": 1983,
+        "height": 793,
+        "decodedPixels": 1572519,
+        "status": "reported-local-inspection-not-server-or-browser",
+        "evidence": {
+          "kind": "git-tracked",
+          "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+          "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+          "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+          "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+        }
+      },
+      "licenseEvidence": [
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "LICENSE",
+          "gitBlob": "4f4b8786a10f0a1946fa67fc3d7d8b203a16d4a1",
+          "sha256": "b851eb2bffdb9cf640bb16ce0e7c520143a6b862a803c032d5a8f8e3241534b9"
+        },
+        {
+          "kind": "git-tracked",
+          "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+          "path": "extensions/src/core/show-themes/classic.manifest.json",
+          "gitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+          "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+        }
+      ],
+      "rights": {
+        "status": "unknown",
+        "provenance": "repository-existing",
+        "reviewReceipt": null
+      }
+    }
+  ],
+  "privateFixturePolicy": {
+    "approvalSourceThread": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+    "scope": "manager-approved-private-internal-qa-of-unchanged-existing-five-images-only",
+    "rightsStatusRemains": "unknown",
+    "customerPackageExport": "denied",
+    "publicDistribution": "denied",
+    "executablePin": "denied",
+    "fixtureCreated": false,
+    "immutableServingEvidence": null,
+    "policyIsNotRuntimeAuthority": true
+  },
+  "platformFontDependency": {
+    "name": "@fontsource-variable/rubik",
+    "version": "5.3.0",
+    "lock": {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "pnpm-lock.yaml",
+      "gitBlob": "b75087466384ce2e404bbd794d985622b51f0ad8",
+      "sha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0"
+    },
+    "importers": [
+      {
+        "path": "extensions",
+        "specifier": "^5.3.0",
+        "resolvedVersion": "5.3.0"
+      },
+      {
+        "path": "packages/web",
+        "specifier": "^5.3.0",
+        "resolvedVersion": "5.3.0"
+      }
+    ],
+    "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+    "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+    "licenseDeclaration": "OFL-1.1",
+    "rawPackageFileObservation": {
+      "status": "reported-server-observation-in-ui-inventory",
+      "evidence": {
+        "kind": "git-tracked",
+        "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+        "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+        "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+        "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+      }
+    },
+    "lockIntegrityToObservedFileBinding": {
+      "status": "not-independently-attested",
+      "receipt": null
+    }
+  },
+  "platformFontFileObservations": [
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "LICENSE",
+        "bytes": 4486,
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "mime": "text/plain",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "files/rubik-arabic-wght-normal.woff2",
+        "bytes": 32468,
+        "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+      },
+      "mime": "font/woff2",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "files/rubik-cyrillic-ext-wght-normal.woff2",
+        "bytes": 12388,
+        "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+      },
+      "mime": "font/woff2",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "files/rubik-cyrillic-wght-normal.woff2",
+        "bytes": 15112,
+        "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+      },
+      "mime": "font/woff2",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "files/rubik-hebrew-wght-normal.woff2",
+        "bytes": 9348,
+        "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+      },
+      "mime": "font/woff2",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "files/rubik-latin-ext-wght-normal.woff2",
+        "bytes": 19400,
+        "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+      },
+      "mime": "font/woff2",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "files/rubik-latin-wght-normal.woff2",
+        "bytes": 35348,
+        "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+      },
+      "mime": "font/woff2",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    },
+    {
+      "source": {
+        "kind": "pnpm-package-file",
+        "packageName": "@fontsource-variable/rubik",
+        "packageVersion": "5.3.0",
+        "lockfilePath": "pnpm-lock.yaml",
+        "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+        "snapshotKey": "@fontsource-variable/rubik@5.3.0",
+        "resolutionIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+        "packagePath": "wght.css",
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+      },
+      "mime": "text/css",
+      "artifactPath": null,
+      "requestPath": null,
+      "emissionStatus": "not-emitted-in-d095",
+      "licenseEvidence": {
+        "packagePath": "LICENSE",
+        "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c"
+      },
+      "status": "observation-only-not-resource-index-entry"
+    }
+  ],
+  "typographyQualification": {
+    "stage": "native-selected-theme-Inter-system-stack-preserved",
+    "platform": "Rubik-Variable-platform-scope-only",
+    "systemFontBytes": "outside-artifact-not-hermetic",
+    "crossMachinePixelParity": "unproved",
+    "japaneseGlyphFallback": "unverified",
+    "injectedStageRubik": false
+  },
+  "sourceAnchors": [
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/package.json",
+      "gitBlob": "83a03c2818c3ad1d018d551da9b7c45e6e1aa726",
+      "sha256": "bc22399bfe10c8b6f892d715362b805c1fb7d3735e2e718b1fcecaf2fbf4c2cf"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/package.json",
+      "gitBlob": "415997f404ead6574ce8fbed61d1cf4365eef827",
+      "sha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/show-themes/context.tsx",
+      "gitBlob": "376d9a02f91944624a6e5fb27d48f650dc2f773a",
+      "sha256": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "gitBlob": "81eb5fecd834456f16063d6f51e5457d061c0287",
+      "sha256": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "gitBlob": "7abe9293ef476d7d63fee322f65c67e1db74e1fb",
+      "sha256": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "gitBlob": "7ea5c05d3ba6b446cbe1f446cec0ef7605cf85ef",
+      "sha256": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-show/motion-assets.provenance.json",
+      "gitBlob": "ad284096b480e42951a5dad65369b8129b451ad1",
+      "sha256": "c9ca6c05d84618f58e9e19bbf8f44b77082b7d0a9d2e9a9c97fa6f1d6c0594e1"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+      "gitBlob": "248220db357c5c2eb2cfdf1559fdd51921fa8a19",
+      "sha256": "22ef6d42f213f7ce46aca57f77686f8498ca70c2fc5c342050bc56c10a697b35"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/platform-ui/catalog/main.tsx",
+      "gitBlob": "e9862ffa82af86110c38d4e10c774f9de21973d3",
+      "sha256": "6922de530478f353d7177b6fa5bbe3efe44a269674d9f3e83efdfeee300a0970"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/site/bootstrap.tsx",
+      "gitBlob": "a13fe987f22e237c18b6724316722612d002ecc3",
+      "sha256": "c96034abc5d43554c67855bc1917a42452ca14a5cc56a9bead5a0b9236324a0a"
+    }
+  ],
+  "executableRegistration": "unavailable",
+  "compiledPins": []
+}

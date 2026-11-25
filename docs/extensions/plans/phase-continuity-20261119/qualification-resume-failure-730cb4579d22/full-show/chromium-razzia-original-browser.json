@@ -1,0 +1,67 @@
+{
+  "browserVersion": "156.0.8078.4",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "chromium / razzia-original native opening, five phases, transitions and closing",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 53692
+    },
+    {
+      "name": "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 3261
+    },
+    {
+      "name": "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 41700
+    },
+    {
+      "name": "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 6890
+    },
+    {
+      "name": "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 8477
+    },
+    {
+      "name": "chromium / razzia-original native pause, resume, replay and adjacent skip",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 7605
+    },
+    {
+      "name": "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 16659
+    },
+    {
+      "name": "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 20614
+    },
+    {
+      "name": "chromium / razzia-original tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 6246
+    },
+    {
+      "name": "chromium / razzia-original CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 34
+    }
+  ]
+}

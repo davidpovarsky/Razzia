@@ -1,0 +1,990 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.components.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.components.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/component-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-components.spec.ts"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/evidence/component-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-components.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/component-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-components.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4330",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/component-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-components.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4330",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-04-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js --config ../../extensions/tds.fixture.vite.config.ts",
+      "env": {
+        "TDS_FIXTURE": "components"
+      },
+      "url": "http://127.0.0.1:4330",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "tds-components.spec.ts",
+      "file": "tds-components.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "host: native pending/disabled, labels, switch and roving tabs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2429,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:35:49.597Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-7a7a5fbf1b7ba366f347",
+          "file": "tds-components.spec.ts",
+          "line": 4,
+          "column": 3
+        },
+        {
+          "title": "host: keyboard menu, native/Radix dialog trap, nested portal and focus return",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3104,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:35:52.223Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-30455f0e30dad515d43b",
+          "file": "tds-components.spec.ts",
+          "line": 47,
+          "column": 3
+        },
+        {
+          "title": "host: alert cancel, single async confirmation and visible failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2311,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:35:55.355Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-1f417ebb0db963db43dc",
+          "file": "tds-components.spec.ts",
+          "line": 108,
+          "column": 3
+        },
+        {
+          "title": "host: popover Escape and keyboard tooltip",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1573,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:35:57.687Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-f1b4bf757ef444a50b65",
+          "file": "tds-components.spec.ts",
+          "line": 137,
+          "column": 3
+        },
+        {
+          "title": "site: native pending/disabled, labels, switch and roving tabs",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7071,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" class=\"tds-tab\" aria-selected=\"false\" data-state=\"inactive\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_r_-trigger-second\" aria-controls=\"radix-_r_r_-content-second\">site second tab</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" class=\"tds-tab\" aria-selected=\"false\" data-state=\"inactive\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_r_-trigger-second\" aria-controls=\"radix-_r_r_-content-second\">site second tab</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at /cleanup/extensions/qa/tds-components.spec.ts:41:7",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                      "column": 7,
+                      "line": 41
+                    },
+                    "snippet": "  39 |     await expect(\n  40 |       panel.getByRole(\"tab\", { name: `${name} second tab` }),\n> 41 |     ).toHaveAttribute(\"aria-selected\", \"true\")\n     |       ^\n  42 |     await panel.getByRole(\"button\", { name: `${name} toggle RTL` }).click()\n  43 |     await panel.getByRole(\"tab\", { name: `${name} second tab` }).focus()\n  44 |     await page.keyboard.press(\"ArrowRight\")"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                        "column": 7,
+                        "line": 41
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" class=\"tds-tab\" aria-selected=\"false\" data-state=\"inactive\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_r_-trigger-second\" aria-controls=\"radix-_r_r_-content-second\">site second tab</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  39 |     await expect(\n  40 |       panel.getByRole(\"tab\", { name: `${name} second tab` }),\n> 41 |     ).toHaveAttribute(\"aria-selected\", \"true\")\n     |       ^\n  42 |     await panel.getByRole(\"button\", { name: `${name} toggle RTL` }).click()\n  43 |     await panel.getByRole(\"tab\", { name: `${name} second tab` }).focus()\n  44 |     await page.keyboard.press(\"ArrowRight\")\n    at /cleanup/extensions/qa/tds-components.spec.ts:41:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:35:59.282Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                    "column": 7,
+                    "line": 41
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-dac286b9dd5e67e70e81",
+          "file": "tds-components.spec.ts",
+          "line": 4,
+          "column": 3
+        },
+        {
+          "title": "site: keyboard menu, native/Radix dialog trap, nested portal and focus return",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6569,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <div tabindex=\"-1\" role=\"menuitem\" class=\"tds-menu-item \" data-orientation=\"vertical\" data-radix-collection-item=\"\">site first action</div>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <div tabindex=\"-1\" role=\"menuitem\" class=\"tds-menu-item \" data-orientation=\"vertical\" data-radix-collection-item=\"\">site first action</div>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at /cleanup/extensions/qa/tds-components.spec.ts:60:7",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                      "column": 7,
+                      "line": 60
+                    },
+                    "snippet": "  58 |     await expect(\n  59 |       page.getByRole(\"menuitem\", { name: `${name} first action`, exact: true }),\n> 60 |     ).toBeFocused()\n     |       ^\n  61 |     await page.keyboard.press(\"Enter\")\n  62 |     await expect(panel.getByTestId(`${name}-message`)).toHaveText(\n  63 |       \"First action\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                        "column": 7,
+                        "line": 60
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <div tabindex=\"-1\" role=\"menuitem\" class=\"tds-menu-item \" data-orientation=\"vertical\" data-radix-collection-item=\"\">site first action</div>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  58 |     await expect(\n  59 |       page.getByRole(\"menuitem\", { name: `${name} first action`, exact: true }),\n> 60 |     ).toBeFocused()\n     |       ^\n  61 |     await page.keyboard.press(\"Enter\")\n  62 |     await expect(panel.getByTestId(`${name}-message`)).toHaveText(\n  63 |       \"First action\",\n    at /cleanup/extensions/qa/tds-components.spec.ts:60:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:36:07.042Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                    "column": 7,
+                    "line": 60
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-063c4e9d172d5968efa5",
+          "file": "tds-components.spec.ts",
+          "line": 47,
+          "column": 3
+        },
+        {
+          "title": "site: alert cancel, single async confirmation and visible failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2450,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:36:14.371Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-abfeef9f43c5e158686e",
+          "file": "tds-components.spec.ts",
+          "line": 108,
+          "column": 3
+        },
+        {
+          "title": "site: popover Escape and keyboard tooltip",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1538,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:36:16.987Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-6406df1415a0514e95c2",
+          "file": "tds-components.spec.ts",
+          "line": 137,
+          "column": 3
+        },
+        {
+          "title": "host Radix portal stays inside actual native fullscreen",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45409,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                        "column": 6,
+                        "line": 168
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nBrowser logs:\n\n<launching> /root/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-VBzonK --remote-debugging-pipe --no-startup-window\n<launched> pid=3922\n[pid=3922][err] [1110/213614.451506:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[pid=3922][err] [1110/213614.451606:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=3922][err] [1110/213614.469892:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[pid=3922][err] [1110/213614.469946:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[pid=3922][err] [1110/213614.484287:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=3922][err] [1110/213614.484467:WARNING:device/bluetooth/dbus/bluez_dbus_manager.cc:209] Floss manager service not available, cannot set Floss enable/disable.\n[pid=3922][err] [1110/213614.487622:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=3922][err] [1110/213614.504781:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=3922][err] [1110/213614.525100:WARNING:media/gpu/vaapi/vaapi_wrapper.cc:1655] drmGetDevices2() has not found any devices\n[pid=3922][err] [1110/213614.532512:WARNING:sandbox/policy/linux/sandbox_linux.cc:405] InitializeSandbox() called with multiple threads in process gpu-process.\n[pid=3922][err] [1110/213614.817466:INFO:CONSOLE:935] \"[vite] connecting...\", source: http://127.0.0.1:4330/@vite/client (935)\n[pid=3922][err] [1110/213614.879677:INFO:CONSOLE:1048] \"[vite] connected.\", source: http://127.0.0.1:4330/@vite/client (1048)\n[pid=3922][err] [1110/213615.525465:INFO:CONSOLE:15805] \"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\", source: http://127.0.0.1:4330/node_modules/.vite/deps/react-dom_client.js?v=28091674 (15805)\n[pid=3922][err] [1110/213617.253040:INFO:CONSOLE:935] \"[vite] connecting...\", source: http://127.0.0.1:4330/@vite/client (935)\n[pid=3922][err] [1110/213617.527955:INFO:CONSOLE:1048] \"[vite] connected.\", source: http://127.0.0.1:4330/@vite/client (1048)\n[pid=3922][err] [1110/213617.819433:INFO:CONSOLE:15805] \"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\", source: http://127.0.0.1:4330/node_modules/.vite/deps/react-dom_client.js?v=28091674 (15805)\n[pid=3922][err] [1110/213618.816299:INFO:CONSOLE:935] \"[vite] connecting...\", source: http://127.0.0.1:4330/@vite/client (935)\n[pid=3922][err] [1110/213619.115432:INFO:CONSOLE:1048] \"[vite] connected.\", source: http://127.0.0.1:4330/@vite/client (1048)\n[pid=3922][err] [1110/213619.488182:INFO:CONSOLE:15805] \"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\", source: http://127.0.0.1:4330/node_modules/.vite/deps/react-dom_client.js?v=28091674 (15805)\n[pid=3922] <gracefully close start>\nCall log:\n\u001b[2m  - waiting for getByTestId('host-panel').getByRole('button', { name: 'host open dialog', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-size=\"md\" data-state=\"closed\" class=\"tds-button \" aria-expanded=\"false\" aria-haspopup=\"dialog\" data-variant=\"secondary\" data-control-source=\"tadazz\" data-platform-component=\"button\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    82 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  166 |     .getByTestId(\"host-panel\")\n  167 |     .getByRole(\"button\", { name: \"host open dialog\", exact: true })\n> 168 |     .click()\n      |      ^\n  169 |   const dialog = page.getByRole(\"dialog\", { name: \"host dialog\", exact: true })\n  170 |   await expect(dialog).toBeVisible()\n  171 |   expect(\n    at /cleanup/extensions/qa/tds-components.spec.ts:168:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:36:18.557Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-chromium/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-fe41054c092e8bb8ad8d",
+          "file": "tds-components.spec.ts",
+          "line": 153,
+          "column": 1
+        },
+        {
+          "title": "host: native pending/disabled, labels, switch and roving tabs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11245,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:04.936Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-26feb44554003920601b",
+          "file": "tds-components.spec.ts",
+          "line": 4,
+          "column": 3
+        },
+        {
+          "title": "host: keyboard menu, native/Radix dialog trap, nested portal and focus return",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10601,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:16.337Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-cef5f5c566e74e381caa",
+          "file": "tds-components.spec.ts",
+          "line": 47,
+          "column": 3
+        },
+        {
+          "title": "host: alert cancel, single async confirmation and visible failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8958,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:26.955Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-34d12b49497b35c1201c",
+          "file": "tds-components.spec.ts",
+          "line": 108,
+          "column": 3
+        },
+        {
+          "title": "host: popover Escape and keyboard tooltip",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2986,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:35.932Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-b720e50ef2c05eca9858",
+          "file": "tds-components.spec.ts",
+          "line": 137,
+          "column": 3
+        },
+        {
+          "title": "site: native pending/disabled, labels, switch and roving tabs",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8725,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" class=\"tds-tab\" aria-selected=\"false\" data-state=\"inactive\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_r_-trigger-second\" aria-controls=\"radix-_r_r_-content-second\">site second tab</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" class=\"tds-tab\" aria-selected=\"false\" data-state=\"inactive\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_r_-trigger-second\" aria-controls=\"radix-_r_r_-content-second\">site second tab</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at /cleanup/extensions/qa/tds-components.spec.ts:41:7",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                      "column": 7,
+                      "line": 41
+                    },
+                    "snippet": "  39 |     await expect(\n  40 |       panel.getByRole(\"tab\", { name: `${name} second tab` }),\n> 41 |     ).toHaveAttribute(\"aria-selected\", \"true\")\n     |       ^\n  42 |     await panel.getByRole(\"button\", { name: `${name} toggle RTL` }).click()\n  43 |     await panel.getByRole(\"tab\", { name: `${name} second tab` }).focus()\n  44 |     await page.keyboard.press(\"ArrowRight\")"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                        "column": 7,
+                        "line": 41
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" class=\"tds-tab\" aria-selected=\"false\" data-state=\"inactive\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_r_-trigger-second\" aria-controls=\"radix-_r_r_-content-second\">site second tab</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  39 |     await expect(\n  40 |       panel.getByRole(\"tab\", { name: `${name} second tab` }),\n> 41 |     ).toHaveAttribute(\"aria-selected\", \"true\")\n     |       ^\n  42 |     await panel.getByRole(\"button\", { name: `${name} toggle RTL` }).click()\n  43 |     await panel.getByRole(\"tab\", { name: `${name} second tab` }).focus()\n  44 |     await page.keyboard.press(\"ArrowRight\")\n    at /cleanup/extensions/qa/tds-components.spec.ts:41:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:38.941Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                    "column": 7,
+                    "line": 41
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-27191ad4c8d4e77881af",
+          "file": "tds-components.spec.ts",
+          "line": 4,
+          "column": 3
+        },
+        {
+          "title": "site: keyboard menu, native/Radix dialog trap, nested portal and focus return",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7274,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <div tabindex=\"-1\" role=\"menuitem\" class=\"tds-menu-item \" data-orientation=\"vertical\" data-radix-collection-item=\"\">site first action</div>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <div tabindex=\"-1\" role=\"menuitem\" class=\"tds-menu-item \" data-orientation=\"vertical\" data-radix-collection-item=\"\">site first action</div>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at /cleanup/extensions/qa/tds-components.spec.ts:60:7",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                      "column": 7,
+                      "line": 60
+                    },
+                    "snippet": "  58 |     await expect(\n  59 |       page.getByRole(\"menuitem\", { name: `${name} first action`, exact: true }),\n> 60 |     ).toBeFocused()\n     |       ^\n  61 |     await page.keyboard.press(\"Enter\")\n  62 |     await expect(panel.getByTestId(`${name}-message`)).toHaveText(\n  63 |       \"First action\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                        "column": 7,
+                        "line": 60
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <div tabindex=\"-1\" role=\"menuitem\" class=\"tds-menu-item \" data-orientation=\"vertical\" data-radix-collection-item=\"\">site first action</div>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  58 |     await expect(\n  59 |       page.getByRole(\"menuitem\", { name: `${name} first action`, exact: true }),\n> 60 |     ).toBeFocused()\n     |       ^\n  61 |     await page.keyboard.press(\"Enter\")\n  62 |     await expect(panel.getByTestId(`${name}-message`)).toHaveText(\n  63 |       \"First action\",\n    at /cleanup/extensions/qa/tds-components.spec.ts:60:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:48.350Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                    "column": 7,
+                    "line": 60
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-a8c0a9005a1939a902a1",
+          "file": "tds-components.spec.ts",
+          "line": 47,
+          "column": 3
+        },
+        {
+          "title": "site: alert cancel, single async confirmation and visible failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7754,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:37:56.409Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-41efa768d756dc3cddee",
+          "file": "tds-components.spec.ts",
+          "line": 108,
+          "column": 3
+        },
+        {
+          "title": "site: popover Escape and keyboard tooltip",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2940,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:38:04.321Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-e985c98ee7057d4b95a5",
+          "file": "tds-components.spec.ts",
+          "line": 137,
+          "column": 3
+        },
+        {
+          "title": "host Radix portal stays inside actual native fullscreen",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45713,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-components.spec.ts",
+                        "column": 6,
+                        "line": 168
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nBrowser logs:\n\n<launching> /root/.cache/ms-playwright/webkit-2370/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=4342\n[pid=4342][err] \n[pid=4342][err] ** (MiniBrowser:4348): CRITICAL **: 21:37:56.576: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.\n[pid=4342][err] \n[pid=4342][err] ** (MiniBrowser:4348): CRITICAL **: 21:38:04.353: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.\n[pid=4342][err] \n[pid=4342][err] ** (MiniBrowser:4348): CRITICAL **: 21:38:07.347: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.\n[pid=4342] <gracefully close start>\nCall log:\n\u001b[2m  - waiting for getByTestId('host-panel').getByRole('button', { name: 'host open dialog', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-size=\"md\" data-state=\"closed\" class=\"tds-button \" aria-expanded=\"false\" aria-haspopup=\"dialog\" data-variant=\"secondary\" data-control-source=\"tadazz\" data-platform-component=\"button\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    77 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  166 |     .getByTestId(\"host-panel\")\n  167 |     .getByRole(\"button\", { name: \"host open dialog\", exact: true })\n> 168 |     .click()\n      |      ^\n  169 |   const dialog = page.getByRole(\"dialog\", { name: \"host dialog\", exact: true })\n  170 |   await expect(dialog).toBeVisible()\n  171 |   expect(\n    at /cleanup/extensions/qa/tds-components.spec.ts:168:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:38:07.282Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-webkit/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1f0f3b1fcf759ab1b17a-0ff928136b347f7ef530",
+          "file": "tds-components.spec.ts",
+          "line": 153,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T21:35:46.599Z",
+    "duration": 187003.57200000001,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}

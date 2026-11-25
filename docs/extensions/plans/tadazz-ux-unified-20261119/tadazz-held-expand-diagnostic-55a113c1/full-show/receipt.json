@@ -1,0 +1,1968 @@
+{
+  "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+  "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+  "sha": "661094be855bbfde18517e2d1103ad62d51911a8",
+  "widgetManifestSha256": "a40c86e1b91a9484e20d187b81c9be39ee3d45cab9e33fdc955bd3c1001847d9",
+  "widgetHtmlSha256": "3738f147817b7372336703b82482e68eb710e07d7a3c7c09a489c2589a2f59f6",
+  "sourceHashesUnchanged": true,
+  "diagnosticMode": "host-controls",
+  "productionChanged": false,
+  "customerMountAccessed": false,
+  "oauthSession": {
+    "kind": "actual-issuer-oauth-refresh",
+    "scheduler": "wall-clock",
+    "accessTokenLifetimeSeconds": 300,
+    "refreshCount": 0,
+    "rejected": false,
+    "automaticReauthorization": false,
+    "refreshes": []
+  },
+  "network": "none",
+  "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+  "outboundDenied": [],
+  "engines": [
+    {
+      "name": "webkit",
+      "version": "27.2",
+      "outcomes": [
+        {
+          "name": "webkit / tadazz-classic synthetic host UI controls",
+          "status": "PASS",
+          "budgetMs": 120000,
+          "ms": 38629
+        }
+      ]
+    },
+    {
+      "name": "chromium",
+      "version": "156.0.8078.4",
+      "outcomes": [
+        {
+          "name": "chromium / tadazz-classic synthetic host UI controls",
+          "status": "PASS",
+          "budgetMs": 120000,
+          "ms": 7751
+        }
+      ]
+    }
+  ],
+  "requiredChecks": [
+    "chromium / tadazz-classic native opening, five phases, transitions and closing",
+    "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+    "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+    "chromium / tadazz-classic CSP, native media resources and browser errors",
+    "chromium / razzia-original native opening, five phases, transitions and closing",
+    "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+    "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+    "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / razzia-original native pause, resume, replay and adjacent skip",
+    "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / razzia-original tamper, cancellation and tool-context teardown",
+    "chromium / razzia-original CSP, native media resources and browser errors",
+    "webkit / tadazz-classic native opening, five phases, transitions and closing",
+    "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+    "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+    "webkit / tadazz-classic CSP, native media resources and browser errors",
+    "webkit / razzia-original native opening, five phases, transitions and closing",
+    "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+    "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+    "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / razzia-original native pause, resume, replay and adjacent skip",
+    "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / razzia-original tamper, cancellation and tool-context teardown",
+    "webkit / razzia-original CSP, native media resources and browser errors"
+  ],
+  "failureCount": 0,
+  "rendererBuildId": "c3039068424d55f82f063db9e5c30a4dbe8f2184fbbcf45cfdaa3d1761f96501",
+  "artifactSha256": "3738f147817b7372336703b82482e68eb710e07d7a3c7c09a489c2589a2f59f6",
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic synthetic host UI controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 38629
+    },
+    {
+      "name": "chromium / tadazz-classic synthetic host UI controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 7751
+    }
+  ],
+  "observations": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:03.077Z",
+      "reason": "navigate host",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T04:08:03.077Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:36.579Z",
+      "reason": "unsupported host fixture",
+      "url": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "status": "drained",
+      "receipt": {
+        "documentId": "ebf57e52-a4e9-401b-8f2b-3bcec5556add",
+        "url": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+        "status": "drained",
+        "startedAt": "2026-11-19T04:08:36.582Z",
+        "finishedAt": "2026-11-19T04:08:36.584Z",
+        "elapsedMs": 3,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 11,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T04:08:04.431Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:04.808Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:05.356Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:05.905Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:10.726Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:11.042Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:16.345Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:16.869Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:25.498Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:25.783Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:25.809Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:26.340Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:26.571Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:27.586Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:31.461Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:31.781Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:33.470Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:33.801Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T04:08:36.589Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:39.187Z",
+      "reason": "restore supported host",
+      "url": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C&unsupported=1",
+      "status": "drained",
+      "receipt": {
+        "documentId": "23f19434-666d-4053-b99c-121a9d11f21c",
+        "url": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C&unsupported=1",
+        "status": "drained",
+        "startedAt": "2026-11-19T04:08:39.189Z",
+        "finishedAt": "2026-11-19T04:08:39.189Z",
+        "elapsedMs": 0,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 0,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T04:08:37.963Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:38.307Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T04:08:39.195Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "proof": "synthetic-host-ui-control-fixture",
+      "saveRequests": [
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "expectedRevision": 1,
+          "idempotencyKey": "2d48183f-45b3-483e-a017-e15a4c3a6652",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "expectedRevision": 1,
+          "idempotencyKey": "2d48183f-45b3-483e-a017-e15a4c3a6652",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "expectedRevision": 1,
+          "idempotencyKey": "2d48183f-45b3-483e-a017-e15a4c3a6652",
+          "intent": "createNew"
+        }
+      ],
+      "openedLinks": [
+        "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+        "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+      ],
+      "displayRequests": [
+        "fullscreen"
+      ],
+      "readiness": {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host control request readiness",
+        "timeoutMs": 5000,
+        "status": "ready",
+        "originallyPaused": false,
+        "heldPreview": {
+          "holding": true,
+          "lifecycle": {
+            "documentId": "ebf57e52-a4e9-401b-8f2b-3bcec5556add",
+            "disposing": false,
+            "remaining": {
+              "http": 0,
+              "handlers": 1,
+              "initialization": 0,
+              "replies": 1,
+              "connecting": false
+            },
+            "receipt": null
+          },
+          "newPreviewCalls": 1
+        },
+        "beforeClick": {
+          "at": "2026-11-19T04:08:33.859Z",
+          "elapsedMs": 853,
+          "sameButton": true,
+          "expandDisabled": false,
+          "refreshDisabled": true,
+          "pauseDisabled": true,
+          "status": "Loading…",
+          "focusedControl": null
+        },
+        "beforeRelease": {
+          "holding": true,
+          "remaining": {
+            "http": 0,
+            "handlers": 1,
+            "initialization": 0,
+            "replies": 1,
+            "connecting": false
+          },
+          "messages": [
+            {
+              "at": "2026-11-19T04:08:33.476Z",
+              "elapsedMs": 478,
+              "method": "tools/call",
+              "id": 13,
+              "name": "preview_show"
+            },
+            {
+              "at": "2026-11-19T04:08:34.577Z",
+              "elapsedMs": 1579,
+              "method": "ui/request-display-mode",
+              "id": 14,
+              "mode": "fullscreen"
+            }
+          ]
+        },
+        "snapshot": {
+          "waitedMs": 1630,
+          "firstReadyMs": 1603,
+          "sameDocument": true,
+          "sameHost": true,
+          "sameBridgeBinding": true,
+          "received": {
+            "proof": "synthetic-host-ui-control-fixture",
+            "saveRequests": [
+              {
+                "contractVersion": "0.1.0",
+                "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+                "expectedRevision": 1,
+                "idempotencyKey": "2d48183f-45b3-483e-a017-e15a4c3a6652",
+                "intent": "createNew"
+              },
+              {
+                "contractVersion": "0.1.0",
+                "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+                "expectedRevision": 1,
+                "idempotencyKey": "2d48183f-45b3-483e-a017-e15a4c3a6652",
+                "intent": "createNew"
+              },
+              {
+                "contractVersion": "0.1.0",
+                "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+                "expectedRevision": 1,
+                "idempotencyKey": "2d48183f-45b3-483e-a017-e15a4c3a6652",
+                "intent": "createNew"
+              }
+            ],
+            "openedLinks": [
+              "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+              "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+            ],
+            "displayRequests": [
+              "fullscreen"
+            ]
+          },
+          "holding": true,
+          "lifecycle": {
+            "documentId": "ebf57e52-a4e9-401b-8f2b-3bcec5556add",
+            "disposing": false,
+            "remaining": {
+              "http": 0,
+              "handlers": 1,
+              "initialization": 0,
+              "replies": 1,
+              "connecting": false
+            },
+            "receipt": null
+          },
+          "messages": [
+            {
+              "at": "2026-11-19T04:08:33.476Z",
+              "elapsedMs": 478,
+              "method": "tools/call",
+              "id": 13,
+              "name": "preview_show"
+            },
+            {
+              "at": "2026-11-19T04:08:34.577Z",
+              "elapsedMs": 1579,
+              "method": "ui/request-display-mode",
+              "id": 14,
+              "mode": "fullscreen"
+            }
+          ]
+        },
+        "control": {
+          "snapshot": {
+            "at": "2026-11-19T04:08:34.632Z",
+            "elapsedMs": 1626,
+            "sameButton": true,
+            "expandDisabled": false,
+            "refreshDisabled": true,
+            "pauseDisabled": true,
+            "status": "Loading…",
+            "focusedControl": "full-show-expand"
+          },
+          "events": [
+            {
+              "type": "pointerdown",
+              "trusted": true,
+              "at": "2026-11-19T04:08:34.555Z",
+              "elapsedMs": 1549,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": null
+            },
+            {
+              "type": "mousedown",
+              "trusted": true,
+              "at": "2026-11-19T04:08:34.555Z",
+              "elapsedMs": 1549,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": null
+            },
+            {
+              "type": "pointerup",
+              "trusted": true,
+              "at": "2026-11-19T04:08:34.559Z",
+              "elapsedMs": 1552,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": "full-show-expand"
+            },
+            {
+              "type": "mouseup",
+              "trusted": true,
+              "at": "2026-11-19T04:08:34.559Z",
+              "elapsedMs": 1552,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": "full-show-expand"
+            },
+            {
+              "type": "click",
+              "trusted": true,
+              "at": "2026-11-19T04:08:34.559Z",
+              "elapsedMs": 1553,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": "full-show-expand"
+            }
+          ]
+        },
+        "afterRelease": {
+          "at": "2026-11-19T04:08:34.792Z",
+          "elapsedMs": 1786,
+          "sameButton": true,
+          "expandDisabled": false,
+          "refreshDisabled": false,
+          "pauseDisabled": false,
+          "status": null,
+          "focusedControl": "full-show-expand"
+        },
+        "cleanup": {
+          "released": true,
+          "restoredPaused": false,
+          "lifecycle": {
+            "documentId": "ebf57e52-a4e9-401b-8f2b-3bcec5556add",
+            "disposing": false,
+            "remaining": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "receipt": null
+          }
+        }
+      },
+      "unsupportedFeaturesHiddenOrDisabled": true,
+      "draftUnchanged": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:41.706Z",
+      "reason": "close context",
+      "url": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "status": "drained",
+      "receipt": {
+        "documentId": "22de145c-9483-4edc-8ecc-cdeb70e60132",
+        "url": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+        "status": "drained",
+        "startedAt": "2026-11-19T04:08:41.712Z",
+        "finishedAt": "2026-11-19T04:08:41.713Z",
+        "elapsedMs": 0,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 1,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T04:08:40.419Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:40.738Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:41.094Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:41.587Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T04:08:41.722Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:44.821Z",
+      "reason": "navigate host",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T04:08:44.821Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:50.329Z",
+      "reason": "unsupported host fixture",
+      "url": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "status": "drained",
+      "receipt": {
+        "documentId": "47550c02-d690-4793-a7af-ff3d02778c18",
+        "url": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+        "status": "drained",
+        "startedAt": "2026-11-19T04:08:50.330Z",
+        "finishedAt": "2026-11-19T04:08:50.331Z",
+        "elapsedMs": 0.6000001430511475,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 8,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T04:08:45.728Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:45.909Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:46.085Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:46.700Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:47.367Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:47.486Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:47.496Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:48.029Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:48.087Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:48.608Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:49.180Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:49.350Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T04:08:50.332Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:51.574Z",
+      "reason": "restore supported host",
+      "url": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W&unsupported=1",
+      "status": "drained",
+      "receipt": {
+        "documentId": "f5fdf323-42ba-4634-b8cd-6e700b132baa",
+        "url": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W&unsupported=1",
+        "status": "drained",
+        "startedAt": "2026-11-19T04:08:51.577Z",
+        "finishedAt": "2026-11-19T04:08:51.577Z",
+        "elapsedMs": 0.09999990463256836,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 0,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T04:08:50.999Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:51.206Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T04:08:51.578Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "proof": "synthetic-host-ui-control-fixture",
+      "saveRequests": [
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "expectedRevision": 1,
+          "idempotencyKey": "c39916e5-8f3b-4766-8e7c-1b18d706fbd2",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "expectedRevision": 1,
+          "idempotencyKey": "c39916e5-8f3b-4766-8e7c-1b18d706fbd2",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "expectedRevision": 1,
+          "idempotencyKey": "c39916e5-8f3b-4766-8e7c-1b18d706fbd2",
+          "intent": "createNew"
+        }
+      ],
+      "openedLinks": [
+        "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+        "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+      ],
+      "displayRequests": [
+        "fullscreen"
+      ],
+      "readiness": {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "check": "host control request readiness",
+        "timeoutMs": 5000,
+        "status": "ready",
+        "originallyPaused": false,
+        "heldPreview": {
+          "holding": true,
+          "lifecycle": {
+            "documentId": "47550c02-d690-4793-a7af-ff3d02778c18",
+            "disposing": false,
+            "remaining": {
+              "http": 0,
+              "handlers": 1,
+              "initialization": 0,
+              "replies": 1,
+              "connecting": false
+            },
+            "receipt": null
+          },
+          "newPreviewCalls": 1
+        },
+        "beforeClick": {
+          "at": "2026-11-19T04:08:49.357Z",
+          "elapsedMs": 229.60000014305115,
+          "sameButton": true,
+          "expandDisabled": false,
+          "refreshDisabled": true,
+          "pauseDisabled": true,
+          "status": "Loading…",
+          "focusedControl": null
+        },
+        "beforeRelease": {
+          "holding": true,
+          "remaining": {
+            "http": 0,
+            "handlers": 1,
+            "initialization": 0,
+            "replies": 1,
+            "connecting": false
+          },
+          "messages": [
+            {
+              "at": "2026-11-19T04:08:49.183Z",
+              "elapsedMs": 60.799999952316284,
+              "method": "tools/call",
+              "id": 10,
+              "name": "preview_show"
+            },
+            {
+              "at": "2026-11-19T04:08:49.414Z",
+              "elapsedMs": 292.2000000476837,
+              "method": "ui/request-display-mode",
+              "id": 11,
+              "mode": "fullscreen"
+            }
+          ]
+        },
+        "snapshot": {
+          "waitedMs": 324.09999990463257,
+          "firstReadyMs": 304.2999999523163,
+          "sameDocument": true,
+          "sameHost": true,
+          "sameBridgeBinding": true,
+          "received": {
+            "proof": "synthetic-host-ui-control-fixture",
+            "saveRequests": [
+              {
+                "contractVersion": "0.1.0",
+                "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+                "expectedRevision": 1,
+                "idempotencyKey": "c39916e5-8f3b-4766-8e7c-1b18d706fbd2",
+                "intent": "createNew"
+              },
+              {
+                "contractVersion": "0.1.0",
+                "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+                "expectedRevision": 1,
+                "idempotencyKey": "c39916e5-8f3b-4766-8e7c-1b18d706fbd2",
+                "intent": "createNew"
+              },
+              {
+                "contractVersion": "0.1.0",
+                "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+                "expectedRevision": 1,
+                "idempotencyKey": "c39916e5-8f3b-4766-8e7c-1b18d706fbd2",
+                "intent": "createNew"
+              }
+            ],
+            "openedLinks": [
+              "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+              "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+            ],
+            "displayRequests": [
+              "fullscreen"
+            ]
+          },
+          "holding": true,
+          "lifecycle": {
+            "documentId": "47550c02-d690-4793-a7af-ff3d02778c18",
+            "disposing": false,
+            "remaining": {
+              "http": 0,
+              "handlers": 1,
+              "initialization": 0,
+              "replies": 1,
+              "connecting": false
+            },
+            "receipt": null
+          },
+          "messages": [
+            {
+              "at": "2026-11-19T04:08:49.183Z",
+              "elapsedMs": 60.799999952316284,
+              "method": "tools/call",
+              "id": 10,
+              "name": "preview_show"
+            },
+            {
+              "at": "2026-11-19T04:08:49.414Z",
+              "elapsedMs": 292.2000000476837,
+              "method": "ui/request-display-mode",
+              "id": 11,
+              "mode": "fullscreen"
+            }
+          ]
+        },
+        "control": {
+          "snapshot": {
+            "at": "2026-11-19T04:08:49.451Z",
+            "elapsedMs": 323.5,
+            "sameButton": true,
+            "expandDisabled": false,
+            "refreshDisabled": true,
+            "pauseDisabled": true,
+            "status": "Loading…",
+            "focusedControl": "full-show-expand"
+          },
+          "events": [
+            {
+              "type": "pointerdown",
+              "trusted": true,
+              "at": "2026-11-19T04:08:49.405Z",
+              "elapsedMs": 277.5,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": null
+            },
+            {
+              "type": "mousedown",
+              "trusted": true,
+              "at": "2026-11-19T04:08:49.405Z",
+              "elapsedMs": 277.7000000476837,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": null
+            },
+            {
+              "type": "pointerup",
+              "trusted": true,
+              "at": "2026-11-19T04:08:49.406Z",
+              "elapsedMs": 278.30000019073486,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": "full-show-expand"
+            },
+            {
+              "type": "mouseup",
+              "trusted": true,
+              "at": "2026-11-19T04:08:49.406Z",
+              "elapsedMs": 278.30000019073486,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": "full-show-expand"
+            },
+            {
+              "type": "click",
+              "trusted": true,
+              "at": "2026-11-19T04:08:49.406Z",
+              "elapsedMs": 278.40000009536743,
+              "sameButton": true,
+              "expandDisabled": false,
+              "refreshDisabled": true,
+              "pauseDisabled": true,
+              "status": "Loading…",
+              "focusedControl": "full-show-expand"
+            }
+          ]
+        },
+        "afterRelease": {
+          "at": "2026-11-19T04:08:49.524Z",
+          "elapsedMs": 396.7000000476837,
+          "sameButton": true,
+          "expandDisabled": false,
+          "refreshDisabled": false,
+          "pauseDisabled": false,
+          "status": null,
+          "focusedControl": "full-show-expand"
+        },
+        "cleanup": {
+          "released": true,
+          "restoredPaused": false,
+          "lifecycle": {
+            "documentId": "47550c02-d690-4793-a7af-ff3d02778c18",
+            "disposing": false,
+            "remaining": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "receipt": null
+          }
+        }
+      },
+      "unsupportedFeaturesHiddenOrDisabled": true,
+      "draftUnchanged": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T04:08:52.571Z",
+      "reason": "close context",
+      "url": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "status": "drained",
+      "receipt": {
+        "documentId": "3e17d9a6-fad9-41f9-aa84-bfd34eecc55a",
+        "url": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+        "status": "drained",
+        "startedAt": "2026-11-19T04:08:52.583Z",
+        "finishedAt": "2026-11-19T04:08:52.959Z",
+        "elapsedMs": 375.89999985694885,
+        "initial": {
+          "http": 1,
+          "handlers": 1,
+          "initialization": 0,
+          "replies": 1,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 1,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T04:08:52.112Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:52.267Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T04:08:52.393Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T04:08:52.959Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T04:08:52.978Z"
+    }
+  ],
+  "rendererFixtures": [],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "85bc005e2f0db5ef347b8b20d43dcbeb2b38176870131f69106e409ff5606831",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "5bbdd7dd-46bf-4db6-8bce-bd3d6f2dfafe",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "192f6e1487b4343e231ad478591be0a9b196f3e5713f27ac5b6f2311cb2982f0",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "b871f31a-ef2d-457a-a887-b288cc605c68",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+          "chapterCount": 28,
+          "frameDigest": "a1ce0dc324327d1e7d3f1b9d10f0221c742fa3cccdd67b0b260a43322b3e6c2d"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "0ed9681ff8969e2a765fabcb25f8a85d07e3e50d85522a2b75ff29d9258db8aa",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "0d3fe14b-7625-4f2e-801d-03f21af584af",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:voting",
+          "chapterCount": 28,
+          "frameDigest": "06756c1d114c4d8cff83505b1ded7bc40fad7550f096352bb28729a332eea2eb"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputDigest": "f83c1a20a198c3f366d76e835d05acc79262f6aef96e5f403c3dadeb97f4c368",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "f82757e8-81a3-4db0-96f2-ae3fe524cbd4",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "62cdc71627922951b4670f5a9f3ebead41991eb11a8eb503ab6ffc06e4416469",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d769a37d-18ce-4c1f-a05e-6f9068da5b63",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-15d1ef97cf9541fef29ff5bb774e69a32843979ee9c9b1b75ea8f162e3f94d61:opening",
+          "chapterCount": 28,
+          "frameDigest": "26ca529eb3d91f6d4b3374d5a4f4172368536fdb5c66670861b3e8ca2660a7ce"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "85bc005e2f0db5ef347b8b20d43dcbeb2b38176870131f69106e409ff5606831",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "51a2dd33-424b-4f17-a186-71fe4f147cad",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "192f6e1487b4343e231ad478591be0a9b196f3e5713f27ac5b6f2311cb2982f0",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "cd044f5a-9680-44d7-841e-3454219a7c98",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+          "chapterCount": 28,
+          "frameDigest": "a1ce0dc324327d1e7d3f1b9d10f0221c742fa3cccdd67b0b260a43322b3e6c2d"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "192f6e1487b4343e231ad478591be0a9b196f3e5713f27ac5b6f2311cb2982f0",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "f9819329-24c7-4827-8f84-b2dcf8c15c42",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+          "chapterCount": 28,
+          "frameDigest": "a1ce0dc324327d1e7d3f1b9d10f0221c742fa3cccdd67b0b260a43322b3e6c2d"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "85bc005e2f0db5ef347b8b20d43dcbeb2b38176870131f69106e409ff5606831",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "0a653842-b774-4554-9ad9-d451748b782d",
+        "data": {
+          "draftId": "8uZOWf49Vx2nUjwfZzyPhl__ayaEpYW_",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "b41420ec33efadea1203a18d4db5e03252325d37251a27dda43aef6c1727dda4",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "6f8986b9-8fd6-4120-aa0d-1b2166ec3b82",
+        "data": {
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputDigest": "da0afbbbe09c76686de8f9b228aa6846e91f101c901595f36c8e897aaa58a0af",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "33f2f24a-f146-4889-a673-3b97c7851726",
+        "data": {
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "fe7e836c257716d03d3637c8a7e3ce490a1f835fb35a8d5e3939732e1c095fc1",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "073d9152-d09c-4e40-b9af-70d1ea640a2c",
+        "data": {
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-15d1ef97cf9541fef29ff5bb774e69a32843979ee9c9b1b75ea8f162e3f94d61:opening",
+          "chapterCount": 28,
+          "frameDigest": "0505979c2e1653fcbfb26c90fce048672902eb89733bc1b1b3ee4ffbb1f970fe"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "b41420ec33efadea1203a18d4db5e03252325d37251a27dda43aef6c1727dda4",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d8e9d1ee-8062-44c5-8e67-4f84ef569267",
+        "data": {
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "7c464cd99349907fd5c9786a00dffb746bd7094855e2bbc9a5a63c64f32d672a",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "27de32e5-0e12-4fe2-911e-df2d49384594",
+        "data": {
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-15d1ef97cf9541fef29ff5bb774e69a32843979ee9c9b1b75ea8f162e3f94d61:opening",
+          "chapterCount": 28,
+          "frameDigest": "0505979c2e1653fcbfb26c90fce048672902eb89733bc1b1b3ee4ffbb1f970fe"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "b41420ec33efadea1203a18d4db5e03252325d37251a27dda43aef6c1727dda4",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "23b3a057-4afc-4556-9c63-588aa0150c57",
+        "data": {
+          "draftId": "58mnOFqEzSlnm-Wl6P6KsFt3NTEG0czd",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    }
+  ],
+  "requestFailures": [],
+  "pageErrorEvents": [],
+  "qaRequestEvents": [
+    {
+      "at": "2026-11-19T04:08:04.437Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "webkit / tadazz-classic synthetic host UI controls",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/initial?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "GET",
+      "responseAt": "2026-11-19T04:08:04.830Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:05.359Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "webkit / tadazz-classic synthetic host UI controls",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:05.908Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:10.729Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:11.049Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:16.348Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:16.871Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:25.500Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:25.786Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:25.825Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:26.342Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:26.576Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:27.599Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:31.464Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:31.784Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:33.475Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:33.803Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:37.965Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C&unsupported=1",
+      "url": "http://127.0.0.1:39787/qa/initial?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "GET",
+      "responseAt": "2026-11-19T04:08:38.326Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:40.421Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/initial?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "GET",
+      "responseAt": "2026-11-19T04:08:40.752Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:41.097Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=_SpGKNZnZIpUGYbbjT7Cp_1C",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:41.590Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:45.731Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "chromium / tadazz-classic synthetic host UI controls",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/initial?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "GET",
+      "responseAt": "2026-11-19T04:08:45.912Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:46.094Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "chromium / tadazz-classic synthetic host UI controls",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:46.706Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:47.375Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:47.494Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:47.499Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:48.030Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:48.089Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:48.605Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:49.185Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:49.349Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:51.013Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W&unsupported=1",
+      "url": "http://127.0.0.1:39787/qa/initial?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "GET",
+      "responseAt": "2026-11-19T04:08:51.205Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:52.114Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/initial?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "GET",
+      "responseAt": "2026-11-19T04:08:52.270Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T04:08:52.400Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic synthetic host UI controls",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:39787/host?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "url": "http://127.0.0.1:39787/qa/call?scenario=mc39CPmbqtMJr75ACbsyWA6W",
+      "method": "POST",
+      "responseAt": "2026-11-19T04:08:52.964Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "requests": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/answersMusic.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    }
+  ]
+}

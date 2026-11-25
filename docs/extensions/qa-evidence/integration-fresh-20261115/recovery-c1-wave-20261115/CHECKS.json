@@ -1,0 +1,40 @@
+[
+  {
+    "name": "c1-types",
+    "source": "b02cc572564b001c735c121e393148ce73febdb1",
+    "args": [
+      "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "extensions/node_modules/typescript/bin/tsc",
+      "--project",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\recovery-c1-wave-20261115\\tsconfig.integration.json"
+    ],
+    "start": "2026-11-15T15:30:54.636237+00:00",
+    "finished": "2026-11-15T15:30:55.765798+00:00",
+    "exit": 1
+  },
+  {
+    "name": "off-path-tests",
+    "source": "b02cc572564b001c735c121e393148ce73febdb1",
+    "args": [
+      "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\vitest.config.ts",
+      "--root",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions",
+      "src/server/storage/create-recovery.test.ts",
+      "--maxWorkers",
+      "1",
+      "--reporter",
+      "default",
+      "--reporter",
+      "json",
+      "--outputFile",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\recovery-c1-wave-20261115\\off-path-tests.json"
+    ],
+    "start": "2026-11-15T15:30:55.767799+00:00",
+    "finished": "2026-11-15T15:31:02.463995+00:00",
+    "exit": 0
+  }
+]

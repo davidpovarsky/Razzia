@@ -1,0 +1,33 @@
+{
+  "grant_id": "hq-compiled-c35-9632e805d4f2455e960b5ff295eb0a81",
+  "issued_utc": "2026-11-15T11:07:00.267586+00:00",
+  "issuer_thread": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+  "worker_thread": "01a1dd19-5220-70d3-8349-e9e135399b4d",
+  "execution_authorized": true,
+  "scope": "One bounded server compiled-index53 + focusedTC job ONLY; not renderer/executable/rights acceptance",
+  "source": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+  "source_bundle_sha256": "4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "plan_sha256": "123093f622de1e5055b83e3e4a31793f75a9c01be4c199e8a4ed7ff5d93dc8e1",
+  "transfer_manifest_sha256": "6d19fcafdad7374dac2dcbd31225ee96ea8fcd624417ff11b4d36d6144cc7f6d",
+  "source_review_sha256": "42474d541023b40ad6abc9ff67fd06e9ddd7a84f9ab74122aa81e8e25673ef85",
+  "cpu": 0.25,
+  "memory_gib": 2,
+  "max_new_disk_mib": 8,
+  "max_upload_kib": 256,
+  "fresh_disk_gate_mib": 2396,
+  "absolute_disk_reserve_mib": 2048,
+  "root_fresh_free_bytes": 2853810176,
+  "root_available_ram_mib": 10513,
+  "future_reserved_other_growth_mib": {
+    "ui": 64,
+    "mcp_correction_future": 8,
+    "qa_framing_units": 4,
+    "qa_future_not_execution_granted": 200,
+    "margin": 64
+  },
+  "single_job_only": true,
+  "fresh_operator_df_ram_before_launch_required": true,
+  "no_install_pull_network_ports_production_or_writable_source": true,
+  "old26_othertests_build_browser_not_authorized": true,
+  "failure_evidence_preserved_no_silent_retry": true
+}

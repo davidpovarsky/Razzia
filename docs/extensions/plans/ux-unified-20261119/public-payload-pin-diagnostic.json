@@ -1,0 +1,90 @@
+{
+  "kind": "public-payload-pin-diagnostic",
+  "at": "2026-11-19T13:17:00.552630+00:00",
+  "files": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 3371,
+      "sha256": "c1525bc10e5b0085178cb147932180787cb375200cb4cd434e37d81db365a854",
+      "expectedSha256": "0f7e8b26b7537425037ab254d9ed1e402934c4fccef98b0f3fbc4a152b20081d",
+      "headers": {
+        "content-type": "text/html",
+        "content-encoding": null,
+        "etag": "\"6afeebc5-d2b\"",
+        "last-modified": "Thu, 19 Nov 2026 12:29:57 GMT",
+        "cf-cache-status": null
+      }
+    },
+    {
+      "path": "/assets/AccountGateway-B8aMaWOA.js",
+      "status": 200,
+      "bytes": 9180,
+      "sha256": "25ee0fbaa63c6b339e54c941434cb1662a8ec406133c9818d041547c0d1b6d0e",
+      "expectedSha256": "25ee0fbaa63c6b339e54c941434cb1662a8ec406133c9818d041547c0d1b6d0e",
+      "headers": {
+        "content-type": "application/javascript",
+        "content-encoding": null,
+        "etag": "\"6afeebc5-23dc\"",
+        "last-modified": "Thu, 19 Nov 2026 12:29:57 GMT",
+        "cf-cache-status": null
+      }
+    },
+    {
+      "path": "/assets/MarketingSite-hgRJ0d-u.js",
+      "status": 200,
+      "bytes": 102387,
+      "sha256": "189b0b2e1227d408d7de34e627f03473c63b70f9387516e961c1dc41067d7831",
+      "expectedSha256": "189b0b2e1227d408d7de34e627f03473c63b70f9387516e961c1dc41067d7831",
+      "headers": {
+        "content-type": "application/javascript",
+        "content-encoding": null,
+        "etag": "\"6afe8b76-18ff3\"",
+        "last-modified": "Thu, 19 Nov 2026 05:39:02 GMT",
+        "cf-cache-status": null
+      }
+    },
+    {
+      "path": "/assets/index-C9t1GO5B.css",
+      "status": 200,
+      "bytes": 125631,
+      "sha256": "6ae995d0559c406ab2668821e3163d448fa6c7bfa8544528b4da7c80feefb1b6",
+      "expectedSha256": "6ae995d0559c406ab2668821e3163d448fa6c7bfa8544528b4da7c80feefb1b6",
+      "headers": {
+        "content-type": "text/css",
+        "content-encoding": null,
+        "etag": "\"6afe8b76-1eabf\"",
+        "last-modified": "Thu, 19 Nov 2026 05:39:02 GMT",
+        "cf-cache-status": null
+      }
+    },
+    {
+      "path": "/assets/index-HeVfHVi0.js",
+      "status": 200,
+      "bytes": 222289,
+      "sha256": "35db1be94c055507a17b7a32a713323f2070dc0c8d4f82216af8e059ac14b700",
+      "expectedSha256": "35db1be94c055507a17b7a32a713323f2070dc0c8d4f82216af8e059ac14b700",
+      "headers": {
+        "content-type": "application/javascript",
+        "content-encoding": null,
+        "etag": "\"6afe8b76-36451\"",
+        "last-modified": "Thu, 19 Nov 2026 05:39:02 GMT",
+        "cf-cache-status": null
+      }
+    },
+    {
+      "path": "/tadazz-design-reference/marketing.css",
+      "status": 200,
+      "bytes": 72036,
+      "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309",
+      "expectedSha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309",
+      "headers": {
+        "content-type": "text/css",
+        "content-encoding": null,
+        "etag": "\"6afebbf5-11964\"",
+        "last-modified": "Thu, 19 Nov 2026 09:05:57 GMT",
+        "cf-cache-status": null
+      }
+    }
+  ]
+}

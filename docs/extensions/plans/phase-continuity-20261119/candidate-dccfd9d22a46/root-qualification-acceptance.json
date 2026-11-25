@@ -1,0 +1,33 @@
+{
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "observedAt": "2026-11-19T21:17:33.056988+00:00",
+  "sourceQualificationAccepted": true,
+  "deployed": false,
+  "fullShowChecks": 40,
+  "rendererFixtures": 44,
+  "transportActions": 8,
+  "fullShowReceiptSha256": "3b98b04099062aaf8e41e5e99c17a8e81994267c845237d688003bc030f7fdc5",
+  "transportReceiptSha256": "0676174b7b12524c5b43d385c149f40729eb824f3c8fd34198cea976ce816458",
+  "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+  "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+  "rendererBuildId": "e1fdf5dc47e277e7da4ec8ce5ce88048bef1e7b34249da1b6240cde8c68ead9f",
+  "sdkManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "transportWitnesses": {
+    "chromium": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-transport-race.json",
+      "sha256": "0c6dedf6adbe3a055e8c47ae53e7c49d84284d9c9243200dced2c48c235c736b",
+      "passedActions": 4,
+      "fulfilledGates": 7
+    },
+    "webkit": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-transport-race.json",
+      "sha256": "c88cb3b6f5556245c7905a932d111c3d5740d9113edeca9d6fc47d98beca1088",
+      "passedActions": 4,
+      "fulfilledGates": 7
+    }
+  },
+  "sameArtifactsVerified": true,
+  "isolatedInputsUnchanged": true,
+  "locksReleasedExplicitly": true
+}

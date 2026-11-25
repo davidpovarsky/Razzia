@@ -1,0 +1,38 @@
+{
+  "activationPerformed": false,
+  "baseImage": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+  "candidateWhenPrepared": "fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4",
+  "contextStrategy": "verified-delta-from-pinned-base",
+  "dockerHeadroomFloorBytes": 2147483648,
+  "executed": false,
+  "files": {
+    "final-package-worker-README.md": {
+      "bytes": 8878,
+      "sha256": "22cf231e4c1f818e1d9425499db6661411a5db50d57f95974dd3553b1dca59ff"
+    },
+    "final-package-worker-base-inventory.py": {
+      "bytes": 9186,
+      "sha256": "e7cf3f48773eb3b53d4fd9614af4e34330695aa86e493535c96da2d4e901d98a"
+    },
+    "final-package-worker-driver.mts": {
+      "bytes": 11072,
+      "sha256": "1ce87c4f7404234acc28cd43e473b5035ae07edfc1f54e39124d25f22ee9ffe8"
+    },
+    "final-package-worker-qualify.py": {
+      "bytes": 27038,
+      "sha256": "c99ad68c39393135bf475e1e8bdb72ee081d1b22f53e1c5f30f07ba6d87a0993"
+    }
+  },
+  "format": "tadazz-worker-qualification-preparation-v1",
+  "fullCandidateImageVerificationRequired": true,
+  "inputManifestWhenPreparedSha256": "bb651d7dec9b0e4afb34afa1fd29cbaac5cc6f7b5d0af4d3e62bfd823ebd8ba1",
+  "metadataHelperPreparedOnly": true,
+  "oldPayloadJobsOrConfigRead": false,
+  "peerContractReview": "theme_architecture: no proof/runtime interface mismatch",
+  "peerDeltaReview": "asana_scope_audit: matching bytes inherit only after pinned-base hash and size agreement; full image verification retained; metadata evidence path fixed; no remaining static blocker",
+  "peerFixtureReview": "asana_scope_audit: referenced-theme selection fixed; no remaining bounded source blocker",
+  "preparedOnly": true,
+  "sourceReferenceDriverSha256": "2d281cfafa7b109ca292ab9fa2689e31b6cfd20da0d35c2d5676aae9dc324baf",
+  "sourceRunWhenPrepared": "tadazz-codex-fe25457aa5c7-53880a3e",
+  "staticPythonAstParsed": true
+}

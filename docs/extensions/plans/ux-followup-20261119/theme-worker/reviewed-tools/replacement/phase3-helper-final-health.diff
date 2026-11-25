@@ -1,0 +1,12 @@
+--- activate_and_verify_timer.py before final health
++++ activate_and_verify_timer.py final
+@@ -257,6 +257,9 @@
+         command(["/usr/bin/systemctl","start",TIMER])
+         final_timer=timer();final_service=service()
+         require(final_timer["ActiveState"]=="active" and final_timer["UnitFileState"]=="enabled" and final_service["image"]==NEW_IMAGE and effective_static(final_service)==effective_static(before_service),"Final enabled timer/service state changed")
++        require(final_service["ActiveState"]!="failed","Restarted timer observed a failed broker")
++        if final_service["ActiveState"]=="inactive":
++            require(final_service["Result"]=="success" and final_service["ExecMainStatus"]=="0","Restarted timer's completed broker failed")
+         require(sha(regular(UNIT))==UNIT_AFTER and sha(regular(BROKER))==BROKER_SHA,"Final operator pins changed")
+         final_binding=app_binding(admission);cache_stopped();runtime_unchanged()
+         report.update({"status":"PASS","actualTimerBuild":True,"mediaValidated":True,"sourceUnchanged":True,"outputDigest":sha(bundle_bytes),"bundleBytes":len(bundle_bytes),"compiledThemeIds":sorted(bundle),"completedTimer":after_timer,"completedService":after_service,"afterTimer":final_timer,"afterService":final_service,"afterBinding":final_binding,"cacheRestoredStopped":True,"runtimeConfigHashUnchanged":True,"effectiveServicePropertiesUnchanged":True})

@@ -1,0 +1,28 @@
+{
+  "id": "2650995c-696e-4f52-9db7-ccb8440cfeec",
+  "context": {
+    "mode": "before-id-return",
+    "root": "/scratch/c1/tadazz-c1-native-synthetic-5ioAJk",
+    "sequence": "",
+    "owner": "00000000-0000-4000-8000-0000000000A1"
+  },
+  "pid": 58,
+  "event": "close",
+  "code": null,
+  "signal": "SIGKILL",
+  "observedNs": "996169916286087",
+  "startedNs": "996165852734992",
+  "streams": {
+    "stdout": {
+      "file": "2650995c-696e-4f52-9db7-ccb8440cfeec.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "2650995c-696e-4f52-9db7-ccb8440cfeec.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observationErrors": []
+}

@@ -1,0 +1,48 @@
+{
+  "extends": "../../../../packages/web/tsconfig.app.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "types": [
+      "../../../../packages/web/node_modules/@types/node",
+      "../../../../packages/web/node_modules/vite/client"
+    ],
+    "paths": {
+      "@razzia/common/*": [
+        "../../../../packages/common/src/*"
+      ],
+      "@razzia/extensions": [
+        "../../../../extensions/src/index.ts"
+      ],
+      "@razzia/extensions/*": [
+        "../../../../extensions/src/*"
+      ],
+      "@razzia/socket/*": [
+        "../../../../packages/socket/src/*"
+      ],
+      "@razzia/web/*": [
+        "../../../../packages/web/src/*"
+      ],
+      "*": [
+        "../../../../packages/web/node_modules/*",
+        "../../../../packages/web/node_modules/@types/*",
+        "../../../../extensions/node_modules/*"
+      ],
+      "react": [
+        "../../../../packages/web/node_modules/@types/react"
+      ],
+      "react/*": [
+        "../../../../packages/web/node_modules/@types/react/*"
+      ],
+      "react-dom": [
+        "../../../../packages/web/node_modules/@types/react-dom"
+      ],
+      "react-dom/*": [
+        "../../../../packages/web/node_modules/@types/react-dom/*"
+      ]
+    }
+  },
+  "include": [
+    "./browser-fixture.tsx",
+    "./browser-i18n.ts"
+  ]
+}

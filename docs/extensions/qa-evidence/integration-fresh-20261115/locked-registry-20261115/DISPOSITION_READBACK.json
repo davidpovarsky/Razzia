@@ -1,0 +1,11 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "completed": false,
+    "modified_at": "2026-11-15T18:05:28.077Z",
+    "exactPreservedNotesReadback": true
+  },
+  "DDispositionDelivered": true,
+  "generatedReceiptLineEndings": "Initial own JSON used CRLF and failed default whitespace check; normalized only own generated JSON to LF, corrected scoped check exited0. Raw streams and producer receipts unchanged; original JSON retained in c3d49c6.",
+  "newTestsRerunAfterEvidenceOnlyNormalization": false
+}

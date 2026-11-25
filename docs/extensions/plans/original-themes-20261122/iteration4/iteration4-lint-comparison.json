@@ -1,0 +1,46 @@
+{
+  "baselineSha": "53c2d04fea97096622204858affe94a614637fca",
+  "candidateSha": "2e9ee96541baf8f0ea16bd4b6b7bd9d89f2eba04",
+  "method": "same unchanged rules and dependencies; every labelled span maps to exact unchanged source lines",
+  "baselineCount": 86,
+  "candidateCount": 87,
+  "inheritedCount": 85,
+  "newCount": 2,
+  "passed": false,
+  "wholeChangedSourceLintPass": false,
+  "unmatchedDiagnostics": [
+    {
+      "message": "Unnecessary conditional, value is always truthy.",
+      "code": "typescript(no-unnecessary-condition)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unnecessary-condition.html",
+      "filename": "extensions/src/core/show-library/consumer-contract.test.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 596,
+            "length": 4,
+            "line": 22,
+            "column": 10
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/core/show-library/native-library-page.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 180,
+            "length": 51,
+            "line": 6,
+            "column": 1
+          }
+        }
+      ]
+    }
+  ]
+}

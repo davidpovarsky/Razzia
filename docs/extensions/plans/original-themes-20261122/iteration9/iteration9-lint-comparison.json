@@ -1,0 +1,2117 @@
+{
+  "baselineSha": "53c2d04fea97096622204858affe94a614637fca",
+  "candidateBaseSha": "6f295c2dbd040785d9b56e2b0dc68824d69c32c3",
+  "method": "same unchanged rules/dependencies; every labelled span maps to exact unchanged source lines",
+  "baselineCount": 391,
+  "candidateCount": 383,
+  "inheritedCount": 258,
+  "newCount": 125,
+  "passed": false,
+  "wholeChangedSourceLintPass": false,
+  "unmatchedDiagnostics": [
+    {
+      "message": "Async function has no `await` expression.",
+      "code": "eslint(require-await)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/require-await.html",
+      "help": "Consider removing the `async` keyword.",
+      "filename": "extensions/qa/mcp-widget/bridge.nodecheck.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 17335,
+            "length": 38,
+            "line": 570,
+            "column": 48
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/qa/mcp-widget/bridge.nodecheck.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 6002,
+            "length": 75,
+            "line": 224,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Unexpected empty function",
+      "code": "eslint(no-empty-function)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-empty-function.html",
+      "help": "Consider removing this function or adding logic to it.",
+      "filename": "extensions/src/components/theme-builder/PreviewControls.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 648,
+            "length": 2,
+            "line": 17,
+            "column": 76
+          }
+        }
+      ]
+    },
+    {
+      "message": "Unexpected empty function",
+      "code": "eslint(no-empty-function)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-empty-function.html",
+      "help": "Consider removing this function or adding logic to it.",
+      "filename": "extensions/src/components/theme-builder/PreviewControls.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 860,
+            "length": 2,
+            "line": 21,
+            "column": 76
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/components/theme-builder/PreviewControls.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 404,
+            "length": 8,
+            "line": 8,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/presentation/show-library-preview/PreviewStageHost.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 378,
+            "length": 8,
+            "line": 10,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `authorityDenied()` with `{authorityDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1846,
+            "length": 17,
+            "line": 51,
+            "column": 39
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `authorityDenied()` with `{authorityDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1976,
+            "length": 17,
+            "line": 55,
+            "column": 42
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `authorityDenied()` with `{authorityDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3089,
+            "length": 17,
+            "line": 91,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3691,
+            "length": 15,
+            "line": 112,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function 'metadata' has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4149,
+            "length": 93,
+            "line": 129,
+            "column": 18
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `authorityDenied()` with `{authorityDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5210,
+            "length": 17,
+            "line": 169,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `authorityDenied()` with `{authorityDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5378,
+            "length": 17,
+            "line": 175,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `authorityDenied()` with `{authorityDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5526,
+            "length": 17,
+            "line": 180,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function 'prior' has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5618,
+            "length": 89,
+            "line": 183,
+            "column": 15
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `return metadata(false, \"request_conflict\", address)` with `{return metadata(false, \"request_conflict\", address)}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5980,
+            "length": 51,
+            "line": 196,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function 'finish' has too many parameters (6). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 6174,
+            "length": 134,
+            "line": 201,
+            "column": 16
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7530,
+            "length": 128,
+            "line": 247,
+            "column": 8
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 8144,
+            "length": 15,
+            "line": 267,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `return finish(\n          db,\n          address,\n          input,\n          \"issue\",\n          fp,\n          metadata(false, \"authority_exists\", address, current),\n        )` with `{return finish(\n          db,\n          address,\n          input,\n          \"issue\",\n          fp,\n          metadata(false, \"authority_exists\", address, current),\n        )}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 8644,
+            "length": 172,
+            "line": 282,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `return finish(\n          db,\n          address,\n          input,\n          \"issue\",\n          fp,\n          metadata(false, \"game_authority_conflict\", address),\n        )` with `{return finish(\n          db,\n          address,\n          input,\n          \"issue\",\n          fp,\n          metadata(false, \"game_authority_conflict\", address),\n        )}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 9532,
+            "length": 170,
+            "line": 307,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 9978,
+            "length": 128,
+            "line": 328,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 10614,
+            "length": 15,
+            "line": 352,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `return finish(\n          db,\n          address,\n          input,\n          \"rotate\",\n          fp,\n          metadata(false, \"version_conflict\", address, current),\n        )` with `{return finish(\n          db,\n          address,\n          input,\n          \"rotate\",\n          fp,\n          metadata(false, \"version_conflict\", address, current),\n        )}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 10896,
+            "length": 173,
+            "line": 360,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 11811,
+            "length": 125,
+            "line": 389,
+            "column": 11
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 12590,
+            "length": 15,
+            "line": 412,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 13352,
+            "length": 128,
+            "line": 439,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `return finish(\n          db,\n          address,\n          input,\n          \"revoke\",\n          fp,\n          metadata(false, \"version_conflict\", address, current),\n        )` with `{return finish(\n          db,\n          address,\n          input,\n          \"revoke\",\n          fp,\n          metadata(false, \"version_conflict\", address, current),\n        )}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 14114,
+            "length": 173,
+            "line": 464,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1776,
+            "length": 31,
+            "line": 50,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1868,
+            "length": 25,
+            "line": 52,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1998,
+            "length": 25,
+            "line": 56,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2659,
+            "length": 4,
+            "line": 79,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3109,
+            "length": 22,
+            "line": 92,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3608,
+            "length": 78,
+            "line": 111,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4809,
+            "length": 4,
+            "line": 155,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5257,
+            "length": 4,
+            "line": 171,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5398,
+            "length": 4,
+            "line": 176,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5946,
+            "length": 29,
+            "line": 195,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7273,
+            "length": 48,
+            "line": 237,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7892,
+            "length": 4,
+            "line": 259,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 8164,
+            "length": 24,
+            "line": 268,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 8312,
+            "length": 41,
+            "line": 275,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 8623,
+            "length": 12,
+            "line": 281,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 10362,
+            "length": 41,
+            "line": 344,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 10449,
+            "length": 4,
+            "line": 346,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 10732,
+            "length": 4,
+            "line": 355,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 11574,
+            "length": 22,
+            "line": 377,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 12090,
+            "length": 41,
+            "line": 398,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 12256,
+            "length": 4,
+            "line": 401,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 12612,
+            "length": 24,
+            "line": 413,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 12887,
+            "length": 18,
+            "line": 422,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 13172,
+            "length": 14,
+            "line": 428,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 13736,
+            "length": 41,
+            "line": 455,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 13989,
+            "length": 4,
+            "line": 460,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 14662,
+            "length": 14,
+            "line": 480,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'for-of'.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `identifier(part)` with `{identifier(part)}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 861,
+            "length": 16,
+            "line": 33,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 951,
+            "length": 15,
+            "line": 35,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1229,
+            "length": 15,
+            "line": 46,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1724,
+            "length": 15,
+            "line": 62,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1874,
+            "length": 15,
+            "line": 66,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function 'deriveServiceId' has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2604,
+            "length": 77,
+            "line": 91,
+            "column": 32
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 339,
+            "length": 42,
+            "line": 12,
+            "column": 1
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 428,
+            "length": 40,
+            "line": 15,
+            "column": 1
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 880,
+            "length": 66,
+            "line": 34,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 986,
+            "length": 33,
+            "line": 38,
+            "column": 1
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1498,
+            "length": 38,
+            "line": 56,
+            "column": 1
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1645,
+            "length": 74,
+            "line": 61,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1742,
+            "length": 27,
+            "line": 63,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1803,
+            "length": 66,
+            "line": 65,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1949,
+            "length": 27,
+            "line": 68,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected method `assertStrictProfile` to have this.",
+      "code": "eslint(class-methods-use-this)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/class-methods-use-this.html",
+      "help": "Consider converting method `assertStrictProfile` to a static method.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1204,
+            "length": 19,
+            "line": 37,
+            "column": 3
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `throw new Denied(\"owner_authority_denied\")` with `{throw new Denied(\"owner_authority_denied\")}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2227,
+            "length": 42,
+            "line": 70,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `throw new Denied(\"owner_authority_denied\")` with `{throw new Denied(\"owner_authority_denied\")}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2893,
+            "length": 42,
+            "line": 90,
+            "column": 17
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `throw new Denied(\"owner_authority_denied\")` with `{throw new Denied(\"owner_authority_denied\")}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3993,
+            "length": 42,
+            "line": 122,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `throw new Denied(\"owner_authority_denied\")` with `{throw new Denied(\"owner_authority_denied\")}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4374,
+            "length": 42,
+            "line": 133,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 964,
+            "length": 43,
+            "line": 27,
+            "column": 1
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1278,
+            "length": 4,
+            "line": 39,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1828,
+            "length": 4,
+            "line": 57,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1994,
+            "length": 39,
+            "line": 63,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2040,
+            "length": 4,
+            "line": 64,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2276,
+            "length": 35,
+            "line": 71,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2881,
+            "length": 54,
+            "line": 90,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2940,
+            "length": 52,
+            "line": 91,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3589,
+            "length": 4,
+            "line": 110,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3751,
+            "length": 44,
+            "line": 115,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3802,
+            "length": 4,
+            "line": 116,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4042,
+            "length": 57,
+            "line": 123,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4159,
+            "length": 4,
+            "line": 127,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4423,
+            "length": 22,
+            "line": 134,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected method `match` to have this.",
+      "code": "eslint(class-methods-use-this)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/class-methods-use-this.html",
+      "help": "Consider converting method `match` to a static method.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2057,
+            "length": 5,
+            "line": 65,
+            "column": 11
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2062,
+            "length": 113,
+            "line": 65,
+            "column": 16
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2624,
+            "length": 15,
+            "line": 83,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2895,
+            "length": 15,
+            "line": 91,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3113,
+            "length": 15,
+            "line": 99,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3241,
+            "length": 15,
+            "line": 104,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3301,
+            "length": 111,
+            "line": 108,
+            "column": 21
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3579,
+            "length": 15,
+            "line": 117,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 4192,
+            "length": 15,
+            "line": 140,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has too many parameters (4). Maximum allowed is 3.",
+      "code": "eslint(max-params)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-params.html",
+      "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5260,
+            "length": 110,
+            "line": 173,
+            "column": 8
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7270,
+            "length": 15,
+            "line": 233,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected { after 'if' condition.",
+      "code": "eslint(curly)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/curly.html",
+      "help": "Replace `serviceDenied()` with `{serviceDenied()}`.",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7610,
+            "length": 15,
+            "line": 247,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2644,
+            "length": 56,
+            "line": 84,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2761,
+            "length": 4,
+            "line": 86,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 2915,
+            "length": 4,
+            "line": 92,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3133,
+            "length": 4,
+            "line": 100,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3498,
+            "length": 74,
+            "line": 116,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3712,
+            "length": 43,
+            "line": 120,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3990,
+            "length": 4,
+            "line": 131,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5045,
+            "length": 22,
+            "line": 162,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5976,
+            "length": 18,
+            "line": 194,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 6263,
+            "length": 5,
+            "line": 204,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 6873,
+            "length": 4,
+            "line": 223,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7290,
+            "length": 30,
+            "line": 234,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7502,
+            "length": 4,
+            "line": 243,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 7793,
+            "length": 11,
+            "line": 256,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Function has no 'await' expression.",
+      "code": "typescript(require-await)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/require-await.html",
+      "filename": "extensions/qa/mcp-widget/bridge.nodecheck.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 17343,
+            "length": 3,
+            "line": 570,
+            "column": 56
+          }
+        }
+      ]
+    },
+    {
+      "message": "Unsafe argument of type any assigned to a parameter of type Action.",
+      "code": "typescript(no-unsafe-argument)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unsafe-argument.html",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1212,
+            "length": 6,
+            "line": 44,
+            "column": 54
+          }
+        }
+      ]
+    },
+    {
+      "message": "This assertion is unnecessary since it does not change the type of the expression.",
+      "code": "typescript(no-unnecessary-type-assertion)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unnecessary-type-assertion.html",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1875,
+            "length": 18,
+            "line": 52,
+            "column": 12
+          }
+        }
+      ]
+    },
+    {
+      "message": "'data.state' may use Object's default stringification format ('[object Object]') when stringified.",
+      "code": "typescript(no-base-to-string)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-base-to-string.html",
+      "help": "Consider picking a property (e.g. `user.name`), using a formatter (or `JSON.stringify`), or implementing a custom `toString()`/`toLocaleString()` on the type.",
+      "filename": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 5357,
+            "length": 10,
+            "line": 173,
+            "column": 64
+          }
+        }
+      ]
+    },
+    {
+      "message": "This expression unnecessarily compares a boolean value to a boolean instead of negating it.",
+      "code": "typescript(no-unnecessary-boolean-literal-compare)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unnecessary-boolean-literal-compare.html",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 1289,
+            "length": 26,
+            "line": 40,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "This expression unnecessarily compares a boolean value to a boolean instead of negating it.",
+      "code": "typescript(no-unnecessary-boolean-literal-compare)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unnecessary-boolean-literal-compare.html",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3875,
+            "length": 25,
+            "line": 119,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "This expression unnecessarily compares a boolean value to a boolean instead of negating it.",
+      "code": "typescript(no-unnecessary-boolean-literal-compare)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unnecessary-boolean-literal-compare.html",
+      "filename": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "labels": [
+        {
+          "span": {
+            "offset": 3912,
+            "length": 64,
+            "line": 120,
+            "column": 9
+          }
+        }
+      ]
+    },
+    {
+      "message": "Module '../../src/components/oauth-consent/OAuthConsentPage' was resolved to '/evidence/source/extensions/src/components/oauth-consent/OAuthConsentPage.tsx', but '--jsx' is not set.",
+      "code": "typescript(TS6142)",
+      "severity": "error",
+      "filename": "extensions/qa/theme-builder/oauth-fixture.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 332,
+            "length": 53,
+            "line": 7,
+            "column": 34
+          }
+        }
+      ]
+    },
+    {
+      "message": "Cannot use JSX unless the '--jsx' flag is provided.",
+      "code": "typescript(TS17004)",
+      "severity": "error",
+      "filename": "extensions/qa/theme-builder/oauth-fixture.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 1109,
+            "length": 33,
+            "line": 29,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Cannot use JSX unless the '--jsx' flag is provided.",
+      "code": "typescript(TS17004)",
+      "severity": "error",
+      "filename": "extensions/qa/theme-builder/oauth-fixture.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 1149,
+            "length": 233,
+            "line": 30,
+            "column": 7
+          }
+        }
+      ]
+    }
+  ]
+}

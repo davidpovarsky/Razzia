@@ -1,0 +1,8 @@
+{
+  "path": "/home/ubuntu/tadazz-mcp-release-dccfd9d22a46-20261119/backup-qualification-20261119T212136Z-d2878f3a/backup-qualification-result.json",
+  "sha256": "f139c52f57b079ee280e7bce5eab4594079c5377acea3fd1f86251476d466eb1",
+  "bytes": 5855,
+  "revision": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "image": "sha256:f56cdcc5f5302128f9b259f19d6008e954dbddc1f4fddbe6d8a5dabbba297b70",
+  "releaseEligible": true
+}

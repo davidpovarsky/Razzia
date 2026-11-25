@@ -1,0 +1,15 @@
+
+  x eslint(no-nested-ternary): Do not nest ternary expressions.
+     ,-[extensions/src/presentation/tadazz-v4/components.tsx:680:13]
+ 679 |               fontSize:
+ 680 | ,->             (data.title?.length ?? 0) > 80
+ 681 | |                 ? 100
+ 682 | |                 : (data.title?.length ?? 0) > 50
+ 683 | |                   ? 128
+ 684 | `->                 : undefined,
+ 685 |             }}
+     `----
+  help: Refactor nested ternary expressions into if-else statements for better readability.
+
+Found 0 warnings and 1 error.
+Finished in 3.7s on 4 files with 233 rules using 12 threads.

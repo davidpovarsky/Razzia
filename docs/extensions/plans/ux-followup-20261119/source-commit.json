@@ -1,0 +1,14 @@
+{
+  "productSourceSha": "14b642e95d15fab3fd5b4577ca72e1aca568f283",
+  "parentSha": "9318a764bd922b2c7970e4866b91d62ade9a1d40",
+  "branch": "codex/tadazz-ux-unified-20261119",
+  "sourceFileCount": 72,
+  "allCandidateHashesUnchanged": true,
+  "preservedAncestors": [
+    "2c66bc94d220b04a7e080d9aafabf2850f328432",
+    "d30a6d55389a85780fcb51d8c28ae607a7fd481c"
+  ],
+  "committedAt": "2026-11-19T14:22:58.592734+00:00",
+  "pushed": false,
+  "productionChanged": false
+}

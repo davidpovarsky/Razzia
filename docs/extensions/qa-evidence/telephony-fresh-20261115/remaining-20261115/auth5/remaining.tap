@@ -1,0 +1,70 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 948016 subject: Test quizz
+# Game 01a1e010-960f-72c9-a3bd-5b3e6a65905a added. Total games: 1
+# New game created: 021848 subject: Test quizz
+# Game 01a1e010-9c53-72ed-a0e2-2b48eced22c1 added. Total games: 2
+# Subtest: R-AUTH-01 invalid manager proofs/profile/account state cannot initialize authority
+ok 1 - R-AUTH-01 invalid manager proofs/profile/account state cannot initialize authority
+  ---
+  duration_ms: 3291.588767
+  type: 'test'
+  ...
+# New game created: 873983 subject: Test quizz
+# Game 01a1e010-a096-76fc-a00f-2be9b8dc1efd added. Total games: 3
+# Subtest: R-AUTH-02 service scope/capability and copied/released provenance deny before lifecycle access
+ok 2 - R-AUTH-02 service scope/capability and copied/released provenance deny before lifecycle access
+  ---
+  duration_ms: 1209.450928
+  type: 'test'
+  ...
+# New game created: 268143 subject: Test quizz
+# Game 01a1e010-a554-73f0-8680-e22ec226b260 added. Total games: 4
+# New game created: 305910 subject: Test quizz
+# Game 01a1e010-aa05-73c1-8c27-2c5a8527a706 added. Total games: 5
+# Subtest: R-AUTH-03 actual session revocation and password reset fence cached receipts; fresh owner can revoke
+ok 3 - R-AUTH-03 actual session revocation and password reset fence cached receipts; fresh owner can revoke
+  ---
+  duration_ms: 3099.672407
+  type: 'test'
+  ...
+# New game created: 297705 subject: Test quizz
+# Game 01a1e010-b173-77ae-900e-543727f26bd7 added. Total games: 6
+# Game 01a1e010-b173-77ae-900e-543727f26bd7 removed. Total games: 5
+# New game created: 174430 subject: Test quizz
+# Game 01a1e010-b173-77ae-900e-543727f26bd7 added. Total games: 6
+# Subtest: R-AUTH-04 removed/reincarnated Game and new factory never recover old service/executor
+ok 4 - R-AUTH-04 removed/reincarnated Game and new factory never recover old service/executor
+  ---
+  duration_ms: 1203.891234
+  type: 'test'
+  ...
+# New game created: 797691 subject: Test quizz
+# Game 01a1e010-b626-72da-9ac0-fb8d1f1539a4 added. Total games: 7
+# New game created: 360743 subject: Test quizz
+# Game 01a1e010-c5bd-7784-96c8-67443728fa2f added. Total games: 8
+# Game 01a1e010-960f-72c9-a3bd-5b3e6a65905a removed. Total games: 7
+# Game 01a1e010-9c53-72ed-a0e2-2b48eced22c1 removed. Total games: 6
+# Game 01a1e010-a096-76fc-a00f-2be9b8dc1efd removed. Total games: 5
+# Game 01a1e010-a554-73f0-8680-e22ec226b260 removed. Total games: 4
+# Game 01a1e010-aa05-73c1-8c27-2c5a8527a706 removed. Total games: 3
+# Game 01a1e010-b173-77ae-900e-543727f26bd7 removed. Total games: 2
+# Game 01a1e010-b626-72da-9ac0-fb8d1f1539a4 removed. Total games: 1
+# Game 01a1e010-c5bd-7784-96c8-67443728fa2f removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# Subtest: R-AUTH-05 actual service expiry and shortened persisted session expiry deny before native access
+ok 5 - R-AUTH-05 actual service expiry and shortened persisted session expiry deny before native access
+  ---
+  duration_ms: 5002.713171
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24698.419527

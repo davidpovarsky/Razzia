@@ -1,0 +1,242 @@
+[
+  {
+    "path": "extensions/src/components/theme-builder/BuilderLibrary.tsx",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/components/theme-builder/BuilderProperties.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/BuilderTree.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/client.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/document.fixture.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/document.test.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/document.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/NativeLibraryPanel.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/OpenThemeBuilderLink.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/strings.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/StudioThemeBuilder.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/styles.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/theme-builder/ThemeBuilderShell.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/server/show-themes/installation.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/server/show-themes/builder-routes.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/server/show-themes/builder-routes.test.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/server/show-themes/builder-host.test.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/server/index.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/site/web/studio/Studio.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/index.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "packages/web/src/features/quizz/components/studio/show-theme-settings.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/env.d.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/fixture.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/fixture.vite.config.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/format.mjs",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/native-build-receipt.mjs",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/playwright.config.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/prepare-native-fixture.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/server.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/server.vite.config.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/theme-builder.spec.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/toolchain.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/projected-frame.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/preview-candidate.test.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native-receipt.vite.config.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-fixture-host.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-fixture-server.ts",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-localized-content.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native-smoke.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native.config.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-browser.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-preview.spec.ts",
+    "sameAst": false,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-preview.config.ts",
+    "sameAst": true,
+    "changed": true
+  }
+]

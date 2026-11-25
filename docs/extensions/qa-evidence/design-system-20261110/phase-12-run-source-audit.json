@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "runtimeSourceChanges": [],
+  "qaOnlyChanges": [
+    {
+      "path": "extensions/qa/tds-package-broker.py",
+      "before": "2288c62dafc4ba44700cdf4ed840763aef86ce2f9a73ce4915cd7cfbb9db772c",
+      "after": "4c7ad6a35d6f4c0f195cd52414e42bd1fedf6468de89ff4cd3f51bb85e6800d8"
+    },
+    {
+      "path": "extensions/tds.native-acceptance.playwright.config.ts",
+      "before": "fb84152b537a056525caa1fd72dfe01211145a4d3637e8e2bbab0e2ac25b3aea",
+      "after": "e2fcb0a7eef64b0b31339fece96d50720fe1613cb3aa8712ef67e5a83ea6efc2"
+    }
+  ],
+  "reason": "Corrected the bounded broker wrapper job-store path and then the native QA assertion deadline to cover the preserved 30-second vote. The affected native suite, config typecheck, formatting and plain lint are rerun; no product or browser-spec source changed."
+}

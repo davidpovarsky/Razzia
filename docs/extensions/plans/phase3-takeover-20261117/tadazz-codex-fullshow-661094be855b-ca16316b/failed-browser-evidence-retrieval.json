@@ -1,0 +1,32 @@
+{
+  "retrievedAt": "2026-11-19T03:56:38.082377+00:00",
+  "candidateSha": "661094be855bbfde18517e2d1103ad62d51911a8",
+  "sourceRun": "tadazz-codex-661094be855b-99ece436",
+  "browserRun": "tadazz-codex-fullshow-661094be855b-ca16316b",
+  "sourceHost": "ubuntu@132.145.25.168",
+  "remoteAccess": "read-only file reads via SSH",
+  "files": [
+    {
+      "relative_path": "full-show/receipt.json",
+      "source_path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-661094be855b-ca16316b/full-show/receipt.json",
+      "sha256": "72b8c9f9c71d46bdb9f1f0761b66401cf22ad923e142db7d8649aee6c1fe4cb8",
+      "bytes": 2301268,
+      "destinationPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-661094be855b-ca16316b\\full-show\\receipt.json"
+    },
+    {
+      "relative_path": "browser-resource-evidence.json",
+      "source_path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-661094be855b-ca16316b/browser-resource-evidence.json",
+      "sha256": "161e218c6ff9473097be4b05df98972018be56905a1c1adf447d67e4558e8f7d",
+      "bytes": 854,
+      "destinationPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-661094be855b-ca16316b\\browser-resource-evidence.json"
+    },
+    {
+      "relative_path": "full-show/webkit-tadazz-classic-host-controls-readiness.json",
+      "source_path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-661094be855b-ca16316b/full-show/webkit-tadazz-classic-host-controls-readiness.json",
+      "sha256": "08cfd8abe6d5fccc1847a184718bc46c5f959a5f98b9b004e544eea9eddbd12d",
+      "bytes": 1459,
+      "destinationPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-661094be855b-ca16316b\\full-show\\webkit-tadazz-classic-host-controls-readiness.json"
+    }
+  ],
+  "outerReceipt": "Not fabricated: normal runner exited on failed browser assertions before writing outer receipt."
+}

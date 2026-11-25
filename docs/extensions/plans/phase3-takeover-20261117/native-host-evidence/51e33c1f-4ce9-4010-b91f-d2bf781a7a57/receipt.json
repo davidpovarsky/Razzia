@@ -1,0 +1,227 @@
+{
+  "createdAtUtc": "2026-11-17T14:49:59.559Z",
+  "runtime": {
+    "node": "v24.22.1",
+    "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "platform": "win32"
+  },
+  "head": "34cfd464ac0bba432701b87f10f4f8388d665066",
+  "sourceState": "UNCOMMITTED_WORKTREE_BYTES_NOT_A_NEW_IMMUTABLE_SHA",
+  "sourceHashesBefore": {
+    "extensions/src/mcp-app/native-host/static-site.ts": "9b5542aeb51129020cf2d12575804781fd1d17416e4767d030d5a07c9c9e18c4",
+    "extensions/src/site/oauth-consent-headers.ts": "f20a58d34ad804a3ee0aa49433bfdb974be93a2232e30b41ad944eacebb5bc25",
+    "extensions/qa/phase3-native-host-static/static-site.node.mjs": "1083a59cdb695d92f63663f4babc0504b124cbe86152f0c67ac870a6c95f877d",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.mjs": "1b09ebfbb4d93f04840b27ebd130ffa790a65823e1f92bfa0b6b4535a4a7724c",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.node.mjs": "3ccda315b78bbdd35d63f04d9d3ebaac8608c78f762fd479667d768f1443654b",
+    "extensions/qa/phase3-native-host-static/verify.mjs": "7ef1b7ed82dd097b7617227e743216bed11f71a68b112e23777c558f4ec0905f",
+    "extensions/src/core/card-media-references.ts": "9050abebb7d060b60f462e2a7b838bbd553071b1c419f9fdd1fd43c1e88649de",
+    "extensions/src/server/storage/service.ts": "37d29e662c23e077776b158ac5180702dd9e42595c85b3a2e84d8626e87f091e",
+    "extensions/qa/phase3-recovery/workspace-typescript.mjs": "000a8dd233fbc46da002cc2f344afcb41a43c744c25dcd74e4a775b59291946b",
+    "extensions/qa/phase3-recovery/recovery-invariants.node.ts": "b57f7866752fcb7a49e28d8791cd6737ab94e5a5f0735768275a9838d42614d0"
+  },
+  "sourceHashesAfter": {
+    "extensions/src/mcp-app/native-host/static-site.ts": "9b5542aeb51129020cf2d12575804781fd1d17416e4767d030d5a07c9c9e18c4",
+    "extensions/src/site/oauth-consent-headers.ts": "f20a58d34ad804a3ee0aa49433bfdb974be93a2232e30b41ad944eacebb5bc25",
+    "extensions/qa/phase3-native-host-static/static-site.node.mjs": "1083a59cdb695d92f63663f4babc0504b124cbe86152f0c67ac870a6c95f877d",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.mjs": "1b09ebfbb4d93f04840b27ebd130ffa790a65823e1f92bfa0b6b4535a4a7724c",
+    "extensions/qa/phase3-native-host-static/endpoint-preflight.node.mjs": "3ccda315b78bbdd35d63f04d9d3ebaac8608c78f762fd479667d768f1443654b",
+    "extensions/qa/phase3-native-host-static/verify.mjs": "7ef1b7ed82dd097b7617227e743216bed11f71a68b112e23777c558f4ec0905f",
+    "extensions/src/core/card-media-references.ts": "9050abebb7d060b60f462e2a7b838bbd553071b1c419f9fdd1fd43c1e88649de",
+    "extensions/src/server/storage/service.ts": "37d29e662c23e077776b158ac5180702dd9e42595c85b3a2e84d8626e87f091e",
+    "extensions/qa/phase3-recovery/workspace-typescript.mjs": "000a8dd233fbc46da002cc2f344afcb41a43c744c25dcd74e4a775b59291946b",
+    "extensions/qa/phase3-recovery/recovery-invariants.node.ts": "b57f7866752fcb7a49e28d8791cd6737ab94e5a5f0735768275a9838d42614d0"
+  },
+  "sourceUnchangedDuringChecks": true,
+  "results": [
+    {
+      "label": "focused-tests",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "--test",
+        "extensions/qa/phase3-native-host-static/static-site.node.mjs",
+        "extensions/qa/phase3-native-host-static/endpoint-preflight.node.mjs"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "recovery-real-invariants",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "--import",
+        "./extensions/qa/phase3-recovery/workspace-typescript.mjs",
+        "--test",
+        "extensions/qa/phase3-recovery/recovery-invariants.node.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "recovery-caller-regressions",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--configLoader",
+        "native",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "src/core/soundtrack-media-references.test.ts",
+        "src/core/show-themes/roundtrip.test.ts",
+        "src/core/card-appearance.test.ts",
+        "src/server/storage.test.ts",
+        "src/server/storage/journal-recovery.test.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117\\extensions",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "static-types",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "extensions/node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--strict",
+        "--skipLibCheck",
+        "--target",
+        "ES2022",
+        "--module",
+        "NodeNext",
+        "--moduleResolution",
+        "NodeNext",
+        "--allowImportingTsExtensions",
+        "--types",
+        "node",
+        "--typeRoots",
+        "packages/socket/node_modules/@types",
+        "extensions/src/mcp-app/native-host/static-site.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "focused-lint",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "node_modules/oxlint/bin/oxlint",
+        "extensions/src/mcp-app/native-host/static-site.ts",
+        "extensions/qa/phase3-native-host-static",
+        "extensions/qa/phase3-recovery/workspace-typescript.mjs",
+        "extensions/src/core/card-media-references.ts",
+        "extensions/src/server/storage/service.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "configured-format",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/mcp-app/native-host/static-site.ts",
+        "extensions/qa/phase3-native-host-static",
+        "extensions/qa/phase3-recovery/workspace-typescript.mjs"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-design",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-design-check.mjs"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-tokens",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-token-registry.mjs",
+        "--check"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-catalog",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-catalog-check.mjs"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "ui-freeze",
+      "executable": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "args": [
+        "--experimental-strip-types",
+        "extensions/qa/tds-boundary.mjs"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 1,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "protected-delta",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--exit-code",
+        "34cfd464ac0bba432701b87f10f4f8388d665066",
+        "--",
+        "packages",
+        "extensions/src/editor"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "whitespace",
+      "executable": "git",
+      "args": [
+        "diff",
+        "--check"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-phase3-codex-takeover-20261117",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    }
+  ],
+  "scopedTestExpectation": "16 dependency-free tests; synthetic responses, no authenticated host installation",
+  "releaseDecision": "NOT_READY",
+  "ext4Recovery": "NOT_RUN",
+  "independentCombinedSecurityReview": "NOT_RUN",
+  "productionDeployment": "NOT_RUN",
+  "realChatGptConnection": "NOT_RUN"
+}

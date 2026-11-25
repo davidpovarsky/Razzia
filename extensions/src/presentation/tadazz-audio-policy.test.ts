@@ -1,0 +1,493 @@
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
+import { createElement } from "react"
+import { renderToString } from "react-dom/server"
+import { describe, expect, it } from "vitest"
+import type { AudioExtras } from "../core/quiz-extras"
+import {
+  AudioCuePlayer,
+  calibratedMusicVolume,
+  resolveAudioCue,
+  TADAZZ_SFX_BY_CUE,
+} from "./audio-cue-player"
+import {
+  resolveTadazzAudioPolicy,
+  isNativeQuestionAudioReady,
+  resolveNativePhaseAudioCue,
+} from "./tadazz-audio-policy"
+
+describe("P0 Tadazz soundtrack policy", () => {
+  it("retains the finale bed across separately delivered closing and native status snapshots", () => {
+    for (const stage of ["closing", "closed"]) {
+      expect(
+        resolveTadazzAudioPolicy({
+          statusName: "SHOW_RESPONSES",
+          extensionPhase: "responses",
+          sceneKind: "wait",
+          presentationLaunch: { stage, startedAt: 1000 },
+        }),
+      ).toEqual({ slot: "finale", continuityKey: "finale" })
+    }
+    expect(
+      resolveTadazzAudioPolicy({
+        statusName: "SHOW_QUESTION",
+        extensionPhase: "question",
+        sceneKind: "question",
+        presentationLaunch: { stage: "running", startedAt: null },
+      }),
+    ).toEqual({ slot: "question", continuityKey: "question" })
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "question",
+        activeTimelineStep: { kind: "question", questionId: "current" },
+        presentationLaunch: { stage: "closed", startedAt: 1000 },
+      }).slot,
+    ).toBe("question")
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "results",
+        presentationLaunch: { stage: "closed", startedAt: "invalid" },
+      }).slot,
+    ).toBe("results")
+  })
+
+  it("gives server start ticks sole effect ownership while retaining round-start music", () => {
+    expect(resolveNativePhaseAudioCue("start", "start")).toBeUndefined()
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "start",
+        statusName: "SHOW_START",
+      }),
+    ).toEqual({
+      slot: "roundStart",
+      continuityKey: "round-launch",
+    })
+    expect(resolveNativePhaseAudioCue("question", "showQuestion")).toBe(
+      "showQuestion",
+    )
+    expect(resolveNativePhaseAudioCue("finale", "podium1")).toBe("podium1")
+  })
+  it("starts the active voting music despite a delayed previous-scene cue and music payload", () => {
+    const html = renderToString(
+      createElement(AudioCuePlayer, {
+        soundtrackSlot: "voting",
+        cueId: "start",
+        autoPlay: false,
+        sceneAudio: {
+          mode: "custom",
+          url: "/media/previous-spotlight.mp3",
+          volume: 0.3,
+          loop: true,
+        },
+        cardAudioCues: {
+          answersMusic: {
+            mode: "custom",
+            url: "/tadazz-show/music/epic-main-menu.mp3",
+            volume: 0.38,
+            loop: true,
+          },
+        },
+      }),
+    )
+    expect(html).toContain(
+      'data-audio-url="/tadazz-show/music/epic-main-menu.mp3"',
+    )
+    expect(html).toContain('data-cue-id="answersMusic"')
+  })
+  it("makes the approved results recording audible without changing other music or SFX", () => {
+    expect(
+      calibratedMusicVolume("/tadazz-show/music/cutie-patootie.mp3", 0.3),
+    ).toBe(0.75)
+    expect(
+      calibratedMusicVolume(
+        "/media/tzila-determined-pursuit-20261105.mp3",
+        0.38,
+      ),
+    ).toBe(0.38)
+    expect(
+      calibratedMusicVolume("/sounds/tadazz-reveal-bright-20261108.mp3", 0.9),
+    ).toBe(0.9)
+    expect(
+      calibratedMusicVolume("/tadazz-show/music/cutie-patootie.mp3", 1),
+    ).toBe(1)
+  })
+  it("connects every authored show scene independently of a previous question's base status", () => {
+    const mappings = {
+      "round-one": "roundStart",
+      "round-two": "roundStart",
+      interlude: "roundStart",
+      "z-wipe": "roundStart",
+      "top-pick": "results",
+      "tie-break": "leaderboard",
+      "story-progress": "recap",
+      "round-recap": "recap",
+      "story-assembly": "recap",
+      "story-live": "recap",
+      "grand-finale": "finale",
+      "representative-directory": "lobby",
+      "phone-instructions": "lobby",
+      "connection-readiness": "lobby",
+    } as const
+    for (const [scenePreset, slot] of Object.entries(mappings)) {
+      const policy = resolveTadazzAudioPolicy({
+        scenePreset,
+        sceneKind: "animation",
+        extensionPhase: "scene",
+        statusName: "SELECT_ANSWER",
+      })
+      expect(policy.slot, scenePreset).toBe(slot)
+    }
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "question",
+        extensionPhase: "question",
+        statusName: "SELECT_ANSWER",
+      }).slot,
+    ).toBe("question")
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "voting",
+        extensionPhase: "question",
+        statusName: "SHOW_QUESTION",
+      }).slot,
+    ).toBe("voting")
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "results",
+        extensionPhase: "question",
+        statusName: "SELECT_ANSWER",
+      }).slot,
+    ).toBe("results")
+    expect(
+      resolveTadazzAudioPolicy({
+        extensionPhase: "responses",
+        statusName: "SELECT_ANSWER",
+      }).slot,
+    ).toBe("results")
+  })
+
+  it("never lets a stale timer cue replace a question, results or round soundtrack", () => {
+    for (const slot of [
+      "question",
+      "results",
+      "roundStart",
+      "leaderboard",
+      "recap",
+      "finale",
+    ] as const) {
+      const audio = {
+        cues: {},
+        soundtrack: {
+          [slot]: {
+            mode: "media",
+            url: `/media/${slot}.mp3`,
+            volume: 0.3,
+            loop: true,
+            fadeMs: 0,
+            startOffsetSeconds: 0,
+          },
+        },
+      } as unknown as AudioExtras
+      const html = renderToString(
+        createElement(AudioCuePlayer, {
+          audioExtras: audio,
+          soundtrackSlot: slot,
+          cueId: "answersMusic",
+          autoPlay: false,
+          cardAudioCues: {
+            answersMusic: {
+              mode: "custom",
+              url: "/media/prior-timer.mp3",
+              volume: 0.38,
+              loop: true,
+            },
+          },
+        }),
+      )
+      expect(html, slot).toContain(`data-audio-url="/media/${slot}.mp3"`)
+    }
+  })
+
+  it("plays the selected results bed, then the authored original spotlight bed, without replacing reveal SFX", () => {
+    const audio = {
+      cues: {},
+      soundtrack: {
+        results: {
+          mode: "media",
+          url: "/tadazz-show/music/cutie-patootie.mp3",
+          volume: 0.3,
+          loop: true,
+          fadeMs: 400,
+          startOffsetSeconds: 0,
+        },
+      },
+    } as unknown as AudioExtras
+    const props = {
+      audioExtras: audio,
+      soundtrackSlot: "results" as const,
+      stageOwnsReveal: true,
+      cueId: "revealResults" as const,
+      autoPlay: false,
+    }
+    const results = renderToString(createElement(AudioCuePlayer, props))
+    expect(results).toContain(
+      'data-audio-url="/tadazz-show/music/cutie-patootie.mp3"',
+    )
+    expect(results).not.toContain('data-testid="soundtrack-credit"')
+    const ending = renderToString(
+      createElement(AudioCuePlayer, { ...props, soundtrackSlot: "finale" }),
+    )
+    expect(ending).toContain('data-testid="soundtrack-credit"')
+    const spotlight = renderToString(
+      createElement(AudioCuePlayer, {
+        ...props,
+        sceneAudio: {
+          mode: "custom",
+          url: "/media/original-results.mp3",
+          volume: 0.3,
+          loop: true,
+        },
+      }),
+    )
+    expect(spotlight).toContain('data-audio-url="/media/original-results.mp3"')
+    const afterVoting = renderToString(
+      createElement(AudioCuePlayer, {
+        ...props,
+        cueId: "answersMusic",
+        cardAudioCues: {
+          answersMusic: {
+            mode: "custom",
+            url: "/tadazz-show/music/epic-main-menu.mp3",
+            volume: 0.38,
+            loop: true,
+          },
+        },
+        sceneAudio: {
+          mode: "custom",
+          url: "/media/original-results.mp3",
+          volume: 0.3,
+          loop: true,
+        },
+      }),
+    )
+    expect(afterVoting).toContain(
+      'data-audio-url="/media/original-results.mp3"',
+    )
+    expect(spotlight).not.toContain('data-testid="soundtrack-credit"')
+    expect(TADAZZ_SFX_BY_CUE["survey-reveal"]).toBe(
+      "/sounds/tadazz-reveal-bright-20261108.mp3",
+    )
+  })
+
+  it("uses an authored question timer track instead of the global voting bed", () => {
+    const html = renderToString(
+      createElement(AudioCuePlayer, {
+        cueId: "answersMusic",
+        soundtrackSlot: "voting",
+        autoPlay: false,
+        cardAudioCues: {
+          answersMusic: {
+            mode: "custom",
+            url: "/tadazz-show/music/epic-main-menu.mp3",
+            volume: 0.38,
+            loop: true,
+          },
+        },
+      }),
+    )
+    expect(html).toContain(
+      'data-audio-url="/tadazz-show/music/epic-main-menu.mp3"',
+    )
+    expect(html).toContain('data-audio-loop="true"')
+  })
+
+  it("loops every stage soundtrack but preserves the twelve-second non-looping intro", () => {
+    const slots = [
+      "openingIntro",
+      "lobby",
+      "roundStart",
+      "question",
+      "results",
+      "leaderboard",
+      "recap",
+      "finale",
+    ] as const
+    const extras = {
+      cues: {},
+      soundtrack: Object.fromEntries(
+        slots.map((slot) => [
+          slot,
+          {
+            mode: "media",
+            url: `/media/${slot}.mp3`,
+            volume: 0.35,
+            loop: false,
+            fadeMs: 0,
+            startOffsetSeconds: 0,
+            maxDurationMs: 4500,
+          },
+        ]),
+      ),
+    } as unknown as AudioExtras
+    for (const slot of [
+      "lobby",
+      "roundStart",
+      "question",
+      "results",
+      "leaderboard",
+      "recap",
+      "finale",
+    ] as const) {
+      const html = renderToString(
+        createElement(AudioCuePlayer, {
+          audioExtras: extras,
+          soundtrackSlot: slot,
+          gameId: "tzila",
+          autoPlay: false,
+        }),
+      )
+      expect(html, slot).toContain('data-audio-loop="true"')
+    }
+    const opening = renderToString(
+      createElement(AudioCuePlayer, {
+        audioExtras: extras,
+        soundtrackSlot: "openingIntro",
+        gameId: "tzila",
+        autoPlay: false,
+      }),
+    )
+    expect(opening).toContain('data-audio-loop="false"')
+  })
+  it("keeps one continuity group across results and interim results", () => {
+    const results = resolveTadazzAudioPolicy({ statusName: "SHOW_RESPONSES" })
+    const interim = resolveTadazzAudioPolicy({ sceneKind: "interimResults" })
+    expect(results).toEqual({ slot: "results", continuityKey: "result-reveal" })
+    expect(interim).toEqual(results)
+    expect(
+      resolveTadazzAudioPolicy({
+        statusName: "SELECT_ANSWER",
+        extensionPhase: "responses",
+      }),
+    ).toEqual(results)
+  })
+
+  it("maps lobby, voting, leaderboard/tie, recap and finale deterministically", () => {
+    expect(resolveTadazzAudioPolicy({}).slot).toBe("lobby")
+    expect(resolveTadazzAudioPolicy({ statusName: "SELECT_ANSWER" }).slot).toBe(
+      "voting",
+    )
+    expect(resolveTadazzAudioPolicy({ scenePreset: "tie-break" }).slot).toBe(
+      "leaderboard",
+    )
+    expect(
+      resolveTadazzAudioPolicy({ scenePreset: "story-assembly" }).slot,
+    ).toBe("recap")
+    expect(resolveTadazzAudioPolicy({ scenePreset: "grand-finale" }).slot).toBe(
+      "finale",
+    )
+  })
+
+  it("maps audible show cues to real assets and keeps decorative impact silent", () => {
+    expect(TADAZZ_SFX_BY_CUE.impact).toBeUndefined()
+    expect(TADAZZ_SFX_BY_CUE["top-pick-reveal"]).toBe(
+      "/sounds/tadazz-confirm-20261108.mp3",
+    )
+    const emitted = [
+      "countdown-ended",
+      "survey-reveal",
+      "story-begin",
+      "wipe-covered",
+      "company-ident",
+      "tadazz-welcome",
+      "opening-portal",
+      "opening-logo",
+      "directory-loaded",
+      "phone-ready",
+      "readiness-grid",
+      "round-launch",
+      "story-progress-update",
+      "story-assembled",
+      "story-live-hold",
+      "finale-impact",
+      "curtains-closed",
+    ]
+    for (const cue of emitted) {
+      expect(TADAZZ_SFX_BY_CUE[cue]).toMatch(/^\/sounds\/.+\.mp3$/u)
+    }
+  })
+
+  it("resolves the preserved Goldy/Tzila voting configuration without changing URL, gain, enabled state or loop", () => {
+    const fixturePath = fileURLToPath(
+      new URL("../../fixtures/audio/tzila-soundtrack.json", import.meta.url),
+    )
+    const fixture = JSON.parse(readFileSync(fixturePath, "utf8")) as {
+      audio: AudioExtras
+    }
+    const configured = fixture.audio.cues.answersMusic
+    expect(configured).toMatchObject({
+      source: "media",
+      url: "/media/tzila-determined-pursuit-20261105.mp3",
+      volume: 0.38,
+      enabled: true,
+      loop: true,
+    })
+    expect(resolveAudioCue("answersMusic", fixture.audio)).toMatchObject({
+      url: "/media/tzila-determined-pursuit-20261105.mp3",
+      volume: 0.38,
+      enabled: true,
+      loop: true,
+      isDefault: false,
+    })
+  })
+})
+
+describe("native question audio handoff", () => {
+  it("defers the native SHOW_QUESTION cue while its extension snapshot is still prepared", () => {
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "prepared",
+        questionId: "question-a",
+        statusQuestionId: "question-a",
+      }),
+    ).toBe(false)
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "question",
+        questionId: "question-a",
+        statusQuestionId: "question-a",
+      }),
+    ).toBe(true)
+  })
+
+  it("rejects mismatched question snapshots in either arrival order", () => {
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "question",
+        questionId: "question-a",
+        statusQuestionId: "question-b",
+      }),
+    ).toBe(false)
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "question",
+        questionId: "question-b",
+        statusQuestionId: "question-a",
+      }),
+    ).toBe(false)
+  })
+
+  it("permits the same question again after replay preparation and preserves legacy missing IDs", () => {
+    const attempt = { questionId: "question-a", statusQuestionId: "question-a" }
+    expect(
+      ["question", "prepared", "question"].map((extensionPhase) =>
+        isNativeQuestionAudioReady({ ...attempt, extensionPhase }),
+      ),
+    ).toEqual([true, false, true])
+    expect(isNativeQuestionAudioReady({ extensionPhase: "question" })).toBe(
+      true,
+    )
+    expect(isNativeQuestionAudioReady({ extensionPhase: "answers" })).toBe(
+      false,
+    )
+  })
+})

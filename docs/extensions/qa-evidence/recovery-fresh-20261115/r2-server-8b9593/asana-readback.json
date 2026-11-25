@@ -1,0 +1,38 @@
+[
+  {
+    "status": "fulfilled",
+    "value": {
+      "task": "1220109925694179",
+      "completed": false,
+      "checkpointReadback": true,
+      "notesLength": 15086
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "task": "1220111293723790",
+      "completed": false,
+      "checkpointReadback": true,
+      "notesLength": 14273
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "task": "1219882508725158",
+      "completed": false,
+      "checkpointReadback": true,
+      "notesLength": 10724
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "task": "1220541793835278",
+      "completed": false,
+      "checkpointReadback": true,
+      "notesLength": 9719
+    }
+  }
+]

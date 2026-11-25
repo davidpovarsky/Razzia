@@ -7,6 +7,7 @@ import z from "zod"
 
 export const createGameValidator = z.object({
   quizzId: z.string().min(1, "errors:quizz.notFound"),
+  requestId: z.uuid().optional(),
 })
 
 export const checkGameValidator = z.object({
@@ -16,6 +17,8 @@ export const checkGameValidator = z.object({
 export const joinGameValidator = z.object({
   inviteCode: inviteCodeValidator,
   username: usernameValidator.optional(),
+  phone: z.string().max(40).optional(),
+  source: z.enum(["web", "phone"]).optional(),
 })
 
 const delayValidator = z
@@ -27,6 +30,9 @@ const delayValidator = z
 export const gameSettingsSchema = z.object({
   generatedUsernames: z.boolean(),
   answersOnly: z.boolean(),
+  phoneInviteOnly: z.boolean().optional(),
+  allowUnregisteredPlayers: z.boolean().optional(),
+  endOnAllAnswered: z.boolean().optional(),
   autoAdvance: z.object({
     enable: z.boolean(),
     responsesDelay: delayValidator,

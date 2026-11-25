@@ -1,0 +1,15 @@
+# Qualified C1 source batch integrated, default OFF
+
+Manager reviewed and selected exactly20B source/test paths at producer9934b9522c4296c049197c2c5589cc75c53db697. Tested app e1fb1b2 + observer47b6826, unchanged throughout the new native trial. Existing six modified target files exactly matched producer96767de base; fourteen additions were absent. Source integrationeed253e preserves every other accepted Site/Show/MCP/Phone path. Matched preparation/qualification/readback evidencebb74091/4f13e67/9934b95 picked as4ef446a/595afea/b02cc57. Actual integrated tested sourceb02cc572564b001c735c121e393148ce73febdb1.
+
+All20 source blobs/SHA256 match tested producer manifest. The minimal allocation/API/startup hooks preserve legacy behavior with creation absent; native creation requires TADAZZ_C1_CREATION_PROTOTYPE=true AND Linux. Startup replays only the dedicated trusted C1 registry, including pending tenant records across account-flag changes. Uncertain ownership/fences retain evidence and deny. Single synchronous cooperating-writer scope only. No active production flag or service/data change.
+
+## Independent review and actual integrated checks
+
+- Manager rehashed190downloaded raw files across packets5/6/7;27actual child outcomes and every stdout/stderr length/hash matched (9SIGKILL/18exit0). Packet5 remains pre-test provisioning failure.
+- Packet6 startup witness1PASS/10deselected then native11/11PASS. Six kill boundaries each have distinct killed/replay/replay PIDs. Packet7 GOMAXPROCSunset witness1PASS/10deselected only. Historical Go cause remains unknown.
+- All1288effective+2aux and1391retained source counters show zero mismatches before/after; zero PID-limit/zombie observations, peak66/96; three stopped/PID0/noOOM receipts. No Linux tests rerun on Windows; raw matched Linux qualification reused at exact source.
+- Actual integrated scoped TypeScript includes all20selected files and their imported source: PASS exit0. First local relocated-config run lacked node type-root and exited1; corrected only explicit existing extensions/node_modules/@types lookup, preserving failure log and source. No stubs, exclusions or source weakening.
+- Actual integrated original OFF-path create/import rollback regression file:5/5PASS, zero skipped/failed. No full37/48/819 rerun. Existing D25/25/focusedTC remain historical at75f74e3; no combined parent green claim while genuine installed MCP/E2E dependencies remain unavailable.
+
+Original three source tasks remainOPEN, with B direct exact-readback evidence. Independent prototype review does not establish all-writer B/F1 coordination, opaque legacy /quizz/historical tenant-root discovery, powerloss/storage migration/provider or production adoption. Original R2813/6 and C141/7 retained; old37 expressly OLD-profile reuse only. Existing16B WIP unchanged. No main merge/push/deploy, server job/cleanup/keeper or backup mutation. Runtime charge remains11,984,896B/64MiB for B's stopped qualification; manager used only local checks.

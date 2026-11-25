@@ -1,0 +1,18 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByTestId('widget-status').filter({ hasText: 'Preview unavailable' }) to be visible
+
+    at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-widget-20261115\extensions\qa\mcp-widget\browser.mjs:17:88
+    at async run (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-widget-20261115\extensions\qa\mcp-widget\browser.mjs:13:38)
+    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/qa/mcp-widget/browser.mjs:15:3 {
+  log: [
+    "  - waiting for getByTestId('widget-status').filter({ hasText: 'Preview unavailable' }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.17.0

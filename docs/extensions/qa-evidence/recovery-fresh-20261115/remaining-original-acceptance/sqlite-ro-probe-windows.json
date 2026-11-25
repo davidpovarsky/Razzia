@@ -1,0 +1,112 @@
+{
+  "node": "v24.22.1",
+  "sqlite": "3.53.4",
+  "cases": [
+    {
+      "label": "live-wal",
+      "code": 0,
+      "stdout": "{\"rows\":[{\"id\":\"wal-committed-owner\"}],\"node\":\"v24.22.1\",\"sqlite\":\"3.53.4\"}\n",
+      "stderr": "",
+      "before": {
+        ".probe-owner": {
+          "bytes": 36,
+          "mode": 33206,
+          "mtime": 1794757777407.6772,
+          "sha": "ebeda96de569f13fcaaea9969ca1c09a422886e11a95983d0fcde8389d21f707"
+        },
+        "accounts.sqlite": {
+          "bytes": 4096,
+          "mode": 33206,
+          "mtime": 1794757777422.8132,
+          "sha": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda"
+        },
+        "accounts.sqlite-shm": {
+          "bytes": 32768,
+          "mode": 33206,
+          "mtime": 1794757777426.324,
+          "sha": "8ffce7434ef66fffdab6d3485724f3335284bf6ec22078dfd7f7010989e4078c"
+        },
+        "accounts.sqlite-wal": {
+          "bytes": 12392,
+          "mode": 33206,
+          "mtime": 1794757777428.8315,
+          "sha": "a9ee3c05aece29d5a900ff26cfa644690b8e0a3900aad7f85ad680bc3bfd34d1"
+        }
+      },
+      "after": {
+        ".probe-owner": {
+          "bytes": 36,
+          "mode": 33206,
+          "mtime": 1794757777407.6772,
+          "sha": "ebeda96de569f13fcaaea9969ca1c09a422886e11a95983d0fcde8389d21f707"
+        },
+        "accounts.sqlite": {
+          "bytes": 4096,
+          "mode": 33206,
+          "mtime": 1794757777422.8132,
+          "sha": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda"
+        },
+        "accounts.sqlite-shm": {
+          "bytes": 32768,
+          "mode": 33206,
+          "mtime": 1794757777426.324,
+          "sha": "8ffce7434ef66fffdab6d3485724f3335284bf6ec22078dfd7f7010989e4078c"
+        },
+        "accounts.sqlite-wal": {
+          "bytes": 12392,
+          "mode": 33206,
+          "mtime": 1794757777428.8315,
+          "sha": "a9ee3c05aece29d5a900ff26cfa644690b8e0a3900aad7f85ad680bc3bfd34d1"
+        }
+      },
+      "unchanged": true
+    },
+    {
+      "label": "clean-closed-wal",
+      "code": 0,
+      "stdout": "{\"rows\":[{\"id\":\"wal-committed-owner\"}],\"node\":\"v24.22.1\",\"sqlite\":\"3.53.4\"}\n",
+      "stderr": "",
+      "before": {
+        ".probe-owner": {
+          "bytes": 36,
+          "mode": 33206,
+          "mtime": 1794757777407.6772,
+          "sha": "ebeda96de569f13fcaaea9969ca1c09a422886e11a95983d0fcde8389d21f707"
+        },
+        "accounts.sqlite": {
+          "bytes": 8192,
+          "mode": 33206,
+          "mtime": 1794757777543.6245,
+          "sha": "f32e14d8544333693f39f787f314d6ab504ca0fae557143113c01193d8ba3d75"
+        }
+      },
+      "after": {
+        ".probe-owner": {
+          "bytes": 36,
+          "mode": 33206,
+          "mtime": 1794757777407.6772,
+          "sha": "ebeda96de569f13fcaaea9969ca1c09a422886e11a95983d0fcde8389d21f707"
+        },
+        "accounts.sqlite": {
+          "bytes": 8192,
+          "mode": 33206,
+          "mtime": 1794757777543.6245,
+          "sha": "f32e14d8544333693f39f787f314d6ab504ca0fae557143113c01193d8ba3d75"
+        },
+        "accounts.sqlite-shm": {
+          "bytes": 0,
+          "mode": 33206,
+          "mtime": 1794757777623.2124,
+          "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "accounts.sqlite-wal": {
+          "bytes": 0,
+          "mode": 33206,
+          "mtime": 1794757777623.2124,
+          "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "unchanged": false
+    }
+  ]
+}

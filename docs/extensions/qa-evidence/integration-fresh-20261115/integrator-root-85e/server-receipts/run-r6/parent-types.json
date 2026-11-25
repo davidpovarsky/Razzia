@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "tsc",
+    "--noEmit",
+    "-p",
+    "tsconfig.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 1,
+  "log_sha256": "a4045896b1ae54eb6074e628e7a6e9715c439299cd9c625783a1f0ef0539a23a",
+  "seconds": 31.17
+}

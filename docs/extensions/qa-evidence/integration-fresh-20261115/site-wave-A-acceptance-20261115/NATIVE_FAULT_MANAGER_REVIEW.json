@@ -1,0 +1,64 @@
+{
+  "captured_utc": "2026-11-15T16:18:16.246253+00:00",
+  "producer": "63dd0bd2339befef14163b543da1ba2b5e1d65c7",
+  "rawFilesVerified": 94,
+  "cases": [
+    {
+      "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+      "mode": "drop-start-ack",
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "terminalChildExit": 1,
+      "publicFiles": 202,
+      "createWritten": 1,
+      "startWritten": 1,
+      "hashesVerified": true
+    },
+    {
+      "nonce": "f8e1688d4d504cddbf90113c70c26998",
+      "mode": "native-write-eio",
+      "status": "PASS_SCOPED_NATIVE_WRITE_EIO_READBACK",
+      "terminalChildExit": 1,
+      "publicFiles": 202,
+      "createWritten": 1,
+      "startWritten": 1,
+      "hashesVerified": true
+    },
+    {
+      "nonce": "83e631a8f8b94f469665beef772b02b8",
+      "mode": "native-fsync-eio",
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "terminalChildExit": 1,
+      "publicFiles": 202,
+      "createWritten": 1,
+      "startWritten": 1,
+      "hashesVerified": true
+    },
+    {
+      "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+      "mode": "native-readonly-erofs",
+      "status": "INCONCLUSIVE_NATIVE_INSTRUMENTATION_BEFORE_STDIN",
+      "terminalChildExit": 1,
+      "publicFiles": 202,
+      "createWritten": 1,
+      "startWritten": 1,
+      "hashesVerified": true
+    },
+    {
+      "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+      "mode": "native-readonly-erofs",
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "terminalChildExit": 1,
+      "publicFiles": 202,
+      "createWritten": 1,
+      "startWritten": 1,
+      "hashesVerified": true
+    }
+  ],
+  "isolationStoppedVerified": 10,
+  "protectedSnapshotsEqual": true,
+  "helperSha": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2",
+  "historicalFailuresPreserved": true,
+  "sourceEligibilityNotActualRetry": true,
+  "productionAction": "NOT_RUN",
+  "actualPhysicalFault": "NOT_PROVEN"
+}

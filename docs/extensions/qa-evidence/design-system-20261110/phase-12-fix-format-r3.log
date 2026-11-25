@@ -1,0 +1,83 @@
+extensions/qa/tds-acceptance.spec.ts 568ms
+extensions/qa/tds-baseline.spec.ts 154ms
+extensions/qa/tds-boundary.mjs 97ms
+extensions/qa/tds-browser.d.ts 24ms
+extensions/qa/tds-catalog-check.mjs 34ms
+extensions/qa/tds-catalog.spec.ts 96ms
+extensions/qa/tds-components-fixture.tsx 80ms
+extensions/qa/tds-components.spec.ts 97ms
+extensions/qa/tds-design-check.mjs 25ms
+extensions/qa/tds-editor-proof.mjs 28ms
+extensions/qa/tds-fixture.tsx 26ms
+extensions/qa/tds-host-seams.mjs 58ms
+extensions/qa/tds-host.spec.ts 203ms
+extensions/qa/tds-inventory.mjs 33ms
+extensions/qa/tds-motion-guard.mjs 6ms
+extensions/qa/tds-motion-site.spec.ts 53ms
+extensions/qa/tds-motion.spec.ts 95ms
+extensions/qa/tds-package-admin.spec.ts 34ms (unchanged)
+extensions/qa/tds-roster.spec.ts 92ms
+extensions/qa/tds-site-account.spec.ts 15ms
+extensions/qa/tds-site-fixture.ts 23ms
+extensions/qa/tds-site-layout.spec.ts 40ms
+extensions/qa/tds-site.spec.ts 41ms
+extensions/qa/tds-stage-fixture.tsx 34ms
+extensions/qa/tds-stage-integration.spec.ts 62ms
+extensions/qa/tds-stage.spec.ts 85ms
+extensions/qa/tds-token-registry.mjs 4ms
+extensions/qa/tds-tokens.spec.ts 11ms
+extensions/qa/tsconfig.json 11ms (unchanged)
+extensions/src/platform-ui/alert-dialog.tsx 39ms
+extensions/src/platform-ui/button.tsx 37ms (unchanged)
+extensions/src/platform-ui/catalog/catalog.tsx 50ms (unchanged)
+extensions/src/platform-ui/catalog/foundations.tsx 24ms (unchanged)
+extensions/src/platform-ui/catalog/i18n.ts 12ms
+extensions/src/platform-ui/catalog/interaction-stories.tsx 23ms
+extensions/src/platform-ui/catalog/layouts.tsx 25ms (unchanged)
+extensions/src/platform-ui/catalog/main.tsx 8ms
+extensions/src/platform-ui/catalog/registry.ts 16ms (unchanged)
+extensions/src/platform-ui/catalog/stories.tsx 63ms (unchanged)
+extensions/src/platform-ui/catalog/story.tsx 11ms (unchanged)
+extensions/src/platform-ui/dialog.tsx 65ms
+extensions/src/platform-ui/fields.tsx 24ms
+extensions/src/platform-ui/host-controls.tsx 28ms
+extensions/src/platform-ui/index.ts 4ms (unchanged)
+extensions/src/platform-ui/menus.tsx 38ms
+extensions/src/platform-ui/portal.tsx 42ms
+extensions/src/platform-ui/roster-controls.tsx 28ms
+extensions/src/platform-ui/scope.tsx 25ms (unchanged)
+extensions/src/platform-ui/shadow-focus.ts 41ms
+extensions/src/platform-ui/styles.ts 7ms (unchanged)
+extensions/src/platform-ui/surfaces.tsx 51ms
+extensions/src/platform-ui/tokens.test.ts 50ms
+extensions/src/platform-ui/tokens.ts 81ms
+extensions/src/presentation/index.ts 10ms (unchanged)
+extensions/src/presentation/platform-controls.test.ts 49ms (unchanged)
+extensions/src/presentation/room-join/contract.ts 22ms (unchanged)
+extensions/src/presentation/room-join/index.ts 12ms (unchanged)
+extensions/src/presentation/room-join/use-room-join.ts 36ms
+extensions/src/presentation/room-join/view.tsx 33ms
+extensions/src/presentation/show-themes/viewport.tsx 39ms
+extensions/src/site/tests/locales.test.ts 7ms
+extensions/src/site/themes/platform.ts 7ms (unchanged)
+extensions/src/site/web/shared/ReferenceCanvas.tsx 29ms (unchanged)
+extensions/src/site/web/studio/GameCard.tsx 34ms
+extensions/src/site/web/studio/MyGames.tsx 64ms
+extensions/src/site/web/studio/PackageTools.tsx 28ms
+extensions/tds.acceptance.playwright.config.ts 10ms
+extensions/tds.catalog.playwright.config.ts 4ms
+extensions/tds.catalog.vite.config.ts 6ms
+extensions/tds.components.playwright.config.ts 13ms
+extensions/tds.fixture.vite.config.ts 15ms
+extensions/tds.host.playwright.config.ts 13ms
+extensions/tds.legacy-acceptance.playwright.config.ts 8ms
+extensions/tds.live-acceptance.playwright.config.ts 10ms
+extensions/tds.motion-site.playwright.config.ts 6ms
+extensions/tds.motion.playwright.config.ts 12ms
+extensions/tds.package-admin.playwright.config.ts 7ms
+extensions/tds.roster.playwright.config.ts 11ms
+extensions/tds.site-regression.playwright.config.ts 6ms
+extensions/tds.site.playwright.config.ts 18ms
+extensions/tds.stage.playwright.config.ts 5ms (unchanged)
+extensions/tds.tokens.playwright.config.ts 4ms
+extensions/tsconfig.json 4ms (unchanged)

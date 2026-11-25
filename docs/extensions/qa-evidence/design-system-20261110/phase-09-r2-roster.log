@@ -1,0 +1,59 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › qa/tds-roster.spec.ts:73:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster (23.6s)
+  ✓  2 [webkit] › qa/tds-roster.spec.ts:73:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster (53.1s)
+
+
+  1) [chromium] › qa/tds-roster.spec.ts:73:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByTestId('host-modal-search-input')
+    Expected: focused
+    Received: inactive
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toBeFocused" getByTestId('host-modal-search-input') with timeout 15000ms
+      - waiting for getByTestId('host-modal-search-input')
+        34 × locator resolved to <input value="" type="text" data-testid="host-modal-search-input" aria-label="Search by name or phone number..." placeholder="Search by name or phone number..." class="border-border bg-background text-foreground w-full rounded-lg border py-1 pr-3 pl-8 text-xs"/>
+           - unexpected value "inactive"
+
+
+      189 |   await expect(modal).not.toContainText("Synthetic participant 001")
+      190 |   expect(deleteRequests).toBe(2)
+    > 191 |   await expect(search).toBeFocused()
+          |                        ^
+      192 |
+      193 |   const rosterPolicy = modal.getByRole("switch", {
+      194 |     name: "Phone Invite Only",
+        at /cleanup/extensions/qa/tds-roster.spec.ts:191:24
+
+    Error Context: ../../evidence/phase-09-roster-traces/tds-roster-authoritative-p-c45d1-0-400-row-responsive-roster-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-09-roster-traces/tds-roster-authoritative-p-c45d1-0-400-row-responsive-roster-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-09-roster-traces/tds-roster-authoritative-p-c45d1-0-400-row-responsive-roster-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa/tds-roster.spec.ts:73:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster
+  1 passed (1.4m)

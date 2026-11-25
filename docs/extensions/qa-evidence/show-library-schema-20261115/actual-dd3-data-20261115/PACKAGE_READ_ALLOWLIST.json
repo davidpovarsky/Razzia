@@ -1,0 +1,856 @@
+{
+  "mode": "FUTURE_READONLY_INPUT_ALLOWLIST_NOT_A_GRANT",
+  "moduleFiles": [
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+      "packageResolutionKey": "i18next@26.4.3",
+      "rawPnpmStoreLocator": "i18next@26.4.3_typescript@7.0.2",
+      "packagePath": "dist/esm/i18next.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+      "packageResolutionKey": "react-dom@19.3.0",
+      "rawPnpmStoreLocator": "react-dom@19.3.0_react@19.3.0",
+      "packagePath": "cjs/react-dom-client.production.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+      "packageResolutionKey": "react-dom@19.3.0",
+      "rawPnpmStoreLocator": "react-dom@19.3.0_react@19.3.0",
+      "packagePath": "cjs/react-dom.production.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+      "packageResolutionKey": "react-dom@19.3.0",
+      "rawPnpmStoreLocator": "react-dom@19.3.0_react@19.3.0",
+      "packagePath": "client.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+      "packageResolutionKey": "react-dom@19.3.0",
+      "rawPnpmStoreLocator": "react-dom@19.3.0_react@19.3.0",
+      "packagePath": "index.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+      "packageResolutionKey": "react@19.3.0",
+      "rawPnpmStoreLocator": "react@19.3.0",
+      "packagePath": "cjs/react-jsx-runtime.production.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+      "packageResolutionKey": "react@19.3.0",
+      "rawPnpmStoreLocator": "react@19.3.0",
+      "packagePath": "cjs/react.production.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+      "packageResolutionKey": "react@19.3.0",
+      "rawPnpmStoreLocator": "react@19.3.0",
+      "packagePath": "index.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+      "packageResolutionKey": "react@19.3.0",
+      "rawPnpmStoreLocator": "react@19.3.0",
+      "packagePath": "jsx-runtime.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+      "packageResolutionKey": "scheduler@0.28.0",
+      "rawPnpmStoreLocator": "scheduler@0.28.0",
+      "packagePath": "cjs/scheduler.production.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+      "packageResolutionKey": "scheduler@0.28.0",
+      "rawPnpmStoreLocator": "scheduler@0.28.0",
+      "packagePath": "index.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "index.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/checks.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/coerce.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/compat.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/deep-partial.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/errors.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/external.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/from-json-schema.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/in-out.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/iso.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/parse.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/classic/schemas.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/api.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/checks.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/compile.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/core.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/doc.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/errors.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/index.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/json-schema-generator.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/json-schema-processors.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/json-schema.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/memoizer.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/parse.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/regexes.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/registries.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/schemas.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/to-json-schema.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/util.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/versions.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/core/visit.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ar.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/az.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/be.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/bg.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/bn.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ca.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ckb.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/cs.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/da.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/de.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/el.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/en.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/eo.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/es.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/fa.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/fi.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/fr-CA.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/fr.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/gu.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/he.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/hi.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/hr.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/hu.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/hy.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/id.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/index.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/is.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/it.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ja.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ka.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/kh.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/km.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/kn.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ko.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/lt.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/mk.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ms.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ne.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/nl.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/nn.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/no.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ota.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/pl.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ps.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/pt-BR.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/pt.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ro.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ru.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/sk.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/sl.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/sv.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ta.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/tg.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/th.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/tk.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/tr.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ua.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/uk.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/ur.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/uz.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/vi.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/yo.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/zh-CN.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    },
+    {
+      "buildNamespaceModuleId": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "buildNamespaceRelativePath": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "packageResolutionKey": "zod@4.6.6",
+      "rawPnpmStoreLocator": "zod@4.6.6",
+      "packagePath": "v4/locales/zh-TW.js",
+      "physicalCacheRoot": "MISSING_REQUIRE_UI_INTEGRATOR_MAPPING_NOT_C35_CACHE_SUBSTITUTION"
+    }
+  ],
+  "additionalPackageMetadataAndLicensePaths": "REQUIRE_ACTUAL_FIVE_PACKAGE_INDEX_INVENTORY_NO_LICENSE_FILENAME_GUESS",
+  "owner": "Core/Integrator collect after exact source/cache mapping and root grant",
+  "packageAttestation": "MISSING_DENIED_NOT_TARBALL_SIGNATURE_PROOF"
+}

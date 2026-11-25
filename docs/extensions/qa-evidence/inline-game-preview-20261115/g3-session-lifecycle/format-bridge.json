@@ -1,0 +1,7 @@
+{
+  "testedSourceCommit": "b0075cecf5835d865f9d85f083a2203a22565ffc",
+  "testedSourceSha256": "d1627a0f4ec9fd4769f59e6fe57b7078a23002b1f5ef3c0bdfaae7d44d98c5c4",
+  "formattedSourceSha256": "dd3a9f546adc07a3b050c551800fb1d3fb962a15f087aaf992fdfcf7e9d972db",
+  "identicalPrettierCanonicalSource": true,
+  "scope": "Only the test file was reformatted; 18-unit/type/lint results retained on equivalent code. Original failed format receipt and prematurely created local commit preserved."
+}

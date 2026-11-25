@@ -1,0 +1,22 @@
+{
+  "command": [
+    "node",
+    "/cleanup/node_modules/prettier/bin/prettier.cjs",
+    "--config",
+    "/evidence/format-options.json",
+    "--check",
+    "first-party/**/*.ts",
+    "first-party/**/*.md",
+    "tests/first-party/**/*.ts",
+    "tests/first-party/**/*.mjs",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 6.497,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 66,
+  "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+}

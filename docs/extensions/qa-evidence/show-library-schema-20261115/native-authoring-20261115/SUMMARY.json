@@ -1,0 +1,70 @@
+{
+  "status": "PASS_SCOPED_AUTHORING_NOT_EXECUTABLE_PREVIEW",
+  "sourceFiles": [
+    {
+      "path": "extensions/src/core/show-library/native-library.ts",
+      "bytes": 2198,
+      "sha256": "a26e3652e976ca39e0b149083e53985487316b1d2b287851aff2feb931800339"
+    },
+    {
+      "path": "extensions/src/core/show-library/composition-document.ts",
+      "bytes": 1901,
+      "sha256": "e639b1cfd4b1ea8900df59b135a44fc08261555d1aaaade1d3748d04e4d3c999"
+    },
+    {
+      "path": "extensions/src/core/show-library/composition-repository.ts",
+      "bytes": 6805,
+      "sha256": "c181dd8c9c21f50c57dc54de95c92aaafeb2039eaf507015787a1dcf2fba2e13"
+    },
+    {
+      "path": "extensions/src/core/show-library/composition-repository.test.ts",
+      "bytes": 11083,
+      "sha256": "fa90b0d63e3e4deb1e989e31c211b5cb929fe5ffa3ae0e3f3d9eb25c61295590"
+    },
+    {
+      "path": "extensions/src/core/show-library/index.ts",
+      "bytes": 222,
+      "sha256": "812904bbb23d68e4f72c2502e41ef12d7995cc3f32c7965275109661ac8efc6e"
+    }
+  ],
+  "tests": 11,
+  "testExit": 0,
+  "focusedTypecheckExit": 0,
+  "formatExit": 0,
+  "designExit": 0,
+  "tokensExit": 0,
+  "catalogExit": 0,
+  "boundaryExit": 1,
+  "boundaryReason": "35historical/new paths outside stale TDS allowlist; mismatches=[]; guard unchanged",
+  "reused": [
+    {
+      "path": "extensions/src/core/show-library/compiled-index-authority.ts",
+      "gitBlob": "32aff4cdd4e5980d365600eabbcda56af2275537",
+      "status": "MATCHES_TESTED_C35_NOT_RERUN"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-schema.ts",
+      "gitBlob": "7eda7e97dfc09c244370d749fe8731b1f3198c94",
+      "status": "MATCHES_TESTED_C35_NOT_RERUN"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-validation.ts",
+      "gitBlob": "b9b6a357cc13a94b1214794cf875ab7ac661506f",
+      "status": "MATCHES_TESTED_C35_NOT_RERUN"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index.test.ts",
+      "gitBlob": "5d6f131799dd2ef349c173a7629b99556ccba893",
+      "status": "MATCHES_TESTED_C35_NOT_RERUN"
+    }
+  ],
+  "productionStorageAdapter": "NOT_IMPLEMENTED_OR_TESTED",
+  "browser": "NOT_RUN",
+  "runtimeAcceptance": "not-evaluated",
+  "compiledPins": [],
+  "executedNode": "24.22.1 Windows x64",
+  "executedVitest": "5.0.3",
+  "productionCustomerActions": 0,
+  "focusedTypecheckEvidence": "types-verified-c1.json + types-verified-c1.log (executed 15:04UTC on c1cabd878a1bcde51ac7da05d8c72ded3e8125cc, exit0)",
+  "preservedInitialTypecheckFailure": "types.log: initial two readonly test fixture TS2540 errors, not final acceptance"
+}

@@ -29,11 +29,19 @@ export interface CommonStatusDataMap {
     questionType: QuestionType
   }
   SHOW_QUESTION: {
+    /** Public renderer capability metadata; no answers or protected media URLs. */
+    questionType?: QuestionType
+    questionMediaType?: QuestionMedia["type"]
+    totalAnswers?: number
+    questionNumber?: number
+    questionId?: string
     question: string
     media?: QuestionMedia
     cooldown: number
   }
   SELECT_ANSWER: {
+    questionNumber?: number
+    questionId?: string
     question: string
     answers: string[]
     media?: QuestionMedia
@@ -42,6 +50,10 @@ export interface CommonStatusDataMap {
     questionType: QuestionType
     options?: QuestionOptions
     answersOnly: boolean
+    playMode?: "quiz" | "survey"
+    /** Authoritative instant at which answer cards, voting and the clock open. */
+    votingStartsAt?: number
+    votingEndsAt?: number
   }
   SHOW_RESULT: {
     correct: boolean
@@ -63,6 +75,8 @@ export interface CommonStatusDataMap {
 interface ManagerExtraStatus {
   SHOW_ROOM: { text: string; inviteCode?: string }
   SHOW_RESPONSES: {
+    questionNumber?: number
+    questionId?: string
     question: string
     responses: Record<number, number>
     solutions?: number[]

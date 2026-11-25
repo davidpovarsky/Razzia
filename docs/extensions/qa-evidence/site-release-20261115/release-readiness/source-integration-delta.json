@@ -1,0 +1,590 @@
+{
+  "site_base": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "application_source": "9b221bc0edabe449cdf27bc818ae77acbc676bae",
+  "test_selector_successor": "31b3cb084efeb50dced6952498e9703cb47dc45c",
+  "integration_checkpoint": "b208609a3005c5e03db12556f5ded3285a33e44a",
+  "current_site_head": "6c87f0431ebc3786752a5492bb988497241db7b6",
+  "application_delta_from_base": [
+    {
+      "path": "extensions/site.vite.config.ts",
+      "status_from_base": "M",
+      "git_blob": "450cb7a85f27dc3ce544bc10e93843d7d1905afb",
+      "sha256": "225ad48c3b5c5bde3efa22d7d97c3f593cc17dd2d760798c906051c126ba7702",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/bootstrap.tsx",
+      "status_from_base": "M",
+      "git_blob": "07498048c894e6ba3f064be7eb6c11860a96fdf3",
+      "sha256": "6982a5c231294292ca2870dd05439808f0a998f9ce437ab33fba9be6dcf29dcb",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/de.json",
+      "status_from_base": "M",
+      "git_blob": "ebdd900b026c241bccefd761d578c497d90c2f0e",
+      "sha256": "35da95623bb09f317de99dc76d8fbaa12de4a491238873669a5d4c60164b8b2f",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/en.json",
+      "status_from_base": "M",
+      "git_blob": "c07e0a3628a44c05dc5ca5e595f1a53d468f4aea",
+      "sha256": "28424b7888675354344f5bf8400607abee8e2bee0559f39b9fe849b382e78362",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/es.json",
+      "status_from_base": "M",
+      "git_blob": "c83e9438b7fa20d3b82e0401e25246afd8f5c182",
+      "sha256": "c31fcda126ae9e194ecb40031574c90c396fe2afbf17a7d64622333f17bab228",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/fr.json",
+      "status_from_base": "M",
+      "git_blob": "0d33e6af22fe5b24ec68093f198e07e8d4e27e96",
+      "sha256": "6bc3eb566c71dbbe6c56bb0e688b1fc655c5925bfdb97f92323c07dcf60afe44",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/it.json",
+      "status_from_base": "M",
+      "git_blob": "bb62db34f459f7878038d1f6867843100d297735",
+      "sha256": "521de1f981dfed0d7fab43db2ea20c0cab5ef06e5a1b74f17c205054cdcda591",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/ja.json",
+      "status_from_base": "M",
+      "git_blob": "fd37293503cc2cda767dad41b7765f6e9b77dcbe",
+      "sha256": "92848385e9d4e7f86355e5c58d0a4cccea4a9b6464ee4dbcdc723f5f1105366e",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/tr.json",
+      "status_from_base": "M",
+      "git_blob": "9c747d6dff6705e07c719f1f175d2ced9a2be582",
+      "sha256": "f2c5f3ef08aeb3ec7a9276a36a8480998e829e6f49ceb9061a1d453146218e24",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/locales/vi.json",
+      "status_from_base": "M",
+      "git_blob": "f899022aec44b4744849ac98771f65ac0f92ebae",
+      "sha256": "9f19dba7c129be9750d2919fdd0dfc02c316c23a0025f43735bb85571aa72356",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/tests/browser/marketing-locales.spec.ts",
+      "status_from_base": "A",
+      "git_blob": "95154ac9759afff7f0e211620d5342579e2c8a5f",
+      "sha256": "9e16f4c30e77627e799a88176b0638c76b004bb60962d661a5734e3a260d48cd",
+      "integration_byte_identical": true,
+      "test_only": true
+    },
+    {
+      "path": "extensions/src/site/tests/catalogue-search.test.ts",
+      "status_from_base": "A",
+      "git_blob": "0c780df9af302b05dbd48a38d7b40555beb3464c",
+      "sha256": "c3e9364350a61f6f4120e80db356b97c5e7034bd7872302affc829c21b85add7",
+      "integration_byte_identical": true,
+      "test_only": true
+    },
+    {
+      "path": "extensions/src/site/tests/metadata-policy.test.ts",
+      "status_from_base": "A",
+      "git_blob": "1bdd923dab04dd83f73a5790553b360aed0ce7fc",
+      "sha256": "97a9e744b791191cdae6f4a5de6f62b4c0dd28bc806fa8376866898a946ff0c9",
+      "integration_byte_identical": true,
+      "test_only": true
+    },
+    {
+      "path": "extensions/src/site/web/marketing/MarketingSite.tsx",
+      "status_from_base": "M",
+      "git_blob": "734e7beafe8b3da2a570c7aa57929eb448926ff9",
+      "sha256": "487ae1bf454855d4862875eff868f9e4e140d6a95e8eb10a4f8026389d0ce110",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/web/marketing/catalogue-search.ts",
+      "status_from_base": "A",
+      "git_blob": "5bc5f9371c48d524675beae7f15bf371c702a672",
+      "sha256": "8a33775515959b4e80d7a8249d6b6f41390bc5e9fab57bfee6c75f3c96e3fa88",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/web/shared/ReferenceCanvas.tsx",
+      "status_from_base": "M",
+      "git_blob": "5edebb05cc91e1477a604b0e957d8157c3178df8",
+      "sha256": "ce0a380fbfba369dbc768bd1a8e46e8875c8b864d68226152ac0072877340819",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/web/shared/SiteMetadata.tsx",
+      "status_from_base": "A",
+      "git_blob": "2189ac41e1a50719c4726908c64b17bdca5834df",
+      "sha256": "5aabefa6fe5a677db6385e6933e7338dfa2126a67a550ea7aef9845a1c2ae854",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "extensions/src/site/web/shared/site-metadata-policy.ts",
+      "status_from_base": "A",
+      "git_blob": "3995c5b30136a3ca4ef7019c3167f083c5399b8a",
+      "sha256": "41ce3a469f7083ebb46e48d8fdc96e236dcf0d2e9103255360d5580df0514ad9",
+      "integration_byte_identical": true,
+      "test_only": false
+    },
+    {
+      "path": "packages/web/index.html",
+      "status_from_base": "M",
+      "git_blob": "a654534f331e6bf237c66fad033019702b9a0db0",
+      "sha256": "9f3f2952feb779859faed515cef30bfbab1801d54f6c336b7eb0ecf33b61d37f",
+      "integration_byte_identical": true,
+      "test_only": false
+    }
+  ],
+  "selector_only_successor_paths": [
+    "extensions/src/site/tests/browser/marketing-locales.spec.ts"
+  ],
+  "site_scope_integration_delta": [],
+  "deployed_backend_source_to_site_base_delta_empty": true,
+  "integration_runtime_source_changes_NOT_in_retained_artifact": [
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/assets.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/binding-policy.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/compiled-index-authority.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/compiled-index-schema.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/compiled-index-validation.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/compiled-index.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/composition-document.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/composition-repository.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/composition-repository.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/digest.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/identity-rule.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/identity-rule2-vectors.json"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/identity.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/identity.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/index.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/manifest.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/native-library.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/preview-fixtures.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/preview-port.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/preview-port.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/preview-resolve.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/preview-schemas.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/primitives.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/projection-assets.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/projection-schema.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/projection.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/projection.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/registry.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/registry.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/schemas.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/stage-metadata-schema.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/stage-metadata.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/stage-metadata.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/core/show-library/tsconfig.focused.json"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/contracts/canonical.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/contracts/index.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/contracts/schemas.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/contracts/tools.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/package.json"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/pnpm-lock.yaml"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/README.md"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/authoring.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/authorization.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/connection.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/dependencies.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/dispatch.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/drafts.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/errors.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/factory.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/preview.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/request-boundary.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/server/results.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/authorization.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/canonical.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/delivery-fixture.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/drafts.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/fixtures.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/ingress.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/integrity.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/lifecycle-fixture.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/replay.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tests/server/send.nodecheck.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/mcp-app/tsconfig.json"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/media-library-recovery.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/media-library.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/media-library.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/show-themes/installation.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/storage.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/create-recovery.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/journal-recovery.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/storage/journal.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/native-binding-child.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/native-binding-fixture.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/native-binding-r2.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/native-binding.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/native-recovery-adapter.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/package-stage-r2.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/physical-binding.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/process-interruption-child.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/process-interruption-state.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/process-interruption.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/recovery-fixture.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/recovery-state.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/review-binding-child.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/review-binding-state.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/server/storage/review-binding.test.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/storage/service.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/server/storage/sidecar.ts"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/telephony/pilot-runtime/README.md"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/phone-gateway-qa-child.cjs"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/phone-route-typecheck.mjs"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/phone-route-typecheck.tsconfig.json"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/phone-safe-extract.py"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/phone-safe-extract.test.py"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/prepare-phone-api-package.mjs"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/run-phone-api-qa.sh"
+    },
+    {
+      "status": "M",
+      "path": "extensions/src/telephony/pilot-runtime/tada-pilot-gateway.cjs"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/tada-pilot-gateway.faults.test.cjs"
+    },
+    {
+      "status": "A",
+      "path": "extensions/src/telephony/pilot-runtime/verify-phone-api-source.mjs"
+    },
+    {
+      "status": "M",
+      "path": "packages/socket/src/api/extensions/game-routes.ts"
+    },
+    {
+      "status": "M",
+      "path": "pnpm-lock.yaml"
+    }
+  ],
+  "artifact": "406a22eadb840f0ac0c8fd269ed2444287157eadbbf15f1779c4a967d2507730",
+  "conclusion": "Site paths byte-identical at integration checkpoint; retained artifact is only original Site candidate, not a rebuild/publication of the integration checkpoint."
+}

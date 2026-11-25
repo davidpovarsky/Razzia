@@ -1,0 +1,162 @@
+Questions
+Participants
+Settings
+Launch
+Exit
+Save
+Quiz
+Survey
+Media
+Animation
+Transition
+Opening
+Closing
+Countdown
+Leaderboard
+Interim Results
+Answer Recap
+Card Type:
+Quiz
+1
+
+Which colour is the sky?
+
+2
+
+Choose the primary colours
+
+3
+
+Estimate the number
+
+Media
+
+Media
+
+5 sec
+Quiz
+Add card
+
+Add an image, video or audio to your question
+
+Upload
+
+Media library
+
+Images, audio or video, up to 100 MB
+
+Add from a URL
+5 answers
+1
+Text Only
+Image Only
+Text and Image
+Browse
+Accessible Alt Text
+2
+Text Only
+Image Only
+Text and Image
+3
+Text Only
+Image Only
+Text and Image
+4
+Text Only
+Image Only
+Text and Image
+5
+Text Only
+Image Only
+Text and Image
+Live preview
+Hide preview
+
+Updates as you edit. No save or live game is needed.
+
+Question
+Answers
+Results
+16:9
+4:3
+ROUND 01 · QUESTION 01 / 3
+NEXT QUESTION
+Which colour is the sky?
+AUDIENCE FAVOURITE
+01
+2
+Green
+AUDIENCE FAVOURITE
+02
+3
+Red
+AUDIENCE FAVOURITE
+03
+4
+Yellow
+AUDIENCE FAVOURITE
+04
+5
+Purple
+AUDIENCE FAVOURITE
+05
+VOTING OPEN
+Replay animation
+Answer mode
+Single choice
+Multiple choice
+Estimation
+Category
+
+Consecutive questions with the same category form a round. The leaderboard is only shown when the category changes.
+
+SCORING
+Max points
+(PTS)
+
+Maximum points awarded for a correct answer
+
+Penalty
+
+Points deducted for a wrong answer (total cannot go below 0)
+
+TIMINGS
+Question display
+(sec)
+
+Duration before answers appear
+
+Answer time
+(sec)
+
+Time players have to answer
+
+BACKGROUND
+
+Choices belong to the active theme. Card settings override show settings.
+
+Inherited from show
+
+Choose media
+AUDIO
+
+Choices belong to the active theme. Card settings override show settings.
+
+Question entrance
+Inherited from show
+Preview
+Choose media
+Voting music
+Inherited from show
+Preview
+Choose media
+Result reveal
+Inherited from show
+Preview
+Choose media
+MOTION
+
+Choices belong to the active theme. Card settings override show settings.
+
+Motion and timing are defined by this theme.
+{"checks":[{"name":"tadazz-classic current valid question beside estimation; both","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\nBlue\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation","theme":"tadazz-classic","number":"1","total":"3","images":[{"src":"/tadazz-show/second-library/teaser-screen-source.jpg","alt":"Creating Worlds","naturalWidth":2048},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/media/editor-proof-7rCI7nu6.png","alt":"A blue sky image","naturalWidth":1},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}}],"failures":["Error: expect(locator).toHaveClass(expected) failed\n\nLocator: getByTestId('question-preview-native-stage').getByText('Blue', { exact: true })\nExpected pattern: /sr-only/\nReceived string:  \"answer-title\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveClass\" getByTestId('question-preview-native-stage').getByText('Blue', { exact: true }) with timeout 5000ms\n  - waiting for getByTestId('question-preview-native-stage').getByText('Blue', { exact: true })\n    13 × locator resolved to <figcaption dir=\"auto\" class=\"answer-title\" data-has-caption=\"false\">Blue</figcaption>\n       - unexpected value \"answer-title\"\n"],"errors":[]}

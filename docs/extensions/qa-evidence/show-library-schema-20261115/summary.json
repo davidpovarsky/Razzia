@@ -1,0 +1,133 @@
+{
+  "portVersion": 2,
+  "identityRuleVersion": 1,
+  "base": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "overlaySha": "28ea054180312e7acf39cc34861ed3f604f0e357bedfdc05924aae7bf95bb2b8",
+  "serverEvidence": "server-validated-28ea",
+  "sourceFiles": 20,
+  "tests": {
+    "files": 4,
+    "total": 80,
+    "passed": 80,
+    "failed": 0
+  },
+  "commands": [
+    {
+      "label": "git-init",
+      "exitCode": 0
+    },
+    {
+      "label": "git-import-git-reference-objects.pack",
+      "exitCode": 0
+    },
+    {
+      "label": "git-import-git-freeze-blobs.pack",
+      "exitCode": 0
+    },
+    {
+      "label": "git-ref",
+      "exitCode": 0
+    },
+    {
+      "label": "git-head",
+      "exitCode": 0
+    },
+    {
+      "label": "git-index",
+      "exitCode": 0
+    },
+    {
+      "label": "git-stage",
+      "exitCode": 0
+    },
+    {
+      "label": "container-create",
+      "exitCode": 0
+    },
+    {
+      "label": "toolchain",
+      "exitCode": 0
+    },
+    {
+      "label": "dependencies-frozen-offline",
+      "exitCode": 0
+    },
+    {
+      "label": "git-baseline-blobs",
+      "exitCode": 0
+    },
+    {
+      "label": "focused-tests",
+      "exitCode": 0
+    },
+    {
+      "label": "focused-types",
+      "exitCode": 0
+    },
+    {
+      "label": "scoped-format",
+      "exitCode": 0
+    },
+    {
+      "label": "design",
+      "exitCode": 0
+    },
+    {
+      "label": "tokens",
+      "exitCode": 0
+    },
+    {
+      "label": "catalog",
+      "exitCode": 0
+    },
+    {
+      "label": "freeze",
+      "exitCode": 1
+    },
+    {
+      "label": "lease-diff",
+      "exitCode": 0
+    },
+    {
+      "label": "network-state",
+      "exitCode": 0
+    },
+    {
+      "label": "ui-check-full-script",
+      "exitCode": 1
+    },
+    {
+      "label": "dependency-source-resolution",
+      "exitCode": 0
+    },
+    {
+      "label": "final-resource-and-network",
+      "exitCode": 0
+    },
+    {
+      "label": "allocation-stop",
+      "exitCode": 0
+    },
+    {
+      "label": "allocation-remove",
+      "exitCode": 0
+    }
+  ],
+  "sourceBefore": {
+    "status": "PASS",
+    "baselineFiles": 3297,
+    "overlayFiles": 20,
+    "errors": []
+  },
+  "sourceAfter": {
+    "status": "PASS",
+    "baselineFiles": 3297,
+    "overlayFiles": 20,
+    "errors": []
+  },
+  "allocationReleased": true,
+  "releaseUtc": "2026-11-15T04:47:36Z",
+  "rawUiCheck": "FAIL: historical scope denies only 20 newly leased module paths; mismatches=[]",
+  "rendererPins": 0,
+  "browserDeviceProvider": "NOT_RUN"
+}

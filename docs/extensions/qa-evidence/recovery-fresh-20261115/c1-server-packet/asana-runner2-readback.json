@@ -1,0 +1,33 @@
+{
+  "packetCommit": "e121dff8be5d5df5652e76d187751bf5894e9746",
+  "applicationSource": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "applicationChecksOrTestsRepeated": false,
+  "serverOperations": 0,
+  "executionAuthorized": false,
+  "readback": [
+    {
+      "gid": "1220109925694179",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 24158
+    },
+    {
+      "gid": "1220111293723790",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 23345
+    },
+    {
+      "gid": "1219882508725158",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 19796
+    },
+    {
+      "gid": "1220541793835278",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 18791
+    }
+  ]
+}

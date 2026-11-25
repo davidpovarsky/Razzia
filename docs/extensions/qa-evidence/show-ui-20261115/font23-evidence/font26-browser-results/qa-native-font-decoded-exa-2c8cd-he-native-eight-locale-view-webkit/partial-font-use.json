@@ -1,0 +1,288 @@
+{
+  "decoded": {
+    "faces": [
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+600-6ff, U+750-77f, U+870-88e, U+890-891, U+897-8e1, U+8e3-8ff, U+200c-200e, U+2010-2011, U+204f, U+2e41, U+fb50-fdff, U+fe70-fe74, U+fe76-fefc, U+102e0-102fb, U+10e60-10e7e, U+10ec2-10ec4, U+10efc-10eff, U+1ee00-1ee03, U+1ee05-1ee1f, U+1ee21-1ee22, U+1ee24, U+1ee27, U+1ee29-1ee32, U+1ee34-1ee37, U+1ee39, U+1ee3b, U+1ee42, U+1ee47, U+1ee49, U+1ee4b, U+1ee4d-1ee4f, U+1ee51-1ee52, U+1ee54, U+1ee57, U+1ee59, U+1ee5b, U+1ee5d, U+1ee5f, U+1ee61-1ee62, U+1ee64, U+1ee67-1ee6a, U+1ee6c-1ee72, U+1ee74-1ee77, U+1ee79-1ee7c, U+1ee7e, U+1ee80-1ee89, U+1ee8b-1ee9b, U+1eea1-1eea3, U+1eea5-1eea9, U+1eeab-1eebb, U+1eef0-1eef1"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+460-52f, U+1c80-1c8a, U+20b4, U+2de0-2dff, U+a640-a69f, U+fe2e-fe2f"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+301, U+400-45f, U+490-491, U+4b0-4b1, U+2116"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+307-308, U+590-5ff, U+200c-2010, U+20aa, U+25cc, U+fb1d-fb4f"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+100-2ba, U+2bd-2c5, U+2c7-2cc, U+2ce-2d7, U+2dd-2ff, U+304, U+308, U+329, U+1d00-1dbf, U+1e00-1e9f, U+1ef2-1eff, U+2020, U+20a0-20ab, U+20ad-20c0, U+2113, U+2c60-2c7f, U+a720-a7ff"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+0-ff, U+131, U+152-153, U+2bb-2bc, U+2c6, U+2da, U+2dc, U+304, U+308, U+329, U+2000-206f, U+20ac, U+2122, U+2191, U+2193, U+2212, U+2215, U+feff, U+fffd"
+      }
+    ],
+    "aliases": [
+      {
+        "status": "loaded",
+        "unicodeRange": "U+600-6ff, U+750-77f, U+870-88e, U+890-891, U+897-8e1, U+8e3-8ff, U+200c-200e, U+2010-2011, U+204f, U+2e41, U+fb50-fdff, U+fe70-fe74, U+fe76-fefc, U+102e0-102fb, U+10e60-10e7e, U+10ec2-10ec4, U+10efc-10eff, U+1ee00-1ee03, U+1ee05-1ee1f, U+1ee21-1ee22, U+1ee24, U+1ee27, U+1ee29-1ee32, U+1ee34-1ee37, U+1ee39, U+1ee3b, U+1ee42, U+1ee47, U+1ee49, U+1ee4b, U+1ee4d-1ee4f, U+1ee51-1ee52, U+1ee54, U+1ee57, U+1ee59, U+1ee5b, U+1ee5d, U+1ee5f, U+1ee61-1ee62, U+1ee64, U+1ee67-1ee6a, U+1ee6c-1ee72, U+1ee74-1ee77, U+1ee79-1ee7c, U+1ee7e, U+1ee80-1ee89, U+1ee8b-1ee9b, U+1eea1-1eea3, U+1eea5-1eea9, U+1eeab-1eebb, U+1eef0-1eef1"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+460-52f, U+1c80-1c8a, U+20b4, U+2de0-2dff, U+a640-a69f, U+fe2e-fe2f"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+301, U+400-45f, U+490-491, U+4b0-4b1, U+2116"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+307-308, U+590-5ff, U+200c-2010, U+20aa, U+25cc, U+fb1d-fb4f"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+100-2ba, U+2bd-2c5, U+2c7-2cc, U+2ce-2d7, U+2dd-2ff, U+304, U+308, U+329, U+1d00-1dbf, U+1e00-1e9f, U+1ef2-1eff, U+2020, U+20a0-20ab, U+20ad-20c0, U+2113, U+2c60-2c7f, U+a720-a7ff"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+0-ff, U+131, U+152-153, U+2bb-2bc, U+2c6, U+2da, U+2dc, U+304, U+308, U+329, U+2000-206f, U+20ac, U+2122, U+2191, U+2193, U+2212, U+2215, U+feff, U+fffd"
+      }
+    ],
+    "resources": [
+      {
+        "url": "/fonts/rubik-wght.css",
+        "status": 200,
+        "mime": "text/css",
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+      },
+      {
+        "url": "/fonts/files/rubik-arabic-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 32468,
+        "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+      },
+      {
+        "url": "/fonts/files/rubik-cyrillic-ext-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 12388,
+        "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+      },
+      {
+        "url": "/fonts/files/rubik-cyrillic-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 15112,
+        "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+      },
+      {
+        "url": "/fonts/files/rubik-hebrew-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 9348,
+        "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+      },
+      {
+        "url": "/fonts/files/rubik-latin-ext-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 19400,
+        "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+      },
+      {
+        "url": "/fonts/files/rubik-latin-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 35348,
+        "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "locale": "en",
+      "paint": {
+        "text": "Which colour do you prefer? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 87,
+        "nativeCloneWidth": 86.53469848632812,
+        "aliasWidth": 86.53469848632812,
+        "raster": "e337b509bf766d1e93a502aece844a223a2ac119c8a2f3a4d657ae216e3fc71b",
+        "aliasRaster": "e337b509bf766d1e93a502aece844a223a2ac119c8a2f3a4d657ae216e3fc71b",
+        "monoRaster": "8bfa22cac8abb473120b5c72eb2d01bbcec9a7e9d751558c873027f025114951",
+        "sansRaster": "3aed678adc551f896bf62342704e710d07ba9b0e58155a7504549479e99fe591",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "fr",
+      "paint": {
+        "text": "Quelle couleur préférez-vous ? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 90,
+        "nativeCloneWidth": 89.644775390625,
+        "aliasWidth": 89.644775390625,
+        "raster": "154b161cb30494fd757ccfcf1ff399c87e592f1a8b4b91be01da5a415498808e",
+        "aliasRaster": "154b161cb30494fd757ccfcf1ff399c87e592f1a8b4b91be01da5a415498808e",
+        "monoRaster": "e6a5974e909c76f8f48a6ec941506caa75cfe6a3c5fe036982f7dd1debd641ea",
+        "sansRaster": "b0396b8bb2e4d1a1678c83c0b51dd91f814e612b13cdd22efdd4e357aad7f259",
+        "fallbackRaster": "3097dc79b88790508916727259429550fc35068915a20055369725e5e81218ee",
+        "sansFallbackRaster": "66f7e9b410091bbece4260328bfea56dd0bec51d2e50c943949af054442d6990",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "de",
+      "paint": {
+        "text": "Welche Farbe bevorzugen Sie? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 102,
+        "nativeCloneWidth": 101.5306396484375,
+        "aliasWidth": 101.5306396484375,
+        "raster": "b42e4e2e39a64ac7546758e98b776c6f6b9ab9a38bbeb7a14f2ee931a55ecd6e",
+        "aliasRaster": "b42e4e2e39a64ac7546758e98b776c6f6b9ab9a38bbeb7a14f2ee931a55ecd6e",
+        "monoRaster": "3af05a20f08e0412a88e80258b01a9ace8984c5fbb0d6cc26d1d05fa0db63d38",
+        "sansRaster": "17638ef27562b96c3386425470f457b7d894a9d6fc046a82459cfa2c0804ec28",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "es",
+      "paint": {
+        "text": "¿Qué color prefieres? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 73,
+        "nativeCloneWidth": 72.17578125,
+        "aliasWidth": 72.17578125,
+        "raster": "4226fd1da683a5547605ecdad211a97b273296b56f93909d7b435c0bd6b5c157",
+        "aliasRaster": "4226fd1da683a5547605ecdad211a97b273296b56f93909d7b435c0bd6b5c157",
+        "monoRaster": "94dc3bb9985ea3e5c9cdbc1d67dfc1b42a92f78f4df2372809afb4149d039064",
+        "sansRaster": "f7e43aaa59cd9ab2565e7884485e63a86d9ec06b3dc82567a0dfbe7772e1c53e",
+        "fallbackRaster": "c6e1069cb80ec29e68861b8ca2d3da04b7917da75d4fd4ff5380081f58bac34e",
+        "sansFallbackRaster": "f66389d62c0b343d78dd29337e9b49af9ac19a5ee3fd7b20acdd0fd96effd5e6",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "it",
+      "paint": {
+        "text": "Quale colore preferisci? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 82,
+        "nativeCloneWidth": 81.293701171875,
+        "aliasWidth": 81.293701171875,
+        "raster": "3bdd5953c9e1b543dc35728921453ac19cbf0744ae3ac99698cdf09c4165a9c0",
+        "aliasRaster": "3bdd5953c9e1b543dc35728921453ac19cbf0744ae3ac99698cdf09c4165a9c0",
+        "monoRaster": "e35c8e8ee271936339c3c81fe0f60e2b36f18a055dba49a6ec6f4860f3b5c936",
+        "sansRaster": "3207ea641eb087e58eda5d733dc8fa84c6b523cad412ebaa9a4beb79ab01d4ae",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "ja",
+      "paint": {
+        "text": "どの色が好きですか？ 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 293,
+        "nativeCloneWidth": 292.6932373046875,
+        "aliasWidth": 292.6932373046875,
+        "raster": "6d802b8bfca0a0221b506705297320302e1cb4166326bbbfc84894c0f5eb6a24",
+        "aliasRaster": "6d802b8bfca0a0221b506705297320302e1cb4166326bbbfc84894c0f5eb6a24",
+        "monoRaster": "bd8ff430937f292ecc47a56ca844bd2e15c65f34e943d4712b8ceab5a5e559cc",
+        "sansRaster": "7adc871aa4cf396a09c634cf46383c79e9b40e85bb9ab374312657112538595d",
+        "fallbackRaster": "1460478a570d28ba84eb353f909aaf44f50df7d614958edd0a7924b735b4aed5",
+        "sansFallbackRaster": "1460478a570d28ba84eb353f909aaf44f50df7d614958edd0a7924b735b4aed5",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "tr",
+      "paint": {
+        "text": "Hangi rengi tercih edersiniz? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 84,
+        "nativeCloneWidth": 83.3958740234375,
+        "aliasWidth": 83.3958740234375,
+        "raster": "96a90539bd255b0cf607a6517a4baad4e8e0a4b72bae8d93ec5460b45086cbba",
+        "aliasRaster": "96a90539bd255b0cf607a6517a4baad4e8e0a4b72bae8d93ec5460b45086cbba",
+        "monoRaster": "302a1f1358ebb791b3e985a828abb2ef200cda27150253c6c7b0d0ea54ca133b",
+        "sansRaster": "1a70d8c554fcc662e4b856958db4016f485fcb302eeb76f8036f8c8cc037a053",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      },
+      "platformFonts": null
+    },
+    {
+      "locale": "vi",
+      "paint": {
+        "text": "Bạn thích màu nào? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 59,
+        "nativeCloneWidth": 58.19287109375,
+        "aliasWidth": 58.19287109375,
+        "raster": "fcb9d9c270c58713cba864eb212da7ea841292a630a3076cf9a376435cdb9f0d",
+        "aliasRaster": "fcb9d9c270c58713cba864eb212da7ea841292a630a3076cf9a376435cdb9f0d",
+        "monoRaster": "63069b8241cbb3d648cec266255395975c7ea12a159d05c250922a96ae18d781",
+        "sansRaster": "009d36ffdf65ee5b3e2d055f0bd0800eb5860285aa4487503eb3d2896b84f092",
+        "fallbackRaster": "5fb7dfb0b2887a9570ca4bed232b9066b47bef78f7b63e5e7f08dd803bb9d022",
+        "sansFallbackRaster": "ca685c068c87ae03657bb60720fee58853178947fc9350ddba7fb85ccee9ed2d",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      }
+    }
+  ]
+}

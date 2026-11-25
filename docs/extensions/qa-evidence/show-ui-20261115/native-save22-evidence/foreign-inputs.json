@@ -1,0 +1,18 @@
+{
+  "producerCommit": "5cba04f399d10c597f4cd6dc1cbfbb2b77041d58",
+  "inputs": [
+    {
+      "path": "extensions/src/mcp-app/contracts/native-save.ts",
+      "producerPath": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/extensions/src/mcp-app/contracts/native-save.ts",
+      "bytes": 2337,
+      "sha256": "ce672e956524b2fe7487d778a1a1a88abf6c45b55f99bd255db4bf0e139b3b8c"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/schemas.ts",
+      "producerPath": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/extensions/src/mcp-app/contracts/schemas.ts",
+      "bytes": 3415,
+      "sha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656"
+    }
+  ],
+  "meaning": "F's unchanged committed pure DTO files, only read-only canonical-path aliases in isolated QA; no F product file authored/copied into E repository."
+}

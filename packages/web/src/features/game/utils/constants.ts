@@ -1,10 +1,8 @@
-import Answers from "@razzia/web/features/game/components/states/Answers"
+import QuestionRound from "@razzia/web/features/game/components/states/QuestionRound"
 import Leaderboard from "@razzia/web/features/game/components/states/Leaderboard"
 import PlayerFinished from "@razzia/web/features/game/components/states/PlayerFinished"
 import Podium from "@razzia/web/features/game/components/states/Podium"
 import Prepared from "@razzia/web/features/game/components/states/Prepared"
-import Question from "@razzia/web/features/game/components/states/Question"
-import Responses from "@razzia/web/features/game/components/states/Responses"
 import Result from "@razzia/web/features/game/components/states/Result"
 import Room from "@razzia/web/features/game/components/states/Room"
 import Start from "@razzia/web/features/game/components/states/Start"
@@ -13,14 +11,7 @@ import Wait from "@razzia/web/features/game/components/states/Wait"
 
 import { STATUS } from "@razzia/common/types/game/status"
 
-export const ANSWERS_COLORS = [
-  "bg-[var(--color-answer-1)] text-white",
-  "bg-[var(--color-answer-2)] text-white",
-  "bg-[var(--color-answer-3)] text-white",
-  "bg-[var(--color-answer-4)] text-white",
-]
-
-export const ANSWERS_LABELS = ["A", "B", "C", "D"]
+export { ANSWERS_COLORS, ANSWERS_LABELS } from "./answer-style"
 
 export const GAME_STATES = {
   status: {
@@ -34,20 +25,21 @@ export const GAME_STATES = {
 }
 
 export const GAME_STATE_COMPONENTS = {
-  [STATUS.SELECT_ANSWER]: Answers,
-  [STATUS.SHOW_QUESTION]: Question,
+  [STATUS.SELECT_ANSWER]: QuestionRound,
+  [STATUS.SHOW_QUESTION]: QuestionRound,
   [STATUS.WAIT]: Wait,
   [STATUS.SHOW_START]: Start,
   [STATUS.SHOW_RESULT]: Result,
   [STATUS.SHOW_PREPARED]: Prepared,
   [STATUS.FINISHED]: PlayerFinished,
   [STATUS.SUMMARY]: Summary,
+  [STATUS.SHOW_RESPONSES]: QuestionRound,
 }
 
 export const GAME_STATE_COMPONENTS_MANAGER = {
   ...GAME_STATE_COMPONENTS,
   [STATUS.SHOW_ROOM]: Room,
-  [STATUS.SHOW_RESPONSES]: Responses,
+  [STATUS.SHOW_RESPONSES]: QuestionRound,
   [STATUS.SHOW_LEADERBOARD]: Leaderboard,
   [STATUS.FINISHED]: Podium,
 }

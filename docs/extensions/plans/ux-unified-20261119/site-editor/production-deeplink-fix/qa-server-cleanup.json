@@ -1,0 +1,20 @@
+{
+  "verifiedAndStopped": [
+    {
+      "processId": 25696,
+      "port": 4372,
+      "commandLine": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe --import tsx src/index.ts",
+      "creationTime": "2026-11-19T00:32:17.9534680Z"
+    },
+    {
+      "processId": 33328,
+      "port": 4371,
+      "commandLine": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe --experimental-strip-types C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\packages\\web\\node_modules\\vite\\bin\\vite.js preview --config C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\site.vite.config.ts --host 127.0.0.1 --port 4371 --strictPort --outDir C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\work\\native-production-cycle-qa-20261119\\dist",
+      "creationTime": "2026-11-19T00:32:17.9809840Z"
+    }
+  ],
+  "verification": "Exact command line and listening port ownership matched before signals.",
+  "remainingProcesses": [],
+  "remainingListeners": [],
+  "verifiedAt": "2026-11-19T00:37:48.228117+00:00"
+}

@@ -1,0 +1,21 @@
+{
+  "baseline": "5161eb7",
+  "comparisons": [
+    {
+      "file": "packages/web/src/components/Button.tsx",
+      "originalGitBlob": "0c877dd8a52aeb0b96f59e9a346cc8d9a266ae90",
+      "currentGitBlob": "0c877dd8a52aeb0b96f59e9a346cc8d9a266ae90",
+      "unchanged": true
+    },
+    {
+      "file": "packages/web/src/assets/background.png",
+      "originalGitBlob": "8ed76ec5013fd0e77b3cb2aabc7d259456af9ee5",
+      "currentGitBlob": "8ed76ec5013fd0e77b3cb2aabc7d259456af9ee5",
+      "unchanged": true
+    }
+  ],
+  "nativeThemeBackgroundByteExact": true,
+  "sharedAnswerComponents": "QUESTION_REGISTRY single/multi/estimation retained; existing extension image/animation props retained",
+  "platformThemeScope": "NativeGameSurface only; operator toolbar, audio, footer and Studio inherit upstream Rubik/common Button/Select",
+  "originalCategoryInheritance": "Restored in owned studio-editor-context.tsx; all-type browser regression passes"
+}

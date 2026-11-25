@@ -1,4 +1,6 @@
 {
+  "edit": "Chỉnh sửa",
+  "retry": "Thử lại",
   "cancel": "Hủy",
   "confirm": "Xác nhận",
   "connecting": "Đang kết nối...",
@@ -14,7 +16,8 @@
     "it": "Italiano - Tiếng Ý",
     "ja": "日本語 - Tiếng Nhật",
     "tr": "Türkçe - Tiếng Thổ Nhĩ Kỳ",
-    "vi": "Tiếng Việt - Tiếng Việt"
+    "vi": "Tiếng Việt - Tiếng Việt",
+    "he": "עברית"
   },
   "loading": "Đang tải...",
   "next": "Tiếp",
@@ -24,5 +27,6 @@
   "submit": "Gửi",
   "close": "Đóng",
   "previous": "Trước",
-  "changeLanguage": "Đổi ngôn ngữ"
+  "changeLanguage": "Đổi ngôn ngữ",
+  "untitledQuiz": "Bài đố chưa có tên"
 }

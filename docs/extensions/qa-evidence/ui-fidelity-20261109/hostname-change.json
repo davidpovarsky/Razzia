@@ -1,0 +1,6 @@
+{
+  "hostname": "theme-lab-v2.132.145.25.168.sslip.io",
+  "beforeSha256": "9a69671c5e1ef242abd25e2a58abd97429b1aaea88f197828ceb8ea6178ad5f1",
+  "afterSha256": "1cba48de63c0b40b19151012177debeee45b46a582ddc28411c1ce0d6e41e246",
+  "change": "additive hostname; graceful reload; all old blocks byte-preserved"
+}

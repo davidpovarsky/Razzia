@@ -1,0 +1,1010 @@
+{
+  "format": "tadazz-final-release-evidence-summary",
+  "version": 1,
+  "scope": "Evidence consolidation only; it does not claim a private host installation.",
+  "reportDate": "2026-11-18",
+  "clientTimezone": "Asia/Hebron",
+  "applicationRevision": "e30133c7dfb03412cfb898705f1115d206548668",
+  "toolingRevision": "21ef71e4e5e803aa55a6ba60a4c5d1a17c94c100",
+  "branch": "codex/tadazz-mcp-connect-20261118",
+  "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-mcp-connect-20261118",
+  "production": {
+    "releaseDirectory": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2",
+    "imageTag": "tadazz:mcp-e30133c-20261118-a2",
+    "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+    "containerId": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+    "observedAt": "2026-11-18T11:31:12.837015+00:00",
+    "container": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+    "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+    "running": true,
+    "restarts": 0,
+    "runningCount": 6,
+    "initiator": "not attributed",
+    "performedByThisRoot": false,
+    "publicProbesPassed": true,
+    "startedAt": "2026-11-18T11:23:24.987508339Z",
+    "sourceLabel": "e30133c7dfb03412cfb898705f1115d206548668",
+    "mountsUnchanged": true,
+    "hostConfigUnchanged": true,
+    "environmentChangedNames": [
+      "CONFIG_PATH",
+      "SOCKET_PORT",
+      "TADAZZ_INLINE_GAME_PREVIEW_ENABLED",
+      "TADAZZ_MCP_SERVICE_ENABLED"
+    ],
+    "oldRetainedStopped": true
+  },
+  "postCutoverIdentityReadback": {
+    "observedAtUtc": "2026-11-18T11:32:52.632810+00:00",
+    "comparisonToOld": {
+      "mountsUnchanged": true,
+      "hostConfigUnchanged": true,
+      "changedEnvironmentNames": [
+        "CONFIG_PATH",
+        "SOCKET_PORT",
+        "TADAZZ_INLINE_GAME_PREVIEW_ENABLED",
+        "TADAZZ_MCP_SERVICE_ENABLED"
+      ]
+    },
+    "hostConfigChangedKeys": [],
+    "containers": [
+      {
+        "exists": true,
+        "id": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+        "name": "tadazz",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "running": true,
+        "startedAt": "2026-11-18T11:23:24.987508339Z",
+        "finishedAt": "0001-01-01T00:00:00Z",
+        "restarts": 0,
+        "sourceRevisionLabel": "e30133c7dfb03412cfb898705f1115d206548668"
+      },
+      {
+        "exists": true,
+        "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+        "name": "tadazz-phone-gateway",
+        "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e",
+        "running": true,
+        "startedAt": "2026-11-08T11:37:09.544011462Z",
+        "finishedAt": "2026-11-08T11:37:09.486517102Z",
+        "restarts": 0,
+        "sourceRevisionLabel": null
+      },
+      {
+        "exists": true,
+        "id": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "name": "tadazz-pre-mcp-e30133c7dfb0-20261118T112319Z-f5b3c25d",
+        "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "running": false,
+        "startedAt": "2026-11-18T11:20:53.610418457Z",
+        "finishedAt": "2026-11-18T11:23:20.490425129Z",
+        "restarts": 0,
+        "sourceRevisionLabel": "bff12a63ec3f69a58123c0299eea991901680b94"
+      }
+    ],
+    "publicProbes": [
+      {
+        "path": "/api/health",
+        "status": 200,
+        "expectedStatus": 200,
+        "contentType": "application/json",
+        "bodyBytes": 15,
+        "bodySha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+        "jsonObject": true,
+        "passed": true
+      },
+      {
+        "path": "/.well-known/oauth-protected-resource",
+        "status": 200,
+        "expectedStatus": 200,
+        "contentType": "application/json",
+        "bodyBytes": 171,
+        "bodySha256": "b9c8b54002b9a972d4d4c525d5150e06e1c86b15fcbb61bf507d364dd5b1a022",
+        "jsonObject": true,
+        "passed": true
+      },
+      {
+        "path": "/.well-known/oauth-authorization-server/oauth",
+        "status": 200,
+        "expectedStatus": 200,
+        "contentType": "application/json",
+        "bodyBytes": 630,
+        "bodySha256": "afa9cdb932bc17c938009d79f0480d1e6f37379cf6f9004aef9c848130cf4cd8",
+        "jsonObject": true,
+        "passed": true
+      },
+      {
+        "path": "/oauth/jwks.json",
+        "status": 200,
+        "expectedStatus": 200,
+        "contentType": "application/json",
+        "bodyBytes": 161,
+        "bodySha256": "64df829c71b81b0781f81515ce0a0903e412e41c7a6d3c083d81a43740912bfc",
+        "jsonObject": true,
+        "passed": true
+      },
+      {
+        "path": "/mcp",
+        "status": 401,
+        "expectedStatus": 401,
+        "contentType": "application/json",
+        "bodyBytes": 38,
+        "bodySha256": "7a34850b1cb0f22840279f30d919dd2467727708b5d30a9c2b28a44211b404a0",
+        "jsonObject": true,
+        "oauthChallengePresent": true,
+        "passed": true
+      }
+    ],
+    "allPublicProbesPassed": true,
+    "note": "These are the recorded comparison outputs after cutover. They do not establish the identity or exact executable bytes of the historical deployment operator."
+  },
+  "deploymentAttribution": {
+    "performedByThisRoot": false,
+    "initiator": "unattributed parallel process",
+    "rootActions": "independent readback, identity/invariant verification, backup hash verification, post-deploy observation",
+    "operatorVariantInvocationProven": false
+  },
+  "qaReceipts": {
+    "host": {
+      "role": "host",
+      "run": "tadazz-codex-e30133c7dfb0-630fa724",
+      "sha256": "7cbfa27b97ca4acffd1760addd1cd118ac6e87279a0d62a91fe0342598f75f1a",
+      "remoteVerified": true,
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-receipts-e30133c7dfb0-20261118/source-630fa724/host-receipt.json"
+    },
+    "launch": {
+      "role": "launch",
+      "run": "tadazz-codex-launch-e30133c7dfb0-534a9b31",
+      "sha256": "d119e3630840a06fc971ce4f82f6348b1f07b90cdd0cc5bbfc093ea92f69d416",
+      "remoteVerified": true,
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-receipts-e30133c7dfb0-20261118/source-630fa724/launch-receipt.json"
+    },
+    "full_show": {
+      "role": "full_show",
+      "run": "tadazz-codex-fullshow-e30133c7dfb0-307ae64f",
+      "sha256": "9abd04d5392b43795cfc8052cca104372443f8653d8c505bb01c374ce7a1e0b2",
+      "remoteVerified": true,
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-receipts-e30133c7dfb0-20261118/full_show-receipt.json"
+    },
+    "recovery": {
+      "role": "recovery",
+      "run": "tadazz-codex-e30133c7dfb0-bbbda047",
+      "sha256": "a916ee541220eaeb3ac1d82a60b193b007ef5eadec230ebd8042f8537f6e0421",
+      "remoteVerified": true,
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-receipts-e30133c7dfb0-20261118/recovery-receipt.json"
+    },
+    "browser": {
+      "role": "browser",
+      "run": "tadazz-codex-browser-e30133c7dfb0-5d513833",
+      "sha256": "aa12501ffd37504e204d723990be2491dac06f585d63a7ad4c64fd47110afd70",
+      "remoteVerified": true,
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-receipts-e30133c7dfb0-20261118/source-630fa724/browser-receipt.json"
+    },
+    "proxy": {
+      "role": "proxy",
+      "run": "tadazz-codex-proxy-e30133c7dfb0-e3cd2f9a",
+      "sha256": "43322e3f5f859818195126c03c896a6b035730373088c9c76a3d94e996ac7125",
+      "remoteVerified": true,
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-receipts-e30133c7dfb0-20261118/source-630fa724/proxy-receipt.json"
+    }
+  },
+  "artifactPins": {
+    "widgetManifest": {
+      "sha256": "1e013c6e35264adf944eae2d53f2314ebc7e2c631a81b05ceb653472911837bd",
+      "bytes": 149848
+    },
+    "widgetHtml": {
+      "sha256": "b684c20fd8a501362fa80c10cf0eefc126d82f980585eb7b528bdada0547bb5c",
+      "bytes": 2929692
+    },
+    "widgetRendererBuildId": "a2eef39dd1c5dcc3a938508ba0951ea777de5d2ec1a189a7cc3722af99c194c4",
+    "backend": {
+      "sha256": "f3ea059c7102dbf223b5b23c166f9623ea5064acc5c6c8fd223920956788c764",
+      "bytes": 2302814
+    },
+    "nativeManifest": {
+      "sha256": "21b32662390df0c58d176076433682392cc9e274d4b74f184c8b35c61b599892",
+      "bytes": 1303
+    },
+    "nativeRendererBuildSha256": "efaaf6898a83c5ed0cb89aeb8fc4cb1d29c0974d26412b4adcd93986b7d414d5",
+    "nativeRendererMjs": {
+      "sha256": "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+      "bytes": 2390392
+    },
+    "nativeRendererCss": {
+      "sha256": "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e",
+      "bytes": 284338
+    },
+    "nativeRegistrySha256": "83490138c3b1a0b7fba807c1834509053d4f5a32ae2b9be30a3c0f5878c6ebc0"
+  },
+  "registryHashSemantics": {
+    "rawFile": {
+      "bytes": 100957,
+      "sha256": "344d166980eca13da285c9be74ff747ab7da1983a9b917545d3dda512f7c3777"
+    },
+    "compactJson": {
+      "bytes": 64618,
+      "sha256": "83490138c3b1a0b7fba807c1834509053d4f5a32ae2b9be30a3c0f5878c6ebc0"
+    },
+    "sameJsonObject": true,
+    "stagedRawCopyIdentical": true
+  },
+  "externalReleaseReadback": {
+    "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-mcp-connect-20261118\\docs\\extensions\\plans\\phase3-takeover-20261117\\external-release-readback-20261118-a2\\receipt.json",
+    "sha256": "3cec2dad3c38bff7d306fd4677aa17215d3b7b42e0b046c37ea8c5ccff28073b",
+    "at": "2026-11-18T11:36:03.724126+00:00",
+    "records": [
+      {
+        "role": "stage",
+        "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-result.json",
+        "sha256": "7b9695d8d2fb33765333b377271d75abb2fb5f4a9de85f68456ba0647930c244",
+        "bytes": 707,
+        "modifiedAt": "2026-11-18T11:16:28.519164+00:00",
+        "fields": {
+          "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+          "productionTouched": false,
+          "customerMountUsed": false,
+          "ok": true,
+          "releaseDir": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2",
+          "image": "tadazz:mcp-e30133c-20261118-a2",
+          "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+          "stageManifestSha256": "9a28980ba2084963b76b32294d7c759a590a7e43bbeb32f8fd57f3ae08063dc7",
+          "backendSha256": "f3ea059c7102dbf223b5b23c166f9623ea5064acc5c6c8fd223920956788c764",
+          "widgetManifestSha256": "1e013c6e35264adf944eae2d53f2314ebc7e2c631a81b05ceb653472911837bd",
+          "payloadFiles": 178,
+          "syntheticSmokePassed": true,
+          "runningContainersUnchanged": true
+        }
+      },
+      {
+        "role": "stage-manifest",
+        "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-manifest.json",
+        "sha256": "9a28980ba2084963b76b32294d7c759a590a7e43bbeb32f8fd57f3ae08063dc7",
+        "bytes": 31883,
+        "modifiedAt": "2026-11-18T11:16:28.370157+00:00",
+        "fields": {
+          "format": "tadazz-mcp-stage",
+          "version": 2,
+          "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+          "sourceRun": "tadazz-codex-e30133c7dfb0-630fa724",
+          "webSourceRun": "tadazz-codex-e30133c7dfb0-630fa724",
+          "baseImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+          "image": "tadazz:mcp-e30133c-20261118-a2",
+          "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+          "backendSha256": "f3ea059c7102dbf223b5b23c166f9623ea5064acc5c6c8fd223920956788c764",
+          "widgetManifestSha256": "1e013c6e35264adf944eae2d53f2314ebc7e2c631a81b05ceb653472911837bd",
+          "widgetHtmlSha256": "b684c20fd8a501362fa80c10cf0eefc126d82f980585eb7b528bdada0547bb5c",
+          "rendererBuildId": "a2eef39dd1c5dcc3a938508ba0951ea777de5d2ec1a189a7cc3722af99c194c4",
+          "publicAssetCount": 77,
+          "syntheticSmokeSha256": "b23dedbe1273d93340e8adb59252b58268e59513d25b60104d9a85927db2dd1b",
+          "productionTouched": false,
+          "customerMountUsed": false,
+          "createdAt": "2026-11-18T11:16:28Z",
+          "nativeApplicationPreview.manifestSha256": "21b32662390df0c58d176076433682392cc9e274d4b74f184c8b35c61b599892",
+          "nativeApplicationPreview.artifactSha256": "2eaf0fb6f62fb16db066f6ce5e471d8d9b64bc9399e9c0968b9e9126d06051e0",
+          "nativeApplicationPreview.registrySha256": "344d166980eca13da285c9be74ff747ab7da1983a9b917545d3dda512f7c3777",
+          "nativeApplicationPreview.rendererBuildSha256": "efaaf6898a83c5ed0cb89aeb8fc4cb1d29c0974d26412b4adcd93986b7d414d5",
+          "nativeApplicationPreview.sourceFiles": 3583,
+          "nativeApplicationPreview.files[].name": [
+            "renderer.mjs",
+            "renderer.css"
+          ],
+          "nativeApplicationPreview.files[].sha256": [
+            "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+            "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+          ],
+          "nativeApplicationPreview.files[].bytes": [
+            2390392,
+            284338
+          ],
+          "receiptSha256.host": "6629d97011b8f4b807bd282cfdf004a726cd38cf3869c6abc7cef9e10be8aa76",
+          "receiptSha256.web": "6629d97011b8f4b807bd282cfdf004a726cd38cf3869c6abc7cef9e10be8aa76",
+          "receiptSha256.launch": "8ceb79c9ef419483967467620cd61d5943ac013feee0ebb9927aa5197d61ea5f",
+          "receiptSha256.browser": "391f29ff56db87263705b03fdea974e37812121e961cd779506f759e704159db",
+          "receiptSha256.full_show": "58d78b0d2d1e86b735992135d06c6d5f2d1d1887c95c2370101f885bff940b1f",
+          "receiptSha256.proxy": "8cc4640dc7d8e2f02a8b38d7435d1e7ff1ffe1f6472c1cea5e27ef872404231f"
+        }
+      },
+      {
+        "role": "smoke",
+        "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/synthetic-smoke-result.json",
+        "sha256": "b23dedbe1273d93340e8adb59252b58268e59513d25b60104d9a85927db2dd1b",
+        "bytes": 7168,
+        "modifiedAt": "2026-11-18T11:16:28.235601+00:00",
+        "fields": {
+          "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+          "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+          "productionTouched": false,
+          "customerMountUsed": false,
+          "network": "none",
+          "container": "d00844afef1be846fde22c75cc8d148ad7f3cf95fbb959a6638f7d576c199514",
+          "ok": true,
+          "engineIoOpenClose": true,
+          "indexAndEntryAssets": 30,
+          "retainedStopped": true,
+          "nativeApplicationPreview.files[].name": [
+            "renderer.mjs",
+            "renderer.css"
+          ],
+          "nativeApplicationPreview.files[].sha256": [
+            "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+            "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+          ],
+          "nativeApplicationPreview.files[].bytes": [
+            2390392,
+            284338
+          ],
+          "nativeApplicationPreview.inlinePreviewEnabled": true,
+          "nativeApplicationPreview.packagedHttpBytes": true,
+          "nativeApplicationPreview.privateRuntimeUnauthorized": true,
+          "nativeApplicationPreview.publicRuntimeDisabled": true,
+          "nativeApplicationPreview.authenticatedStudioRender": false
+        }
+      },
+      {
+        "role": "qualification",
+        "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+        "sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3",
+        "bytes": 2635,
+        "modifiedAt": "2026-11-18T11:19:55.452597+00:00",
+        "fields": {
+          "kind": "backup-qualification",
+          "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+          "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+          "sourceContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+          "sourceImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+          "success": true,
+          "configSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+          "productionDataRestored": false,
+          "deploymentPerformed": false,
+          "phase": "qualified",
+          "oldApplicationResumed": true,
+          "stopToHealthySeconds": 8.469,
+          "oldContainerRetained": true,
+          "releaseEligible": true,
+          "finishedAt": "2026-11-18T11:19:55.452907+00:00",
+          "receiptPath": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+          "roomGate.count": 0,
+          "roomGate.source": "complete-retained-container-log-events",
+          "roomGate.lastCountAt": "2026-11-12T12:01:30.941422185Z",
+          "roomGate.observedAt": "2026-11-18T11:19:40.926371+00:00",
+          "roomGate.logBytes": 2042,
+          "roomGate.checkStopRaceEliminated": false,
+          "backup.sha256": "f44735f8c29b5039620e87ccddc3346c298bd9e75c9d755646bdd4537998138e",
+          "backup.treeSha256": "56dd656b77a82207b750dd19829cc524fc90fa38c4b33d0f500bd2773fb25354",
+          "backup.files": 344,
+          "backup.bytes": 125302944,
+          "backup.restoredBytesAndModesVerified": true,
+          "backup.consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+          "backup.productionRestorePerformed": false,
+          "backup.sqliteDatabasesVerified": 2,
+          "backup.restoreProof": "isolated extracted bytes/modes and SQLite backup/integrity",
+          "candidateCloneBoot.container": "89e53a3b72042bf414c13357eee560171efa2ea462eb85c6caf0f317ef217ad7",
+          "candidateCloneBoot.network": "none",
+          "candidateCloneBoot.publishedPorts": false,
+          "candidateCloneBoot.liveConfigMounted": false,
+          "candidateCloneBoot.retainedStopped": true,
+          "candidateCloneBoot.passed": true,
+          "candidateCloneBoot.nativeApplicationPreview.files[].name": [
+            "renderer.mjs",
+            "renderer.css"
+          ],
+          "candidateCloneBoot.nativeApplicationPreview.files[].sha256": [
+            "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+            "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+          ],
+          "candidateCloneBoot.nativeApplicationPreview.files[].bytes": [
+            2390392,
+            284338
+          ],
+          "candidateCloneBoot.nativeApplicationPreview.inlinePreviewEnabled": true,
+          "candidateCloneBoot.nativeApplicationPreview.packagedHttpBytes": true,
+          "candidateCloneBoot.nativeApplicationPreview.privateRuntimeUnauthorized": true,
+          "candidateCloneBoot.nativeApplicationPreview.publicRuntimeDisabled": true,
+          "candidateCloneBoot.nativeApplicationPreview.authenticatedStudioRender": false
+        }
+      },
+      {
+        "role": "deployment",
+        "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112319Z-f5b3c25d/deployment-result.json",
+        "sha256": "5dc60033383b530511601e440b1481157b0ef7b250c0d4bdfa175aeab576b733",
+        "bytes": 3758,
+        "modifiedAt": "2026-11-18T11:23:31.116989+00:00",
+        "fields": {
+          "version": 1,
+          "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+          "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+          "previousImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+          "previousContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+          "rollbackContainer": "tadazz-pre-mcp-e30133c7dfb0-20261118T112319Z-f5b3c25d",
+          "success": true,
+          "customerContentPrinted": false,
+          "dataRestorePerformed": false,
+          "phase": "verified",
+          "replacementContainer": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+          "environmentPreservedExcept": [
+            "CONFIG_PATH",
+            "SOCKET_PORT",
+            "TADAZZ_INLINE_GAME_PREVIEW_ENABLED",
+            "TADAZZ_MCP_SERVICE_ENABLED"
+          ],
+          "hostConfigurationUnchanged": true,
+          "mountsUnchanged": true,
+          "otherContainersUnchanged": true,
+          "previousContainerRetainedStopped": true,
+          "installedChatGptVerified": false,
+          "installedClaudeVerified": false,
+          "finishedAt": "2026-11-18T11:23:31.116672+00:00",
+          "priorRestoreBootQualification.sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3",
+          "priorRestoreBootQualification.candidateCloneBootPassed": true,
+          "priorRestoreBootQualification.ageSeconds": 204,
+          "roomGate.count": 0,
+          "roomGate.source": "retained-startup-empty-registry-no-subsequent-game-events",
+          "roomGate.lastCountAt": "2026-11-18T11:20:53.610418457Z",
+          "roomGate.observedAt": "2026-11-18T11:23:19.953752+00:00",
+          "roomGate.logBytes": 1019,
+          "roomGate.checkStopRaceEliminated": false,
+          "backup.sha256": "d7d5db86330b1903d9be03c2f6637cfef693b05ad78c4016d3a0bf85baa2d2cb",
+          "backup.treeSha256": "755ea6b8ec9a0e1fc82b6f8636aa5243526cdc08b61d447322acc0ccade4d330",
+          "backup.files": 344,
+          "backup.bytes": 125302944,
+          "backup.restoredBytesAndModesVerified": true,
+          "backup.consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+          "backup.productionRestorePerformed": false,
+          "backup.sqliteDatabasesVerified": 2,
+          "backup.restoreProof": "isolated extracted bytes/modes and SQLite backup/integrity",
+          "loopback.oauthAndMcp": true,
+          "loopback.consentGetHead": true,
+          "loopback.indexAndEntryAssets": 30,
+          "loopback.engineIoOpenClose": true,
+          "loopback.installedHostTest": false,
+          "loopback.authenticatedGameplayTest": false,
+          "loopback.nativeApplicationPreview.files[].name": [
+            "renderer.mjs",
+            "renderer.css"
+          ],
+          "loopback.nativeApplicationPreview.files[].sha256": [
+            "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+            "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+          ],
+          "loopback.nativeApplicationPreview.files[].bytes": [
+            2390392,
+            284338
+          ],
+          "loopback.nativeApplicationPreview.inlinePreviewEnabled": true,
+          "loopback.nativeApplicationPreview.packagedHttpBytes": true,
+          "loopback.nativeApplicationPreview.privateRuntimeUnauthorized": true,
+          "loopback.nativeApplicationPreview.publicRuntimeDisabled": true,
+          "loopback.nativeApplicationPreview.authenticatedStudioRender": false,
+          "publicHttps.oauthAndMcp": true,
+          "publicHttps.consentGetHead": true,
+          "publicHttps.indexAndEntryAssets": 30,
+          "publicHttps.engineIoOpenClose": true,
+          "publicHttps.installedHostTest": false,
+          "publicHttps.authenticatedGameplayTest": false,
+          "publicHttps.nativeApplicationPreview.files[].name": [
+            "renderer.mjs",
+            "renderer.css"
+          ],
+          "publicHttps.nativeApplicationPreview.files[].sha256": [
+            "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb",
+            "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+          ],
+          "publicHttps.nativeApplicationPreview.files[].bytes": [
+            2390392,
+            284338
+          ],
+          "publicHttps.nativeApplicationPreview.inlinePreviewEnabled": true,
+          "publicHttps.nativeApplicationPreview.packagedHttpBytes": true,
+          "publicHttps.nativeApplicationPreview.privateRuntimeUnauthorized": true,
+          "publicHttps.nativeApplicationPreview.publicRuntimeDisabled": true,
+          "publicHttps.nativeApplicationPreview.authenticatedStudioRender": false
+        }
+      }
+    ]
+  },
+  "stagedReceiptSerialization": "json.dumps(receipt, indent=2, sort_keys=True) + newline; raw receipt digests remain separately preserved",
+  "receiptSerializationReconciled": true,
+  "backupIndependentHashVerification": {
+    "qualification": {
+      "bytes": 121080125,
+      "sha256": "f44735f8c29b5039620e87ccddc3346c298bd9e75c9d755646bdd4537998138e",
+      "matchesReceipt": true,
+      "rootRegular": true,
+      "mode": "0600"
+    },
+    "deployment": {
+      "bytes": 121080107,
+      "sha256": "d7d5db86330b1903d9be03c2f6637cfef693b05ad78c4016d3a0bf85baa2d2cb",
+      "matchesReceipt": true,
+      "rootRegular": true,
+      "mode": "0600"
+    },
+    "filesStableDuringRead": true,
+    "exitCode": 0,
+    "archiveContentsEmitted": false,
+    "extractionPerformed": false,
+    "sqliteReopened": false
+  },
+  "observer": {
+    "receiptPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-mcp-connect-20261118\\docs\\extensions\\plans\\phase3-takeover-20261117\\release-observe-e30133c7dfb0-20261118T113802Z-0603c764\\receipt.json",
+    "receiptSha256": "205a8020649e79cc5180cc3b19e92267c7141b987641cf5a27a9f339b967a194",
+    "summary": {
+      "action": "observe",
+      "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+      "operatorSha256": "0057bf915a6df3a673c99345ca6e18f07eb94adbca86f56b97221f0125fb5fce",
+      "startedAt": "2026-11-18T11:37:32.502436+00:00",
+      "finishedAt": "2026-11-18T11:38:02.835393+00:00",
+      "exitCode": 0,
+      "operationDirectory": "/home/ubuntu/tadazz-mcp-operation-records-e30133c7dfb0-20261118/observe-20261118T113732Z-39d58821",
+      "stdoutSha256": "19753bb7efbf898289ab7fc121a619b8ce8e4bc7b50d9985725ed8f3af0f0df1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 4881,
+      "stderrBytes": 0,
+      "stdoutJsonParsed": true,
+      "result": {
+        "kind": "post-deploy-observation",
+        "version": 1,
+        "startedAt": "2026-11-18T11:37:32.612142+00:00",
+        "container": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "gateway": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+        "finishedAt": "2026-11-18T11:38:02.817890+00:00",
+        "probes": 15,
+        "medianProbeMs": 12.94,
+        "maxProbeMs": 17.4,
+        "restartsDuringWindow": 0,
+        "passed": true,
+        "rawLogsEmitted": false,
+        "customerContentEmitted": false,
+        "mutationsPerformed": false,
+        "installedHostVerified": false,
+        "longTermReliabilityVerified": false,
+        "samples": [
+          {
+            "at": "2026-11-18T11:37:32.613883+00:00",
+            "restartCount": 0,
+            "probes": [
+              {
+                "path": "/api/health",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 14.69
+              },
+              {
+                "path": "/.well-known/oauth-protected-resource",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 13.06
+              },
+              {
+                "path": "/.well-known/oauth-authorization-server/oauth",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 11.57
+              },
+              {
+                "path": "/oauth/jwks.json",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 11.58
+              },
+              {
+                "path": "/mcp",
+                "expectedStatus": 401,
+                "passed": true,
+                "status": 401,
+                "contentType": "application/json",
+                "milliseconds": 12.15
+              }
+            ]
+          },
+          {
+            "at": "2026-11-18T11:37:47.678645+00:00",
+            "restartCount": 0,
+            "probes": [
+              {
+                "path": "/api/health",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 12.94
+              },
+              {
+                "path": "/.well-known/oauth-protected-resource",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 12.89
+              },
+              {
+                "path": "/.well-known/oauth-authorization-server/oauth",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 11.56
+              },
+              {
+                "path": "/oauth/jwks.json",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 11.47
+              },
+              {
+                "path": "/mcp",
+                "expectedStatus": 401,
+                "passed": true,
+                "status": 401,
+                "contentType": "application/json",
+                "milliseconds": 11.49
+              }
+            ]
+          },
+          {
+            "at": "2026-11-18T11:38:02.740751+00:00",
+            "restartCount": 0,
+            "probes": [
+              {
+                "path": "/api/health",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 17.4
+              },
+              {
+                "path": "/.well-known/oauth-protected-resource",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 13.92
+              },
+              {
+                "path": "/.well-known/oauth-authorization-server/oauth",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 13.47
+              },
+              {
+                "path": "/oauth/jwks.json",
+                "expectedStatus": 200,
+                "passed": true,
+                "status": 200,
+                "contentType": "application/json",
+                "milliseconds": 13.83
+              },
+              {
+                "path": "/mcp",
+                "expectedStatus": 401,
+                "passed": true,
+                "status": 401,
+                "contentType": "application/json",
+                "milliseconds": 13.94
+              }
+            ]
+          }
+        ],
+        "logObservation": {
+          "available": true,
+          "maximumBytes": 1048576,
+          "maximumLinesRequested": 1000,
+          "bytesRead": 1042,
+          "linesRead": 8,
+          "errorKeywordLines": 0,
+          "http5xxLines": 0,
+          "completeTrafficErrorRate": false,
+          "rawLogsEmitted": false
+        },
+        "endingSnapshot": {
+          "at": "2026-11-18T11:38:02.817871+00:00",
+          "restartCount": 0,
+          "releaseIdentityVerified": true,
+          "gatewayIdentityVerified": true
+        }
+      },
+      "projectionOmissions": []
+    }
+  },
+  "hostConnections": {
+    "chatgpt": {
+      "operation": "Plugin Creator create_plugin",
+      "observed": "2026-11-18",
+      "httpStatus": 403,
+      "category": "permission_denied",
+      "retryable": false,
+      "message": "You do not have permission to use plugins with MCPs. Contact your workspace admin for access",
+      "privatePluginCreated": false,
+      "privatePluginInstalled": false,
+      "oauthConnected": false
+    },
+    "claude": {
+      "observed": "2026-11-18",
+      "url": "https://claude.ai/plugins",
+      "accountPlan": "Free",
+      "action": "Add custom connector",
+      "ariaDisabled": true,
+      "visibleTooltip": "Free plan allows 1 custom connector. Upgrade for more.",
+      "connectionCreated": false,
+      "existingConnectionsUnmodified": true,
+      "existingTadazzConnectorFound": false,
+      "existingCustomConnectorSlotOccupied": true,
+      "observedInstalledListUrl": "https://claude.ai/plugins/yours",
+      "relatedConnectionReusable": false
+    },
+    "tadazzAccountLoginRequired": true,
+    "privatePluginCreated": false,
+    "installedHostE2ECompleted": false
+  },
+  "privatePluginPackage": {
+    "name": "tadazz-private-0.1.0.zip",
+    "sha256": "1caf6917c3e30028d44378a6dd8673e6625a6066d5000985fb58e8aff9e8d3de",
+    "status": "prepared; create request rejected by provider permission"
+  },
+  "audit": {
+    "full": {
+      "high": 1,
+      "moderate": 9,
+      "low": 2,
+      "critical": 0
+    },
+    "production": {
+      "high": 1,
+      "moderate": 8,
+      "low": 1,
+      "critical": 0
+    },
+    "evidence": "dependency-audit-development-e09255afce",
+    "clean": false,
+    "manifestsLocksUnchanged": true,
+    "sourceAndCacheLockShaSame": true,
+    "decision": "record locked dependency findings + reachability review; no dependency mutation mid-qualification; stop if protected route exposure demonstrated",
+    "reviewPath": "docs/extensions/plans/phase3-takeover-20261117/dependency-audit-development-e09255afce/AUDIT_AND_BOUNDARY_REVIEW.md",
+    "reviewSha256": "7d0caed9be71f2fe29ad23c6d29688a36b3912f54a99f57b1b60f7d264d21458",
+    "assessmentSha256": "38516e690858b5f98b168a66016ae46f4ebd8be93299e8adf3cdb2dde3f20704"
+  },
+  "freeze": {
+    "status": "FAIL",
+    "mismatches": 23,
+    "denied": 0,
+    "baselineUnchanged": true
+  },
+  "limitations": {
+    "longTermReliabilityProven": false,
+    "completeTrafficErrorRateMeasured": false,
+    "installedChatGPTWidgetObserved": false,
+    "installedClaudeWidgetObserved": false,
+    "globalLintClean": false,
+    "globalFreezeClean": false,
+    "dependencyAuditClean": false,
+    "rtlVerified": false,
+    "physicalIPadVerified": false,
+    "externalCiVerified": false,
+    "dedicatedProviderTestsVerified": false
+  },
+  "qaResults": {
+    "hostAndWeb": {
+      "passed": 158,
+      "total": 158,
+      "gatesPassed": 16
+    },
+    "launch": {
+      "passed": 9,
+      "total": 9
+    },
+    "consentAndStudioEditor": {
+      "passed": 6,
+      "total": 6,
+      "browsers": [
+        "Chromium",
+        "WebKit"
+      ]
+    },
+    "fullShow": {
+      "scenariosPassed": 40,
+      "scenariosTotal": 40,
+      "rendererFixturesPassed": 44,
+      "rendererFixturesTotal": 44
+    },
+    "tlsNginx": {
+      "passed": 1,
+      "total": 1,
+      "privacyChecksPassed": 9
+    },
+    "recovery": {
+      "passed": 8,
+      "total": 8,
+      "boundaryPassed": 1
+    }
+  },
+  "qaReceiptPreservation": {
+    "originalsRetainedUnmodified": true,
+    "rawStdoutAndLinksNotRepublished": true,
+    "hashRecheck": {
+      "result": "MATCH",
+      "verificationJobStartedAtUtc": "2026-11-18T11:43:10.274513+00:00",
+      "entries": [
+        {
+          "role": "host",
+          "relativePath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-e30133c7dfb0-630fa724/receipt.json",
+          "bytes": 1112079,
+          "sha256": "7cbfa27b97ca4acffd1760addd1cd118ac6e87279a0d62a91fe0342598f75f1a",
+          "gitTrackedAtRead": false
+        },
+        {
+          "role": "launch",
+          "relativePath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-e30133c7dfb0-534a9b31/receipt.json",
+          "bytes": 190226,
+          "sha256": "d119e3630840a06fc971ce4f82f6348b1f07b90cdd0cc5bbfc093ea92f69d416",
+          "gitTrackedAtRead": false
+        },
+        {
+          "role": "full_show",
+          "relativePath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-e30133c7dfb0-307ae64f/receipt.json",
+          "bytes": 1526620,
+          "sha256": "9abd04d5392b43795cfc8052cca104372443f8653d8c505bb01c374ce7a1e0b2",
+          "gitTrackedAtRead": false
+        },
+        {
+          "role": "recovery",
+          "relativePath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-e30133c7dfb0-bbbda047/receipt.json",
+          "bytes": 455254,
+          "sha256": "a916ee541220eaeb3ac1d82a60b193b007ef5eadec230ebd8042f8537f6e0421",
+          "gitTrackedAtRead": false
+        },
+        {
+          "role": "browser",
+          "relativePath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-e30133c7dfb0-5d513833/receipt.json",
+          "bytes": 40150,
+          "sha256": "aa12501ffd37504e204d723990be2491dac06f585d63a7ad4c64fd47110afd70",
+          "gitTrackedAtRead": false
+        },
+        {
+          "role": "proxy",
+          "relativePath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-e30133c7dfb0-e3cd2f9a/receipt.json",
+          "bytes": 444017,
+          "sha256": "43322e3f5f859818195126c03c896a6b035730373088c9c76a3d94e996ac7125",
+          "gitTrackedAtRead": false
+        }
+      ]
+    },
+    "publication": "Sanitized receipt summaries and original file hashes are included. Original QA receipts remain at their recorded Windows/Linux locations."
+  },
+  "asanaFinalStatus": {
+    "file": "asana-status-readback.json",
+    "sha256": "2d1ab2d53a93f1c4023c19d36edb6fd26117db316d17b08576de4c7a730020a2",
+    "capturedAtUtc": "2026-11-18T12:02:35Z",
+    "closedThisPass": [
+      "MCP02",
+      "MCP03",
+      "MCP04",
+      "MCP05",
+      "MCP08",
+      "HQM1",
+      "HQM2",
+      "MCP11"
+    ],
+    "alreadyCompleted": [
+      "MCP01"
+    ],
+    "summary": {
+      "taskCount": 16,
+      "completed": 9,
+      "open": 7,
+      "allReadbacksVerified": false,
+      "latestTaskReadbackVerifiedCount": 14,
+      "latestAddendumReadbackPendingCount": 2,
+      "parentCompleted": false,
+      "entireProjectCompleted": false
+    }
+  },
+  "finalLiveReadback": {
+    "file": "final-live-readback.json",
+    "sha256": "8d662dfb27f8c95afcb3ed43ec542e54a93261b2c272209df61a68bea38da013",
+    "result": {
+      "authenticatedHostTest": false,
+      "format": "tadazz-final-live-identity-readback",
+      "identities": {
+        "applicationContainer": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+        "applicationImage": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "applicationRestartCount": 0,
+        "applicationRunning": true,
+        "applicationSourceLabelMatches": true,
+        "changedEnvironmentNames": [
+          "CONFIG_PATH",
+          "SOCKET_PORT",
+          "TADAZZ_INLINE_GAME_PREVIEW_ENABLED",
+          "TADAZZ_MCP_SERVICE_ENABLED"
+        ],
+        "expectedIdentityMatches": true,
+        "gatewayContainer": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+        "gatewayRunning": true,
+        "hostConfigRawEqual": true,
+        "mountsEqual": true,
+        "oldContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "oldRetainedStopped": true
+      },
+      "longTermReliabilityProven": false,
+      "mutationsPerformed": false,
+      "observedAtUtc": "2026-11-18T11:59:03.264780+00:00",
+      "passed": true,
+      "probes": [
+        {
+          "bodyBytes": 15,
+          "bodySha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+          "contentType": "application/json",
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/api/health",
+          "status": 200
+        },
+        {
+          "bodyBytes": 171,
+          "bodySha256": "b9c8b54002b9a972d4d4c525d5150e06e1c86b15fcbb61bf507d364dd5b1a022",
+          "contentType": "application/json",
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/.well-known/oauth-protected-resource",
+          "status": 200
+        },
+        {
+          "bodyBytes": 630,
+          "bodySha256": "afa9cdb932bc17c938009d79f0480d1e6f37379cf6f9004aef9c848130cf4cd8",
+          "contentType": "application/json",
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/.well-known/oauth-authorization-server/oauth",
+          "status": 200
+        },
+        {
+          "bodyBytes": 161,
+          "bodySha256": "64df829c71b81b0781f81515ce0a0903e412e41c7a6d3c083d81a43740912bfc",
+          "contentType": "application/json",
+          "expectedPublicKeyMatches": true,
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/oauth/jwks.json",
+          "status": 200
+        },
+        {
+          "bodyBytes": 38,
+          "bodySha256": "7a34850b1cb0f22840279f30d919dd2467727708b5d30a9c2b28a44211b404a0",
+          "contentType": "application/json",
+          "expectedStatus": 401,
+          "jsonObject": true,
+          "oauthChallengePresent": true,
+          "passed": true,
+          "path": "/mcp",
+          "status": 401
+        }
+      ],
+      "purpose": "Final handoff identity check after a parallel cutover; no deployment or QA suite rerun.",
+      "revision": "e30133c7dfb03412cfb898705f1115d206548668"
+    }
+  },
+  "qaScopeClarifications": {
+    "rtl": "NOT_RUN; applicability and verification remain under MCP10; eight existing locales do not prove RTL/bidi",
+    "ipad": "physical device test where eligible; determine eligibility after host availability and test or document N/A",
+    "externalCi": "no PASS claimed; original criterion applies only if configured and verified",
+    "provider": "no dedicated provider PASS claimed; no new mandatory PSTN/provider scenario inferred"
+  }
+}

@@ -1,0 +1,33 @@
+[WebServer] (node:8588) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:5:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:20368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:5:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 7 tests using 1 worker
+
+(node:36660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:46:1 › touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact (15.1s)
+  ok 2 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:121:1 › public routes, catalogue, demo, history, responsive navigation and screenshots (6.6s)
+  ok 3 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:185:1 › real account → original editor save/edit → duplicate/export/delete → prepare → sign-out (14.8s)
+  ok 4 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:336:1 › localized routes and reduced motion keep the reference usable (4.6s)
+  ok 5 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:381:1 › password reset, failed authentication, guest and cross-account isolation (8.9s)
+  ok 6 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:458:1 › past events read real persisted results and confirm deletion (3.2s)
+  ok 7 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:524:1 › failed deletion stays in the dialog and can be retried without a false success (3.5s)
+
+  7 passed (1.1m)

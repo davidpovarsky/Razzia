@@ -1,0 +1,55 @@
+{
+  "kind": "read-only binding of reviewed controller and generated pins for pending candidate",
+  "createdUtc": "2026-11-19T20:42:28.530075+00:00",
+  "candidate": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "parentProductCommit": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+  "twoFileCommitReportedByReleaseCoordinator": true,
+  "gitCommandRunByCurator": false,
+  "files": {
+    "controller": {
+      "path": "extensions/qa/phase3-full-show/linux-browser-verify.py",
+      "sha256": "6ab6c244740f79c9475ab8009fe6b80fc650e425666cfee0c680d68f3d8f9e83",
+      "matchesReviewedProposal": true,
+      "reviewProvenance": "docs/extensions/plans/phase-continuity-20261119/release-planning/fullshow-transport-mode-provenance.json",
+      "reviewProvenanceSha256": "928409beb2909db03627ff9e682b9524a576e02dac14426a0ef65468ffd40cbc"
+    },
+    "generatedManifest": {
+      "path": "extensions/src/core/show-library/application-preview-build.json",
+      "sha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+      "matchesPinReceipt": true
+    }
+  },
+  "pinReceipt": {
+    "path": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d99b9c78a803-e7048ebe/receipt.json",
+    "sha256": "ce1ffc930adeb5e74943edfcbaf080a888070e0855182b1e333a50f78b739a23",
+    "sourceSha": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+    "sourceUnchangedExceptGeneratedManifest": true,
+    "productionChanged": false,
+    "releaseQualified": false
+  },
+  "sourceIdentityCopy": {
+    "source": "docs/extensions/plans/phase-continuity-20261119/current-release-source.json",
+    "copy": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/source.json",
+    "sha256": "76bda5b0c1dafc309dc4ce96b26a5d847b9b636a218533480bbab00e2a03e298",
+    "sourceUnchangedAfterCopy": true
+  },
+  "controllerModes": {
+    "standard": "Both engines,40 checks,44 renderer fixtures; fullShow receipt.",
+    "focused": "Separate transport prefix, both engines, four actions each; transportRace receipt only, diagnosticOnly=true, releaseQualified=false.",
+    "ordering": "Focused acceptance additionally required after full standard exact-source qualification and before staging."
+  },
+  "resourceBudget": {
+    "cpuQuotaCores": 2,
+    "memoryGiB": 3,
+    "swapGiB": 0,
+    "nice": 19,
+    "physicalCpuAffinityPin": false,
+    "network": "none",
+    "readOnlyRootAndSources": true,
+    "behavioralAssertionsAndTimeoutsUnchanged": true
+  },
+  "status": "PENDING FINAL QUALIFICATION / NOT DEPLOYED",
+  "testsRunByCurator": false,
+  "productChangedByCurator": false,
+  "originalProposalsUnmodified": true
+}

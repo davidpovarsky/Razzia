@@ -1,0 +1,55 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ ↓ src/server/storage/startup-recovery.test.ts > blocks unresolved tenant quiz-save before listen, including accounts OFF
+ ↓ src/server/storage/startup-recovery.test.ts > blocks unresolved tenant media-delete before listen, including accounts OFF
+ ↓ src/server/storage/startup-recovery.test.ts > selects all exact disabled and unverified owner IDs independent of the current flag
+ ↓ src/server/storage/startup-recovery.test.ts > reads owners committed only in a live WAL without changing source files
+ ↓ src/server/storage/startup-recovery.test.ts > reads a cleanly closed WAL DB without creating source sidecars
+ × src/server/storage/startup-recovery.test.ts > accepts native WAL reset with retained older-generation tail frames without source writes 85ms
+   → Owner WAL frame is unavailable or stale
+ ↓ src/server/storage/startup-recovery.test.ts > accepts structural never-account absence without creating an account store
+ ↓ src/server/storage/startup-recovery.test.ts > denies missing DB with even an empty tenant namespace
+ ↓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":[null]} before recovery
+ ↓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["not-an-owner"]} before recovery
+ ↓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000A1"]} before recovery
+ ↓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000a1"]} before recovery
+ ↓ src/server/storage/startup-recovery.test.ts > rejects corrupt committed WAL bytes without journal mutation
+ ↓ src/server/storage/startup-recovery.test.ts > rejects corrupt DB and missing owner table without source or journal writes
+ ↓ src/server/storage/startup-recovery.test.ts > checks the complete owner list before touching a valid earlier root
+ ↓ src/server/storage/startup-recovery.test.ts > refuses changed owner metadata after snapshot and preserves journal bytes
+ ↓ src/server/storage/startup-recovery.test.ts > keeps a linked known tenant root out of recovery
+ ↓ src/server/storage/startup-recovery.test.ts > replays clean known roots twice without ambient native CRUD or account changes
+ ↓ src/server/storage/startup-recovery.test.ts > restores full tenant V2 and native basename through bound-root adapters with the account flag OFF
+ ↓ src/server/storage/startup-recovery.test.ts > finishes committed tenant Media cleanup through explicit roots after the accounts flag changes
+ ↓ src/server/storage/startup-recovery.test.ts > retries a changed live source and publishes only the revalidated owner set
+ ↓ src/server/storage/startup-recovery.test.ts > bounds churn to three captures, cleans private copies and preserves journals
+ ↓ src/server/storage/startup-recovery.test.ts > retries a WAL/SHM disappearance and accepts the complete closed source without creating source sidecars
+ ↓ src/server/storage/startup-recovery.test.ts > refuses oversized metadata before private copying or journal changes
+ ↓ src/server/storage/startup-recovery.test.ts > fails closed on unreadable canonical metadata without changing permissions
+ ↓ src/server/storage/startup-recovery.test.ts > rejects a linked canonical DB without following or rewriting its target
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/storage/startup-recovery.test.ts > accepts native WAL reset with retained older-generation tail frames without source writes
+Error: Owner WAL frame is unavailable or stale
+ ❯ validateOwnerWal ../packages/socket/src/services/account-db.ts:82:15
+     80|         frame.readUInt32BE(0) === 0
+     81|       )
+     82|         throw new Error("Owner WAL frame is unavailable or stale")
+       |               ^
+     83|       checksum(frame.subarray(0, 8))
+     84|       checksum(frame.subarray(24))
+ ❯ captureStartupOwners ../packages/socket/src/services/account-db.ts:269:7
+ ❯ readStartupOwnerSnapshot ../packages/socket/src/services/account-db.ts:155:14
+ ❯ src/server/storage/startup-recovery.test.ts:169:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 25 skipped (26)
+   Start at  18:31:19
+   Duration  2.88s (import 54%, transform 42%, tests 4%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/wal-reset-before.json

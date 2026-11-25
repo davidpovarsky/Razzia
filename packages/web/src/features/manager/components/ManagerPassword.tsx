@@ -28,7 +28,7 @@ const ManagerPassword = ({ onSubmit, disabled }: Props) => {
   }
 
   return (
-    <Card>
+    <Card className="max-w-md p-6 shadow-xl sm:p-8">
       <Input
         type="password"
         onChange={(e) => setPassword(e.target.value)}

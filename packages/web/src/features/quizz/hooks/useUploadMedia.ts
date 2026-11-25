@@ -1,3 +1,4 @@
+import { matchesMediaUploadType } from "@razzia/extensions/core"
 import { ACCEPTED_MEDIA_TYPES, MAX_MEDIA_SIZE } from "@razzia/common/constants"
 import type { UploadedMedia } from "@razzia/common/types/game"
 import { mediaKeys, uploadMedia } from "@razzia/web/features/quizz/queries"
@@ -18,6 +19,7 @@ const uploadKey = [...mediaKeys.all, "upload"] as const
 
 export const useUploadMedia = (
   onUploaded?: (_media: UploadedMedia) => void,
+  acceptType?: "image" | "video" | "audio" | "all",
 ) => {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
@@ -39,6 +41,17 @@ export const useUploadMedia = (
     for (const file of files) {
       if (file.size > MAX_MEDIA_SIZE) {
         toast.error(t("errors:media.tooLarge"))
+
+        continue
+      }
+
+      if (!matchesMediaUploadType(file, acceptType)) {
+        toast.error(
+          t("extensions:errors.invalidMediaType", {
+            expected: acceptType,
+            defaultValue: `Only ${acceptType} files are allowed here`,
+          }),
+        )
 
         continue
       }

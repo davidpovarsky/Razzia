@@ -1,0 +1,10 @@
+Sun Nov 15 06:40:09 UTC 2026
+               total        used        free      shared  buff/cache   available
+Mem:           11925         996         442           5       10713       10928
+Swap:              0           0           0
+Filesystem     1048576-blocks  Used Available Capacity Mounted on
+/dev/sda1               48527 44383      4129      92% /
+tadazz-hq-recovery-r2-20261115 0.00% 60.78MiB / 2GiB
+tadazz 0.01% 66.25MiB / 11.65GiB
+tadazz-design-system-qa-20261110 0.00% 26.61MiB / 4GiB
+tadazz-phone-gateway 0.00% 32.58MiB / 11.65GiB

@@ -1,0 +1,31 @@
+{
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "baseWrapperSha256": "b441d0f7a2e2f8886cc8bc3732dee06c7b85ce759797c8a474c66ee6f3378ecb",
+  "proposedWrapperSha256": "01ad775f77f46539da80c4f935104869685c58710d58075d01ea5978b41f9a8a",
+  "controllerSha256": "6ab6c244740f79c9475ab8009fe6b80fc650e425666cfee0c680d68f3d8f9e83",
+  "proposalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\work\\phase-continuity-20261119\\release-tools\\with_shared_qa_lock_transport_v2.py",
+  "patchPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\release-planning\\shared-qa-lock-transport-v2.patch",
+  "patchSha256": "5561f0f523d2894ba0d68cee8f300ada2ff03ff517e300f88e9da6583effa742",
+  "syntaxParsedOuterAndRemote": true,
+  "executed": false,
+  "canonicalFilesChanged": false,
+  "currentV1InvocationUntouched": true,
+  "mode": "transport only",
+  "controllerBudgetSeconds": 1980,
+  "controllerOwnSshBudgetSeconds": 1860,
+  "lockLeaseSeconds": 2200,
+  "changes": [
+    "Require successful same-source standard qualification and its explicit intact lock release",
+    "Poll holder while unchanged controller runs; never publish passed before release",
+    "Use independent v2 receipt without overwriting v1 or existing run evidence",
+    "Inspect only exact owned transport container and process PID before explicit release",
+    "Fail on holder loss, nonzero exit, unexpected release, controller failure or incomplete cleanup proof",
+    "Timeout terminates only direct owned local controller; descendants remain explicitly unverified"
+  ],
+  "limits": [
+    "This is prepared source, not runtime validation",
+    "No browser assertion, timeout, artifact, SDK or resource limit changes",
+    "No broad cleanup; no production, worker or cache changes"
+  ],
+  "preFreezeCorrection": "lockContinuityVerified explicitly requires the parsed release acknowledgement; acceptance checks unchanged"
+}

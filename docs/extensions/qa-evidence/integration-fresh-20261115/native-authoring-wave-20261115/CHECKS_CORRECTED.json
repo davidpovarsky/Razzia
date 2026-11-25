@@ -1,0 +1,29 @@
+[
+  {
+    "name": "focused-tests-corrected",
+    "args": [
+      "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\vitest.config.ts",
+      "--root",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions",
+      "src/core/show-library/composition-repository.test.ts",
+      "src/core/show-library/preview-port.test.ts",
+      "--maxWorkers",
+      "1",
+      "--reporter",
+      "default",
+      "--reporter",
+      "json",
+      "--outputFile",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\native-authoring-wave-20261115\\tests-integrated-corrected.json"
+    ],
+    "source": "75f74e3dc321109469b140eab6be03d3353509c0",
+    "started_utc": "2026-11-15T15:08:33.849266+00:00",
+    "finished_utc": "2026-11-15T15:08:41.958044+00:00",
+    "exit": 0,
+    "log": "focused-tests-corrected.log"
+  }
+]

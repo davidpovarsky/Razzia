@@ -1,0 +1,867 @@
+{
+  "at": "2026-11-19T18:08:34.632Z",
+  "engine": "webkit",
+  "theme": "razzia-original",
+  "reason": "check failure",
+  "check": "webkit / razzia-original diagnostic workspace and logical card navigation",
+  "step": "HTTP get_game_draft_summary",
+  "detail": {
+    "check": "webkit / razzia-original diagnostic workspace and logical card navigation",
+    "error": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-full-show-chapter=\"preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results\"]') to be visible\n"
+  },
+  "requestedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+  "initialFrame": {
+    "acknowledgedAt": "2026-11-19T18:08:23.889Z",
+    "requestedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+    "frame": {
+      "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+      "revision": 1,
+      "title": "Full show razzia-original webkit",
+      "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+      "chapterCount": 28,
+      "frameDigest": "b68448fedaff0269617ca21ec2a18d1d3f99d8753dd7d0689fd69643f5be6240"
+    }
+  },
+  "lastAcknowledgedPreview": {
+    "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+    "revision": 1,
+    "title": "Full show razzia-original webkit",
+    "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+    "chapterCount": 28,
+    "frameDigest": "b68448fedaff0269617ca21ec2a18d1d3f99d8753dd7d0689fd69643f5be6240"
+  },
+  "hostUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+  "widget": {
+    "capturedAt": "2026-11-19T18:08:34.820Z",
+    "uiEvents": [],
+    "documentReady": "complete",
+    "visibilityState": "visible",
+    "uiText": "Full show razzia-original webkit\n\nPreview / demo — no live player votes\n\nSave in Tadazz\nEdit this draft\nAppearance and sound\n2 / 8\nChoose an answer in this demo.\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nRevision 1\n\nUndo acknowledged edit",
+    "revision": "Revision 1",
+    "status": [],
+    "pause": {
+      "attributes": {
+        "class": "bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg",
+        "data-control-source": "razzia",
+        "type": "button",
+        "data-testid": "full-show-pause",
+        "aria-label": "Pause show",
+        "title": "Pause show"
+      },
+      "rect": {
+        "x": 498.390625,
+        "y": 63,
+        "width": 40,
+        "height": 40
+      },
+      "clientSize": {
+        "width": 40,
+        "height": 40
+      },
+      "scrollSize": {
+        "width": 40,
+        "height": 40
+      },
+      "style": {
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "",
+      "textContent": ""
+    },
+    "host": {
+      "attributes": {
+        "class": "widget-stage-host",
+        "data-testid": "full-show-native-surface",
+        "style": "width: 1144px; height: 643.5px; aspect-ratio: 16 / 9; visibility: visible;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 294.84375,
+        "width": 824,
+        "height": 643.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 644
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 644
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "",
+      "textContent": ""
+    },
+    "layoutAncestors": [
+      {
+        "attributes": {
+          "class": "widget-stage-viewport",
+          "style": "background-color: rgb(26, 20, 11); background-image: url(\"/tadazz-show/razzia-original/background.png\"); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+        },
+        "rect": {
+          "x": 60,
+          "y": 133.1875,
+          "width": 824,
+          "height": 966.8125
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 967
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 967
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "",
+        "textContent": ""
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace-canvas",
+          "data-testid": "editor-workspace-canvas"
+        },
+        "rect": {
+          "x": 60,
+          "y": 133.1875,
+          "width": 824,
+          "height": 966.8125
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 967
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 967
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "",
+        "textContent": ""
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace-center"
+        },
+        "rect": {
+          "x": 60,
+          "y": 56,
+          "width": 824,
+          "height": 1044
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 1044
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 1044
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "2 / 8\nChoose an answer in this demo.",
+        "textContent": "2 / 8Choose an answer in this demo."
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace widget-editor-workspace",
+          "data-testid": "editor-workspace",
+          "data-layout": "wide",
+          "aria-label": "Edit this draft"
+        },
+        "rect": {
+          "x": 0,
+          "y": 56,
+          "width": 1264,
+          "height": 1044
+        },
+        "clientSize": {
+          "width": 1264,
+          "height": 1044
+        },
+        "scrollSize": {
+          "width": 1264,
+          "height": 1044
+        },
+        "style": {
+          "display": "grid",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "Save in Tadazz\nEdit this draft\nAppearance and sound\n2 / 8\nChoose an answer in this demo.\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nRevision 1\n\nUndo acknowledged edit",
+        "textContent": "Save in TadazzEdit this draftAppearance and sound2 / 8Choose an answer in this demo.Edit this draftDraft titleApply draft editQuestion textSELECTED_QUESTION_0Apply draft editAppearance and soundOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.Voting music volume (%)Apply draft editLoad approved assetsRevision 1Undo acknowledged editAppearance and soundAspect ratio16:94:3LanguageenfrdeesitjatrviheReduce motionEnable soundSave in TadazzSave in TadazzSaving to your library requires approval in Tadazz. This widget cannot approve it."
+      },
+      {
+        "attributes": {
+          "class": "widget-shell widget-workspace-shell",
+          "data-testid": "full-show-widget",
+          "dir": "ltr",
+          "lang": "en"
+        },
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1264,
+          "height": 1100
+        },
+        "clientSize": {
+          "width": 1264,
+          "height": 1100
+        },
+        "scrollSize": {
+          "width": 1264,
+          "height": 1100
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "Full show razzia-original webkit\n\nPreview / demo — no live player votes\n\nSave in Tadazz\nEdit this draft\nAppearance and sound\n2 / 8\nChoose an answer in this demo.\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nRevision 1\n\nUndo acknowledged edit",
+        "textContent": "Full show razzia-original webkitPreview / demo — no live player votesSave in TadazzEdit this draftAppearance and sound2 / 8Choose an answer in this demo.Edit this draftDraft titleApply draft editQuestion textSELECTED_QUESTION_0Apply draft editAppearance and soundOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.Voting music volume (%)Apply draft editLoad approved assetsRevision 1Undo acknowledged editAppearance and soundAspect ratio16:94:3LanguageenfrdeesitjatrviheReduce motionEnable soundSave in TadazzSave in TadazzSaving to your library requires approval in Tadazz. This widget cannot approve it."
+      }
+    ],
+    "native": {
+      "attributes": {
+        "class": "widget-native-stage"
+      },
+      "rect": {
+        "x": 60,
+        "y": 294.84375,
+        "width": 824,
+        "height": 643.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 644
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 644
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "SELECTED_QUESTION_0\n\nAUDIENCE RESULTS\n\n1\n\nA\n\n0%\n0\n2\n\nB\n\n0%\n0\n3\n\nC\n\n0%\n0\n4\n\nD\n\n0%\n0\n5\n\nE\n\n0%\n0",
+      "textContent": "SELECTED_QUESTION_0AUDIENCE RESULTS 1A 0%0 2B 0%0 3C 0%0 4D 0%0 5E 0%0"
+    },
+    "stage": {
+      "attributes": {
+        "data-full-show-stage": "question",
+        "data-full-show-theme": "razzia-original",
+        "data-full-show-chapter": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results",
+        "data-playback-elapsed": "0",
+        "data-playback-epoch": "1",
+        "data-playback-paused": "false",
+        "style": "background: rgb(26, 20, 11); --show-theme-background: #1a140b; --show-theme-foreground: #ffffff; --show-theme-accent: #ff9900; --show-theme-font: \"Rubik Variable\", sans-serif; --show-theme-night: #1a140b; --show-theme-purple: #1a140b; --show-theme-violet: #ff9900; --show-theme-pink: #cc79a7; --show-theme-blue: #56b4e9; --show-theme-royal: #0072b2; --show-theme-lime: #3dbfa0; --show-theme-gold: #e69f00; --show-theme-cream: #ffffff; --show-theme-ink: #1a140b; width: 100%; height: 100%; position: relative; overflow: hidden;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 294.84375,
+        "width": 824,
+        "height": 643.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 644
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 644
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "SELECTED_QUESTION_0\n\nAUDIENCE RESULTS\n\n1\n\nA\n\n0%\n0\n2\n\nB\n\n0%\n0\n3\n\nC\n\n0%\n0\n4\n\nD\n\n0%\n0\n5\n\nE\n\n0%\n0",
+      "textContent": "SELECTED_QUESTION_0AUDIENCE RESULTS 1A 0%0 2B 0%0 3C 0%0 4D 0%0 5E 0%0"
+    },
+    "renderer": {
+      "attributes": {
+        "class": "native-razzia-preview-v2",
+        "data-testid": "native-razzia-preview-v2",
+        "data-native-renderer": "razzia-native-stage",
+        "data-role": "spectator",
+        "data-phase": "results",
+        "data-static-motion": "true",
+        "data-transport-paused": "false",
+        "style": "background: rgb(26, 20, 11); --show-theme-background: #1a140b; --show-theme-foreground: #ffffff; --show-theme-accent: #ff9900; --show-theme-font: \"Rubik Variable\", sans-serif; --show-theme-night: #1a140b; --show-theme-purple: #1a140b; --show-theme-violet: #ff9900; --show-theme-pink: #cc79a7; --show-theme-blue: #56b4e9; --show-theme-royal: #0072b2; --show-theme-lime: #3dbfa0; --show-theme-gold: #e69f00; --show-theme-cream: #ffffff; --show-theme-ink: #1a140b;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 294.84375,
+        "width": 824,
+        "height": 643.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 644
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 644
+      },
+      "style": {
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "auto"
+      },
+      "text": "SELECTED_QUESTION_0\n\nAUDIENCE RESULTS\n\n1\n\nA\n\n0%\n0\n2\n\nB\n\n0%\n0\n3\n\nC\n\n0%\n0\n4\n\nD\n\n0%\n0\n5\n\nE\n\n0%\n0",
+      "textContent": "SELECTED_QUESTION_0AUDIENCE RESULTS 1A 0%0 2B 0%0 3C 0%0 4D 0%0 5E 0%0"
+    },
+    "preview": null,
+    "fit": {
+      "attributes": {
+        "data-testid": "native-stage-viewport",
+        "data-fit-factor": "1",
+        "data-fit-ready": "false",
+        "style": "width: 100%; height: 100%; position: relative; overflow: hidden;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 294.84375,
+        "width": 824,
+        "height": 643.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 644
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 644
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "SELECTED_QUESTION_0\n\nAUDIENCE RESULTS\n\n1\n\nA\n\n0%\n0\n2\n\nB\n\n0%\n0\n3\n\nC\n\n0%\n0\n4\n\nD\n\n0%\n0\n5\n\nE\n\n0%\n0",
+      "textContent": "SELECTED_QUESTION_0AUDIENCE RESULTS 1A 0%0 2B 0%0 3C 0%0 4D 0%0 5E 0%0"
+    },
+    "question": {
+      "attributes": {
+        "data-testid": "native-razzia-question"
+      },
+      "rect": {
+        "x": 257.78125,
+        "y": 350.546875,
+        "width": 428.421875,
+        "height": 42.890625
+      },
+      "clientSize": {
+        "width": 428,
+        "height": 43
+      },
+      "scrollSize": {
+        "width": 428,
+        "height": 43
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "SELECTED_QUESTION_0",
+      "textContent": "SELECTED_QUESTION_0"
+    },
+    "answers": [
+      {
+        "attributes": {
+          "class": "relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4",
+          "disabled": "",
+          "aria-disabled": "true",
+          "data-testid": "native-razzia-answer-0",
+          "style": "background: rgb(5, 150, 105);"
+        },
+        "rect": {
+          "x": 76,
+          "y": 481.140625,
+          "width": 392,
+          "height": 141.734375
+        },
+        "clientSize": {
+          "width": 392,
+          "height": 142
+        },
+        "scrollSize": {
+          "width": 392,
+          "height": 142
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "1\n\nA\n\n0%\n0",
+        "textContent": " 1A 0%0"
+      },
+      {
+        "attributes": {
+          "class": "relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4",
+          "disabled": "",
+          "aria-disabled": "true",
+          "data-testid": "native-razzia-answer-1",
+          "style": "background: rgb(185, 28, 28);"
+        },
+        "rect": {
+          "x": 476,
+          "y": 481.140625,
+          "width": 392,
+          "height": 141.734375
+        },
+        "clientSize": {
+          "width": 392,
+          "height": 142
+        },
+        "scrollSize": {
+          "width": 392,
+          "height": 142
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "2\n\nB\n\n0%\n0",
+        "textContent": " 2B 0%0"
+      },
+      {
+        "attributes": {
+          "class": "relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4",
+          "disabled": "",
+          "aria-disabled": "true",
+          "data-testid": "native-razzia-answer-2",
+          "style": "background: rgb(185, 28, 28);"
+        },
+        "rect": {
+          "x": 76,
+          "y": 630.875,
+          "width": 392,
+          "height": 141.734375
+        },
+        "clientSize": {
+          "width": 392,
+          "height": 142
+        },
+        "scrollSize": {
+          "width": 392,
+          "height": 142
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "3\n\nC\n\n0%\n0",
+        "textContent": " 3C 0%0"
+      },
+      {
+        "attributes": {
+          "class": "relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4",
+          "disabled": "",
+          "aria-disabled": "true",
+          "data-testid": "native-razzia-answer-3",
+          "style": "background: rgb(185, 28, 28);"
+        },
+        "rect": {
+          "x": 476,
+          "y": 630.875,
+          "width": 392,
+          "height": 141.734375
+        },
+        "clientSize": {
+          "width": 392,
+          "height": 142
+        },
+        "scrollSize": {
+          "width": 392,
+          "height": 142
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "4\n\nD\n\n0%\n0",
+        "textContent": " 4D 0%0"
+      },
+      {
+        "attributes": {
+          "class": "relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4",
+          "disabled": "",
+          "aria-disabled": "true",
+          "data-testid": "native-razzia-answer-4",
+          "style": "background: rgb(185, 28, 28);"
+        },
+        "rect": {
+          "x": 76,
+          "y": 780.609375,
+          "width": 792,
+          "height": 141.734375
+        },
+        "clientSize": {
+          "width": 792,
+          "height": 142
+        },
+        "scrollSize": {
+          "width": 792,
+          "height": 142
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "5\n\nE\n\n0%\n0",
+        "textContent": " 5E 0%0"
+      }
+    ],
+    "nativeMarkup": "<div class=\"widget-native-stage\"><div data-full-show-stage=\"question\" data-full-show-theme=\"razzia-original\" data-full-show-chapter=\"preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results\" data-playback-elapsed=\"0\" data-playback-epoch=\"1\" data-playback-paused=\"false\" style=\"background: rgb(26, 20, 11); --show-theme-background: #1a140b; --show-theme-foreground: #ffffff; --show-theme-accent: #ff9900; --show-theme-font: &quot;Rubik Variable&quot;, sans-serif; --show-theme-night: #1a140b; --show-theme-purple: #1a140b; --show-theme-violet: #ff9900; --show-theme-pink: #cc79a7; --show-theme-blue: #56b4e9; --show-theme-royal: #0072b2; --show-theme-lime: #3dbfa0; --show-theme-gold: #e69f00; --show-theme-cream: #ffffff; --show-theme-ink: #1a140b; width: 100%; height: 100%; position: relative; overflow: hidden;\"><div data-testid=\"native-stage-viewport\" data-fit-factor=\"1\" data-fit-ready=\"false\" style=\"width: 100%; height: 100%; position: relative; overflow: hidden;\"><div style=\"width: 100%; height: 100%; position: absolute; inset: 0px auto auto 0px; transform: scale(1); transform-origin: left top; container-type: inline-size;\"><div data-testid=\"stage-fit-container\" data-fit-mode=\"compact\" data-is-compact=\"true\" data-is-ultracompact=\"false\" data-is-portrait=\"false\" class=\"relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden\" style=\"--stage-available-height: 644px; --stage-available-width: 1144px; --stage-max-photo-h: 103px;\"><div class=\"native-razzia-preview-v2\" data-testid=\"native-razzia-preview-v2\" data-native-renderer=\"razzia-native-stage\" data-role=\"spectator\" data-phase=\"results\" data-static-motion=\"true\" data-transport-paused=\"false\" style=\"background: rgb(26, 20, 11); --show-theme-background: #1a140b; --show-theme-foreground: #ffffff; --show-theme-accent: #ff9900; --show-theme-font: &quot;Rubik Variable&quot;, sans-serif; --show-theme-night: #1a140b; --show-theme-purple: #1a140b; --show-theme-violet: #ff9900; --show-theme-pink: #cc79a7; --show-theme-blue: #56b4e9; --show-theme-royal: #0072b2; --show-theme-lime: #3dbfa0; --show-theme-gold: #e69f00; --show-theme-cream: #ffffff; --show-theme-ink: #1a140b;\"><div class=\"flex h-full min-h-0 w-full flex-col native-razzia-question\"><h2 data-testid=\"native-razzia-question\">SELECTED_QUESTION_0</h2></div><p>AUDIENCE RESULTS</p><div class=\"native-razzia-answers\"><button class=\"relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4\" disabled=\"\" aria-disabled=\"true\" data-testid=\"native-razzia-answer-0\" style=\"background: rgb(5, 150, 105);\"> <span class=\"pointer-events-none absolute inset-y-0 left-0 bg-white/20 transition-[width] duration-150 ease-out\" data-testid=\"answer-horizontal-bar\" style=\"width: 0%;\"></span><div class=\"relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 gap-y-1.5 sm:content-center sm:gap-x-3\"><span data-testid=\"answer-badge-0\" class=\"col-start-1 row-start-1 flex shrink-0 items-center justify-center bg-black/20 font-bold size-5 rounded text-xs sm:size-7 sm:rounded-md sm:text-sm md:size-8 md:text-base\">1</span><div class=\"col-span-3 row-start-2 flex flex-col items-start gap-1.5 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:gap-2\"><p class=\"text-xs leading-tight break-words sm:text-sm md:text-lg\">A</p></div><div class=\"col-start-3 row-start-1 flex items-center gap-2\"> <div class=\"flex flex-col items-end text-right leading-tight\"><span class=\"text-base font-extrabold drop-shadow-md md:text-xl\">0%</span><span class=\"text-xs font-medium text-white/80 drop-shadow-sm\">0</span></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check size-5 stroke-[3] md:size-7\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"></path></svg></div></div></button><button class=\"relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4\" disabled=\"\" aria-disabled=\"true\" data-testid=\"native-razzia-answer-1\" style=\"background: rgb(185, 28, 28);\"> <span class=\"pointer-events-none absolute inset-y-0 left-0 bg-white/20 transition-[width] duration-150 ease-out\" data-testid=\"answer-horizontal-bar\" style=\"width: 0%;\"></span><div class=\"relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 gap-y-1.5 sm:content-center sm:gap-x-3\"><span data-testid=\"answer-badge-1\" class=\"col-start-1 row-start-1 flex shrink-0 items-center justify-center bg-black/20 font-bold size-5 rounded text-xs sm:size-7 sm:rounded-md sm:text-sm md:size-8 md:text-base\">2</span><div class=\"col-span-3 row-start-2 flex flex-col items-start gap-1.5 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:gap-2\"><p class=\"text-xs leading-tight break-words sm:text-sm md:text-lg\">B</p></div><div class=\"col-start-3 row-start-1 flex items-center gap-2\"> <div class=\"flex flex-col items-end text-right leading-tight\"><span class=\"text-base font-extrabold drop-shadow-md md:text-xl\">0%</span><span class=\"text-xs font-medium text-white/80 drop-shadow-sm\">0</span></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x size-5 stroke-[3] md:size-7\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></div></div></button><button class=\"relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4\" disabled=\"\" aria-disabled=\"true\" data-testid=\"native-razzia-answer-2\" style=\"background: rgb(185, 28, 28);\"> <span class=\"pointer-events-none absolute inset-y-0 left-0 bg-white/20 transition-[width] duration-150 ease-out\" data-testid=\"answer-horizontal-bar\" style=\"width: 0%;\"></span><div class=\"relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 gap-y-1.5 sm:content-center sm:gap-x-3\"><span data-testid=\"answer-badge-2\" class=\"col-start-1 row-start-1 flex shrink-0 items-center justify-center bg-black/20 font-bold size-5 rounded text-xs sm:size-7 sm:rounded-md sm:text-sm md:size-8 md:text-base\">3</span><div class=\"col-span-3 row-start-2 flex flex-col items-start gap-1.5 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:gap-2\"><p class=\"text-xs leading-tight break-words sm:text-sm md:text-lg\">C</p></div><div class=\"col-start-3 row-start-1 flex items-center gap-2\"> <div class=\"flex flex-col items-end text-right leading-tight\"><span class=\"text-base font-extrabold drop-shadow-md md:text-xl\">0%</span><span class=\"text-xs font-medium text-white/80 drop-shadow-sm\">0</span></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x size-5 stroke-[3] md:size-7\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></div></div></button><button class=\"relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4\" disabled=\"\" aria-disabled=\"true\" data-testid=\"native-razzia-answer-3\" style=\"background: rgb(185, 28, 28);\"> <span class=\"pointer-events-none absolute inset-y-0 left-0 bg-white/20 transition-[width] duration-150 ease-out\" data-testid=\"answer-horizontal-bar\" style=\"width: 0%;\"></span><div class=\"relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 gap-y-1.5 sm:content-center sm:gap-x-3\"><span data-testid=\"answer-badge-3\" class=\"col-start-1 row-start-1 flex shrink-0 items-center justify-center bg-black/20 font-bold size-5 rounded text-xs sm:size-7 sm:rounded-md sm:text-sm md:size-8 md:text-base\">4</span><div class=\"col-span-3 row-start-2 flex flex-col items-start gap-1.5 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:gap-2\"><p class=\"text-xs leading-tight break-words sm:text-sm md:text-lg\">D</p></div><div class=\"col-start-3 row-start-1 flex items-center gap-2\"> <div class=\"flex flex-col items-end text-right leading-tight\"><span class=\"text-base font-extrabold drop-shadow-md md:text-xl\">0%</span><span class=\"text-xs font-medium text-white/80 drop-shadow-sm\">0</span></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x size-5 stroke-[3] md:size-7\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></div></div></button><button class=\"relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4\" disabled=\"\" aria-disabled=\"true\" data-testid=\"native-razzia-answer-4\" style=\"background: rgb(185, 28, 28);\"> <span class=\"pointer-events-none absolute inset-y-0 left-0 bg-white/20 transition-[width] duration-150 ease-out\" data-testid=\"answer-horizontal-bar\" style=\"width: 0%;\"></span><div class=\"relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 gap-y-1.5 sm:content-center sm:gap-x-3\"><span data-testid=\"answer-badge-4\" class=\"col-start-1 row-start-1 flex shrink-0 items-center justify-center bg-black/20 font-bold size-5 rounded text-xs sm:size-7 sm:rounded-md sm:text-sm md:size-8 md:text-base\">5</span><div class=\"col-span-3 row-start-2 flex flex-col items-start gap-1.5 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:gap-2\"><p class=\"text-xs leading-tight break-words sm:text-sm md:text-lg\">E</p></div><div class=\"col-start-3 row-start-1 flex items-center gap-2\"> <div class=\"flex flex-col items-end text-right leading-tight\"><span class=\"text-base font-extrabold drop-shadow-md md:text-xl\">0%</span><span class=\"text-xs font-medium text-white/80 drop-shadow-sm\">0</span></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x size-5 stroke-[3] md:size-7\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></div></div></button></div></div></div></div></div><div class=\"widget-audio\" data-testid=\"full-show-audio\" data-audio-enabled=\"false\" data-audio-playing=\"false\"><span class=\"sr-only\" data-testid=\"audio-cue-player-state\" data-sfx-ducked=\"false\" data-cue-id=\"revealResults\" data-soundtrack-slot=\"results\" data-should-play=\"true\" data-audio-url=\"/sounds/results.mp3\" data-audio-identity=\"CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR:result-reveal:revealResults:/sounds/results.mp3\" data-audio-loop=\"false\" data-audio-blocked=\"false\" data-audio-error=\"false\" data-audio-paused=\"true\"></span></div></div></div>"
+  },
+  "host": {
+    "capturedAt": "2026-11-19T18:08:34.988Z",
+    "ready": "true",
+    "calls": [
+      "get_game_draft_summary"
+    ],
+    "lifecycle": {
+      "documentId": "f3572e1e-2bdf-4c95-9bf6-106601f81667",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "iframe": [
+      {
+        "src": "http://127.0.0.1:45519/widget",
+        "rect": {
+          "width": 1264,
+          "height": 1100
+        },
+        "visibility": "visible",
+        "display": "inline"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "at": "2026-11-19T18:08:23.002Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:08:23.912Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:08:24.762Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "activeStep": "webkit / razzia-original diagnostic workspace and logical card navigation",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:08:25.669Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:06:51.470Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "2a8174e1-ab5c-46b7-b64b-3e511df6c9ab",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:07:26.706Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "b2a1cd80-31d3-4541-af12-71de75058106",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:07:33.720Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+      "inputRevision": 1,
+      "inputDigest": "40dd7db68c5bcf1cc7bd5b9a49ad5a7b9c1bf77cd5e0cc210e628adde4ea0019",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "32b28095-e3e6-4fb3-a23e-1fb290cd9c23",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+          "chapterCount": 28,
+          "frameDigest": "f4158a73a8ac70844da72ec8951cb1f23ff3cba7425c28769d8c3bc144abb0e7"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:07:46.241Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "inputRevision": 1,
+      "inputDigest": "d57d7a8edca5ab3989e24bafc224517ebf33a86fa2566dcb36209aaf52713f54",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "bb183296-88d9-459d-af0e-dd92741b1757",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "chapterCount": 28,
+          "frameDigest": "3d45501f41cbfab01a5e02bca9314199ab36c3fc5b38f61be35674c7a3a00e6b"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:07:50.953Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "410feb9d-747a-4c78-aa24-fbbf10606983",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:00.266Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d00ce223-5b54-4ca3-ad22-c2d7d9a41c7a",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:05.850Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "30fd1796-58d7-40d4-956a-081a04832a3d",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:12.155Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d099adec-9dbc-446f-a160-dbd135a2483d",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "apply_game_edit",
+      "completedAt": "2026-11-19T18:08:16.023Z",
+      "inputRevision": 1,
+      "inputDigest": "ff3f07e231b375324c463d68e15033eff47c7864c5af4fc9cff6048615f2e8e2",
+      "patchKind": "set-question-text",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d856b608-adfa-434e-96c8-10d05ae87984",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 2,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "04d85379-5cb6-4feb-9943-d01778ea0811"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:25.618Z",
+      "inputRevision": 1,
+      "inputDigest": "3313631c24992e2a3605605bcf15f6fd86455e8e1f23f6ee1944b76805e2b386",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "579cb526-2a4f-438c-b8c3-6eb1bf1846e4",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 1,
+          "summary": {
+            "title": "Full show razzia-original webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    }
+  ],
+  "screenshot": "webkit-razzia-original-failure-state-1.png"
+}

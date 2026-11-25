@@ -1,0 +1,65 @@
+{
+  "allocation": "RELEASED",
+  "sha": "6fa3a75b3b82c3fc22923c470624a0599a6a1638",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T07:54:28.71465272Z",
+    "FinishedAt": "2026-11-15T07:57:20.776012307Z"
+  },
+  "container_id": "17c3f57d3fb5f91837f5f3f00f8101fb71c4204754b76f5ba469deee7be835fa",
+  "resources": {
+    "NanoCpus": 250000000,
+    "Memory": 1073741824,
+    "PidsLimit": 256,
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges"
+    ]
+  },
+  "size_rw": 28672,
+  "mounts": [
+    {
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/phone-s02-003cf88b6cba19989388dca20efcfaa01cc8f9ad/input",
+      "Destination": "/input",
+      "RW": false
+    },
+    {
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-v2a-6fa3a75b3b82c3fc22923c470624a0599a6a1638",
+      "Destination": "/delta",
+      "RW": false
+    },
+    {
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/phone-v2a-6fa3a75b3b82c3fc22923c470624a0599a6a1638/input",
+      "Destination": "/input-v2a",
+      "RW": false
+    },
+    {
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/phone-v2a-6fa3a75b3b82c3fc22923c470624a0599a6a1638/runtime",
+      "Destination": "/fixtures",
+      "RW": true
+    },
+    {
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-v2a-6fa3a75b3b82c3fc22923c470624a0599a6a1638",
+      "Destination": "/evidence",
+      "RW": true
+    },
+    {
+      "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-s02-003cf88b6cba19989388dca20efcfaa01cc8f9ad",
+      "Destination": "/work",
+      "RW": false
+    }
+  ],
+  "available_bytes": 2795470848
+}

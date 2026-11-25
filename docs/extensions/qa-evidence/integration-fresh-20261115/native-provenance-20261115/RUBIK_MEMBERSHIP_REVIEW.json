@@ -1,0 +1,183 @@
+{
+  "utc": "2026-11-15T20:27:52.516231+00:00",
+  "producer": "f20a143bdfc1eefcf50900bd13dae2ddcb4bed69",
+  "productDelta": [],
+  "sqliteMode": "ro immutable query_only",
+  "exactRawBlob4263Verified": true,
+  "localIndexedFiles24Verified": [
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 111,
+      "sha256": "85fdcfc37da22374dfc9bba5ea81e9bb99f7afb1f78521cd374156aef6f158fd",
+      "sha512": "0a4da89751145fccf15cd2a1cd4c152f44a9f4e28673755adf2071a4298479ef979119576f75ed56d43f306970b56a00d97f7983df008f30a6c7d52b8c54392b",
+      "sameFile": true
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 4486,
+      "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c",
+      "sha512": "5390dbb42061478b6298220dc06553a7efc6aea582b8310db43a8ca39b3ce9f36e636eac430fc474fe70183e8de4311b7b12283ddda9f3d51d070f7f2001c2c5",
+      "sameFile": true
+    },
+    {
+      "path": "README.md",
+      "bytes": 2592,
+      "sha256": "0800717cb28e14ab554b819b5422b427e7ab107203accce06b39f50440dc9217",
+      "sha512": "eef48f9f1508857e6eff9deb80d0840d1ba895c5aee51b27c276302eb970e56e1964f460cf352cf19c847b2a1e175fb4e39dca8bd817e28b200f234e90760eac",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-arabic-wght-italic.woff2",
+      "bytes": 32620,
+      "sha256": "d64df39f7e37d0cfbfa2cbbc6c534d485273bb4d59c51dcfe5878b83e9e05764",
+      "sha512": "c060b14dbe594ef482212b57d952bc021b2e87ff354ade000a7560cf07589dcbdbb0a0393f72c47f9dbf98634988c89ad11200337e2525530d75377d432d965d",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-arabic-wght-normal.woff2",
+      "bytes": 32468,
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+      "sha512": "01e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-cyrillic-ext-wght-italic.woff2",
+      "bytes": 13676,
+      "sha256": "86b49c65aab61a0aa22e180c532c038f01cae4f1fc06a0801ddbb3c06ae10ce5",
+      "sha512": "0c8e5e5c1480a9061a045cf8f33a2102987acf109dfe914661f34789e1e59eb9267b703ebf396a29a4f461307a801c802afa7f9641ac24f7c361dd04c9d132fd",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-cyrillic-ext-wght-normal.woff2",
+      "bytes": 12388,
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+      "sha512": "6c6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-cyrillic-wght-italic.woff2",
+      "bytes": 16488,
+      "sha256": "e9f7ede725761fea79102f5256a581eb4693dbaff21e61db15974eec2dfb226a",
+      "sha512": "c32417b8e5fe1bb0138443a2b0e00f679128444cbed1d8916b394bfa4391d73b918b05e2c9f6919772bd2f71fd01270c630e6df0f0bb467d10e386defb274884",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-cyrillic-wght-normal.woff2",
+      "bytes": 15112,
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+      "sha512": "eaf0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-hebrew-wght-italic.woff2",
+      "bytes": 9764,
+      "sha256": "8f5e07ecc6ab0058087b174d3275528bee0418a3f01204f5082552a3f020dc0e",
+      "sha512": "ac0e65684a528341a006e2f4499dcd49285d46293d9adadbf5fc4cc219676756c7751ed4104d78381b1c39c6f089ab100dfa6b8ea86cb222522bb6197b532888",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-hebrew-wght-normal.woff2",
+      "bytes": 9348,
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+      "sha512": "2b9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-latin-ext-wght-italic.woff2",
+      "bytes": 21152,
+      "sha256": "51999fc7e45d93d8d34d3c0f1c32e58f85ae6e69d8dfb700771062e5c3945e49",
+      "sha512": "df713b27caa9c8ade850b130770b8ddc6c2e05190b03441c1b777a3e61df6598aab79fe8022a69feebb55ecb75f4d1aa2db04cd0da4b1b770bc73136663095b1",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-latin-ext-wght-normal.woff2",
+      "bytes": 19400,
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+      "sha512": "52e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-latin-wght-italic.woff2",
+      "bytes": 36616,
+      "sha256": "4d9f552c4b0a7f02f231e56198d80aed8550bdfb7e7541260b2b20455b14fb88",
+      "sha512": "7b59b52831ca73697ba0040af9192d5262610d968fe0e5a3cab8866cce09f33f7719f3f2eda63c74463f56189c39948fc5351c89247a80debcf9b43bbe2997ea",
+      "sameFile": true
+    },
+    {
+      "path": "files/rubik-latin-wght-normal.woff2",
+      "bytes": 35348,
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+      "sha512": "d9e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+      "sameFile": true
+    },
+    {
+      "path": "index.css",
+      "bytes": 2581,
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+      "sha512": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+      "sameFile": true
+    },
+    {
+      "path": "index.d.css.ts",
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "sha512": "4ee1c88f8c3f4e4cd34cb6c00339bf9d6d036ff4ade3af49e871cc8966b84c729d8b75492acc6413c9a664ac00a57958223ac13c4229da8c62ebe6a53e4f783f",
+      "sameFile": true
+    },
+    {
+      "path": "metadata.json",
+      "bytes": 858,
+      "sha256": "ace225a1378779527f7121cb28dddd9efe78e32d3a2d76a4e2aaacaa9e3701c3",
+      "sha512": "2349d135d54e5902464e75fd9d3d66b7f93ac83ae961340f20dd5f6fbbaf14e9f448ddac8e49b03ae5cc3756510906b05c09614a214eec7dec6e3659581bef84",
+      "sameFile": true
+    },
+    {
+      "path": "package.json",
+      "bytes": 1457,
+      "sha256": "10a0e96b78e2aa2810b638f056a2456fcc9eca48ec90bfd505382b98bfc6b0a9",
+      "sha512": "c45cc866bc231f2869b32c1ac736d44033a1e5e6051dc18a0a31f12038aa77ea6379a87495e94fa7b34c228aab9dbada3ee166a64719c9861658929d02796984",
+      "sameFile": true
+    },
+    {
+      "path": "scss/metadata.scss",
+      "bytes": 1836,
+      "sha256": "9c68949e56fef63510b0155d4ef24e451c28c4cba41f2c05469a51929c0d8401",
+      "sha512": "6deb6cc90d43d1c0ebea2b74b2eaad7c662dc8a2c772e8f76863472a53cc3f62bfffd67dd6882ed68710024b5e09dfad53beb26ef5247786b0f84a5853e09f68",
+      "sameFile": true
+    },
+    {
+      "path": "scss/mixins.scss",
+      "bytes": 6041,
+      "sha256": "7c978d8fa8d971fc220363b404ba9e9087e0d5dd4614c29d645285c5150ad867",
+      "sha512": "9ae69435753befc7762ff9c3d0f1c13dac1fcb2bea2956e436aa905f40f85465d82ce2a957e4c9fc7881ab0819de28f1f0c5910a0355c42e9950b1764a47a6f7",
+      "sameFile": true
+    },
+    {
+      "path": "unicode.json",
+      "bytes": 1195,
+      "sha256": "ae9cf9910eeadf60ff53fa37d8037c4f120ed0a2d334e68ff3d9f8ad9d94cccc",
+      "sha512": "300ed274f3cc448a94e092a4ec3479dc3e2da8d3eed1821830188944580a90ef0d51b3933021fad362f393f989c0498859d241cd3c8ff7c25f16fb9cc0c7b374",
+      "sameFile": true
+    },
+    {
+      "path": "wght-italic.css",
+      "bytes": 2581,
+      "sha256": "5de96985f21918fbdf6caf26a64daff38d05cafddc1f844489afd05915461514",
+      "sha512": "8cb9c1ace419db61288f513a7b54f2499795656360745383ed5f88fd190812ce7d02e84fbbbe7d226f45e163d9dd8a8340901eb55fe526003e391ad1d541cf0c",
+      "sameFile": true
+    },
+    {
+      "path": "wght.css",
+      "bytes": 2581,
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+      "sha512": "d0d2e50b1fd219bd384dbb10d2129a8ce84ad8ccd7078b3181c58ae871b3309d7bb69e6df16fb719661c6b92d1deb70a80f29fec67bc3ba9dd28d53755d2fc4e",
+      "sameFile": true
+    }
+  ],
+  "priorUsedMetadataAndFonts": 10,
+  "indexCurrentBeforeAfterByteMtimeInodeUnchanged": true,
+  "producerWholeIndexHashStillMatches": true,
+  "packageAndDecoderMetadataByteEqual": true,
+  "noSidecarsOrWrites": true,
+  "limits": "Local existing Rubik5.3.0 CAFS membership only. No Oracle five-package/106module extension, tarball/signature/historical install/loader/emittedfont/glyph/browser/rights/pin/runtime/export authority. SB01/SB05 stay OPEN."
+}

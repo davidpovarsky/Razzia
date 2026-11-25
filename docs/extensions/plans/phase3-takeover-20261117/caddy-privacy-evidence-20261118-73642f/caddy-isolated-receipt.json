@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "passed": true,
+  "scope": "isolated-loopback-synthetic-upstream-error-only",
+  "productionConfigurationChanged": false,
+  "productionLogsRead": false,
+  "binary": "/usr/bin/caddy",
+  "binarySha256": "6da742da7bb1a73f89c01a1e098aaa5df3ba0f4dab4cbf229b614ea5d4030a3c",
+  "binaryVersion": "2.6.2",
+  "fixtureUid": 1001,
+  "cases": [
+    {
+      "case": "default",
+      "passed": true,
+      "httpStatus": 502,
+      "errorRecordRetained": true,
+      "capabilityAndRefererAbsent": false,
+      "configSha256": "68f9633519e2c1c21ccd65932e62c74debae1e136d9fc94fccefed7fadbda37c",
+      "runtimeLogSha256": "74194aacd211bcfce5d71d0ad12be606c8f3ad0796ec3db6afa1917e2725a9e4"
+    },
+    {
+      "case": "filtered",
+      "passed": true,
+      "httpStatus": 502,
+      "errorRecordRetained": true,
+      "capabilityAndRefererAbsent": true,
+      "configSha256": "148a154e2d2208a3b290d550e5cb888b4cbe854423fafe1ea24c11793ce95f6e",
+      "runtimeLogSha256": "4fc576231c85e72ec6f74396f260330209991d9b6f1ebbe5226f26253fd358b6"
+    }
+  ],
+  "requiredEncoder": {
+    "format": "filter",
+    "wrap": {
+      "format": "json"
+    },
+    "fields": {
+      "request>uri": {
+        "filter": "delete"
+      },
+      "request>headers>Referer": {
+        "filter": "delete"
+      }
+    }
+  }
+}

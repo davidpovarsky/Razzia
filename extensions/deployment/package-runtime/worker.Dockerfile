@@ -1,0 +1,2 @@
+FROM sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411
+COPY source/ /cleanup/

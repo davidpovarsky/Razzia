@@ -1,0 +1,13 @@
+# Local Rubik CAFS membership observation
+
+This addendum addresses the explicitly unverified local font membership in the earlier `native-asset-provenance-20261115/rubik-observation.json`. That historical receipt is unchanged. The new observation verifies local store membership only; it does not extend the Oracle five-package/106-module graph proof or grant execution/export authority.
+
+Executed `py -3 .../observe_store.py` in the D worktree, exit 0. The existing JSON `.modules.yaml` declares pnpm 11.24.0 and the local v11 store. These are observed metadata fields, not proof that a historical pnpm invocation ran. The script opened that store's `index.db` using SQLite `mode=ro&immutable=1` and connection `query_only`, with no WAL/SHM/journal before or after. The exact key combines the previously Git-verified lock integrity and `@fontsource-variable/rubik@5.3.0` separated by a tab.
+
+The existing retained-index decoder parsed the actual 4,263-byte msgpackr record; its source matches Git and is hashed in the receipt. The raw index BLOB/base64, decoded record and exact original file rows are preserved. This local record has `requiresBuild`, `manifest`, `algo` and `files`; unlike the separate Oracle pnpm 12 record, it has no `tarIntegrity`/alias-table proof. No missing field was fabricated.
+
+All 24 indexed package files were read from both their content-addressed paths and the installed package. Every observed size and SHA512 matched the index row, and every installed file equaled its CAFS bytes. All 24 installed paths identify the same physical files as their CAFS paths (`sameFileCount: 24`). Package name/version and the declared OFL-1.1 license agree. The six previously observed normal-weight font files plus four package/license/CSS/metadata inputs match their prior SHA256/size observations exactly. Other package files were verified as part of the 24-file package but are not claimed as renderer graph inputs.
+
+The whole index's byte count, SHA256, SHA512, mtime and inode matched before/after. All 48 file-path observations, `.modules.yaml` and decoder source remained unchanged. No cache write, repair, extraction, package script, install, network request, dependency/version change or remote job occurred. Product source and all prior accepted test receipts remain unchanged; no suite was rerun.
+
+The observation does not verify original tarball bytes/signatures, historical package installation, Oracle mount provenance, emitted font files, loader registration, font glyph/browser rendering, or media rights. It installs no trusted store receipt, pin, renderer reference, execution/export grant or readiness. Full SB-01/SB-05 acceptance remains OPEN.

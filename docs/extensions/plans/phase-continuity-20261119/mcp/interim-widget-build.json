@@ -1,0 +1,46 @@
+{
+  "command": [
+    "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "extensions/src/mcp-app/widget/build-full-show.mjs"
+  ],
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119",
+  "exit": 0,
+  "seconds": 47.53,
+  "rendererBuildId": "a0c52538c2570d88e01a71a8f4dc8068d83a3dc35ceced1819c77afc14c6375e",
+  "widgetSha256": "6a0781393b9db686ed7803d8e1c2c88c00bb6bc4b8a1637bd69db5b2b539c1a9",
+  "physicalModuleCount": 2694,
+  "offWorktreeProductModules": [],
+  "inputReceiptSha256": "3561e21b3c3257ccb975514e2d4b03332e753756ce1a781606a3424465f35264",
+  "criticalModules": [
+    {
+      "path": "extensions/src/mcp-app/widget/full-show-demo-question.tsx",
+      "sha256": "03b0c4794bf9c2f12581177fdbb91d5355a76655068535264717aa9b9cf933d9",
+      "bytes": 6519
+    },
+    {
+      "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+      "sha256": "9f11759d8209280fa5e36d98387364bd659be66f941e9e47e103fe0cecb75f58",
+      "bytes": 9897
+    },
+    {
+      "path": "extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx",
+      "sha256": "29d2d5d6a0c2d51cbc617c8265a362dc7cbd4f5d5a164f2205f1055dab572619",
+      "bytes": 8652
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "sha256": "e3714fb5dc00ba3d8a8962ce77dd13516e7f2f41d21295d6f6a323afa953331e",
+      "bytes": 26301
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+      "sha256": "6e244d5905b123f7e13156e2a9ad74ef1918c537c9367e5f32730f07e46fe3a3",
+      "bytes": 44192
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "sha256": "9e8e8a0a41a1502b1b8ce8c2fcbed2221ccd5ae353cc3888df803350511c04a9",
+      "bytes": 13034
+    }
+  ]
+}

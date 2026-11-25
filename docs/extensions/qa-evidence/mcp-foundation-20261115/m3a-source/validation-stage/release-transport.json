@@ -1,0 +1,5 @@
+{
+  "exit": 0,
+  "stdout": "{\"kind\": \"ACTUAL_ALLOCATION_RELEASE_AND_PHYSICAL_ACCOUNTING\", \"allOwnContainersStopped\": true, \"finalNaturalExit\": 0, \"allOomKilledFalse\": true, \"ownSourceEvidencePhysicalBytes\": 4366336, \"ownContainerDirectoryPhysicalBytes\": 290816, \"additionalLayerAllowanceBytes\": 2097152, \"newPhysicalConservativeUpperBoundBytes\": 6754304, \"newPhysicalCapBytes\": 67108864, \"hostFreeAfterBytes\": 2859171840, \"sharedMetadataKeeperLeftRunning\": true, \"sharedMetadataCopied\": false, \"validatedIndexSha256After\": \"ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89\"}\n",
+  "stderr": ""
+}

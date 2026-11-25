@@ -1,0 +1,231 @@
+{
+  "sourceFiles": 1234,
+  "sourceMismatches": [],
+  "oldArtifactFilesUnchanged": 152,
+  "fixedArtifactFilesVerified": 152,
+  "fixtures": [
+    {
+      "name": "/tadazz-site-native-lang-app-A-20261115",
+      "id": "0bb08b3f90314d0ede55d21aaa6c20de8d2f6f4c249940bdf866125ac251b33b",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:21:13.039222414Z",
+        "FinishedAt": "2026-11-15T18:22:54.89470639Z"
+      },
+      "sizeRw": 135168,
+      "logBytes": 1994
+    },
+    {
+      "name": "/tadazz-site-native-lang-baseline-browser-A-20261115",
+      "id": "4142dc4008fb735e6310be90e9791d1f1f0ca5b4fb6c80a339fe76e7eefe3b47",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:21:35.836556073Z",
+        "FinishedAt": "2026-11-15T18:22:05.000016617Z"
+      },
+      "sizeRw": 12288,
+      "logBytes": 110
+    },
+    {
+      "name": "/tadazz-site-native-lang-build-A-20261115",
+      "id": "bb2c9f05bdbecc623775ea36b64a19262310ac83578ab18b216fb0b500006475",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:33:35.598213476Z",
+        "FinishedAt": "2026-11-15T18:33:51.451417836Z"
+      },
+      "sizeRw": 20480,
+      "logBytes": 11784
+    },
+    {
+      "name": "/tadazz-site-native-lang-fixed-app-A-20261115",
+      "id": "3036d2cb432ea0a96780b1ef024cdf4d9d2cc963d00bce7d9e0e023576782b15",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:34:54.891801973Z",
+        "FinishedAt": "2026-11-15T18:37:58.710831509Z"
+      },
+      "sizeRw": 176128,
+      "logBytes": 1995
+    },
+    {
+      "name": "/tadazz-site-native-lang-fixed-browser-A-20261115",
+      "id": "7ebcdb14261e87cd23a83233b004c4866dbe4a014532c073ebde86aab04fdbad",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:34:56.771172973Z",
+        "FinishedAt": "2026-11-15T18:35:20.796659793Z"
+      },
+      "sizeRw": 12288,
+      "logBytes": 110
+    },
+    {
+      "name": "/tadazz-site-native-lang-spec-A-20261115",
+      "id": "4de189c2b94e21baa0a884b3fcf7f43d209ef2da8bfc12af84085149cecb9bc6",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:35:59.624856731Z",
+        "FinishedAt": "2026-11-15T18:36:02.263956425Z"
+      },
+      "sizeRw": 12288,
+      "logBytes": 712
+    },
+    {
+      "name": "/tadazz-site-native-lang-spec2-A-20261115",
+      "id": "583a5473e70e384b118301fb37212d051e28be0032296d146813b09b03479264",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T18:36:47.346003876Z",
+        "FinishedAt": "2026-11-15T18:37:17.589604092Z"
+      },
+      "sizeRw": 12288,
+      "logBytes": 1316
+    }
+  ],
+  "protected": [
+    {
+      "id": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 949376,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-12T03:38:48.157101207Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"
+    },
+    {
+      "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 270983,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-08T11:37:09.544011462Z",
+        "FinishedAt": "2026-11-08T11:37:09.486517102Z"
+      },
+      "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e"
+    },
+    {
+      "id": "505772e38a7c0ecd700f82d189219f0b951a7cc95eb933ea58372ccf72b1fab8",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1212596,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T11:33:46.733525138Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"
+    },
+    {
+      "id": "701c07ef1fab02d5772fb2af15b733f0fdd5383a170c46da69fb3a529f343757",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1212666,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T11:33:47.11610192Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647"
+    },
+    {
+      "id": "06144b29108376b584e0cdb2377e397c48ab7a37c3395481ee4fdae08d908ee6",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1161954,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T09:11:20.079019103Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647"
+    }
+  ],
+  "newDataAndWritableLayerBytes": 1353317,
+  "note": "150 old artifact body hardlinks and two payload hardlinks excluded from duplicate data accounting; original bodies hashed unchanged. Directory/container metadata reserved separately.",
+  "availableBytes": "Avail\n2519293952"
+}

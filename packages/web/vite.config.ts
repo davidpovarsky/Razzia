@@ -8,9 +8,20 @@ import path from "node:path"
 import { fileURLToPath } from "url"
 import { defineConfig, type Plugin } from "vite"
 import packageJson from "../../package.json" with { type: "json" }
+import {
+  createPrivateMediaProxy,
+  usesPrivateMediaRoutes,
+} from "./vite/private-media"
 
-const configDir = (name: string) =>
-  fileURLToPath(new URL(`../../config/${name}`, import.meta.url))
+const configDir = (name: string) => {
+  const customConfig = process.env.CONFIG_PATH
+
+  if (customConfig) {
+    return path.resolve(customConfig, name)
+  }
+
+  return fileURLToPath(new URL(`../../config/${name}`, import.meta.url))
+}
 
 const brandingMimeTypes: Record<string, string> = {
   ".json": "application/json",
@@ -23,9 +34,12 @@ const brandingMimeTypes: Record<string, string> = {
   ".woff2": "font/woff2",
 }
 
-const mediaMimeTypes: Record<string, string> = Object.fromEntries(
-  Object.entries(ACCEPTED_MEDIA_TYPES).map(([mime, { ext }]) => [ext, mime]),
-)
+const mediaMimeTypes: Record<string, string> = {
+  ...Object.fromEntries(
+    Object.entries(ACCEPTED_MEDIA_TYPES).map(([mime, { ext }]) => [ext, mime]),
+  ),
+  ".json": "application/json; charset=utf-8",
+}
 
 const serveDir =
   (prefix: string, dir: string, mimeTypes: Record<string, string>) =>
@@ -73,11 +87,17 @@ const configServer = (): Plugin => ({
   name: "razzia-config-server",
   configureServer(server) {
     server.middlewares.use(serveBranding)
-    server.middlewares.use(serveMedia)
+
+    if (!usesPrivateMediaRoutes()) {
+      server.middlewares.use(serveMedia)
+    }
   },
   configurePreviewServer(server) {
     server.middlewares.use(serveBranding)
-    server.middlewares.use(serveMedia)
+
+    if (!usesPrivateMediaRoutes()) {
+      server.middlewares.use(serveMedia)
+    }
   },
 })
 
@@ -88,6 +108,7 @@ const serverOptions = {
   port: webPort,
   host: "0.0.0.0",
   proxy: {
+    ...createPrivateMediaProxy(socketUrl),
     "/ws": {
       target: socketUrl,
       ws: true,

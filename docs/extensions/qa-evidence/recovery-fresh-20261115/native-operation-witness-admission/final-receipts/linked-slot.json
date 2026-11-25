@@ -1,0 +1,206 @@
+{
+  "fault": "linked-slot",
+  "original": {
+    "version": 1,
+    "kind": "native-create-operation",
+    "binding": {
+      "version": 1,
+      "operationId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "authorizationDigest": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "requestDigest": "79081118a98cfbcbe1ad4dabc613a97939168bddc865e48f78bb4920f7652a8b",
+    "scope": {
+      "configuredRoot": "/tmp/tadazz-witness-owned-EAn9Iq",
+      "root": "/tmp/tadazz-witness-owned-EAn9Iq/tenants/00000000-0000-4000-8000-0000000000a1",
+      "mode": "tenant",
+      "owner": "00000000-0000-4000-8000-0000000000a1"
+    },
+    "pins": {
+      "configured": {
+        "dev": "2096",
+        "ino": "2603",
+        "mode": 448
+      },
+      "root": {
+        "dev": "2096",
+        "ino": "14297",
+        "mode": 448
+      },
+      "registry": {
+        "dev": "2096",
+        "ino": "14320",
+        "mode": 448
+      },
+      "slot": {
+        "dev": "2096",
+        "ino": "14322",
+        "mode": 448
+      }
+    },
+    "phase": "committed",
+    "target": {
+      "quizId": "-Rvra02OXjiEabr5UGZ0W",
+      "nonce": "69328a40-bf8c-408c-928f-78b88a9e20ac",
+      "logicalDigest": "1d5a0425317e7460e5d4a35899a3de0be7986492831de519676702355e41ca78",
+      "baseSha256": "dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b",
+      "sidecarSha256": null
+    },
+    "result": {
+      "quizId": "-Rvra02OXjiEabr5UGZ0W",
+      "revision": 1,
+      "baseDigest": "1d5a0425317e7460e5d4a35899a3de0be7986492831de519676702355e41ca78"
+    }
+  },
+  "result": {
+    "quizId": "-Rvra02OXjiEabr5UGZ0W",
+    "revision": 1,
+    "baseDigest": "1d5a0425317e7460e5d4a35899a3de0be7986492831de519676702355e41ca78"
+  },
+  "before": {
+    ".owner": {
+      "sha256": "08ab19c0b7f3b14ae68ab6fb7948866d55ace5fb85f0485ca00997a933633c46",
+      "mode": 33188,
+      "links": 1
+    },
+    ".tadazz-creation-operations-v1/1111111111111111111111111111111111111111111111111111111111111111": {
+      "link": "/tmp/tadazz-witness-owned-EAn9Iq/retained-original-slot"
+    },
+    "foreign-sentinel.txt": {
+      "sha256": "55533e21fa01f499aeb917c113b02002de3c1b6a6bb693afef489e629fdc31c2",
+      "mode": 33188,
+      "links": 1
+    },
+    "retained-original-slot/operation.json": {
+      "sha256": "e6b110125acbf7ef830f5166c75b6a4de247c3f61d8d89d06d28317a314aa9e0",
+      "mode": 33152,
+      "links": 1
+    },
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": {
+      "sha256": "cb7f3faf49a7e31404058e0d0b30da4181442742a6fc6d1baf1932c95c9951bb",
+      "mode": 33188,
+      "links": 1
+    },
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/witness-ad-zlFR8wVV.json": {
+      "sha256": "dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b",
+      "mode": 33152,
+      "links": 1
+    }
+  },
+  "after": {
+    ".owner": {
+      "sha256": "08ab19c0b7f3b14ae68ab6fb7948866d55ace5fb85f0485ca00997a933633c46",
+      "mode": 33188,
+      "links": 1
+    },
+    ".tadazz-creation-operations-v1/1111111111111111111111111111111111111111111111111111111111111111": {
+      "link": "/tmp/tadazz-witness-owned-EAn9Iq/retained-original-slot"
+    },
+    "foreign-sentinel.txt": {
+      "sha256": "55533e21fa01f499aeb917c113b02002de3c1b6a6bb693afef489e629fdc31c2",
+      "mode": 33188,
+      "links": 1
+    },
+    "retained-original-slot/operation.json": {
+      "sha256": "e6b110125acbf7ef830f5166c75b6a4de247c3f61d8d89d06d28317a314aa9e0",
+      "mode": 33152,
+      "links": 1
+    },
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": {
+      "sha256": "cb7f3faf49a7e31404058e0d0b30da4181442742a6fc6d1baf1932c95c9951bb",
+      "mode": 33188,
+      "links": 1
+    },
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/witness-ad-zlFR8wVV.json": {
+      "sha256": "dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b",
+      "mode": 33152,
+      "links": 1
+    }
+  },
+  "lookup": {
+    "pid": 496,
+    "exit": 0,
+    "signal": null,
+    "stdout": "{\"pid\":496,\"outcome\":{\"status\":\"unresolved\",\"quizId\":null},\"snapshot\":{\".owner\":{\"sha256\":\"08ab19c0b7f3b14ae68ab6fb7948866d55ace5fb85f0485ca00997a933633c46\",\"mode\":33188,\"links\":1},\".tadazz-creation-operations-v1/1111111111111111111111111111111111111111111111111111111111111111\":{\"link\":\"/tmp/tadazz-witness-owned-EAn9Iq/retained-original-slot\"},\"foreign-sentinel.txt\":{\"sha256\":\"55533e21fa01f499aeb917c113b02002de3c1b6a6bb693afef489e629fdc31c2\",\"mode\":33188,\"links\":1},\"retained-original-slot/operation.json\":{\"sha256\":\"e6b110125acbf7ef830f5166c75b6a4de247c3f61d8d89d06d28317a314aa9e0\",\"mode\":33152,\"links\":1},\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt\":{\"sha256\":\"cb7f3faf49a7e31404058e0d0b30da4181442742a6fc6d1baf1932c95c9951bb\",\"mode\":33188,\"links\":1},\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/witness-ad-zlFR8wVV.json\":{\"sha256\":\"dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b\",\"mode\":33152,\"links\":1}}}",
+    "stderr": "",
+    "body": {
+      "pid": 496,
+      "outcome": {
+        "status": "unresolved",
+        "quizId": null
+      },
+      "snapshot": {
+        ".owner": {
+          "sha256": "08ab19c0b7f3b14ae68ab6fb7948866d55ace5fb85f0485ca00997a933633c46",
+          "mode": 33188,
+          "links": 1
+        },
+        ".tadazz-creation-operations-v1/1111111111111111111111111111111111111111111111111111111111111111": {
+          "link": "/tmp/tadazz-witness-owned-EAn9Iq/retained-original-slot"
+        },
+        "foreign-sentinel.txt": {
+          "sha256": "55533e21fa01f499aeb917c113b02002de3c1b6a6bb693afef489e629fdc31c2",
+          "mode": 33188,
+          "links": 1
+        },
+        "retained-original-slot/operation.json": {
+          "sha256": "e6b110125acbf7ef830f5166c75b6a4de247c3f61d8d89d06d28317a314aa9e0",
+          "mode": 33152,
+          "links": 1
+        },
+        "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": {
+          "sha256": "cb7f3faf49a7e31404058e0d0b30da4181442742a6fc6d1baf1932c95c9951bb",
+          "mode": 33188,
+          "links": 1
+        },
+        "tenants/00000000-0000-4000-8000-0000000000a1/quizz/witness-ad-zlFR8wVV.json": {
+          "sha256": "dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b",
+          "mode": 33152,
+          "links": 1
+        }
+      }
+    }
+  },
+  "retry": {
+    "pid": 507,
+    "exit": 0,
+    "signal": null,
+    "stdout": "{\"pid\":507,\"outcome\":{\"rejected\":\"Error: Linked or irregular durable directory\"},\"snapshot\":{\".owner\":{\"sha256\":\"08ab19c0b7f3b14ae68ab6fb7948866d55ace5fb85f0485ca00997a933633c46\",\"mode\":33188,\"links\":1},\".tadazz-creation-operations-v1/1111111111111111111111111111111111111111111111111111111111111111\":{\"link\":\"/tmp/tadazz-witness-owned-EAn9Iq/retained-original-slot\"},\"foreign-sentinel.txt\":{\"sha256\":\"55533e21fa01f499aeb917c113b02002de3c1b6a6bb693afef489e629fdc31c2\",\"mode\":33188,\"links\":1},\"retained-original-slot/operation.json\":{\"sha256\":\"e6b110125acbf7ef830f5166c75b6a4de247c3f61d8d89d06d28317a314aa9e0\",\"mode\":33152,\"links\":1},\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt\":{\"sha256\":\"cb7f3faf49a7e31404058e0d0b30da4181442742a6fc6d1baf1932c95c9951bb\",\"mode\":33188,\"links\":1},\"tenants/00000000-0000-4000-8000-0000000000a1/quizz/witness-ad-zlFR8wVV.json\":{\"sha256\":\"dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b\",\"mode\":33152,\"links\":1}}}",
+    "stderr": "",
+    "body": {
+      "pid": 507,
+      "outcome": {
+        "rejected": "Error: Linked or irregular durable directory"
+      },
+      "snapshot": {
+        ".owner": {
+          "sha256": "08ab19c0b7f3b14ae68ab6fb7948866d55ace5fb85f0485ca00997a933633c46",
+          "mode": 33188,
+          "links": 1
+        },
+        ".tadazz-creation-operations-v1/1111111111111111111111111111111111111111111111111111111111111111": {
+          "link": "/tmp/tadazz-witness-owned-EAn9Iq/retained-original-slot"
+        },
+        "foreign-sentinel.txt": {
+          "sha256": "55533e21fa01f499aeb917c113b02002de3c1b6a6bb693afef489e629fdc31c2",
+          "mode": 33188,
+          "links": 1
+        },
+        "retained-original-slot/operation.json": {
+          "sha256": "e6b110125acbf7ef830f5166c75b6a4de247c3f61d8d89d06d28317a314aa9e0",
+          "mode": 33152,
+          "links": 1
+        },
+        "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": {
+          "sha256": "cb7f3faf49a7e31404058e0d0b30da4181442742a6fc6d1baf1932c95c9951bb",
+          "mode": 33188,
+          "links": 1
+        },
+        "tenants/00000000-0000-4000-8000-0000000000a1/quizz/witness-ad-zlFR8wVV.json": {
+          "sha256": "dae4774c51fb4a70112432620a3449c6d21dd931d6fa42b2d6bf91bdb53b842b",
+          "mode": 33152,
+          "links": 1
+        }
+      }
+    }
+  }
+}

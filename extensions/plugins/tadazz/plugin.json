@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tadazz",
+  "version": "0.2.0",
+  "description": "Create quiz drafts and custom theme/game packages, preview their native show, and choose when to save them to your Tadazz account.",
+  "author": {
+    "name": "Tadazz",
+    "url": "https://tadazz.com"
+  },
+  "homepage": "https://tadazz.com",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Tadazz",
+        "shortDescription": "Create interactive quiz shows",
+        "longDescription": "Create and edit quiz drafts or complete packages with custom themes and bundled media. Check live authoring capabilities, upload a package, build it with the native isolated worker, and preview its game in Tadazz. Explicit save and install requests write directly to your account without a second confirmation or independent review for private themes. Account access, exact-version checks, validation, and isolated theme execution remain in place. Preview interactions are demonstrations and do not cast live votes.",
+        "developerName": "Tadazz",
+        "capabilities": ["Interactive"],
+        "websiteURL": "https://tadazz.com",
+        "defaultPrompt": "Create a five-question quiz draft in Tadazz and show its interactive preview.",
+        "logo": "./assets/tadazz.png",
+        "composerIcon": "./assets/tadazz.png"
+      }
+    }
+  }
+}

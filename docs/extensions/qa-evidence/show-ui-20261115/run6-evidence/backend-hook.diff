@@ -1,0 +1,16 @@
+--- a/packages/socket/src/api/extensions/theme-routes.ts
++++ b/packages/socket/src/api/extensions/theme-routes.ts
+@@ -14,6 +14,7 @@
+ import { requireManager } from "@razzia/socket/api/middleware"
+ import {
+   ThemeInstallationError,
++  createThemeBuilderRoutes,
+   themeApprovalSchema,
+ } from "@razzia/extensions/server"
+ import { showThemeDefinitionSchema } from "@razzia/extensions/core"
+@@ -359,4 +360,5 @@
+         ),
+     })
+   })
++  .route("/builder", createThemeBuilderRoutes({ enabled: themeInstallerEnabled, principal: (claims, tenantId) => themeWorkspacePrincipal(claims.sub, tenantId), store: themeInstallationStore }))
+   .route("/workspaces/:tenantId", workspace)

@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:35644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 extensions\qa\site-public-production.spec.ts:14:1 › deployed homepage, account routes and guest boundary stay on the production origin (4.8s)
+  ok 2 extensions\qa\site-public-production.spec.ts:85:1 › real touch swipes scroll the public site on iPad portrait, landscape and phone (8.3s)
+  ok 3 extensions\qa\site-public-production.spec.ts:111:1 › site links preserve the document and only fingerprinted public assets are immutable (2.1s)
+
+  3 passed (16.6s)

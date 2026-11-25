@@ -1,0 +1,18 @@
+{
+  "task": "1220541793845448",
+  "completed": false,
+  "exactReadback": true,
+  "priorNotesPreserved": true,
+  "notesLength": 27572,
+  "originalsReadOpenUntouched": [
+    "1220539611695147",
+    "1220539638962739",
+    "1220539638955304",
+    "1220539632251971"
+  ],
+  "functionalPass": "TC + 34 tests + 1 extra compatibility observation",
+  "formatExit": 1,
+  "containerNaturalExit": 1,
+  "computeReturned": true,
+  "sourceUnchanged": "bfb796c72495f0f9d99442066f825a74ebd054d4"
+}

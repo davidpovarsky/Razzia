@@ -1,0 +1,39 @@
+{
+  "baseCommit": "96767de6d40b594324687e15b0f386b87dd7ef19",
+  "protectedPreparerAddedLines": 18,
+  "protectedRemovedLines": 0,
+  "existingConfigCrudByteIdentical": true,
+  "apiAndStartupHooksUnchanged": true,
+  "publicationOrServiceWiringImplemented": false,
+  "runtimeTestsExecuted": false,
+  "preparedLinuxTests": 9,
+  "typecheckExecuted": false,
+  "files": [
+    {
+      "path": "packages/socket/src/services/config.ts",
+      "bytes": 7628,
+      "sha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f"
+    },
+    {
+      "path": "extensions/src/server/storage/durable-files.ts",
+      "bytes": 7582,
+      "sha256": "6fc12c71392f8b8d85706c44af513f17bb38799cac90afe62f6aab2b1f2b6b6b"
+    },
+    {
+      "path": "extensions/src/server/storage/durable-files.test.ts",
+      "bytes": 4939,
+      "sha256": "df0aa9ac9051e8200c033c0285fb66a0c2a4268e63d31c6a4686096bf50a4b58"
+    },
+    {
+      "path": "extensions/src/server/storage/creation-scope.ts",
+      "bytes": 4213,
+      "sha256": "400ed6e14d2565df6a9bb13df66886524a21906d75ded8707eb8def54c29d808"
+    },
+    {
+      "path": "extensions/src/server/storage/creation-scope.test.ts",
+      "bytes": 4382,
+      "sha256": "f212045a246a0a455e905dfe89578da39c0dd01c5e61fe5aa0e7db33ec3b6ae0"
+    }
+  ],
+  "pendingBoundary": "Null-sidecar exclusion against another writer between absence check and base hard link; manager must qualify cooperating-writer scope or extend actual shared-writer hooks"
+}

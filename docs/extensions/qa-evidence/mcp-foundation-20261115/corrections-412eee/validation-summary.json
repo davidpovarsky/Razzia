@@ -1,0 +1,38 @@
+{
+  "status": "CORRECTED_FOUNDATION_VALIDATED_PENDING_INDEPENDENT_REVIEW",
+  "reviewedBase": "412eee44255e159e6bdb1fb5d31f3fef0c1fdc6f",
+  "sourceCommit": "Commit containing this receipt",
+  "manifestSha256": "ce3799535b27538f86cea7f5ad9040856bfcb9976f5311c3a214584fe189ca05",
+  "inputs": 125,
+  "moduleFiles": 28,
+  "archiveSha256": "7a699fafe65d43e1472867b3c673019b45b6cff999610802f0e5d4d4ee3afe6c",
+  "isolatedLockSha256": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe",
+  "checks": {
+    "frozenOfflineInstall": 0,
+    "typecheck": 0,
+    "tests": {
+      "exit": 0,
+      "pass": 27,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "format": 0,
+    "inputHashes": "125 unchanged",
+    "sourcePreservation": "602 files,593 unchanged+9 approved seams,0 unexpected",
+    "historicalGuard": "FAIL exit1:28 leased module paths,mismatches=[]; not edited/waived"
+  },
+  "allocation": {
+    "name": "tadazz-hq-mcp-corrected-20261115",
+    "cpu": 0.25,
+    "memoryBytes": 2147483648,
+    "network": "none",
+    "running": false,
+    "oomKilled": false,
+    "released": true,
+    "exit137": "Explicit stop after checks"
+  },
+  "scope": "Synthetic linked-transport foundation only. HTTP/OAuth/private durable store/renderer/real host/download unavailable; all original source/security tasks OPEN",
+  "sbSuccessor": "Pending accepted port3/identityRule2; no producer import/mapping/schema clone; frozen wire unchanged",
+  "preservedFailures": "preparation/ and independent-review/"
+}

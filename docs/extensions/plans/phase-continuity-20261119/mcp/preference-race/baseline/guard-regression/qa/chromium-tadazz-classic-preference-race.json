@@ -1,0 +1,49 @@
+{
+  "engine": "chromium",
+  "theme": "tadazz-classic",
+  "mechanism": "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+  "cases": [
+    {
+      "preference": "motion",
+      "expected": {
+        "locale": "en",
+        "reducedMotion": false
+      },
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "motionDisabled": true,
+          "languageDisabled": true,
+          "motion": true,
+          "locale": "en",
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+        }
+      ]
+    }
+  ],
+  "status": "FAIL",
+  "error": "AssertionError [ERR_ASSERTION]: Automatic loading must not disable the motion preference\n\ntrue !== false\n",
+  "gates": [
+    {
+      "label": "motion automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "_q_668fWdusAI7rIfsKBQwRytJuSfFO4",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    }
+  ]
+}

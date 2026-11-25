@@ -1,0 +1,23 @@
+{
+  "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "baseHashesUnchanged": true,
+  "newFileHashesUnchanged": true,
+  "combinedImmutableGate": true,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "privacyProof": {
+    "version": 1,
+    "passed": true,
+    "ordinaryAccessControl": true,
+    "ordinaryUpstreamErrorControl": true,
+    "sensitiveAccessLogAbsent": true,
+    "sensitiveErrorLogAbsent": true,
+    "protectedSuccess": true,
+    "protectedDenial": true,
+    "protectedUpstreamFailure": true
+  },
+  "exit": 0,
+  "seconds": 5.909,
+  "stdout": "TADAZZ_PROXY_PRIVACY_PROOF {\"version\":1,\"passed\":true,\"ordinaryAccessControl\":true,\"ordinaryUpstreamErrorControl\":true,\"sensitiveAccessLogAbsent\":true,\"sensitiveErrorLogAbsent\":true,\"protectedSuccess\":true,\"protectedDenial\":true,\"protectedUpstreamFailure\":true}\n\u2714 real TLS Nginx preserves protected routes and excludes capability URLs from access and error logs (483.285928ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 4975.524711\n",
+  "stderr": ""
+}

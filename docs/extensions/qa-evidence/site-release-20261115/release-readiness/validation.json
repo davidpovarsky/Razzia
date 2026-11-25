@@ -1,0 +1,23 @@
+{
+  "status": "PASS_SCOPED_READONLY_AND_PACKET_CONSISTENCY_NOT_RELEASE",
+  "audit_program_sha256": "6670c2771aae9304a9c3b7fee8195c75577a0265f5af205d7350c8aa87602cd8",
+  "audit_command_exit": 0,
+  "executed_readonly": {
+    "live_files": 202,
+    "artifact_files": 152,
+    "protected_file_hashes": 5,
+    "source_paths_integration_identical": 19,
+    "rollback_map_files_checked_locally": 242
+  },
+  "plan_cases_not_executed": 96,
+  "planned_browser_viewport_combinations_not_executed": 384,
+  "app_build_and_functional_tests": "REUSED matching proofs; no app code changes; no new build/full suite/browser replay",
+  "production_action_executed": false,
+  "note": "Initial failed inspection template and local JSON generation UTF8 error corrected; neither labelled as a pass. Initial staged CRLF whitespace failure corrected by documented lossless normalization.",
+  "local_capture_provenance": {
+    "raw_path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\site-A-artifacts\\production-readonly-inputs.raw.json",
+    "raw_sha256": "04d50cb51f01efe2403b16ed0c1854f847ac2ad3573fc678d5d75279389e9cf7",
+    "normalized_sha256": "7a1af60bda25cf0b61f7161fb6081b523748cc7a70d09c5be5c6247ae3ecd6bb",
+    "method": "PowerShell local capture CRLF normalized to LF for Git; JSON object byte-for-byte values equal; raw capture retained"
+  }
+}

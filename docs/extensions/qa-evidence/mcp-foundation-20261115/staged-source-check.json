@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "inputFiles": 118,
+  "allLocalAndGitIndexHashesMatchTestedManifest": true,
+  "stagedPaths": 103,
+  "unleased": [],
+  "scopedSourceWhitespace": "git diff --cached --check -- extensions/src/mcp-app docs/extensions/plans/MCP_APP_ADOPTION_20261115.md EXIT0",
+  "rawEvidenceWhitespace": "Full staged whitespace check reports original log CRLF and blank EOF in retained scripts/logs. Raw receipts preserved unchanged; source and adoption addendum check passes."
+}

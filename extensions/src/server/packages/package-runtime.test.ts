@@ -1,0 +1,947 @@
+/* oxlint-disable eslint/max-params, eslint/no-nested-ternary -- Synthetic fixtures explicitly bind the store, account, bytes and optional replay key; attack cases select fixed variants. */
+/* oxlint-disable typescript/no-non-null-assertion -- Fixture inventory and successful responses are asserted before indexed access. */
+import { afterEach, describe, expect, it, vi } from "vitest"
+import fs from "node:fs"
+import os from "node:os"
+import path from "node:path"
+import { randomUUID } from "node:crypto"
+import { createPackageFixture } from "../../testkit/package-fixtures"
+import { packagePath, relativePackagePath } from "../../core/packages/paths"
+import {
+  RendererMessageGuard,
+  runtimeSnapshotSchema,
+} from "../../core/packages/protocol"
+import { packageManifestSchema } from "../../core/packages/manifest"
+import { unpackPackage, packPackage, packageSha } from "./archive"
+import { inspectPackage } from "./preflight"
+import { PackageStore } from "./store"
+import {
+  issueRuntimeAccess,
+  readRuntimeAccess,
+  sandboxDocument,
+} from "./runtime-access"
+import type { ThemePrincipal } from "../show-themes/review"
+import { quizExtrasV2Schema } from "../../core/studio-timeline-schema"
+import { authoredShowToNativeBundleDraft } from "../../core/show-authoring-convert"
+import type { ShowThemeDefinition } from "../../core/show-themes/definition"
+import type { ShowThemeSelection } from "../../core/show-themes/selection"
+import { createShowThemeRegistry } from "../../core/show-themes/registry"
+import { resolveShowTheme } from "../../core/show-themes/resolve"
+import { applyThemeAudioDefaults } from "../../core/show-themes/audio"
+import { quizzValidator } from "@razzia/common/validators/quizz"
+
+const temporary: string[] = []
+const databases: Array<{ close: () => void }> = []
+const author: ThemePrincipal = {
+  tenantId: "tenant-a",
+  userId: "author",
+  grants: ["author"],
+}
+const reviewer: ThemePrincipal = {
+  tenantId: "tenant-a",
+  userId: "reviewer",
+  grants: ["review"],
+}
+function setup() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "tadazz-package-"))
+  temporary.push(dir)
+  const store = new PackageStore(
+    path.join(dir, "store"),
+    "fixture-secret-at-least-32-characters",
+    (tenant) => path.join(dir, tenant),
+  )
+  databases.push(store)
+
+  return { dir, store }
+}
+afterEach(() => {
+  databases.splice(0).forEach((s) => {
+    s.close()
+  })
+  temporary.splice(0).forEach((d) => {
+    fs.rmSync(d, { recursive: true, force: true })
+  })
+})
+function approve(store: PackageStore, upload: string) {
+  const receipt = store.details(author, upload)
+  store.approve(reviewer, upload, {
+    revision: receipt.revision,
+    sourceDigest: receipt.sourceDigest,
+    buildDigest: receipt.buildDigest,
+    qaEvidenceSha256: packageSha("synthetic fixture review"),
+    rightsReviewed: true,
+    contentReviewed: true,
+    accessibilityReviewed: true,
+    performanceReviewed: true,
+  })
+}
+/** Unit double for the trusted worker; actual decoder/build is exercised remotely. */
+function preparedUpload(
+  store: PackageStore,
+  p: ThemePrincipal,
+  bytes: Buffer,
+  key: string = randomUUID(),
+) {
+  const draft = store.upload(p, bytes, key)
+  store.requestBuild(p, draft.uploadId)
+  const job = path.join(store.tenantRoot(p.tenantId), "jobs", draft.uploadId)
+  const output = Buffer.from("{}")
+  fs.writeFileSync(path.join(job, "bundle.json"), output)
+  fs.writeFileSync(
+    path.join(job, "result.json"),
+    JSON.stringify({
+      sourceDigest: draft.sourceDigest,
+      outputDigest: packageSha(output),
+      mediaValidated: true,
+    }),
+  )
+  store.acceptBuild(p, draft.uploadId)
+
+  return store.details(p, draft.uploadId)
+}
+
+function selectedThemeFixture(
+  format: "authored" | "enhanced",
+  identity = { id: "fixture-arcade", version: "1.0.0" },
+) {
+  const fixture = createPackageFixture("complete")
+  const theme = JSON.parse(
+    fixture.files.get("theme/theme.json")!.toString(),
+  ) as ShowThemeDefinition
+  const events = [
+    "lobby",
+    "showQuestion",
+    "answersMusic",
+    "revealResults",
+    "leaderboard",
+  ] as const
+  const audio = Object.fromEntries(
+    events.map((event) => {
+      const spec = theme.audioEvents[event]
+      const variant = spec.variants.find(
+        (item) => item.id === spec.defaultVariantId,
+      )!
+      Object.assign(variant, {
+        assetId: "music",
+        silent: false,
+        roles: ["manager", "spectator"],
+      })
+
+      return [event, { variantId: variant.id, volume: 0.23 }]
+    }),
+  )
+  const selection: ShowThemeSelection = {
+    ...identity,
+    legacyPolicy: "theme-defaults",
+    overrides: {
+      audio,
+      slots: {
+        question: { variantId: theme.slots.question.defaultVariantId },
+      },
+      roles: { spectator: { audio: { lobby: { volume: 0.17 } } } },
+    },
+  }
+  const show = {
+    format: "tada-show",
+    version: 1,
+    title: "Synthetic authored theme selection",
+    defaults: { showTheme: selection },
+    cards: [
+      {
+        key: "question-1",
+        kind: "quiz",
+        question: "Synthetic question",
+        questionType: "single",
+        timeSeconds: 20,
+        correctAnswers: [1],
+        answers: [{ text: "First" }, { text: "Second" }],
+      },
+    ],
+  }
+  let document: unknown = show
+
+  if (format === "enhanced") {
+    const converted = authoredShowToNativeBundleDraft(show)
+    expect(converted.ok).toBe(true)
+    expect(converted.bundleDraft).toBeDefined()
+    document = {
+      bundleVersion: 1,
+      quizz: converted.bundleDraft!.quizz,
+      extras: converted.bundleDraft!.extras,
+    }
+  }
+
+  fixture.files.set("theme/theme.json", Buffer.from(JSON.stringify(theme)))
+  fixture.files.set("games/game-1.json", Buffer.from(JSON.stringify(document)))
+  const manifest = {
+    ...fixture.manifest,
+    files: fixture.manifest.files.map((file) => {
+      const bytes = fixture.files.get(file.path)!
+
+      return { ...file, bytes: bytes.length, sha256: packageSha(bytes) }
+    }),
+  }
+
+  return {
+    bytes: packPackage(manifest, fixture.files),
+    selection,
+    musicDigest: manifest.files.find(
+      (file) => file.path === "shared/music.wav",
+    )!.sha256,
+  }
+}
+
+describe("portable package trust boundary", () => {
+  it("reclaims idle draft archives/jobs and permits same-key retry while counting orphan disk usage", () => {
+    const { store } = setup()
+    const fixture = createPackageFixture("game")
+    const key = packageSha(fixture.bytes)
+    const draft = preparedUpload(store, author, fixture.bytes, key)
+    store.uninstall(author, draft.uploadId)
+    expect(
+      fs.existsSync(
+        path.join(
+          store.tenantRoot(author.tenantId),
+          `${draft.sourceDigest}.tadazz`,
+        ),
+      ),
+    ).toBe(false)
+    expect(
+      fs.existsSync(
+        path.join(store.tenantRoot(author.tenantId), "jobs", draft.uploadId),
+      ),
+    ).toBe(false)
+    expect(store.upload(author, fixture.bytes, key).uploadId).not.toBe(
+      draft.uploadId,
+    )
+    const orphan = path.join(
+      store.tenantRoot(author.tenantId),
+      "retained-orphan",
+    )
+    fs.writeFileSync(orphan, "")
+    fs.truncateSync(orphan, 2_000_000_001)
+    expect(() =>
+      store.upload(
+        author,
+        createPackageFixture("game", "another").bytes,
+        randomUUID(),
+      ),
+    ).toThrow("PACKAGE_QUOTA")
+  })
+  it("binds expiring runtime capabilities to exact tenant/source/build and hashes CSP scripts", () => {
+    const { store } = setup()
+    const draft = preparedUpload(
+      store,
+      author,
+      createPackageFixture("theme").bytes,
+    )
+    const secret = "isolated-runtime-capability-test-secret"
+    const token = issueRuntimeAccess(store, author, draft.uploadId, secret)
+    const image = draft.manifest.files.find((f) => f.kind === "image")!
+    const name = `pkg_${draft.sourceDigest.slice(0, 24)}_${image.sha256}.png`
+    expect(store.readMedia(author.tenantId, name)).toBeNull()
+    expect(
+      store.readMedia(author.tenantId, name, draft.sourceDigest)?.bytes.length,
+    ).toBe(image.bytes)
+    expect(store.readMedia("tenant-b", name, draft.sourceDigest)).toBeNull()
+    expect(readRuntimeAccess(store, token, secret).row.source).toBe(
+      draft.sourceDigest,
+    )
+    expect(() => readRuntimeAccess(store, token, "different-secret")).toThrow(
+      "PACKAGE_CAPABILITY",
+    )
+    expect(() => readRuntimeAccess(store, `${token}.extra`, secret)).toThrow(
+      "PACKAGE_CAPABILITY",
+    )
+    expect(() =>
+      issueRuntimeAccess(
+        store,
+        { ...author, tenantId: "tenant-b" },
+        draft.uploadId,
+        secret,
+      ),
+    ).toThrow("PACKAGE_NOT_FOUND")
+    const now = Date.now()
+    const clock = vi.spyOn(Date, "now").mockReturnValue(now + 300_001)
+
+    try {
+      expect(() => readRuntimeAccess(store, token, secret)).toThrow(
+        "PACKAGE_CAPABILITY",
+      )
+    } finally {
+      clock.mockRestore()
+    }
+
+    const document = sandboxDocument(
+      "console.log(1)",
+      "body{color:white}",
+      "https://manager.example.invalid",
+    )
+    expect(document.csp).toContain("script-src 'sha256-")
+    expect(document.csp).toContain("connect-src 'none'")
+    expect(document.csp).not.toContain("unsafe-eval")
+    expect(document.csp).not.toContain("allow-same-origin")
+  })
+  it.each(["theme", "game", "complete", "declarative"] as const)(
+    "round trips a real %s archive and verifies its full inventory",
+    (kind) => {
+      const fixture = createPackageFixture(kind)
+      const result = inspectPackage(fixture.bytes)
+      expect(result.report.manifest.id).toBe(fixture.manifest.id)
+      expect(packPackage(result.pkg.manifest, result.pkg.files)).toEqual(
+        fixture.bytes,
+      )
+      expect(result.report.games.length).toBe(
+        kind === "complete" ? 2 : kind === "game" ? 1 : 0,
+      )
+
+      if (result.report.games.length) {
+        expect(result.report.games[0].summary?.sceneCount).toBe(2)
+      }
+    },
+  )
+  it.each([
+    "../x",
+    "/x",
+    "C:/x",
+    "x\\y",
+    "x/%2e",
+    "x//y",
+    "x/../y",
+    "x\u0000y",
+    "e\u0301.png",
+    "x/CON.png",
+    "x/y.",
+  ])("rejects unsafe archive path %j", (name) =>
+    expect(() => packagePath(name)).toThrow(),
+  )
+  it("resolves references relative to the declaring file and rejects root escape/URLs", () => {
+    expect(relativePackagePath("theme/theme.json", "../shared/music.wav")).toBe(
+      "shared/music.wav",
+    )
+    expect(() => relativePackagePath("theme.json", "../secret")).toThrow()
+    expect(() =>
+      relativePackagePath("theme.json", "https://external.test/x.png"),
+    ).toThrow()
+    expect(() => relativePackagePath("theme.json", "./%2e/x")).toThrow()
+  })
+  it("rejects placeholders, duplicate casefolded paths, unknown versions and extra fields", () => {
+    const { manifest } = createPackageFixture("game")
+    expect(
+      packageManifestSchema.safeParse({ ...manifest, formatVersion: 2 })
+        .success,
+    ).toBe(false)
+    expect(
+      packageManifestSchema.safeParse({ ...manifest, tenantId: "foreign" })
+        .success,
+    ).toBe(false)
+    expect(
+      packageManifestSchema.safeParse({
+        ...manifest,
+        files: [
+          ...manifest.files,
+          { ...manifest.files[0], path: manifest.files[0].path.toUpperCase() },
+        ],
+      }).success,
+    ).toBe(false)
+    expect(
+      packageManifestSchema.safeParse({
+        ...manifest,
+        files: [{ ...manifest.files[0], sha256: "ACTUAL_SHA256_REQUIRED" }],
+      }).success,
+    ).toBe(false)
+  })
+  it.each([
+    "crc",
+    "local-size",
+    "link",
+    "encrypted",
+    "extra",
+    "appended",
+    "truncated",
+  ])("rejects %s archive before installation", (attack) => {
+    const buffer = Buffer.from(createPackageFixture("game").bytes)
+    const central = buffer.readUInt32LE(buffer.length - 6)
+
+    if (attack === "crc") {
+      buffer[35] ^= 1
+    }
+
+    if (attack === "local-size") {
+      buffer.writeUInt32LE(100_000_001, 22)
+    }
+
+    if (attack === "link") {
+      buffer.writeUInt32LE(0xa1ff0000, central + 38)
+    }
+
+    if (attack === "encrypted") {
+      buffer.writeUInt16LE(1, central + 8)
+    }
+
+    if (attack === "extra") {
+      buffer.writeUInt16LE(4, central + 30)
+    }
+
+    const bytes =
+      attack === "appended"
+        ? Buffer.concat([buffer, Buffer.from("junk")])
+        : attack === "truncated"
+          ? buffer.subarray(0, -1)
+          : buffer
+    expect(() => unpackPackage(bytes)).toThrow()
+  })
+  it("fails missing relative assets and data-only scripts at preflight", () => {
+    const fixture = createPackageFixture("game")
+    const descriptor = fixture.files
+      .get("games/game-1.json")!
+      .toString()
+      .replace("./assets/q0-a0.png", "./assets/missing.png")
+    fixture.files.set("games/game-1.json", Buffer.from(descriptor))
+    const manifest = {
+      ...fixture.manifest,
+      files: fixture.manifest.files.map((f) =>
+        f.path === "games/game-1.json"
+          ? {
+              ...f,
+              bytes: Buffer.byteLength(descriptor),
+              sha256: packageSha(descriptor),
+            }
+          : f,
+      ),
+    }
+    expect(() => inspectPackage(packPackage(manifest, fixture.files))).toThrow(
+      "PACKAGE_MISSING_ASSET",
+    )
+  })
+  it("installs ten five-image questions/audio, persists and reimports in another tenant without manual upload", () => {
+    const { store, dir } = setup(),
+      fixture = createPackageFixture("game")
+    const draft = preparedUpload(store, author, fixture.bytes)
+    const result = store.install(author, draft.uploadId, draft.revision, [
+      "demo-game-1",
+    ])
+    expect(result.installedGames).toHaveLength(1)
+    const savedBase = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          dir,
+          author.tenantId,
+          `quizz/${result.installedGames[0]}.json`,
+        ),
+        "utf8",
+      ),
+    ) as { id: string }
+    const base = { ...quizzValidator.parse(savedBase), id: savedBase.id }
+    expect(base.questions).toHaveLength(10)
+    const sidecar = quizExtrasV2Schema.parse(
+      JSON.parse(
+        fs.readFileSync(
+          path.join(dir, author.tenantId, `extensions/quizzes/${base.id}.json`),
+          "utf8",
+        ),
+      ),
+    )
+    expect(
+      Object.values(sidecar.perQuestion).flatMap((q) => q.answerVisuals ?? []),
+    ).toHaveLength(50)
+    const asset = `/media/pkg_${draft.sourceDigest.slice(0, 24)}_${fixture.manifest.files[0].sha256}.png`
+    expect(
+      store.readMedia(author.tenantId, asset.split("/").at(-1)!),
+    ).not.toBeNull()
+    expect(store.readMedia("tenant-b", asset.split("/").at(-1)!)).toBeNull()
+    const other = { ...author, tenantId: "tenant-b" }
+    const upload = preparedUpload(
+      store,
+      other,
+      store.export(author, draft.uploadId),
+    )
+    const second = store.install(other, upload.uploadId, upload.revision, [
+      "demo-game-1",
+    ])
+    expect(second.installedGames[0]).not.toBe(base.id)
+    expect(() => store.details(other, draft.uploadId)).toThrow(
+      "PACKAGE_NOT_FOUND",
+    )
+    expect(() => store.uninstall(author, draft.uploadId)).toThrow(
+      "PACKAGE_REFERENCES_RETAINED",
+    )
+    const currentExport = store.exportGame(author, draft.uploadId, {
+      bundleVersion: 1,
+      quizz: base,
+      extras: sidecar,
+    })
+    const exported = inspectPackage(currentExport)
+    expect(exported.report.type).toBe("game")
+    expect(exported.report.games[0].summary?.answerImageCount).toBe(50)
+  })
+  it.each(["authored", "enhanced"] as const)(
+    "preserves the matching %s theme selection and effective custom soundtracks",
+    (format) => {
+      const { store, dir } = setup()
+      const fixture = selectedThemeFixture(format)
+      const upload = preparedUpload(store, author, fixture.bytes)
+      const result = store.install(author, upload.uploadId, upload.revision, [
+        "fixture-arcade",
+        "demo-game-1",
+      ])
+      const sidecar = quizExtrasV2Schema.parse(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(
+              dir,
+              author.tenantId,
+              `extensions/quizzes/${result.installedGames[0]}.json`,
+            ),
+            "utf8",
+          ),
+        ),
+      )
+      const registry = createShowThemeRegistry(store.catalog(author.tenantId))
+      const theme = resolveShowTheme({
+        selection: sidecar.defaults.showTheme,
+        role: "manager",
+        registry,
+      })
+      const resolved = applyThemeAudioDefaults(theme, sidecar.audio)
+      const expectedMusic = `/media/pkg_${upload.sourceDigest.slice(0, 24)}_${fixture.musicDigest}.wav`
+
+      for (const slot of [
+        "lobby",
+        "question",
+        "voting",
+        "results",
+        "leaderboard",
+      ] as const) {
+        expect(resolved.soundtrack?.[slot]).toMatchObject({
+          mode: "media",
+          url: expectedMusic,
+          volume: 0.23,
+        })
+      }
+
+      expect(resolved.cues.answersMusic.url).toBe(expectedMusic)
+      expect(sidecar.defaults.showTheme).toEqual(fixture.selection)
+      const spectator = applyThemeAudioDefaults(
+        resolveShowTheme({
+          selection: sidecar.defaults.showTheme,
+          role: "spectator",
+          registry,
+        }),
+        sidecar.audio,
+      )
+      expect(spectator.soundtrack?.lobby).toMatchObject({
+        url: expectedMusic,
+        volume: 0.17,
+      })
+    },
+  )
+  it.each([
+    ["authored", "id"],
+    ["enhanced", "id"],
+    ["authored", "version"],
+    ["enhanced", "version"],
+    ["authored", "classic"],
+    ["enhanced", "classic"],
+  ] as const)(
+    "clears incompatible %s selections when the selected theme changes by %s",
+    (format, change) => {
+      const { store, dir } = setup()
+      const identity = {
+        id: change === "id" ? "different-theme" : "fixture-arcade",
+        version: change === "version" ? "2.0.0" : "1.0.0",
+      }
+      const fixture = selectedThemeFixture(format, identity)
+      const upload = preparedUpload(store, author, fixture.bytes)
+      const classic = change === "classic"
+      const result = store.install(
+        author,
+        upload.uploadId,
+        upload.revision,
+        classic ? ["demo-game-1"] : ["fixture-arcade", "demo-game-1"],
+        classic,
+      )
+      const sidecar = quizExtrasV2Schema.parse(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(
+              dir,
+              author.tenantId,
+              `extensions/quizzes/${result.installedGames[0]}.json`,
+            ),
+            "utf8",
+          ),
+        ),
+      )
+      expect(sidecar.defaults.showTheme).toEqual({
+        id: classic ? "tadazz-classic" : "fixture-arcade",
+        version: "1.0.0",
+        overrides: {},
+      })
+
+      if (classic) {
+        expect(store.catalog(author.tenantId)).toEqual([])
+      }
+    },
+  )
+  it("retains independent exact review as optional, truthful metadata", () => {
+    const { store } = setup()
+    const draft = preparedUpload(
+      store,
+      author,
+      createPackageFixture("declarative").bytes,
+    )
+    const review = {
+      revision: draft.revision,
+      sourceDigest: draft.sourceDigest,
+      buildDigest: draft.buildDigest,
+      qaEvidenceSha256: packageSha("synthetic fixture review"),
+      rightsReviewed: true,
+      contentReviewed: true,
+      accessibilityReviewed: true,
+      performanceReviewed: true,
+    }
+    expect(() =>
+      store.approve({ ...author, grants: ["review"] }, draft.uploadId, review),
+    ).toThrow("PACKAGE_REVIEW_STALE_OR_SELF")
+    expect(() =>
+      store.approve(reviewer, draft.uploadId, {
+        ...review,
+        revision: draft.revision + 1,
+      }),
+    ).toThrow("PACKAGE_REVIEW_STALE_OR_SELF")
+    expect(store.details(author, draft.uploadId).reviewed).toBe(false)
+    approve(store, draft.uploadId)
+    expect(store.details(author, draft.uploadId).reviewed).toBe(true)
+  })
+  it("privately installs an unreviewed declarative theme, persists and supports immutable rollback", () => {
+    const { store, dir } = setup()
+    const one = preparedUpload(
+      store,
+      author,
+      createPackageFixture("declarative").bytes,
+    )
+    expect(one.reviewed).toBe(false)
+    const installed = store.install(author, one.uploadId, one.revision, [
+      "fixture-arcade",
+    ])
+    expect(installed.phase).toBe("installed")
+    expect(installed.reviewed).toBe(false)
+    const two = preparedUpload(
+      store,
+      author,
+      createPackageFixture("declarative", "arcade", "2.0.0").bytes,
+    )
+    store.install(author, two.uploadId, two.revision, ["fixture-arcade"])
+    expect(store.catalog(author.tenantId, true)[0].version).toBe("2.0.0")
+    store.rollback(author, one.uploadId)
+    expect(store.catalog(author.tenantId, true)[0].version).toBe("1.0.0")
+    expect(store.catalog(author.tenantId)).toHaveLength(2)
+    const reopened = new PackageStore(
+      path.join(dir, "store"),
+      "fixture-secret-at-least-32-characters",
+      (tenant) => path.join(dir, tenant),
+    )
+    databases.push(reopened)
+    expect(reopened.catalog(author.tenantId, true)[0].version).toBe("1.0.0")
+    expect(reopened.details(author, one.uploadId).reviewed).toBe(false)
+  })
+  it("prevents replayed idempotency keys changing bytes and retains revisions", () => {
+    const { store } = setup(),
+      fixture = createPackageFixture("game"),
+      key = randomUUID()
+    const first = preparedUpload(store, author, fixture.bytes, key)
+    expect(store.upload(author, fixture.bytes, key).uploadId).toBe(
+      first.uploadId,
+    )
+    expect(() =>
+      store.upload(
+        author,
+        createPackageFixture("game", "cinematic").bytes,
+        key,
+      ),
+    ).toThrow("PACKAGE_IDEMPOTENCY_CONFLICT")
+    expect(() =>
+      store.install(author, first.uploadId, 100, ["demo-game-1"]),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+  })
+  it("privately installs an unreviewed complete pack with its custom runtime and exact replay", () => {
+    const { store, dir } = setup()
+    const upload = preparedUpload(
+      store,
+      author,
+      createPackageFixture("complete").bytes,
+    )
+    expect(upload.reviewed).toBe(false)
+    const selected = ["fixture-arcade", "demo-game-1", "demo-game-2"]
+    expect(() =>
+      store.install(
+        { ...author, tenantId: "tenant-b" },
+        upload.uploadId,
+        upload.revision,
+        selected,
+      ),
+    ).toThrow("PACKAGE_NOT_FOUND")
+    expect(() =>
+      store.install(
+        { ...author, grants: [] },
+        upload.uploadId,
+        upload.revision,
+        selected,
+      ),
+    ).toThrow("PACKAGE_FORBIDDEN")
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision + 1, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    const result = store.install(author, upload.uploadId, upload.revision, [
+      "fixture-arcade",
+      "demo-game-1",
+      "demo-game-2",
+    ])
+    expect(result.installedGames).toHaveLength(2)
+    expect(result.phase).toBe("installed")
+    expect(result.reviewed).toBe(false)
+    expect(store.catalog(author.tenantId)[0].runtime?.sourceDigest).toBe(
+      upload.sourceDigest,
+    )
+    for (const id of result.installedGames) {
+      const sidecar = quizExtrasV2Schema.parse(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(dir, author.tenantId, `extensions/quizzes/${id}.json`),
+            "utf8",
+          ),
+        ),
+      )
+      expect(sidecar.defaults.showTheme?.id).toBe("fixture-arcade")
+    }
+    const secret = "isolated-runtime-capability-test-secret"
+    const access = issueRuntimeAccess(store, author, upload.uploadId, secret)
+    expect(readRuntimeAccess(store, access, secret).row.build).toBe(
+      upload.buildDigest,
+    )
+    const replay = store.install(
+      author,
+      upload.uploadId,
+      upload.revision,
+      [...selected].reverse(),
+    )
+    expect(replay.installedGames).toEqual(result.installedGames)
+    expect(store.catalog(author.tenantId)).toHaveLength(1)
+    expect(
+      fs.readdirSync(path.join(dir, author.tenantId, "quizz")),
+    ).toHaveLength(2)
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision + 1, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, ["demo-game-1"]),
+    ).toThrow("PACKAGE_INSTALL_SELECTION_CONFLICT")
+    const reopened = new PackageStore(
+      path.join(dir, "store"),
+      "fixture-secret-at-least-32-characters",
+      (tenant) => path.join(dir, tenant),
+    )
+    databases.push(reopened)
+    expect(
+      reopened.install(author, upload.uploadId, upload.revision, selected)
+        .installedGames,
+    ).toEqual(result.installedGames)
+    expect(reopened.details(author, upload.uploadId).reviewed).toBe(false)
+    expect(reopened.catalog("tenant-b")).toEqual([])
+  })
+  it("retains older installed games and runtime pins when migrating install selection metadata", () => {
+    const { store, dir } = setup()
+    const upload = preparedUpload(
+      store,
+      author,
+      createPackageFixture("complete").bytes,
+    )
+    const selected = ["fixture-arcade", "demo-game-1", "demo-game-2"]
+    const installed = store.install(
+      author,
+      upload.uploadId,
+      upload.revision,
+      selected,
+    )
+    store.db.exec("ALTER TABLE packages DROP COLUMN installed_selection")
+    const reopened = new PackageStore(
+      path.join(dir, "store"),
+      "fixture-secret-at-least-32-characters",
+      (tenant) => path.join(dir, tenant),
+    )
+    databases.push(reopened)
+    expect(reopened.details(author, upload.uploadId).installedGames).toEqual(
+      installed.installedGames,
+    )
+    expect(reopened.catalog(author.tenantId)[0].runtime?.buildDigest).toBe(
+      upload.buildDigest,
+    )
+    expect(() =>
+      reopened.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_SELECTION_UNAVAILABLE")
+    expect(
+      fs.readdirSync(path.join(dir, author.tenantId, "quizz")),
+    ).toHaveLength(2)
+  })
+  it("requires a completed valid build even when private installation needs no review", () => {
+    const { store } = setup()
+    const upload = store.upload(
+      author,
+      createPackageFixture("complete").bytes,
+      randomUUID(),
+    )
+    const selected = ["fixture-arcade", "demo-game-1", "demo-game-2"]
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    store.requestBuild(author, upload.uploadId)
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    const job = path.join(
+      store.tenantRoot(author.tenantId),
+      "jobs",
+      upload.uploadId,
+    )
+    fs.writeFileSync(
+      path.join(job, "result.json"),
+      JSON.stringify({ error: "Synthetic build failure" }),
+    )
+    expect(store.acceptBuild(author, upload.uploadId)).toBe("failed")
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    expect(store.catalog(author.tenantId)).toEqual([])
+  })
+  it("a failed second game leaves no imported games or installed theme", () => {
+    const { store, dir } = setup()
+    const upload = preparedUpload(
+      store,
+      author,
+      createPackageFixture("complete").bytes,
+    )
+    const original = fs.writeFileSync
+    let writes = 0
+    const spy = vi
+      .spyOn(fs, "writeFileSync")
+      .mockImplementation((file, data, options) => {
+        if (
+          typeof file === "string" &&
+          file.startsWith(path.join(dir, author.tenantId, "quizz"))
+        ) {
+          writes += 1
+
+          if (writes === 2) {
+            throw new Error("Injected disk failure")
+          }
+        }
+
+        return original(file, data, options)
+      })
+
+    try {
+      expect(() =>
+        store.install(author, upload.uploadId, upload.revision, [
+          "fixture-arcade",
+          "demo-game-1",
+          "demo-game-2",
+        ]),
+      ).toThrow("Injected disk failure")
+    } finally {
+      spy.mockRestore()
+    }
+
+    expect(fs.readdirSync(path.join(dir, author.tenantId, "quizz"))).toEqual([])
+    expect(store.catalog(author.tenantId)).toEqual([])
+    expect(store.details(author, upload.uploadId).phase).toBe("preview-ready")
+  })
+  it("explicit game-only selection can use Classic without installing the bundled code", () => {
+    const { store } = setup()
+    const upload = preparedUpload(
+      store,
+      author,
+      createPackageFixture("complete").bytes,
+    )
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, ["demo-game-1"]),
+    ).toThrow("PACKAGE_DEPENDENCY")
+    const result = store.install(
+      author,
+      upload.uploadId,
+      upload.revision,
+      ["demo-game-1"],
+      true,
+    )
+    expect(result.installedGames).toHaveLength(1)
+    expect(store.catalog(author.tenantId)).toEqual([])
+  })
+  it("recovers interrupted installation using only its predeclared new game paths", () => {
+    const { store, dir } = setup(),
+      upload = preparedUpload(store, author, createPackageFixture("game").bytes)
+    const id = randomUUID(),
+      relative = `quizz/${id}.json`
+    fs.mkdirSync(path.join(dir, author.tenantId, "quizz"), { recursive: true })
+    fs.writeFileSync(path.join(dir, author.tenantId, relative), "partial")
+    store.db
+      .prepare(
+        "UPDATE packages SET phase='installing',targets=? WHERE upload=?",
+      )
+      .run(JSON.stringify([relative]), upload.uploadId)
+    const reopened = new PackageStore(
+      path.join(dir, "store"),
+      "fixture-secret-at-least-32-characters",
+      (tenant) => path.join(dir, tenant),
+    )
+    databases.push(reopened)
+    expect(fs.existsSync(path.join(dir, author.tenantId, relative))).toBe(false)
+    expect(reopened.details(author, upload.uploadId).phase).toBe(
+      "preview-ready",
+    )
+  })
+  it("rejects excess/PII fields, bridge replays, foreign channels and stale epochs", () => {
+    expect(
+      runtimeSnapshotSchema.safeParse({ account: { token: "secret" } }).success,
+    ).toBe(false)
+    const guard = new RendererMessageGuard("a".repeat(64))
+    const context = {
+      epoch: 3,
+      roomId: "room-a",
+      questionId: "question-a",
+      role: "player" as const,
+    }
+    const message = {
+      v: 1,
+      channel: "a".repeat(64),
+      sequence: 1,
+      ...context,
+      type: "READY",
+      runtimeApi: 1,
+    }
+    expect(guard.accept(message, context, 1000)).not.toBeNull()
+    expect(guard.accept(message, context, 1001)).toBeNull()
+    expect(
+      guard.accept({ ...message, sequence: 2, epoch: 2 }, context, 1002),
+    ).toBeNull()
+    expect(
+      guard.accept(
+        { ...message, sequence: 2, channel: "b".repeat(64) },
+        context,
+        1002,
+      ),
+    ).toBeNull()
+    expect(
+      guard.accept(
+        { ...message, sequence: 2, roomId: "room-b" },
+        context,
+        1002,
+      ),
+    ).toBeNull()
+    expect(
+      guard.accept({ ...message, sequence: 2, auth: "secret" }, context, 1002),
+    ).toBeNull()
+    expect(
+      guard.accept({ ...message, sequence: 2 }, context, 1002),
+    ).not.toBeNull()
+  })
+})

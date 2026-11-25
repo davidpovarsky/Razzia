@@ -1,0 +1,22 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mre-fences warm absent base parent before releasing witnesses[33m 22185[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mre-fences warm absent sidecar parent before releasing witnesses[33m 21217[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mre-establishes both move parents at active-committed and retries twice[33m 21697[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mre-establishes both move parents at resolved-committed and retries twice[33m 21300[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mre-establishes both move parents at active-empty and retries twice[33m 21104[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mre-establishes both move parents at resolved-empty and retries twice[33m 21402[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mrefuses an unknown phase without changing any evidence[33m 407[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mrefuses nonprivate registry intermediate before replay[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mrefuses nonprivate tenants intermediate before replay[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mrefuses nonprivate owner intermediate before replay[32m 66[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mleaves a supported legacy symlink root alone when C1 is absent[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-review.test.ts[2m > [22mC1 independent review regressions[2m > [22mdenies a linked quiz lookup before preparation and performs zero target reads[32m 4[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 11:31:37
+[2m   Duration [22m 134.90s[2m (tests 96%, transform 3%, import 1%)[22m
+
+JSON report written to /qa/results/review-regressions.results.json

@@ -1,0 +1,9 @@
+# Copy settings into an ignored environment file; never commit real values.
+TADAZZ_BILLING_ENABLED=false
+PADDLE_ENVIRONMENT=sandbox
+PADDLE_API_KEY=
+PADDLE_CLIENT_TOKEN=
+PADDLE_WEBHOOK_SECRET=
+TADAZZ_BILLING_CATALOG_PATH=
+TADAZZ_BILLING_GRACE_HOURS=72
+# Existing accounts must already be configured before enabling billing.

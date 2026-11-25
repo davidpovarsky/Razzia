@@ -1,0 +1,117 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118[39m
+
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/questions/estimation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/game.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/quizz.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 862[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/auth.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/account-auth.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 2373[2mms[22m[39m
+   [32m✓[39m Tadazz account ownership and authentication [2m(4)[22m
+     [33m[2m✓[22m[39m creates distinct verified accounts, never grants access to unverified users[33m 1496[2mms[22m[39m
+     [33m[2m✓[22m[39m reset with code invalidates previous sessions and changes password[33m 573[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/demo-catalog.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/registry.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/theme-vote-completion.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/downstream-game.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 135[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/creating-worlds-repair.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 196[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/game.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 1006[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/round.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/utils/utils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/scoring.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/join-policy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-dial-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/cooldown-timer.pause.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 245[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/score-ledger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/lib/session.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1006[2mms[22m[39m
+   [32m✓[39m session [2m(5)[22m
+     [33m[2m✓[22m[39m reads the role from a valid stored token[33m 930[2mms[22m[39m
+ [2m[90m↓[39m[22m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts [2m([22m[2m11 tests[22m[2m | [22m[33m11 skipped[39m[2m)[22m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/ranks.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1581[2mms[22m[39m
+   [32m✓[39m POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance) [2m(4)[22m
+     [33m[2m✓[22m[39m A01: accepts answerIndex 4 for 5-answer survey and tallies 5th vote correctly[33m 530[2mms[22m[39m
+     [33m[2m✓[22m[39m A02: bounds validation (2..5), rejects invalid indices, unsupported types, and enforces phone limits[33m 319[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/billing.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 3091[2mms[22m[39m
+   [32m✓[39m real authenticated billing/game integration [2m(5)[22m
+     [33m[2m✓[22m[39m denies guests and players, exposes only the manager's own billing[33m 315[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces one shared participant cap for real websocket and simulated phone[33m 979[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/accounts-isolation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 4286[2mms[22m[39m
+   [32m✓[39m Tadazz HTTP tenant separation [2m(5)[22m
+     [33m[2m✓[22m[39m rejects legacy password and unverified account, then verifies both new accounts[33m 3046[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/api.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 5287[2mms[22m[39m
+   [32m✓[39m auth [2m(5)[22m
+     [33m[2m✓[22m[39m blocks the manager login until a password is configured[33m 664[2mms[22m[39m
+   [32m✓[39m games [2m(8)[22m
+     [33m[2m✓[22m[39m gives a join ticket to players[33m 502[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts the short username Al[33m 644[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts the short username Ali[33m 310[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/language-direction.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/handlers/game.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 5310[2mms[22m[39m
+   [32m✓[39m socket authentication [2m(2)[22m
+     [33m[2m✓[22m[39m rejects the token undefined[33m 442[2mms[22m[39m
+   [32m✓[39m game socket handlers [2m(18)[22m
+     [33m[2m✓[22m[39m keeps a player in the lobby when their connection drops[33m 321[2mms[22m[39m
+     [33m[2m✓[22m[39m lets the manager kick a player by the id sent after a lobby reconnect[33m 350[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps a player connected when a new connection replaces theirs in the lobby[33m 391[2mms[22m[39m
+     [33m[2m✓[22m[39m closes the lobby when the manager exits[33m 435[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps two simultaneous games apart[33m 1210[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps a started game when the manager leaves[33m 338[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/questions/questions.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/tadazz-show/cooldown-sync.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/p1-timer-entrance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/locales.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 7826[2mms[22m[39m
+   [32m✓[39m translations [2m(28)[22m
+     [33m[2m✓[22m[39m fr has every english key[33m 329[2mms[22m[39m
+     [33m[2m✓[22m[39m it has every english key[33m 379[2mms[22m[39m
+     [33m[2m✓[22m[39m vi has every english key[33m 363[2mms[22m[39m
+     [33m[2m✓[22m[39m every key used in web exists[33m 4309[2mms[22m[39m
+     [33m[2m✓[22m[39m every key used in socket exists[33m 507[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/host-presentation-controller.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [31m❯[39m [30m[46m web [49m[39m packages/web/src/features/game/phase-a-flow.browser.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 15786[2mms[22m[39m
+   [31m❯[39m PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2E / DOM Harness) [2m(10)[22m
+     [33m[2m✓[22m[39m 1. [Synthetic DOM Protocol] Manager End Timer command emission on click[33m 313[2mms[22m[39m
+     [32m✓[39m 2. [Synthetic DOM Protocol] Immediate player personal result on SHOW_RESULT[32m 182[2mms[22m[39m
+     [32m✓[39m 3. [Synthetic DOM Protocol] Authoritative percentage reveal on manager responses screen[32m 81[2mms[22m[39m
+     [32m✓[39m 4. [Synthetic DOM Protocol] Previous / History data contract with question details[32m 72[2mms[22m[39m
+     [32m✓[39m 5. [Synthetic DOM Protocol] Replay checkpoint confirmation and socket command emission[32m 109[2mms[22m[39m
+     [32m✓[39m 6. [Synthetic DOM Protocol] Interlude auto and manual transition handling[32m 170[2mms[22m[39m
+     [32m✓[39m 7. [Synthetic DOM Protocol] Keyboard shortcut focus isolation & modal protection[32m 163[2mms[22m[39m
+     [32m✓[39m 8. [P1 DOM Protocol] Previous Screen button emission and Alt+ArrowLeft shortcut[32m 194[2mms[22m[39m
+     [32m✓[39m 9. [P1 DOM Protocol] Big 20s countdown timer on Host & Audience Display with urgency threshold[32m 91[2mms[22m[39m
+     [32m✓[39m 10. [P1 DOM Protocol] Question Entrance Animation wrapper applies preset & epoch cleanly[32m 89[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/theme-routes.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 53238[2mms[22m[39m
+   [33m[2m✓[22m[39m enforces verified HTTP auth, tenant-private upload, independent review, signed persistence and private media[33m 52607[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/game-controls.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/quizz/extensions-ui.test.ts [2m([22m[2m48 tests[22m[2m)[22m[33m 448[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m37 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (39)[39m
+[2m      Tests [22m [1m[32m384 passed[39m[22m[2m | [22m[33m11 skipped[39m[90m (395)[39m
+[2m   Start at [22m 16:22:01
+[2m   Duration [22m 111.87s[2m (import 45%, transform 38%, tests 16%)[22m
+
+[2m  Transform [22m [30m[43m socket [49m[39m [33mtransforming modules took 165.63s[39m[2m · 37% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m
+
+[2m  Transform [22m [30m[46m web [49m[39m [33mtransforming modules took 82.58s[39m[2m · 43% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m [30m[46m web [49m[39m packages/web/src/features/game/phase-a-flow.browser.test.ts[2m > [22mPROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2E / DOM Harness)
+[31m[1mError[22m: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".[39m
+[36m [2m❯[22m packages/web/src/features/game/phase-a-flow.browser.test.ts:[2m72:3[22m[39m
+    [90m 70|[39m   }, 30000)
+    [90m 71|[39m
+    [90m 72|[39m   afterAll(async () => {
+    [90m   |[39m   [31m^[39m
+    [90m 73|[39m     if (browser) {
+    [90m 74|[39m       await browser.close()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m

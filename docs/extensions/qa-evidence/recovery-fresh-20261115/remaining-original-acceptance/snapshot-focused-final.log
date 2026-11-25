@@ -1,0 +1,306 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-127b-72fd-a8af-2fa9ef8c14a8.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-127b-72fd-a8af-2fa9ef8c14a8.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-copy 785ms
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1431-7503-a2b9-cc34da39fa76.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1431-7503-a2b9-cc34da39fa76.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal 435ms
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1622-76ad-a3aa-c8cc60bb1404.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1622-76ad-a3aa-c8cc60bb1404.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write 490ms
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1802-73d9-9e52-7391f33dc136.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1802-73d9-9e52-7391f33dc136.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write 485ms
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1a0e-7598-b9a1-b00851d41a94.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1a0e-7598-b9a1-b00851d41a94.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete 517ms
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1bb1-768c-917b-604bcd9972d4.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1dfff-1bb1-768c-917b-604bcd9972d4.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library-recovery.test.ts:230:11
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal 438ms
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup 438ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at journal-cleanup 420ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal and quarantine after partial restore and retries 732ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > blocks startup rather than restoring refs when original and quarantine are missing 399ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show 536ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present 466ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit 468ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > rejects unsafe journal IDs without writing outside authorized paths 585ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal when quarantine cleanup fails and replays safely 1704ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains committed journal when quarantine cleanup fails and replays safely 720ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves an insufficient committed empty-shows record and its last copy without mutation 359ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves evidence when a restore rename silently changes valid sidecar content 749ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > recovers concurrent journal families with real matching base digest 665ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction committed cleanup retains its journal after quarantine unlink EACCES 425ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent base corruption 571ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent sidecar corruption 507ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent binary corruption 658ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback preserves permission-denied restores without chmod 517ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending quarantine cleanup and replays 645ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending journal cleanup and replays 922ms
+stderr | src/server/storage/startup-recovery.test.ts > blocks unresolved tenant quiz-save before listen, including accounts OFF
+[Journal] Malformed JSON in journal synthetic.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:174:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1398:24)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:93:28
+    at Array.map (<anonymous>)
+    at recoverStartupOwnerJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:91:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.test.ts:102:18
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/storage/startup-recovery.test.ts > blocks unresolved tenant media-delete before listen, including accounts OFF
+[MediaJournal] Malformed JSON in journal synthetic.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:917:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:93:28
+    at Array.map (<anonymous>)
+    at recoverStartupOwnerJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:91:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.test.ts:102:18
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/storage/startup-recovery.test.ts > blocks unresolved tenant quiz-save before listen, including accounts OFF 234ms
+ ✓ src/server/storage/startup-recovery.test.ts > blocks unresolved tenant media-delete before listen, including accounts OFF 161ms
+ ✓ src/server/storage/startup-recovery.test.ts > selects all exact disabled and unverified owner IDs independent of the current flag 250ms
+ ✓ src/server/storage/startup-recovery.test.ts > reads owners committed only in a live WAL without changing source files 173ms
+ ✓ src/server/storage/startup-recovery.test.ts > reads a cleanly closed WAL DB without creating source sidecars 154ms
+ ✓ src/server/storage/startup-recovery.test.ts > accepts structural never-account absence without creating an account store 20ms
+ ✓ src/server/storage/startup-recovery.test.ts > denies missing DB with even an empty tenant namespace 13ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":[null]} before recovery 163ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["not-an-owner"]} before recovery 160ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000A1"]} before recovery 167ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000a1"]} before recovery 156ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects corrupt committed WAL bytes without journal mutation 102ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects corrupt DB and missing owner table without source or journal writes 165ms
+ × src/server/storage/startup-recovery.test.ts > checks the complete owner list before touching a valid earlier root 159ms
+   → expected [Function] to throw error matching /snapshot owner/ but got 'Known recovery root changed after adm…'
+ ✓ src/server/storage/startup-recovery.test.ts > refuses changed owner metadata after snapshot and preserves journal bytes 132ms
+ ✓ src/server/storage/startup-recovery.test.ts > keeps a linked known tenant root out of recovery 119ms
+stdout | src/server/storage/startup-recovery.test.ts > restores full tenant V2 and native basename through bound-root adapters with the account flag OFF
+[StartupRecovery] Recovered 1 quiz journals and 0 media delete journals
+
+ ✓ src/server/storage/startup-recovery.test.ts > replays clean known roots twice without ambient native CRUD or account changes 283ms
+stdout | src/server/storage/startup-recovery.test.ts > finishes committed tenant Media cleanup through explicit roots after the accounts flag changes
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/storage/startup-recovery.test.ts > restores full tenant V2 and native basename through bound-root adapters with the account flag OFF 416ms
+ ✓ src/server/storage/startup-recovery.test.ts > finishes committed tenant Media cleanup through explicit roots after the accounts flag changes 465ms
+ ✓ src/server/storage/startup-recovery.test.ts > retries a changed live source and publishes only the revalidated owner set 232ms
+ ✓ src/server/storage/startup-recovery.test.ts > bounds churn to three captures, cleans private copies and preserves journals 171ms
+ ✓ src/server/storage/startup-recovery.test.ts > retries a WAL/SHM disappearance and accepts the complete closed source without creating source sidecars 182ms
+ ✓ src/server/storage/startup-recovery.test.ts > refuses oversized metadata before private copying or journal changes 26ms
+ ↓ src/server/storage/startup-recovery.test.ts > fails closed on unreadable canonical metadata without changing permissions
+ ✓ src/server/storage/startup-recovery.test.ts > rejects a linked canonical DB without following or rewriting its target 69ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at base-written and replay is a no-op 84ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at sidecar-written and replay is a no-op 62ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > preserves V1 backups 65ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > accepts a payload digest when the original adapter adds its matching storage ID 54ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is throw 37ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content 56ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision 51ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for invalid-v2 38ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch 34ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for newer-revision 34ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id 32ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename 34ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal after partial sidecar write and retries safely 36ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal if cleanup fails after exact restoration 32ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if create sidecar write and base cleanup fail 62ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if import sidecar write and base cleanup fail 35ms
+stderr | src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-i31LNM\extensions\quizzes\f56cd195-a300-412f-b496-3cec6cf57699.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/sidecar.ts:71:25)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:246:30)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/create-recovery.test.ts:104:12
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base 35ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > replays interrupted create after ID return and journal stage 57ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > replays interrupted import after ID return and journal stage 50ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/storage/startup-recovery.test.ts > checks the complete owner list before touching a valid earlier root
+AssertionError: expected [Function] to throw error matching /snapshot owner/ but got 'Known recovery root changed after adm…'
+
+- Expected:
+/snapshot owner/
+
++ Received:
+"Known recovery root changed after admission"
+
+ ❯ src/server/storage/startup-recovery.test.ts:200:5
+    198|   expect(() =>
+    199|     recoverStartupOwnerJournals({ ...snapshot, ownerIds: [OWNER, "bad"…
+    200|   ).toThrow(/snapshot owner/)
+       |     ^
+    201|   expect(fs.readFileSync(journal)).toEqual(before)
+    202| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 68 passed | 1 skipped (70)
+   Start at  18:16:34
+   Duration  26.89s (tests 81%, import 12%, transform 6%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/snapshot-focused-final.json

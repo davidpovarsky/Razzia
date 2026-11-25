@@ -1,0 +1,5 @@
+{
+  "original_sha256": "03a9da13f487181cafb46c8e828b4ef2517dfacb13e063eb10959812b2b5bc25",
+  "proposed_sha256": "f36582bed11704f1380981fb69cfc36cf10f1299c01762376a5fdc9d502640b8",
+  "test_application": "public Hono route mounting under original parent; source file unchanged"
+}

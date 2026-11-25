@@ -1,0 +1,134 @@
+{
+  "status": "LOCAL_INSTALLED_FONT_OBSERVATION",
+  "capturedUtc": "2026-11-15T18:21:30.677725+00:00",
+  "sourceCommit": "ed0efade3d1eaf972475d3f5544f4c3ae10aa6eb",
+  "package": {
+    "name": "@fontsource-variable/rubik",
+    "version": "5.3.0",
+    "declaredLicense": "OFL-1.1"
+  },
+  "sourceInputs": [
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\package.json",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\package.json",
+      "packagePath": "package.json",
+      "bytes": 1457,
+      "sha256": "10a0e96b78e2aa2810b638f056a2456fcc9eca48ec90bfd505382b98bfc6b0a9",
+      "bodyBase64": "ewogICJuYW1lIjogIkBmb250c291cmNlLXZhcmlhYmxlL3J1YmlrIiwKICAidmVyc2lvbiI6ICI1LjMuMCIsCiAgImRlc2NyaXB0aW9uIjogIlNlbGYtaG9zdCB0aGUgUnViaWsgZm9udCBpbiBhIG5lYXRseSBidW5kbGVkIE5QTSBwYWNrYWdlLiIsCiAgIm1haW4iOiAiaW5kZXguY3NzIiwKICAidHlwZXMiOiAiaW5kZXguZC5jc3MudHMiLAogICJwdWJsaXNoQ29uZmlnIjogeyJhY2Nlc3MiOiAicHVibGljIn0sCiAgImtleXdvcmRzIjogWwogICAgImZvbnRzb3VyY2UiLAogICAgImZvbnQiLAogICAgImZvbnQgZmFtaWx5IiwKICAgICJnb29nbGUgZm9udHMiLAogICAgInJ1YmlrIiwKICAgICJSdWJpayIsCiAgICAiY3NzIiwKICAgICJzYXNzIiwKICAgICJmcm9udC1lbmQiLAogICAgIndlYiIsCiAgICAidHlwZWZhY2UiLAogICAgInZhcmlhYmxlIgogIF0sCiAgImV4cG9ydHMiOiB7CiAgICAiLiI6IHsKICAgICAgInR5cGVzIjogIi4vaW5kZXguZC5jc3MudHMiLAogICAgICAic2FzcyI6ICIuL2luZGV4LmNzcyIsCiAgICAgICJkZWZhdWx0IjogIi4vaW5kZXguY3NzIgogICAgfSwKICAgICIuL0xJQ0VOU0UiOiAiLi9MSUNFTlNFIiwKICAgICIuLyoiOiB7InNhc3MiOiAiLi8qLmNzcyIsICJkZWZhdWx0IjogIi4vKi5jc3MifSwKICAgICIuLyouY3NzIjogeyJzYXNzIjogIi4vKi5jc3MiLCAiZGVmYXVsdCI6ICIuLyouY3NzIn0sCiAgICAiLi9maWxlcy8qIjogeyJzYXNzIjogIi4vZmlsZXMvKiIsICJkZWZhdWx0IjogIi4vZmlsZXMvKiJ9LAogICAgIi4vZmlsZXMvKi53b2ZmIjogeyJzYXNzIjogIi4vZmlsZXMvKi53b2ZmIiwgImRlZmF1bHQiOiAiLi9maWxlcy8qLndvZmYifSwKICAgICIuL2ZpbGVzLyoud29mZjIiOiB7CiAgICAgICJzYXNzIjogIi4vZmlsZXMvKi53b2ZmMiIsCiAgICAgICJkZWZhdWx0IjogIi4vZmlsZXMvKi53b2ZmMiIKICAgIH0sCiAgICAiLi9wYWNrYWdlLmpzb24iOiAiLi9wYWNrYWdlLmpzb24iLAogICAgIi4vbWV0YWRhdGEuanNvbiI6ICIuL21ldGFkYXRhLmpzb24iLAogICAgIi4vdW5pY29kZS5qc29uIjogIi4vdW5pY29kZS5qc29uIiwKICAgICIuL3Njc3MiOiB7InNhc3MiOiAiLi9zY3NzL21ldGFkYXRhLnNjc3MifQogIH0sCiAgImF1dGhvciI6ICJHb29nbGUgSW5jLiIsCiAgImxpY2Vuc2UiOiAiT0ZMLTEuMSIsCiAgImhvbWVwYWdlIjogImh0dHBzOi8vZm9udHNvdXJjZS5vcmcvZm9udHMvcnViaWsiLAogICJmdW5kaW5nIjogImh0dHBzOi8vZ2l0aHViLmNvbS9zcG9uc29ycy9heXVoaXRvIiwKICAicmVwb3NpdG9yeSI6IHsKICAgICJ0eXBlIjogImdpdCIsCiAgICAidXJsIjogImdpdCtodHRwczovL2dpdGh1Yi5jb20vZm9udHNvdXJjZS9mb250LWZpbGVzLmdpdCIsCiAgICAiZGlyZWN0b3J5IjogImZvbnRzL3ZhcmlhYmxlL3J1YmlrIgogIH0sCiAgInB1Ymxpc2hIYXNoIjogIjlhNjY5NGM0ZGU0M2Q5NzAiCn0=",
+      "mtimeNs": 1794434196057529600
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\LICENSE",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\LICENSE",
+      "packagePath": "LICENSE",
+      "bytes": 4486,
+      "sha256": "46a250495a963b0b84f2736c0185d0e3af8df9d23427bd425b92a8ece020283c",
+      "bodyBase64": "Q29weXJpZ2h0IDIwMTUgVGhlIFJ1YmlrIFByb2plY3QgQXV0aG9ycyAoaHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZWZvbnRzL3J1YmlrKSBSdWJpay1JdGFsaWNbd2dodF0udHRmOiBDb3B5cmlnaHQgMjAxNSBUaGUgUnViaWsgUHJvamVjdCBBdXRob3JzIChodHRwczovL2dpdGh1Yi5jb20vZ29vZ2xlZm9udHMvcnViaWspCgpUaGlzIEZvbnQgU29mdHdhcmUgaXMgbGljZW5zZWQgdW5kZXIgdGhlIFNJTCBPcGVuIEZvbnQgTGljZW5zZSwgVmVyc2lvbiAxLjEuClRoaXMgbGljZW5zZSBpcyBjb3BpZWQgYmVsb3csIGFuZCBpcyBhbHNvIGF2YWlsYWJsZSB3aXRoIGEgRkFRIGF0OgpodHRwOi8vc2NyaXB0cy5zaWwub3JnL09GTAoKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tClNJTCBPUEVOIEZPTlQgTElDRU5TRSBWZXJzaW9uIDEuMSAtIDI2IEZlYnJ1YXJ5IDIwMDcKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KClBSRUFNQkxFClRoZSBnb2FscyBvZiB0aGUgT3BlbiBGb250IExpY2Vuc2UgKE9GTCkgYXJlIHRvIHN0aW11bGF0ZSB3b3JsZHdpZGUKZGV2ZWxvcG1lbnQgb2YgY29sbGFib3JhdGl2ZSBmb250IHByb2plY3RzLCB0byBzdXBwb3J0IHRoZSBmb250IGNyZWF0aW9uCmVmZm9ydHMgb2YgYWNhZGVtaWMgYW5kIGxpbmd1aXN0aWMgY29tbXVuaXRpZXMsIGFuZCB0byBwcm92aWRlIGEgZnJlZSBhbmQKb3BlbiBmcmFtZXdvcmsgaW4gd2hpY2ggZm9udHMgbWF5IGJlIHNoYXJlZCBhbmQgaW1wcm92ZWQgaW4gcGFydG5lcnNoaXAKd2l0aCBvdGhlcnMuCgpUaGUgT0ZMIGFsbG93cyB0aGUgbGljZW5zZWQgZm9udHMgdG8gYmUgdXNlZCwgc3R1ZGllZCwgbW9kaWZpZWQgYW5kCnJlZGlzdHJpYnV0ZWQgZnJlZWx5IGFzIGxvbmcgYXMgdGhleSBhcmUgbm90IHNvbGQgYnkgdGhlbXNlbHZlcy4gVGhlCmZvbnRzLCBpbmNsdWRpbmcgYW55IGRlcml2YXRpdmUgd29ya3MsIGNhbiBiZSBidW5kbGVkLCBlbWJlZGRlZCwKcmVkaXN0cmlidXRlZCBhbmQvb3Igc29sZCB3aXRoIGFueSBzb2Z0d2FyZSBwcm92aWRlZCB0aGF0IGFueSByZXNlcnZlZApuYW1lcyBhcmUgbm90IHVzZWQgYnkgZGVyaXZhdGl2ZSB3b3Jrcy4gVGhlIGZvbnRzIGFuZCBkZXJpdmF0aXZlcywKaG93ZXZlciwgY2Fubm90IGJlIHJlbGVhc2VkIHVuZGVyIGFueSBvdGhlciB0eXBlIG9mIGxpY2Vuc2UuIFRoZQpyZXF1aXJlbWVudCBmb3IgZm9udHMgdG8gcmVtYWluIHVuZGVyIHRoaXMgbGljZW5zZSBkb2VzIG5vdCBhcHBseQp0byBhbnkgZG9jdW1lbnQgY3JlYXRlZCB1c2luZyB0aGUgZm9udHMgb3IgdGhlaXIgZGVyaXZhdGl2ZXMuCgpERUZJTklUSU9OUwoiRm9udCBTb2Z0d2FyZSIgcmVmZXJzIHRvIHRoZSBzZXQgb2YgZmlsZXMgcmVsZWFzZWQgYnkgdGhlIENvcHlyaWdodApIb2xkZXIocykgdW5kZXIgdGhpcyBsaWNlbnNlIGFuZCBjbGVhcmx5IG1hcmtlZCBhcyBzdWNoLiBUaGlzIG1heQppbmNsdWRlIHNvdXJjZSBmaWxlcywgYnVpbGQgc2NyaXB0cyBhbmQgZG9jdW1lbnRhdGlvbi4KCiJSZXNlcnZlZCBGb250IE5hbWUiIHJlZmVycyB0byBhbnkgbmFtZXMgc3BlY2lmaWVkIGFzIHN1Y2ggYWZ0ZXIgdGhlCmNvcHlyaWdodCBzdGF0ZW1lbnQocykuCgoiT3JpZ2luYWwgVmVyc2lvbiIgcmVmZXJzIHRvIHRoZSBjb2xsZWN0aW9uIG9mIEZvbnQgU29mdHdhcmUgY29tcG9uZW50cyBhcwpkaXN0cmlidXRlZCBieSB0aGUgQ29weXJpZ2h0IEhvbGRlcihzKS4KCiJNb2RpZmllZCBWZXJzaW9uIiByZWZlcnMgdG8gYW55IGRlcml2YXRpdmUgbWFkZSBieSBhZGRpbmcgdG8sIGRlbGV0aW5nLApvciBzdWJzdGl0dXRpbmcgLS0gaW4gcGFydCBvciBpbiB3aG9sZSAtLSBhbnkgb2YgdGhlIGNvbXBvbmVudHMgb2YgdGhlCk9yaWdpbmFsIFZlcnNpb24sIGJ5IGNoYW5naW5nIGZvcm1hdHMgb3IgYnkgcG9ydGluZyB0aGUgRm9udCBTb2Z0d2FyZSB0byBhCm5ldyBlbnZpcm9ubWVudC4KCiJBdXRob3IiIHJlZmVycyB0byBhbnkgZGVzaWduZXIsIGVuZ2luZWVyLCBwcm9ncmFtbWVyLCB0ZWNobmljYWwKd3JpdGVyIG9yIG90aGVyIHBlcnNvbiB3aG8gY29udHJpYnV0ZWQgdG8gdGhlIEZvbnQgU29mdHdhcmUuCgpQRVJNSVNTSU9OICYgQ09ORElUSU9OUwpQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcKYSBjb3B5IG9mIHRoZSBGb250IFNvZnR3YXJlLCB0byB1c2UsIHN0dWR5LCBjb3B5LCBtZXJnZSwgZW1iZWQsIG1vZGlmeSwKcmVkaXN0cmlidXRlLCBhbmQgc2VsbCBtb2RpZmllZCBhbmQgdW5tb2RpZmllZCBjb3BpZXMgb2YgdGhlIEZvbnQKU29mdHdhcmUsIHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgoKMSkgTmVpdGhlciB0aGUgRm9udCBTb2Z0d2FyZSBub3IgYW55IG9mIGl0cyBpbmRpdmlkdWFsIGNvbXBvbmVudHMsCmluIE9yaWdpbmFsIG9yIE1vZGlmaWVkIFZlcnNpb25zLCBtYXkgYmUgc29sZCBieSBpdHNlbGYuCgoyKSBPcmlnaW5hbCBvciBNb2RpZmllZCBWZXJzaW9ucyBvZiB0aGUgRm9udCBTb2Z0d2FyZSBtYXkgYmUgYnVuZGxlZCwKcmVkaXN0cmlidXRlZCBhbmQvb3Igc29sZCB3aXRoIGFueSBzb2Z0d2FyZSwgcHJvdmlkZWQgdGhhdCBlYWNoIGNvcHkKY29udGFpbnMgdGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgbGljZW5zZS4gVGhlc2UgY2FuIGJlCmluY2x1ZGVkIGVpdGhlciBhcyBzdGFuZC1hbG9uZSB0ZXh0IGZpbGVzLCBodW1hbi1yZWFkYWJsZSBoZWFkZXJzIG9yCmluIHRoZSBhcHByb3ByaWF0ZSBtYWNoaW5lLXJlYWRhYmxlIG1ldGFkYXRhIGZpZWxkcyB3aXRoaW4gdGV4dCBvcgpiaW5hcnkgZmlsZXMgYXMgbG9uZyBhcyB0aG9zZSBmaWVsZHMgY2FuIGJlIGVhc2lseSB2aWV3ZWQgYnkgdGhlIHVzZXIuCgozKSBObyBNb2RpZmllZCBWZXJzaW9uIG9mIHRoZSBGb250IFNvZnR3YXJlIG1heSB1c2UgdGhlIFJlc2VydmVkIEZvbnQKTmFtZShzKSB1bmxlc3MgZXhwbGljaXQgd3JpdHRlbiBwZXJtaXNzaW9uIGlzIGdyYW50ZWQgYnkgdGhlIGNvcnJlc3BvbmRpbmcKQ29weXJpZ2h0IEhvbGRlci4gVGhpcyByZXN0cmljdGlvbiBvbmx5IGFwcGxpZXMgdG8gdGhlIHByaW1hcnkgZm9udCBuYW1lIGFzCnByZXNlbnRlZCB0byB0aGUgdXNlcnMuCgo0KSBUaGUgbmFtZShzKSBvZiB0aGUgQ29weXJpZ2h0IEhvbGRlcihzKSBvciB0aGUgQXV0aG9yKHMpIG9mIHRoZSBGb250ClNvZnR3YXJlIHNoYWxsIG5vdCBiZSB1c2VkIHRvIHByb21vdGUsIGVuZG9yc2Ugb3IgYWR2ZXJ0aXNlIGFueQpNb2RpZmllZCBWZXJzaW9uLCBleGNlcHQgdG8gYWNrbm93bGVkZ2UgdGhlIGNvbnRyaWJ1dGlvbihzKSBvZiB0aGUKQ29weXJpZ2h0IEhvbGRlcihzKSBhbmQgdGhlIEF1dGhvcihzKSBvciB3aXRoIHRoZWlyIGV4cGxpY2l0IHdyaXR0ZW4KcGVybWlzc2lvbi4KCjUpIFRoZSBGb250IFNvZnR3YXJlLCBtb2RpZmllZCBvciB1bm1vZGlmaWVkLCBpbiBwYXJ0IG9yIGluIHdob2xlLAptdXN0IGJlIGRpc3RyaWJ1dGVkIGVudGlyZWx5IHVuZGVyIHRoaXMgbGljZW5zZSwgYW5kIG11c3Qgbm90IGJlCmRpc3RyaWJ1dGVkIHVuZGVyIGFueSBvdGhlciBsaWNlbnNlLiBUaGUgcmVxdWlyZW1lbnQgZm9yIGZvbnRzIHRvCnJlbWFpbiB1bmRlciB0aGlzIGxpY2Vuc2UgZG9lcyBub3QgYXBwbHkgdG8gYW55IGRvY3VtZW50IGNyZWF0ZWQKdXNpbmcgdGhlIEZvbnQgU29mdHdhcmUuCgpURVJNSU5BVElPTgpUaGlzIGxpY2Vuc2UgYmVjb21lcyBudWxsIGFuZCB2b2lkIGlmIGFueSBvZiB0aGUgYWJvdmUgY29uZGl0aW9ucyBhcmUKbm90IG1ldC4KCkRJU0NMQUlNRVIKVEhFIEZPTlQgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwKRVhQUkVTUyBPUiBJTVBMSUVELCBJTkNMVURJTkcgQlVUIE5PVCBMSU1JVEVEIFRPIEFOWSBXQVJSQU5USUVTIE9GCk1FUkNIQU5UQUJJTElUWSwgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVApPRiBDT1BZUklHSFQsIFBBVEVOVCwgVFJBREVNQVJLLCBPUiBPVEhFUiBSSUdIVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFCkNPUFlSSUdIVCBIT0xERVIgQkUgTElBQkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIgTElBQklMSVRZLApJTkNMVURJTkcgQU5ZIEdFTkVSQUwsIFNQRUNJQUwsIElORElSRUNULCBJTkNJREVOVEFMLCBPUiBDT05TRVFVRU5USUFMCkRBTUFHRVMsIFdIRVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNULCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lORwpGUk9NLCBPVVQgT0YgVEhFIFVTRSBPUiBJTkFCSUxJVFkgVE8gVVNFIFRIRSBGT05UIFNPRlRXQVJFIE9SIEZST00KT1RIRVIgREVBTElOR1MgSU4gVEhFIEZPTlQgU09GVFdBUkUuCg==",
+      "mtimeNs": 1794434196015146300
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\wght.css",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\wght.css",
+      "packagePath": "wght.css",
+      "bytes": 2581,
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+      "bodyBase64": "LyogcnViaWstYXJhYmljLXdnaHQtbm9ybWFsICovCkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnUnViaWsgVmFyaWFibGUnOwogIGZvbnQtc3R5bGU6IG5vcm1hbDsKICBmb250LWRpc3BsYXk6IHN3YXA7CiAgZm9udC13ZWlnaHQ6IDMwMCA5MDA7CiAgc3JjOiB1cmwoLi9maWxlcy9ydWJpay1hcmFiaWMtd2dodC1ub3JtYWwud29mZjIpIGZvcm1hdCgnd29mZjItdmFyaWF0aW9ucycpOwogIHVuaWNvZGUtcmFuZ2U6IFUrMDYwMC0wNkZGLFUrMDc1MC0wNzdGLFUrMDg3MC0wODhFLFUrMDg5MC0wODkxLFUrMDg5Ny0wOEUxLFUrMDhFMy0wOEZGLFUrMjAwQy0yMDBFLFUrMjAxMC0yMDExLFUrMjA0RixVKzJFNDEsVStGQjUwLUZERkYsVStGRTcwLUZFNzQsVStGRTc2LUZFRkMsVSsxMDJFMC0xMDJGQixVKzEwRTYwLTEwRTdFLFUrMTBFQzItMTBFQzQsVSsxMEVGQy0xMEVGRixVKzFFRTAwLTFFRTAzLFUrMUVFMDUtMUVFMUYsVSsxRUUyMS0xRUUyMixVKzFFRTI0LFUrMUVFMjcsVSsxRUUyOS0xRUUzMixVKzFFRTM0LTFFRTM3LFUrMUVFMzksVSsxRUUzQixVKzFFRTQyLFUrMUVFNDcsVSsxRUU0OSxVKzFFRTRCLFUrMUVFNEQtMUVFNEYsVSsxRUU1MS0xRUU1MixVKzFFRTU0LFUrMUVFNTcsVSsxRUU1OSxVKzFFRTVCLFUrMUVFNUQsVSsxRUU1RixVKzFFRTYxLTFFRTYyLFUrMUVFNjQsVSsxRUU2Ny0xRUU2QSxVKzFFRTZDLTFFRTcyLFUrMUVFNzQtMUVFNzcsVSsxRUU3OS0xRUU3QyxVKzFFRTdFLFUrMUVFODAtMUVFODksVSsxRUU4Qi0xRUU5QixVKzFFRUExLTFFRUEzLFUrMUVFQTUtMUVFQTksVSsxRUVBQi0xRUVCQixVKzFFRUYwLTFFRUYxOwp9CgovKiBydWJpay1jeXJpbGxpYy1leHQtd2dodC1ub3JtYWwgKi8KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdSdWJpayBWYXJpYWJsZSc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtZGlzcGxheTogc3dhcDsKICBmb250LXdlaWdodDogMzAwIDkwMDsKICBzcmM6IHVybCguL2ZpbGVzL3J1YmlrLWN5cmlsbGljLWV4dC13Z2h0LW5vcm1hbC53b2ZmMikgZm9ybWF0KCd3b2ZmMi12YXJpYXRpb25zJyk7CiAgdW5pY29kZS1yYW5nZTogVSswNDYwLTA1MkYsVSsxQzgwLTFDOEEsVSsyMEI0LFUrMkRFMC0yREZGLFUrQTY0MC1BNjlGLFUrRkUyRS1GRTJGOwp9CgovKiBydWJpay1jeXJpbGxpYy13Z2h0LW5vcm1hbCAqLwpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ1J1YmlrIFZhcmlhYmxlJzsKICBmb250LXN0eWxlOiBub3JtYWw7CiAgZm9udC1kaXNwbGF5OiBzd2FwOwogIGZvbnQtd2VpZ2h0OiAzMDAgOTAwOwogIHNyYzogdXJsKC4vZmlsZXMvcnViaWstY3lyaWxsaWMtd2dodC1ub3JtYWwud29mZjIpIGZvcm1hdCgnd29mZjItdmFyaWF0aW9ucycpOwogIHVuaWNvZGUtcmFuZ2U6IFUrMDMwMSxVKzA0MDAtMDQ1RixVKzA0OTAtMDQ5MSxVKzA0QjAtMDRCMSxVKzIxMTY7Cn0KCi8qIHJ1YmlrLWhlYnJldy13Z2h0LW5vcm1hbCAqLwpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ1J1YmlrIFZhcmlhYmxlJzsKICBmb250LXN0eWxlOiBub3JtYWw7CiAgZm9udC1kaXNwbGF5OiBzd2FwOwogIGZvbnQtd2VpZ2h0OiAzMDAgOTAwOwogIHNyYzogdXJsKC4vZmlsZXMvcnViaWstaGVicmV3LXdnaHQtbm9ybWFsLndvZmYyKSBmb3JtYXQoJ3dvZmYyLXZhcmlhdGlvbnMnKTsKICB1bmljb2RlLXJhbmdlOiBVKzAzMDctMDMwOCxVKzA1OTAtMDVGRixVKzIwMEMtMjAxMCxVKzIwQUEsVSsyNUNDLFUrRkIxRC1GQjRGOwp9CgovKiBydWJpay1sYXRpbi1leHQtd2dodC1ub3JtYWwgKi8KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdSdWJpayBWYXJpYWJsZSc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtZGlzcGxheTogc3dhcDsKICBmb250LXdlaWdodDogMzAwIDkwMDsKICBzcmM6IHVybCguL2ZpbGVzL3J1YmlrLWxhdGluLWV4dC13Z2h0LW5vcm1hbC53b2ZmMikgZm9ybWF0KCd3b2ZmMi12YXJpYXRpb25zJyk7CiAgdW5pY29kZS1yYW5nZTogVSswMTAwLTAyQkEsVSswMkJELTAyQzUsVSswMkM3LTAyQ0MsVSswMkNFLTAyRDcsVSswMkRELTAyRkYsVSswMzA0LFUrMDMwOCxVKzAzMjksVSsxRDAwLTFEQkYsVSsxRTAwLTFFOUYsVSsxRUYyLTFFRkYsVSsyMDIwLFUrMjBBMC0yMEFCLFUrMjBBRC0yMEMwLFUrMjExMyxVKzJDNjAtMkM3RixVK0E3MjAtQTdGRjsKfQoKLyogcnViaWstbGF0aW4td2dodC1ub3JtYWwgKi8KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdSdWJpayBWYXJpYWJsZSc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtZGlzcGxheTogc3dhcDsKICBmb250LXdlaWdodDogMzAwIDkwMDsKICBzcmM6IHVybCguL2ZpbGVzL3J1YmlrLWxhdGluLXdnaHQtbm9ybWFsLndvZmYyKSBmb3JtYXQoJ3dvZmYyLXZhcmlhdGlvbnMnKTsKICB1bmljb2RlLXJhbmdlOiBVKzAwMDAtMDBGRixVKzAxMzEsVSswMTUyLTAxNTMsVSswMkJCLTAyQkMsVSswMkM2LFUrMDJEQSxVKzAyREMsVSswMzA0LFUrMDMwOCxVKzAzMjksVSsyMDAwLTIwNkYsVSsyMEFDLFUrMjEyMixVKzIxOTEsVSsyMTkzLFUrMjIxMixVKzIyMTUsVStGRUZGLFUrRkZGRDsKfQ==",
+      "mtimeNs": 1794434196026264400
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\metadata.json",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\metadata.json",
+      "packagePath": "metadata.json",
+      "bytes": 858,
+      "sha256": "ace225a1378779527f7121cb28dddd9efe78e32d3a2d76a4e2aaacaa9e3701c3",
+      "bodyBase64": "ewogICJpZCI6ICJydWJpayIsCiAgImZhbWlseSI6ICJSdWJpayIsCiAgInN1YnNldHMiOiBbCiAgICAiYXJhYmljIiwKICAgICJjeXJpbGxpYyIsCiAgICAiY3lyaWxsaWMtZXh0IiwKICAgICJoZWJyZXciLAogICAgImxhdGluIiwKICAgICJsYXRpbi1leHQiCiAgXSwKICAid2VpZ2h0cyI6IFszMDAsIDQwMCwgNTAwLCA2MDAsIDcwMCwgODAwLCA5MDBdLAogICJzdHlsZXMiOiBbIml0YWxpYyIsICJub3JtYWwiXSwKICAiZGVmU3Vic2V0IjogImxhdGluIiwKICAidmFyaWFibGUiOiB7CiAgICAiaXRhbCI6IHsiZGVmYXVsdCI6ICIwIiwgIm1pbiI6ICIwIiwgIm1heCI6ICIxIiwgInN0ZXAiOiAiMSJ9LAogICAgIndnaHQiOiB7ImRlZmF1bHQiOiAiNDAwIiwgIm1pbiI6ICIzMDAiLCAibWF4IjogIjkwMCIsICJzdGVwIjogIjEifQogIH0sCiAgImxhc3RNb2RpZmllZCI6ICIyMDI1LTA5LTEwIiwKICAidmVyc2lvbiI6ICJ2MzEiLAogICJjYXRlZ29yeSI6ICJzYW5zLXNlcmlmIiwKICAibGljZW5zZSI6IHsKICAgICJ0eXBlIjogIk9GTC0xLjEiLAogICAgInVybCI6ICJodHRwczovL29wZW5mb250bGljZW5zZS5vcmciLAogICAgImF0dHJpYnV0aW9uIjogIkNvcHlyaWdodCAyMDE1IFRoZSBSdWJpayBQcm9qZWN0IEF1dGhvcnMgKGh0dHBzOi8vZ2l0aHViLmNvbS9nb29nbGVmb250cy9ydWJpaykgUnViaWstSXRhbGljW3dnaHRdLnR0ZjogQ29weXJpZ2h0IDIwMTUgVGhlIFJ1YmlrIFByb2plY3QgQXV0aG9ycyAoaHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZWZvbnRzL3J1YmlrKSIKICB9LAogICJzb3VyY2UiOiAiaHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9mb250cyIsCiAgInR5cGUiOiAiZ29vZ2xlIgp9",
+      "mtimeNs": 1794434196051462000
+    }
+  ],
+  "cssFontUrls": [
+    "./files/rubik-arabic-wght-normal.woff2",
+    "./files/rubik-cyrillic-ext-wght-normal.woff2",
+    "./files/rubik-cyrillic-wght-normal.woff2",
+    "./files/rubik-hebrew-wght-normal.woff2",
+    "./files/rubik-latin-ext-wght-normal.woff2",
+    "./files/rubik-latin-wght-normal.woff2"
+  ],
+  "fonts": [
+    {
+      "packagePath": "./files/rubik-arabic-wght-normal.woff2",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-arabic-wght-normal.woff2",
+      "bytes": 32468,
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+      "mtimeNs": 1794434196152117400,
+      "woff2Signature": true
+    },
+    {
+      "packagePath": "./files/rubik-cyrillic-ext-wght-normal.woff2",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-cyrillic-ext-wght-normal.woff2",
+      "bytes": 12388,
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+      "mtimeNs": 1794434196174612900,
+      "woff2Signature": true
+    },
+    {
+      "packagePath": "./files/rubik-cyrillic-wght-normal.woff2",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-cyrillic-wght-normal.woff2",
+      "bytes": 15112,
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+      "mtimeNs": 1794434196214327300,
+      "woff2Signature": true
+    },
+    {
+      "packagePath": "./files/rubik-hebrew-wght-normal.woff2",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-hebrew-wght-normal.woff2",
+      "bytes": 9348,
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+      "mtimeNs": 1794434196233550100,
+      "woff2Signature": true
+    },
+    {
+      "packagePath": "./files/rubik-latin-ext-wght-normal.woff2",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-latin-ext-wght-normal.woff2",
+      "bytes": 19400,
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+      "mtimeNs": 1794434196249769600,
+      "woff2Signature": true
+    },
+    {
+      "packagePath": "./files/rubik-latin-wght-normal.woff2",
+      "physicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\@fontsource-variable+rubik@5.3.0\\node_modules\\@fontsource-variable\\rubik\\files\\rubik-latin-wght-normal.woff2",
+      "bytes": 35348,
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+      "mtimeNs": 1794434196267014200,
+      "woff2Signature": true
+    }
+  ],
+  "appImportInputs": [
+    {
+      "path": "packages/web/src/main.tsx",
+      "bytes": 1166,
+      "sha256": "ef3fefb6791405dcc1fc7860019168119ab26ca5697dd2bb6e19cb9bffbda4e4",
+      "matchesGitCommit": true
+    },
+    {
+      "path": "packages/web/src/index.css",
+      "bytes": 4849,
+      "sha256": "7ec692a4158f90baf7fc93f815bfd4d32493712947d31c777d0a8ff387190c5e",
+      "matchesGitCommit": true
+    }
+  ],
+  "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+  "lockMatchesGitCommit": true,
+  "declaredLockIntegrity": "sha512-yQUf8qle24MJYA+EuauyF+cqjjN6I715nGjitt3sGmwZA0XfA4fWJcLq1C/diREZl4Qzn1E80nLMc0ipC/a4Lg==",
+  "tarballOrCafsMembershipVerified": false,
+  "filesAndMtimeUnchanged": true,
+  "fontCount": 6,
+  "fontBytes": 124064,
+  "emittedBuildOrLoaderBindingVerified": false,
+  "browserRenderingVerified": false,
+  "trustedReceiptsInstalled": false,
+  "executionOrExportAuthorized": false,
+  "remoteWrites": 0,
+  "networkRequests": 0,
+  "rightsMeaning": "Exact existing OFL notice and package declaration observed; no authority installed or legal conclusion about media rights"
+}

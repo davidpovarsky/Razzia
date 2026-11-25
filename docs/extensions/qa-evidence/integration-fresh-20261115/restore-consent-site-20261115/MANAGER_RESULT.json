@@ -1,0 +1,198 @@
+{
+  "utc": "2026-11-15T18:14:22.283222+00:00",
+  "managerSource": "f9bad23a638522d3d3f50cd16171d9d0ffd6f97c",
+  "D": {
+    "source": "4271edf12b36ca15d49ddc3d38a0117c7f54bdf0",
+    "producer": [
+      {
+        "stage": "initial",
+        "streamShaAndBytesVerified": true,
+        "checks": [
+          [
+            "tests",
+            0
+          ],
+          [
+            "types",
+            0
+          ],
+          [
+            "format",
+            0
+          ],
+          [
+            "lint",
+            1
+          ]
+        ]
+      },
+      {
+        "stage": "corrected",
+        "streamShaAndBytesVerified": true,
+        "checks": [
+          [
+            "tests",
+            0
+          ],
+          [
+            "types",
+            0
+          ],
+          [
+            "format",
+            0
+          ],
+          [
+            "lint",
+            0
+          ]
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "name": "tests",
+        "command": [
+          "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+          "extensions/node_modules/vitest/vitest.mjs",
+          "run",
+          "--root",
+          "extensions",
+          "--config",
+          "vitest.config.ts",
+          "src/core/show-library/composition-restore.test.ts",
+          "src/core/show-library/composition-repository.test.ts",
+          "--maxWorkers",
+          "1"
+        ],
+        "exitCode": 0,
+        "streams": {
+          "stdout": {
+            "bytes": 439,
+            "sha256": "a1bd70b440f15126c9984c2e97ca3ee04708c15322bd099c477dfe480061f2c1"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      },
+      {
+        "name": "types",
+        "command": [
+          "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+          "extensions/node_modules/typescript/bin/tsc",
+          "--project",
+          "extensions/src/core/show-library/tsconfig.focused.json"
+        ],
+        "exitCode": 0,
+        "streams": {
+          "stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      },
+      {
+        "name": "format",
+        "command": [
+          "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+          "node_modules/prettier/bin/prettier.cjs",
+          "--check",
+          "extensions/src/core/show-library/composition-repository-base.ts",
+          "extensions/src/core/show-library/composition-restore.test.ts"
+        ],
+        "exitCode": 0,
+        "streams": {
+          "stdout": {
+            "bytes": 66,
+            "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      }
+    ],
+    "sourceBefore": {
+      "extensions/src/core/show-library/composition-repository-base.ts": "d576a35a42ad8dbe494c58878bc30e743bc8937f9a7bcd9e9b7d6cfb847eed30",
+      "extensions/src/core/show-library/composition-restore.test.ts": "fdd2afe0d73ede119a19c369c8398294de8921b75191e251f0f20580ed206cdb",
+      "extensions/src/core/show-library/composition-repository.ts": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+      "extensions/src/core/show-library/composition-repository-v2.ts": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057"
+    },
+    "sourceAfter": {
+      "extensions/src/core/show-library/composition-repository-base.ts": "d576a35a42ad8dbe494c58878bc30e743bc8937f9a7bcd9e9b7d6cfb847eed30",
+      "extensions/src/core/show-library/composition-restore.test.ts": "fdd2afe0d73ede119a19c369c8398294de8921b75191e251f0f20580ed206cdb",
+      "extensions/src/core/show-library/composition-repository.ts": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+      "extensions/src/core/show-library/composition-repository-v2.ts": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057"
+    }
+  },
+  "F": {
+    "source": "63e1094d27e6c1c9ea02c1054277cb76e524121a",
+    "evidence": "ad702a8bcdb1585e49105f22972a0d955c716bf1",
+    "manifest172SnapshotHashesVerified": true,
+    "currentOriginalChanged": [],
+    "producerActualCases": 3,
+    "producerFocusedTypes": 0,
+    "managerTestNotImported": true,
+    "reason": "Await committed reviewed E client; no WIP copied or fake implementation added; no browser/HEAD/TLS/host/nativeSave/executablePreview acceptance",
+    "localNpmGraphNotRootPnpmGraph": true
+  },
+  "A": {
+    "source": "335f099f97eb77b450ed7c9f33188f8a46c9e7ef",
+    "checks": 22,
+    "flows": 2,
+    "artifact": "9a9edaf33fbcdddc569b66fb1044c2280eb83732c958653019fb499c05681f71",
+    "remoteRawHashesAndTerminalReadback": {
+      "files": {
+        "account-transitions.cjs": "1f294388fcd9e3d9312798cd0969be78a39521042f15b6954fa73834e3dec06d",
+        "observations.json": "609fc6e420187f8c5abeda6b683d2b591b051399a6242cf6d23108d31df16aa4",
+        "run.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "run.log": "fdef6b11aa7325ad3ca1abbc4bc434d8f5424a302167da806e0d21c5e0e527c0"
+      },
+      "containers": [
+        {
+          "id": "614544522d826920dd718eefe7acb96e7a2a51bc7f67ddcec4d8ed02e62e1833",
+          "state": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-11-15T18:04:24.235774713Z",
+            "FinishedAt": "2026-11-15T18:06:58.387568088Z"
+          },
+          "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"
+        },
+        {
+          "id": "34b7c0e651b2648822fe40257bce0d0aecea724db94b78dd288ae6ddf7b97275",
+          "state": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-11-15T18:04:52.649396396Z",
+            "FinishedAt": "2026-11-15T18:05:18.74932876Z"
+          },
+          "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647"
+        }
+      ]
+    },
+    "authDisabledGuestOnly": true
+  },
+  "noNewRemoteJobOrInstall": true
+}

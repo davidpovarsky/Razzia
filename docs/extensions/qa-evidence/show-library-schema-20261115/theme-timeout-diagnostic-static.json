@@ -1,0 +1,14 @@
+{
+  "status": "READ_ONLY_DIAGNOSTIC_DOC_STATIC_PASS",
+  "reviewPath": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\reviews\\THEME_INSTALLATION_TIMEOUT_DIAG_20261115.md",
+  "reviewSha256": "11fc4ead4c43fe923697b42b35396a1e94839a2b5cf0c8a97d241a8f88bb8120",
+  "planSha256": "ff75f3e34a3f250172fd569cd246d8d198e82dcbae1070d8a4838893b3ca12cd",
+  "comparisonSha256": "e09c0bc92f164e317d31ecd1ad76aef592a0026698111aaed700dfed1295935a",
+  "acceptedCore26HashesUnchanged": true,
+  "baseTargetComparableFiles": 27,
+  "runtimeGraphNodesIncludingTestAndJson": 12,
+  "newTestsProfilesContainers": "NOT_RUN",
+  "readonlyServerAction": "Only hashes of three existing executed dependency source files read; no install/start/config/write",
+  "cause": "UNKNOWN_RUNTIME_ATTRIBUTION_SPECIFIC_BUFFER_MATCHER_HYPOTHESIS",
+  "createdUtc": "2026-11-15T09:00:27.177497+00:00"
+}

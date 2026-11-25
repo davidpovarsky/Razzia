@@ -1,0 +1,46 @@
+{
+  "stage": "before",
+  "startedUtc": "2026-11-15T22:29:49.880968+00:00",
+  "sourceBaseCommit": "2fbb4cb5a04a7be0eb417bf687b2143d7c590fd6",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "sourceBefore": {
+    "extensions/src/core/show-library/registry.ts": "5170beb15152b30e1bb9fc8452e5ca6fd027934ae8ad9d9f125cccc5cf2424ec",
+    "extensions/src/core/show-library/registry-motion-references.test.ts": "c0752a873925caa358f371dc39b79141d2018b80db23451e4dc4fe8810cae2bb"
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/registry-motion-references.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 997,
+          "sha256": "09f93c2af052541e09ac6fd3e3f253ab8e9aae5b6ec7804aa3a6736c5369c487",
+          "rawBase64": "CiBSVU4gIHY1LjAuMyBDOi9Vc2Vycy9EQVZJRC9Db2RlL1JhenppYS13b3JrdHJlZXMvdGFkYXp6LWhxLXNob3ctbGlicmFyeS0yMDI2MTExNS9leHRlbnNpb25zCgog4p2vIHNyYy9jb3JlL3Nob3ctbGlicmFyeS9yZWdpc3RyeS1tb3Rpb24tcmVmZXJlbmNlcy50ZXN0LnRzICg3IHRlc3RzIHwgNCBmYWlsZWQpIDQ0OG1zCiAgIOKdryBtb3Rpb24gY29tcGF0aWJpbGl0eSByZWZlcmVuY2VzIGZvcm0gYSBjbG9zZWQgY2FuZGlkYXRlIHJlZ2lzdHJ5ICg3KQogICAgIMOXIHJlamVjdHMgYW4gdW5yZWdpc3RlcmVkIGV4YWN0IG1vdGlvbiBjb21wb25lbnQgbWlzc2luZy1jb21wb25lbnRAMS4wLjAgOTJtcwogICAgIMOXIHJlamVjdHMgYW4gdW5yZWdpc3RlcmVkIGV4YWN0IG1vdGlvbiBjb21wb25lbnQgYW5zd2VyLWNhbmRpZGF0ZUA5LjAuMCAzMG1zCiAgICAgw5cgY2hlY2tzIHVuc2VsZWN0ZWQgbW90aW9ucyByYXRoZXIgdGhhbiB3YWl0aW5nIGZvciBhIHRlbXBsYXRlIHRvIHVzZSB0aGVtIDUxbXMKICAgICDDlyByZWplY3RzIGEgbW90aW9uLW9ubHkgcmVnaXN0cnkgY2xhaW1pbmcgYW4gYWJzZW50IGNvbXBvbmVudCA3Nm1zCgogVGVzdCBGaWxlcyAgMSBmYWlsZWQgKDEpCiAgICAgIFRlc3RzICA0IGZhaWxlZCB8IDMgcGFzc2VkICg3KQogICBTdGFydCBhdCAgMDA6MzA6MTIKICAgRHVyYXRpb24gIDEyLjg1cyAodHJhbnNmb3JtIDUyJSwgaW1wb3J0IDQzJSwgdGVzdHMgNSUsIHdvcmtlciAxJSkKCiAgVHJhbnNmb3JtICB0cmFuc2Zvcm1pbmcgbW9kdWxlcyB0b29rIDUuMDZzIMK3IDUyJSBvZiB0cmFja2VkIHRpbWUsIHJlLWRvbmUgb24gZXZlcnkgcnVuCiAgICAgICAgICAgICBwZXJzaXN0IHRyYW5zZm9ybXMgYWNyb3NzIHJ1bnMgd2l0aCBmc01vZHVsZUNhY2hlOiB0cnVlCiAgICAgICAgICAgICBsZWFybiBtb3JlOiBodHRwczovL3ZpdGVzdC5kZXYvZ3VpZGUvaW1wcm92aW5nLXBlcmZvcm1hbmNlI2NhY2hpbmctYmV0d2Vlbi1yZXJ1bnMKCg=="
+        },
+        "stderr": {
+          "bytes": 2385,
+          "sha256": "c0f7bbd6cddae96d52f2393d561ea0c15006ad5a58efec27efe8d9897a330270",
+          "rawBase64": "CuKOr+KOr+KOr+KOr+KOr+KOr+KOryBGYWlsZWQgVGVzdHMgNCDijq/ijq/ijq/ijq/ijq/ijq/ijq8KCiBGQUlMICBzcmMvY29yZS9zaG93LWxpYnJhcnkvcmVnaXN0cnktbW90aW9uLXJlZmVyZW5jZXMudGVzdC50cyA+IG1vdGlvbiBjb21wYXRpYmlsaXR5IHJlZmVyZW5jZXMgZm9ybSBhIGNsb3NlZCBjYW5kaWRhdGUgcmVnaXN0cnkgPiByZWplY3RzIGFuIHVucmVnaXN0ZXJlZCBleGFjdCBtb3Rpb24gY29tcG9uZW50IG1pc3NpbmctY29tcG9uZW50QDEuMC4wCiBGQUlMICBzcmMvY29yZS9zaG93LWxpYnJhcnkvcmVnaXN0cnktbW90aW9uLXJlZmVyZW5jZXMudGVzdC50cyA+IG1vdGlvbiBjb21wYXRpYmlsaXR5IHJlZmVyZW5jZXMgZm9ybSBhIGNsb3NlZCBjYW5kaWRhdGUgcmVnaXN0cnkgPiByZWplY3RzIGFuIHVucmVnaXN0ZXJlZCBleGFjdCBtb3Rpb24gY29tcG9uZW50IGFuc3dlci1jYW5kaWRhdGVAOS4wLjAKQXNzZXJ0aW9uRXJyb3I6IGV4cGVjdGVkIFtGdW5jdGlvbl0gdG8gdGhyb3cgYW4gZXJyb3IKCi0gRXhwZWN0ZWQ6Cm51bGwKCisgUmVjZWl2ZWQ6CnVuZGVmaW5lZAoKIOKdryBzcmMvY29yZS9zaG93LWxpYnJhcnkvcmVnaXN0cnktbW90aW9uLXJlZmVyZW5jZXMudGVzdC50czo4MTo1NAogICAgIDc5fCAgICAgICBpbnB1dC5tb3Rpb25zWzBdLmNvbXBvbmVudHMucHVzaChtaXNzaW5nKQogICAgIDgwfAogICAgIDgxfCAgICAgICBleHBlY3QoKCkgPT4gY3JlYXRlU2hvd0xpYnJhcnlSZWdpc3RyeShpbnB1dCkpLnRvVGhyb3coCiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXgogICAgIDgyfCAgICAgICAgICJ1bmtub3duLW1vdGlvbi1jb21wb25lbnQiLAogICAgIDgzfCAgICAgICApCgrijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq9bMS80XeKOrwoKIEZBSUwgIHNyYy9jb3JlL3Nob3ctbGlicmFyeS9yZWdpc3RyeS1tb3Rpb24tcmVmZXJlbmNlcy50ZXN0LnRzID4gbW90aW9uIGNvbXBhdGliaWxpdHkgcmVmZXJlbmNlcyBmb3JtIGEgY2xvc2VkIGNhbmRpZGF0ZSByZWdpc3RyeSA+IGNoZWNrcyB1bnNlbGVjdGVkIG1vdGlvbnMgcmF0aGVyIHRoYW4gd2FpdGluZyBmb3IgYSB0ZW1wbGF0ZSB0byB1c2UgdGhlbQpBc3NlcnRpb25FcnJvcjogZXhwZWN0ZWQgW0Z1bmN0aW9uXSB0byB0aHJvdyBhbiBlcnJvcgoKLSBFeHBlY3RlZDoKbnVsbAoKKyBSZWNlaXZlZDoKdW5kZWZpbmVkCgog4p2vIHNyYy9jb3JlL3Nob3ctbGlicmFyeS9yZWdpc3RyeS1tb3Rpb24tcmVmZXJlbmNlcy50ZXN0LnRzOjkxOjUyCiAgICAgODl8ICAgICBpbnB1dC5tb3Rpb25zWzBdLmNvbXBvbmVudHMgPSBbeyBpZDogImZ1dHVyZS1taXNzaW5nIiwgdmVyc2lvbjogIjHigKYKICAgICA5MHwKICAgICA5MXwgICAgIGV4cGVjdCgoKSA9PiBjcmVhdGVTaG93TGlicmFyeVJlZ2lzdHJ5KGlucHV0KSkudG9UaHJvdygKICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXgogICAgIDkyfCAgICAgICAidW5rbm93bi1tb3Rpb24tY29tcG9uZW50IiwKICAgICA5M3wgICAgICkKCuKOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr+KOr1syLzRd4o6vCgogRkFJTCAgc3JjL2NvcmUvc2hvdy1saWJyYXJ5L3JlZ2lzdHJ5LW1vdGlvbi1yZWZlcmVuY2VzLnRlc3QudHMgPiBtb3Rpb24gY29tcGF0aWJpbGl0eSByZWZlcmVuY2VzIGZvcm0gYSBjbG9zZWQgY2FuZGlkYXRlIHJlZ2lzdHJ5ID4gcmVqZWN0cyBhIG1vdGlvbi1vbmx5IHJlZ2lzdHJ5IGNsYWltaW5nIGFuIGFic2VudCBjb21wb25lbnQKQXNzZXJ0aW9uRXJyb3I6IGV4cGVjdGVkIFtGdW5jdGlvbl0gdG8gdGhyb3cgYW4gZXJyb3IKCi0gRXhwZWN0ZWQ6Cm51bGwKCisgUmVjZWl2ZWQ6CnVuZGVmaW5lZAoKIOKdryBzcmMvY29yZS9zaG93LWxpYnJhcnkvcmVnaXN0cnktbW90aW9uLXJlZmVyZW5jZXMudGVzdC50czo5OTo1MgogICAgIDk3fCAgICAgaW5wdXQuY29tcG9uZW50cyA9IFtdCiAgICAgOTh8CiAgICAgOTl8ICAgICBleHBlY3QoKCkgPT4gY3JlYXRlU2hvd0xpYnJhcnlSZWdpc3RyeShpbnB1dCkpLnRvVGhyb3coCiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KICAgIDEwMHwgICAgICAgInVua25vd24tbW90aW9uLWNvbXBvbmVudCIsCiAgICAxMDF8ICAgICApCgrijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq/ijq9bMy80XeKOrwoK"
+        }
+      }
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/registry.ts": "5170beb15152b30e1bb9fc8452e5ca6fd027934ae8ad9d9f125cccc5cf2424ec",
+    "extensions/src/core/show-library/registry-motion-references.test.ts": "c0752a873925caa358f371dc39b79141d2018b80db23451e4dc4fe8810cae2bb"
+  },
+  "sourceUnchangedDuringChecks": true,
+  "finishedUtc": "2026-11-15T22:30:25.911583+00:00"
+}

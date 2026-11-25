@@ -1,0 +1,51 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "typeRoots": ["../../node_modules/@types"],
+    "lib": ["ES2022", "DOM"],
+    "paths": {
+      "@razzia/socket/*": ["../../../packages/socket/src/*"],
+      "@razzia/common/*": ["../../../packages/common/src/*"],
+      "@razzia/extensions/core": ["../../../extensions/src/core/index.ts"],
+      "@razzia/socket/api/factory": [
+        "../../../packages/socket/src/api/factory.ts"
+      ],
+      "@razzia/socket/api/middleware": [
+        "../../../packages/socket/src/api/middleware.ts"
+      ],
+      "@razzia/socket/services/auth": [
+        "../../../packages/socket/src/services/auth.ts"
+      ],
+      "@razzia/socket/services/account-scope": [
+        "../../../packages/socket/src/services/account-scope.ts"
+      ],
+      "@razzia/socket/services/account-auth": [
+        "../../../packages/socket/src/services/account-auth.ts"
+      ],
+      "@razzia/socket/services/account-db": [
+        "../../../packages/socket/src/services/account-db.ts"
+      ],
+      "@razzia/socket/services/config": [
+        "../../../packages/socket/src/services/config.ts"
+      ],
+      "@razzia/socket/env": ["../../../packages/socket/src/env.ts"]
+    }
+  },
+  "include": [
+    "contracts/**/*.ts",
+    "server/**/*.ts",
+    "tests/server/**/*.ts",
+    "first-party/**/*.ts",
+    "tests/first-party/**/*.ts"
+  ]
+}

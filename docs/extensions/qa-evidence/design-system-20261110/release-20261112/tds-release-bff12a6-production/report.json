@@ -1,0 +1,43 @@
+{
+  "target": "https://tadazz.com",
+  "label": "production",
+  "readOnly": true,
+  "accountCreated": false,
+  "mailSent": false,
+  "gameStarted": false,
+  "browserCases": [
+    {
+      "browser": "chromium",
+      "width": 1366,
+      "status": "PASS",
+      "entry": "/assets/index-D4sBj2w1.js",
+      "pageErrors": [],
+      "failedAssets": []
+    },
+    {
+      "browser": "chromium",
+      "width": 390,
+      "status": "PASS",
+      "entry": "/assets/index-D4sBj2w1.js",
+      "pageErrors": [],
+      "failedAssets": []
+    },
+    {
+      "browser": "webkit",
+      "width": 1366,
+      "status": "PASS",
+      "entry": "/assets/index-D4sBj2w1.js",
+      "pageErrors": [],
+      "failedAssets": []
+    },
+    {
+      "browser": "webkit",
+      "width": 390,
+      "status": "PASS",
+      "entry": "/assets/index-D4sBj2w1.js",
+      "pageErrors": [],
+      "failedAssets": []
+    }
+  ],
+  "success": true
+}

@@ -1,0 +1,6 @@
+{
+  "change": "Narrow fixture callback from unknown to void|Promise<void> for node:test callback typing",
+  "executableBundleIdentical": true,
+  "sha256": "476462dd3eff54e44081175c52f34098330cf56944e54bff465c6edcabe71fab",
+  "rerunRequired": false
+}

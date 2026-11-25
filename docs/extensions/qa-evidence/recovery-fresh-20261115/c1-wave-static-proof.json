@@ -1,0 +1,9 @@
+{
+  "preservedOriginalUntrackedFiles": 16,
+  "unchangedApplicationTestFiles": 5,
+  "unchangedArchive": true,
+  "archiveMatchesCurrentSource": 20,
+  "packetInputHashes": 10,
+  "runtime": "NOT_RUN; resource wait pending",
+  "oldResults": "41 PASS/7 FAIL unchanged; R2 813 PASS/6 FAIL unchanged"
+}

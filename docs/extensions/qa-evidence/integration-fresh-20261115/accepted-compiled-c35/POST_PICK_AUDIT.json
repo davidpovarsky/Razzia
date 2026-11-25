@@ -1,0 +1,387 @@
+{
+  "status": "EXACT_FOUR_LEAF_UNION_PASS_NO_EXECUTION",
+  "sourceHead": "9f873632de0b1bee969d7aec9ef3d059f3bf3744",
+  "sourceTree": "59c4ef7257a1e56437cdf910ad6ad0a6d2fb7e28",
+  "fourSourcePaths": {
+    "extensions/src/core/show-library/compiled-index-authority.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob 32aff4cdd4e5980d365600eabbcda56af2275537\textensions/src/core/show-library/compiled-index-authority.ts",
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55",
+      "actual": "100644 blob 32aff4cdd4e5980d365600eabbcda56af2275537\textensions/src/core/show-library/compiled-index-authority.ts"
+    },
+    "extensions/src/core/show-library/compiled-index-schema.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob 7eda7e97dfc09c244370d749fe8731b1f3198c94\textensions/src/core/show-library/compiled-index-schema.ts",
+      "sha256": "a6bad0c603af33508a8b157c541490a9b9e113b7a1c4c080de517b63852034e9",
+      "actual": "100644 blob 7eda7e97dfc09c244370d749fe8731b1f3198c94\textensions/src/core/show-library/compiled-index-schema.ts"
+    },
+    "extensions/src/core/show-library/compiled-index-validation.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob b9b6a357cc13a94b1214794cf875ab7ac661506f\textensions/src/core/show-library/compiled-index-validation.ts",
+      "sha256": "bf11b1ea664d13ef8038e4649351195a8c528a703f79933f03d210f6322ad0ec",
+      "actual": "100644 blob b9b6a357cc13a94b1214794cf875ab7ac661506f\textensions/src/core/show-library/compiled-index-validation.ts"
+    },
+    "extensions/src/core/show-library/compiled-index.test.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob 5d6f131799dd2ef349c173a7629b99556ccba893\textensions/src/core/show-library/compiled-index.test.ts",
+      "sha256": "8fcdbddd5d2dc21199edc3760995189cff38270dbd6ae16259f9572b8f767207",
+      "actual": "100644 blob 5d6f131799dd2ef349c173a7629b99556ccba893\textensions/src/core/show-library/compiled-index.test.ts"
+    }
+  },
+  "cumulative33SourceUnion": {
+    "extensions/src/server/media-library-recovery.test.ts": "100644 blob efd190e3b288c86641a8c072922c23e801a38a84\textensions/src/server/media-library-recovery.test.ts",
+    "extensions/src/server/media-library.test.ts": "100644 blob 6e1ce616d6f2e7b6904a618140d2e9b0406edff8\textensions/src/server/media-library.test.ts",
+    "extensions/src/server/media-library.ts": "100644 blob d5d0ed9652828dbb1e3db0568e0d8132ee24e0d3\textensions/src/server/media-library.ts",
+    "extensions/src/server/storage.test.ts": "100644 blob fc5b609b449b8b942acdfa3787460864d043f3cd\textensions/src/server/storage.test.ts",
+    "extensions/src/server/storage/create-recovery.test.ts": "100644 blob 71a74895fe6c6465a863ef4dc7aef762a91b5748\textensions/src/server/storage/create-recovery.test.ts",
+    "extensions/src/server/storage/journal-recovery.test.ts": "100644 blob 8a1d628c9882b666409d9d8a1d51432711d3a842\textensions/src/server/storage/journal-recovery.test.ts",
+    "extensions/src/server/storage/journal.ts": "100644 blob d3afe86d1880e223aac4ff625e52ce0915193f64\textensions/src/server/storage/journal.ts",
+    "extensions/src/server/storage/native-binding-child.ts": "100644 blob 9a5a24f9d5844545b7bdcc33aed0970733d98bfc\textensions/src/server/storage/native-binding-child.ts",
+    "extensions/src/server/storage/native-binding-fixture.ts": "100644 blob 437960f962b367f7bc2a99117a949f5e9e68f178\textensions/src/server/storage/native-binding-fixture.ts",
+    "extensions/src/server/storage/native-binding-r2.test.ts": "100644 blob 221d3916d8cf4b0cd7abd560aed77b28b3607eaf\textensions/src/server/storage/native-binding-r2.test.ts",
+    "extensions/src/server/storage/native-binding.test.ts": "100644 blob 29f2d113f8c9b402c001958ee380d849663a8b97\textensions/src/server/storage/native-binding.test.ts",
+    "extensions/src/server/storage/native-recovery-adapter.ts": "100644 blob f235f4bdb6e6d0442a977b04c5bc5700632762ad\textensions/src/server/storage/native-recovery-adapter.ts",
+    "extensions/src/server/storage/package-stage-r2.test.ts": "100644 blob e0f9c09ca291b9a7c8742b79ae439420f9ad3654\textensions/src/server/storage/package-stage-r2.test.ts",
+    "extensions/src/server/storage/physical-binding.ts": "100644 blob 28624a3788d01de148cf002abf6ada426299562c\textensions/src/server/storage/physical-binding.ts",
+    "extensions/src/server/storage/process-interruption-child.ts": "100644 blob 74fb3e95dd23b08d11052a59b8012d26525084c3\textensions/src/server/storage/process-interruption-child.ts",
+    "extensions/src/server/storage/process-interruption-state.ts": "100644 blob f28867731fd5f654a3e19fc83eec56d5dcef3912\textensions/src/server/storage/process-interruption-state.ts",
+    "extensions/src/server/storage/process-interruption.test.ts": "100644 blob 92c578427260a0a8d0160aa6d2a4206653092254\textensions/src/server/storage/process-interruption.test.ts",
+    "extensions/src/server/storage/recovery-fixture.ts": "100644 blob d0477ba3764b1d9c3fd7816786e595bf40060bfd\textensions/src/server/storage/recovery-fixture.ts",
+    "extensions/src/server/storage/recovery-state.ts": "100644 blob 8c84e97eb835401ccaac70b63800b584398117d0\textensions/src/server/storage/recovery-state.ts",
+    "extensions/src/server/storage/review-binding-child.ts": "100644 blob cea3724c5a114d8aeb09cd2db9008dc3c4cc73ff\textensions/src/server/storage/review-binding-child.ts",
+    "extensions/src/server/storage/review-binding-state.ts": "100644 blob 89893fe78ef5ef73345b85f6cf7823188c191cdd\textensions/src/server/storage/review-binding-state.ts",
+    "extensions/src/server/storage/review-binding.test.ts": "100644 blob 048857b1bc46fa68d781143ee901241e4094240e\textensions/src/server/storage/review-binding.test.ts",
+    "extensions/src/server/storage/service.ts": "100644 blob 53f927db5cc14eec0ec08977361e45abb3936eea\textensions/src/server/storage/service.ts",
+    "extensions/src/server/storage/sidecar.ts": "100644 blob 262a0974ce2befdb262c8ed5565beefecc04a3a0\textensions/src/server/storage/sidecar.ts",
+    "extensions/src/core/show-library/preview-port.ts": "100644 blob d660f9fa165105086f80c646ef6e7fe4a4bcb4af\textensions/src/core/show-library/preview-port.ts",
+    "extensions/src/core/show-library/stage-metadata-schema.ts": "100644 blob 9b379a992d9bd2b9f69bc7d43fec9d77fab311be\textensions/src/core/show-library/stage-metadata-schema.ts",
+    "extensions/src/core/show-library/stage-metadata.test.ts": "100644 blob 0911e7fc564bb4380f3b06772e8c61acc15484fd\textensions/src/core/show-library/stage-metadata.test.ts",
+    "extensions/src/core/show-library/stage-metadata.ts": "100644 blob 3596890bed38b6581b922fee4381bd887f9f2eba\textensions/src/core/show-library/stage-metadata.ts",
+    "extensions/src/server/show-themes/installation.test.ts": "100644 blob 1855fe5692b8d3cba7a6cb57fa2e06987a2be4be\textensions/src/server/show-themes/installation.test.ts",
+    "extensions/src/core/show-library/compiled-index-authority.ts": "100644 blob 32aff4cdd4e5980d365600eabbcda56af2275537\textensions/src/core/show-library/compiled-index-authority.ts",
+    "extensions/src/core/show-library/compiled-index-schema.ts": "100644 blob 7eda7e97dfc09c244370d749fe8731b1f3198c94\textensions/src/core/show-library/compiled-index-schema.ts",
+    "extensions/src/core/show-library/compiled-index-validation.ts": "100644 blob b9b6a357cc13a94b1214794cf875ab7ac661506f\textensions/src/core/show-library/compiled-index-validation.ts",
+    "extensions/src/core/show-library/compiled-index.test.ts": "100644 blob 5d6f131799dd2ef349c173a7629b99556ccba893\textensions/src/core/show-library/compiled-index.test.ts"
+  },
+  "evidence": [
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/FINAL_STATIC_RECEIPT.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob a827255a7f19ffbc133d3bf51f637ec52b00ead5\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/FINAL_STATIC_RECEIPT.json",
+      "sha256": "815d5a8b0f908c5713cb5a467e9b7fd782e81835edd8ab1ced77c8e5f5fcc690"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/HANDOFF.md",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob fe2867ec23195800c8b5c0ee110fd394c90b9950\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/HANDOFF.md",
+      "sha256": "8993a7619c3145d72611d65bd636b6bf8531db4dd59e67dde97ec5f157e2b9e1"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/PNPM_STATIC_CHECK_INCIDENT.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 3cd614a2de6944b84e63ae450cc8e84ca39c6e02\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/PNPM_STATIC_CHECK_INCIDENT.json",
+      "sha256": "d53492936efcf6b8abb01bd8589aa60a170aa596770add8394c7d51df8ea8d16"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/PRE_EDIT_LEDGER.md",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 4bcf553c0ae70222f96493a7c7d774c37de82d08\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/PRE_EDIT_LEDGER.md",
+      "sha256": "90ccce086f019a6edde0b763bb0bb20d27208e708c5a614f7bdcfe6a3a8bd4d8"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/evidence-manifest.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob f708712533bd7729056445ca4d75e5a964ef7cb0\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/evidence-manifest.json",
+      "sha256": "feb883d04ef9fc3c1230a9fa592998d18709da23eb4d1d90fb9947995d003de5"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format-check.log",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 4aa0d16e7a0ff5c16269bf45771cebe89cc2e81d\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format-receipts.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob cb0babee11e44f5b57406ffc9ac2e6e14e417f4f\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format-receipts.json",
+      "sha256": "2ddc72366dbfa920ebaa42a1c2f1f0d5f6988225136f94c74a29f1cdf358d09e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format.log",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 42373b1a9b0fd74d65d8e39c4f55f5270a196189\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format.log",
+      "sha256": "792a2018166e5aeadeeb2f3809c1e5503a33da6eb5a6504c7604c363ef3edec9"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/freeze-guard.log",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob af0cc74ebc7019a42ba9e561ce2cb9477ad3ca7d\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/freeze-guard.log",
+      "sha256": "32ec56cfa7163ec895eaba9655c642852e193c5da270a3db83eb94e1cad47756"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/raw-command-logs.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 6c9f60ec8648448949c9b3870031e53fbe421aef\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/raw-command-logs.json",
+      "sha256": "b3b61ec5d5957300367a5e75300a82f0c59f6c46b2114e6c6f9db69d6432a3d1"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/source-ast-audit.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 16bea4a745ccdf29020364fd4d85c996e905c9fd\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/source-ast-audit.json",
+      "sha256": "175245183c25eab848ff68885ab7a9b0e8c4b6048a06398a1b716dff3723f0df"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/source-format.log",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob da58903aa9bbb4cef5322cfd2821181de76ed2c2\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/source-format.log",
+      "sha256": "e6643fd913a2207f742253ddaa99b805932db0296298275043f12675c6a9412c"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/static-command-receipts.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob c4747048c089aecc1e00d7bf350dd42f6bae9b1d\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/static-command-receipts.json",
+      "sha256": "55e8f8ab0c271edec3854d16edc5bc2f1bfd7172adcd30b8d8452f301e66b77f"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/static-source-audit.cjs",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 47c14f4e56630b4862ae0637abde44f95da4d975\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/static-source-audit.cjs",
+      "sha256": "48d985c61847057f90ddf8f6ba392b1c87cae109f08e91c2a158aa9bc77b2f36"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/ui-check-receipt.json",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob cd2610b9e4f82ea8ff1449d3f61fce190da4695f\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/ui-check-receipt.json",
+      "sha256": "881c57fd9933ae3de62dbc9d0cc83fb372b29834457447880bf2a8eced1fca3a"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/ui-check.log",
+      "sourceRef": "155c6b84df84c900872162e2a8c0267c90641153",
+      "entry": "100644 blob 891f48d27ef2658eaf601b669d53d3a6eb12fff4\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/ui-check.log",
+      "sha256": "a0e0d6b8307150d324c5f249bb6c5f584c3fbade6d9ed15f1459ab8b5ec1fdb5"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/CORRECTED_STATIC_RECEIPT.json",
+      "sourceRef": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+      "entry": "100644 blob 4c385c67c166915c3810c902b0132f0502e84448\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/CORRECTED_STATIC_RECEIPT.json",
+      "sha256": "d792fbfb03fc30f2c8614ea182a012eedb76bd2ac90984affbfc4cea97e515d3"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/HANDOFF.md",
+      "sourceRef": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+      "entry": "100644 blob fc18ba4e6d99dfc7963f8c90f8acee003b7920b9\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/HANDOFF.md",
+      "sha256": "ea231682c3a1b6b886d0562e8910705283525d4f6d6b54d37f220cef8a564ded"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/PRE_EDIT_LEDGER.json",
+      "sourceRef": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+      "entry": "100644 blob 7c33f62add688e43c6a3be765fdd6cfa19f69ccb\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/PRE_EDIT_LEDGER.json",
+      "sha256": "8f61c38d9ba1935fb22649332f793cc8844a889c06cc5780ebba89c3e8480f86"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/static-correction-audit.cjs",
+      "sourceRef": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+      "entry": "100644 blob 434b690e08d16c715e1d55a6609832035d6e5d6d\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/static-correction-audit.cjs",
+      "sha256": "19e27db7a3b6357488d01ffea3e44821982c03ff5531673fdd83823ce0c7bfdf"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/EVIDENCE_MANIFEST.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 39a13f7ecc9bb7ac71953cb2871ab60dbe50d410\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/EVIDENCE_MANIFEST.json",
+      "sha256": "11da25020e83517b9b8bb8e19e51b28c056862bb1ed426114cbf0b3c6c36ba57"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/HANDOFF.md",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 9cdf2cce8f69743aeeacdd8514e5fe7f0cdb1710\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/HANDOFF.md",
+      "sha256": "33b071523fbace60efd8f769ce217064bba4362700efd7ae5b0d19a911799c7c"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/RESULT.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob cee2260edad874c1d8b06512f450d22d851e5192\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/RESULT.json",
+      "sha256": "2f62896d19c24b294e4991aad83a1b133338569983fdc4edb300ca0801180c47"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/download.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/download.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/fixture-create.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 67294688a5e2d528443e973a138e8d714ac349b6\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/fixture-create.log",
+      "sha256": "b5a8a82c09e892e5538f24a3659dda9f16bfdf9a76b0b765cc322176c4530755"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-before-upload.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob ebb22d3d88454960102890740c2890fd2aff0a58\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-before-upload.log",
+      "sha256": "d48461adf3bbddb5dc2ddd8fde8d54049df6ffa4867a809de8cca69e84a50d75"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-launch-supervisor.py",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 0b6dd5dec696bedbdfd46d22995d250dc206b540\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-launch-supervisor.py",
+      "sha256": "cd6088e80fd80551edc1cac79c3b670b8db3ff36f22d0035670f30cca013913e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-probe-syntax-failure.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 3cfda75ccc91a244b0971e4c908e5163cf6a4117\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-probe-syntax-failure.log",
+      "sha256": "9f2746ce60d3d7638a5d170bd603b6196777f56f7d95ba1cad28a8576ccab8f2"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/remote-final-files.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob d134fbb1eec94c8798f55904172802a1c232bd2e\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/remote-final-files.json",
+      "sha256": "3f23f7671f406892fcefc531f1c08234dfeb159ae693d62e3e023311deabc7cb"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/root-grant.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob dfeb187ff3b21d90b9ef849a270c0e35df9d1f07\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/root-grant.json",
+      "sha256": "7f9fa5034a805cc167b696766003d1e93acd548e0f2b3b061c8d389911f82b04"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/compiled-index-tests.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 72e59f55969743e92c0ee6d48b887d89cc1e7950\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/compiled-index-tests.json",
+      "sha256": "15c6eb64e287c7a0b2f95a50e9d34bd2a9f5c61eca49a79524b8bd17d693db7e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/compiled-index-tests.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 13385159d6c8208e53a28b78a980405685c949a9\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/compiled-index-tests.log",
+      "sha256": "1f57a46362e5671529373aa6dae5f304952a2b9e382ac8adf3e3727123ec764e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/container-create.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob c760f7205faaf9dce3597c30cef5b4aad18fa914\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/container-create.log",
+      "sha256": "7971356630c4d395a19cfa874e08612df23f5a84196acb5a0b6257ab3c29f606"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/focused-types.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/focused-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/operator-resource-monitor.jsonl",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob b339c1e4cefd751d45b5788053e55fbeb60899de\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/operator-resource-monitor.jsonl",
+      "sha256": "d637e5c33390cfd592179588a6a7e659ffca4fe5bf10955682c80c40956ea8be"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/operator-resource-receipt.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 89dc62c44c8ba0c7b7bbea1a3799d78253b28bb1\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/operator-resource-receipt.json",
+      "sha256": "54341accef08b495711562d1a943b648a1090dde114d6d8b53735dbedf10b379"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/receipt.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 2580d8757342323ade963824f71c65aead8373f2\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/receipt.json",
+      "sha256": "ed84b5cf3d798818f643297f2c6b7fe31dd57609a9b557fb26a743f480ffa856"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/release.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 8a99afbba2f73d6bd94c2598ce838995c3056f61\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/release.log",
+      "sha256": "fb3e81f32fe996c0bbd04680fd00256618089e8bb44a5338338e140cf7848f56"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/view-after.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 7437d491ba69306f9b8fbc32179d50d983562143\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/view-after.log",
+      "sha256": "43db0749cf3aafdfa0579ac699b025ee141da6aaa894206bd7f8e456c649b38f"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/view-before.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 7437d491ba69306f9b8fbc32179d50d983562143\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/view-before.log",
+      "sha256": "43db0749cf3aafdfa0579ac699b025ee141da6aaa894206bd7f8e456c649b38f"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/single-job-exit.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 6c71aaf00bd6565bad674d33a8890f1c1fc93476\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/single-job-exit.json",
+      "sha256": "f86b854c7c4ca0775b69bbac45ae495a9cdf572e63a2f355985b575078602f4a"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/single-job-operator.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob 00be5d431318263de5125dcb737e1c513dfbfc94\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/single-job-operator.log",
+      "sha256": "dd70449e6ed50dc475c2a0605cb40358e9baa7bcb27f9343ab16feaf49eba58a"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/upload-receipt.json",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob cf3783c4851bc51734bb8db28cf07b4bba7a4033\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/upload-receipt.json",
+      "sha256": "0c441c81b1a4e94244a7c792ca76bbe4bc9968551a3ec287a2f9cd6b2b8b4502"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/upload.log",
+      "sourceRef": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+      "entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/upload.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/PREPARATION_RECEIPT.json",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob 93a6f6909e06c564e500671b6e1d8e15ba4c8799\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/PREPARATION_RECEIPT.json",
+      "sha256": "b608fe636ddaf180b512c1ca6d332529cb95da68a59834bae2d3bc91b95c4770"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/RUN_PLAN.md",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob c6450f816369d89bd881dea7eccd77bdcd6d2b15\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/RUN_PLAN.md",
+      "sha256": "ce9573671e1aaa7009db115e089d43b0d797418521996a2171968f9f80276715"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/audit-view.cjs",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob 2a7c895b2fe43593d084e1bad58299df143d902b\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/audit-view.cjs",
+      "sha256": "201ec1337ebea59cda27c597884b981ad89cfd59fcd0f6028bdfcb76abdf3e94"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/compiled-index.tsconfig.json",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob e3ea1321d2be1c50446fa917331f24b0c8e3fec8\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/compiled-index.tsconfig.json",
+      "sha256": "d9e26fb3ee96dd9f33f05494c0abcf45d6029046b02f619a890b5bd9f4b4ea20"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/overlay-plan.json",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob faaace3c3e899525126dc52a5f1ec000d7d210cb\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/overlay-plan.json",
+      "sha256": "123093f622de1e5055b83e3e4a31793f75a9c01be4c199e8a4ed7ff5d93dc8e1"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/run-compiled-index.py",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob 5e14592d7638d0ce09bbe1f1af459dda5bb89888\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/run-compiled-index.py",
+      "sha256": "3e492e8f72d958910239508c6e858b5407f5c1cfb68d85ca43127a72369bb7eb"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/transfer-manifest.json",
+      "sourceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+      "entry": "100644 blob 9eb061db601da47afb6d5a4ede399534c2df2af6\tdocs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/transfer-manifest.json",
+      "sha256": "6d19fcafdad7374dac2dcbd31225ee96ea8fcd624417ff11b4d36d6144cc7f6d"
+    }
+  ],
+  "serverManifestEntriesVerified": 23,
+  "producer53CaseJsonVerified": true,
+  "existingCallers": [],
+  "protectedPackagesUnchanged": true,
+  "rootLocksUnchanged": true,
+  "unapprovedProducerAncestryMerged": false,
+  "localBuildTestInstall": "NOT_RUN",
+  "combinedParentTypes": "DEFERRED_BY_ROOT_UNTIL_ACCEPTED_M3A_BATCH",
+  "serverOrKeeperMutation": "NONE"
+}

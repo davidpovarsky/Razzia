@@ -1,0 +1,40 @@
+{
+  "evidence": {
+    "diagnostics": {
+      "disposed": true,
+      "handleId": null,
+      "lifecycle": [
+        {
+          "event": "mounted",
+          "handleId": 1
+        },
+        {
+          "event": "disposed",
+          "handleId": 1
+        },
+        {
+          "event": "mounted",
+          "handleId": 2
+        },
+        {
+          "event": "disposed",
+          "handleId": 2
+        },
+        {
+          "event": "mounted",
+          "handleId": 3
+        },
+        {
+          "event": "disposed",
+          "handleId": 3
+        }
+      ],
+      "jitlessBefore": false,
+      "jitlessAfter": false,
+      "failures": 0
+    },
+    "csp": [],
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36"
+  },
+  "events": []
+}

@@ -1,0 +1,50 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "productSourceChanged": false,
+  "browserLaunched": false,
+  "networkRequestsPerformed": false,
+  "deploymentAttempted": false,
+  "newEvidenceNamespace": "docs/extensions/plans/ux-followup-20261119",
+  "syntax": {
+    "pythonAst": "PASS",
+    "nodeCheck": "PASS"
+  },
+  "files": [
+    {
+      "file": "work/ux-followup-20261119/release-plan/run-production-public-smoke.py",
+      "baselineFile": "work/ux-unified-20261119/release-plan/run-production-public-smoke.py",
+      "baselineSha256": "8adcecdd3bcce56a151b0e5eadbe44061293643a029cbd43c2fa3eb47ad65ca3",
+      "preparedSha256": "3f3bb4ed6fe97217ffd0e051d2c59ac76cb9cb4772e898846b1c77092f9ee651",
+      "onlyDocumentationNamespaceChanged": true,
+      "diff": "--- work/ux-unified-20261119/release-plan/run-production-public-smoke.py\n+++ work/ux-followup-20261119/release-plan/run-production-public-smoke.py\n@@ -9,7 +9,7 @@\n import time\n \n ROOT = pathlib.Path(__file__).resolve().parents[3]\n-DOCS = ROOT / \"docs/extensions/plans/ux-unified-20261119\"\n+DOCS = ROOT / \"docs/extensions/plans/ux-followup-20261119\"\n NODE = pathlib.Path(r\"C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe\")\n parser = argparse.ArgumentParser()\n parser.add_argument(\"--expected-revision\", required=True)\n"
+    },
+    {
+      "file": "work/ux-followup-20261119/release-plan/production-public-smoke.mjs",
+      "baselineFile": "work/ux-unified-20261119/release-plan/production-public-smoke.mjs",
+      "baselineSha256": "e9d838678266777aa97548d2c3846f306284ac829332357ac9316399f116d790",
+      "preparedSha256": "6f3a295f48861c4e4831d22d9d133afea272646fcb4640943393ace0a483d615",
+      "onlyDocumentationNamespaceChanged": true,
+      "diff": "--- work/ux-unified-20261119/release-plan/production-public-smoke.mjs\n+++ work/ux-followup-20261119/release-plan/production-public-smoke.mjs\n@@ -5,7 +5,7 @@\n import { createHash } from \"node:crypto\";\n \n const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), \"../../..\");\n-const DOCS = path.join(ROOT, \"docs/extensions/plans/ux-unified-20261119\");\n+const DOCS = path.join(ROOT, \"docs/extensions/plans/ux-followup-20261119\");\n const ORIGIN = \"https://tadazz.com\";\n const EDGE = \"C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\";\n const options = Object.fromEntries(process.argv.slice(2).map((v, i, all) => v.startsWith(\"--\") ? [v.slice(2), all[i + 1]] : null).filter(Boolean));\n"
+    }
+  ],
+  "unchangedGuards": [
+    "40-hex expected revision and current-release-source pushed identity",
+    "accepted coordinator and remote deploy envelopes",
+    "verified deployment image/container/revision and no rollback",
+    "fresh post-deploy observation with unchanged runtime config and no customer mutation",
+    "matching app/gateway identities, zero restarts and observation age<=20minutes",
+    "existing evidence output refusal",
+    "anonymous fresh nonpersistent Edge contexts; no user browser profile",
+    "GET/HEAD-only traffic, same-origin anonymous document scope, private API denial and blocked websockets",
+    "CSP enforcement, source module entry, loaded assets and HTTP/JavaScript/console error checks",
+    "bounded owned-process cleanup and timeout guards"
+  ],
+  "coverage": [
+    "home1440",
+    "forgot1440",
+    "home390",
+    "forgot390"
+  ],
+  "pricingContactAssertionReview": "Baseline contains no static-price or contact-stub assertions. Current Pricing and ContactForm mount only on pricing/custom views, outside these four cases. No selector, assertion, request scope, or API allowlist change was made.",
+  "executionAuthorization": "Coordinator must authorize execution after actual deployment and accepted observation. This preparation did not execute either helper."
+}

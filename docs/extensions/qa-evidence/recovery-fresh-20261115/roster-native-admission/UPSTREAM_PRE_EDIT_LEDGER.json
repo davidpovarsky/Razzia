@@ -1,0 +1,38 @@
+{
+  "authority": "Sole manager existing B assignment 15 Nov: narrow native backend admission for actual roster40; common/web24 unchanged",
+  "base": "30bd603d0555446b8760fb54406b724512ac254b",
+  "files": [
+    {
+      "path": "extensions/src/server/game/phone-controller.ts",
+      "sha256": "9232b51b6cf22b73405fc211d68b7344af7795dfbeb96f86d591fce8e118343c"
+    },
+    {
+      "path": "packages/socket/src/services/game/player-manager.ts",
+      "sha256": "ffead1639365e71fd9033d2bda97bcfc65224ad181a635cb5b4ba7a4830e095c"
+    }
+  ],
+  "upstreamHook": {
+    "path": "packages/socket/src/services/game/player-manager.ts",
+    "symbols": [
+      "PlayerManager.joinResolvedRoster",
+      "PlayerManager.addPlayer (private shared existing side effects)"
+    ],
+    "rationale": "Resolved roster accepts trim-length1..40 while ordinary shared validator remains24; keep one Player/event creation implementation and duplicate guard",
+    "test": "Scoped actual controller+PlayerManager admission/callback/40boundary/fallback24/event counts/warm rebind/sentinels; C separately owns real authority/freshGame/invitation proof"
+  },
+  "downstreamHook": {
+    "path": "extensions/src/server/game/phone-controller.ts",
+    "symbols": [
+      "PhonePlayerPort",
+      "GamePhoneController.joinOrRebindPhoneCaller"
+    ],
+    "rationale": "Only an actual resolved roster entry, revalidated inside existing billing callback, can call narrow hook; fallback stays ordinary join"
+  },
+  "forbiddenEdits": [
+    "common validators/schemas",
+    "roster logic/data",
+    "fourcore",
+    "other upstream paths",
+    "production/customer state"
+  ]
+}

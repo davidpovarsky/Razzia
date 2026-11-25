@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<stdin>", line 47, in <module>
+AssertionError: Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+  File "/usr/lib/python3.11/pathlib.py", line 1059, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1045, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/phase3-999ed90c/deps/node_modules/@modelcontextprotocol/server/package.json'
+
+
+Controller failed; preserved evidence: C:\Users\DAVID\Code\Razzia-worktrees\tadazz-editor-hebrew-20261118\docs\extensions\plans\phase3-takeover-20261117\tadazz-codex-8f965fe8e63a-b3861e54

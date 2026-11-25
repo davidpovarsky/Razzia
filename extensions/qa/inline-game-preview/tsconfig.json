@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "../../src/site/components/game-preview/**/*.ts",
+    "../../src/site/tests/inline-game-preview-*.test.ts",
+    "./vitest.config.ts"
+  ]
+}

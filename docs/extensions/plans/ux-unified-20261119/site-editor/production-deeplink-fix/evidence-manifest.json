@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "name": "browser-receipt.json",
+      "bytes": 4277,
+      "sha256": "be59742f241efe8181d0d7e91520dcbd2eabdc4eaf5a3fe1bb9d95f26ae7e383"
+    },
+    {
+      "name": "build-receipt.json",
+      "bytes": 319,
+      "sha256": "020ad8690fd7f11bff8e0fc5c624ab09d76a5edc4c66a2c1d1041b51722cff65"
+    },
+    {
+      "name": "built-document-entry.json",
+      "bytes": 1381,
+      "sha256": "244725af3dcf4135e7189455337223fefc7f6e469164807dec5de72d6b5ad784"
+    },
+    {
+      "name": "qa-server-cleanup.json",
+      "bytes": 1113,
+      "sha256": "dd5907448e68d40c0b328e0ef2dd7c3850e403faec50a648384cde7bd47a3d42"
+    },
+    {
+      "name": "RESULTS.md",
+      "bytes": 3652,
+      "sha256": "cb358b1588f749dd79cd9cb0b17921aefb7ce0e0090081e6357c938d73946ad6"
+    },
+    {
+      "name": "rtl-question-320x640.png",
+      "bytes": 90683,
+      "sha256": "8e25e3359b88d461d79792b16de5848bfee5109f132847e070a9022338b432e3"
+    },
+    {
+      "name": "saved-reloaded-390x844.png",
+      "bytes": 178836,
+      "sha256": "08c506e94f99c7b511eccf7e9c55d3fd2ae2266c0240e31460b144fb7d35b767"
+    },
+    {
+      "name": "typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

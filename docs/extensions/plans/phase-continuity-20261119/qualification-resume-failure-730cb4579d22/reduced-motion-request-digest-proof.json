@@ -1,0 +1,132 @@
+{
+  "kind": "independent analysis of existing qualification evidence; no execution or retry",
+  "recordedAtUtc": "2026-11-19T19:32:12.518892+00:00",
+  "sourceSha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "run": "tadazz-codex-fullshow-730cb4579d22-64fcadf1",
+  "receipt": {
+    "path": "full-show/receipt.json",
+    "sha256": "9b23783b3acfae7d72d131dd533d90092eb0f511eed082bbec95cf4de3377d78",
+    "pass": 39,
+    "fail": 1,
+    "rendererFixtureCount": 44,
+    "pageErrorCount": 0,
+    "requestFailureCount": 0
+  },
+  "sourceContext": {
+    "path": "extensions/qa/phase3-full-show/browser-verify.mjs",
+    "sha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+    "lines": "1504-1588",
+    "sequence": "After all locale assertions and the English reset, Classic navigates to opening, emulates no-preference, opens display, clicks reduced motion normally, then waits up to the existing 10000ms for the unchecked visible input."
+  },
+  "failedCheck": {
+    "name": "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "status": "FAIL",
+    "error": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-testid=\"full-show-reduce-motion\"]:not(:checked)') to be visible\n",
+    "stack": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-testid=\"full-show-reduce-motion\"]:not(:checked)') to be visible\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1588:16\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:623:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1504:7",
+    "budgetMs": 120000,
+    "ms": 50951
+  },
+  "digestMethod": "SHA256 of UTF-8 JSON with recursively lexicographic sorted keys and no whitespace. Reconstructed input uses contractVersion 0.1.0, selectionVersion 3, expectedRevision 9, draftId and selectedChapterId from each recorded successful preview result, and context {mode:demo,role:spectator,locale:en,reducedMotion:true|false,join:unavailable-demo,actions:synthetic-only}.",
+  "digestProofs": [
+    {
+      "receiptCallArrayIndex": 393,
+      "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+      "revision": 9,
+      "recordedInputDigest": "0e0d66cab501a4480ba8764ef91f91bbcc32cd525f8035bdbabcc596a00aad38",
+      "candidateInputDigestsByReducedMotion": {
+        "true": "0e0d66cab501a4480ba8764ef91f91bbcc32cd525f8035bdbabcc596a00aad38",
+        "false": "1769a5bce824451cac0bf7faa41cfb22489803dea3a848d07ed6822c020fe54c"
+      },
+      "onlyTrueMatches": true,
+      "acknowledgedOk": true
+    },
+    {
+      "receiptCallArrayIndex": 402,
+      "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+      "revision": 9,
+      "recordedInputDigest": "0e0d66cab501a4480ba8764ef91f91bbcc32cd525f8035bdbabcc596a00aad38",
+      "candidateInputDigestsByReducedMotion": {
+        "true": "0e0d66cab501a4480ba8764ef91f91bbcc32cd525f8035bdbabcc596a00aad38",
+        "false": "1769a5bce824451cac0bf7faa41cfb22489803dea3a848d07ed6822c020fe54c"
+      },
+      "onlyTrueMatches": true,
+      "acknowledgedOk": true
+    },
+    {
+      "receiptCallArrayIndex": 404,
+      "chapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+      "revision": 9,
+      "recordedInputDigest": "77cce8258768354144a21f578515e04e213608d8d014b72f4d0e058acce26146",
+      "candidateInputDigestsByReducedMotion": {
+        "true": "77cce8258768354144a21f578515e04e213608d8d014b72f4d0e058acce26146",
+        "false": "b52505ebe366968c354839572a345dd9e22129c70bc6f7b632c8e02c1b6487f6"
+      },
+      "onlyTrueMatches": true,
+      "acknowledgedOk": true
+    },
+    {
+      "receiptCallArrayIndex": 405,
+      "chapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:voting",
+      "revision": 9,
+      "recordedInputDigest": "09770fa66b2b545cf01f00a3db4430300ce2b808490431e41dba8c3b0d4ee776",
+      "candidateInputDigestsByReducedMotion": {
+        "true": "09770fa66b2b545cf01f00a3db4430300ce2b808490431e41dba8c3b0d4ee776",
+        "false": "682e1fe424a18d942445bd5ea017aedfd398ce14068d8f3ea99bcabcd5db0795"
+      },
+      "onlyTrueMatches": true,
+      "acknowledgedOk": true
+    }
+  ],
+  "postOpeningHostCallWindow": [
+    {
+      "receiptCallArrayIndex": 403,
+      "name": "get_game_draft_summary",
+      "recordedInputDigest": "fc2c8d3c7bbc8a10d0a1c90473b052c7bf256d6b0eea2eafb6734d4cda27df89",
+      "acknowledgedOk": true
+    },
+    {
+      "receiptCallArrayIndex": 404,
+      "name": "preview_show",
+      "recordedInputDigest": "77cce8258768354144a21f578515e04e213608d8d014b72f4d0e058acce26146",
+      "acknowledgedOk": true
+    },
+    {
+      "receiptCallArrayIndex": 405,
+      "name": "preview_show",
+      "recordedInputDigest": "09770fa66b2b545cf01f00a3db4430300ce2b808490431e41dba8c3b0d4ee776",
+      "acknowledgedOk": true
+    }
+  ],
+  "postOpeningRequestEvents": [
+    {
+      "at": "2026-11-19T18:42:12.610Z",
+      "responseAt": "2026-11-19T18:42:12.916Z",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "at": "2026-11-19T18:42:13.500Z",
+      "responseAt": "2026-11-19T18:42:14.078Z",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "at": "2026-11-19T18:42:18.877Z",
+      "responseAt": "2026-11-19T18:42:19.189Z",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "at": "2026-11-19T18:42:22.228Z",
+      "responseAt": "2026-11-19T18:42:22.589Z",
+      "method": "POST",
+      "status": 200
+    }
+  ],
+  "conclusion": "No reducedMotion:false preview request reached the recorded host in the post-opening failure window. The only two recorded previews in that window both match reducedMotion:true exactly and both acknowledged successfully. This is not evidence of a false request that was accepted and later overwritten.",
+  "limits": [
+    "The canonical failed run did not capture pointer, click or React onChange events. Their exact historical delivery mechanism is unknown.",
+    "The separately captured old-source baseline proves the disabled-preference hazard; the fixed held-ACK matrix proves the new request ordering behavior. Those are separate evidence, not inferred events in this failed run.",
+    "This report analyzes the collected failed receipt only; it does not rerun tests, change assertions, modify product source or qualify a release."
+  ]
+}

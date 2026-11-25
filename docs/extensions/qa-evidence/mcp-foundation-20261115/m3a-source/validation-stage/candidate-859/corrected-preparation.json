@@ -1,0 +1,12 @@
+{
+  "kind": "LOCAL_SOURCE_PACKAGING_ONLY",
+  "sourceCommit": "859b9d76fce4a3b9a323a3ae502e2af5367ef1ff",
+  "inputFiles": 150,
+  "overlayFiles": 24,
+  "overlayBytes": 118116,
+  "archiveBytes": 44169,
+  "archiveSha256": "ad9ccd00ffda727ea2eb2d36e8135385f890b8bc14e9604724ff214fde057cd6",
+  "fullInputManifestSha256": "71c8b82b9d89287428a11a1d4fefb7980eee63b9ad72f5769e3674a0de0d20ee",
+  "oldArtifactsPreserved": true,
+  "functionalChecks": "NOT_RUN_ON_CORRECTED_SOURCE"
+}

@@ -1,0 +1,23 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/presentation/show-library-preview/preview-candidate.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 392[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/installation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 34205[2mms[22m[39m
+   [32m✓[39m durable theme installation [2m(5)[22m
+     [33m[2m✓[22m[39m runs actual bytes through validation, independent approval, staging, publishing, restart and rollback[33m 33093[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects imported code-backed themes until an exact committed build AND platform review exist[33m 315[2mms[22m[39m
+     [33m[2m✓[22m[39m supports review rejection and CAS draft revision, rejects stale approval and every contributor's self-review[33m 399[2mms[22m[39m
+ [32m✓[39m src/components/theme-builder/document.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1202[2mms[22m[39m
+   [32m✓[39m Theme Builder atomic bounded authoring [2m(7)[22m
+     [33m[2m✓[22m[39m bounds history and preserves the save fingerprint when editing after save begins[33m 803[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/builder-routes.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 702[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/upload-security.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 392[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 15:36:17
+[2m   Duration [22m 49.71s[2m (tests 80%, transform 10%, import 9%)[22m
+
+[2m    Isolate [22m [33m5 workers spawned[39m[2m · ~665ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~2.66s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+

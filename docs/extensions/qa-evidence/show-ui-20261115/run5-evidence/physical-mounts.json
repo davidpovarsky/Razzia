@@ -1,0 +1,30 @@
+[
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/web/node_modules",
+    "destination": "/work/packages/web/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/socket/node_modules",
+    "destination": "/work/packages/socket/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/e2e/node_modules",
+    "destination": "/work/packages/e2e/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view5",
+    "destination": "/work"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/node_modules",
+    "destination": "/work/extensions/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/common/node_modules",
+    "destination": "/work/packages/common/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules",
+    "destination": "/work/node_modules"
+  }
+]

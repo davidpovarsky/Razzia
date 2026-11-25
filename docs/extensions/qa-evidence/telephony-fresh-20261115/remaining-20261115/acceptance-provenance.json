@@ -1,0 +1,19 @@
+{
+  "latest_source": "66d794a4c7947af355de7dc27217e03b72b1a759",
+  "auth5_source": "2a888de9c832670ca657a5774a85f70f9a38e3ad",
+  "application_diff_from_formatter": [],
+  "preserved_old_fixture_receipt_diff": [],
+  "auth5": {
+    "sha": "2a888de9c832670ca657a5774a85f70f9a38e3ad",
+    "finished": "2026-11-15T16:35:59.308Z",
+    "test_exit": 0,
+    "old10_100_18_rerun": false
+  },
+  "crash": {
+    "sha": "66d794a4c7947af355de7dc27217e03b72b1a759",
+    "finished": "2026-11-15T16:45:36.417Z",
+    "test_exit": 0,
+    "old5_10_100_18_rerun": false,
+    "hardware_power_loss_tested": false
+  }
+}

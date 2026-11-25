@@ -1,0 +1,4 @@
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/actual-game.ts(205,12): error TS2339: Property 'closeAllConnections' does not exist on type 'ServerType'.
+  Property 'closeAllConnections' does not exist on type 'Http2SecureServer<typeof IncomingMessage, typeof ServerResponse, typeof Http2ServerRequest, typeof Http2ServerResponse>'.
+../delta/extensions/src/server/phone-lifecycle-v2/store.ts(142,12): error TS2565: Property 'sql' is used before being assigned.
+{"scope":"V2A prototype and Node-only harness with transitive real Game imports","typescript":"7.0.2","exit_code":1,"signal":null,"full_project_check":false}

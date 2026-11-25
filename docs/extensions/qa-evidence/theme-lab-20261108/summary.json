@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "bc7ba6d8135825fdc12563c43919eda558ed42ed",
+  "url": "https://theme-lab.132.145.25.168.sslip.io",
+  "image": "sha256:e0bc48ecd01c6a79c63e244337e07334c85226bcb819247361ab904c4ae923b3",
+  "unitTests": 985,
+  "rootTests": 365,
+  "extensionTests": 620,
+  "classicBrowserTests": 2,
+  "loopbackBrowserTests": 3,
+  "publicBrowserTests": 14,
+  "releaseRegressionBrowserTests": 6,
+  "buildInputs": 973,
+  "sourceMismatches": 0,
+  "themes": [
+    "Classic",
+    "Cosmic Night",
+    "Jade Studio"
+  ],
+  "savedGames": 6,
+  "productionContainerUnchangedByTask": true
+}

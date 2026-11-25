@@ -1,0 +1,20 @@
+{
+  "format": "tadazz-theme-worker-timer-fixture",
+  "asanaTaskId": "1220708526935641",
+  "tenant": "452af5625f3f00dd05982533702d0a98746b2d50294b544854f69399d904fd5e",
+  "uploadId": "2692771b-32f8-445e-bf15-1947471fd6b3",
+  "kind": "complete",
+  "packageId": "fixture-complete-arcade",
+  "version": "1.0.0",
+  "themeId": "fixture-arcade",
+  "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "archiveBytes": 520223,
+  "expectedCompiledThemeIds": [
+    "fixture-arcade"
+  ],
+  "generatedOnly": true,
+  "customerData": false,
+  "sourceCodeExecutedDuringPreparation": false,
+  "archiveProvenance": "Same pinned generated Complete archive in a new, separately owned recovery timer job",
+  "attempt": "r2"
+}

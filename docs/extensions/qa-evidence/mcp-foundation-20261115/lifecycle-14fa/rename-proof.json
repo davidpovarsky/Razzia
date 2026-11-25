@@ -1,0 +1,14 @@
+{
+  "originalSuites": 8,
+  "originalTestBytesUnchanged": true,
+  "parentPattern": "src/**/*.test.ts",
+  "parentIntersection": [],
+  "originalPrivateCoverage": 8,
+  "privatePattern": "tests/server/*.nodecheck.ts",
+  "privateCoverage": 9,
+  "newLifecycleFiles": [
+    "extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts"
+  ],
+  "parentConfigSha256": "73742e609bb01e7567e054e7b0c3475d6ec973e1bb4a51f4b131374198db0d30",
+  "privateInvocation": "tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.nodecheck.ts"
+}

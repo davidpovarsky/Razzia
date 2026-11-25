@@ -1,0 +1,190 @@
+{
+  "passed": false,
+  "sourceSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "runtimeQaSourceEqualsCandidate": false,
+  "isolatedNativeHost": true,
+  "customerMountUsed": false,
+  "realEmailSent": false,
+  "manualListeningPerformed": false,
+  "results": [
+    {
+      "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+      "passed": true,
+      "originals": 8,
+      "rounds": 32,
+      "anonymousInstallDenied": true,
+      "crossAccountReadDenied": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    },
+    {
+      "name": "native-pause-replay-previous-and-confirmed-skip",
+      "passed": true,
+      "retainedPausedTimer": true,
+      "replayDiscardsOldVotes": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "choice-layout-royal-quiz-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-neon-arcade",
+      "passed": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-retro-tv",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "choice-layout-retro-tv-5-voting",
+        "choice-layout-retro-tv-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-magic-storybook",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "question-sequence-magic-storybook-4-results",
+        "choice-layout-magic-storybook-5-voting",
+        "choice-layout-magic-storybook-5-results",
+        "question-sequence-magic-storybook-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-crystal-future",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "choice-layout-crystal-future-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-carnival-pop",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "choice-layout-carnival-pop-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-sports-arena",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "question-sequence-sports-arena-4-results",
+        "choice-layout-sports-arena-5-voting",
+        "choice-layout-sports-arena-5-results",
+        "question-sequence-sports-arena-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "reduced-motion-native-two-to-five-choices-votes-images-and-audio-mystery-noir",
+      "passed": false,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false,
+      "layoutFailures": [
+        "choice-layout-mystery-noir-5-results"
+      ],
+      "questions": 4,
+      "realPlayers": 2,
+      "tie": true,
+      "zeroVotes": true,
+      "answerImages": 14,
+      "questionImages": 1,
+      "votingLayoutChecks": 4,
+      "resultsLayoutChecks": 4
+    },
+    {
+      "name": "original-browser-console-and-resource-integrity",
+      "passed": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    }
+  ],
+  "error": "AggregateError: 14 collected native geometry/sequence assertions failed\n    at verifyOriginalThemeBrowser (file:///overlay/extensions/qa/original-themes/browser-verify.mjs:1375:13)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)"
+}

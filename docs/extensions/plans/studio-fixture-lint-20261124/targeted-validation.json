@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-11-24T02:53:52.572374+00:00",
+  "baseCommit": "c5028c4cb9fc839aa514edec47cae2a8a8bff1b0",
+  "baseTree": "70715a2d98872148fcc50588af74ad8fd2793d88",
+  "versions": {
+    "node": "v26.13.1",
+    "oxlint": "Version: 1.90.0",
+    "prettier": "3.9.10"
+  },
+  "checks": {
+    "format": {
+      "command": [
+        "/mnt/development/tooling/tadazz/node-v26.13.1-linux-arm64/bin/node",
+        "/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-studio-recovery-20261124/node_modules/prettier/bin/prettier.cjs",
+        "--write",
+        "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx",
+        "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts",
+        "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs",
+        "docs/extensions/plans/studio-recovery-20261124/tsconfig.json"
+      ],
+      "returncode": 0,
+      "output": "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx 274ms (unchanged)\ndocs/extensions/plans/studio-recovery-20261124/browser-i18n.ts 8ms (unchanged)\ndocs/extensions/plans/studio-recovery-20261124/browser-check.mjs 164ms (unchanged)\n"
+    },
+    "lint": {
+      "command": [
+        "/mnt/development/tooling/tadazz/node-v26.13.1-linux-arm64/bin/node",
+        "/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-studio-recovery-20261124/node_modules/oxlint/bin/oxlint",
+        "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx",
+        "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts",
+        "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs"
+      ],
+      "returncode": 0,
+      "output": "Found 0 warnings and 0 errors.\nFinished in 1.6s on 3 files with 233 rules using 2 threads.\n"
+    }
+  },
+  "fileSHA256": {
+    "oxlint.config.ts": "beb3b15821ab22c765d6106709c85e148764b73e4eaf0687d4d881b358a76de7",
+    "tsconfig.json": "d56ba48424503b6b02f99f8eb319e9ec7c1036c5cc0d31cc8a0795391937c474",
+    "packages/web/tsconfig.app.json": "572c11faca80fc1bc246142c0d9927461dcf3db98ffb6f646a64b672ed99eb61",
+    "package.json": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd",
+    "packages/web/package.json": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02",
+    "extensions/package.json": "368072b66177bc2aea0bd938ba9be493eb1ae292b4c869f677cc59062c3cf5b3",
+    "pnpm-lock.yaml": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952",
+    "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx": "26d607acc5495df98ebc113775bee219c32d6c58f6dcced3de183a8255bbde54",
+    "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts": "087c5cabf68719451c9a989f0b05e9f8541a9f2eb6ba2c5a1106179827c7baf4",
+    "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs": "b9ca3a2a3b2955b89f9607d2c906b55ceecf1ce624111809d7a38b36a062b2bb",
+    "docs/extensions/plans/studio-recovery-20261124/tsconfig.json": "139bcd26ed1aeef0deb430f388471f780a8c15332184fb847ccc7f1dbb341ef7"
+  }
+}

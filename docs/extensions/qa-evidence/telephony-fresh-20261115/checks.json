@@ -1,0 +1,41 @@
+{
+  "node_version": "v22.17.0",
+  "checks": [
+    {
+      "command": "node --check gateway",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check faults",
+      "exit_code": 0
+    },
+    {
+      "command": "node extensions/qa/tds-boundary.mjs --files-only",
+      "exit_code": 0,
+      "result": {
+        "status": "PASS",
+        "base": "fb6c7631999f33c8fb47638a99920e450f326fbf",
+        "protectedFiles": 602,
+        "unchangedHashes": 593,
+        "approvedModifiedHashes": [
+          "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+          "packages/web/src/features/game/components/GameWrapper.tsx",
+          "packages/web/src/features/game/components/HistoryDialog.tsx",
+          "packages/web/src/features/game/components/HostPlayersModal.tsx",
+          "packages/web/src/features/game/components/HostShortcutsDialog.tsx",
+          "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+          "packages/web/src/features/game/components/states/Room.tsx",
+          "packages/web/src/features/game/components/tadazz-show/NativeGameLayout.tsx",
+          "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx"
+        ],
+        "approvedSeams": [],
+        "changedPaths": [],
+        "manifest": "docs\\extensions\\plans\\tds-freeze.json"
+      }
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ]
+}

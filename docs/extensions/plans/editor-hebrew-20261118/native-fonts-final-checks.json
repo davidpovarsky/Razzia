@@ -1,0 +1,22 @@
+[
+  {
+    "name": "lint-fix",
+    "code": 0,
+    "output": "Found 0 warnings and 0 errors.\nFinished in 2.0s on 3 files with 233 rules using 12 threads.\n"
+  },
+  {
+    "name": "format",
+    "code": 0,
+    "output": "\u001b[90mextensions/src/presentation/show-library-preview/application-runtime-entry.tsx\u001b[39m 253ms (unchanged)\nextensions/src/presentation/show-library-preview/native-fonts.ts 36ms\n\u001b[90mextensions/src/presentation/show-library-preview/native-fonts.test.ts\u001b[39m 37ms (unchanged)\n"
+  },
+  {
+    "name": "lint",
+    "code": 0,
+    "output": "Found 0 warnings and 0 errors.\nFinished in 1.9s on 3 files with 233 rules using 12 threads.\n"
+  },
+  {
+    "name": "font-tests",
+    "code": 0,
+    "output": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv5.0.3 \u001b[39m\u001b[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions\u001b[39m\n\n \u001b[32m✓\u001b[39m src/presentation/show-library-preview/native-fonts.test.ts \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 15\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m1 passed\u001b[39m\u001b[22m\u001b[90m (1)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m5 passed\u001b[39m\u001b[22m\u001b[90m (5)\u001b[39m\n\u001b[2m   Start at \u001b[22m 15:58:56\n\u001b[2m   Duration \u001b[22m 383ms\u001b[2m (import 57%, transform 29%, tests 9%, worker 4%)\u001b[22m\n\n"
+  }
+]

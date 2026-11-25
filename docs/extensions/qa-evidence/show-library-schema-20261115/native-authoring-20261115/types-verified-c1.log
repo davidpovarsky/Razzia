@@ -1,0 +1,6 @@
+COMMAND: C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe extensions/node_modules/typescript/bin/tsc --project extensions/src/core/show-library/tsconfig.focused.json
+WORKDIR: C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-show-library-20261115
+SOURCE: c1cabd878a1bcde51ac7da05d8c72ded3e8125cc
+STARTED_UTC: 2026-11-15T15:04:05.9131203Z
+EXIT_CODE: 0
+FINISHED_UTC: 2026-11-15T15:04:07.6741540Z

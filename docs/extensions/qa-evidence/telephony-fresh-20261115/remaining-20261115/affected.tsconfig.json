@@ -1,0 +1,26 @@
+{
+  "extends": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\packages\\socket\\node_modules\\@types",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\node_modules\\@types"
+    ]
+  },
+  "files": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\actual-auth-backend.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-crash.child.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-crash.node.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-negative.node.ts"
+  ],
+  "include": []
+}

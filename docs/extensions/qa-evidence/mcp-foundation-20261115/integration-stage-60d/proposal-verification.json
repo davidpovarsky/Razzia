@@ -1,0 +1,22 @@
+{
+  "kind": "DOCUMENTATION_ONLY_SOURCE_INSPECTION",
+  "acceptedMcpSource": "60d289821df631d55c91d48f4f753197d85d0041",
+  "acceptanceReportSha256": "363933bbfe23b837b5432541edaf67215d288916ed05b0625d1fcdf9e68d6d23",
+  "independentTargetedCases": "6/6 PASS, test exit0; separate outer SSH assertion syntax exit1 retained",
+  "moduleInputsUnchanged": 129,
+  "moduleFilesUnchanged": 32,
+  "sourceWrites": 0,
+  "proposalLinksResolved": 10,
+  "acceptedSbSource": "81d5b8f7c0bd3931982c2b0d5a3a13b86e523a8c",
+  "sbPort": 3,
+  "sbIdentityRule": 2,
+  "sbCompiledPins": 0,
+  "newTestsInstallsRunners": "NONE",
+  "proposalStatus": "M3A PROPOSED ONLY; source lease not expanded",
+  "blockedGates": [
+    "Host OAuth actual client/grant/account scopes absent",
+    "Accepted integrated C1 reservation absent from60d",
+    "R2 native read/import root identity changes not integrated; no WIP59xx dependency"
+  ],
+  "originalTasks": "MCP02-05/HQ OPEN"
+}

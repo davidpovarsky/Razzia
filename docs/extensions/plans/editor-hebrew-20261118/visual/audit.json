@@ -1,0 +1,530 @@
+{
+  "ok": true,
+  "checks": [
+    "Text-only hides image picker; live preview visible",
+    "Image mode reveals image picker",
+    "participants hides unrelated card-kind bar",
+    "settings hides unrelated card-kind bar",
+    "launch hides unrelated card-kind bar",
+    "Four tabs fit 1920x1080",
+    "Four tabs fit 1280x800",
+    "Four tabs fit 1024x768",
+    "Four tabs fit 844x768",
+    "Four tabs fit 768x768",
+    "Four tabs fit 390x844",
+    "Four tabs fit 320x640",
+    "Theme copy retains readable width at320",
+    "Image-only media picker omits irrelevant type filter"
+  ],
+  "errors": [],
+  "httpErrors": [
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    }
+  ],
+  "metrics": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 811.65625,
+          "right": 895.140625,
+          "top": 14,
+          "bottom": 42,
+          "width": 83.484375
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 895.140625,
+          "right": 1013.9375,
+          "top": 14,
+          "bottom": 42,
+          "width": 118.796875
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 1013.9375,
+          "right": 1110.40625,
+          "top": 14,
+          "bottom": 42,
+          "width": 96.46875
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 1110.40625,
+          "right": 1200.21875,
+          "top": 14,
+          "bottom": 42,
+          "width": 89.8125
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 491.65625,
+          "right": 575.140625,
+          "top": 14,
+          "bottom": 42,
+          "width": 83.484375
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 575.140625,
+          "right": 693.9375,
+          "top": 14,
+          "bottom": 42,
+          "width": 118.796875
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 693.9375,
+          "right": 790.40625,
+          "top": 14,
+          "bottom": 42,
+          "width": 96.46875
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 790.40625,
+          "right": 880.21875,
+          "top": 14,
+          "bottom": 42,
+          "width": 89.8125
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 363.65625,
+          "right": 447.140625,
+          "top": 14,
+          "bottom": 42,
+          "width": 83.484375
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 447.140625,
+          "right": 565.9375,
+          "top": 14,
+          "bottom": 42,
+          "width": 118.796875
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 565.9375,
+          "right": 662.40625,
+          "top": 14,
+          "bottom": 42,
+          "width": 96.46875
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 662.40625,
+          "right": 752.21875,
+          "top": 14,
+          "bottom": 42,
+          "width": 89.8125
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "width": 844,
+      "height": 768,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 273.65625,
+          "right": 357.140625,
+          "top": 14,
+          "bottom": 42,
+          "width": 83.484375
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 357.140625,
+          "right": 475.9375,
+          "top": 14,
+          "bottom": 42,
+          "width": 118.796875
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 475.9375,
+          "right": 572.40625,
+          "top": 14,
+          "bottom": 42,
+          "width": 96.46875
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 572.40625,
+          "right": 662.21875,
+          "top": 14,
+          "bottom": 42,
+          "width": 89.8125
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 844,
+      "height": 768,
+      "scroll": 844,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 844,
+      "height": 768,
+      "scroll": 844,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 844,
+      "height": 768,
+      "scroll": 844,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 844,
+      "height": 768,
+      "scroll": 844,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "width": 768,
+      "height": 768,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 361.4375,
+          "right": 444.921875,
+          "top": 12,
+          "bottom": 40,
+          "width": 83.484375
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 444.921875,
+          "right": 563.71875,
+          "top": 12,
+          "bottom": 40,
+          "width": 118.796875
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 563.71875,
+          "right": 660.1875,
+          "top": 12,
+          "bottom": 40,
+          "width": 96.46875
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 660.1875,
+          "right": 750,
+          "top": 12,
+          "bottom": 40,
+          "width": 89.8125
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 768,
+      "height": 768,
+      "scroll": 768,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 768,
+      "height": 768,
+      "scroll": 768,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 768,
+      "height": 768,
+      "scroll": 768,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 768,
+      "height": 768,
+      "scroll": 768,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 14,
+          "right": 194,
+          "top": 56,
+          "bottom": 88,
+          "width": 180
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 196,
+          "right": 376,
+          "top": 56,
+          "bottom": 88,
+          "width": 180
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 14,
+          "right": 194,
+          "top": 90,
+          "bottom": 122,
+          "width": 180
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 196,
+          "right": 376,
+          "top": 90,
+          "bottom": 122,
+          "width": 180
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "navigation": [
+        {
+          "id": "studio-tab-questions",
+          "left": 14,
+          "right": 159,
+          "top": 56,
+          "bottom": 88,
+          "width": 145
+        },
+        {
+          "id": "studio-tab-participants",
+          "left": 161,
+          "right": 306,
+          "top": 56,
+          "bottom": 88,
+          "width": 145
+        },
+        {
+          "id": "studio-tab-settings",
+          "left": 14,
+          "right": 159,
+          "top": 90,
+          "bottom": 122,
+          "width": 145
+        },
+        {
+          "id": "studio-tab-launch",
+          "left": 161,
+          "right": 306,
+          "top": 90,
+          "bottom": 122,
+          "width": 145
+        }
+      ]
+    },
+    {
+      "tab": "questions",
+      "width": 320,
+      "height": 640,
+      "scroll": 320,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "participants",
+      "width": 320,
+      "height": 640,
+      "scroll": 320,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "settings",
+      "width": 320,
+      "height": 640,
+      "scroll": 320,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    },
+    {
+      "tab": "launch",
+      "width": 320,
+      "height": 640,
+      "scroll": 320,
+      "font": "\"Rubik Variable\", sans-serif",
+      "dir": "ltr"
+    }
+  ]
+}

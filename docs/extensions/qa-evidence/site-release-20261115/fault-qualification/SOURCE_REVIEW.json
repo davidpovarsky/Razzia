@@ -1,0 +1,26 @@
+{
+  "scope": "Fresh synthetic uncertain start and native syscall failures; unchanged352734 helper and88e1 controller. No175b reuse, no uncertain retry, no product/source change.",
+  "cases": [
+    {
+      "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+      "mode": "drop-start-ack"
+    },
+    {
+      "nonce": "f8e1688d4d504cddbf90113c70c26998",
+      "mode": "native-write-eio"
+    },
+    {
+      "nonce": "83e631a8f8b94f469665beef772b02b8",
+      "mode": "native-fsync-eio"
+    },
+    {
+      "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+      "mode": "native-readonly-erofs"
+    }
+  ],
+  "proxy_delta": "Four new hardcoded nonces/modes only; sleep fault fixture command; readonly-root contract for EROFS;512MiB controller; pre-ACK native-tracer handshake. Engine create/start request bodies, peer/cgroup checks, one-create/one-start slots, source/payload/target gates and transport framing retained.",
+  "native_witness": "Host strace6.8 attaches to exact running Docker exec PID after verifying target cgroup and exact python/INNER/publish argv. ACK/stdin held until TracerPid verified. writeEIO firstwrite and fsyncEIO fourthfsync (backup file) are ptrace-injected syscall errors, never called real disk EIO. ReadonlyEROFS is kernel rejection with trace only. Lost ACK withholds actual Engine101 after actual Running=true and sends no payload.",
+  "authority": "Current owner-activated wave and sole-manager instruction to qualify faults; no oldmanager IDs/signatures forged. Fresh UID1001 lease/control for each fixture; root controlled pinned code/logs.",
+  "resources": "New serial job.5CPU/1024MiB total (app256/controller512/proxy128/host128); old pair retained under old claim; 24MiB growth inside remaining200MiB QA phase; existing artifact hard-link bodies not duplicated; inode records and actual growth samples. Stop only fresh containers after same exec terminal and controller action finished; retain containers/files/holds. Unknown evidence leaves resources intact/inconclusive.",
+  "coverage_limits": "No repeat metadata/positive rollback; no full normal web server in sleep fault containers; no post-rename EIO, hardware powerloss or real network outage proof. No automatic production authorization from results."
+}

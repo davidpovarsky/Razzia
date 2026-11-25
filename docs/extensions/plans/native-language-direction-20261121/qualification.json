@@ -1,0 +1,346 @@
+{
+  "run": "tadazz-native-language-36d31499",
+  "container": "d16696883e7173a3cdff840532ea0e77c30d3421ef79009ed30b9a99f6e9fe8c",
+  "containerStopped": true,
+  "sourceRevision": "a9bbb7703f329487a3b9ef6623a415d49bf94aa1",
+  "files": {
+    "presentation-locale.tsx": "995e062bd0241a37c182941f0111b947b38041418455d063c1a5c299fe8f997c",
+    "components.tsx": "b3c13ce4ec82010589679b4dc814abe665e46a0ada98d550deeb80adcacee757",
+    "TadazzShowView.tsx": "1c600ad68f7d732460ec33bec0c270c1541278555b7db0adc91a3654d2fd48a3",
+    "native-language-direction.mjs": "93deb5dcf797bafac01591271cf67e6c5e2e3ee462927ec7b3ac868661b8b7a1"
+  },
+  "runs": [
+    {
+      "phase": "before",
+      "exit": 1,
+      "receipt": {
+        "fixture": "actual native adapter/director under Hebrew document; previous actual provider-only scope versus shared PresentationLocale",
+        "source": "/src",
+        "before": true,
+        "checks": [
+          {
+            "name": "english-three: answer order follows show locale",
+            "passed": false,
+            "reading": [
+              0,
+              2,
+              1
+            ]
+          },
+          {
+            "name": "english-three: terminal punctuation follows question content",
+            "passed": false,
+            "direction": "rtl",
+            "last": {
+              "left": 447.82220458984375,
+              "right": 471.7221984863281,
+              "top": 167.4666748046875
+            },
+            "previous": {
+              "left": 873.9000244140625,
+              "right": 918.1777954101562,
+              "top": 167.4666748046875
+            }
+          },
+          {
+            "name": "english-three: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "english-three: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "english-three: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "hebrew-three: answer order follows show locale",
+            "passed": true,
+            "reading": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "hebrew-three: terminal punctuation follows question content",
+            "passed": true,
+            "direction": "rtl",
+            "last": {
+              "left": 416.4888916015625,
+              "right": 440.3888854980469,
+              "top": 143.43333435058594
+            },
+            "previous": {
+              "left": 440.3777770996094,
+              "right": 453.8555603027344,
+              "top": 143.43333435058594
+            }
+          },
+          {
+            "name": "hebrew-three: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "hebrew-three: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "hebrew-three: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "english-content-hebrew-game: answer order follows show locale",
+            "passed": true,
+            "reading": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "english-content-hebrew-game: terminal punctuation follows question content",
+            "passed": false,
+            "direction": "rtl",
+            "last": {
+              "left": 447.82220458984375,
+              "right": 471.7221984863281,
+              "top": 167.4666748046875
+            },
+            "previous": {
+              "left": 873.9000244140625,
+              "right": 918.1777954101562,
+              "top": 167.4666748046875
+            }
+          },
+          {
+            "name": "english-content-hebrew-game: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "english-content-hebrew-game: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "english-content-hebrew-game: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "english-five: answer order follows show locale",
+            "passed": false,
+            "reading": [
+              0,
+              4,
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "name": "english-five: terminal punctuation follows question content",
+            "passed": false,
+            "direction": "rtl",
+            "last": {
+              "left": 391.8999938964844,
+              "right": 415.79998779296875,
+              "top": 143.43333435058594
+            },
+            "previous": {
+              "left": 954.7000122070312,
+              "right": 974.111083984375,
+              "top": 143.43333435058594
+            }
+          },
+          {
+            "name": "english-five: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "english-five: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "english-five: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "no browser runtime errors",
+            "passed": true,
+            "errors": []
+          }
+        ],
+        "network": "isolated loopback",
+        "documentLocale": "he",
+        "passed": false
+      },
+      "stderr": ""
+    },
+    {
+      "phase": "after",
+      "exit": 0,
+      "receipt": {
+        "fixture": "actual native adapter/director under Hebrew document; previous actual provider-only scope versus shared PresentationLocale",
+        "source": "/src",
+        "before": false,
+        "checks": [
+          {
+            "name": "english-three: answer order follows show locale",
+            "passed": true,
+            "reading": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "english-three: terminal punctuation follows question content",
+            "passed": true,
+            "direction": "ltr",
+            "last": {
+              "left": 894.2666625976562,
+              "right": 918.1777954101562,
+              "top": 167.4666748046875
+            },
+            "previous": {
+              "left": 850,
+              "right": 894.2777709960938,
+              "top": 167.4666748046875
+            }
+          },
+          {
+            "name": "english-three: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "english-three: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "english-three: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "hebrew-three: answer order follows show locale",
+            "passed": true,
+            "reading": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "hebrew-three: terminal punctuation follows question content",
+            "passed": true,
+            "direction": "rtl",
+            "last": {
+              "left": 416.4888916015625,
+              "right": 440.3888854980469,
+              "top": 143.43333435058594
+            },
+            "previous": {
+              "left": 440.3777770996094,
+              "right": 453.8555603027344,
+              "top": 143.43333435058594
+            }
+          },
+          {
+            "name": "hebrew-three: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "hebrew-three: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "hebrew-three: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "english-content-hebrew-game: answer order follows show locale",
+            "passed": true,
+            "reading": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "english-content-hebrew-game: terminal punctuation follows question content",
+            "passed": true,
+            "direction": "ltr",
+            "last": {
+              "left": 894.2666625976562,
+              "right": 918.1777954101562,
+              "top": 167.4666748046875
+            },
+            "previous": {
+              "left": 850,
+              "right": 894.2777709960938,
+              "top": 167.4666748046875
+            }
+          },
+          {
+            "name": "english-content-hebrew-game: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "english-content-hebrew-game: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "english-content-hebrew-game: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "english-five: answer order follows show locale",
+            "passed": true,
+            "reading": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "name": "english-five: terminal punctuation follows question content",
+            "passed": true,
+            "direction": "ltr",
+            "last": {
+              "left": 950.1889038085938,
+              "right": 974.0999755859375,
+              "top": 143.43333435058594
+            },
+            "previous": {
+              "left": 930.7888793945312,
+              "right": 950.2000122070312,
+              "top": 143.43333435058594
+            }
+          },
+          {
+            "name": "english-five: original answer index and correct choice stay bound",
+            "passed": true
+          },
+          {
+            "name": "english-five: question node persists through answers and reveal",
+            "passed": true
+          },
+          {
+            "name": "english-five: per-show language leaves editor document unchanged",
+            "passed": true
+          },
+          {
+            "name": "no browser runtime errors",
+            "passed": true,
+            "errors": []
+          }
+        ],
+        "network": "isolated loopback",
+        "documentLocale": "he",
+        "passed": true
+      },
+      "stderr": ""
+    }
+  ]
+}

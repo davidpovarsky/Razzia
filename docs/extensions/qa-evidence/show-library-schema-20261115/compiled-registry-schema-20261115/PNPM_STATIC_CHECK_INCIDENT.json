@@ -1,0 +1,27 @@
+{
+  "status": "UNEXPECTED_PNPM_AUTOMATIC_CACHE_LINK_DURING_REQUIRED_STATIC_UI_CHECK",
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "ui:check"
+  ],
+  "intent": "Run repository-required static design/freeze checkpoint, not install dependencies",
+  "observed": {
+    "pnpm": "11.24.0",
+    "packagesAdded": 354,
+    "packagesReused": 354,
+    "packagesDownloaded": 0,
+    "node": "22.17.0",
+    "uiCheckExitCode": 1,
+    "designCheck": "PASS",
+    "nextFailure": "ERR_UNKNOWN_FILE_EXTENSION .ts loading platform-ui/tokens.ts"
+  },
+  "response": "Stopped further pnpm commands; preserved ignored dependency links and raw failure; no delete/rollback/install/download/repair followup",
+  "trackedLockAndPackageFiles": "UNCHANGED",
+  "acceptedCore26Hashes": "UNCHANGED",
+  "rawReceipt": "ui-check-receipt.json",
+  "rawLogSha256": "b09929faa1c1b0a5c08a8299611f6f4a32a250674fb8b72ac30b87ec5eafcad3",
+  "functionalTestsOrTypecheck": "NOT_RUN",
+  "serverAllocation": "NONE"
+}

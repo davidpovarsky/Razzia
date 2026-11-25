@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "scope": "actual components with synthetic HTTP; provider transport separately verified by route tests; no real email or account mutation",
+  "cases": [
+    {
+      "name": "Selecting a game launches exactly that game once, without another selector",
+      "passed": true
+    },
+    {
+      "name": "General Prepare retains explicit selection and makes no automatic request",
+      "passed": true
+    },
+    {
+      "name": "An unavailable requested game is never replaced silently with another game",
+      "passed": true
+    },
+    {
+      "name": "Failed direct launch shows one working retry and no second selection",
+      "passed": true
+    },
+    {
+      "name": "History restoration aborts a pending launch and ignores its late reply",
+      "passed": true
+    },
+    {
+      "name": "Game-list retry preserves the originally requested game",
+      "passed": true
+    },
+    {
+      "name": "Contact uses real form submission state and preserves content and key on retry",
+      "passed": true
+    },
+    {
+      "name": "Unavailable contact service disables sending without a fake success",
+      "passed": true
+    },
+    {
+      "name": "Hebrew contact layout stays bounded and uses translated canonical fields",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

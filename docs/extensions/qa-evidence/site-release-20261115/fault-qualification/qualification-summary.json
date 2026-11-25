@@ -1,0 +1,128 @@
+{
+  "status": "PASS_SCOPED_FOUR_QUALIFIED_MODES_WITH_ONE_RETAINED_INCONCLUSIVE",
+  "cases": [
+    {
+      "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+      "mode": "drop-start-ack",
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "execId": "33e1c99d7921db41bfac0ba935d9e9e2144c67b2fbb71951f12c233daf16193b",
+      "holdPhase": "start-intent",
+      "failure": null,
+      "liveFilesVerified": 202,
+      "holdSha256": "9e647faf19565f291f3281d2a82f63ebba26a6c9e0a3be0113864b7fd9bc72f5",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "transcriptSha256": "ca6c5694b3223b2c36be7445a29eee5f5fc5149981e58a56a8fabb52897d48b8",
+      "nativeTraceSha256": null
+    },
+    {
+      "nonce": "f8e1688d4d504cddbf90113c70c26998",
+      "mode": "native-write-eio",
+      "status": "PASS_SCOPED_NATIVE_WRITE_EIO_READBACK",
+      "execId": "6ec085a5b83363be557e965b6614a96fcd3d9a43e7ae99562b6ff73ab82a3f2e",
+      "holdPhase": "stopped",
+      "failure": {
+        "chain": [],
+        "errno": 5,
+        "error": "OSError",
+        "failureJournal": "written",
+        "kind": "storage-or-unknown",
+        "operation": "backup:assets/AccountGateway-BtBiDgZv.js",
+        "phase": "backup",
+        "secondary": null
+      },
+      "liveFilesVerified": 202,
+      "holdSha256": "b9b348598c6c31d22d8a888ffd8fd55f3e534b3c0491a7924b2076b3a8ccb9f2",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "transcriptSha256": "4f705c2bece431dde850530d7f6de94e3a43aabdcab775c3430aeb47412a362b",
+      "nativeTraceSha256": "eae5344326fb535ecf649779939c0a854e45eff681efd82f6643e8d75df6d414"
+    },
+    {
+      "nonce": "83e631a8f8b94f469665beef772b02b8",
+      "mode": "native-fsync-eio",
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "execId": "0ec446735db892fe4b3d39cc7f340e347e27601a712b4e7d9ca80f03f0ad1177",
+      "holdPhase": "stopped",
+      "failure": {
+        "chain": [],
+        "errno": 5,
+        "error": "OSError",
+        "failureJournal": "written",
+        "kind": "storage-or-unknown",
+        "operation": "backup:assets/AccountGateway-BtBiDgZv.js",
+        "phase": "backup",
+        "secondary": null
+      },
+      "liveFilesVerified": 202,
+      "holdSha256": "5d7395457e76e52d97b3bfc2246e68b0c5ff39dac29cd5795ade2ecc3389fcee",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "transcriptSha256": "a39b7c6485bacfa5b43618e00d5e6adc2f0514b312e094f5d656b9bf24bebd6c",
+      "nativeTraceSha256": "71d19a36aa6c7d36115e4602bf737f7c63a071e16aaefa0b61517ee93bb317f5"
+    },
+    {
+      "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+      "mode": "native-readonly-erofs",
+      "status": "INCONCLUSIVE_NATIVE_INSTRUMENTATION_BEFORE_STDIN",
+      "execId": "cdccc5bcc786aa28733115267b3e03257dbea699b5a32c08122a908ff131a735",
+      "holdPhase": "start-intent",
+      "failure": null,
+      "liveFilesVerified": 202,
+      "holdSha256": "8e6f8dc2101b0bcf3b3efa091a5ed5596c7e50caf7dca438797cca060827e13e",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "transcriptSha256": "e5c665932b828aeba14afcfab64999dc0cc9b2af3f8aad08d8c0dd30eca43a45",
+      "nativeTraceSha256": null
+    },
+    {
+      "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+      "mode": "native-readonly-erofs",
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "execId": "25fccf2112a4e74ce0d2241be6ac39ecabd2c20056e245ca30caf4fd97b33295",
+      "holdPhase": "stopped",
+      "failure": {
+        "chain": [],
+        "errno": 30,
+        "error": "OSError",
+        "failureJournal": "not-attempted",
+        "kind": "storage-or-unknown",
+        "operation": "stage-create",
+        "phase": "stage-create-uncertain",
+        "secondary": null
+      },
+      "liveFilesVerified": 202,
+      "holdSha256": "ef9dcd7a4aa7773114815a990aaae9ae951469ad1fdd15d2dab6cdb86290ea8a",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "transcriptSha256": "61a30f99a4c4becb72c7a2a46856886b22582ca1539023bec3d535170bfff328",
+      "nativeTraceSha256": "e18af3c5201dde8f3cfcdfa91e68dc9363eb354cc01245c1fb66c9f3afa30fb1"
+    }
+  ],
+  "qualified_modes": 4,
+  "inconclusive_attempts": 1,
+  "exact_helper_sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2",
+  "unchanged_controller_sha256": "88e1ce3a89edd45eccaf856e10adeabd17dd59b47f95cc7bd240518124877b26",
+  "raw_file_receipts_verified": 94,
+  "effective_isolated_containers_verified_stopped": 10,
+  "public_files_verified_unchanged_each": 202,
+  "new_fault_growth_conservative_bytes": 10240000,
+  "shared_qa_cumulative_conservative_bytes": 171864064,
+  "free_bytes_at_final_accounting": 2614829056,
+  "limits": "EIO and ACK loss induced; EROFS is native kernel rejection. No physical disk/powerloss, post-index-replace fault, fresh WebKit rollback, original publish game-continuity or production authorization claim."
+}

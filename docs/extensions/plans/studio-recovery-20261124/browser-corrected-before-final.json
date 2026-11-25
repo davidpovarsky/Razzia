@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "passedCases": 9,
+  "cases": [
+    "Actual providers: mixed add/duplicate/remove/reorder and quiz/survey/scene conversion Undo; exact IDs, attachments and later field/audio edits preserved",
+    "Existing quiz hard reload: explicit recovery restores composite text, scenes, audio and stable IDs without a server write",
+    "Actual composite save/reopen: revision advances, submitted backup clears, IDs persist and Undo starts empty",
+    "Failed save retained; stale recovery keeps original revision; Save/cancel/Save cannot bypass conflict; explicit server reload clears only its draft/history",
+    "New quiz hard reload retains incomplete form and scene; invalid Save preserves backup; valid composite create clears its own new-draft record",
+    "Late edit during create retains unsaved draft; subsequent Save, conflict reload and explicitly confirmed overwrite all use the persisted quiz identity without duplicate creation",
+    "Two tabs: compare-and-remove preserves newer first-tab backup; explicit discard in second tab removes only its own record",
+    "Different authenticated owner cannot see or overwrite the other owner's pending draft",
+    "Storage quota denial: Hebrew mobile warning appears; normal editing remains functional"
+  ],
+  "saves": [
+    {
+      "method": "PUT",
+      "id": "quiz-one",
+      "expectedRevision": 1
+    },
+    {
+      "method": "PUT",
+      "id": "quiz-one",
+      "expectedRevision": 2
+    },
+    {
+      "method": "POST"
+    },
+    {
+      "method": "POST"
+    },
+    {
+      "method": "PUT",
+      "id": "created-2",
+      "expectedRevision": 1
+    },
+    {
+      "method": "PUT",
+      "id": "created-2",
+      "expectedRevision": 2
+    },
+    {
+      "method": "PUT",
+      "id": "created-2",
+      "expectedRevision": null
+    }
+  ],
+  "browserErrors": [],
+  "scope": "Isolated fixture server; real QuizzEditorProvider, StudioEditorProvider, native header/recovery/history controls and composite save hook. Not production or a full Studio visual qualification.",
+  "testedBrowserBundleSHA256": "384fde4118ac4bf5815889cf74f8e5819a22f124108361c0e787603b1f54684d",
+  "note": "Passed before final formatting and immediate post-create receipt fix; final exact-source run is browser-result.json."
+}

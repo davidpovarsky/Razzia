@@ -1,0 +1,38 @@
+[
+  {
+    "check": "root-units",
+    "exitCode": 0
+  },
+  {
+    "check": "extension-units",
+    "exitCode": 0
+  },
+  {
+    "check": "web-types",
+    "exitCode": 0
+  },
+  {
+    "check": "socket-types",
+    "exitCode": 0
+  },
+  {
+    "check": "extension-types",
+    "exitCode": 0
+  },
+  {
+    "check": "authoring-types",
+    "exitCode": 0
+  },
+  {
+    "check": "e2e-types",
+    "exitCode": 0
+  },
+  {
+    "check": "build",
+    "exitCode": 0
+  },
+  {
+    "check": "root-lint",
+    "exitCode": 1
+  }
+]

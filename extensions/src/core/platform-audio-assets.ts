@@ -1,0 +1,68 @@
+// Exact owner-authorized Creating Worlds recordings promoted without changing their bytes.
+// Provenance: docs/extensions/experience-refinement-20261119/platform-audio-assets.json
+export const PLATFORM_AUDIO_ASSETS = [
+  {
+    key: "voting",
+    assetId: "platform-voting",
+    url: "/tadazz-show/music/platform/tzila-determined-pursuit-20261105.mp3",
+    sha256: "bbd4db307419437e490b9285e594a0c15a30c29de87a384c36567e0c36201f3d",
+    bytes: 2161415,
+    mime: "audio/mpeg",
+  },
+  {
+    key: "openingIntro",
+    assetId: "platform-openingIntro",
+    url: "/tadazz-show/music/platform/tadazz-production-intro-20261106.wav",
+    sha256: "65aca17e6c1b0ff067aeda6251c900e3a4eff3033c018598002f2a6432b05c07",
+    bytes: 2116310,
+    mime: "audio/wav",
+  },
+  {
+    key: "lobby",
+    assetId: "platform-lobby",
+    url: "/tadazz-show/music/platform/tadazz-exploration-20261106.mp3",
+    sha256: "432f9dc04fbbcffe9f14e5559e2d17a9167d7a2ca5fb5bc887543200ad6248a8",
+    bytes: 2553620,
+    mime: "audio/mpeg",
+  },
+  {
+    key: "roundStart",
+    assetId: "platform-roundStart",
+    url: "/tadazz-show/music/platform/tadazz-prepare-to-fight-20261106.mp3",
+    sha256: "755aa38c6583016480671354bde7aabf2f1ada789eb2c99b3e2504e507cf4ed6",
+    bytes: 2426921,
+    mime: "audio/mpeg",
+  },
+  {
+    key: "question",
+    assetId: "platform-question",
+    url: "/tadazz-show/music/platform/tadazz-determination-20261106.mp3",
+    sha256: "6a9821e5320933dd0b4445847911287563ec794cf0162291b882ffbb07fa1ebc",
+    bytes: 5231002,
+    mime: "audio/mpeg",
+  },
+  {
+    key: "leaderboard",
+    assetId: "platform-leaderboard",
+    url: "/tadazz-show/music/platform/tadazz-boss-battle-20261106.mp3",
+    sha256: "84cb8fc344ae1d52a9c8d25d38a633137994a9632c8a68568f38418a5a3f1960",
+    bytes: 3046160,
+    mime: "audio/mpeg",
+  },
+  {
+    key: "recap",
+    assetId: "platform-recap",
+    url: "/tadazz-show/music/platform/tadazz-fantasy-orchestral-20261106.mp3",
+    sha256: "8bc3c4df066c16916bd6a44008bcbd571e06396f4b335013e9c11c81d6239c15",
+    bytes: 3914876,
+    mime: "audio/mpeg",
+  },
+  {
+    key: "finale",
+    assetId: "platform-finale",
+    url: "/tadazz-show/music/platform/tadazz-epic-endgame-20261106.mp3",
+    sha256: "b0ae9562d2c9c8e3a5d445789ed9e1f6f0b201bdc2b57f07897eac9a03a66c36",
+    bytes: 2156220,
+    mime: "audio/mpeg",
+  },
+] as const

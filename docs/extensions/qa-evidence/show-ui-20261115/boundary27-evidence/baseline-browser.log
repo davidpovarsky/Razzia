@@ -1,0 +1,60 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response (8.4s)
+  ✘  2 [webkit] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response (14.7s)
+
+
+  1) [chromium] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      48 |   await page.evaluate(() => (window as any).__qaBoundary.account("tenant-b"))
+      49 |   // This must hold while the new workspace authority request is still blocked.
+    > 50 |   await expect.poll(() => page.locator("input").evaluateAll(inputs => inputs.map(input => input.value).some(value => value.includes("Private tenant-a")))).toBe(false)
+         |                                                                                                                                                            ^
+      51 |   await expect(select).toHaveCount(0)
+      52 |   await expect(page.getByRole("button", { name: "Save draft", exact: true })).toBeDisabled()
+      53 |   workspace.resolve()
+        at /work/extensions/qa/theme-builder/account-boundary.spec.ts:50:156
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../out/boundary-baseline-results/account-boundary-account-s-cc04e-ted-draft-and-late-response-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/boundary-baseline-results/account-boundary-account-s-cc04e-ted-draft-and-late-response-chromium/error-context.md
+
+  2) [webkit] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      48 |   await page.evaluate(() => (window as any).__qaBoundary.account("tenant-b"))
+      49 |   // This must hold while the new workspace authority request is still blocked.
+    > 50 |   await expect.poll(() => page.locator("input").evaluateAll(inputs => inputs.map(input => input.value).some(value => value.includes("Private tenant-a")))).toBe(false)
+         |                                                                                                                                                            ^
+      51 |   await expect(select).toHaveCount(0)
+      52 |   await expect(page.getByRole("button", { name: "Save draft", exact: true })).toBeDisabled()
+      53 |   workspace.resolve()
+        at /work/extensions/qa/theme-builder/account-boundary.spec.ts:50:156
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../out/boundary-baseline-results/account-boundary-account-s-cc04e-ted-draft-and-late-response-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/boundary-baseline-results/account-boundary-account-s-cc04e-ted-draft-and-late-response-webkit/error-context.md
+
+  2 failed
+    [chromium] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response 
+    [webkit] › qa/theme-builder/account-boundary.spec.ts:14:62 › account switch isolates edited draft and late response 

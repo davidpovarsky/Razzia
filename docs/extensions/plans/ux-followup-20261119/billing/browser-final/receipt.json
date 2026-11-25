@@ -1,0 +1,167 @@
+{
+  "kind": "isolated-billing-public-browser",
+  "startedAt": "2026-11-19T14:00:01.019Z",
+  "status": "PASS",
+  "externalProviderNetworkBlocked": true,
+  "productionChanged": false,
+  "realPaymentsMade": false,
+  "fixturePricesOnly": true,
+  "frontend": "actual Vite site composition",
+  "backend": "actual application and billing routes with isolated synthetic configuration",
+  "cases": [
+    {
+      "id": "disabled-desktop",
+      "mode": "disabled",
+      "width": 1440,
+      "locale": "en",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "billingResponses": [
+        200
+      ],
+      "failedResponses": [],
+      "layout": {
+        "viewport": 1440,
+        "documentWidth": 1440,
+        "bodyWidth": 1440,
+        "direction": "ltr"
+      },
+      "fonts": [
+        "Rubik Variable"
+      ]
+    },
+    {
+      "id": "sandbox-mobile",
+      "mode": "sandbox",
+      "width": 390,
+      "locale": "en",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "billingResponses": [
+        200
+      ],
+      "failedResponses": [],
+      "layout": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "direction": "ltr"
+      },
+      "fonts": [
+        "Rubik Variable"
+      ]
+    },
+    {
+      "id": "missing-token",
+      "mode": "missing-token",
+      "width": 768,
+      "locale": "en",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "billingResponses": [
+        200
+      ],
+      "failedResponses": [],
+      "layout": {
+        "viewport": 768,
+        "documentWidth": 768,
+        "bodyWidth": 768,
+        "direction": "ltr"
+      },
+      "fonts": [
+        "Rubik Variable"
+      ]
+    },
+    {
+      "id": "live-catalog-currency",
+      "mode": "live",
+      "width": 1440,
+      "locale": "en",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "billingResponses": [
+        200
+      ],
+      "failedResponses": [],
+      "currencyChangeVerified": true,
+      "layout": {
+        "viewport": 1440,
+        "documentWidth": 1440,
+        "bodyWidth": 1440,
+        "direction": "ltr"
+      },
+      "fonts": [
+        "Rubik Variable"
+      ]
+    },
+    {
+      "id": "live-catalog-hebrew",
+      "mode": "live",
+      "width": 390,
+      "locale": "he",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "billingResponses": [
+        200
+      ],
+      "failedResponses": [],
+      "currencyChangeVerified": true,
+      "layout": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "direction": "rtl"
+      },
+      "fonts": [
+        "Rubik Variable",
+        "Rubik Variable"
+      ]
+    },
+    {
+      "id": "error-retry",
+      "mode": "error",
+      "width": 390,
+      "locale": "en",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://127.0.0.1:4392/api/billing/catalog",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "billingResponses": [
+        503,
+        200
+      ],
+      "failedResponses": [
+        {
+          "url": "http://127.0.0.1:4392/api/billing/catalog",
+          "status": 503
+        }
+      ],
+      "currencyChangeVerified": true,
+      "layout": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "direction": "ltr"
+      },
+      "fonts": [
+        "Rubik Variable"
+      ]
+    }
+  ],
+  "finishedAt": "2026-11-19T14:00:13.593Z"
+}

@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "candidateContainer": "07f6f3f7522bbcd821d3c47d55c475e03b63022caf2d03f0fe5a56a301312f8a",
+  "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+  "baseURL": "http://172.17.0.4:3000",
+  "verifiedWebArtifactFiles": 154,
+  "preservedBackendAndConfiguration": {
+    "/app/socket/index.cjs": "83f75aac39d14e92eb849cca17d3848e13dd140fee5ce3a1c946694c289d6476",
+    "/etc/nginx/nginx.conf": "ca4278d6b81120988a6056c2a71891ea2719aad4535d2fc4f7ab7ac8da560c2f",
+    "/etc/nginx/http.d/default.conf": "3edfd96a46ed0346c2631ca30cdfd206e300a2637f3f86afa10b966dd657a0e2",
+    "/etc/nginx/tadazz/server.conf": "17e42c8281fd9a0f673e87332f02f6130e8f471a4a977b0bba26389ef083ea7f",
+    "/etc/supervisord.conf": "d58d111a1d4dfb0e936f0fa0048cc61ee120ff52979980bb57d8bbbee683c26b"
+  },
+  "checks": {
+    "/": 200,
+    "/login": 200,
+    "/signup": 200,
+    "/forgot": 200,
+    "/studio/games": 200,
+    "/game": 200,
+    "/manager": 200,
+    "/api/quizz": 401,
+    "/api/results": 401,
+    "/api/accounts/me": 401,
+    "/api/packages/capabilities": 401,
+    "/media/release-probe-missing.png": 401,
+    "/__private_media/release-probe-missing": 404
+  },
+  "socketHandshake": true,
+  "nginxValidation": true,
+  "productionDataMounted": false,
+  "productionCredentialsUsed": false,
+  "productionAndGatewayUnchanged": true,
+  "publishedPorts": false
+}

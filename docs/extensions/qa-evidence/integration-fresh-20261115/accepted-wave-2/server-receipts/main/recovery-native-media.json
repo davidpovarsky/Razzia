@@ -1,0 +1,24 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/server/storage/native-binding.test.ts",
+    "src/server/storage/native-binding-r2.test.ts",
+    "-t",
+    "startup preserves native binding: media|legacy-tagged Media|actual rollback binary",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/recovery-native-media.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "fcf6bd254f6347ae333e28f1db5defb43b8a84133d9f42f7e9688ee8dba3e494",
+  "seconds": 28.303
+}

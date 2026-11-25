@@ -1,0 +1,93 @@
+{
+  "origin": "https://theme-lab-v2.132.145.25.168.sslip.io",
+  "samples": [
+    {
+      "theme": "tadazz-classic",
+      "version": "1.0.0",
+      "mode": "quiz",
+      "quizId": "PYdVJFxJZMUIF0FvcfWrj",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "tadazz-classic",
+      "version": "1.0.0",
+      "mode": "survey",
+      "quizId": "9M6HS6TFH8P_-Reo1T_bX",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "razzia-original",
+      "version": "1.0.0",
+      "mode": "quiz",
+      "quizId": "ByLe3pcmezNxLiwa-UuXW",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "razzia-original",
+      "version": "1.0.0",
+      "mode": "survey",
+      "quizId": "OSyLexU8gkEyagi6_kebo",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "tadazz-demo-cosmic",
+      "version": "2.0.0",
+      "mode": "quiz",
+      "quizId": "13-mJwqCZpkarszW4KUHs",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "tadazz-demo-cosmic",
+      "version": "2.0.0",
+      "mode": "survey",
+      "quizId": "-a9mgBX6NtHRlRpyves5k",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "tadazz-demo-jade",
+      "version": "2.0.0",
+      "mode": "quiz",
+      "quizId": "mMhbp_BzDbjXL0AtuLC2o",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    },
+    {
+      "theme": "tadazz-demo-jade",
+      "version": "2.0.0",
+      "mode": "survey",
+      "quizId": "aDqE-zJAInWpWMDRqGazN",
+      "hostNative": true,
+      "iPadResponsive": true,
+      "fixedBrand": true,
+      "publicDisplay": true,
+      "scoringOrSurvey": true
+    }
+  ]
+}

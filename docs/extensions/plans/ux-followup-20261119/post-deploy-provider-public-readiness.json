@@ -1,0 +1,66 @@
+{
+  "observedAt": "2026-11-19T15:43:16.194684+00:00",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "identityProof": "post-deploy-observation.json",
+  "publicPayloadCarriesReleaseIdentity": false,
+  "routes": [
+    {
+      "path": "/api/contact/config",
+      "status": 200,
+      "cacheControl": "no-store",
+      "fieldNames": [
+        "available"
+      ],
+      "readiness": {
+        "available": false
+      },
+      "publicArrayCounts": {},
+      "sha256": "9c9729d235cfd4897778afaf5651db6b7e91ca68f8c5d052d66de5e09734d668"
+    },
+    {
+      "path": "/api/billing/config",
+      "status": 200,
+      "cacheControl": "no-store",
+      "fieldNames": [
+        "catalogAvailable",
+        "configured",
+        "enabled",
+        "environment"
+      ],
+      "readiness": {
+        "enabled": false,
+        "configured": false,
+        "environment": "sandbox",
+        "catalogAvailable": false
+      },
+      "publicArrayCounts": {},
+      "sha256": "e03dcbe3bc1ce353216613a8804994717e16e50c71e75057a8f3420270755937"
+    },
+    {
+      "path": "/api/billing/catalog",
+      "status": 200,
+      "cacheControl": "no-store",
+      "fieldNames": [
+        "configured",
+        "currencies",
+        "enabled",
+        "environment",
+        "plans"
+      ],
+      "readiness": {
+        "enabled": false,
+        "configured": false,
+        "environment": "sandbox"
+      },
+      "publicArrayCounts": {
+        "currencies": 0,
+        "plans": 0
+      },
+      "sha256": "2c1e61b60fd788ae4f6484e4241ee4999e6117d7ded31680d95995a82776dc05"
+    }
+  ],
+  "realMailSent": false,
+  "paymentCreated": false,
+  "earlierProbe": "A first read-only inspection assumed an exact four-field catalog schema and stopped before writing evidence; this receipt projects only readiness booleans/environment and array counts without inventing a catalog shape."
+}

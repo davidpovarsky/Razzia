@@ -1,0 +1,31 @@
+{
+  "executedCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "sameApplicationAndDependencyMounts": true,
+  "samePinnedImage": true,
+  "actualFixtureKind": "HOST SCRATCH BIND",
+  "fakeFixture": {
+    "Type": "bind",
+    "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-991f38f216ad265e06aec53313db8928437da248/followup/fake",
+    "Destination": "/fake",
+    "Mode": "",
+    "RW": true,
+    "Propagation": "rprivate"
+  },
+  "noMapBaseDiskMirror": true,
+  "rootStillReadOnly": true,
+  "api": {
+    "exit": "0",
+    "summary": "Tests  5 passed (5)"
+  },
+  "theme": {
+    "exit": "1",
+    "summary": "Tests  1 failed | 4 passed (5)",
+    "originalTimeoutMs": 30000,
+    "timeoutOverride": false
+  },
+  "fullSuiteOutcomeUnchanged": "813 PASS / 6 FAIL (819); no duplicate full run",
+  "runnerStopped": true,
+  "resourceGrantReleasedByManager": true,
+  "tmpfsPlan": "NOT RUN; manager accepted actual owned host scratch fixture and explicitly forbade an unnecessary rerun",
+  "limit": "Repeatable theme timeout remains for its owner; no theme/source/timeout edits or proven capacity/regression claim"
+}

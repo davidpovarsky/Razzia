@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "stdout": "{\"passed\": true, \"cacheContainer\": \"07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872\", \"cacheSettingsUnchanged\": true, \"productionUnchanged\": true, \"gatewayUnchanged\": true, \"customerDataRead\": false, \"finishedAt\": \"2026-11-19T14:37:00.517079+00:00\", \"sourceEntries\": 2042, \"targetEntries\": 2042, \"manifestSha256\": \"0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de\", \"sdkVersions\": {\"server\": \"2.4.0\", \"client\": \"2.4.0\", \"core\": \"2.4.0\"}, \"symlinksPreserved\": true, \"sourceUnchanged\": true}\n",
+  "stderr": "",
+  "observedAt": "2026-11-19T14:37:00.564077+00:00"
+}

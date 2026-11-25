@@ -1,0 +1,28 @@
+{
+  "id": "97718199-75e2-4efa-afcf-e4c01d2bd22c",
+  "context": {
+    "mode": "private-cleanup",
+    "root": "/scratch/c1/tadazz-c1-native-synthetic-BkQ2R2",
+    "sequence": "",
+    "owner": ""
+  },
+  "pid": 336,
+  "event": "close",
+  "code": null,
+  "signal": "SIGKILL",
+  "observedNs": "996264038730534",
+  "startedNs": "996259821568973",
+  "streams": {
+    "stdout": {
+      "file": "97718199-75e2-4efa-afcf-e4c01d2bd22c.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "97718199-75e2-4efa-afcf-e4c01d2bd22c.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observationErrors": []
+}

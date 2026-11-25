@@ -1,0 +1,79 @@
+{
+  "kind": "independent-static-release-helper-review",
+  "reviewedAt": "2026-11-19T14:09:18.110065+00:00",
+  "reviewer": "finish_release_verification",
+  "status": "PASS_STATIC_REVIEW",
+  "reviewedGitHead": "9318a764bd922b2c7970e4866b91d62ade9a1d40",
+  "helpers": [
+    {
+      "file": "stage_current_candidate.py",
+      "sha256": "819ed320b1c02ea0c297f826ef842b4c3cca043719ce20059c2d4a87a87bb48f",
+      "declaredDiffVerified": true,
+      "syntaxParsedWithoutExecution": true
+    },
+    {
+      "file": "qualify_current_candidate.py",
+      "sha256": "5916506d58421fb1b21d8d373257593b0f6e9b68dfb01aba5b9763ed3d319352",
+      "declaredDiffVerified": true,
+      "syntaxParsedWithoutExecution": true
+    },
+    {
+      "file": "deploy_current_candidate.py",
+      "sha256": "cf19dfabcee3657b60b10ae1cff1bc435ac07e6ec5758c0d58b42e50bff3a8ee",
+      "declaredDiffVerified": true,
+      "syntaxParsedWithoutExecution": true
+    },
+    {
+      "file": "observe_current_candidate.py",
+      "sha256": "1a4c772018039a0f648e37acb77e97f4fdb5e1c5d26cd4e2f12553c56e745492",
+      "declaredDiffVerified": true,
+      "syntaxParsedWithoutExecution": true
+    }
+  ],
+  "helperExecutionPerformed": false,
+  "deploymentPerformed": false,
+  "productionIdentityReadPerformed": false,
+  "canonicalSourceRecordPresentAtReview": false,
+  "canonicalSourceShaAtReview": null,
+  "checks": {
+    "exactSourceGates": "Qualification requires HEAD and clean tracked extensions/packages. Stage requires canonical 40-character hexadecimal SHA, matching successful four-step progress, exact ordered gates, unique matching receipts, source hashes verified before/after, 40/40 full-show entries, zero OOM counters and immutable proxy/privacy proof. Candidate scripts are compared to git show of that same source SHA.",
+    "baselinePins": "Only expected production container/image changed: ce2deee99d7ba30717b8609a2138456d4834bee33cc2263031253d22d57c3081 and sha256:4489e57b83be163dfa8fc312a6ed38df277e48fa0016263f807ae8266ee30344. Gateway c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202, runtime config 6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5 and qualified build base 417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346 remain pinned. This review checked source constants, not live infrastructure.",
+    "backupAndQualification": "Deployer retains nonblocking private deployment lock, baseline/config/room rechecks before stop, stopped-application archive with exact tree/hash checks and disk reserve, offline byte/mode/SQLite restore verification, isolated candidate clone with no network or ports, pinned successful receipt bound to source/image/container/config and age <= 24 hours.",
+    "rollback": "SIGTERM/SIGINT raise guarded failure. Container rollback retains the current customer config volume, verifies the original image/identity, resumes the original container and rechecks public health. No production data restore is introduced. Old container and private backup remain retained.",
+    "comparisons": "Candidate image/revision, complete stage artifact hashes, environment, mounts, launch contract, other-container identity/image/start time and gateway remain checked. HostConfig comparison remains exact apart from the approved present-null/false OomKillDisable normalization.",
+    "observer": "Existing stable candidate-image/container/gateway/runtime comparisons, three restart-free samples, retained old container and stopped cache checks remain. Themes/contact/billing probes add only bounded public GETs; HTML vs JSON-object/status checks and hashes are retained."
+  },
+  "timeoutsSeconds": {
+    "qualificationSteps": [
+      600,
+      720,
+      1980,
+      120
+    ],
+    "stageChild": 1300,
+    "stageSsh": 1420,
+    "deployChild": 1200,
+    "deployRollbackGrace": 300,
+    "deploySsh": 1620,
+    "observerChild": 240,
+    "publicGetEach": 20,
+    "observerSsh": 420
+  },
+  "timeoutSemantics": "No timeout is interpreted as success. Deployment deadline first sends SIGTERM for rollback, waits 300 seconds, then reports inspection required without hard killing a still-running guarded deployer.",
+  "gitDeployer": {
+    "path": "extensions/deployment/deploy-mcp-site.py",
+    "sha256": "3cf6acd277c9c9f7322c21c17ad27da8ee10a8ab2dd76594f81bc7d5f707cc35",
+    "oomNormalizationCommitPresent": "2c66bc9",
+    "newerLiveDemoCommitPresent": "d30a6d",
+    "normalization": "Only explicitly present null maps to false in a deep-copy comparison. True changes, missing/present changes, invalid types and every other host field remain rejected. Replacement payload itself is not normalized.",
+    "toolSourceSplitNeeded": false
+  },
+  "limitations": [
+    "Static source/diff review only; no release gates, helper commands, SSH, Docker, backup, rollback or deployment were executed for this review.",
+    "The canonical current-release-source record and new source-specific qualification receipts remain required at execution. This receipt does not substitute for them.",
+    "The existing zero-room check remains based on retained container log events and explicitly reports checkStopRaceEliminated:false.",
+    "Public GET probes establish response availability/shape/hash, not visual host parity, inbox delivery or LIVE payment activation."
+  ],
+  "helperMutations": false,
+  "onlyWrittenArtifact": "docs/extensions/plans/ux-followup-20261119/release-helper-review.json"
+}

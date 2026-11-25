@@ -1,0 +1,2 @@
+extensions/src/core/show-library/composition-repository.test.ts(269,44): error TS2540: Cannot assign to 'revision' because it is a read-only property.
+extensions/src/core/show-library/composition-repository.test.ts(288,42): error TS2540: Cannot assign to 'documentSha256' because it is a read-only property.

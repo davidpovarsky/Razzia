@@ -1,0 +1,523 @@
+{
+  "host": {
+    "plays": [
+      {
+        "url": "http://127.0.0.1:3170/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-reveal-bright-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-timer-end-368edc1d9522.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0.894428
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      }
+    ],
+    "resets": [
+      "",
+      "",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-reveal-bright-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3"
+    ],
+    "cues": [
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:question:Theme question 1#1:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:voting:Theme question 1#1:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:voting:Theme question 1#1:countdown:scene:countdown"
+      },
+      {
+        "name": "vote-locked",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:7b609292-46f4-41af-8ed6-f1435161dc22:1:vote-locked"
+      },
+      {
+        "name": "scene:vote-locked",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:results:Theme question 1#1:vote-locked:scene:vote-locked"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:results:Theme question 1#1:vote-locked:impact"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:prepared:2:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:question:Theme question 2#2:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:question:Theme question 2#2:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:question:Theme question 2#2:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:voting:Theme question 2#2:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:voting:Theme question 2#2:countdown:scene:countdown"
+      },
+      {
+        "name": "timer-ended",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:024b9461-e235-4e05-8956-817ccc2ea3ac:2:timer-ended"
+      },
+      {
+        "name": "scene:vote-locked",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:results:Theme question 2#2:vote-locked:scene:vote-locked"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:results:Theme question 2#2:vote-locked:impact"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:prepared:3:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:voting:Theme question 3#3:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:voting:Theme question 3#3:countdown:scene:countdown"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:prepared:3:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:voting:Theme question 3#3:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:prepared:4:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:voting:Theme question 4#4:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:voting:Theme question 4#4:countdown:scene:countdown"
+      }
+    ],
+    "frames": 308,
+    "legacy": 0,
+    "wrongBackground": 0
+  },
+  "player": {
+    "plays": [
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-confirm-20261108.mp3",
+        "time": 0
+      }
+    ],
+    "resets": [
+      "",
+      "http://127.0.0.1:3170/sounds/tadazz-confirm-20261108.mp3",
+      "",
+      ""
+    ],
+    "cues": [
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:question:Theme question 1#1:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:voting:Theme question 1#1:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:voting:Theme question 1#1:countdown:scene:countdown"
+      },
+      {
+        "name": "answer-submitted",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:Theme question 1#1:submitted"
+      },
+      {
+        "name": "scene:chosen",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:wait:game:waitingForAnswers:1:chosen:scene:chosen"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:1:wait:game:waitingForAnswers:1:chosen:impact"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:prepared:2:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:question:Theme question 2#2:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:question:Theme question 2#2:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:question:Theme question 2#2:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:voting:Theme question 2#2:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:voting:Theme question 2#2:countdown:scene:countdown"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:prepared:3:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:voting:Theme question 3#3:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:voting:Theme question 3#3:countdown:scene:countdown"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:prepared:3:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:voting:Theme question 3#3:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:prepared:4:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:voting:Theme question 4#4:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:voting:Theme question 4#4:countdown:scene:countdown"
+      }
+    ],
+    "frames": 294,
+    "legacy": 0,
+    "wrongBackground": 0
+  },
+  "display": {
+    "plays": [
+      {
+        "url": "http://127.0.0.1:3170/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-timer-end-368edc1d9522.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0.833022
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+        "time": 0
+      },
+      {
+        "url": "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+        "time": 0
+      }
+    ],
+    "resets": [
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/tadazz-silky-transition-20261108.mp3",
+      "http://127.0.0.1:3170/sounds/answersMusic.mp3"
+    ],
+    "cues": [
+      {
+        "name": "scene:picture-answers",
+        "identity": "show:0:voting:Theme question 2#2:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:voting:Theme question 2#2:countdown:scene:countdown"
+      },
+      {
+        "name": "timer-ended",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:024b9461-e235-4e05-8956-817ccc2ea3ac:2:timer-ended"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:2:results:Theme question 2#2:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:prepared:3:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:question:Theme question 3#3:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:3:voting:Theme question 3#3:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:prepared:3:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:question:Theme question 3#3:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:4:voting:Theme question 3#3:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:z-wipe",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:prepared:4:z-wipe:scene:z-wipe"
+      },
+      {
+        "name": "impact",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:z-wipe:impact"
+      },
+      {
+        "name": "wipe-covered",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:z-wipe:wipe-covered"
+      },
+      {
+        "name": "scene:question",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:question:Theme question 4#4:question:scene:question"
+      },
+      {
+        "name": "scene:picture-answers",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:voting:Theme question 4#4:picture-answers:scene:picture-answers"
+      },
+      {
+        "name": "scene:countdown",
+        "identity": "01a1ba9f-67cc-72a8-bc7a-4718a5dd2c68:5:voting:Theme question 4#4:countdown:scene:countdown"
+      }
+    ],
+    "frames": 176,
+    "legacy": 0,
+    "wrongBackground": 0
+  }
+}

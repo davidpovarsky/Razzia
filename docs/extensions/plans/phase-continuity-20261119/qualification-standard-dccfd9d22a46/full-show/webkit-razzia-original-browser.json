@@ -1,0 +1,67 @@
+{
+  "browserVersion": "27.2",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "webkit / razzia-original native opening, five phases, transitions and closing",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 85896
+    },
+    {
+      "name": "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 3380
+    },
+    {
+      "name": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 58594
+    },
+    {
+      "name": "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 10464
+    },
+    {
+      "name": "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 14517
+    },
+    {
+      "name": "webkit / razzia-original native pause, resume, replay and adjacent skip",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 7838
+    },
+    {
+      "name": "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 31243
+    },
+    {
+      "name": "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 19883
+    },
+    {
+      "name": "webkit / razzia-original tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 5103
+    },
+    {
+      "name": "webkit / razzia-original CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 89
+    }
+  ]
+}

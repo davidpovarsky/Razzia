@@ -1,0 +1,289 @@
+{
+  "kind": "billing-followup-verification",
+  "createdAt": "2026-11-19T14:04:30.566327+00:00",
+  "productionBillingChanged": false,
+  "realPaymentMade": false,
+  "codeAndFixtureChecks": "54/54 billing tests; 6/6 pricing browser; 9/9 shared site browser; typed lint zero errors/warnings on 14 billing files",
+  "liveActivation": "pending commercial plan approvals, LIVE business/domain/credentials and pilot grant migration",
+  "scope": "Allowlisted source and public synthetic/sanitized evidence only. Raw logs, runtime configurations, secret files and automatic backups excluded. Earlier failed checks are retained as historical receipts. This manifest excludes itself.",
+  "sourceCount": 14,
+  "evidenceCount": 32,
+  "files": [
+    {
+      "category": "billing-source",
+      "path": "extensions/src/core/billing/contracts.ts",
+      "bytes": 3560,
+      "sha256": "536ace72b0505366dd1169a9b0ba11a99a9af9b78d026ac88f9dc857578bdd45"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/server/billing/config.ts",
+      "bytes": 1960,
+      "sha256": "666d54a522323920c1658376a0bb00b12eda700ac346280c45d4f5488d9f8a9d"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/server/billing/service.ts",
+      "bytes": 2387,
+      "sha256": "088aad393490ab6536315424d7d4d5d666d420033552d0c07504dba11d839521"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/server/billing/public-catalog.ts",
+      "bytes": 1258,
+      "sha256": "9032b3f4b1b964669ddfccc09181a8c337a2e9d6fcea8a8fb4a36eba773f5621"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/server/billing/index.ts",
+      "bytes": 251,
+      "sha256": "73ffdefb467ae7a35f0d9a727fada83debf8d6e181f596543e79a2a609ff8fd1"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/server/billing/test-fixture.ts",
+      "bytes": 2798,
+      "sha256": "176a3fac20475a5b71ecbd146a23547eecb693145b2150aa06853072e9551711"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/server/billing/public-catalog.test.ts",
+      "bytes": 4257,
+      "sha256": "44f4f55ded015c5297cb4a3637f3f670cd2774fcb8c1f560058b70f0be1a95b2"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/src/site/web/marketing/Pricing.tsx",
+      "bytes": 7292,
+      "sha256": "db0d5f42a4f5ab6565cc88184314fda069f1ed5e0e4c61f5a70f394bc1b55b5b"
+    },
+    {
+      "category": "billing-source",
+      "path": "packages/socket/src/api/extensions/billing-routes.ts",
+      "bytes": 3969,
+      "sha256": "badfae44dcf3eef5aeaac34cbc51f0aaefcfa38a4ba2e23bad8ad9cf71d769cf"
+    },
+    {
+      "category": "billing-source",
+      "path": "packages/socket/src/api/extensions/billing-public.test.ts",
+      "bytes": 3629,
+      "sha256": "1b2fba37928bb109ced9cb9418362b1530148cfbdab02091c0c4c206d0330ce0"
+    },
+    {
+      "category": "billing-source",
+      "path": "packages/socket/src/api/billing.test.ts",
+      "bytes": 9204,
+      "sha256": "fd167e13981754cab3a5e53506ec45a0a3c2b70871f2d1f3eeb0a608f24bc1cb"
+    },
+    {
+      "category": "billing-source",
+      "path": "packages/e2e/playwright.billing.config.ts",
+      "bytes": 1852,
+      "sha256": "fbcb223acac4ddfd2264f43b4ded19702e37cee8a38c49823e915950efa5e528"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/qa/billing-public-server.ts",
+      "bytes": 2910,
+      "sha256": "1b8bbf5eb10f66638984d22b568bf885583734921d3c588b54682b241c6d5e60"
+    },
+    {
+      "category": "billing-source",
+      "path": "extensions/qa/billing-public.vite.config.ts",
+      "bytes": 576,
+      "sha256": "d601f5824b889617995677857edd55f5dd9050957a6f2c62207033eb475b80f6"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+      "bytes": 11604,
+      "sha256": "fae513cdc785e579178383a3f69a9258683ec03bc5b876f781032e80910bff4d"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/asana-readback.json",
+      "bytes": 235,
+      "sha256": "5a2ac25c6b167608487cafff715c21752bc274476b4df7b7d0b1b3783741dc9b"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/cleanup.json",
+      "bytes": 274,
+      "sha256": "64415a473d0f47e178c41bd7da4968c3b9137c5131cb0376827f40cc4beab04c"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/disabled-desktop.png",
+      "bytes": 204804,
+      "sha256": "94d2cd09e4a5e39d6aed2f44ab4b9803b7b4d0de91ee82b596c5ab9977f8791e"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/error-retry.png",
+      "bytes": 229635,
+      "sha256": "1c94a96be37070e1b23cf1755eb5650679e3491dde5836a7754d59d8a8142b0b"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/live-catalog-currency.png",
+      "bytes": 282750,
+      "sha256": "a7b3056bfb11e2e3420873f123cb0d76734d29f0dc5be933cb21424d56cf1e2f"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/live-catalog-hebrew.png",
+      "bytes": 192329,
+      "sha256": "b473da0bba9a48d2a9ca62f8e7fb9044480c5ceb44c488a2b5397a89471c80f1"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/missing-token.png",
+      "bytes": 164862,
+      "sha256": "ca9b6a05e7191b3239d3991aa37db78fe9383abaa61aeea7ed6e55f637e65fd2"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/receipt.json",
+      "bytes": 3755,
+      "sha256": "485af45bd9ed25f59211276596483d9604d6dc376f3ff98b609b62f8fe287237"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/sandbox-mobile.png",
+      "bytes": 154409,
+      "sha256": "5f88a6457a4f7ab77ca06d50172121ff2e1b05279d0634803e24ba462d04fbda"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/cleanup.json",
+      "bytes": 273,
+      "sha256": "3fdaf9ddeadfbfff09b1a4a329970afc32544bed23ef69b9debb256d0671ba45"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/disabled-desktop-failure.png",
+      "bytes": 211002,
+      "sha256": "aa3b9ae8324528d15317ab0bb45478c349ad826743d7291eda7292beb004804a"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/error-retry-failure.png",
+      "bytes": 212812,
+      "sha256": "c60fa933e266d7077192974d76873ab26e07d1f5374359ed9875fc39d5b2dd73"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/live-catalog-currency-failure.png",
+      "bytes": 224813,
+      "sha256": "5431beb45e356fdbfe259050a073bc0a515e528a495fdb86905394837333e873"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/live-catalog-hebrew-failure.png",
+      "bytes": 159054,
+      "sha256": "4612383d68e3a69ce485487bb0f2a9a8e92f49cf43bc458f6c14465f2a59a7be"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/missing-token-failure.png",
+      "bytes": 156260,
+      "sha256": "e40470a2cb294ae73e7b063cf0a8374a23375249f3fd583ea114da59bf2341e0"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/receipt.json",
+      "bytes": 6071,
+      "sha256": "93e9da105356856522fe8c1acb02e58be8757e7d6ee5cfc5b56714410d55d3c7"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/sandbox-mobile-failure.png",
+      "bytes": 146603,
+      "sha256": "079d8c69c3583d7a0344ba9c4aa77bf477aaab5a9caffd1e0e2e59eceea23c88"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-source-checks.json",
+      "bytes": 7666,
+      "sha256": "ed276bb969f349807dc14742ba0c586d52fc2752f2e1ff27822758aa355924c9"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-source-final.json",
+      "bytes": 4492,
+      "sha256": "68994807987191f325de67f933069a75e109e52d70fd04efe2bf4588572918be"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-test-execution.json",
+      "bytes": 5966,
+      "sha256": "17e4bb0a79649b95ec19d2dd13c4d101faaf46bddfc11c3fc293f6dafdb500d3"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-test-followup.json",
+      "bytes": 1815,
+      "sha256": "4b33c0e0182ff203dd876699de3595579677b6fe79fd274ea6a25213543baab0"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-typed-final.json",
+      "bytes": 2130,
+      "sha256": "cdea77bfbce817ba8cd04bb7d06a1645dbc3b66cb32d890719b8d0d19b78e198"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/harness/public-browser-check.mjs",
+      "bytes": 6862,
+      "sha256": "d508bd4bb1b10373eb5e3a0cc57caf38d8dae3bc99bb1fde6dd367bc0a0f9403"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/harness/run-public-browser.py",
+      "bytes": 4358,
+      "sha256": "4ebe6e74b563e871f35477e726c9f4c889b8b58b1f24edfed48b6ce9c8bcf1ee"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-1440.png",
+      "bytes": 117840,
+      "sha256": "aefe8210500bf8737f68b58c0b3fe5affc091be6a0013240d8bfc8149fecfc1c"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-320.png",
+      "bytes": 79647,
+      "sha256": "b6a8173706053aa3afa09c6eef22e42bb192c6aa5a8b27d9d79a10909d546cdb"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-390.png",
+      "bytes": 87715,
+      "sha256": "53fcfeecdc1173488e38ce427717c3d47b66ea52a9afc8ac0645ff6c0e0c70bd"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-he-390.png",
+      "bytes": 64221,
+      "sha256": "aeaf707832b824cabfac99d0155bffe8a9269240c51c6bcf73f528fd7913dfbc"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/prepare-retry.png",
+      "bytes": 166319,
+      "sha256": "bc8978c62db13fa21b2bbf892c5483a7c3f2c4fb05690116762b33601f33034b"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/receipt.json",
+      "bytes": 1294,
+      "sha256": "1bccee73008cfd4c4fb041b9b2fbe71655ca1de8bbdf4ba097753ff5df508755"
+    },
+    {
+      "category": "evidence",
+      "path": "docs/extensions/plans/ux-followup-20261119/provider-readiness.json",
+      "bytes": 5651,
+      "sha256": "8f63c9eb5ed8fdd430cb4fbe867229f279bcd03f09759e52fab73bc834b4cfdc"
+    }
+  ]
+}

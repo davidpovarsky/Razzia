@@ -1,0 +1,27 @@
+{
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "push": {
+    "ok": true,
+    "version": 1,
+    "operation": "push",
+    "root": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119",
+    "remote": "origin",
+    "branch": "codex/tadazz-ux-unified-20261119",
+    "forced": false,
+    "output": "To https://github.com/davidpovarsky/Razzia.git\n   2c66bc9..34568c5  codex/tadazz-ux-unified-20261119 -> codex/tadazz-ux-unified-20261119"
+  },
+  "readback": {
+    "ok": true,
+    "version": 1,
+    "operation": "ls_remote",
+    "remote": "origin",
+    "refs": [
+      {
+        "sha": "34568c5c937a51d236a440513adeb9bf93637525",
+        "ref": "refs/heads/codex/tadazz-ux-unified-20261119"
+      }
+    ],
+    "count": 1
+  },
+  "remoteVerified": true
+}

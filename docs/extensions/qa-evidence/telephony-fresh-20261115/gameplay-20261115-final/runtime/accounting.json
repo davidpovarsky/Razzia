@@ -1,0 +1,39 @@
+{
+  "source_sha": "ccb0c5c2add55b7ba13bff2f56f04a4295dfc867",
+  "phase": "gameplay",
+  "container": "phone-gameplay-ccb0c5c-attempt01",
+  "recorded_utc": "2026-11-15T19:15:59.974505+00:00",
+  "prior_cumulative_bytes": 12365824,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-gameplay-receipts-gameplay-ccb0c5c.tar",
+  "archive_sha256": "8f80b931685fbfeb5faffea2a33ba7682bc6301df444af21c4defea2c2ce7406",
+  "archive_bytes": 30720,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-gameplay-ccb0c5c2add55b7ba13bff2f56f04a4295dfc867",
+      "allocated_bytes": 417792
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-ccb0c5c2add55b7ba13bff2f56f04a4295dfc867",
+      "allocated_bytes": 561152
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-gameplay-ccb0c5c-attempt01",
+      "allocated_bytes": 65536
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-gameplay-ccb0c5c",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-gameplay-receipts-gameplay-ccb0c5c.tar",
+      "allocated_bytes": 32768
+    },
+    {
+      "path": "/var/lib/docker/containers/622e6fa8e6c76d6915ca728845b27aa39f2567a9fff6c17630fc05a09c13b37d",
+      "allocated_bytes": 40960
+    }
+  ],
+  "new_allocated_bytes": 1130496,
+  "cumulative_allocated_bytes": 13496320
+}

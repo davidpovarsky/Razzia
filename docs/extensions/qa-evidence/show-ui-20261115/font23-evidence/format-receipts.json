@@ -1,0 +1,42 @@
+[
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-fixture-server.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-browser.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-browser-v2.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-rubik-resources.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native-font.config.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native-font.spec.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/prepare-font23.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/verify-font-host-policy.mjs",
+    "sameAst": true,
+    "changed": true
+  }
+]

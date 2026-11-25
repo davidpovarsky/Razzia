@@ -4,25 +4,33 @@ import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
 interface Props {
-  trigger: ReactNode
+  trigger?: ReactNode
+  open?: boolean
+  onOpenChange?: (_open: boolean) => void
   title: string
   description: string
   confirmLabel?: string
+  confirmTestId?: string
   onConfirm: () => void
 }
 
 const AlertDialog = ({
   trigger,
+  open,
+  onOpenChange,
   title,
   description,
   confirmLabel,
+  confirmTestId,
   onConfirm,
 }: Props) => {
   const { t } = useTranslation()
 
   return (
-    <RadixAlertDialog.Root>
-      <RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+    <RadixAlertDialog.Root open={open} onOpenChange={onOpenChange}>
+      {trigger && (
+        <RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+      )}
 
       <RadixAlertDialog.Portal>
         <RadixAlertDialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/40" />
@@ -50,6 +58,7 @@ const AlertDialog = ({
               <Button
                 className="bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:brightness-95 active:brightness-90"
                 onClick={onConfirm}
+                data-testid={confirmTestId}
               >
                 {confirmLabel ?? t("common:confirm")}
               </Button>

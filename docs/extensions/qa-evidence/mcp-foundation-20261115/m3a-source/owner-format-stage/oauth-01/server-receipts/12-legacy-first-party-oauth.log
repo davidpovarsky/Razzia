@@ -1,0 +1,57 @@
+✔ post-body abort retains pending real authentication work and creates no private store (886.523485ms)
+✔ abort at the verified-principal promise handoff prevents private work (89.035472ms)
+✔ postcommit abort withholds disclosure without claiming rollback (199.528115ms)
+✔ caller-built identity and missing actual ALS owner cannot access the store (606.496142ms)
+✔ accounts-off and persistent key/root drift deny before private store I/O (93.348234ms)
+✔ Context claims cannot substitute for the actual cryptographic verifier (1.491574ms)
+✔ actual player, malformed JWT, expired JWT and invalid sid are rejected (200.477804ms)
+✔ real session revoke and account disable/unverify deny previously issued capabilities (4.336803ms)
+✔ closed startup account handle fails GET without reinitializing account sidecars (89.386996ms)
+✔ symlink, hardlink and cross-owner DB substitutions cannot read borrowed private data (1096.527943ms)
+✔ an unsafe existing ancestor is denied without creating or repairing directories (4.927728ms)
+✔ missing manager credentials reject before consuming body or allocating a draft family (701.534433ms)
+✔ wrong Host/Origin, forwarded headers, routes, methods and body types are rejected before storage (7.940997ms)
+✔ malformed JSON and native/enhanced envelopes are rejected before private/native allocation (394.02154ms)
+✔ create/read/replace use actual auth and SQLite; pending save has no success/consent/native URL (392.049041ms)
+✔ actual streamed bytes override an underreported Content-Length and invalid UTF8 is rejected (5.820217ms)
+✔ revocation during the body await is reverified before parsing or store allocation (6.226141ms)
+✔ a public cancel promise that stalls keeps body work unresolved (1.797458ms)
+✔ 32 real authenticated body lifetimes exhaust anonymous admission until they finish (1291.419492ms)
+✔ discovery and JWKS expose public configuration without creating a tenant grant store (895.10481ms)
+✔ exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests (10.784066ms)
+✔ consent requires real manager identity, same origin and the exact account/session/ticket proof (188.519407ms)
+✔ real account PKCE flow stores only token digests and survives a fresh issuer instance (194.311463ms)
+✔ wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant (104.213501ms)
+✔ refresh rotates once, and replay durably revokes both old and newly issued access (110.720965ms)
+✔ client revocation and actual native-session logout revoke OAuth access (186.968711ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes (1105.845634ms)
+✔ hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure (96.727308ms)
+✔ exact old producer schema1 remains readable and mutable without a migration (1101.439511ms)
+✔ same columns/version/owner without the operations PK are preserved and denied (198.172102ms)
+✔ same columns/version/owner without native_id IS NULL are preserved and denied (201.576535ms)
+✔ unexpected mutating trigger is rejected before it can delete a private draft (101.757837ms)
+✔ unexpected view or index is preserved and rejected as an unknown object (297.09447ms)
+✔ absent GET does not create a private family (801.927056ms)
+✔ real create persists canonical content, outcome and audit; another owner cannot read it (388.642648ms)
+✔ durable create replay survives a fresh repository instance and rejects a reused key/digest (110.320441ms)
+✔ two competing expected revisions have exactly one CAS winner and one durable mutation (390.830189ms)
+✔ replace and pending save replay precede current revision; pending never contains a native target (305.20275ms)
+✔ SQLite audit failure rolls draft and operation back together (91.749658ms)
+✔ revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows (13.207529ms)
+✔ ordinary GET changes no private-family or native sentinel bytes/mtime/directory membership (93.446276ms)
+✔ real crashed hot journal is rejected without recovery or any private-family write (206.311622ms)
+✔ WAL-mode header, orphan SHM and corrupt private DB are preserved and denied (188.920571ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44996.524035

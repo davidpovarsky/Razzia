@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.r2.json",
+  "compilerOptions": {
+    "typeRoots": ["../../../../extensions/node_modules/@types"],
+    "paths": {
+      "@razzia/common/*": ["../../../../packages/common/src/*"],
+      "@razzia/socket/*": ["../../../../packages/socket/src/*"],
+      "zod": ["../../../../extensions/node_modules/zod"],
+      "uuid": ["../../../../extensions/node_modules/uuid"],
+      "http-status-codes": ["../../../../extensions/node_modules/http-status-codes"],
+      "vitest": ["../../../../extensions/node_modules/vitest"],
+      "nanoid": ["../../../../packages/socket/node_modules/nanoid"]
+    }
+  }
+}

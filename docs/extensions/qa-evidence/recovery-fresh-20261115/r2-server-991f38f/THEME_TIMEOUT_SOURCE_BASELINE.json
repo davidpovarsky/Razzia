@@ -1,0 +1,41 @@
+{
+  "priorSourceCommit": "9593f24f287f2e404f387f6359e89453cd8a971e",
+  "executedCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "records": [
+    {
+      "path": "extensions/src/server/show-themes/installation.test.ts",
+      "bytes": 9608,
+      "priorSha256": "ed8a2e78732cb4150c3d64f3e346ee6017f0d68d2e2e083401bb4ba3610bc92e",
+      "executedSha256": "ed8a2e78732cb4150c3d64f3e346ee6017f0d68d2e2e083401bb4ba3610bc92e",
+      "byteIdentical": true
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.ts",
+      "bytes": 24158,
+      "priorSha256": "ef354a86bfa72faccfeb1c525ddffa45335207400b808f69807ac9cf0a14c7f1",
+      "executedSha256": "ef354a86bfa72faccfeb1c525ddffa45335207400b808f69807ac9cf0a14c7f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.fixture.ts",
+      "bytes": 5205,
+      "priorSha256": "9a3f907fd06c57babef7d58e7d4ee7a670e0c263feff5cfe6d1b7eaa72e72fe7",
+      "executedSha256": "9a3f907fd06c57babef7d58e7d4ee7a670e0c263feff5cfe6d1b7eaa72e72fe7",
+      "byteIdentical": true
+    },
+    {
+      "path": "extensions/src/server/show-themes/review.ts",
+      "bytes": 5680,
+      "priorSha256": "7dfd3327901f5e43d15eac845b601a53ea403788f1a9a27f2a425f859ae0de0b",
+      "executedSha256": "7dfd3327901f5e43d15eac845b601a53ea403788f1a9a27f2a425f859ae0de0b",
+      "byteIdentical": true
+    }
+  ],
+  "cpuLimit": 0.25,
+  "memoryLimitBytes": 2147483648,
+  "timeoutMs": 30000,
+  "fullRun": "813 PASS / 6 FAIL; one installation case timed out",
+  "isolatedOriginalBudget": "4 PASS / 1 TIMEOUT in unchanged installation.test.ts",
+  "dependencies": "same immutable 9593 installed dependency tree and pinned Node image reused",
+  "interpretation": "Repeatable timeout at the leased CPU budget; source and test unchanged. No claim of a proven capacity cause, historical runtime baseline pass/fail, or permission to change theme code/timeout."
+}

@@ -1,0 +1,39 @@
+{
+  "engine": "chromium",
+  "theme": "razzia-original",
+  "reducedMotion": false,
+  "proof": "real MCP SDK + AppBridge + unchanged native animations",
+  "snapshots": [
+    {
+      "step": "question",
+      "documentId": 1795108279103.1,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "epoch": 1,
+      "paused": "false",
+      "elapsed": 410,
+      "renderer": 1,
+      "nativeMode": "question",
+      "question": 2,
+      "textNode": 3,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [],
+      "entrances": []
+    }
+  ],
+  "status": "FAIL",
+  "error": "AssertionError [ERR_ASSERTION]: Normal motion must play the genuine initial question entrance once\n\n0 !== 1\n",
+  "failureState": {
+    "documentId": 1795108279103.1,
+    "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+    "epoch": 1,
+    "paused": "false",
+    "elapsed": 410,
+    "renderer": 1,
+    "nativeMode": "question",
+    "question": 2,
+    "textNode": 3,
+    "text": "SELECTED_QUESTION_2",
+    "cards": [],
+    "entrances": []
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "utc": "2026-11-15T18:43:39.168880+00:00",
+  "producerEvidence": "54235b49d08184d920d6e996d47f05c3096e6bd8",
+  "evidenceOnlyPaths": 13,
+  "managerProductUnchanged": true,
+  "physicalMedia35Bytes": 22384330,
+  "allMediaExactGitDeclaredHashAndSize": true,
+  "embeddedPng5HeadersAndHashes": true,
+  "embeddedRights": "UNKNOWN",
+  "font6Bytes": 124064,
+  "fontInputBodiesHashVerified": true,
+  "beforeAfterPhysicalFilesUnchanged": true,
+  "publicPages": "Manager independently opened current SFXMint license and exact49/46 source pages; labels confirmed. No new MP3 download/engine/render/transform executed. Producer recorded response hashes matched source notices.",
+  "primarySources": [
+    "https://sfxmint.com/license",
+    "https://sfxmint.com/sounds/transition-swoosh-49",
+    "https://sfxmint.com/sounds/ui-chime-46"
+  ],
+  "limits": "No font tarball/CAFS/loader/glyph/browser or adaptation/historical archive/other media rights certification; no runtime/export authority, pin or readiness installed; tasks OPEN"
+}

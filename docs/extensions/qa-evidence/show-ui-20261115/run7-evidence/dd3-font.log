@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 ../docs/extensions/qa-evidence/show-ui-20261115/qa-preview.spec.ts:433:1 › diagnostic: native rendered font evidence for Japanese UI (4.9s)
+
+  1 passed (10.6s)

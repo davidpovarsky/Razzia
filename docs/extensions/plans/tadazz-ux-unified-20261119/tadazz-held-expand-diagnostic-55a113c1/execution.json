@@ -1,0 +1,112 @@
+{
+  "kind": "supplementary-held-preview-fullscreen-diagnostic",
+  "releaseQualification": false,
+  "baseSourceSha": "661094be855bbfde18517e2d1103ad62d51911a8",
+  "sourceOverrides": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "5065e92ac8b6f90be553478fec30f8f59f82598a6561b72b2e7b5955686c843d",
+    "extensions/qa/phase3-full-show/host-controls.mjs": "311e86eddd3ce77abdb7ef8bf511214bc1c9527d4764958a5be16082dc1723e9"
+  },
+  "container": "9eef08a3d197a10b17c6b139b863a525216da18fe73c20f4dd9b5e321bb36566",
+  "run": "tadazz-held-expand-diagnostic-55a113c1",
+  "network": "none",
+  "cpus": 1,
+  "memoryBytes": 3221225472,
+  "sourceMountsReadOnly": true,
+  "oldFullshowStopped": true,
+  "customerMountAccessed": false,
+  "productionChanged": false,
+  "startedAt": 1795061275.7999032,
+  "resourcesBefore": {
+    "memoryLimitBytes": 3221225472,
+    "memoryPeakBytes": 5431296,
+    "memoryCurrentBytes": 5431296,
+    "events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    }
+  },
+  "command": [
+    "docker",
+    "exec",
+    "-w",
+    "/source",
+    "-e",
+    "TMPDIR=/tmp",
+    "-e",
+    "HOME=/tmp",
+    "-e",
+    "PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright",
+    "-e",
+    "TSX_DISABLE_CACHE=1",
+    "-e",
+    "NODE_OPTIONS=--max-old-space-size=1024",
+    "-e",
+    "TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show",
+    "-e",
+    "TADAZZ_FULL_SHOW_SOURCE_SHA=661094be855bbfde18517e2d1103ad62d51911a8",
+    "-e",
+    "TADAZZ_FULL_SHOW_BROWSERS=webkit,chromium",
+    "-e",
+    "TADAZZ_FULL_SHOW_THEMES=tadazz-classic",
+    "-e",
+    "TADAZZ_FULL_SHOW_DIAGNOSTIC=host-controls",
+    "9eef08a3d197a10b17c6b139b863a525216da18fe73c20f4dd9b5e321bb36566",
+    "nice",
+    "-n",
+    "19",
+    "taskset",
+    "-c",
+    "0",
+    "timeout",
+    "-k",
+    "5",
+    "300",
+    "node",
+    "/cleanup/extensions/node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "extensions/qa/phase3-full-show/browser-verify.mjs"
+  ],
+  "exit": 0,
+  "resourcesAfter": {
+    "memoryLimitBytes": 3221225472,
+    "memoryPeakBytes": 1174126592,
+    "memoryCurrentBytes": 10321920,
+    "events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    }
+  },
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic synthetic host UI controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 38629
+    },
+    {
+      "name": "chromium / tadazz-classic synthetic host UI controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 7751
+    }
+  ],
+  "errors": [],
+  "pageErrorEvents": [],
+  "requestFailures": [],
+  "diagnosticMode": "host-controls",
+  "artifactSha256": "3738f147817b7372336703b82482e68eb710e07d7a3c7c09a489c2589a2f59f6",
+  "status": "PASS",
+  "seconds": 57.581,
+  "ownedContainerStopped": true
+}

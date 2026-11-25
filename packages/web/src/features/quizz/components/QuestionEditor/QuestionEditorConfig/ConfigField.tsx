@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from "react"
 
 interface LabelProps {
-  icon: ReactNode
+  icon?: ReactNode
   label: string
   unit?: string
   action?: ReactNode

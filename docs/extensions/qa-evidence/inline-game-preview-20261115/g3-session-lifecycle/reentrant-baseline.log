@@ -1,0 +1,9 @@
+{
+  "source": "b7a8fd4eb16a5d1da1cee71ed148fd431dab7966",
+  "sourceSha256": "34e00b4a67e18e4c66a6bf88c6f676e681ad7681024c24e6ee70a4c41b9e9369",
+  "newestClaimCurrent": false,
+  "newestClaimAborted": false,
+  "supersededOuterCurrent": true,
+  "expected": "The reentrant/newer claim wins; outer claim is aborted",
+  "scope": "Pure coordinator regression; no stage/DOM/network/auth or product acceptance"
+}

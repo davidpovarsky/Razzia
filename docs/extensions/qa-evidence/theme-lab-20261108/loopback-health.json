@@ -1,0 +1,9 @@
+{
+  "origin": "http://127.0.0.1:3288",
+  "health": "ok",
+  "wrongPassword": "rejected",
+  "savedSamples": 6,
+  "themesIncludingBundledClassic": 3,
+  "productionContainer": "8227d0c96ba1cda10d4f003a51bb6465e495e64afa2f24443d82c0cd7dd5d0ec sha256:05c66d23d7c76ccd964720e672bbac001decfcfc7e670e7aafa3508a698937ac 2026-11-08T17:29:44.514365819Z",
+  "labImage": "sha256:861c67990a82d676073f9e39cbc89664807696d0c965d6dfcb29409617616fbe"
+}

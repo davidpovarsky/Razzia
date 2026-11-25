@@ -1,0 +1,82 @@
+{
+  "api": {
+    "notFound": "הפריט המבוקש אינו קיים",
+    "serverError": "אירעה שגיאה בשרת. נסו שוב"
+  },
+  "auth": {
+    "invalidInviteCode": "קוד ההזמנה אינו תקין",
+    "joinTicketInvalid": "תוקף בקשת ההצטרפות פג. הזינו שוב את קוד המשחק",
+    "sessionFailed": "לא ניתן להתחיל חיבור. טענו מחדש את העמוד",
+    "tokenInvalid": "אישור החיבור אינו תקין",
+    "tokenMissing": "חסר אישור חיבור",
+    "unauthorized": "אין לכם הרשאה לפעולה זו",
+    "usernameTooLong": "שם המשתמש יכול להכיל עד 24 תווים",
+    "usernameTooShort": "שם המשתמש צריך להכיל לפחות 4 תווים"
+  },
+  "game": {
+    "alreadyStarted": "המשחק כבר התחיל",
+    "expired": "תוקף המשחק פג",
+    "invalidAutoAdvanceDelay": "ההשהיה צריכה להיות בין 3 ל־600 שניות",
+    "kickedByManager": "המנחה הוציא אתכם מהמשחק",
+    "locked": "המשחק נעול",
+    "managerAlreadyConnected": "המנחה כבר מחובר",
+    "managerCannotJoin": "לא ניתן להצטרף כשחקן למשחק שאתם מנחים",
+    "managerDisconnected": "המנחה התנתק",
+    "noPlayersConnected": "אין שחקנים מחוברים",
+    "notFound": "המשחק לא נמצא",
+    "playerAlreadyConnected": "השחקן כבר מחובר"
+  },
+  "invalidRequest": "הבקשה אינה תקינה",
+  "manager": {
+    "failedToReadConfig": "לא ניתן לקרוא את הגדרות המשחק",
+    "invalidPassword": "הסיסמה אינה נכונה",
+    "passwordNotConfigured": "לא הוגדרה סיסמת מנהל"
+  },
+  "notFound": {
+    "back": "חזרה לדף הבית",
+    "description": "העמוד שחיפשתם אינו קיים.",
+    "title": "העמוד לא נמצא"
+  },
+  "quizz": {
+    "answerEmpty": "התשובה אינה יכולה להיות ריקה",
+    "cooldownTooLong": "זמן הצגת השאלה אינו יכול לעלות על 15 שניות",
+    "cooldownTooShort": "זמן הצגת השאלה צריך להיות לפחות 3 שניות",
+    "failedToDelete": "לא ניתן למחוק את החידון",
+    "failedToSave": "החידון אינו שלם. ודאו שלכל שאלה יש כותרת ולפחות תשובה נכונה אחת",
+    "failedToUpdate": "לא ניתן לעדכן את החידון",
+    "invalidMediaUrl": "יש להזין כתובת מדיה תקינה",
+    "maxPointsNegative": "מספר הנקודות אינו יכול להיות שלילי",
+    "noQuestions": "החידון צריך לכלול לפחות שאלה אחת",
+    "noSolution": "בחרו לפחות תשובה נכונה אחת",
+    "notFound": "החידון לא נמצא",
+    "penaltyNegative": "הפחתת הניקוד אינה יכולה להיות שלילית",
+    "questionEmpty": "השאלה אינה יכולה להיות ריקה",
+    "subjectEmpty": "הנושא אינו יכול להיות ריק",
+    "tooFewAnswers": "השאלה צריכה לכלול לפחות 2 תשובות",
+    "tooManyAnswers": "השאלה יכולה לכלול עד 4 תשובות",
+    "estimationInvalidRange": "הערך המרבי חייב להיות גדול מהערך המזערי",
+    "estimationSolutionOutOfRange": "התשובה הנכונה חייבת להיות בין הערך המזערי למרבי",
+    "estimationStepInvalid": "גודל הצעד חייב להיות גדול מ־0",
+    "estimationMarginNegative": "טווח הסטייה אינו יכול להיות שלילי",
+    "estimationInvalidOptions": "הגדרות ההערכה חסרות או אינן תקינות"
+  },
+  "result": {
+    "notFound": "התוצאה לא נמצאה"
+  },
+  "route": {
+    "back": "חזרה לדף הבית",
+    "description": "אירעה שגיאה בלתי צפויה. נסו שוב.",
+    "title": "משהו השתבש"
+  },
+  "media": {
+    "invalidName": "שם המדיה אינו תקין",
+    "invalidType": "סוג הקובץ אינו נתמך. העלו תמונה, קובץ שמע או וידאו",
+    "missingFile": "לא נשלח קובץ",
+    "notFound": "המדיה לא נמצאה",
+    "tooLarge": "הקובץ גדול מדי",
+    "uploadFailed": "העלאת הקובץ נכשלה"
+  },
+  "server": {
+    "internal": "אירעה שגיאה בשרת. נסו שוב"
+  }
+}

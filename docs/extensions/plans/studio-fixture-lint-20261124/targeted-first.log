@@ -1,0 +1,1030 @@
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:58:7]
+ 57 |       if (!value) return value
+ 58 |       const { start } = value.audio.cues
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 59 |       if (!start) throw new Error("The browser fixture requires its start cue")
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:60:7]
+ 59 |       if (!start) throw new Error("The browser fixture requires its start cue")
+ 60 |       return {
+    :       ^^^^^^^^
+ 61 |         ...value,
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:230:3]
+ 229 |   if (quizzId !== "new" && !base) return <p>Loading fixture</p>
+ 230 |   return (
+     :   ^^^^^^^^
+ 231 |     <QuizzEditorProvider initialData={base ?? undefined}>
+     `----
+
+  x eslint(no-shadow): 'quiz' is already declared in the upper scope.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:277:55]
+ 276 | }
+ 277 | const recordCount = async (page, owner = "owner-one", quiz = "quiz-one") =>
+     :                                                       ^^|^
+     :                                                         `-- shadowed declaration is here
+ 278 |   page.evaluate(
+ 279 |     ({ owner, quiz }) =>
+     :               ^^|^
+     :                 `-- 'quiz' is declared here
+ 280 |       Object.keys(localStorage).filter((key) =>
+     `----
+  help: Consider renaming 'quiz' to avoid shadowing the variable from the outer scope.
+
+  x eslint(prefer-destructuring): Use Array destructuring.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:157:18]
+ 156 |     if (path.startsWith("/api/extensions/quizzes")) {
+ 157 |       const id = path.split("/")[4]
+     :                  ^^^^^^^^^^^^^^^^^^
+ 158 |       if (request.method === "GET") {
+     `----
+  help: Use array destructuring rather than direct member access.
+
+  x eslint(no-plusplus): Unary operator '++' used.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:214:41]
+ 213 |       }
+ 214 |       const targetId = id || `created-${++created}`
+     :                                         ^^^^^^^^^
+ 215 |       const revision = existing ? existing.extras.revision + 1 : 1
+     `----
+  help: Use the assignment operator `+=` instead.
+
+  x eslint(no-promise-executor-return): Return statement should not be used in Promise executor.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:247:29]
+ 246 | })
+ 247 | await new Promise((done) => server.listen(0, "127.0.0.1", done))
+     :                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 248 | const origin = `http://127.0.0.1:${server.address().port}`
+     `----
+  help: Use `resolve()` or `reject()` instead of returning a value.
+
+  x eslint(no-await-in-loop): Unexpected `await` inside a loop.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:271:21]
+ 270 |     try {
+ 271 |       if (condition(await inspect(page))) return
+     :                     ^^^^^
+ 272 |     } catch {}
+     `----
+  help: Collect all promises into an array and use `Promise.all()` to run them in parallel, rather than awaiting each one sequentially inside the loop.
+
+  x eslint(no-empty): Unexpected empty block statements
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:272:13]
+ 271 |       if (condition(await inspect(page))) return
+ 272 |     } catch {}
+     :             ^^
+ 273 |     await page.waitForTimeout(30)
+     `----
+  help: Remove this block or add a comment inside it
+
+  x eslint(no-await-in-loop): Unexpected `await` inside a loop.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:273:5]
+ 272 |     } catch {}
+ 273 |     await page.waitForTimeout(30)
+     :     ^^^^^
+ 274 |   }
+     `----
+  help: Collect all promises into an array and use `Promise.all()` to run them in parallel, rather than awaiting each one sequentially inside the loop.
+
+  x eslint(require-await): Async function has no `await` expression.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:277:21]
+ 276 |     }
+ 277 | ,-> const recordCount = async (page, owner = "owner-one", quiz = "quiz-one") =>
+ 278 | |     page.evaluate(
+ 279 | |       ({ owner, quiz }) =>
+ 280 | |         Object.keys(localStorage).filter((key) =>
+ 281 | |           key.startsWith(
+ 282 | |             `tadazz:studio-draft:v1:${owner}:${quiz === null ? "new" : "quiz-" + quiz}:`,
+ 283 | |           ),
+ 284 | |         ).length,
+ 285 | |       { owner, quiz },
+ 286 | `->   )
+ 287 |     const open = async (page, id = "quiz-one", extra = "") => {
+     `----
+  help: Consider removing the `async` keyword.
+
+  x eslint(no-unmodified-loop-condition): 'releaseCreate' is not modified in this loop.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:522:11]
+ 521 |   await page.getByTestId("editor-save-btn").click()
+ 522 |   while (!releaseCreate) await page.waitForTimeout(20)
+     :           ^^^^^^^^^^^^^
+ 523 |   await page.evaluate(() => window.fixtureLateEdit())
+     `----
+
+  x eslint(no-await-in-loop): Unexpected `await` inside a loop.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:522:26]
+ 521 |   await page.getByTestId("editor-save-btn").click()
+ 522 |   while (!releaseCreate) await page.waitForTimeout(20)
+     :                          ^^^^^
+ 523 |   await page.evaluate(() => window.fixtureLateEdit())
+     `----
+  help: Collect all promises into an array and use `Promise.all()` to run them in parallel, rather than awaiting each one sequentially inside the loop.
+
+  x eslint(no-empty-function): Unexpected empty function
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:696:18]
+ 695 |     .screenshot({ path: join(output, "failure.png"), fullPage: true })
+ 696 |     .catch(() => {})
+     :                  ^^
+ 697 |   const report = {
+     `----
+  help: Consider removing this function or adding logic to it.
+
+  x eslint(no-promise-executor-return): Return statement should not be used in Promise executor.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:712:31]
+ 711 |   await browser.close()
+ 712 |   await new Promise((done) => server.close(done))
+     :                               ^^^^^^^^^^^^^^^^^^
+ 713 | }
+     `----
+  help: Use `resolve()` or `reject()` instead of returning a value.
+
+  x eslint(no-shadow): 'owner' is already declared in the upper scope.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:277:34]
+ 276 | }
+ 277 | const recordCount = async (page, owner = "owner-one", quiz = "quiz-one") =>
+     :                                  ^^|^^
+     :                                    `-- shadowed declaration is here
+ 278 |   page.evaluate(
+ 279 |     ({ owner, quiz }) =>
+     :        ^^|^^
+     :          `-- 'owner' is declared here
+ 280 |       Object.keys(localStorage).filter((key) =>
+     `----
+  help: Consider renaming 'owner' to avoid shadowing the variable from the outer scope.
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:15:1]
+ 14 |   throw new Error("Set STUDIO_DIAGNOSTICS to an owned scratch directory")
+ 15 | await mkdir(output, { recursive: true })
+    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 16 | const require = createRequire(join(repo, "extensions/package.json"))
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:523:3]
+ 522 |   while (!releaseCreate) await page.waitForTimeout(20)
+ 523 |   await page.evaluate(() => window.fixtureLateEdit())
+     :   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 524 |   await check(
+     `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:648:7]
+ 647 |         throw new DOMException("Fixture quota", "QuotaExceededError")
+ 648 |       return original.call(this, key, value)
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 649 |     }
+     `----
+
+  x typescript(TS7016): Could not find a declaration file for module 'react-dom/client'. '/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-oracle-integration-20261123/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js' implicitly has an 'any' type.
+   ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:2:28]
+ 1 | import "./browser-i18n"
+ 2 | import { createRoot } from "react-dom/client"
+   :                            ^^^^^^^^^^^^^^^^^^
+ 3 | import { useEffect, useState } from "react"
+   `----
+
+  x typescript(TS7016): Could not find a declaration file for module 'react'. '/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-oracle-integration-20261123/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js' implicitly has an 'any' type.
+   ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:3:37]
+ 2 | import { createRoot } from "react-dom/client"
+ 3 | import { useEffect, useState } from "react"
+   :                                     ^^^^^^^
+ 4 | import { Toaster } from "react-hot-toast"
+   `----
+
+  x typescript(TS7006): Parameter 'value' implicitly has an 'any' type.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:57:23]
+ 56 |   const editAudio = () => {
+ 57 |     editor.setExtras((value) => {
+    :                       ^^^^^
+ 58 |       if (!value) {return value}
+    `----
+
+  x typescript(TS7016): Could not find a declaration file for module 'react/jsx-runtime'. '/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-oracle-integration-20261123/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:78:5]
+ 77 |   return (
+ 78 |     <>
+    :     ^^
+ 79 |       <QuizzEditorHeader />
+    `----
+
+  x typescript(TS7006): Parameter 'item' implicitly has an 'any' type.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:144:33]
+ 143 |         <div className="actions">
+ 144 |           {studio.timeline.map((item) => (
+     :                                 ^^^^
+ 145 |             <Button
+     `----
+
+  x typescript(TS7006): Parameter 'event' implicitly has an 'any' type.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:160:26]
+ 159 |               value={scene.title ?? ""}
+ 160 |               onChange={(event) =>
+     :                          ^^^^^
+ 161 |                 studio.updateSceneConfig(scene.id, {
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:47:9]
+ 46 | function Controls() {
+ 47 |   const studio = useStudioEditor()
+    :         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 48 |   const editor = useQuizzEditor()
+    `----
+  help: Assigned value has type `error`, so the target is also inferred as `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:48:9]
+ 47 |   const studio = useStudioEditor()
+ 48 |   const editor = useQuizzEditor()
+    :         ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 49 |   const { control, setValue, formState } = useFormContext<QuizzFormValues>()
+    `----
+  help: Assigned value has type `error`, so the target is also inferred as `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:50:3]
+ 49 |   const { control, setValue, formState } = useFormContext<QuizzFormValues>()
+ 50 |   useEffect(() => {
+    :   ^^^^^^^^^
+ 51 |     Object.assign(window, {
+    `----
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:57:5]
+ 56 |   const editAudio = () => {
+ 57 |     editor.setExtras((value) => {
+    :     ^^^^^^^^^^^^^^^^
+ 58 |       if (!value) {return value}
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .setExtras on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:57:12]
+ 56 |   const editAudio = () => {
+ 57 |     editor.setExtras((value) => {
+    :            ^^^^^^^^^
+ 58 |       if (!value) {return value}
+    `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type `any`.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:58:20]
+ 57 |     editor.setExtras((value) => {
+ 58 |       if (!value) {return value}
+    :                    ^^^^^^^^^^^^
+ 59 |       const { start } = value.audio.cues
+    `----
+  help: Returned expression has type `any`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:59:13]
+ 58 |       if (!value) {return value}
+ 59 |       const { start } = value.audio.cues
+    :             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 60 | 
+    `----
+  help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .audio on an `any` value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:59:31]
+ 58 |       if (!value) {return value}
+ 59 |       const { start } = value.audio.cues
+    :                               ^^^^^
+ 60 | 
+    `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type `any`.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:62:7]
+ 61 |           if (!start) {throw new Error("The browser fixture requires its start cue")}
+ 62 | ,->       return {
+ 63 | |           ...value,
+ 64 | |           audio: {
+ 65 | |             ...value.audio,
+ 66 | |             cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+ 67 | |           },
+ 68 | `->       }
+ 69 |         })
+    `----
+  help: Returned expression has type `any`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:64:9]
+ 63 |             ...value,
+ 64 | ,->         audio: {
+ 65 | |             ...value.audio,
+ 66 | |             cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+ 67 | `->         },
+ 68 |           }
+    `----
+  help: Assigned value has type `any`; the target has type `any`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:66:11]
+ 65 |           ...value.audio,
+ 66 |           cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+    :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 67 |         },
+    `----
+  help: Assigned value has type `any`; the target has type `any`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .audio on an `any` value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:65:20]
+ 64 |         audio: {
+ 65 |           ...value.audio,
+    :                    ^^^^^
+ 66 |           cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+    `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:66:40]
+ 65 |           ...value.audio,
+ 66 |           cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+    :                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 67 |         },
+    `----
+  help: Assigned value has type `any`; the target has type `any`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .audio on an `any` value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:66:28]
+ 65 |           ...value.audio,
+ 66 |           cues: { ...value.audio.cues, start: { ...start, volume: 0.17 } },
+    :                            ^^^^^
+ 67 |         },
+    `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:71:9]
+ 70 |       }
+ 71 | ,->   const scene =
+ 72 | |       studio.selectedTimelineItem?.kind !== "question" &&
+ 73 | |       studio.selectedTimelineItem
+ 74 | |         ? studio.scenes[studio.selectedTimelineItem.sceneId]
+ 75 | `->       : null
+ 76 |     
+    `----
+  help: Assigned value has type `error`, so the target is also inferred as `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectedTimelineItem on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:72:12]
+ 71 |   const scene =
+ 72 |     studio.selectedTimelineItem?.kind !== "question" &&
+    :            ^^^^^^^^^^^^^^^^^^^^
+ 73 |     studio.selectedTimelineItem
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectedTimelineItem on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:73:12]
+ 72 |     studio.selectedTimelineItem?.kind !== "question" &&
+ 73 |     studio.selectedTimelineItem
+    :            ^^^^^^^^^^^^^^^^^^^^
+ 74 |       ? studio.scenes[studio.selectedTimelineItem.sceneId]
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .scenes on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:74:16]
+ 73 |     studio.selectedTimelineItem
+ 74 |       ? studio.scenes[studio.selectedTimelineItem.sceneId]
+    :                ^^^^^^
+ 75 |       : null
+    `----
+
+  x typescript(no-unsafe-member-access): Computed name [studio.selectedTimelineItem.sceneId] resolves to an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:74:23]
+ 73 |     studio.selectedTimelineItem
+ 74 |       ? studio.scenes[studio.selectedTimelineItem.sceneId]
+    :                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 75 |       : null
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectedTimelineItem on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:74:30]
+ 73 |     studio.selectedTimelineItem
+ 74 |       ? studio.scenes[studio.selectedTimelineItem.sceneId]
+    :                              ^^^^^^^^^^^^^^^^^^^^
+ 75 |       : null
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .extrasStatus on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:81:26]
+ 80 |       <fieldset
+ 81 |         disabled={editor.extrasStatus !== "ready" || formState.isSubmitting}
+    :                          ^^^^^^^^^^^^
+ 82 |         inert={formState.isSubmitting}
+    `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:87:28]
+ 86 |             data-testid="add-question"
+ 87 |             onClick={() => studio.addTimelineCard("quiz")}
+    :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 88 |           >
+    `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:87:28]
+ 86 |             data-testid="add-question"
+ 87 |             onClick={() => studio.addTimelineCard("quiz")}
+    :                            ^^^^^^^^^^^^^^^^^^^^^^
+ 88 |           >
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .addTimelineCard on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:87:35]
+ 86 |             data-testid="add-question"
+ 87 |             onClick={() => studio.addTimelineCard("quiz")}
+    :                                   ^^^^^^^^^^^^^^^
+ 88 |           >
+    `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:93:28]
+ 92 |             data-testid="add-scene"
+ 93 |             onClick={() => studio.addTimelineCard("transition")}
+    :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 94 |           >
+    `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:93:28]
+ 92 |             data-testid="add-scene"
+ 93 |             onClick={() => studio.addTimelineCard("transition")}
+    :                            ^^^^^^^^^^^^^^^^^^^^^^
+ 94 |           >
+    `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .addTimelineCard on an `error` typed value.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:93:35]
+ 92 |             data-testid="add-scene"
+ 93 |             onClick={() => studio.addTimelineCard("transition")}
+    :                                   ^^^^^^^^^^^^^^^
+ 94 |           >
+    `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:100:15]
+  99 |             onClick={() =>
+ 100 |               studio.duplicateTimelineCard(studio.selectedTimelineIndex)
+     :               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 101 |             }
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:100:15]
+  99 |             onClick={() =>
+ 100 |               studio.duplicateTimelineCard(studio.selectedTimelineIndex)
+     :               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 101 |             }
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .duplicateTimelineCard on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:100:22]
+  99 |             onClick={() =>
+ 100 |               studio.duplicateTimelineCard(studio.selectedTimelineIndex)
+     :                      ^^^^^^^^^^^^^^^^^^^^^
+ 101 |             }
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectedTimelineIndex on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:100:51]
+  99 |             onClick={() =>
+ 100 |               studio.duplicateTimelineCard(studio.selectedTimelineIndex)
+     :                                                   ^^^^^^^^^^^^^^^^^^^^^
+ 101 |             }
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:108:15]
+ 107 |             onClick={() =>
+ 108 |               studio.removeTimelineCard(studio.selectedTimelineIndex)
+     :               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 109 |             }
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:108:15]
+ 107 |             onClick={() =>
+ 108 |               studio.removeTimelineCard(studio.selectedTimelineIndex)
+     :               ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 109 |             }
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .removeTimelineCard on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:108:22]
+ 107 |             onClick={() =>
+ 108 |               studio.removeTimelineCard(studio.selectedTimelineIndex)
+     :                      ^^^^^^^^^^^^^^^^^^
+ 109 |             }
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectedTimelineIndex on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:108:48]
+ 107 |             onClick={() =>
+ 108 |               studio.removeTimelineCard(studio.selectedTimelineIndex)
+     :                                                ^^^^^^^^^^^^^^^^^^^^^
+ 109 |             }
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:116:15]
+ 115 |             onClick={() =>
+ 116 |               studio.reorderTimelineCards(studio.selectedTimelineIndex, 0)
+     :               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 117 |             }
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:116:15]
+ 115 |             onClick={() =>
+ 116 |               studio.reorderTimelineCards(studio.selectedTimelineIndex, 0)
+     :               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 117 |             }
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .reorderTimelineCards on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:116:22]
+ 115 |             onClick={() =>
+ 116 |               studio.reorderTimelineCards(studio.selectedTimelineIndex, 0)
+     :                      ^^^^^^^^^^^^^^^^^^^^
+ 117 |             }
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectedTimelineIndex on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:116:50]
+ 115 |             onClick={() =>
+ 116 |               studio.reorderTimelineCards(studio.selectedTimelineIndex, 0)
+     :                                                  ^^^^^^^^^^^^^^^^^^^^^
+ 117 |             }
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:123:28]
+ 122 |             data-testid="convert-scene"
+ 123 |             onClick={() => studio.changeSelectedCardKind("transition")}
+     :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 124 |           >
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:123:28]
+ 122 |             data-testid="convert-scene"
+ 123 |             onClick={() => studio.changeSelectedCardKind("transition")}
+     :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 124 |           >
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .changeSelectedCardKind on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:123:35]
+ 122 |             data-testid="convert-scene"
+ 123 |             onClick={() => studio.changeSelectedCardKind("transition")}
+     :                                   ^^^^^^^^^^^^^^^^^^^^^^
+ 124 |           >
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:129:28]
+ 128 |             data-testid="convert-survey"
+ 129 |             onClick={() => studio.changeSelectedCardKind("survey")}
+     :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 130 |           >
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:129:28]
+ 128 |             data-testid="convert-survey"
+ 129 |             onClick={() => studio.changeSelectedCardKind("survey")}
+     :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 130 |           >
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .changeSelectedCardKind on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:129:35]
+ 128 |             data-testid="convert-survey"
+ 129 |             onClick={() => studio.changeSelectedCardKind("survey")}
+     :                                   ^^^^^^^^^^^^^^^^^^^^^^
+ 130 |           >
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:135:28]
+ 134 |             data-testid="convert-quiz"
+ 135 |             onClick={() => studio.changeSelectedCardKind("quiz")}
+     :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 136 |           >
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:135:28]
+ 134 |             data-testid="convert-quiz"
+ 135 |             onClick={() => studio.changeSelectedCardKind("quiz")}
+     :                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 136 |           >
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .changeSelectedCardKind on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:135:35]
+ 134 |             data-testid="convert-quiz"
+ 135 |             onClick={() => studio.changeSelectedCardKind("quiz")}
+     :                                   ^^^^^^^^^^^^^^^^^^^^^^
+ 136 |           >
+     `----
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:144:12]
+ 143 |         <div className="actions">
+ 144 |           {studio.timeline.map((item) => (
+     :            ^^^^^^^^^^^^^^^^^^^
+ 145 |             <Button
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .timeline on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:144:19]
+ 143 |         <div className="actions">
+ 144 |           {studio.timeline.map((item) => (
+     :                   ^^^^^^^^
+ 145 |             <Button
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:146:20]
+ 145 |             <Button
+ 146 |               key={item.id}
+     :                    ^^^^^^^
+ 147 |               data-testid={`select-${item.id}`}
+     `----
+  help: Assigned value has type `any`; the target has type `any`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .id on an `any` value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:146:25]
+ 145 |             <Button
+ 146 |               key={item.id}
+     :                         ^^
+ 147 |               data-testid={`select-${item.id}`}
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .id on an `any` value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:147:43]
+ 146 |               key={item.id}
+ 147 |               data-testid={`select-${item.id}`}
+     :                                           ^^
+ 148 |               onClick={() => studio.selectTimelineItem(item.id)}
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:148:30]
+ 147 |               data-testid={`select-${item.id}`}
+ 148 |               onClick={() => studio.selectTimelineItem(item.id)}
+     :                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 149 |             >
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:148:30]
+ 147 |               data-testid={`select-${item.id}`}
+ 148 |               onClick={() => studio.selectTimelineItem(item.id)}
+     :                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 149 |             >
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .selectTimelineItem on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:148:37]
+ 147 |               data-testid={`select-${item.id}`}
+ 148 |               onClick={() => studio.selectTimelineItem(item.id)}
+     :                                     ^^^^^^^^^^^^^^^^^^
+ 149 |             >
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .id on an `any` value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:148:61]
+ 147 |               data-testid={`select-${item.id}`}
+ 148 |               onClick={() => studio.selectTimelineItem(item.id)}
+     :                                                             ^^
+ 149 |             >
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .kind on an `any` value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:150:21]
+ 149 |             >
+ 150 |               {item.kind}
+     :                     ^^^^
+ 151 |             </Button>
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:159:22]
+ 158 |               data-testid="scene-title"
+ 159 |               value={scene.title ?? ""}
+     :                      ^^^^^^^^^^^^^^^^^
+ 160 |               onChange={(event) =>
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .title on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:159:28]
+ 158 |               data-testid="scene-title"
+ 159 |               value={scene.title ?? ""}
+     :                            ^^^^^
+ 160 |               onChange={(event) =>
+     `----
+
+  x typescript(no-unsafe-return): Unsafe return of a value of type error.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:161:17]
+ 160 |                   onChange={(event) =>
+ 161 | ,->                 studio.updateSceneConfig(scene.id, {
+ 162 | |                     title: event.target.value,
+ 163 | `->                 })
+ 164 |                   }
+     `----
+  help: Returned expression has type `error`. Return a safely typed value or narrow the value before returning it.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:161:17]
+ 160 |               onChange={(event) =>
+ 161 |                 studio.updateSceneConfig(scene.id, {
+     :                 ^^^^^^^^^^^^^^^^^^^^^^^^
+ 162 |                   title: event.target.value,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .updateSceneConfig on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:161:24]
+ 160 |               onChange={(event) =>
+ 161 |                 studio.updateSceneConfig(scene.id, {
+     :                        ^^^^^^^^^^^^^^^^^
+ 162 |                   title: event.target.value,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .id on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:161:48]
+ 160 |               onChange={(event) =>
+ 161 |                 studio.updateSceneConfig(scene.id, {
+     :                                                ^^
+ 162 |                   title: event.target.value,
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:162:19]
+ 161 |                 studio.updateSceneConfig(scene.id, {
+ 162 |                   title: event.target.value,
+     :                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 163 |                 })
+     `----
+  help: Assigned value has type `any`; the target has type `any`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-member-access): Unsafe member access .target on an `any` value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:162:32]
+ 161 |                 studio.updateSceneConfig(scene.id, {
+ 162 |                   title: event.target.value,
+     :                                ^^^^^^
+ 163 |                 })
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .currentIndex on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:171:41]
+ 170 |               control={control}
+ 171 |               name={`questions.${editor.currentIndex}.question`}
+     :                                         ^^^^^^^^^^^^
+ 172 |               render={({ field }) => (
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .currentIndex on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:181:41]
+ 180 |               control={control}
+ 181 |               name={`questions.${editor.currentIndex}.answers.0`}
+     :                                         ^^^^^^^^^^^^
+ 182 |               render={({ field }) => (
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .currentIndex on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:190:41]
+ 189 |               control={control}
+ 190 |               name={`questions.${editor.currentIndex}.answers.1`}
+     :                                         ^^^^^^^^^^^^
+ 191 |               render={({ field }) => (
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:202:11]
+ 201 |         {JSON.stringify({
+ 202 |           snapshot: studio.captureStudioSnapshot(),
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:203:11]
+ 202 |           snapshot: studio.captureStudioSnapshot(),
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 204 |           canUndo: studio.canUndo,
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:204:11]
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+ 204 |           canUndo: studio.canUndo,
+     :           ^^^^^^^^^^^^^^^^^^^^^^^
+ 205 |           canRedo: studio.canRedo,
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:205:11]
+ 204 |           canUndo: studio.canUndo,
+ 205 |           canRedo: studio.canRedo,
+     :           ^^^^^^^^^^^^^^^^^^^^^^^
+ 206 |           ready: editor.extrasStatus,
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:206:11]
+ 205 |           canRedo: studio.canRedo,
+ 206 |           ready: editor.extrasStatus,
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 207 |           draftConflict: studio.draftConflict,
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:207:11]
+ 206 |           ready: editor.extrasStatus,
+ 207 |           draftConflict: studio.draftConflict,
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 208 |           pending: Boolean(studio.pendingDraft),
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:202:21]
+ 201 |         {JSON.stringify({
+ 202 |           snapshot: studio.captureStudioSnapshot(),
+     :                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .captureStudioSnapshot on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:202:28]
+ 201 |         {JSON.stringify({
+ 202 |           snapshot: studio.captureStudioSnapshot(),
+     :                            ^^^^^^^^^^^^^^^^^^^^^
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .isExtrasDirty on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:203:46]
+ 202 |           snapshot: studio.captureStudioSnapshot(),
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+     :                                              ^^^^^^^^^^^^^
+ 204 |           canUndo: studio.canUndo,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .canUndo on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:204:27]
+ 203 |           dirty: formState.isDirty || editor.isExtrasDirty,
+ 204 |           canUndo: studio.canUndo,
+     :                           ^^^^^^^
+ 205 |           canRedo: studio.canRedo,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .canRedo on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:205:27]
+ 204 |           canUndo: studio.canUndo,
+ 205 |           canRedo: studio.canRedo,
+     :                           ^^^^^^^
+ 206 |           ready: editor.extrasStatus,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .extrasStatus on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:206:25]
+ 205 |           canRedo: studio.canRedo,
+ 206 |           ready: editor.extrasStatus,
+     :                         ^^^^^^^^^^^^
+ 207 |           draftConflict: studio.draftConflict,
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .draftConflict on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:207:33]
+ 206 |           ready: editor.extrasStatus,
+ 207 |           draftConflict: studio.draftConflict,
+     :                                 ^^^^^^^^^^^^^
+ 208 |           pending: Boolean(studio.pendingDraft),
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .pendingDraft on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:208:35]
+ 207 |           draftConflict: studio.draftConflict,
+ 208 |           pending: Boolean(studio.pendingDraft),
+     :                                   ^^^^^^^^^^^^
+ 209 |         })}
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:217:9]
+ 216 |   const { quizzId } = useParams({ strict: false }) as { quizzId: string }
+ 217 |   const [base, setBase] = useState<QuizzWithId | null>(null)
+     :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 218 |   useEffect(() => {
+     `----
+  help: Assigned value has type `error`, so the target is also inferred as `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:217:27]
+ 216 |   const { quizzId } = useParams({ strict: false }) as { quizzId: string }
+ 217 |   const [base, setBase] = useState<QuizzWithId | null>(null)
+     :                           ^^^^^^^^
+ 218 |   useEffect(() => {
+     `----
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:218:3]
+ 217 |   const [base, setBase] = useState<QuizzWithId | null>(null)
+ 218 |   useEffect(() => {
+     :   ^^^^^^^^^
+ 219 |     let active = true
+     `----
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:220:5]
+ 219 |     let active = true
+ 220 |     setBase(null)
+     :     ^^^^^^^
+ 221 | 
+     `----
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:225:11]
+ 224 |         if (active) {
+ 225 |           setBase(data)
+     :           ^^^^^^^
+ 226 |         }
+     `----
+
+  x typescript(no-unsafe-assignment): Unsafe assignment of an error typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:237:39]
+ 236 |   return (
+ 237 |     <QuizzEditorProvider initialData={base ?? undefined}>
+     :                                       ^^^^^^^^^^^^^^^^^
+ 238 |       <StudioEditorProvider>
+     `----
+  help: Assigned value has type `error`; the target has type `error`. Use a safely typed value or `unknown`, and narrow it before use.
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:276:1]
+ 275 | 
+ 276 | createRoot(container).render(
+     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 277 |   <QueryClientProvider
+     `----
+
+  x typescript(no-unsafe-member-access): Unsafe member access .render on an `error` typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:276:23]
+ 275 | 
+ 276 | createRoot(container).render(
+     :                       ^^^^^^
+ 277 |   <QueryClientProvider
+     `----
+
+  x typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+     ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:276:1]
+ 275 | 
+ 276 | createRoot(container).render(
+     : ^^^^^^^^^^
+ 277 |   <QueryClientProvider
+     `----
+
+  ! typescript(require-array-sort-compare): Require 'compare' argument.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-check.mjs:22:21]
+ 21 |       execFileSync("git", ["-C", repo, ...args], { encoding: "utf8" }).trim()
+ 22 | ,-> const sourcePaths = [
+ 23 | |     ...new Set([
+ 24 | |       ...git("diff", "--name-only").split("\n"),
+ 25 | |       ...git("ls-files", "--others", "--exclude-standard").split("\n"),
+ 26 | |     ]),
+ 27 | |   ]
+ 28 | |     .filter(
+ 29 | |       (path) =>
+ 30 | |         /\.(ts|tsx|mjs|json)$/.test(path) &&
+ 31 | |         (path.startsWith("packages/") ||
+ 32 | |           path.startsWith("extensions/") ||
+ 33 | |           /browser-(check\.mjs|fixture\.tsx|i18n\.ts)$/.test(path)),
+ 34 | |     )
+ 35 | `->   .sort()
+ 36 |     const sourceReceipt = {
+    `----
+
+Found 1 warning and 117 errors.
+Finished in 2.2s on 3 files with 233 rules using 2 threads.

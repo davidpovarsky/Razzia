@@ -1,0 +1,69 @@
+{
+  "before": {
+    "memoryLimitBytes": 3221225472,
+    "memoryCurrentBytes": 5472256,
+    "memoryPeakBytes": 14028800,
+    "memorySwapLimitBytes": 0,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "cpuMax": [
+      100000,
+      100000
+    ],
+    "cpuStat": {
+      "usage_usec": 223160,
+      "user_usec": 156369,
+      "system_usec": 66790,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_periods": 4,
+      "nr_throttled": 0,
+      "throttled_usec": 0,
+      "nr_bursts": 0,
+      "burst_usec": 0
+    },
+    "cpuPressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=24499\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=19013\n"
+  },
+  "after": {
+    "memoryLimitBytes": 3221225472,
+    "memoryCurrentBytes": 11874304,
+    "memoryPeakBytes": 1075417088,
+    "memorySwapLimitBytes": 0,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "cpuMax": [
+      100000,
+      100000
+    ],
+    "cpuStat": {
+      "usage_usec": 31216222,
+      "user_usec": 29165494,
+      "system_usec": 2050727,
+      "nice_usec": 29298691,
+      "core_sched.force_idle_usec": 0,
+      "nr_periods": 628,
+      "nr_throttled": 0,
+      "throttled_usec": 0,
+      "nr_bursts": 0,
+      "burst_usec": 0
+    },
+    "cpuPressure": "some avg10=76.62 avg60=48.94 avg300=14.47 total=47491074\nfull avg10=49.46 avg60=31.50 avg300=9.33 total=30886250\n"
+  },
+  "configuredMemoryLimitBytes": 3221225472,
+  "configuredNanoCpus": 1000000000,
+  "dockerOOMKilled": false
+}

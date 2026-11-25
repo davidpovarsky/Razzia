@@ -1,0 +1,16 @@
+{
+  "extends": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\@types",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules\\@types"
+    ]
+  },
+  "files": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\server\\game\\phone-controller.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\src\\services\\game\\player-manager.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\server\\game\\roster-native-admission.test.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\src\\services\\game\\index.ts"
+  ],
+  "include": []
+}

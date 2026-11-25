@@ -1,0 +1,1862 @@
+{
+  "engine": "chromium",
+  "theme": "razzia-original",
+  "reducedMotion": false,
+  "proof": "real MCP SDK + AppBridge + unchanged native animations",
+  "snapshots": [
+    {
+      "step": "question",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "epoch": 1,
+      "paused": "false",
+      "elapsed": 691,
+      "renderer": 2,
+      "nativeMode": "question",
+      "question": 1,
+      "textNode": 3,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        }
+      ]
+    },
+    {
+      "step": "answers-and-voting",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "epoch": 2,
+      "paused": "false",
+      "elapsed": 1018,
+      "renderer": 2,
+      "nativeMode": "voting",
+      "question": 1,
+      "textNode": 3,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 4,
+          "testId": "native-razzia-answer-0",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 5,
+          "testId": "native-razzia-answer-1",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 6,
+          "testId": "native-razzia-answer-2",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 7,
+          "testId": "native-razzia-answer-3",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 8,
+          "testId": "native-razzia-answer-4",
+          "pressed": "false",
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "selected",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "epoch": 2,
+      "paused": "false",
+      "elapsed": 1334,
+      "renderer": 2,
+      "nativeMode": "voting",
+      "question": 1,
+      "textNode": 3,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 4,
+          "testId": "native-razzia-answer-0",
+          "pressed": "true",
+          "entrance": "cascade"
+        },
+        {
+          "id": 5,
+          "testId": "native-razzia-answer-1",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 6,
+          "testId": "native-razzia-answer-2",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 7,
+          "testId": "native-razzia-answer-3",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 8,
+          "testId": "native-razzia-answer-4",
+          "pressed": "false",
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "results",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+      "epoch": 3,
+      "paused": "false",
+      "elapsed": 28,
+      "renderer": 2,
+      "nativeMode": "results",
+      "question": 1,
+      "textNode": 3,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 4,
+          "testId": "native-razzia-answer-0",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 5,
+          "testId": "native-razzia-answer-1",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 6,
+          "testId": "native-razzia-answer-2",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 7,
+          "testId": "native-razzia-answer-3",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 8,
+          "testId": "native-razzia-answer-4",
+          "pressed": null,
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "explicit-replay",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "epoch": 4,
+      "paused": "false",
+      "elapsed": 565,
+      "renderer": 9,
+      "nativeMode": "question",
+      "question": 10,
+      "textNode": 11,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        }
+      ]
+    },
+    {
+      "step": "next-question",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+      "epoch": 5,
+      "paused": "false",
+      "elapsed": 577,
+      "renderer": 12,
+      "nativeMode": "question",
+      "question": 13,
+      "textNode": 14,
+      "text": "SELECTED_QUESTION_3",
+      "cards": [],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        }
+      ]
+    },
+    {
+      "step": "previous-question",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "epoch": 6,
+      "paused": "false",
+      "elapsed": 610,
+      "renderer": 16,
+      "nativeMode": "question",
+      "question": 15,
+      "textNode": 17,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        }
+      ]
+    },
+    {
+      "step": "second-answers",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "epoch": 7,
+      "paused": "false",
+      "elapsed": 1055,
+      "renderer": 16,
+      "nativeMode": "voting",
+      "question": 15,
+      "textNode": 17,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 18,
+          "testId": "native-razzia-answer-0",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 19,
+          "testId": "native-razzia-answer-1",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 20,
+          "testId": "native-razzia-answer-2",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 21,
+          "testId": "native-razzia-answer-3",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 22,
+          "testId": "native-razzia-answer-4",
+          "pressed": "false",
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 9,
+          "kind": "answer",
+          "node": 18,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11360.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 10,
+          "kind": "answer",
+          "node": 19,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11443.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 11,
+          "kind": "answer",
+          "node": 20,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11526.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 12,
+          "kind": "answer",
+          "node": 21,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11626.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 13,
+          "kind": "answer",
+          "node": 22,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11710.099999964237,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "paused-answers",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "epoch": 7,
+      "paused": "true",
+      "elapsed": 1122,
+      "renderer": 16,
+      "nativeMode": "voting",
+      "question": 15,
+      "textNode": 17,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 18,
+          "testId": "native-razzia-answer-0",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 19,
+          "testId": "native-razzia-answer-1",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 20,
+          "testId": "native-razzia-answer-2",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 21,
+          "testId": "native-razzia-answer-3",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 22,
+          "testId": "native-razzia-answer-4",
+          "pressed": "false",
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 9,
+          "kind": "answer",
+          "node": 18,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11360.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 10,
+          "kind": "answer",
+          "node": 19,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11443.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 11,
+          "kind": "answer",
+          "node": 20,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11526.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 12,
+          "kind": "answer",
+          "node": 21,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11626.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 13,
+          "kind": "answer",
+          "node": 22,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11710.099999964237,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "paused-selection",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "epoch": 7,
+      "paused": "true",
+      "elapsed": 1122,
+      "renderer": 16,
+      "nativeMode": "voting",
+      "question": 15,
+      "textNode": 17,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 18,
+          "testId": "native-razzia-answer-0",
+          "pressed": "true",
+          "entrance": "cascade"
+        },
+        {
+          "id": 19,
+          "testId": "native-razzia-answer-1",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 20,
+          "testId": "native-razzia-answer-2",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 21,
+          "testId": "native-razzia-answer-3",
+          "pressed": "false",
+          "entrance": "cascade"
+        },
+        {
+          "id": 22,
+          "testId": "native-razzia-answer-4",
+          "pressed": "false",
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 9,
+          "kind": "answer",
+          "node": 18,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11360.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 10,
+          "kind": "answer",
+          "node": 19,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11443.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 11,
+          "kind": "answer",
+          "node": 20,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11526.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 12,
+          "kind": "answer",
+          "node": 21,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11626.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 13,
+          "kind": "answer",
+          "node": 22,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11710.099999964237,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "paused-results",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+      "epoch": 8,
+      "paused": "true",
+      "elapsed": 0,
+      "renderer": 16,
+      "nativeMode": "results",
+      "question": 15,
+      "textNode": 17,
+      "text": "SELECTED_QUESTION_2",
+      "cards": [
+        {
+          "id": 18,
+          "testId": "native-razzia-answer-0",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 19,
+          "testId": "native-razzia-answer-1",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 20,
+          "testId": "native-razzia-answer-2",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 21,
+          "testId": "native-razzia-answer-3",
+          "pressed": null,
+          "entrance": "cascade"
+        },
+        {
+          "id": 22,
+          "testId": "native-razzia-answer-4",
+          "pressed": null,
+          "entrance": "cascade"
+        }
+      ],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 9,
+          "kind": "answer",
+          "node": 18,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11360.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 10,
+          "kind": "answer",
+          "node": 19,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11443.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 11,
+          "kind": "answer",
+          "node": 20,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11526.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 12,
+          "kind": "answer",
+          "node": 21,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11626.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 13,
+          "kind": "answer",
+          "node": 22,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11710.099999964237,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        }
+      ]
+    },
+    {
+      "step": "paused-next-question",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+      "epoch": 9,
+      "paused": "true",
+      "elapsed": 0,
+      "renderer": 24,
+      "nativeMode": "question",
+      "question": 23,
+      "textNode": 25,
+      "text": "SELECTED_QUESTION_3",
+      "cards": [],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 9,
+          "kind": "answer",
+          "node": 18,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11360.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 10,
+          "kind": "answer",
+          "node": 19,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11443.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 11,
+          "kind": "answer",
+          "node": 20,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11526.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 12,
+          "kind": "answer",
+          "node": 21,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11626.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 13,
+          "kind": "answer",
+          "node": 22,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11710.099999964237,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 14,
+          "kind": "question",
+          "node": 23,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 13362.699999988079,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        }
+      ]
+    },
+    {
+      "step": "resumed-next-question",
+      "documentId": 1795108702786.5,
+      "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+      "epoch": 9,
+      "paused": "false",
+      "elapsed": 647,
+      "renderer": 24,
+      "nativeMode": "question",
+      "question": 23,
+      "textNode": 25,
+      "text": "SELECTED_QUESTION_3",
+      "cards": [],
+      "entrances": [
+        {
+          "sequence": 0,
+          "kind": "question",
+          "node": 1,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 887.5,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 1,
+          "kind": "answer",
+          "node": 4,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4144.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 2,
+          "kind": "answer",
+          "node": 5,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4231.199999988079,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 3,
+          "kind": "answer",
+          "node": 6,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4311,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 4,
+          "kind": "answer",
+          "node": 7,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4411,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 5,
+          "kind": "answer",
+          "node": 8,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 4494.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 6,
+          "kind": "question",
+          "node": 10,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 6294.300000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 7,
+          "kind": "question",
+          "node": 13,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 7210.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 8,
+          "kind": "question",
+          "node": 15,
+          "testId": null,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "at": 8127.399999976158,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        },
+        {
+          "sequence": 9,
+          "kind": "answer",
+          "node": 18,
+          "testId": "native-razzia-answer-0",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11360.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 10,
+          "kind": "answer",
+          "node": 19,
+          "testId": "native-razzia-answer-1",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11443.5,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 11,
+          "kind": "answer",
+          "node": 20,
+          "testId": "native-razzia-answer-2",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11526.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 12,
+          "kind": "answer",
+          "node": 21,
+          "testId": "native-razzia-answer-3",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11626.800000011921,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 13,
+          "kind": "answer",
+          "node": 22,
+          "testId": "native-razzia-answer-4",
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "at": 11710.099999964237,
+          "source": "CSS",
+          "name": "tadaEntranceCascade",
+          "duration": "0.65s"
+        },
+        {
+          "sequence": 14,
+          "kind": "question",
+          "node": 23,
+          "testId": null,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "at": 13362.699999988079,
+          "source": "CSS",
+          "name": "tadaEntranceSlideUp",
+          "duration": "0.6s"
+        }
+      ]
+    }
+  ],
+  "resultCounts": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "selectedOutcome": "correct",
+  "draftUnchanged": true,
+  "status": "PASS"
+}

@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "id": "tadazz-classic",
+      "version": "1.0.0",
+      "rendererId": "tadazz-classic-stage",
+      "definitionSha256": "e75af05a88dbf7bb243f387b27f5a95a23c6545219aaf7ea93432508bf63a10e"
+    },
+    {
+      "id": "razzia-original",
+      "version": "1.0.0",
+      "rendererId": "razzia-native-stage",
+      "definitionSha256": "5456810883fc87e885f4194516bfec65c2818a9354c8f5a4f186a80a7404c033"
+    }
+  ],
+  "sources": [
+    {
+      "path": "/work/extensions/src/core/show-themes/classic.manifest.json",
+      "bytes": 41813,
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+    },
+    {
+      "path": "/work/extensions/src/core/show-themes/razzia.manifest.json",
+      "bytes": 45192,
+      "sha256": "ff910bf226e39af78de8240b81671c089ec0c81c48a57538708d0c0caf93eb51"
+    }
+  ]
+}

@@ -1,0 +1,682 @@
+[
+  {
+    "path": "docs/extensions/plans/M1_SECURITY_ACCEPTANCE_20261115.json",
+    "source": "/accepted-source/docs/extensions/plans/M1_SECURITY_ACCEPTANCE_20261115.json"
+  },
+  {
+    "path": "docs/extensions/plans/MCP_APP_ADOPTION_20261115.md",
+    "source": "/accepted-source/docs/extensions/plans/MCP_APP_ADOPTION_20261115.md"
+  },
+  {
+    "path": "docs/extensions/plans/MCP_APP_ADR.md",
+    "source": "/accepted-source/docs/extensions/plans/MCP_APP_ADR.md"
+  },
+  {
+    "path": "extensions/package.json",
+    "source": "/accepted-source/extensions/package.json"
+  },
+  {
+    "path": "extensions/src/core/audio-catalog.test.ts",
+    "source": "/accepted-source/extensions/src/core/audio-catalog.test.ts"
+  },
+  {
+    "path": "extensions/src/core/audio-catalog.ts",
+    "source": "/accepted-source/extensions/src/core/audio-catalog.ts"
+  },
+  {
+    "path": "extensions/src/core/billing/contracts.ts",
+    "source": "/accepted-source/extensions/src/core/billing/contracts.ts"
+  },
+  {
+    "path": "extensions/src/core/billing/index.ts",
+    "source": "/accepted-source/extensions/src/core/billing/index.ts"
+  },
+  {
+    "path": "extensions/src/core/billing/locales.test.ts",
+    "source": "/accepted-source/extensions/src/core/billing/locales.test.ts"
+  },
+  {
+    "path": "extensions/src/core/bundle.ts",
+    "source": "/accepted-source/extensions/src/core/bundle.ts"
+  },
+  {
+    "path": "extensions/src/core/card-appearance.test.ts",
+    "source": "/accepted-source/extensions/src/core/card-appearance.test.ts"
+  },
+  {
+    "path": "extensions/src/core/card-appearance.ts",
+    "source": "/accepted-source/extensions/src/core/card-appearance.ts"
+  },
+  {
+    "path": "extensions/src/core/card-media-references.ts",
+    "source": "/accepted-source/extensions/src/core/card-media-references.ts"
+  },
+  {
+    "path": "extensions/src/core/cinematic-overlays.test.ts",
+    "source": "/accepted-source/extensions/src/core/cinematic-overlays.test.ts"
+  },
+  {
+    "path": "extensions/src/core/cinematic-overlays.ts",
+    "source": "/accepted-source/extensions/src/core/cinematic-overlays.ts"
+  },
+  {
+    "path": "extensions/src/core/commands.ts",
+    "source": "/accepted-source/extensions/src/core/commands.ts"
+  },
+  {
+    "path": "extensions/src/core/constants.ts",
+    "source": "/accepted-source/extensions/src/core/constants.ts"
+  },
+  {
+    "path": "extensions/src/core/core.test.ts",
+    "source": "/accepted-source/extensions/src/core/core.test.ts"
+  },
+  {
+    "path": "extensions/src/core/creating-worlds-show.test.ts",
+    "source": "/accepted-source/extensions/src/core/creating-worlds-show.test.ts"
+  },
+  {
+    "path": "extensions/src/core/creating-worlds-show.ts",
+    "source": "/accepted-source/extensions/src/core/creating-worlds-show.ts"
+  },
+  {
+    "path": "extensions/src/core/digest.ts",
+    "source": "/accepted-source/extensions/src/core/digest.ts"
+  },
+  {
+    "path": "extensions/src/core/imports.test.ts",
+    "source": "/accepted-source/extensions/src/core/imports.test.ts"
+  },
+  {
+    "path": "extensions/src/core/index.ts",
+    "source": "/accepted-source/extensions/src/core/index.ts"
+  },
+  {
+    "path": "extensions/src/core/lottie.test.ts",
+    "source": "/accepted-source/extensions/src/core/lottie.test.ts"
+  },
+  {
+    "path": "extensions/src/core/lottie.ts",
+    "source": "/accepted-source/extensions/src/core/lottie.ts"
+  },
+  {
+    "path": "extensions/src/core/media-selection.ts",
+    "source": "/accepted-source/extensions/src/core/media-selection.ts"
+  },
+  {
+    "path": "extensions/src/core/media.ts",
+    "source": "/accepted-source/extensions/src/core/media.ts"
+  },
+  {
+    "path": "extensions/src/core/packages/index.ts",
+    "source": "/accepted-source/extensions/src/core/packages/index.ts"
+  },
+  {
+    "path": "extensions/src/core/packages/manifest.ts",
+    "source": "/accepted-source/extensions/src/core/packages/manifest.ts"
+  },
+  {
+    "path": "extensions/src/core/packages/paths.ts",
+    "source": "/accepted-source/extensions/src/core/packages/paths.ts"
+  },
+  {
+    "path": "extensions/src/core/packages/protocol.ts",
+    "source": "/accepted-source/extensions/src/core/packages/protocol.ts"
+  },
+  {
+    "path": "extensions/src/core/packages/zip-detection.ts",
+    "source": "/accepted-source/extensions/src/core/packages/zip-detection.ts"
+  },
+  {
+    "path": "extensions/src/core/phone-roster.ts",
+    "source": "/accepted-source/extensions/src/core/phone-roster.ts"
+  },
+  {
+    "path": "extensions/src/core/product-branding.ts",
+    "source": "/accepted-source/extensions/src/core/product-branding.ts"
+  },
+  {
+    "path": "extensions/src/core/question-play-mode.ts",
+    "source": "/accepted-source/extensions/src/core/question-play-mode.ts"
+  },
+  {
+    "path": "extensions/src/core/questions.ts",
+    "source": "/accepted-source/extensions/src/core/questions.ts"
+  },
+  {
+    "path": "extensions/src/core/quiz-extras.ts",
+    "source": "/accepted-source/extensions/src/core/quiz-extras.ts"
+  },
+  {
+    "path": "extensions/src/core/reveal.ts",
+    "source": "/accepted-source/extensions/src/core/reveal.ts"
+  },
+  {
+    "path": "extensions/src/core/revisions.ts",
+    "source": "/accepted-source/extensions/src/core/revisions.ts"
+  },
+  {
+    "path": "extensions/src/core/roster-import.ts",
+    "source": "/accepted-source/extensions/src/core/roster-import.ts"
+  },
+  {
+    "path": "extensions/src/core/roster.test.ts",
+    "source": "/accepted-source/extensions/src/core/roster.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-authoring-convert.ts",
+    "source": "/accepted-source/extensions/src/core/show-authoring-convert.ts"
+  },
+  {
+    "path": "extensions/src/core/show-authoring-schema.ts",
+    "source": "/accepted-source/extensions/src/core/show-authoring-schema.ts"
+  },
+  {
+    "path": "extensions/src/core/show-authoring.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-authoring.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-import-preflight.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-import-preflight.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-import-preflight.ts",
+    "source": "/accepted-source/extensions/src/core/show-import-preflight.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/audio.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/audio.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/classic.manifest.json",
+    "source": "/accepted-source/extensions/src/core/show-themes/classic.manifest.json"
+  },
+  {
+    "path": "extensions/src/core/show-themes/definition.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/definition.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/history-audio.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/history-audio.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/index.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/index.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/media.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/media.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/product-brand.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/product-brand.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/razzia.manifest.json",
+    "source": "/accepted-source/extensions/src/core/show-themes/razzia.manifest.json"
+  },
+  {
+    "path": "extensions/src/core/show-themes/registry.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/registry.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/resolve.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/resolve.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/roundtrip.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/roundtrip.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/selection.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/selection.ts"
+  },
+  {
+    "path": "extensions/src/core/show-themes/show-themes.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-themes/show-themes.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-workbook.test.ts",
+    "source": "/accepted-source/extensions/src/core/show-workbook.test.ts"
+  },
+  {
+    "path": "extensions/src/core/show-workbook.ts",
+    "source": "/accepted-source/extensions/src/core/show-workbook.ts"
+  },
+  {
+    "path": "extensions/src/core/soundtrack-media-references.test.ts",
+    "source": "/accepted-source/extensions/src/core/soundtrack-media-references.test.ts"
+  },
+  {
+    "path": "extensions/src/core/state.ts",
+    "source": "/accepted-source/extensions/src/core/state.ts"
+  },
+  {
+    "path": "extensions/src/core/studio-migrate.ts",
+    "source": "/accepted-source/extensions/src/core/studio-migrate.ts"
+  },
+  {
+    "path": "extensions/src/core/studio-timeline-schema.test.ts",
+    "source": "/accepted-source/extensions/src/core/studio-timeline-schema.test.ts"
+  },
+  {
+    "path": "extensions/src/core/studio-timeline-schema.ts",
+    "source": "/accepted-source/extensions/src/core/studio-timeline-schema.ts"
+  },
+  {
+    "path": "extensions/src/core/studio-timeline.test.ts",
+    "source": "/accepted-source/extensions/src/core/studio-timeline.test.ts"
+  },
+  {
+    "path": "extensions/src/core/tadazz-appearance.test.ts",
+    "source": "/accepted-source/extensions/src/core/tadazz-appearance.test.ts"
+  },
+  {
+    "path": "extensions/src/core/tadazz-appearance.ts",
+    "source": "/accepted-source/extensions/src/core/tadazz-appearance.ts"
+  },
+  {
+    "path": "extensions/src/core/tadazz-studio-defaults.test.ts",
+    "source": "/accepted-source/extensions/src/core/tadazz-studio-defaults.test.ts"
+  },
+  {
+    "path": "extensions/src/core/tadazz-workbook.test.ts",
+    "source": "/accepted-source/extensions/src/core/tadazz-workbook.test.ts"
+  },
+  {
+    "path": "extensions/src/core/tzila-show-acceptance.test.ts",
+    "source": "/accepted-source/extensions/src/core/tzila-show-acceptance.test.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/contracts/canonical.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/contracts/canonical.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/contracts/index.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/contracts/index.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/contracts/schemas.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/contracts/schemas.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/contracts/tools.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/contracts/tools.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/OAUTH.md",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/OAUTH.md"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/README.md",
+    "source": "/predecessor/app/extensions/src/mcp-app/first-party/README.md"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/bindings.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/bindings.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/http.ts",
+    "source": "/predecessor/app/extensions/src/mcp-app/first-party/http.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/index.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/first-party/index.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/ingress.ts",
+    "source": "/predecessor/app/extensions/src/mcp-app/first-party/ingress.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/oauth-grants.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/oauth-grants.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/oauth-protocol.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/oauth-protocol.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/oauth.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/oauth.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/owner.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/first-party/owner.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/schema-manifest.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/schema-manifest.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/schema.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/first-party/schema.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/first-party/store.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/first-party/store.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/package.json",
+    "source": "/delivery/app/extensions/src/mcp-app/package.json"
+  },
+  {
+    "path": "extensions/src/mcp-app/pnpm-lock.yaml",
+    "source": "/producer-source/app/extensions/src/mcp-app/pnpm-lock.yaml"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/README.md",
+    "source": "/accepted-source/extensions/src/mcp-app/server/README.md"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/REMOTE_SERVICE.md",
+    "source": "/delivery/app/extensions/src/mcp-app/server/REMOTE_SERVICE.md"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/access-token.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/server/access-token.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/authoring.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/authoring.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/authorization.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/server/authorization.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/connection.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/connection.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/dependencies.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/server/dependencies.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/dispatch.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/dispatch.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/drafts.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/drafts.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/errors.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/errors.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/factory.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/server/factory.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/http.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/server/http.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/preview.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/preview.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/request-boundary.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/request-boundary.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/server/results.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/server/results.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/abort.nodecheck.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/abort.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/contracts/schemas.ts",
+    "source": "/predecessor/app/extensions/src/mcp-app/tests/first-party/ad895-producer/contracts/schemas.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/first-party/schema.ts",
+    "source": "/predecessor/app/extensions/src/mcp-app/tests/first-party/ad895-producer/first-party/schema.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/provenance.json",
+    "source": "/predecessor/app/extensions/src/mcp-app/tests/first-party/ad895-producer/provenance.json"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/server/errors.ts",
+    "source": "/predecessor/app/extensions/src/mcp-app/tests/first-party/ad895-producer/server/errors.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/auth.nodecheck.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/tests/first-party/auth.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/compatibility.observation.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/compatibility.observation.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/filesystem.nodecheck.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/tests/first-party/filesystem.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/fixtures.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/tests/first-party/fixtures.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/hot-journal-worker.mjs",
+    "source": "/producer-source/app/extensions/src/mcp-app/tests/first-party/hot-journal-worker.mjs"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/http.nodecheck.ts",
+    "source": "/producer-source/app/extensions/src/mcp-app/tests/first-party/http.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/oauth.nodecheck.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/oauth.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/review-evidence.fixture.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/review-evidence.fixture.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/schema-ad895.fixture.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/schema-ad895.fixture.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/schema.nodecheck.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/schema.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/first-party/store.nodecheck.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/first-party/store.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/access-token.nodecheck.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/server/access-token.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/authorization.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/authorization.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/canonical.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/canonical.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/delivery-fixture.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/delivery-fixture.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/drafts.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/drafts.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/fixtures.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/fixtures.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/http.nodecheck.ts",
+    "source": "/delivery/app/extensions/src/mcp-app/tests/server/http.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/ingress.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/ingress.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/integrity.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/integrity.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/lifecycle-fixture.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/lifecycle-fixture.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/protocol.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/replay.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/replay.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tests/server/send.nodecheck.ts",
+    "source": "/accepted-source/extensions/src/mcp-app/tests/server/send.nodecheck.ts"
+  },
+  {
+    "path": "extensions/src/mcp-app/tsconfig.json",
+    "source": "/producer-source/app/extensions/src/mcp-app/tsconfig.json"
+  },
+  {
+    "path": "extensions/tsconfig.json",
+    "source": "/accepted-source/extensions/tsconfig.json"
+  },
+  {
+    "path": "package.json",
+    "source": "/accepted-source/package.json"
+  },
+  {
+    "path": "packages/common/.gitignore",
+    "source": "/accepted-source/packages/common/.gitignore"
+  },
+  {
+    "path": "packages/common/package.json",
+    "source": "/accepted-source/packages/common/package.json"
+  },
+  {
+    "path": "packages/common/src/constants.ts",
+    "source": "/accepted-source/packages/common/src/constants.ts"
+  },
+  {
+    "path": "packages/common/src/questions/estimation.test.ts",
+    "source": "/accepted-source/packages/common/src/questions/estimation.test.ts"
+  },
+  {
+    "path": "packages/common/src/questions/estimation.ts",
+    "source": "/accepted-source/packages/common/src/questions/estimation.ts"
+  },
+  {
+    "path": "packages/common/src/questions/options.ts",
+    "source": "/accepted-source/packages/common/src/questions/options.ts"
+  },
+  {
+    "path": "packages/common/src/types/auth.ts",
+    "source": "/accepted-source/packages/common/src/types/auth.ts"
+  },
+  {
+    "path": "packages/common/src/types/game/index.ts",
+    "source": "/accepted-source/packages/common/src/types/game/index.ts"
+  },
+  {
+    "path": "packages/common/src/types/game/socket.ts",
+    "source": "/accepted-source/packages/common/src/types/game/socket.ts"
+  },
+  {
+    "path": "packages/common/src/types/game/status.ts",
+    "source": "/accepted-source/packages/common/src/types/game/status.ts"
+  },
+  {
+    "path": "packages/common/src/validators/auth.ts",
+    "source": "/accepted-source/packages/common/src/validators/auth.ts"
+  },
+  {
+    "path": "packages/common/src/validators/game.test.ts",
+    "source": "/accepted-source/packages/common/src/validators/game.test.ts"
+  },
+  {
+    "path": "packages/common/src/validators/game.ts",
+    "source": "/accepted-source/packages/common/src/validators/game.ts"
+  },
+  {
+    "path": "packages/common/src/validators/questions/choice.ts",
+    "source": "/accepted-source/packages/common/src/validators/questions/choice.ts"
+  },
+  {
+    "path": "packages/common/src/validators/questions/estimation.ts",
+    "source": "/accepted-source/packages/common/src/validators/questions/estimation.ts"
+  },
+  {
+    "path": "packages/common/src/validators/questions/index.ts",
+    "source": "/accepted-source/packages/common/src/validators/questions/index.ts"
+  },
+  {
+    "path": "packages/common/src/validators/quizz.test.ts",
+    "source": "/accepted-source/packages/common/src/validators/quizz.test.ts"
+  },
+  {
+    "path": "packages/common/src/validators/quizz.ts",
+    "source": "/accepted-source/packages/common/src/validators/quizz.ts"
+  },
+  {
+    "path": "packages/common/src/validators/socket.ts",
+    "source": "/accepted-source/packages/common/src/validators/socket.ts"
+  },
+  {
+    "path": "packages/common/tsconfig.json",
+    "source": "/accepted-source/packages/common/tsconfig.json"
+  },
+  {
+    "path": "packages/socket/src/api/factory.ts",
+    "source": "/producer-source/app/packages/socket/src/api/factory.ts"
+  },
+  {
+    "path": "packages/socket/src/api/middleware.ts",
+    "source": "/producer-source/app/packages/socket/src/api/middleware.ts"
+  },
+  {
+    "path": "packages/socket/src/env.ts",
+    "source": "/producer-source/app/packages/socket/src/env.ts"
+  },
+  {
+    "path": "packages/socket/src/services/account-auth.ts",
+    "source": "/producer-source/app/packages/socket/src/services/account-auth.ts"
+  },
+  {
+    "path": "packages/socket/src/services/account-db.ts",
+    "source": "/producer-source/app/packages/socket/src/services/account-db.ts"
+  },
+  {
+    "path": "packages/socket/src/services/account-scope.ts",
+    "source": "/producer-source/app/packages/socket/src/services/account-scope.ts"
+  },
+  {
+    "path": "packages/socket/src/services/auth.ts",
+    "source": "/producer-source/app/packages/socket/src/services/auth.ts"
+  },
+  {
+    "path": "pnpm-lock.yaml",
+    "source": "/accepted-source/pnpm-lock.yaml"
+  },
+  {
+    "path": "pnpm-workspace.yaml",
+    "source": "/accepted-source/pnpm-workspace.yaml"
+  },
+  {
+    "path": "tsconfig.json",
+    "source": "/accepted-source/tsconfig.json"
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "capturedUtc": "2026-11-15T16:25:19.906964+00:00",
+  "status": "LOCAL_PEER_RECEIPT_INTAKE_ONLY",
+  "peerFiles": [
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-ui-20261115\\docs\\extensions\\qa-evidence\\show-ui-20261115\\native-build5\\native-build-receipt.json",
+      "bytes": 79931,
+      "sha256": "0915448dca9f5f47ed79c2e6e2288c6922df26d24a89de169504f746748b3d3a"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-ui-20261115\\docs\\extensions\\qa-evidence\\show-ui-20261115\\native-build5\\native-module-receipt.json",
+      "bytes": 111343,
+      "sha256": "8b83c445cfc103e913e740dc5fd49b71eaf367cb79d0792bfbcb0fecf682f2a4"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-ui-20261115\\docs\\extensions\\qa-evidence\\show-ui-20261115\\native-build5\\physical-mounts.json",
+      "bytes": 1449,
+      "sha256": "4b17640c971981ab90fd54b09cb38f45ca7f4a185d8b70f82b5907a671d90319"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-ui-20261115\\docs\\extensions\\qa-evidence\\show-ui-20261115\\native-build5\\runtime-toolchain.json",
+      "bytes": 2563,
+      "sha256": "9bcd42ad51e9b11860323146afd205989ca566bfd35fca078a96a4e4e5f648c0"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-ui-20261115\\docs\\extensions\\qa-evidence\\show-ui-20261115\\native-build5\\native-build.log",
+      "bytes": 1070,
+      "sha256": "c7cc86623615f7e4a8ee3fd2019462a8a807a3e4494fc5ad007098aca02d96b9"
+    }
+  ],
+  "physicalInputs": 163,
+  "graphNodes": 163,
+  "vendorInputsMatchedToActualPriorCafsObservation": 106,
+  "moduleContributions": 86,
+  "contributorsWithoutPhysicalInput": [
+    "\u0000rolldown/runtime.js"
+  ],
+  "outputsReportedByPeerReceipt": [
+    {
+      "path": "renderer.css",
+      "bytes": 148376,
+      "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+    },
+    {
+      "path": "renderer.js",
+      "bytes": 1043108,
+      "sha256": "d2aed49dfbea0ad2a29349ee19a190d5f7516b7c2955a8b37219f5b2d3cf6890"
+    }
+  ],
+  "forbiddenPayloadModulesReportedByPeerReceipt": [],
+  "sourceIsPeerWorkInProgress": true,
+  "v2RendererBuild": false,
+  "browserOrLoaderAcceptance": "NOT_RUN_BY_D",
+  "independentRemoteOutputRehash": false,
+  "remoteWrites": 0,
+  "imageRights": "UNKNOWN",
+  "trustedReceiptsInstalled": false,
+  "executableAcceptance": false,
+  "compiledPins": []
+}

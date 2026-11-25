@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-19T16:22:56.895Z",
+  "status": "PASS",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "completedCount": 7,
+  "openCount": 4,
+  "scope": "Latest follow-up acceptance tasks; earlier narrow tasks were already completed and verified separately.",
+  "openReason": "Contact recipient and provider sending readiness; Paddle LIVE business/catalog/credentials and pilot entitlements. Master remains open until these activations are resolved.",
+  "tasks": [
+    {
+      "taskId": "1220689157929446",
+      "name": "P0 | Tadazz — גל תיקוני ממשק, פתיחה וניווט 19.11.2026",
+      "completed": false,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220689157929446",
+      "exactExpectedMatch": true,
+      "notesReadBack": true,
+      "notesCodeUnits": 32126
+    },
+    {
+      "taskId": "1220689223603180",
+      "name": "P0 | Tadazz 19.11 — אימות משולב, פריסה ודוח סיום לכל התיקונים",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220689223603180",
+      "exactExpectedMatch": true,
+      "notesReadBack": true,
+      "notesCodeUnits": 29507
+    },
+    {
+      "taskId": "1220705115002170",
+      "name": "P0 | Tadazz — בחירה, ייבוא והחלפת ערכת נושא מתוך העורך",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705115002170",
+      "exactExpectedMatch": true,
+      "notesReadBack": true,
+      "notesCodeUnits": 3473
+    },
+    {
+      "taskId": "1220708526935641",
+      "name": "P0 | שחזור סביבת עיבוד חבילות לערכות נושא",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220708526935641",
+      "exactExpectedMatch": true,
+      "notesReadBack": true,
+      "notesCodeUnits": 2511
+    },
+    {
+      "taskId": "1220704938065711",
+      "name": "P1 | Tadazz — בקרת מוזיקה ברורה ופעילה במקום ״לפי המופע״ עמום",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220704938065711",
+      "exactExpectedMatch": null,
+      "notesReadBack": true,
+      "notesCodeUnits": 2985
+    },
+    {
+      "taskId": "1220705114721895",
+      "name": "P1 | Tadazz — ארגון חלון המשתתפים ללא כפילויות",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705114721895",
+      "exactExpectedMatch": null,
+      "notesReadBack": true,
+      "notesCodeUnits": 3074
+    },
+    {
+      "taskId": "1220705114982885",
+      "name": "P0 | Tadazz — אחידות שלב המשחק במנחה, קהל ומסך מלא",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705114982885",
+      "exactExpectedMatch": null,
+      "notesReadBack": true,
+      "notesCodeUnits": 3183
+    },
+    {
+      "taskId": "1220705107692510",
+      "name": "P0 | Tadazz — הכנת מופע ישירות מהמשחק שנבחר",
+      "completed": true,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705107692510",
+      "exactExpectedMatch": null,
+      "notesReadBack": true,
+      "notesCodeUnits": 2292
+    },
+    {
+      "taskId": "1220720111240379",
+      "name": "P1 | Tadazz — חיבור טופס קשר ובדיקת דומיין ושירות הדוא״ל",
+      "completed": false,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220720111240379",
+      "exactExpectedMatch": true,
+      "notesReadBack": true,
+      "notesCodeUnits": 2602
+    },
+    {
+      "taskId": "1220704776639666",
+      "name": "P0 | Tadazz — השלמת חיבור Paddle והוראות הפעלה מדויקות",
+      "completed": false,
+      "url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220704776639666",
+      "exactExpectedMatch": null,
+      "notesReadBack": true,
+      "notesCodeUnits": 3669
+    },
+    {
+      "taskId": "1220541896328538",
+      "name": "HQ-I4 | תשתית Oracle, Billing/Paddle ו־QA ספק",
+      "completed": false,
+      "url": "https://app.asana.com/1/1219597879016953/project/1220541896326618/task/1220541896328538",
+      "exactExpectedMatch": null,
+      "notesReadBack": true,
+      "notesCodeUnits": 2533
+    }
+  ]
+}

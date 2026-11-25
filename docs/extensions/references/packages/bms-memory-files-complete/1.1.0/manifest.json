@@ -1,0 +1,191 @@
+{
+  "format": "tadazz-package",
+  "formatVersion": 1,
+  "id": "bms-memory-files-complete",
+  "version": "1.1.0",
+  "displayName": "BMS: The Most Quizzical Quiz EVER!",
+  "author": "BMS Reunion / owner-authorized Tadazz project",
+  "requires": {
+    "packageApi": 1,
+    "runtimeApi": 1
+  },
+  "contents": [
+    {
+      "kind": "sandboxed-react-theme",
+      "id": "bms-memory-files",
+      "path": "theme/theme.json",
+      "demo": false
+    },
+    {
+      "kind": "game",
+      "id": "bms-reunion",
+      "path": "games/bms-reunion.json",
+      "themeRef": "bms-memory-files@1.1.0",
+      "demo": false
+    }
+  ],
+  "files": [
+    {
+      "path": "credits.json",
+      "kind": "descriptor",
+      "bytes": 1159,
+      "sha256": "4ab4f1c101b9b8505555581e857e9b50ada4706653bf0cd69238d3c536968218",
+      "rights": "owner-authorized",
+      "provenance": "Owner-authorized BMS game presentation source and metadata; see credits.json.",
+      "exportable": true
+    },
+    {
+      "path": "games/bms-reunion.json",
+      "kind": "descriptor",
+      "bytes": 16360,
+      "sha256": "52945d06ce9e9e04cfe2accaf1204414dff41d2b07a3943be2b87bad5b812438",
+      "rights": "owner-authorized",
+      "provenance": "Owner-supplied original BMS reunion questions and answers, with approved English presentation, phone lobby and platform audio settings from the integrated game definition.",
+      "exportable": true
+    },
+    {
+      "path": "shared/art/bms-wordmark.png",
+      "kind": "image",
+      "rights": "licensed",
+      "provenance": "Transparent screenshot of the actual BMS header text mark using Barlow Condensed (SIL OFL 1.1). No institutional logo is claimed. See third-party-notices.json.",
+      "exportable": true,
+      "bytes": 10776,
+      "sha256": "b12aac4ad988ee3a1ceb68cdffb3828c0474e5901de816f7f1f61b700f9635c8"
+    },
+    {
+      "path": "shared/art/stage-backdrop.webp",
+      "kind": "image",
+      "bytes": 12242,
+      "sha256": "50c25ef41f2a3c9f1bde4d96fbaa0179f6287dc40c1d925d2177a939c01f202a",
+      "rights": "licensed",
+      "provenance": "Screenshot of incorporated BMS game stage using React Bits LightRays and Barlow; see credits.json and third-party-notices.json.",
+      "exportable": false
+    },
+    {
+      "path": "shared/art/stage-poster.webp",
+      "kind": "image",
+      "bytes": 38662,
+      "sha256": "09a4687f7dea664b194df9fc66a0c80cba144b5455d3153c5c69d21ff2ecccd6",
+      "rights": "licensed",
+      "provenance": "Screenshot of incorporated BMS game stage using React Bits LightRays and Barlow; see credits.json and third-party-notices.json.",
+      "exportable": false
+    },
+    {
+      "path": "shared/fonts/barlow-condensed-latin-700-normal.woff2",
+      "kind": "font",
+      "bytes": 22444,
+      "sha256": "3787a5a419171630e6890cfa47c4da067474d005cd0ff8dc11ec090fdc3ee2b8",
+      "rights": "licensed",
+      "provenance": "Barlow / Barlow Condensed, Fontsource 5.3.0, SIL OFL 1.1; full notice in third-party-notices.json.",
+      "exportable": true
+    },
+    {
+      "path": "shared/fonts/barlow-latin-500-normal.woff2",
+      "kind": "font",
+      "bytes": 22008,
+      "sha256": "cd759df8ef9efc98fee14307b4eb5ba27f08b1f8f2f3ad2872432e25c89907a8",
+      "rights": "licensed",
+      "provenance": "Barlow / Barlow Condensed, Fontsource 5.3.0, SIL OFL 1.1; full notice in third-party-notices.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/src/entry.tsx",
+      "kind": "source",
+      "bytes": 17188,
+      "sha256": "712261cf2a3519d4b429556665e48839027f2bcb9c45e60b3c7b8582ee7ec278",
+      "rights": "owner-authorized",
+      "provenance": "Owner-authorized BMS game presentation source and metadata; see credits.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/src/messages.ts",
+      "kind": "source",
+      "bytes": 1148,
+      "sha256": "611e3ea66b15962e750d39f30cca6b918c2ea518e10df580737959983b264d26",
+      "rights": "owner-authorized",
+      "provenance": "Owner-authorized BMS game presentation source and metadata; see credits.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/src/style.css",
+      "kind": "style",
+      "bytes": 24942,
+      "sha256": "774581dc2651376ba880969613dbd4bbea3f3e0a22682aca5d0323fe00d28190",
+      "rights": "owner-authorized",
+      "provenance": "Owner-authorized BMS game presentation source and metadata; see credits.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/src/vendor/LightRays.css",
+      "kind": "style",
+      "bytes": 221,
+      "sha256": "745fa51da4964776a2a0166857f94bcaa2b131bd6bf92fa46796226cc5ce58e3",
+      "rights": "licensed",
+      "provenance": "React Bits LightRays at ed33ebe4acfe29e60fb759bcccc70a138ce2dcef; incorporated application use only; full notice in third-party-notices.json.",
+      "exportable": false
+    },
+    {
+      "path": "theme/src/vendor/LightRays.tsx",
+      "kind": "source",
+      "bytes": 24253,
+      "sha256": "8b3f6e46a30df95d6b0031e54624efc37a625b47d25d82a611f9a23cc6ba7215",
+      "rights": "licensed",
+      "provenance": "React Bits LightRays at ed33ebe4acfe29e60fb759bcccc70a138ce2dcef; incorporated application use only; full notice in third-party-notices.json.",
+      "exportable": false
+    },
+    {
+      "path": "theme/src/vendor/model.d.ts",
+      "kind": "source",
+      "bytes": 1179,
+      "sha256": "3bf7a84fc935b58609adadc6b388d0ca0749145a7cb92312fba8614f21cd71c9",
+      "rights": "licensed",
+      "provenance": "Rough Notation 0.5.1, MIT, full notice in third-party-notices.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/src/vendor/rough-notation.css",
+      "kind": "style",
+      "rights": "licensed",
+      "provenance": "Rough Notation 0.5.1 original animation keyframe, imported statically to comply with the platform style CSP; MIT notice retained.",
+      "exportable": true,
+      "bytes": 1243,
+      "sha256": "b1327c96c0f428e395a13b15811fb98d06db28641f8cd5ac80d0daf5bd39b59a"
+    },
+    {
+      "path": "theme/src/vendor/rough-notation.d.ts",
+      "kind": "source",
+      "bytes": 290,
+      "sha256": "f01ad1f653120c77d889ab3fe47a3d1fae04f00c390b8d5a2915a9133c8abe5c",
+      "rights": "licensed",
+      "provenance": "Rough Notation 0.5.1, MIT, full notice in third-party-notices.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/src/vendor/rough-notation.js",
+      "kind": "source",
+      "bytes": 11582,
+      "sha256": "2eb00d146cde62ec1287dbc946ad312e86f194f173000b516b96a939504ddabf",
+      "rights": "licensed",
+      "provenance": "Rough Notation 0.5.1, MIT, full notice in third-party-notices.json.",
+      "exportable": true
+    },
+    {
+      "path": "theme/theme.json",
+      "kind": "descriptor",
+      "bytes": 20251,
+      "sha256": "720f49a679de62e69e126f7e216015021469f26f09071b0d830dd1531185068f",
+      "rights": "owner-authorized",
+      "provenance": "Owner-authorized BMS game presentation source and metadata; see credits.json.",
+      "exportable": true
+    },
+    {
+      "path": "third-party-notices.json",
+      "kind": "descriptor",
+      "bytes": 10732,
+      "sha256": "79cb5bb2619de9e9fcdca207cc4cc340140fa3e4d32756ca082848fa069e0c64",
+      "rights": "owner-authorized",
+      "provenance": "Owner-authorized BMS game presentation source and metadata; see credits.json.",
+      "exportable": true
+    }
+  ]
+}

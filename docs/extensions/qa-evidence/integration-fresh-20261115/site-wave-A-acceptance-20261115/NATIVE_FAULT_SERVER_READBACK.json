@@ -1,0 +1,47 @@
+{
+  "captured_utc": "2026-11-15T16:19:23.943133+00:00",
+  "read_only": true,
+  "holdsAndTraces": [
+    {
+      "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+      "holdMatches": true,
+      "traceMatches": null
+    },
+    {
+      "nonce": "f8e1688d4d504cddbf90113c70c26998",
+      "holdMatches": true,
+      "traceMatches": true
+    },
+    {
+      "nonce": "83e631a8f8b94f469665beef772b02b8",
+      "holdMatches": true,
+      "traceMatches": true
+    },
+    {
+      "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+      "holdMatches": true,
+      "traceMatches": null
+    },
+    {
+      "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+      "holdMatches": true,
+      "traceMatches": true
+    }
+  ],
+  "protectedUnchanged": 5,
+  "freshStopped": 10,
+  "legacyScripts": [
+    {
+      "path": "/home/ubuntu/tadazz-unified-site-20261110-eeb973e/deploy-unified-site.py",
+      "sha256": "82428d8259695b33eedd0997fccbf8a50da6fb965928a2a93175d04226d56113"
+    },
+    {
+      "path": "/home/ubuntu/tadazz-unified-site-20261112-bff12a6/deploy-unified-site.py",
+      "sha256": "82428d8259695b33eedd0997fccbf8a50da6fb965928a2a93175d04226d56113"
+    }
+  ],
+  "legacyProcessExactArgMatches": [],
+  "productionControlPresent": false,
+  "exclusiveLiveWindowEstablished": false,
+  "productionAction": "NOT_RUN"
+}

@@ -1,0 +1,33 @@
+$ pnpm -r run build
+Scope: 5 of 6 workspace projects
+packages/socket build$ rolldown -c
+packages/socket build: <DIR>/index.cjs.map  asset │ size: 3,379.85 kB
+packages/socket build: <DIR>/index.cjs      chunk │ size:   930.21 kB
+packages/socket build: √ rolldown v1.2.13 Finished in 1.72 s
+packages/socket build: Done
+packages/web build$ node --experimental-strip-types ./node_modules/vite/bin/vite.js build
+packages/web build: vite v8.3.4 building client environment for production...
+packages/web build: transforming...
+packages/web build: ✓ 3127 modules transformed.
+packages/web build: rendering chunks...
+packages/web build: computing gzip size...
+packages/web build: dist/index.html                                                0.98 kB │ gzip:   0.52 kB
+packages/web build: dist/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2            9.34 kB
+packages/web build: dist/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2     12.38 kB
+packages/web build: dist/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2         15.11 kB
+packages/web build: dist/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2        19.40 kB
+packages/web build: dist/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2           32.46 kB
+packages/web build: dist/assets/rubik-latin-wght-normal-CnQIisVs.woff2            35.34 kB
+packages/web build: dist/assets/tadazz-question-background-BnsH8I8M.png        1,610.33 kB
+packages/web build: dist/assets/background-CMjhDDHd.png                        2,777.38 kB
+packages/web build: dist/assets/index-FenIYSQy.css                               288.44 kB │ gzip:  55.20 kB
+packages/web build: dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:   0.42 kB
+packages/web build: dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:   9.60 kB
+packages/web build: dist/assets/index-xsKI0xFY.js                              2,745.37 kB │ gzip: 715.63 kB
+packages/web build: [plugin builtin:vite-reporter]
+packages/web build: (!) Some chunks are larger than 2000 kB after minification. Consider:
+packages/web build: - Using dynamic import() to code-split the application
+packages/web build: - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+packages/web build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web build: ✓ built in 10.05s
+packages/web build: Done

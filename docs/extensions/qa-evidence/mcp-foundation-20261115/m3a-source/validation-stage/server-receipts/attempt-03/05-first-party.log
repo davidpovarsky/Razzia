@@ -1,0 +1,47 @@
+✔ caller-built identity and missing actual ALS owner cannot access the store (885.074691ms)
+✔ accounts-off and persistent key/root drift deny before private store I/O (9.342571ms)
+✔ Context claims cannot substitute for the actual cryptographic verifier (1.393173ms)
+✔ actual player, malformed JWT, expired JWT and invalid sid are rejected (181.548615ms)
+✔ real session revoke and account disable/unverify deny previously issued capabilities (111.690452ms)
+✔ closed startup account handle fails GET without reinitializing account sidecars (87.109292ms)
+✔ symlink, hardlink and cross-owner DB substitutions cannot read borrowed private data (1110.569655ms)
+✔ an unsafe existing ancestor is denied without creating or repairing directories (85.123232ms)
+✔ missing manager credentials reject before consuming body or allocating a draft family (701.879821ms)
+✔ wrong Host/Origin, forwarded headers, routes, methods and body types are rejected before storage (79.414136ms)
+✔ malformed JSON and native/enhanced envelopes are rejected before private/native allocation (326.33675ms)
+✔ create/read/replace use actual auth and SQLite; pending save has no success/consent/native URL (379.48919ms)
+✔ actual streamed bytes override an underreported Content-Length and invalid UTF8 is rejected (5.893618ms)
+✔ revocation during the body await is reverified before parsing or store allocation (6.193021ms)
+✔ a public cancel promise that stalls keeps body work unresolved (1.802657ms)
+✔ 32 real authenticated body lifetimes exhaust anonymous admission until they finish (1298.755534ms)
+✔ absent GET does not create a private family (791.379855ms)
+✔ real create persists canonical content, outcome and audit; another owner cannot read it (394.292374ms)
+✔ durable create replay survives a fresh repository instance and rejects a reused key/digest (106.554081ms)
+✔ two competing expected revisions have exactly one CAS winner and one durable mutation (201.113126ms)
+✔ replace and pending save replay precede current revision; pending never contains a native target (294.552199ms)
+✔ SQLite audit failure rolls draft and operation back together (8.993048ms)
+✔ revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows (93.039509ms)
+✔ ordinary GET changes no private-family or native sentinel bytes/mtime/directory membership (92.523544ms)
+✖ real crashed hot journal is rejected without recovery or any private-family write (212.246715ms)
+✔ WAL-mode header, orphan SHM and corrupt private DB are preserved and denied (181.945819ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 25
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25701.046615
+
+✖ failing tests:
+
+test at tests/first-party/store.nodecheck.ts:1:7134
+✖ real crashed hot journal is rejected without recovery or any private-family write (212.246715ms)
+  Error: Synthetic crash worker failed
+      at ChildProcess.<anonymous> (/ram/work/extensions/src/mcp-app/tests/first-party/store.nodecheck.ts:249:18)
+      at ChildProcess.wrapper (node:events:639:12)
+      at ChildProcess.emit (node:events:514:28)
+      at maybeClose (node:internal/child_process:1172:16)
+      at Socket.<anonymous> (node:internal/child_process:527:11)
+      at Socket.emit (node:events:514:28)
+      at Pipe.<anonymous> (node:net:362:12)

@@ -1,0 +1,262 @@
+✖ two real SDK sessions retain account isolation and revoked replay is denied (595.419512ms)
+✖ invalid principal fails before account store: issuer (9.059329ms)
+✖ invalid principal fails before account store: audience (87.559458ms)
+✖ invalid principal fails before account store: accountId (9.308852ms)
+✖ invalid principal fails before account store: active (8.724606ms)
+✖ invalid principal fails before account store: accountsEnabled (84.618148ms)
+✖ invalid principal fails before account store: expiresAt (13.720215ms)
+✖ invalid principal fails before account store: scopes (203.667475ms)
+✖ missing real authorizer/rate limiter/repository and preview/save/download fail closed (101.961758ms)
+✖ rate denials and unexpected dependency failures expose no raw secret or mutation (6.932308ms)
+✔ invalid authored/schema/settings/media rejected without mutation (410.247618ms)
+✔ scoped ordinary export delegates without adding a new consent stage (286.224723ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (79.6399ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (2.611866ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (700.969585ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (181.256175ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (194.656066ms)
+✖ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (293.742277ms)
+✖ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (9.477133ms)
+✖ denied or missing ingress guard fails closed before token verification and schema work (92.172222ms)
+✔ inconsistent repository summary fails closed on read (507.36573ms)
+✔ inconsistent repository summary fails closed on create (102.764726ms)
+✔ inconsistent repository summary fails closed on replace (107.23293ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (304.721545ms)
+✖ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (803.435029ms)
+✖ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (487.313693ms)
+✔ new save still requires exact-revision consent; ordinary export does not (98.069321ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 12
+ℹ fail 15
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44400.399468
+
+✖ failing tests:
+
+test at tests/server/authorization.test.ts:1:262
+✖ two real SDK sessions retain account isolation and revoked replay is denied (595.419512ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:31:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: issuer (9.059329ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: audience (87.559458ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: accountId (9.308852ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: active (8.724606ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: accountsEnabled (84.618148ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: expiresAt (13.720215ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1122
+✖ invalid principal fails before account store: scopes (203.667475ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:63:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:1513
+✖ missing real authorizer/rate limiter/repository and preview/save/download fail closed (101.961758ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:86:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/authorization.test.ts:1:2720
+✖ rate denials and unexpected dependency failures expose no raw secret or mutation (6.932308ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/authorization.test.ts:151:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/ingress.test.ts:1:300
+✖ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (293.742277ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/ingress.test.ts:61:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/server/ingress.test.ts:1:1811
+✖ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (9.477133ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/ingress.test.ts:111:18)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/ingress.test.ts:1:2527
+✖ denied or missing ingress guard fails closed before token verification and schema work (92.172222ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/ingress.test.ts:136:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/server/replay.test.ts:1:360
+✖ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (803.435029ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/replay.test.ts:76:22)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/server/replay.test.ts:1:360
+✖ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (487.313693ms)
+  ZodError: [
+    {
+      "expected": "record",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected record, received undefined"
+    }
+  ]
+      at code (/work/extensions/src/mcp-app/tests/server/fixtures.ts:188:21)
+      at TestContext.<anonymous> (/work/extensions/src/mcp-app/tests/server/replay.test.ts:76:22)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

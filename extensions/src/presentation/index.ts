@@ -1,0 +1,139 @@
+export { SeatingPlan } from "./tadazz-v4/reference-story/SeatingPlan"
+
+export * from "./editor-workspace"
+
+export { STORY_ASSETS } from "./tadazz-v4/reference-story/assets"
+
+export * from "./interlude-state"
+
+export * from "./interlude-presenter"
+
+export * from "./scene-presenter"
+
+export * from "./interlude-preview"
+
+export * from "./audio-cue-player"
+
+export * from "./platform-closing"
+
+export * from "./tadazz-audio-policy"
+
+export * from "./tadazz-sfx-policy"
+
+export * from "./timer-end-cue"
+
+export * from "./team-scoring"
+
+export * from "./team-leaderboard-panel"
+
+export * from "./lobby-team-assignment"
+
+export * from "./reveal-timeline"
+
+export * from "./history-helper"
+
+export * from "./cinematic-clock"
+
+export * from "./cinematic-geometry"
+
+export * from "./cinematic-layer-stack"
+
+export * from "./cinematic-overlay"
+
+export * from "./lottie-player"
+
+export * from "./poll-ranking"
+
+export * from "./stage-fit"
+
+export * from "./tadazz-answer-cards"
+
+export * from "./tadazz-backdrop"
+
+export * from "./tadazz-leaderboard"
+
+export * from "./tadazz-zz-transition"
+
+export * from "./tadazz-show"
+
+export * from "./tadazz-v4"
+
+// Semantic public names for new consumers; historical imports remain identical.
+export { TadazzV4Stage as ShowStage } from "./tadazz-v4/TadazzV4Stage"
+
+export { TadazzV4StageAdapter as StageRendererAdapter } from "./tadazz-show/TadazzV4StageAdapter"
+
+export type { TadazzV4Data as StageData } from "./tadazz-v4/types"
+
+export * from "./extension-stage-content"
+
+export * from "./scene-labels"
+
+export * from "./show-themes/context"
+
+export * from "./show-themes/scene"
+
+export * from "./show-themes/timer-events"
+
+export * from "./question-underline"
+
+export * from "./platform-controls"
+
+export * from "./room-join"
+
+export * from "./show-themes/viewport"
+
+export * from "./show-themes/native-composition"
+
+export * from "./tadazz-show/native-question-media"
+
+export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"
+
+export { createPackageSceneContinuity } from "./package-runtime/scene-continuity"
+
+export {
+  usePackageRevealClock,
+  usePackageRevealAudio,
+} from "./package-runtime/use-package-reveal"
+
+export {
+  createPackageQuestionAdmission,
+  packageQuestionContentSupported,
+  packageUsesSandboxForPhase,
+  selectPackageFrame,
+} from "./package-runtime/question-family"
+
+export {
+  packageRuntimePhase,
+  projectPackageClock,
+  projectPackageScene,
+  type PackageSceneProjection,
+  type PackageSceneProjectionInput,
+} from "./package-runtime/projection"
+
+export { OpenThemeBuilderLink } from "../components/theme-builder/OpenThemeBuilderLink"
+
+export { PublishedCompositionSelect } from "../components/theme-builder/PublishedCompositionSelect"
+
+export { EditorReadonlyPreview } from "../components/theme-builder/EditorReadonlyPreview"
+
+export {
+  NativeRazziaPlayerResult,
+  NativeClassicPlayerResult,
+} from "./show-library-preview/native-player-result"
+
+export {
+  NativeRazziaRoomPanel,
+  NativeClassicLobbyPanel,
+} from "./show-library-preview/native-room-panel"
+
+export {
+  NativeRazziaQuestion,
+  NativeQuestionHeading,
+} from "./show-library-preview/native-question"
+
+export { LiveEditorStagePreview } from "./show-library-preview/live-editor-stage"
+
+export { createDemoClock } from "./show-library-preview/demo-clock"
+
+export { observeQuestionPresentation } from "./question-lead-in"

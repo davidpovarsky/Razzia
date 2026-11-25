@@ -1,0 +1,268 @@
+Game cleanup task started
+New game created: 365685 subject: Synthetic phone API security QA
+Game 01a1dda3-9321-73e2-a02a-ba2ea5938ac8 added. Total games: 1
+Game 01a1dda3-9321-73e2-a02a-ba2ea5938ac8 marked as empty. Total empty games: 1
+A user connected: socketId: FSjkTwRjHYicWphQAAAA, clientId: 01a1dda3-92b7-7673-aeaa-df3a4cf4bd74
+Game 01a1dda3-9321-73e2-a02a-ba2ea5938ac8 reactivated. Remaining empty games: 0
+Manager reconnected to game 365685
+Game 01a1dda3-9321-73e2-a02a-ba2ea5938ac8 removed. Total games: 0
+✔ API01 configured route secret rejects missing/wrong credentials without roster mutation (795.401074ms)
+A user disconnected : FSjkTwRjHYicWphQAAAA
+New game created: 625550 subject: Synthetic phone API security QA
+Game 01a1dda3-9505-74c0-9d96-7fffa2f0871a added. Total games: 1
+Game 01a1dda3-9505-74c0-9d96-7fffa2f0871a marked as empty. Total empty games: 1
+A user connected: socketId: dxs1mtcpo4p4MhhlAAAB, clientId: 01a1dda3-94a6-73bc-9fae-36c3cdf54c71
+Game 01a1dda3-9505-74c0-9d96-7fffa2f0871a reactivated. Remaining empty games: 0
+Manager reconnected to game 625550
+Game 01a1dda3-9505-74c0-9d96-7fffa2f0871a removed. Total games: 0
+✔ API02 absent route-secret configuration fails closed (199.241272ms)
+A user disconnected : dxs1mtcpo4p4MhhlAAAB
+New game created: 328052 subject: Synthetic phone API security QA
+Game 01a1dda3-95cd-721c-a87a-ee5cdaff60bb added. Total games: 1
+Game 01a1dda3-95cd-721c-a87a-ee5cdaff60bb marked as empty. Total empty games: 1
+A user connected: socketId: l2QeFlmw8nG4mFaMAAAC, clientId: 01a1dda3-956c-7376-bdb2-514ad445208e
+Game 01a1dda3-95cd-721c-a87a-ee5cdaff60bb reactivated. Remaining empty games: 0
+Manager reconnected to game 328052
+Game 01a1dda3-95cd-721c-a87a-ee5cdaff60bb removed. Total games: 0
+✔ API03 stale A poll after B rebind is denied without returning B private roster state (210.368141ms)
+A user disconnected : l2QeFlmw8nG4mFaMAAAC
+New game created: 787974 subject: Synthetic phone API security QA
+Game 01a1dda3-969a-7766-bd07-19393d8b97e7 added. Total games: 1
+Game 01a1dda3-969a-7766-bd07-19393d8b97e7 marked as empty. Total empty games: 1
+A user connected: socketId: RMLmswt_P7Um5PWbAAAD, clientId: 01a1dda3-9696-74f9-b2cd-171e131fb536
+Game 01a1dda3-969a-7766-bd07-19393d8b97e7 reactivated. Remaining empty games: 0
+Manager reconnected to game 787974
+Game 01a1dda3-969a-7766-bd07-19393d8b97e7 removed. Total games: 0
+✔ API04 late A answer/hangup preserve B binding and B earns authoritative score (12318.414608ms)
+A user disconnected : RMLmswt_P7Um5PWbAAAD
+New game created: 488986 subject: Synthetic phone API security QA
+Game 01a1dda3-c660-7735-b294-7c3f826526f5 added. Total games: 1
+Game 01a1dda3-c660-7735-b294-7c3f826526f5 marked as empty. Total empty games: 1
+A user connected: socketId: kYzcbp0d4ofEqXciAAAE, clientId: 01a1dda3-c65d-751e-8c23-c5eb821c57d9
+Game 01a1dda3-c660-7735-b294-7c3f826526f5 reactivated. Remaining empty games: 0
+Manager reconnected to game 488986
+Game 01a1dda3-c660-7735-b294-7c3f826526f5 removed. Total games: 0
+✔ API05 stale epoch is rejected; current epoch key5 is accepted exactly once (17085.033485ms)
+A user disconnected : kYzcbp0d4ofEqXciAAAE
+New game created: 642250 subject: Synthetic phone API security QA
+Game 01a1dda4-091c-763b-9a18-6ffac2ae3320 added. Total games: 1
+Game 01a1dda4-091c-763b-9a18-6ffac2ae3320 marked as empty. Total empty games: 1
+A user connected: socketId: dyPm1Duo-Joczen6AAAF, clientId: 01a1dda4-0919-7708-92ac-d794c641bebb
+Game 01a1dda4-091c-763b-9a18-6ffac2ae3320 reactivated. Remaining empty games: 0
+Manager reconnected to game 642250
+Game 01a1dda4-091c-763b-9a18-6ffac2ae3320 removed. Total games: 0
+✔ API06 unknown phone/call cannot poll a connected victim roster by supplied roster ID (86.933412ms)
+A user disconnected : dyPm1Duo-Joczen6AAAF
+New game created: 303310 subject: Synthetic phone API security QA
+Game 01a1dda4-0974-73b7-bcc6-3aefa763645f added. Total games: 1
+Game 01a1dda4-0974-73b7-bcc6-3aefa763645f marked as empty. Total empty games: 1
+A user connected: socketId: s1ib_SJhWL-DrdHPAAAG, clientId: 01a1dda4-0970-750d-9226-abce7c921867
+Game 01a1dda4-0974-73b7-bcc6-3aefa763645f reactivated. Remaining empty games: 0
+Manager reconnected to game 303310
+Game 01a1dda4-0974-73b7-bcc6-3aefa763645f removed. Total games: 0
+✖ API07 unknown phone cannot rebind a disconnected victim through its roster ID (105.592076ms)
+A user disconnected : s1ib_SJhWL-DrdHPAAAG
+New game created: 942172 subject: Synthetic phone API security QA
+Game 01a1dda4-0a35-771f-8fb2-bee139849a40 added. Total games: 1
+Game 01a1dda4-0a35-771f-8fb2-bee139849a40 marked as empty. Total empty games: 1
+A user connected: socketId: 5xVnnMfVgitB1j6gAAAH, clientId: 01a1dda4-09db-7052-b4f7-dac64af6b163
+Game 01a1dda4-0a35-771f-8fb2-bee139849a40 reactivated. Remaining empty games: 0
+Manager reconnected to game 942172
+Game 01a1dda4-0a35-771f-8fb2-bee139849a40 removed. Total games: 0
+✖ API08 phone mismatch plus copied roster/call IDs cannot submit a victim answer (11120.888069ms)
+A user disconnected : 5xVnnMfVgitB1j6gAAAH
+New game created: 838817 subject: Synthetic phone API security QA
+Game 01a1dda4-354f-75cc-9e71-b8d0daa7b446 added. Total games: 1
+Game 01a1dda4-354f-75cc-9e71-b8d0daa7b446 marked as empty. Total empty games: 1
+A user connected: socketId: vSwTJ6_lD5jZkz2OAAAI, clientId: 01a1dda4-354c-7139-8299-e9de16094552
+Game 01a1dda4-354f-75cc-9e71-b8d0daa7b446 reactivated. Remaining empty games: 0
+Manager reconnected to game 838817
+Game 01a1dda4-354f-75cc-9e71-b8d0daa7b446 removed. Total games: 0
+A user disconnected : vSwTJ6_lD5jZkz2OAAAI
+✖ API09 failed cleanup followed by TTL expiry cannot let old A replace B (872.088353ms)
+New game created: 363818 subject: Synthetic phone API security QA
+Game 01a1dda4-38b8-75cf-965e-73c2c007a5f7 added. Total games: 1
+Game 01a1dda4-38b8-75cf-965e-73c2c007a5f7 marked as empty. Total empty games: 1
+A user connected: socketId: bvAqM8bZnDLv3hA7AAAJ, clientId: 01a1dda4-38b5-7770-a143-b22b1f25f28b
+Game 01a1dda4-38b8-75cf-965e-73c2c007a5f7 reactivated. Remaining empty games: 0
+Manager reconnected to game 363818
+Game 01a1dda4-38b8-75cf-965e-73c2c007a5f7 removed. Total games: 0
+A user disconnected : bvAqM8bZnDLv3hA7AAAJ
+✖ API10 real gateway process restart cannot revive retired A and replace B (1211.783244ms)
+New game created: 952325 subject: Synthetic phone API security QA
+Game 01a1dda4-3dcd-7740-a5cf-1fde78391d33 added. Total games: 1
+Game 01a1dda4-3dcd-7740-a5cf-1fde78391d33 marked as empty. Total empty games: 1
+A user connected: socketId: rLLq0z1ent7cgdQ8AAAK, clientId: 01a1dda4-3dc8-779c-9189-01f89bee57a6
+Game 01a1dda4-3dcd-7740-a5cf-1fde78391d33 reactivated. Remaining empty games: 0
+Manager reconnected to game 952325
+Game 01a1dda4-3dcd-7740-a5cf-1fde78391d33 removed. Total games: 0
+A user disconnected : rLLq0z1ent7cgdQ8AAAK
+✖ API11 documented national/international aliases cannot reorder A after B (692.001507ms)
+New game created: 893263 subject: Synthetic phone API security QA
+Game 01a1dda4-4027-72dc-8fa3-bb04330ed3bb added. Total games: 1
+Game 01a1dda4-4027-72dc-8fa3-bb04330ed3bb marked as empty. Total empty games: 1
+A user connected: socketId: xpjQv8cPR6To6YCqAAAL, clientId: 01a1dda4-4024-7215-89eb-679c296b108c
+Game 01a1dda4-4027-72dc-8fa3-bb04330ed3bb reactivated. Remaining empty games: 0
+Manager reconnected to game 893263
+Game 01a1dda4-4027-72dc-8fa3-bb04330ed3bb removed. Total games: 0
+A user disconnected : xpjQv8cPR6To6YCqAAAL
+✔ API12 simultaneous duplicate callbacks through actual gateway count one answer (12814.637357ms)
+New game created: 645810 subject: Synthetic phone API security QA
+Game 01a1dda4-7284-75b6-aaf2-1c72f2c8a2a3 added. Total games: 1
+Game 01a1dda4-7284-75b6-aaf2-1c72f2c8a2a3 marked as empty. Total empty games: 1
+A user connected: socketId: yHW1gd7EOxqCUAL0AAAM, clientId: 01a1dda4-7281-70d0-b9a9-8fff24eac599
+Game 01a1dda4-7284-75b6-aaf2-1c72f2c8a2a3 reactivated. Remaining empty games: 0
+Manager reconnected to game 645810
+Game 01a1dda4-7284-75b6-aaf2-1c72f2c8a2a3 removed. Total games: 0
+✔ API13 actual invitation-only policy rejects an unknown caller without adding roster state (97.443876ms)
+A user disconnected : yHW1gd7EOxqCUAL0AAAM
+New game created: 754711 subject: Synthetic phone API security QA
+Game 01a1dda4-72e6-7200-8079-6d5b918cdc41 added. Total games: 1
+Game 01a1dda4-72e6-7200-8079-6d5b918cdc41 marked as empty. Total empty games: 1
+A user connected: socketId: jIfSXcGpDsAXkLTwAAAN, clientId: 01a1dda4-7293-7476-ab16-c90aa4cbaca7
+Game 01a1dda4-72e6-7200-8079-6d5b918cdc41 reactivated. Remaining empty games: 0
+Manager reconnected to game 754711
+Game 01a1dda4-72e6-7200-8079-6d5b918cdc41 removed. Total games: 0
+✔ S01-C1 configured current poll and fresh redial work; stale cached poll denies all private fields (96.87659ms)
+A user disconnected : jIfSXcGpDsAXkLTwAAAN
+New game created: 648519 subject: Synthetic phone API security QA
+Game 01a1dda4-72f6-7152-91d2-fad9e972f62f added. Total games: 1
+Game 01a1dda4-72f6-7152-91d2-fad9e972f62f marked as empty. Total empty games: 1
+A user connected: socketId: 8vQUpLBb43w7fE-IAAAO, clientId: 01a1dda4-72f4-73c1-ae21-4452a2866497
+Game 01a1dda4-72f6-7152-91d2-fad9e972f62f reactivated. Remaining empty games: 0
+Manager reconnected to game 648519
+Game 01a1dda4-72f6-7152-91d2-fad9e972f62f removed. Total games: 0
+Game cleanup task stopped
+Registry cleaned up
+A user disconnected : 8vQUpLBb43w7fE-IAAAO
+✔ S01-C2 legitimate disconnected rebind preserves roster identity and earned authoritative score (12121.833721ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 10
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78796.480103
+
+✖ failing tests:
+
+test at extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:15373
+✖ API07 unknown phone cannot rebind a disconnected victim through its roster ID (105.592076ms)
+  AssertionError [ERR_ASSERTION]: Wrong-phone rebind must not change authoritative roster
+  + actual - expected
+  
+    {
+  +   activeCallId: 'direct-away-spoof',
+  -   activeCallId: 'direct-away-A',
+      answered: false,
+      clientId: 'phone-client-01a1dda4-097a-7138-ba3d-19dff811c77c',
+  +   connected: 1,
+  -   connected: 0,
+      epoch: 0,
+      exists: true,
+      players: 1,
+      points: 0,
+      registered: 1,
+  +   status: 'connected'
+  -   status: 'disconnected'
+    }
+  
+      at TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:649:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { exists: true, activeCallId: 'direct-away-spoof', status: 'connected', clientId: 'phone-client-01a1dda4-097a-7138-ba3d-19dff811c77c', points: 0, epoch: 0, answered: false, connected: 1, players: 1, registered: 1 },
+    expected: { exists: true, activeCallId: 'direct-away-A', status: 'disconnected', clientId: 'phone-client-01a1dda4-097a-7138-ba3d-19dff811c77c', points: 0, epoch: 0, answered: false, connected: 0, players: 1, registered: 1 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:16165
+✖ API08 phone mismatch plus copied roster/call IDs cannot submit a victim answer (11120.888069ms)
+  AssertionError [ERR_ASSERTION]: Caller identity mismatch must be rejected
+      at TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:688:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: true,
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:16964
+✖ API09 failed cleanup followed by TTL expiry cannot let old A replace B (872.088353ms)
+  AssertionError [ERR_ASSERTION]: Retired ID after TTL must not rebind the actual roster
+  + actual - expected
+  
+    {
+  +   activeCallId: '04e1b4965fe7092d0691efb3',
+  -   activeCallId: '30aedafe02aad4e91b06fd42',
+      answered: false,
+      clientId: 'phone-client-01a1dda4-3735-77a3-9e1a-d242189906dd',
+      connected: 1,
+      epoch: 0,
+      exists: true,
+  
+      at TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:726:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { exists: true, activeCallId: '04e1b4965fe7092d0691efb3', status: 'connected', clientId: 'phone-client-01a1dda4-3735-77a3-9e1a-d242189906dd', points: 0, epoch: 0, answered: false, connected: 1, players: 1, registered: 1 },
+    expected: { exists: true, activeCallId: '30aedafe02aad4e91b06fd42', status: 'connected', clientId: 'phone-client-01a1dda4-3735-77a3-9e1a-d242189906dd', points: 0, epoch: 0, answered: false, connected: 1, players: 1, registered: 1 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:18027
+✖ API10 real gateway process restart cannot revive retired A and replace B (1211.783244ms)
+  AssertionError [ERR_ASSERTION]: Process-local history loss must not authorize retired IDs
+  + actual - expected
+  
+    {
+  +   activeCallId: '3cd2960f3aa89decdf7ade80',
+  -   activeCallId: 'e2719f718e3649a980fa4f32',
+      answered: false,
+      clientId: 'phone-client-01a1dda4-3aa9-712b-ada6-76389b4a51b4',
+      connected: 1,
+      epoch: 0,
+      exists: true,
+  
+      at TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:757:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { exists: true, activeCallId: '3cd2960f3aa89decdf7ade80', status: 'connected', clientId: 'phone-client-01a1dda4-3aa9-712b-ada6-76389b4a51b4', points: 0, epoch: 0, answered: false, connected: 1, players: 1, registered: 1 },
+    expected: { exists: true, activeCallId: 'e2719f718e3649a980fa4f32', status: 'connected', clientId: 'phone-client-01a1dda4-3aa9-712b-ada6-76389b4a51b4', points: 0, epoch: 0, answered: false, connected: 1, players: 1, registered: 1 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:1:18861
+✖ API11 documented national/international aliases cannot reorder A after B (692.001507ms)
+  AssertionError [ERR_ASSERTION]: Earlier delayed alias join must not replace the newer call
+  + actual - expected
+  
+  + 'aef90ec10f44779186fa595c'
+  - '1a1c136966ad753bc282c474'
+  
+      at TestContext.<anonymous> (/work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts:803:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'aef90ec10f44779186fa595c',
+    expected: '1a1c136966ad753bc282c474',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

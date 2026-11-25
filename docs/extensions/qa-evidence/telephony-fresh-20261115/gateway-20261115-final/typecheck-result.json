@@ -1,0 +1,24 @@
+{
+  "scope": "New actual gateway delivery/custody acceptance and transitive current source",
+  "typescript": "7.0.2",
+  "authored_files": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\gateway-source\\gateway.node.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\gateway-source\\prepare-overlay.mjs",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\adapter.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\codec.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\contracts.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\private-custody.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\server\\phone-lifecycle-v2\\auth\\unmounted-factory.ts"
+  ],
+  "type_roots": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\gateway-source\\gateway.node.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\adapter.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\codec.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\contracts.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\private-custody.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\server\\phone-lifecycle-v2\\auth\\unmounted-factory.ts"
+  ],
+  "type_exit": 0,
+  "no_install": true,
+  "temporary_links_removed": true
+}

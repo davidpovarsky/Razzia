@@ -1,0 +1,160 @@
+{
+  "utc": "2026-11-17T12:10:12.4073596Z",
+  "runs": [
+    {
+      "id": "fd341b34-dbd2-436d-a3fd-afe9e140fba3",
+      "status": "cancelled",
+      "branch": "cez/fd341b34",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\fd341b34-dbd2-436d-a3fd-afe9e140fba3",
+      "head": "a7c7c8f531fee3ad32416e8edf0b33ef01886b63",
+      "gitState": "DIRTY",
+      "dirtyPaths": [
+        " M extensions/src/site/web/studio/Studio.tsx",
+        "?? extensions/qa/phase3-native-consent/",
+        "?? extensions/src/mcp-app/native-host/"
+      ],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "1e96bb6f-0451-4568-aeab-c14c0fb708cd",
+      "status": "done",
+      "branch": "cez/1e96bb6f",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\1e96bb6f-0451-4568-aeab-c14c0fb708cd",
+      "head": "f6fc33969bd59ca59cc030cd32d9fda4a801be79",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "8de82781-9222-4ea0-8eea-0c61982b564a",
+      "status": "done",
+      "branch": "cez/8de82781",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\8de82781-9222-4ea0-8eea-0c61982b564a",
+      "head": "62a9cbea2846711a8392d695be02f9f82f635536",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "482771e7-752c-4083-b823-703b5badc6a8",
+      "status": "failed",
+      "branch": "cez/482771e7",
+      "worktree": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-one-agent-consolidation-20261116/.ai/cezar/worktrees/482771e7-752c-4083-b823-703b5badc6a8",
+      "head": "dd6fd4392d44932fd63a80837abadece416e5ade",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": "continue failed: Your previous response was cut off because it exceeded the output token limit\nPlease continue from where you left off, keeping your response shorter\nRetries remaining: 3",
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "e17507c7-ed2a-47d6-9e89-4cd55a5277a3",
+      "status": "failed",
+      "branch": "cez/e17507c7",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\e17507c7-ed2a-47d6-9e89-4cd55a5277a3",
+      "head": "02d752c04a5d9bef1d670d3f613ea9e921f0506a",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": "continue failed: Individual quota reached. Please upgrade your subscription to increase your limits. Resets in 25m49s.",
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "44fdfcc0-aeb6-46d4-8707-b2f6e8a59d3a",
+      "status": "done",
+      "branch": "cez/44fdfcc0",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\44fdfcc0-aeb6-46d4-8707-b2f6e8a59d3a",
+      "head": "4a1d92b03d734d96717c26873686c68d6c76735c",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "17edc638-3eae-492f-adde-76373a73db3e",
+      "status": "done",
+      "branch": "cez/17edc638",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\17edc638-3eae-492f-adde-76373a73db3e",
+      "head": "6fc790a53056b972b5161ea2e78355c64635c815",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "df544d57-2f58-4005-9b4d-328a7bfbd772",
+      "status": "done",
+      "branch": "cez/df544d57",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\df544d57-2f58-4005-9b4d-328a7bfbd772",
+      "head": "95e892e80a1bb85c1d118d221a5dfcd7d3b74d19",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db",
+      "status": "done",
+      "branch": "cez/c76cfcf7",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db",
+      "head": "0c1aa5ed0abcf16e16a6e1ed5d4598127438de02",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "e0c87b17-8d33-415c-811a-1370aa05654a",
+      "status": "done",
+      "branch": "cez/e0c87b17",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\e0c87b17-8d33-415c-811a-1370aa05654a",
+      "head": "8e13d00a7c36dd1b130018ca59499acf6fc1fa83",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": null,
+      "error": null,
+      "runner": "antigravity",
+      "model": "gemini-4-hydrogen-xhigh"
+    },
+    {
+      "id": "999ed90c-ed4e-4af6-aa93-bbb250334c05",
+      "status": "running",
+      "branch": "cez/999ed90c",
+      "worktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-one-agent-consolidation-20261116\\.ai\\cezar\\worktrees\\999ed90c-ed4e-4af6-aa93-bbb250334c05",
+      "head": "1b9f77cd2d61b46cefe419a30fd643ff6c86e46a",
+      "gitState": "CLEAN",
+      "dirtyPaths": [],
+      "currentStep": "continue-5",
+      "error": null,
+      "runner": "opencode",
+      "model": "openai/gpt-6.1-sol"
+    }
+  ],
+  "sourceCheckout": {
+    "path": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-one-agent-consolidation-20261116",
+    "head": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab",
+    "status": [
+      "?? .ai/"
+    ]
+  },
+  "protectedDelta": []
+}

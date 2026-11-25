@@ -1,0 +1,77 @@
+{
+  "sha": "fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-original-themes-20261122\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fe25457aa5c7-53880a3e-retry-22e28948",
+  "sourceFilesVerified": 2266,
+  "checks": [
+    {
+      "label": "native-application-preview-build",
+      "exit": 1,
+      "seconds": 3.947
+    },
+    {
+      "label": "native-http",
+      "exit": 0,
+      "seconds": 79.641
+    },
+    {
+      "label": "native-types",
+      "exit": 0,
+      "seconds": 7.786
+    },
+    {
+      "label": "native-lint",
+      "exit": 0,
+      "seconds": 6.738
+    },
+    {
+      "label": "native-format",
+      "exit": 0,
+      "seconds": 3.918
+    },
+    {
+      "label": "package-runtime-deploy-self-test",
+      "exit": 0,
+      "seconds": 0.221
+    },
+    {
+      "label": "package-runtime-operator-tests",
+      "exit": 0,
+      "seconds": 0.223
+    },
+    {
+      "label": "semantic-types",
+      "exit": 1,
+      "seconds": 7.27
+    },
+    {
+      "label": "full-show-widget-types",
+      "exit": 0,
+      "seconds": 5.776
+    },
+    {
+      "label": "full-show-widget-lint",
+      "exit": 0,
+      "seconds": 5.298
+    },
+    {
+      "label": "full-show-widget-format",
+      "exit": 0,
+      "seconds": 2.028
+    },
+    {
+      "label": "semantic-lint",
+      "exit": 1,
+      "seconds": 6.328
+    },
+    {
+      "label": "semantic-format",
+      "exit": 0,
+      "seconds": 2.073
+    },
+    {
+      "label": "semantic-integration-lint-baseline",
+      "exit": 0,
+      "seconds": 6.577
+    }
+  ]
+}

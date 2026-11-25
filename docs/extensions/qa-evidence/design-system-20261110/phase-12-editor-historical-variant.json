@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "pairs": [
+    {
+      "name": "editor-question",
+      "byteIdenticalToAcceptedPhase06": true,
+      "changedRgbaPixels": 9,
+      "samplesMatchHistorical": true
+    },
+    {
+      "name": "editor-media",
+      "byteIdenticalToAcceptedPhase06": true,
+      "changedRgbaPixels": 2,
+      "samplesMatchHistorical": true
+    },
+    {
+      "name": "editor-scene-timeline",
+      "byteIdenticalToAcceptedPhase06": true,
+      "changedRgbaPixels": 0,
+      "samplesMatchHistorical": true
+    },
+    {
+      "name": "editor-theme-settings",
+      "byteIdenticalToAcceptedPhase06": true,
+      "changedRgbaPixels": 0,
+      "samplesMatchHistorical": true
+    }
+  ],
+  "scope": "Original threshold=0/maxDiffPixels=0 Playwright comparison passed. Raw diagnostic reproduces the accepted TDS-06 9/2 antialias-edge variant exactly; no new differing pixel pattern or baseline change."
+}

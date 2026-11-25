@@ -1,0 +1,2 @@
+$ vitest run --maxWorkers 2 --reporter=json --outputFile=/evidence/root-tests.json
+JSON report written to /evidence/root-tests.json

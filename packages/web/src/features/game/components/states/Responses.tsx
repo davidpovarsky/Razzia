@@ -1,114 +1,64 @@
+import { ChoiceResultsView } from "../tadazz-show/choice-results-view"
+import { useResponseReveal } from "../tadazz-show/use-response-reveal"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
-import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
+import type { ExtensionStateEnvelope } from "@razzia/extensions/core"
+import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
+import { SFX } from "@razzia/web/features/game/utils/constants"
 import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
-import {
-  ANSWERS_COLORS,
-  ANSWERS_LABELS,
-  SFX,
-} from "@razzia/web/features/game/utils/constants"
-import { calculatePercentages } from "@razzia/web/features/game/utils/score"
+import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
-import clsx from "clsx"
-import { useEffect, useState } from "react"
 import useSound from "use-sound"
 
 interface Props {
   data: ManagerStatusDataMap["SHOW_RESPONSES"]
+  extensionState?: ExtensionStateEnvelope | null
+  hideHeading?: boolean
 }
 
-const Responses = ({ data }: Props) => {
-  const { question, answers, responses, solutions, type, note } = data
+const Responses = ({
+  data,
+  extensionState: propExtensionState,
+  hideHeading = false,
+}: Props) => {
+  const { question, type } = data
+  const viewRole = useViewRole()
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
-  const percentages = calculatePercentages(responses)
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false)
+  const contextExtensionState = useExtensionState()
+
+  // Single authoritative extension state source: explicit prop (e.g. testing) or context/store
+  const extensionState =
+    propExtensionState !== undefined
+      ? propExtensionState
+      : contextExtensionState
 
   const [sfxResults] = useSound(SFX.RESULTS_SOUND, {
     volume: 0.2,
   })
 
-  const [playMusic, { stop: stopMusic }] = useSound(SFX.ANSWERS.MUSIC, {
-    volume: 0.2,
-    onplay: () => {
-      setIsMusicPlaying(true)
-    },
-    onend: () => {
-      setIsMusicPlaying(false)
-    },
-  })
+  const reveal = useResponseReveal(data, extensionState, sfxResults)
 
-  useEffect(() => {
-    stopMusic()
-    sfxResults()
-  }, [responses, playMusic, stopMusic, sfxResults])
-
-  useEffect(() => {
-    if (!isMusicPlaying) {
-      playMusic()
-    }
-  }, [isMusicPlaying, playMusic])
-
-  useEffect(() => {
-    stopMusic()
-  }, [playMusic, stopMusic])
-
-  if (ResponsesComponent) {
-    return (
-      <div className="flex h-full flex-1 flex-col items-center justify-center gap-8 pb-4">
-        <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
-          {question}
-        </h2>
-        <ResponsesComponent data={data} />
-        <AnswerNote note={note} />
-      </div>
-    )
-  }
-
+  // One manager-only explanation follows either existing result renderer.
   return (
-    <div className="flex h-full flex-1 flex-col justify-between">
-      <div className="mx-auto inline-flex h-full w-full max-w-7xl flex-1 flex-col items-center justify-center gap-5">
-        <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
-          {question}
-        </h2>
-
-        <div
-          className={`mt-8 grid h-40 w-full max-w-3xl gap-4 px-2`}
-          style={{ gridTemplateColumns: `repeat(${answers.length}, 1fr)` }}
-        >
-          {answers.map((_, key) => (
-            <div
-              key={key}
-              className={clsx(
-                "flex flex-col justify-end self-end overflow-hidden rounded-md",
-                ANSWERS_COLORS[key],
-              )}
-              style={{ height: percentages[key] }}
-            >
-              <span className="w-full bg-black/10 text-center text-lg font-bold text-white drop-shadow-md">
-                {responses[key] || 0}
-              </span>
-            </div>
-          ))}
+    <>
+      {ResponsesComponent ? (
+        <div className="flex h-full flex-1 flex-col items-center justify-center gap-8 pb-4">
+          {!hideHeading && (
+            <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+              {question}
+            </h2>
+          )}
+          <ResponsesComponent data={data} />
         </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <AnswerNote note={note} />
-        <div className="mx-auto mb-4 grid w-full max-w-7xl grid-cols-2 gap-1 rounded-full px-2 text-lg font-bold text-white md:text-xl">
-          {answers.map((answer, key) => (
-            <AnswerButton
-              key={key}
-              className={clsx(ANSWERS_COLORS[key], {
-                "opacity-65": solutions && !solutions.includes(key),
-              })}
-              label={ANSWERS_LABELS[key]}
-              correct={solutions ? solutions.includes(key) : undefined}
-            >
-              {answer}
-            </AnswerButton>
-          ))}
-        </div>
-      </div>
-    </div>
+      ) : (
+        <ChoiceResultsView
+          data={data}
+          extensionState={extensionState}
+          reveal={reveal}
+          hideHeading={hideHeading}
+        />
+      )}
+      <AnswerNote note={data.note} isManager={viewRole === "manager"} />
+    </>
   )
 }
 

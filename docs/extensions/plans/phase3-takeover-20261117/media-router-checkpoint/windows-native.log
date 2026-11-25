@@ -1,0 +1,49 @@
+▶ native-host consent routes and security headers
+  ✔ merges frame-ancestors 'none' safely into existing CSP headers (2.3042ms)
+  ✔ matches exact OAuth consent and exact 54-char native-save consent paths only (2.2961ms)
+  ✔ identifies protected OAuth and MCP machine routes strictly (1.5171ms)
+  ✔ stays byte-equivalent pass-through with zero OAuth/storage side effects when disabled (15.1933ms)
+  ✔ fails closed on missing or invalid enabled configuration (9.4047ms)
+  ✔ applies merged consent headers on GET/HEAD consent routes only and preserves raw machine listener (612.3495ms)
+  ✔ wires NativeSaveConsentPage lazily inside Studio.tsx (3.7494ms)
+✔ native-host consent routes and security headers (650.6584ms)
+✔ raw routing refuses normalized, encoded-separator, fragment and malformed paths (2.7252ms)
+✔ native bridge streams a response before its producer completes (136.7385ms)
+✔ a slow non-machine body is torn down before consumption completes and drain settles (143.346ms)
+✔ native media preserves its existing upload cap; generic bodies keep 16 MiB (2936.6227ms)
+✔ authorization can refuse an incomplete upload without buffering its body (31.752ms)
+✔ two media requests can proceed while a third is refused and normal requests remain available (58.6801ms)
+Game cleanup task started
+✔ client disconnect aborts the same native Request and settles tracked work (18.4734ms)
+Game cleanup task stopped
+✔ Socket.IO shutdown settles with an idle non-HTTP socket (4126.6653ms)
+Game cleanup task started
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+Game cleanup task stopped
+▶ native-host end-to-end consent integration
+  ✔ runs real accounts, PKCE OAuth, MCP save consent, security denials, and C1 gate (7836.5104ms)
+✔ native-host end-to-end consent integration (7839.2315ms)
+ℹ tests 16
+ℹ suites 2
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10489.6885

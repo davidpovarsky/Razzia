@@ -1,0 +1,50 @@
+--- a/extensions/qa/phase3-full-show/linux-browser-verify.py
++++ b/extensions/qa/phase3-full-show/linux-browser-verify.py
+@@ -2,8 +2,9 @@
+ 
+ Reuses the existing local image and read-only source/dependency/browser caches.
+ No network, published ports, customer mount, installs, old restart or deletion.
+-The 1800s ceiling bounds all 40 checks and 44 renderer fixtures on one CPU. The 9fa
+-run took 544.83s for 23 checks; the complete compound semantic case measured 147.562s.
++The 1800s ceiling bounds all 40 checks and 44 renderer fixtures. The fresh
++offline browser container uses a two-CPU quota for its renderer and fixture host.
++Behavioral assertions and their individual timeouts remain unchanged.
+ """
+ import json
+ import pathlib
+@@ -55,7 +56,7 @@
+ # The native browser and the real issuer/SDK harness share this bounded cgroup.
+ # The 2 GiB run killed Chromium at ~1.5 GiB renderer RSS plus ~475 MiB harness RSS.
+ memory_limit_bytes=3*1024**3
+-command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","1","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
++command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","2","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
+ for origin,target,readonly in [(str(source),"/source",True),(str(owned),"/evidence",False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True),(str(rootfs/"root/.cache/ms-playwright"),"/root/.cache/ms-playwright",True)]:
+     command += ["--mount",f"type=bind,source={origin},target={target}" + (",readonly" if readonly else "")]
+ command += [facts["Image"],"sleep","infinity"]
+@@ -85,7 +86,7 @@
+ try:
+     resources_before=resources()
+     assert resources_before["memoryLimitBytes"]==memory_limit_bytes and resources_before["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_MISMATCH"
+-    assert resources_before["cpuMax"][0]==resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
++    assert resources_before["cpuMax"][0]==2*resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
+     before=hashes()
+     assert before==c["manifest"],"Fresh browser source differs from committed input"
+     widget=source/"extensions/src/mcp-app/widget/dist"
+@@ -96,7 +97,7 @@
+     assert hashlib.sha256((widget/"full-show.html").read_bytes()).hexdigest()==artifact["sha256"]
+     for item in artifact["physicalSources"]+artifact["publicAssets"]:
+         assert item["path"] in c["manifest"] and c["manifest"][item["path"]]==item["sha256"]
+-    # Preserve the one-CPU Docker quota and nice 19, but allow an idle CPU.
++    # Keep nice 19 and allow both cores within the two-CPU QA quota.
+     # A CPU 0 pin starved native browser frames while CPU 1 was idle in QA.
+     argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
+     started=time.time()
+@@ -112,7 +113,7 @@
+                        "dockerOOMKilled":container_after["State"]["OOMKilled"]}
+     (owned/"browser-resource-evidence.json").write_text(json.dumps(resource_evidence,indent=2)+"\n")
+     assert resources_after["memoryLimitBytes"]==memory_limit_bytes and resources_after["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_CHANGED"
+-    assert resources_after["cpuMax"]==resources_before["cpuMax"] and resource_evidence["configuredNanoCpus"]==1000000000,"QA_CPU_LIMIT_CHANGED"
++    assert resources_after["cpuMax"]==resources_before["cpuMax"] and resource_evidence["configuredNanoCpus"]==2000000000,"QA_CPU_LIMIT_CHANGED"
+     assert not resource_evidence["dockerOOMKilled"] and all(resources_after["memoryEvents"][key]==0 for key in ("oom","oom_kill","oom_group_kill")),"FULLSHOW_QA_OOM"
+     after=hashes()
+     widget_after=widget_hashes()

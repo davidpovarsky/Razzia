@@ -1,0 +1,58 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › qa/tds-acceptance.spec.ts:12:1 › public routes, six viewport sizes and scoped title retain lazy entry and real navigation (4.6s)
+  ✓  2 [chromium] › qa/tds-acceptance.spec.ts:85:1 › owned Studio routes, loading/error/empty recovery, legacy redirect and read-only editor keep real state (9.8s)
+  ✓  3 [chromium] › qa/tds-acceptance.spec.ts:162:1 › touch tablet portrait/landscape, keyboard and 200% CSS zoom retain Studio controls (4.1s)
+  ✓  4 [webkit] › qa/tds-acceptance.spec.ts:12:1 › public routes, six viewport sizes and scoped title retain lazy entry and real navigation (23.9s)
+  ✓  5 [webkit] › qa/tds-acceptance.spec.ts:85:1 › owned Studio routes, loading/error/empty recovery, legacy redirect and read-only editor keep real state (24.7s)
+  ✘  6 [webkit] › qa/tds-acceptance.spec.ts:162:1 › touch tablet portrait/landscape, keyboard and 200% CSS zoom retain Studio controls (22.3s)
+
+
+  1) [webkit] › qa/tds-acceptance.spec.ts:162:1 › touch tablet portrait/landscape, keyboard and 200% CSS zoom retain Studio controls
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 15000ms exceeded while waiting on the predicate
+
+       7 |       page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+       8 |     )
+    >  9 |     .toBe(true)
+         |      ^
+      10 | }
+      11 |
+      12 | test("public routes, six viewport sizes and scoped title retain lazy entry and real navigation", async ({
+        at noHorizontalOverflow (/cleanup/extensions/qa/tds-acceptance.spec.ts:9:6)
+        at /cleanup/extensions/qa/tds-acceptance.spec.ts:196:11
+
+    Error Context: ../../evidence/phase-12-route-traces/tds-acceptance-touch-table-cbf2e-zoom-retain-Studio-controls-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-route-traces/tds-acceptance-touch-table-cbf2e-zoom-retain-Studio-controls-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-route-traces/tds-acceptance-touch-table-cbf2e-zoom-retain-Studio-controls-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [webkit] › qa/tds-acceptance.spec.ts:162:1 › touch tablet portrait/landscape, keyboard and 200% CSS zoom retain Studio controls
+  5 passed (1.6m)

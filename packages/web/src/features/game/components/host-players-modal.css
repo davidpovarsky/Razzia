@@ -1,0 +1,282 @@
+.tds-scope .host-roster-dialog {
+  position: fixed;
+  inset-block-start: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--tds-z-dialog);
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  box-sizing: border-box;
+  width: min(64rem, calc(100vw - 2rem));
+  height: min(48rem, calc(100dvh - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: var(--tds-space-6);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+.tds-scope .host-roster-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tds-space-3);
+}
+.tds-scope .host-roster-title {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-2);
+  margin: 0;
+  font-size: var(--tds-type-title);
+  font-weight: var(--tds-weight-heading);
+}
+.tds-scope .host-roster-title > svg {
+  color: var(--tds-action);
+}
+.tds-scope .host-roster-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-2);
+  margin: var(--tds-space-2) 0 0;
+  color: var(--tds-muted-text);
+  font-size: var(--tds-type-label);
+}
+.tds-scope .host-roster-toolbar {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(8rem, 13rem) auto auto;
+  gap: var(--tds-space-2);
+  flex-shrink: 0;
+  align-items: center;
+}
+.tds-scope .host-roster-toolbar > * {
+  min-width: 0;
+}
+.tds-scope .host-roster-editor,
+.tds-scope .host-roster-management,
+.tds-scope .host-roster-import-preview {
+  flex-shrink: 0;
+  max-height: 35dvh;
+  overflow: auto;
+  padding: var(--tds-space-3);
+  border: 1px solid var(--tds-border);
+  border-radius: var(--tds-radius-control);
+  background: var(--tds-elevated);
+}
+.tds-scope .host-roster-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--tds-space-3);
+}
+.tds-scope .host-roster-editor-actions,
+.tds-scope .host-roster-file-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--tds-space-2);
+}
+.tds-scope .host-roster-form-error {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.tds-scope .host-roster-import-preview {
+  display: grid;
+  gap: var(--tds-space-3);
+}
+.tds-scope .host-roster-load-error {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-3);
+  color: var(--tds-danger);
+  font-size: var(--tds-type-label);
+}
+.tds-scope .host-roster-list {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--tds-border);
+  border-radius: var(--tds-radius-control);
+}
+.tds-scope .host-roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: start;
+  font-size: var(--tds-type-label);
+}
+.tds-scope .host-roster-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--tds-elevated);
+  color: var(--tds-muted-text);
+}
+.tds-scope .host-roster-table :is(th, td) {
+  text-align: start;
+  padding: var(--tds-space-3);
+  border-block-end: 1px solid var(--tds-border);
+}
+.tds-scope .host-roster-table tbody tr:last-child td {
+  border-block-end: 0;
+}
+.tds-scope .host-roster-person {
+  min-width: 0;
+  width: 50%;
+  overflow-wrap: anywhere;
+}
+.tds-scope .host-roster-person > strong {
+  font-weight: var(--tds-weight-label);
+}
+.tds-scope .host-roster-person-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-2) var(--tds-space-3);
+  margin-block-start: var(--tds-space-1);
+  color: var(--tds-muted-text);
+  font-size: var(--tds-type-caption);
+}
+.tds-scope .host-roster-person-details > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-1);
+}
+.tds-scope .host-roster-person-details [dir="ltr"] {
+  unicode-bidi: isolate;
+}
+.tds-scope .host-roster-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-1);
+  white-space: nowrap;
+  font-size: var(--tds-type-caption);
+  color: var(--tds-muted-text);
+}
+.tds-scope .host-roster-status[data-status="connected"] {
+  color: var(--tds-success);
+}
+.tds-scope .host-roster-status[data-status="disconnected"] {
+  color: var(--tds-warning);
+}
+.tds-scope .host-roster-status-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.tds-scope .host-roster-activity > span {
+  display: block;
+  color: var(--tds-muted-text);
+  font-size: var(--tds-type-caption);
+}
+.tds-scope .host-roster-actions-heading {
+  text-align: end;
+}
+.tds-scope .host-roster-row-actions {
+  white-space: nowrap;
+  text-align: end;
+}
+.tds-scope .host-roster-mobile-label {
+  display: none;
+}
+.tds-scope .host-roster-count {
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--tds-muted-text);
+  font-size: var(--tds-type-caption);
+}
+.tds-scope .host-roster-empty {
+  padding: var(--tds-space-6);
+  color: var(--tds-muted-text);
+  text-align: center;
+}
+@media (max-width: 48rem) {
+  .tds-scope .host-roster-dialog {
+    padding: var(--tds-space-4);
+    gap: var(--tds-space-3);
+    width: calc(100vw - 1rem);
+    height: calc(100dvh - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+  .tds-scope .host-roster-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+  .tds-scope .host-roster-search {
+    grid-column: 1 / -1;
+  }
+  .tds-scope .host-roster-editor {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .tds-scope .host-roster-editor-actions {
+    grid-column: 1 / -1;
+  }
+  .tds-scope .host-roster-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .tds-scope .host-roster-table tbody {
+    display: block;
+  }
+  .tds-scope .host-roster-table tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--tds-space-1) var(--tds-space-2);
+    padding: var(--tds-space-3);
+    border-block-end: 1px solid var(--tds-border);
+  }
+  .tds-scope .host-roster-table tbody tr:last-child {
+    border-block-end: 0;
+  }
+  .tds-scope .host-roster-table tbody td {
+    display: block;
+    padding: 0;
+    border: 0;
+    width: auto;
+  }
+  .tds-scope .host-roster-person {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .tds-scope .host-roster-connection {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .tds-scope .host-roster-activity {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: var(--tds-type-caption);
+  }
+  .tds-scope .host-roster-table td.host-roster-row-actions {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+  }
+  .tds-scope .host-roster-mobile-label {
+    display: inline;
+  }
+}
+@media (max-width: 24rem) {
+  .tds-scope .host-roster-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .tds-scope .host-roster-toolbar > .tds-field {
+    grid-column: 1 / -1;
+  }
+  .tds-scope .host-roster-editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tds-scope
+    .host-roster-toolbar
+    .tds-button[data-testid="host-modal-add-btn"] {
+    font-size: var(--tds-type-caption);
+    padding-inline: var(--tds-space-2);
+  }
+  .tds-scope .host-roster-table td.host-roster-row-actions {
+    flex-direction: column;
+  }
+}

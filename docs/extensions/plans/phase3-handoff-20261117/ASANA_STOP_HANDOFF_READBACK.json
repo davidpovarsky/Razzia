@@ -1,0 +1,27 @@
+{
+  "status": "VERIFIED_15_OF_15_ALL_OPEN",
+  "phase3": "OWNER_STOP_NOT_READY",
+  "tasksReadBeforeUpdate": "All fifteen original task GIDs read successfully; all OPEN",
+  "handoffDocumentationCommit": "b17ed9c30efe76af35d69a7465f0741a0d577f16",
+  "verification": "Read back each exact comment GID, handoff filename and NOT_READY text through get_task_stories; separately read all fifteen tasks and confirmed completed=false. No task status changed.",
+  "comments": [
+    {"task":"1220539632193783","comment":"1220606834360675","verified":true,"completed":false},
+    {"task":"1220539638955304","comment":"1220606800425066","verified":true,"completed":false},
+    {"task":"1220539632251971","comment":"1220607068741306","verified":true,"completed":false},
+    {"task":"1220539611695147","comment":"1220606834360779","verified":true,"completed":false},
+    {"task":"1220539638962739","comment":"1220606834361931","verified":true,"completed":false},
+    {"task":"1220539769117845","comment":"1220606954107080","verified":true,"completed":false},
+    {"task":"1220539638954076","comment":"1220606800907628","verified":true,"completed":false},
+    {"task":"1220539632226057","comment":"1220606800941853","verified":true,"completed":false},
+    {"task":"1220539611723851","comment":"1220607068587057","verified":true,"completed":false},
+    {"task":"1220539638965463","comment":"1220606834328144","verified":true,"completed":false},
+    {"task":"1220539769107140","comment":"1220606800941724","verified":true,"completed":false},
+    {"task":"1219846294963052","comment":"1220607068742495","verified":true,"completed":false},
+    {"task":"1219881067977912","comment":"1220606800891809","verified":true,"completed":false},
+    {"task":"1220109925694179","comment":"1220606953955800","verified":true,"completed":false},
+    {"task":"1220111293723790","comment":"1220606761069450","verified":true,"completed":false}
+  ],
+  "pendingTaskGids": [],
+  "linkRule": "https://app.asana.com/0/1219846276680200/<task>",
+  "noDuplicateTasksCreated": true
+}

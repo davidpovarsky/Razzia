@@ -1,0 +1,55 @@
+{
+  "reviewedModule": "14faea86a7c22a16cb4ff5391e4e3c70aaea62ec",
+  "parentPattern": "src/**/*.test.ts",
+  "parentConfigSha256": "73742e609bb01e7567e054e7b0c3475d6ec973e1bb4a51f4b131374198db0d30",
+  "files": [
+    {
+      "from": "extensions/src/mcp-app/tests/server/authorization.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/authorization.nodecheck.ts",
+      "bytes": 4700,
+      "sha256": "363d1f4bf2c5401a17fd576a3daaadf3686e25b6784e6ed1174f5aeb723b778a"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/boundaries.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts",
+      "bytes": 2374,
+      "sha256": "2406fbb92db3204faef1dc9236bd7bc93589e7cdb02920fcd22016bfda9a6302"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/canonical.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/canonical.nodecheck.ts",
+      "bytes": 2447,
+      "sha256": "2a782e417312a7ccc0d7a2525046505104d148aa9029bc094ee503e0c6d8a44c"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/drafts.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/drafts.nodecheck.ts",
+      "bytes": 3479,
+      "sha256": "9a90571e0923340db3dfbe901900460e62dbe71b2dece405c4d0917479827dbc"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/ingress.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/ingress.nodecheck.ts",
+      "bytes": 4046,
+      "sha256": "d3f41a29f36519c1e17ef7117ae10ec10445e559223ce264613ce94d547f0934"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/integrity.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/integrity.nodecheck.ts",
+      "bytes": 1920,
+      "sha256": "2a5ef1c323e13d14e88cf1c7c2b361511a675cc7dbe52b0a3651af2b029deb75"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/protocol.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+      "bytes": 1191,
+      "sha256": "ce048dd8ca1a95304a7820a54a29818c8ba04c1d67f54828596be54a67fc3fd8"
+    },
+    {
+      "from": "extensions/src/mcp-app/tests/server/replay.test.ts",
+      "to": "extensions/src/mcp-app/tests/server/replay.nodecheck.ts",
+      "bytes": 3625,
+      "sha256": "992195429728d625fe59fe4d5a12d9f759ba193465759c5233c0d3a03e1781ba"
+    }
+  ]
+}

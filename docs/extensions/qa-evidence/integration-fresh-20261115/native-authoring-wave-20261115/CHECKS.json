@@ -1,0 +1,57 @@
+[
+  {
+    "name": "focused-types",
+    "args": [
+      "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "extensions/node_modules/typescript/bin/tsc",
+      "--project",
+      "extensions/src/core/show-library/tsconfig.focused.json"
+    ],
+    "source": "75f74e3dc321109469b140eab6be03d3353509c0",
+    "started_utc": "2026-11-15T15:06:56.178272+00:00",
+    "finished_utc": "2026-11-15T15:06:57.434351+00:00",
+    "exit": 0,
+    "log": "focused-types.log"
+  },
+  {
+    "name": "parent-types",
+    "args": [
+      "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "extensions/node_modules/typescript/bin/tsc",
+      "--project",
+      "extensions/tsconfig.json"
+    ],
+    "source": "75f74e3dc321109469b140eab6be03d3353509c0",
+    "started_utc": "2026-11-15T15:06:57.436352+00:00",
+    "finished_utc": "2026-11-15T15:07:07.508449+00:00",
+    "exit": 1,
+    "log": "parent-types.log"
+  },
+  {
+    "name": "focused-tests",
+    "args": [
+      "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "extensions/vitest.config.ts",
+      "--root",
+      "extensions",
+      "src/core/show-library/composition-repository.test.ts",
+      "src/core/show-library/preview-port.test.ts",
+      "--maxWorkers",
+      "1",
+      "--reporter",
+      "default",
+      "--reporter",
+      "json",
+      "--outputFile",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\native-authoring-wave-20261115\\tests-integrated.json"
+    ],
+    "source": "75f74e3dc321109469b140eab6be03d3353509c0",
+    "started_utc": "2026-11-15T15:07:07.509458+00:00",
+    "finished_utc": "2026-11-15T15:07:08.394667+00:00",
+    "exit": 1,
+    "log": "focused-tests.log"
+  }
+]

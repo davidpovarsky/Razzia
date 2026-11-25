@@ -1,0 +1,30 @@
+{
+  "baseCommit": "c5028c4cb9fc839aa514edec47cae2a8a8bff1b0",
+  "checkedAt": "2026-11-24T02:56:48.370Z",
+  "unchangedOriginalAssertionCalls": 46,
+  "originalAssertionCallsPreservedInOrder": true,
+  "emittedComparison": {
+    "browser-fixture.tsx": {
+      "oldSourceSHA256": "891704057c4b4abde1fcc0c10d723dffff995709c79b3fa204cb1556a92d2b23",
+      "newSourceSHA256": "26d607acc5495df98ebc113775bee219c32d6c58f6dcced3de183a8255bbde54",
+      "oldEmittedSHA256": "4b155bfee14f143c835dea639b77b3cafc638a8c544c0c3ee5257d008bfcbd84",
+      "newEmittedSHA256": "3bc17a171127fb67068cf5e8ab94ae3aee3aa52dbf3a0147d81582179b43dc06",
+      "byteIdenticalNormalizedEmission": false
+    },
+    "browser-i18n.ts": {
+      "oldSourceSHA256": "df73076e6c2a189b4f33baef6fefed571fe91b867ae4d8f0ce90b4cb3b354723",
+      "newSourceSHA256": "087c5cabf68719451c9a989f0b05e9f8541a9f2eb6ba2c5a1106179827c7baf4",
+      "oldEmittedSHA256": "d6d89d267c1769ad72f679db914ac1596ec92749f188e8a975fbd406df8bdda6",
+      "newEmittedSHA256": "d6d89d267c1769ad72f679db914ac1596ec92749f188e8a975fbd406df8bdda6",
+      "byteIdenticalNormalizedEmission": true
+    },
+    "browser-check.mjs": {
+      "oldSourceSHA256": "3be474bb6240e3aa9197cdf9e5a5e28f4d0a2ab23a26697335faa6ccf5970592",
+      "newSourceSHA256": "b9ca3a2a3b2955b89f9607d2c906b55ceecf1ce624111809d7a38b36a062b2bb",
+      "oldEmittedSHA256": "68dd76fbe3282dd8c17897df32be2b783048d74236ef2ba600581833a5439593",
+      "newEmittedSHA256": "ae467a19a22929df0ece456f5e6eb7de7941dc8737c71e0ccf5843863c8fca21",
+      "byteIdenticalNormalizedEmission": false
+    }
+  },
+  "interpretation": "Only browser-i18n.ts has byte-identical normalized emission. Runtime adapter/control-flow/config changes in the other fixtures are qualified by the separate final nine-case browser run; this comparison does not claim complete behavioral identity."
+}

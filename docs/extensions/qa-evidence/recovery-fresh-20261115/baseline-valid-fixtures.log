@@ -1,0 +1,162 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-copy 283ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal 209ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write 242ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write 229ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete 227ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal 329ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup 277ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at journal-cleanup 192ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal and quarantine after partial restore and retries 104ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > blocks startup rather than restoring refs when original and quarantine are missing 73ms
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show 163ms
+   → expected +0 to be 1 // Object.is equality
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present 193ms
+   → expected +0 to be 1 // Object.is equality
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit 121ms
+   → expected true to be false // Object.is equality
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > rejects unsafe journal IDs without writing outside authorized paths 152ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at base-written and replay is a no-op 123ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at sidecar-written and replay is a no-op 75ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > preserves V1 backups 103ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is throw 87ms
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content 112ms
+   → expected +0 to be 1 // Object.is equality
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision 87ms
+   → expected +0 to be 1 // Object.is equality
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for invalid-v2 70ms
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch 99ms
+   → expected +0 to be 1 // Object.is equality
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for newer-revision 72ms
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id 90ms
+   → expected +0 to be 1 // Object.is equality
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename 94ms
+   → expected +0 to be 1 // Object.is equality
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal after partial sidecar write and retries safely 99ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal if cleanup fails after exact restoration 66ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/media-library-recovery.test.ts:146:73
+    144|     if (fault === "unreadable-show") fs.writeFileSync(fixture.basePath…
+    145|     if (fault === "binary-present") fs.writeFileSync(mediaPath(), "rep…
+    146|     expect(recoverMediaDeleteJournals(fixture.getPath).unresolvedCount…
+       |                                                                         ^
+    147|     expect(fs.existsSync(journal)).toBe(true)
+    148|     expect(fs.existsSync(entry.quarantinePath)).toBe(true)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/server/media-library-recovery.test.ts:156:35
+    154|       rename(source, destination)
+    155|     })
+    156|     expect(transaction().allowed).toBe(false)
+       |                                   ^
+    157|     expect(fs.existsSync(mediaPath())).toBe(true)
+    158|     expect(loadAllShowsHealth(fixture.getPath).records.every((s) => s.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/storage/journal-recovery.test.ts:56:50
+     54|       return { id }
+     55|     } }
+     56|     expect(recoverJournals(bad).unresolvedCount).toBe(1)
+       |                                                  ^
+     57|     expect(fs.existsSync(original.journal)).toBe(true)
+     58|     expect(recoverJournals(fixture.injections).unresolvedCount).toBe(0)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/storage/journal-recovery.test.ts:71:65
+     69|       return write(file, data, options)
+     70|     })
+     71|     expect(recoverJournals(fixture.injections).unresolvedCount).toBe(1)
+       |                                                                 ^
+     72|     expect(fs.existsSync(original.journal)).toBe(true)
+     73|     spy.mockRestore()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/storage/journal-recovery.test.ts:88:65
+     86|     const beforeHash = fileDigest(original.sidecarPath)
+     87|     const update = vi.spyOn(fixture.injections, "updateQuizz")
+     88|     expect(recoverJournals(fixture.injections).unresolvedCount).toBe(1)
+       |                                                                 ^
+     89|     expect(update).not.toHaveBeenCalled()
+     90|     expect(fs.existsSync(original.journal)).toBe(true)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  8 failed | 19 passed (27)
+   Start at  04:59:37
+   Duration  8.21s (tests 56%, import 28%, transform 16%)

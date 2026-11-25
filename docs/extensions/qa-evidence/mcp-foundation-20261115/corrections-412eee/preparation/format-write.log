@@ -1,0 +1,27 @@
+contracts/canonical.ts 787ms (unchanged)
+contracts/index.ts 79ms (unchanged)
+contracts/schemas.ts 388ms (unchanged)
+contracts/tools.ts 486ms (unchanged)
+server/authoring.ts 204ms (unchanged)
+server/authorization.ts 201ms (unchanged)
+server/connection.ts 118ms
+server/dependencies.ts 105ms
+server/dispatch.ts 210ms
+server/drafts.ts 79ms
+server/errors.ts 84ms (unchanged)
+server/factory.ts 107ms
+server/preview.ts 190ms (unchanged)
+server/results.ts 195ms
+tests/server/authorization.test.ts 200ms (unchanged)
+tests/server/boundaries.test.ts 97ms (unchanged)
+tests/server/canonical.test.ts 178ms (unchanged)
+tests/server/delivery-fixture.ts 95ms
+tests/server/drafts.test.ts 192ms (unchanged)
+tests/server/fixtures.ts 196ms (unchanged)
+tests/server/ingress.test.ts 104ms
+tests/server/integrity.test.ts 88ms
+tests/server/protocol.test.ts 10ms (unchanged)
+tests/server/replay.test.ts 102ms
+package.json 96ms (unchanged)
+tsconfig.json 3ms (unchanged)
+server/README.md 401ms (unchanged)

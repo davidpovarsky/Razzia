@@ -1,0 +1,47 @@
+[
+  {
+    "path": "SUMMARY.json",
+    "originalCommit": "54ef55c2dc92c2088a3006cc8b269003f7a4188d",
+    "originalBytes": 3082,
+    "originalSha256": "c689bd741e1b836324c59b6e531ee8bd1df545bd6be29c7c4509ce8075928efb",
+    "normalizedBytes": 3003,
+    "normalizedSha256": "7db606dfef7079269bc5168a58f7fefe84c0cfe49b359a142cfa809a55a27c3d",
+    "change": "CRLF-to-LF display normalization only; embedded base64/raw package bytes unchanged"
+  },
+  {
+    "path": "decoded-index-rows.json",
+    "originalCommit": "54ef55c2dc92c2088a3006cc8b269003f7a4188d",
+    "originalBytes": 280836,
+    "originalSha256": "c1673229ffc8ab5853926bdbbe2eb60d0bb4aff04db7c01af71ff00294b3fdb8",
+    "normalizedBytes": 275030,
+    "normalizedSha256": "34c290f0501c2fdd4d1ba92c30bff4f597b7f9deee13c766d78286e936fb7052",
+    "change": "CRLF-to-LF display normalization only; embedded base64/raw package bytes unchanged"
+  },
+  {
+    "path": "package-sources.candidate.json",
+    "originalCommit": "54ef55c2dc92c2088a3006cc8b269003f7a4188d",
+    "originalBytes": 62489,
+    "originalSha256": "a6e2bd03c799c25ed93dd83d96915404cc39977d5f3fcbd37f39fea287b2d8c4",
+    "normalizedBytes": 61095,
+    "normalizedSha256": "e10d14e72ee1ecc1fef356decf9551625ce4d584ac751be4ede6c1bc2267d335",
+    "change": "CRLF-to-LF display normalization only; embedded base64/raw package bytes unchanged"
+  },
+  {
+    "path": "exact-index-rows.json",
+    "originalCommit": "54ef55c2dc92c2088a3006cc8b269003f7a4188d",
+    "originalBytes": 218907,
+    "originalSha256": "d4f05bcb2419611d7babc7cc201e224b2704d99f5e5453a12d542dee33a1aaca",
+    "normalizedBytes": 218906,
+    "normalizedSha256": "3d20fae82f71d149ee1e20c6f3a1ccffab2b4c0e592d5064c750dd93f88644da",
+    "change": "CRLF-to-LF display normalization only; embedded base64/raw package bytes unchanged"
+  },
+  {
+    "path": "observed-membership.json",
+    "originalCommit": "54ef55c2dc92c2088a3006cc8b269003f7a4188d",
+    "originalBytes": 341698,
+    "originalSha256": "b3cd90e116d630abd81e9a0c3b41fe7ba70c33f791dcad56e0e8c7e40d4707ef",
+    "normalizedBytes": 341697,
+    "normalizedSha256": "67f03b0b46ed8a13aa46a4764cf396ea2f809fa20a1c998ea1a42e6b5f5adfd0",
+    "change": "CRLF-to-LF display normalization only; embedded base64/raw package bytes unchanged"
+  }
+]

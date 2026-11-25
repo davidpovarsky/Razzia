@@ -1,0 +1,16 @@
+{
+  "runtime": "v22.17.0",
+  "platform": "win32",
+  "command": [
+    "--test",
+    "--test-concurrency=1",
+    "--test-reporter=tap",
+    "docs/extensions/qa-evidence/mcp-foundation-20261115/preview-candidate/candidate-01/producer.mjs",
+    "docs/extensions/qa-evidence/mcp-foundation-20261115/preview-candidate/candidate-01/protocol.mjs",
+    "docs/extensions/qa-evidence/mcp-foundation-20261115/preview-candidate/candidate-01/http.mjs"
+  ],
+  "started": "2026-11-15T20:40:27.438Z",
+  "ended": "2026-11-15T20:40:29.233Z",
+  "exit": 1,
+  "signal": null
+}

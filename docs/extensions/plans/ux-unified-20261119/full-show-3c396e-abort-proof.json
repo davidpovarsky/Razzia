@@ -1,0 +1,152 @@
+{
+  "sourceSha": "3c396e059bf3c9b737934ab7f1b79098bc97d9b5",
+  "sourceRun": "tadazz-codex-3c396e059bf3-28ffc5d8",
+  "browserRun": "tadazz-codex-fullshow-3c396e059bf3-dbdedd29",
+  "at": "2026-11-19T02:32:42.307821+00:00",
+  "status": "intentionally-aborted-after-known-failure",
+  "notAcceptedAsQualification": true,
+  "reason": "The asynchronous host display-mode request was asserted before receipt; preserving failure and replacing the unsafe immediate-read QA check before a complete new-source rerun.",
+  "container": "25a7c5ecb3b4b441bc6ad2c5b793f27e0f6bd762ee368dab6e9630a6cb08477b",
+  "progressAt": "2026-11-19T02:32:39.511Z",
+  "activeAtStop": "HTTP preview_show",
+  "completedChecks": 23,
+  "passed": 22,
+  "failed": 1,
+  "failures": [
+    {
+      "name": "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'fullscreen'\n- ]\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'fullscreen'\n- ]\n\n    at verifyHostControls (file:///source/extensions/qa/phase3-full-show/host-controls.mjs:45:10)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2111:32\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:592:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1921:7",
+      "budgetMs": 120000,
+      "ms": 11777
+    }
+  ],
+  "rendererFixtureCount": 22,
+  "resumeReadiness": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "native resume readiness",
+      "timeoutMs": 5000,
+      "status": "ready",
+      "snapshot": {
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "epoch": "1",
+        "pausedElapsedMs": 9306,
+        "pausedMedia": [
+          {
+            "index": 0,
+            "time": 6.487862,
+            "paused": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3"
+          },
+          {
+            "index": 1,
+            "time": 0.99923,
+            "paused": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3"
+          }
+        ],
+        "waitedMs": 273.69999980926514,
+        "firstClockProgressMs": 271.19999980926514,
+        "firstMediaProgressMs": 220.89999985694885,
+        "renderedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "renderedEpoch": "1",
+        "renderedPaused": "false",
+        "renderedElapsedMs": 9531,
+        "media": [
+          {
+            "index": 0,
+            "sameElement": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3",
+            "paused": true,
+            "time": 6.487862
+          },
+          {
+            "index": 1,
+            "sameElement": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3",
+            "paused": false,
+            "time": 1.226118
+          }
+        ]
+      }
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "check": "native resume readiness",
+      "timeoutMs": 5000,
+      "status": "ready",
+      "snapshot": {
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "epoch": "1",
+        "pausedElapsedMs": 7709,
+        "pausedMedia": [
+          {
+            "index": 0,
+            "time": 5.797901,
+            "paused": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3"
+          },
+          {
+            "index": 1,
+            "time": 0.595698,
+            "paused": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3"
+          }
+        ],
+        "waitedMs": 292.90000009536743,
+        "firstClockProgressMs": 289.60000014305115,
+        "firstMediaProgressMs": 189.20000004768372,
+        "renderedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "renderedEpoch": "1",
+        "renderedPaused": "false",
+        "renderedElapsedMs": 7938,
+        "media": [
+          {
+            "index": 0,
+            "sameElement": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3",
+            "paused": true,
+            "time": 5.797901
+          },
+          {
+            "index": 1,
+            "sameElement": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3",
+            "paused": false,
+            "time": 0.857235
+          }
+        ]
+      }
+    }
+  ],
+  "resourcesBeforeStop": {
+    "memoryLimitBytes": 3221225472,
+    "memoryCurrentBytes": 1702756352,
+    "memoryPeakBytes": 2703015936,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "cpuMax": [
+      "100000",
+      "100000"
+    ],
+    "memorySwapLimitBytes": 0
+  },
+  "dockerOOMKilledBeforeStop": false,
+  "rawPartialProgressSha256": "d1acdd0ffd6b262b200e603fba2086329a407d9d79d621ae56762bffb52a238d",
+  "rawPartialProgressPreservedAt": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-3c396e059bf3-dbdedd29/coordinator-abort-progress.json",
+  "onlyOwnedQaContainerStopped": true,
+  "productionContainerUnchanged": true,
+  "gatewayUnchanged": true,
+  "requiresCompleteNewSourceQualification": true
+}

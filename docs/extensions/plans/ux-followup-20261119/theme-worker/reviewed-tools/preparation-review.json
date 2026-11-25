@@ -1,0 +1,18 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "helperSha256": "e656b7ea66bd6379829016b2426d8f206fdbf5ff6b66ecb0acb70bb79a5735a6",
+  "inputManifestSha256": "60e57a577a69cd592c1fd2c81cbc902878206050126693fb27b06c94d2a54b09",
+  "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "originalWorkerSha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+  "pythonSyntax": "PASS (ast.parse only; helper not executed)",
+  "maxContainers": 1,
+  "maxWorkerSeconds": 45,
+  "cpuLimit": 1,
+  "memoryMiB": 768,
+  "network": "none",
+  "imageReadiness": "BLOCKED_PINNED_IMAGE_ABSENT",
+  "sourceMutated": false,
+  "gitMutated": false,
+  "linuxWorkerExecuted": false,
+  "productionMutation": false
+}

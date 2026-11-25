@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "/delivery/format-and-compare.mjs"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 11.288,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 158,
+  "logSha256": "172b488936ef9ad99cad1e7fd4b090d1f08e02b299adf11dbbcb351061eff6c3"
+}

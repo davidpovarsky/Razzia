@@ -1,0 +1,9 @@
+{
+  "customerMountUsed": false,
+  "error": "SYNTHETIC_SMOKE_PROCESS_FAILED",
+  "ok": false,
+  "productionTouched": false,
+  "releaseDir": "/home/ubuntu/tadazz-mcp-release-8b063c17800d-20261119",
+  "runningContainersUnchanged": true,
+  "sourceSha": "8b063c17800dffe4f91a7f2c9ae6aa882389e614"
+}

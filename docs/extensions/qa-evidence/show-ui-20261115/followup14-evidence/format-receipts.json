@@ -1,0 +1,22 @@
+[
+  {
+    "path": "extensions/src/components/oauth-consent/OAuthConsentPage.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/client.test.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/oauth-consent.spec.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts",
+    "sameAst": true,
+    "changed": false
+  }
+]

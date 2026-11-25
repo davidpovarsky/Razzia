@@ -1,0 +1,2 @@
+docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/actual-auth-backend.ts(50,46): error TS2307: Cannot find module '@hono/node-server' or its corresponding type declarations.
+docs/extensions/qa-evidence/telephony-fresh-20261115/remaining-source/actual-auth-backend.ts(56,31): error TS2307: Cannot find module 'hono/jwt' or its corresponding type declarations.

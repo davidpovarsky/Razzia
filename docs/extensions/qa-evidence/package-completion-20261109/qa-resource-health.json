@@ -1,0 +1,32 @@
+{
+  "handoffSnapshot": {
+    "peakMemoryBytes": 484651008,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "pidEvents": {
+      "max": 0
+    }
+  },
+  "packageAndOtherSuites": {
+    "peakMemoryBytes": 7737835520,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0,
+      "sock_throttled": 0
+    },
+    "pidEvents": {
+      "max": 0
+    }
+  }
+}

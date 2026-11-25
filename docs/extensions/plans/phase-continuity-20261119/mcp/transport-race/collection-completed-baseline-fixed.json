@@ -1,0 +1,329 @@
+{
+  "kind": "exact isolated transport baseline and mixed fixed run evidence collection",
+  "createdUtc": "2026-11-19T20:27:08.500502+00:00",
+  "sourceRoot": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119",
+  "destinationRoot": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119",
+  "files": [
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/audit.json",
+      "bytes": 621,
+      "sourceBeforeSha256": "6f0a8b713b120fc42c7db5e79a70a4761d8c6b215ec27ce7e2fb6f02052984f4",
+      "copiedSha256": "6f0a8b713b120fc42c7db5e79a70a4761d8c6b215ec27ce7e2fb6f02052984f4",
+      "sourceAfterSha256": "6f0a8b713b120fc42c7db5e79a70a4761d8c6b215ec27ce7e2fb6f02052984f4"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/browser-verify.mjs",
+      "bytes": 110034,
+      "sourceBeforeSha256": "ce311a798e90459cc061aa3b8ac358979464b9ebb228c9356d672ad2cb044335",
+      "copiedSha256": "ce311a798e90459cc061aa3b8ac358979464b9ebb228c9356d672ad2cb044335",
+      "sourceAfterSha256": "ce311a798e90459cc061aa3b8ac358979464b9ebb228c9356d672ad2cb044335"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/build.json",
+      "bytes": 1257,
+      "sourceBeforeSha256": "c09ea83a83b31e50efd07c1eac4ed26a5e62685d69402e46212201e0502d8734",
+      "copiedSha256": "c09ea83a83b31e50efd07c1eac4ed26a5e62685d69402e46212201e0502d8734",
+      "sourceAfterSha256": "c09ea83a83b31e50efd07c1eac4ed26a5e62685d69402e46212201e0502d8734"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/build.stderr.log",
+      "bytes": 130001,
+      "sourceBeforeSha256": "9ee537644cd40301b09f3513cecc137f685948f09f4631263b888070299ef7ab",
+      "copiedSha256": "9ee537644cd40301b09f3513cecc137f685948f09f4631263b888070299ef7ab",
+      "sourceAfterSha256": "9ee537644cd40301b09f3513cecc137f685948f09f4631263b888070299ef7ab"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/build.stdout.log",
+      "bytes": 1061,
+      "sourceBeforeSha256": "b5cd3b9bec95830de9edbdbd0df68e5bf28b705538500a3e2e670f248eb07a8d",
+      "copiedSha256": "b5cd3b9bec95830de9edbdbd0df68e5bf28b705538500a3e2e670f248eb07a8d",
+      "sourceAfterSha256": "b5cd3b9bec95830de9edbdbd0df68e5bf28b705538500a3e2e670f248eb07a8d"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/full-show-artifact.json",
+      "bytes": 159613,
+      "sourceBeforeSha256": "8b07e08fdbdc272087f28734f266f4c6dd1133ad0c73ab094a5910d23c648464",
+      "copiedSha256": "8b07e08fdbdc272087f28734f266f4c6dd1133ad0c73ab094a5910d23c648464",
+      "sourceAfterSha256": "8b07e08fdbdc272087f28734f266f4c6dd1133ad0c73ab094a5910d23c648464"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/full-show-entry-inputs.json",
+      "bytes": 765946,
+      "sourceBeforeSha256": "c1d6aaaac3380e9bc32bdf0b0f26da65b33a71a2adef3e81dfd894095539e5ff",
+      "copiedSha256": "c1d6aaaac3380e9bc32bdf0b0f26da65b33a71a2adef3e81dfd894095539e5ff",
+      "sourceAfterSha256": "c1d6aaaac3380e9bc32bdf0b0f26da65b33a71a2adef3e81dfd894095539e5ff"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/preference-race.mjs",
+      "bytes": 11448,
+      "sourceBeforeSha256": "795c8e29ee6f3bb921a999c2a2286da83729b77c62912d6569d9431739adb7f8",
+      "copiedSha256": "795c8e29ee6f3bb921a999c2a2286da83729b77c62912d6569d9431739adb7f8",
+      "sourceAfterSha256": "795c8e29ee6f3bb921a999c2a2286da83729b77c62912d6569d9431739adb7f8"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/qa/chromium-tadazz-classic-transport-race.json",
+      "bytes": 1294,
+      "sourceBeforeSha256": "a48ac1ba4ffa4ef4265160ba1f4bf66761db9a768299e231fc814b10d7aacf8c",
+      "copiedSha256": "a48ac1ba4ffa4ef4265160ba1f4bf66761db9a768299e231fc814b10d7aacf8c",
+      "sourceAfterSha256": "a48ac1ba4ffa4ef4265160ba1f4bf66761db9a768299e231fc814b10d7aacf8c"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/qa/progress.json",
+      "bytes": 8276,
+      "sourceBeforeSha256": "f01a2b94ada127bf241195d6907c94fcc9e16088aeb77adb3016e19d2012e2ea",
+      "copiedSha256": "f01a2b94ada127bf241195d6907c94fcc9e16088aeb77adb3016e19d2012e2ea",
+      "sourceAfterSha256": "f01a2b94ada127bf241195d6907c94fcc9e16088aeb77adb3016e19d2012e2ea"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/qa/receipt.json",
+      "bytes": 13984,
+      "sourceBeforeSha256": "c0f20c53e56afc23f8181d7124aecf4f721835c03fc51a5d0c3c1c0bdf6f7ade",
+      "copiedSha256": "c0f20c53e56afc23f8181d7124aecf4f721835c03fc51a5d0c3c1c0bdf6f7ade",
+      "sourceAfterSha256": "c0f20c53e56afc23f8181d7124aecf4f721835c03fc51a5d0c3c1c0bdf6f7ade"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/run.json",
+      "bytes": 1329,
+      "sourceBeforeSha256": "dad7f0b68f4d4017ce13ee2feaff4808e83fb9ed47af746b4f49f5259541b72e",
+      "copiedSha256": "dad7f0b68f4d4017ce13ee2feaff4808e83fb9ed47af746b4f49f5259541b72e",
+      "sourceAfterSha256": "dad7f0b68f4d4017ce13ee2feaff4808e83fb9ed47af746b4f49f5259541b72e"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/run.stderr.log",
+      "bytes": 1189,
+      "sourceBeforeSha256": "94327cdf00ead5a667ae0f495da3b7c74f01a5560896ffc209b4150e218c3b24",
+      "copiedSha256": "94327cdf00ead5a667ae0f495da3b7c74f01a5560896ffc209b4150e218c3b24",
+      "sourceAfterSha256": "94327cdf00ead5a667ae0f495da3b7c74f01a5560896ffc209b4150e218c3b24"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/run.stdout.log",
+      "bytes": 483,
+      "sourceBeforeSha256": "cd525ed3c10a22c09045d379acca585bb6a748bc32316557e0bbe94b19bcd81c",
+      "copiedSha256": "cd525ed3c10a22c09045d379acca585bb6a748bc32316557e0bbe94b19bcd81c",
+      "sourceAfterSha256": "cd525ed3c10a22c09045d379acca585bb6a748bc32316557e0bbe94b19bcd81c"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/transport-race.mjs",
+      "bytes": 8806,
+      "sourceBeforeSha256": "4fb57817d67baf42a84837af6638531dc74ca895e185f60890296860b0441376",
+      "copiedSha256": "4fb57817d67baf42a84837af6638531dc74ca895e185f60890296860b0441376",
+      "sourceAfterSha256": "4fb57817d67baf42a84837af6638531dc74ca895e185f60890296860b0441376"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/audit.json",
+      "bytes": 881,
+      "sourceBeforeSha256": "df422de3007e8e88ab8037d86caf20c9eaf024521ac79043f07831749c682d1a",
+      "copiedSha256": "df422de3007e8e88ab8037d86caf20c9eaf024521ac79043f07831749c682d1a",
+      "sourceAfterSha256": "df422de3007e8e88ab8037d86caf20c9eaf024521ac79043f07831749c682d1a"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/build.json",
+      "bytes": 1259,
+      "sourceBeforeSha256": "e0ac754f63139474f8cf033eed7047ba5a20d2d75afd4aa55e7c9ed5d9a50467",
+      "copiedSha256": "e0ac754f63139474f8cf033eed7047ba5a20d2d75afd4aa55e7c9ed5d9a50467",
+      "sourceAfterSha256": "e0ac754f63139474f8cf033eed7047ba5a20d2d75afd4aa55e7c9ed5d9a50467"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/build.stderr.log",
+      "bytes": 130002,
+      "sourceBeforeSha256": "516ec4f96f746371971fe7fe008c2763ffb60fe52e0887055a13ab70f8df93f7",
+      "copiedSha256": "516ec4f96f746371971fe7fe008c2763ffb60fe52e0887055a13ab70f8df93f7",
+      "sourceAfterSha256": "516ec4f96f746371971fe7fe008c2763ffb60fe52e0887055a13ab70f8df93f7"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/build.stdout.log",
+      "bytes": 1061,
+      "sourceBeforeSha256": "44d985d29097dcc3b3d1a3f0cef673b4c9ad2279e784081b9ac536e561de939b",
+      "copiedSha256": "44d985d29097dcc3b3d1a3f0cef673b4c9ad2279e784081b9ac536e561de939b",
+      "sourceAfterSha256": "44d985d29097dcc3b3d1a3f0cef673b4c9ad2279e784081b9ac536e561de939b"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/crash-observation.json",
+      "bytes": 2588,
+      "sourceBeforeSha256": "f87a85eb77cddc614c2a512df8c1dbd94aac7a93bcf8da31c3797e68440b8955",
+      "copiedSha256": "f87a85eb77cddc614c2a512df8c1dbd94aac7a93bcf8da31c3797e68440b8955",
+      "sourceAfterSha256": "f87a85eb77cddc614c2a512df8c1dbd94aac7a93bcf8da31c3797e68440b8955"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/full-show-artifact.json",
+      "bytes": 159613,
+      "sourceBeforeSha256": "071e8db00ebc53b8937e88a2803ca5b3993552f72e64aba3be8b0408f97d1c6f",
+      "copiedSha256": "071e8db00ebc53b8937e88a2803ca5b3993552f72e64aba3be8b0408f97d1c6f",
+      "sourceAfterSha256": "071e8db00ebc53b8937e88a2803ca5b3993552f72e64aba3be8b0408f97d1c6f"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/full-show-entry-inputs.json",
+      "bytes": 765946,
+      "sourceBeforeSha256": "8f897620eb50d4e97dbcc63f0dec319c8cbc00152487f6d14084b81effeb9d55",
+      "copiedSha256": "8f897620eb50d4e97dbcc63f0dec319c8cbc00152487f6d14084b81effeb9d55",
+      "sourceAfterSha256": "8f897620eb50d4e97dbcc63f0dec319c8cbc00152487f6d14084b81effeb9d55"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-next-transport-race.png",
+      "bytes": 626969,
+      "sourceBeforeSha256": "b024f9b844ec3a27349c0d30d048a055e1765a8a3d6a4bb19ff80e76723e913a",
+      "copiedSha256": "b024f9b844ec3a27349c0d30d048a055e1765a8a3d6a4bb19ff80e76723e913a",
+      "sourceAfterSha256": "b024f9b844ec3a27349c0d30d048a055e1765a8a3d6a4bb19ff80e76723e913a"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-pause-transport-race.png",
+      "bytes": 584853,
+      "sourceBeforeSha256": "152ef6423c214a5589c7cbadcb362fb7e9870846bf1e9109997847fb51aad212",
+      "copiedSha256": "152ef6423c214a5589c7cbadcb362fb7e9870846bf1e9109997847fb51aad212",
+      "sourceAfterSha256": "152ef6423c214a5589c7cbadcb362fb7e9870846bf1e9109997847fb51aad212"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-previous-transport-race.png",
+      "bytes": 626393,
+      "sourceBeforeSha256": "b837bf4e7b632c102e3379d55e4d2a0782ce7b3736e38adf7f39098c2f0acd3e",
+      "copiedSha256": "b837bf4e7b632c102e3379d55e4d2a0782ce7b3736e38adf7f39098c2f0acd3e",
+      "sourceAfterSha256": "b837bf4e7b632c102e3379d55e4d2a0782ce7b3736e38adf7f39098c2f0acd3e"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-replay-transport-race.png",
+      "bytes": 626873,
+      "sourceBeforeSha256": "1c7d79a3592c9882de407e9d26a5881b733ee26bdd5624dca6363110a650bafd",
+      "copiedSha256": "1c7d79a3592c9882de407e9d26a5881b733ee26bdd5624dca6363110a650bafd",
+      "sourceAfterSha256": "1c7d79a3592c9882de407e9d26a5881b733ee26bdd5624dca6363110a650bafd"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-transport-race.json",
+      "bytes": 14978,
+      "sourceBeforeSha256": "167d749202ee16f49fb0224b9fc71e8c84b03631ad144d2bbd96a42f7bb2f9c2",
+      "copiedSha256": "167d749202ee16f49fb0224b9fc71e8c84b03631ad144d2bbd96a42f7bb2f9c2",
+      "sourceAfterSha256": "167d749202ee16f49fb0224b9fc71e8c84b03631ad144d2bbd96a42f7bb2f9c2"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/progress.json",
+      "bytes": 59307,
+      "sourceBeforeSha256": "f6b9a4851c034148d1330ffa69b60865ab752ce2741045846ed226ce16e08d9f",
+      "copiedSha256": "f6b9a4851c034148d1330ffa69b60865ab752ce2741045846ed226ce16e08d9f",
+      "sourceAfterSha256": "f6b9a4851c034148d1330ffa69b60865ab752ce2741045846ed226ce16e08d9f"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/receipt.json",
+      "bytes": 65248,
+      "sourceBeforeSha256": "d14340d84eed30578ad92b4a76f6ecfb1a0b3d327bc3d43b7542d97f93ea1749",
+      "copiedSha256": "d14340d84eed30578ad92b4a76f6ecfb1a0b3d327bc3d43b7542d97f93ea1749",
+      "sourceAfterSha256": "d14340d84eed30578ad92b4a76f6ecfb1a0b3d327bc3d43b7542d97f93ea1749"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/webkit-tadazz-classic-pause-transport-race.png",
+      "bytes": 609419,
+      "sourceBeforeSha256": "3af838dc8108c9d5e5d044fe2914486aebea00071218b01347faebf4d5cc5b72",
+      "copiedSha256": "3af838dc8108c9d5e5d044fe2914486aebea00071218b01347faebf4d5cc5b72",
+      "sourceAfterSha256": "3af838dc8108c9d5e5d044fe2914486aebea00071218b01347faebf4d5cc5b72"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/webkit-tadazz-classic-transport-race.json",
+      "bytes": 2774,
+      "sourceBeforeSha256": "59afceaa7b21309282a6d2e91b618fdbd1f9339f57cb32e84c3bc3d124f9b9da",
+      "copiedSha256": "59afceaa7b21309282a6d2e91b618fdbd1f9339f57cb32e84c3bc3d124f9b9da",
+      "sourceAfterSha256": "59afceaa7b21309282a6d2e91b618fdbd1f9339f57cb32e84c3bc3d124f9b9da"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/run.json",
+      "bytes": 1329,
+      "sourceBeforeSha256": "b815e7f3b043645b63b38e4616e6744d9015e204eac1c912197604f620b122c3",
+      "copiedSha256": "b815e7f3b043645b63b38e4616e6744d9015e204eac1c912197604f620b122c3",
+      "sourceAfterSha256": "b815e7f3b043645b63b38e4616e6744d9015e204eac1c912197604f620b122c3"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/run.stderr.log",
+      "bytes": 5168,
+      "sourceBeforeSha256": "008968992cf497b744582c89310babff6e839242545f3fb8915c7b5ff7cd8748",
+      "copiedSha256": "008968992cf497b744582c89310babff6e839242545f3fb8915c7b5ff7cd8748",
+      "sourceAfterSha256": "008968992cf497b744582c89310babff6e839242545f3fb8915c7b5ff7cd8748"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/run.stdout.log",
+      "bytes": 635,
+      "sourceBeforeSha256": "0c294e0082499f855b94a11769cc7757e6f7311cd7168fbee595eaabba13c774",
+      "copiedSha256": "0c294e0082499f855b94a11769cc7757e6f7311cd7168fbee595eaabba13c774",
+      "sourceAfterSha256": "0c294e0082499f855b94a11769cc7757e6f7311cd7168fbee595eaabba13c774"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/product-application.json",
+      "bytes": 557,
+      "sourceBeforeSha256": "f6230cb83af5d15272158e4ff08f0d9d63f976eb92e2887bb6940dbcf9e284e4",
+      "copiedSha256": "f6230cb83af5d15272158e4ff08f0d9d63f976eb92e2887bb6940dbcf9e284e4",
+      "sourceAfterSha256": "f6230cb83af5d15272158e4ff08f0d9d63f976eb92e2887bb6940dbcf9e284e4"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/review.patch",
+      "bytes": 23392,
+      "sourceBeforeSha256": "3d24882e604ad0480b7ee35632807063892ca77a03c3a5cc6d75e372d87e69ff",
+      "copiedSha256": "3d24882e604ad0480b7ee35632807063892ca77a03c3a5cc6d75e372d87e69ff",
+      "sourceAfterSha256": "3d24882e604ad0480b7ee35632807063892ca77a03c3a5cc6d75e372d87e69ff"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/scoped-validation.json",
+      "bytes": 828,
+      "sourceBeforeSha256": "7ea0de4de0c90658cb67be978e6b3fcc8886b52001ed45cd5468258f2a3232ba",
+      "copiedSha256": "7ea0de4de0c90658cb67be978e6b3fcc8886b52001ed45cd5468258f2a3232ba",
+      "sourceAfterSha256": "7ea0de4de0c90658cb67be978e6b3fcc8886b52001ed45cd5468258f2a3232ba"
+    }
+  ],
+  "completedRunsOnly": [
+    "baseline",
+    "fixed"
+  ],
+  "notCollected": [
+    "fixed-webkit-only (active at assignment)"
+  ],
+  "results": {
+    "baseline": "Expected real failure: automatic loading disabled pause, replay, next and previous.",
+    "fixedMixed": "Chromium four transport actions passed; WebKit Pause passed, then page crash during Replay setup before explicit Replay input. Mixed run remains failed."
+  },
+  "baselineReceiptSha256": "c0f20c53e56afc23f8181d7124aecf4f721835c03fc51a5d0c3c1c0bdf6f7ade",
+  "fixedReceiptSha256": "d14340d84eed30578ad92b4a76f6ecfb1a0b3d327bc3d43b7542d97f93ea1749",
+  "formattedProductHash": "6b270bfba2229d9d3e3413b0838f36a322ab4d7ef572fff1bbf73edd323a4067",
+  "rawOriginalsModified": false,
+  "productEdited": false,
+  "testsRun": false,
+  "gitMutation": false,
+  "deployed": false,
+  "releaseQualified": false,
+  "screening": {
+    "findings": [],
+    "unexpected": [],
+    "pngs": [
+      {
+        "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-next-transport-race.png",
+        "width": 1280,
+        "height": 1200,
+        "textOrExifChunks": [],
+        "pixelReview": "No OCR or visual privacy claim; synthetic QA fixture provenance."
+      },
+      {
+        "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-pause-transport-race.png",
+        "width": 1280,
+        "height": 1200,
+        "textOrExifChunks": [],
+        "pixelReview": "No OCR or visual privacy claim; synthetic QA fixture provenance."
+      },
+      {
+        "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-previous-transport-race.png",
+        "width": 1280,
+        "height": 1200,
+        "textOrExifChunks": [],
+        "pixelReview": "No OCR or visual privacy claim; synthetic QA fixture provenance."
+      },
+      {
+        "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/chromium-tadazz-classic-replay-transport-race.png",
+        "width": 1280,
+        "height": 1200,
+        "textOrExifChunks": [],
+        "pixelReview": "No OCR or visual privacy claim; synthetic QA fixture provenance."
+      },
+      {
+        "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed/qa/webkit-tadazz-classic-pause-transport-race.png",
+        "width": 1280,
+        "height": 1200,
+        "textOrExifChunks": [],
+        "pixelReview": "No OCR or visual privacy claim; synthetic QA fixture provenance."
+      }
+    ],
+    "matchedValuesPrinted": false
+  }
+}

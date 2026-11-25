@@ -1,0 +1,584 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import { STATUS, type Status } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type CommandAction,
+  type ExtensionStateEnvelope,
+} from "@razzia/extensions/core"
+import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
+
+export const DOUBLE_PRESS_WINDOW_MS = 500
+
+export type PresentationShortcut =
+  "next" | "previous" | "end-timer" | "pause-toggle" | "restart" | "exit"
+
+export function shouldIgnorePresentationShortcut(
+  event: KeyboardEvent,
+): boolean {
+  if (
+    event.repeat ||
+    event.defaultPrevented ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.altKey
+  ) {
+    return true
+  }
+
+  // Entering native fullscreen can briefly move focus outside Radix's trap.
+  // An open modal still owns the keyboard during that focus handoff.
+  if (
+    typeof document !== "undefined" &&
+    document.querySelector?.(
+      "[role='dialog'][data-state='open'], [role='alertdialog'][data-state='open']",
+    )
+  ) {
+    return true
+  }
+
+  const active =
+    (event.target as HTMLElement | null) ??
+    (typeof document !== "undefined"
+      ? (document.activeElement as HTMLElement | null)
+      : null)
+
+  if (!active) {
+    return false
+  }
+
+  const tag = active.tagName?.toUpperCase()
+
+  if (
+    tag === "INPUT" ||
+    tag === "TEXTAREA" ||
+    tag === "SELECT" ||
+    tag === "BUTTON" ||
+    tag === "A" ||
+    active.isContentEditable
+  ) {
+    return true
+  }
+
+  return Boolean(
+    active.closest?.(
+      "dialog, [role='dialog'], [role='alertdialog'], [data-state='open'], [data-radix-portal]",
+    ),
+  )
+}
+
+export function resolvePresentationShortcut(
+  event: Pick<KeyboardEvent, "key" | "shiftKey"> &
+    Partial<Pick<KeyboardEvent, "code">>,
+): PresentationShortcut | null {
+  if (event.key === "Escape") {
+    return "exit"
+  }
+
+  if (event.shiftKey) {
+    return null
+  }
+
+  if (event.key.toLowerCase() === "r" || event.code === "KeyR") {
+    return "restart"
+  }
+
+  if (event.key === "ArrowRight") {
+    return "next"
+  }
+
+  if (event.key === "ArrowLeft") {
+    return "previous"
+  }
+
+  if (event.key === "Enter") {
+    return "end-timer"
+  }
+
+  if (event.key === " ") {
+    return "pause-toggle"
+  }
+
+  return null
+}
+
+export function isDoublePress(
+  previous: {
+    chord: string
+    until: number
+  } | null,
+  chord: string,
+  now: number,
+): boolean {
+  return previous?.chord === chord && previous.until >= now
+}
+
+export interface HostPresentationCommandOptions {
+  enabled: boolean
+  statusName: Status | undefined
+  extensionState: ExtensionStateEnvelope | null
+  currentQuestion: number
+  onExit: () => void
+  onAdvanceFallback?: () => void
+}
+
+/** Keyboard controller remains mounted even while every visual host control is absent. */
+export function useHostPresentationCommands({
+  enabled,
+  statusName,
+  extensionState,
+  currentQuestion,
+  onExit,
+  onAdvanceFallback,
+}: HostPresentationCommandOptions): void {
+  const { socket, isConnected } = useSocket()
+  const pendingRef = useRef(false)
+  const pendingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const confirmationRef = useRef<{
+    chord: string
+    until: number
+  } | null>(null)
+  const latestRef = useRef({
+    enabled,
+    statusName,
+    extensionState,
+    currentQuestion,
+    onExit,
+    onAdvanceFallback,
+    isConnected,
+  })
+  useLayoutEffect(() => {
+    latestRef.current = {
+      enabled,
+      statusName,
+      extensionState,
+      currentQuestion,
+      onExit,
+      onAdvanceFallback,
+      isConnected,
+    }
+  })
+  useEffect(() => {
+    pendingRef.current = false
+
+    if (pendingTimerRef.current) {
+      clearTimeout(pendingTimerRef.current)
+    }
+
+    pendingTimerRef.current = null
+  }, [extensionState?.seq, extensionState?.epoch])
+
+  // Presence/clock snapshots can arrive between the two physical presses.
+  // They must not cancel a valid double press.
+  useEffect(() => {
+    confirmationRef.current = null
+  }, [extensionState?.gameId])
+  useEffect(() => {
+    if (!enabled) {
+      confirmationRef.current = null
+      pendingRef.current = false
+    }
+  }, [enabled])
+  useEffect(() => {
+    const send = (
+      action: CommandAction,
+      payload: Record<string, unknown>,
+      requestSuffix: string,
+    ) => {
+      const { current } = latestRef
+      const gameId = current.extensionState?.gameId
+
+      if (!gameId || !current.isConnected || pendingRef.current) {
+        return
+      }
+
+      pendingRef.current = true
+      const requestId = `host-present-${action}-${current.extensionState?.epoch ?? 0}-${requestSuffix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+      socket.emit(
+        EXTENSION_EVENTS.COMMAND,
+        {
+          v: 1,
+          gameId,
+          action,
+          payload,
+          requestId,
+        },
+        (result) => {
+          if (pendingTimerRef.current) {
+            clearTimeout(pendingTimerRef.current)
+          }
+
+          pendingTimerRef.current = null
+          pendingRef.current = false
+
+          if (!result.success) {
+            console.warn(
+              "Host presentation command rejected",
+              action,
+              result.error,
+            )
+          }
+        },
+      )
+      pendingTimerRef.current = setTimeout(() => {
+        pendingRef.current = false
+        pendingTimerRef.current = null
+      }, 1500)
+    }
+    const confirmDestructive = (chord: string): boolean => {
+      const now = Date.now()
+      const pending = confirmationRef.current
+
+      if (isDoublePress(pending, chord, now)) {
+        confirmationRef.current = null
+
+        return true
+      }
+
+      confirmationRef.current = {
+        chord,
+        until: now + DOUBLE_PRESS_WINDOW_MS,
+      }
+
+      return false
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const { current } = latestRef
+
+      if (!current.enabled || shouldIgnorePresentationShortcut(event)) {
+        if (!event.repeat) {
+          confirmationRef.current = null
+        }
+
+        return
+      }
+
+      const chord = `${event.shiftKey ? "Shift+" : ""}${event.key}`
+      const shortcut = resolvePresentationShortcut(event)
+
+      if (!shortcut) {
+        confirmationRef.current = null
+
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+
+      if (shortcut === "exit") {
+        current.onExit()
+
+        return
+      }
+
+      if (!confirmDestructive(chord)) {
+        return
+      }
+
+      const state = current.extensionState
+
+      if (!state) {
+        return
+      }
+
+      const { epoch } = state
+      const paused = Boolean(state.pause?.paused)
+      const isScene = state.phase === "scene"
+      const isInterlude = state.phase === "interlude"
+
+      if (shortcut === "pause-toggle") {
+        send(
+          paused ? "RESUME_GAME" : "PAUSE_GAME",
+          {
+            epoch,
+          },
+          `${state.seq}`,
+        )
+
+        return
+      }
+
+      if (shortcut === "restart") {
+        if (
+          current.currentQuestion > 0 &&
+          ((
+            [
+              STATUS.SHOW_QUESTION,
+              STATUS.SELECT_ANSWER,
+              STATUS.SHOW_RESPONSES,
+            ] as readonly string[]
+          ).includes(current.statusName ?? "") ||
+            state.phase === "responses")
+        ) {
+          send(
+            "REPLAY_FROM_CHECKPOINT",
+            {
+              epoch,
+              questionIndex: current.currentQuestion - 1,
+              confirmed: true,
+            },
+            `${state.seq}`,
+          )
+        }
+
+        return
+      }
+
+      if (paused) {
+        return
+      }
+
+      if (shortcut === "end-timer") {
+        if (current.statusName === STATUS.SELECT_ANSWER) {
+          send(
+            "END_ANSWER_TIMER",
+            {
+              epoch,
+              questionIndex: Math.max(0, current.currentQuestion - 1),
+            },
+            `${state.seq}`,
+          )
+        }
+
+        return
+      }
+
+      if (shortcut === "next") {
+        if (
+          current.statusName === STATUS.SELECT_ANSWER &&
+          state.phase !== "responses" &&
+          !isScene
+        ) {
+          send(
+            "SKIP_QUESTION",
+            {
+              epoch,
+              questionIndex: Math.max(0, current.currentQuestion - 1),
+              reason: "Double-press next question",
+            },
+            `${state.seq}`,
+          )
+
+          return
+        }
+
+        if (isInterlude) {
+          send(
+            "END_OR_SKIP_INTERLUDE",
+            {
+              epoch,
+              reason: "manual",
+            },
+            `${state.seq}`,
+          )
+        } else if (
+          isScene ||
+          state.phase === "responses" ||
+          current.statusName === STATUS.SHOW_ROOM ||
+          current.statusName === STATUS.SHOW_RESPONSES ||
+          current.statusName === STATUS.SHOW_LEADERBOARD
+        ) {
+          send(
+            "NEXT_SCREEN",
+            {
+              epoch,
+              phase: state.phase,
+            },
+            `${state.seq}`,
+          )
+        } else if (!state.gameId) {
+          current.onAdvanceFallback?.()
+        }
+
+        return
+      }
+
+      if (shortcut === "previous") {
+        const canPrevious = state.extras.canPrevious === true
+
+        if (canPrevious) {
+          send(
+            "PREVIOUS_SCREEN",
+            {
+              epoch,
+              phase: state.phase,
+              confirmed: true,
+            },
+            `${state.seq}`,
+          )
+        }
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown, {
+      capture: true,
+    })
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, {
+        capture: true,
+      })
+
+      if (pendingTimerRef.current) {
+        clearTimeout(pendingTimerRef.current)
+      }
+    }
+  }, [socket])
+}
+
+export function useHostPresentation(enabled: boolean) {
+  const [isPresenting, setIsPresenting] = useState(false)
+  const [isPending, setIsPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const targetRef = useRef<HTMLElement | null>(null)
+  const enterAttemptRef = useRef(0)
+  const exitPromiseRef = useRef<Promise<void> | null>(null)
+  const exit = useCallback(() => {
+    enterAttemptRef.current += 1
+    targetRef.current = null
+    setIsPending(false)
+    setIsPresenting(false)
+    setError(null)
+
+    if (document.fullscreenElement) {
+      // Chrome may paint the restored toolbar before the native exit event.
+      // A new enter must wait for that event or the old exit cancels it later.
+      const exiting = new Promise<void>((resolve) => {
+        const complete = () => {
+          if (document.fullscreenElement) {
+            return
+          }
+
+          document.removeEventListener("fullscreenchange", complete)
+          resolve()
+        }
+        document.addEventListener("fullscreenchange", complete)
+        void document
+          .exitFullscreen()
+          .then(() => {
+            if (!document.fullscreenElement) {
+              requestAnimationFrame(complete)
+            }
+          })
+          .catch(() => {
+            document.removeEventListener("fullscreenchange", complete)
+            resolve()
+          })
+      })
+      exitPromiseRef.current = exiting
+      void exiting.then(() => {
+        if (exitPromiseRef.current === exiting) {
+          exitPromiseRef.current = null
+        }
+      })
+    }
+  }, [])
+  const enter = useCallback(
+    async (target: HTMLElement | null) => {
+      if (!enabled || !target?.requestFullscreen) {
+        setIsPending(false)
+        setError("fullscreen-unavailable")
+
+        return false
+      }
+
+      const attempt = enterAttemptRef.current + 1
+      enterAttemptRef.current = attempt
+      setError(null)
+      setIsPending(true)
+
+      try {
+        await exitPromiseRef.current
+
+        if (attempt !== enterAttemptRef.current) {
+          return false
+        }
+
+        targetRef.current = target
+        await target.requestFullscreen()
+
+        if (attempt !== enterAttemptRef.current) {
+          if (
+            targetRef.current === null &&
+            document.fullscreenElement === target
+          ) {
+            await document.exitFullscreen().catch(() => undefined)
+          }
+
+          return false
+        }
+
+        if (document.fullscreenElement !== target) {
+          setIsPending(false)
+          setError("fullscreen-denied")
+
+          return false
+        }
+
+        setIsPending(false)
+        setIsPresenting(true)
+        target.tabIndex = -1
+        target.focus({
+          preventScroll: true,
+        })
+
+        return true
+      } catch {
+        setIsPresenting(false)
+        setError("fullscreen-denied")
+        setIsPending(false)
+
+        return false
+      }
+    },
+    [enabled],
+  )
+  useEffect(() => {
+    const change = () => {
+      const active = Boolean(
+        targetRef.current && document.fullscreenElement === targetRef.current,
+      )
+      setIsPending(false)
+      setIsPresenting(active)
+
+      if (active) {
+        // Host chrome disappears after the fullscreen event. Refit the 16:9
+        // stage on the following painted frame, once its viewport has expanded.
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() =>
+            window.dispatchEvent(new Event("resize")),
+          ),
+        )
+      }
+
+      if (!active) {
+        targetRef.current = null
+      }
+    }
+    const failed = () => {
+      setIsPending(false)
+      setIsPresenting(false)
+      setError("fullscreen-denied")
+    }
+    document.addEventListener("fullscreenchange", change)
+    document.addEventListener("fullscreenerror", failed)
+
+    return () => {
+      document.removeEventListener("fullscreenchange", change)
+      document.removeEventListener("fullscreenerror", failed)
+    }
+  }, [])
+
+  return {
+    isPresenting,
+    isPending,
+    error,
+    enter,
+    exit,
+  }
+}

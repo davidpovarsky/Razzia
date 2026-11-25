@@ -1,0 +1,9 @@
+{
+  "origin": "https://theme-lab-v2.132.145.25.168.sslip.io",
+  "theme": "razzia-original",
+  "hostReloadInLobby": true,
+  "hostReloadWhileVoting": true,
+  "iPadPlayerReload": true,
+  "noDuplicatePlayer": true,
+  "voteAndScoreAfterReload": true
+}

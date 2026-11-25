@@ -1,0 +1,74 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ × src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if create sidecar write and base cleanup fail 84ms
+   → expected [Function run] to throw error matching /recovery|journal/i but got 'Failed to create composite quiz: ENOS…'
+ × src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if import sidecar write and base cleanup fail 41ms
+   → expected [Function run] to throw error matching /recovery|journal/i but got 'Failed to import enhanced bundle: ENO…'
+ × src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base 30ms
+   → expected [Function] to throw error matching /recovery|journal/i but got 'Failed to create composite quiz: ENOS…'
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if create sidecar write and base cleanup fail
+AssertionError: expected [Function run] to throw error matching /recovery|journal/i but got 'Failed to create composite quiz: ENOS…'
+
+- Expected:
+/recovery|journal/i
+
++ Received:
+"Failed to create composite quiz: ENOSPC injected partial sidecar"
+
+ ❯ src/server/storage/create-recovery.test.ts:29:17
+     27|       ? service.createCompositeQuiz({ quizz: original.base, extras: or…
+     28|       : service.importEnhancedBundle({ bundleVersion: 1, quizz: origin…
+     29|     expect(run).toThrow(/recovery|journal/i)
+       |                 ^
+     30|     spy.mockRestore()
+     31|     expect(fs.readdirSync(getJournalDirectory(fixture.getPath)).some((…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if import sidecar write and base cleanup fail
+AssertionError: expected [Function run] to throw error matching /recovery|journal/i but got 'Failed to import enhanced bundle: ENO…'
+
+- Expected:
+/recovery|journal/i
+
++ Received:
+"Failed to import enhanced bundle: ENOSPC injected partial sidecar"
+
+ ❯ src/server/storage/create-recovery.test.ts:29:17
+     27|       ? service.createCompositeQuiz({ quizz: original.base, extras: or…
+     28|       : service.importEnhancedBundle({ bundleVersion: 1, quizz: origin…
+     29|     expect(run).toThrow(/recovery|journal/i)
+       |                 ^
+     30|     spy.mockRestore()
+     31|     expect(fs.readdirSync(getJournalDirectory(fixture.getPath)).some((…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base
+AssertionError: expected [Function] to throw error matching /recovery|journal/i but got 'Failed to create composite quiz: ENOS…'
+
+- Expected:
+/recovery|journal/i
+
++ Received:
+"Failed to create composite quiz: ENOSPC injected partial sidecar"
+
+ ❯ src/server/storage/create-recovery.test.ts:51:98
+     49|     })
+     50|     const service = new CompositeStorageService(fixture.injections)
+     51|     expect(() => service.createCompositeQuiz({ quizz: original.base, e…
+       |                                                                                                  ^
+     52|     vi.restoreAllMocks()
+     53|     expect(fs.readdirSync(getJournalDirectory(fixture.getPath)).some((…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  05:01:47
+   Duration  5.49s (import 53%, transform 43%, tests 4%)

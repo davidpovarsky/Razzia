@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-11-24T02:54:58.584122+00:00",
+  "baseCommit": "c5028c4cb9fc839aa514edec47cae2a8a8bff1b0",
+  "baseTree": "70715a2d98872148fcc50588af74ad8fd2793d88",
+  "beforeSHA256": {
+    "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx": "26d607acc5495df98ebc113775bee219c32d6c58f6dcced3de183a8255bbde54",
+    "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts": "087c5cabf68719451c9a989f0b05e9f8541a9f2eb6ba2c5a1106179827c7baf4",
+    "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs": "b9ca3a2a3b2955b89f9607d2c906b55ceecf1ce624111809d7a38b36a062b2bb",
+    "docs/extensions/plans/studio-recovery-20261124/tsconfig.json": "139bcd26ed1aeef0deb430f388471f780a8c15332184fb847ccc7f1dbb341ef7"
+  },
+  "historicalBeforeSHA256": {
+    "docs/extensions/plans/studio-recovery-20261124/format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "docs/extensions/plans/studio-recovery-20261124/changed-files-lint.log": "d63f294086d3e6d14db4e7c917bc81e07db89ed28955856a1e926bf751c6a389",
+    "docs/extensions/plans/studio-recovery-20261124/final-verification.json": "18ecd8e8ee430a8f55358da38aca82c88d76b444c7836dda021bce14de303ef0",
+    "docs/extensions/plans/studio-recovery-20261124/browser-result.json": "175380b286b24c340620d4e1066816dae5502fabf0e10393d9f2dda900c04f9a",
+    "docs/extensions/plans/studio-recovery-20261124/VALIDATION.md": "37ecc8ed5cc7f5bd242cca3baaf066fb5afb95e3949f5bf8bbed0c92c71e0b46",
+    "docs/extensions/plans/studio-recovery-20261124/browser-storage-warning-he-mobile.png": "1501ea38b7cf3e6c62fab48586abfe5f971ce65d6943bc3f1166c79cb70a2cb9",
+    "docs/extensions/plans/studio-recovery-20261124/browser-initial-failure.png": "5289165d21aabffb6ec5e39b8ef497747ee5bf2b17b5611c113c88ebce94e05f",
+    "docs/extensions/plans/studio-recovery-20261124/focused-unit.log": "e60d6a2f1c465dce25ef61270721af7b34f66d85d307b90af98cbce52bab3882",
+    "docs/extensions/plans/studio-recovery-20261124/browser-initial-result.json": "669bf91ac736ff08100b2792c4ef4e3d716575e322379a3fa431e3993161f193",
+    "docs/extensions/plans/studio-recovery-20261124/browser-corrected-before-final.json": "bfbd20e561c2d718b30b820b8171fdb3da715f1effd2399f330259c013a48a6a",
+    "docs/extensions/plans/studio-recovery-20261124/source-receipt.json": "5a7c831d8e0c1e19acd5c05c756f220bcd07777a8ab8cfc044eceee6b9e45c52",
+    "docs/extensions/plans/studio-recovery-20261124/browser-recovered-existing.png": "bf2753400984fa91990562067c29b19f7bbc980df1c98d3998b1220dc7ba80cf"
+  },
+  "isolatedLoopbackFixture": true,
+  "command": [
+    "/mnt/development/tooling/tadazz/node-v26.13.1-linux-arm64/bin/node",
+    "/mnt/development/projects/worktrees/Razzia-worktrees/tadazz-studio-recovery-20261124/docs/extensions/plans/studio-recovery-20261124/browser-check.mjs"
+  ],
+  "environment": {
+    "TMPDIR": "/mnt/development/projects/diagnostics/tadazz-studio-fixture-lint-20261124/final-browser/tmp",
+    "STUDIO_DIAGNOSTICS": "/mnt/development/projects/diagnostics/tadazz-studio-fixture-lint-20261124/final-browser",
+    "PLAYWRIGHT_BROWSERS_PATH": "/mnt/development/tooling/tadazz/ms-playwright"
+  },
+  "nodePid": 3449958,
+  "returncode": 0,
+  "finishedAt": "2026-11-24T02:55:20.637870+00:00",
+  "afterSHA256": {
+    "docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx": "26d607acc5495df98ebc113775bee219c32d6c58f6dcced3de183a8255bbde54",
+    "docs/extensions/plans/studio-recovery-20261124/browser-i18n.ts": "087c5cabf68719451c9a989f0b05e9f8541a9f2eb6ba2c5a1106179827c7baf4",
+    "docs/extensions/plans/studio-recovery-20261124/browser-check.mjs": "b9ca3a2a3b2955b89f9607d2c906b55ceecf1ce624111809d7a38b36a062b2bb",
+    "docs/extensions/plans/studio-recovery-20261124/tsconfig.json": "139bcd26ed1aeef0deb430f388471f780a8c15332184fb847ccc7f1dbb341ef7"
+  },
+  "sourceUnchangedDuringRun": true,
+  "historicalArtifactsUnchanged": true,
+  "matchingLiveNodeProcessesAfter": [],
+  "status": "PASS",
+  "passedCases": 9,
+  "browserErrors": []
+}

@@ -1,0 +1,35 @@
+{
+  "baseline": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "scope": "Static pre-fix evidence; not a pre-fix browser run",
+  "files": {
+    "extensions/src/mcp-app/widget/full-show-demo-question.tsx": "7cedfc00b3f0892e60218d3aaf383949b06a4b34f12bcd9dc7f792f4425b4272",
+    "extensions/src/mcp-app/widget/full-show-stage.tsx": "e70cd33cebefa8ceccf3fced6839a43bed106058b3f98f6f8be5d1eee509ab3e",
+    "extensions/src/mcp-app/client/full-show-playback.ts": "3a25fb965194f64f4110f80376b0049d4b6e710167c28e8157006413da0559b4",
+    "extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx": "6a8576dba31152d2047d951dc48c00e741f8301fdb044a4c7fced59ae2b749e8"
+  },
+  "findings": [
+    {
+      "source": "extensions/src/mcp-app/widget/full-show-demo-question.tsx",
+      "phaseKeyPresent": true,
+      "childKeyOccurrences": 2,
+      "effect": "A new chapter or phase-clock epoch replaces the native renderer and all child DOM."
+    },
+    {
+      "source": "extensions/src/mcp-app/widget/full-show-stage.tsx",
+      "questionBoundaryPresent": true,
+      "effect": "Parent already owns intended draft/revision/question/explicit replay reset identity."
+    },
+    {
+      "source": "extensions/src/mcp-app/client/full-show-playback.ts",
+      "clockReplayPresent": true,
+      "phaseIdentityPresent": true,
+      "effect": "Per-phase clock resets are intentional and remain unchanged."
+    },
+    {
+      "source": "extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx",
+      "innerPhaseEpochPresent": true,
+      "effect": "Shared Original renderer replayed question and answer entrances independently of the widget remount."
+    }
+  ],
+  "regressionMeaning": "Same-iframe renderer/question/card identity assertions fail with the original child keys; entrance counters separately detect animation restart without DOM replacement. Forward results labels and choice highlights are allowed."
+}

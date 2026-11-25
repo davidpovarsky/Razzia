@@ -1,0 +1,34 @@
+{
+  "source": "96fba5cd6c3d251d677394f7bff4a54c8a0ca853",
+  "sourceFiles": 11,
+  "actualExecutedSourcesHashVerified": true,
+  "archiveSha256": "fe61c26096de7cdfa338b068e1370dd8aacc090f492990386919eb7827efaf08",
+  "archiveHashedFiles": 103,
+  "actualConsentBrowser": 26,
+  "producerUnit42Scope": "6 consent client +36 other native/preview cases; other native WIP not integrated",
+  "producerFocusedTypeConfig": {
+    "extends": "/work/extensions/tsconfig.json",
+    "include": [
+      "/work/extensions/src/components/theme-builder/**/*",
+      "/work/extensions/src/components/oauth-consent/**/*",
+      "/work/extensions/src/presentation/show-library-preview/**/*",
+      "/work/extensions/src/server/show-themes/builder-routes*",
+      "/work/extensions/src/server/show-themes/installation.ts",
+      "/work/extensions/src/site/oauth-consent-headers.ts",
+      "/work/extensions/src/site/env.d.ts",
+      "/work/extensions/src/presentation/tadazz-css.d.ts",
+      "/work/extensions/qa/theme-builder/**/*.ts",
+      "/work/extensions/qa/theme-builder/**/*.tsx",
+      "/work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts",
+      "/work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts"
+    ],
+    "compilerOptions": {
+      "typeRoots": [
+        "/work/extensions/node_modules/@types"
+      ]
+    }
+  },
+  "overallMixedRunExit": "1",
+  "nativeFailuresRetained": true,
+  "noNewRemoteJobOrInstall": true
+}

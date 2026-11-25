@@ -1,0 +1,26 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/node_modules/vitest/vitest.mjs",
+    "run",
+    "--root",
+    "/work/project/extensions",
+    "--config",
+    "/work/project/extensions/vitest.config.ts",
+    "--configLoader",
+    "runner",
+    "src/components/theme-builder/document.test.ts",
+    "src/presentation/show-library-preview/preview-candidate.test.ts",
+    "src/server/show-themes/builder-routes.test.ts",
+    "src/server/show-themes/builder-host.test.ts",
+    "--maxWorkers",
+    "1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/builder-authoring.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "d64d396b5c5ba61ff5beaa909115a7ee0b13f5af3158663627fa916e3ec98ab7",
+  "seconds": 11.21
+}

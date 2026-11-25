@@ -1,0 +1,19 @@
+{
+  "exampleOnly": true,
+  "schemaVersion": 1,
+  "snapshotId": "ROOT_REPLACES_WITH_FRESH_SNAPSHOT_ID",
+  "issuerThreadId": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "packetHashesSha256": "ROOT_BINDS_FINAL_CORRECTED_PACKET_HASH_FILE",
+  "capturedAtEpochSeconds": 0,
+  "expiresAtEpochSeconds": 0,
+  "lanes": [],
+  "aggregate": {
+    "approvedCpu": null,
+    "approvedMemoryBytes": null,
+    "retainedSharedMetadataBytesOnce": null
+  },
+  "disk": { "floorBytes": 2147483648, "futureReserveBytes": null, "marginBytes": null },
+  "ram": { "minimumHostAvailableBytes": null },
+  "note": "Deliberately invalid and stale: not a real ledger. ROOT enumerates every actual reserved lane with unique laneId, cpuGrant, memoryGrantBytes, newPhysicalBudgetBytes and consumedPhysicalBytes. Recovery-C1 appears exactly once at .25 CPU / 2147483648 RAM / 67108864 new physical bytes. ROOT supplies fresh other lanes, aggregate capacity, future reserve, margin and minimum available RAM. No lane names or historical QA reserve are inferred by the runner. Actual control files belong to UID/GID1001, private under the host-only admissions directory, and are not mounted."
+}

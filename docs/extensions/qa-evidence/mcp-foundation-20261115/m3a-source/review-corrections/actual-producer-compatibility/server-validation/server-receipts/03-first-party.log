@@ -1,0 +1,43 @@
+$ tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/first-party/*.nodecheck.ts
+✔ post-body abort retains pending real authentication work and creates no private store (703.988911ms)
+✔ abort at the verified-principal promise handoff prevents private work (97.501666ms)
+✔ postcommit abort withholds disclosure without claiming rollback (301.94001ms)
+✔ caller-built identity and missing actual ALS owner cannot access the store (610.07148ms)
+✔ accounts-off and persistent key/root drift deny before private store I/O (96.476616ms)
+✔ Context claims cannot substitute for the actual cryptographic verifier (89.612469ms)
+✔ actual player, malformed JWT, expired JWT and invalid sid are rejected (107.344521ms)
+✔ real session revoke and account disable/unverify deny previously issued capabilities (4.230161ms)
+✔ closed startup account handle fails GET without reinitializing account sidecars (88.329697ms)
+✔ symlink, hardlink and cross-owner DB substitutions cannot read borrowed private data (1103.414828ms)
+✔ an unsafe existing ancestor is denied without creating or repairing directories (4.798246ms)
+✔ missing manager credentials reject before consuming body or allocating a draft family (613.708956ms)
+✔ wrong Host/Origin, forwarded headers, routes, methods and body types are rejected before storage (87.056325ms)
+✔ malformed JSON and native/enhanced envelopes are rejected before private/native allocation (311.797266ms)
+✔ create/read/replace use actual auth and SQLite; pending save has no success/consent/native URL (397.956662ms)
+✔ actual streamed bytes override an underreported Content-Length and invalid UTF8 is rejected (5.16597ms)
+✔ revocation during the body await is reverified before parsing or store allocation (87.63401ms)
+✔ a public cancel promise that stalls keeps body work unresolved (1.997619ms)
+✔ 32 real authenticated body lifetimes exhaust anonymous admission until they finish (1293.948958ms)
+✔ exact old producer schema1 remains readable and mutable without a migration (1288.827509ms)
+✔ same columns/version/owner without the operations PK are preserved and denied (109.834626ms)
+✔ same columns/version/owner without native_id IS NULL are preserved and denied (197.563478ms)
+✔ unexpected mutating trigger is rejected before it can delete a private draft (105.419663ms)
+✔ unexpected view or index is preserved and rejected as an unknown object (294.480418ms)
+✔ absent GET does not create a private family (688.438643ms)
+✔ real create persists canonical content, outcome and audit; another owner cannot read it (503.413006ms)
+✔ durable create replay survives a fresh repository instance and rejects a reused key/digest (194.591089ms)
+✔ two competing expected revisions have exactly one CAS winner and one durable mutation (113.504581ms)
+✔ replace and pending save replay precede current revision; pending never contains a native target (387.113557ms)
+✔ SQLite audit failure rolls draft and operation back together (9.722254ms)
+✔ revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows (95.74937ms)
+✔ ordinary GET changes no private-family or native sentinel bytes/mtime/directory membership (91.248846ms)
+✔ real crashed hot journal is rejected without recovery or any private-family write (205.193711ms)
+✔ WAL-mode header, orphan SHM and corrupt private DB are preserved and denied (105.514105ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35481.532963

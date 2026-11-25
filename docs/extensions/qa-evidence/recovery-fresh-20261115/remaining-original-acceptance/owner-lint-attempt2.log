@@ -1,0 +1,197 @@
+extensions/src/server/index.ts:18:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/index.ts:19:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/index.ts:3:45: error eslint(no-duplicate-imports): '@razzia/extensions/server' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/server/storage/startup-recovery.ts:22:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid configured recovery root")` with `{throw new Error("Invalid configured recovery root")}`.
+extensions/src/server/storage/startup-recovery.ts:27:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid recovery owner snapshot mode")` with `{throw new Error("Invalid recovery owner snapshot mode")}`.
+extensions/src/server/storage/startup-recovery.ts:34:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid or conflicting snapshot owner")` with `{throw new Error("Invalid or conflicting snapshot owner")}`.
+extensions/src/server/storage/startup-recovery.ts:49:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsafe known recovery root")` with `{throw new Error("Unsafe known recovery root")}`.
+extensions/src/server/storage/startup-recovery.ts:51:65: error eslint(curly): Expected { after 'if' condition. help: Replace `throw error` with `{throw error}`.
+extensions/src/server/storage/startup-recovery.ts:54:30: error eslint(curly): Expected { after 'if' condition. help: Replace `roots.push(root)` with `{roots.push(root)}`.
+extensions/src/server/storage/startup-recovery.ts:65:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Recovery root changed")` with `{throw new Error("Recovery root changed")}`.
+extensions/src/server/storage/startup-recovery.ts:67:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsafe recovery relative path")` with `{throw new Error("Unsafe recovery relative path")}`.
+extensions/src/server/storage/startup-recovery.ts:70:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsafe recovery relative path")` with `{throw new Error("Unsafe recovery relative path")}`.
+extensions/src/server/storage/startup-recovery.ts:76:13: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Linked recovery path")` with `{throw new Error("Linked recovery path")}`.
+extensions/src/server/storage/startup-recovery.ts:78:67: error eslint(curly): Expected { after 'if' condition. help: Replace `throw error` with `{throw error}`.
+extensions/src/server/storage/startup-recovery.ts:88:7: error eslint(curly): Expected { after 'for-of'. help: Replace `getPath(relative)` with `{getPath(relative)}`.
+extensions/src/server/storage/startup-recovery.ts:12:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/startup-recovery.ts:18:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:23:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:28:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:35:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:44:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:54:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:60:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:66:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:68:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:69:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:71:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:74:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:81:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:89:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:91:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:93:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:5:16: error eslint(no-duplicate-imports): 'node:fs' import is duplicated help: Merge the duplicated import into a single import statement
+packages/socket/src/services/account-db.ts:19:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsafe startup owner metadata path")` with `{throw new Error("Unsafe startup owner metadata path")}`.
+packages/socket/src/services/account-db.ts:31:61: error eslint(curly): Expected { after 'if' condition. help: Replace `return null` with `{return null}`.
+packages/socket/src/services/account-db.ts:37:22: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+packages/socket/src/services/account-db.ts:45:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid owner WAL header")` with `{throw new Error("Invalid owner WAL header")}`.
+packages/socket/src/services/account-db.ts:56:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid or incomplete owner WAL")` with `{throw new Error("Invalid or incomplete owner WAL")}`.
+packages/socket/src/services/account-db.ts:73:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Owner WAL header checksum mismatch")` with `{throw new Error("Owner WAL header checksum mismatch")}`.
+packages/socket/src/services/account-db.ts:78:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Owner WAL frame is unavailable")` with `{throw new Error("Owner WAL frame is unavailable")}`.
+packages/socket/src/services/account-db.ts:83:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Owner WAL has an incomplete transaction")` with `{throw new Error("Owner WAL has an incomplete transaction")}`.
+packages/socket/src/services/account-db.ts:86:40: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid owner WAL page")` with `{throw new Error("Invalid owner WAL page")}`.
+packages/socket/src/services/account-db.ts:90:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Owner WAL frame checksum mismatch")` with `{throw new Error("Owner WAL frame checksum mismatch")}`.
+packages/socket/src/services/account-db.ts:93:21: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Owner WAL has an incomplete transaction")` with `{throw new Error("Owner WAL has an incomplete transaction")}`.
+packages/socket/src/services/account-db.ts:109:24: error eslint(curly): Expected { after 'if' condition. help: Replace `return { stamp: before, bytes: null, sha256: null }` with `{return { stamp: before, bytes: null, sha256: null }}`.
+packages/socket/src/services/account-db.ts:112:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Owner snapshot input exceeds its private capture bound")` with `{throw new Error("Owner snapshot input exceeds its private capture bound")}`.
+packages/socket/src/services/account-db.ts:120:7: error eslint(curly): Expected { after 'if' condition. help: Replace `ownerCaptureChanged()` with `{ownerCaptureChanged()}`.
+packages/socket/src/services/account-db.ts:131:19: error eslint(curly): Expected { after 'if' condition. help: Replace `ownerCaptureChanged()` with `{ownerCaptureChanged()}`.
+packages/socket/src/services/account-db.ts:141:7: error eslint(curly): Expected { after 'if' condition. help: Replace `ownerCaptureChanged()` with `{ownerCaptureChanged()}`.
+packages/socket/src/services/account-db.ts:157:27: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+packages/socket/src/services/account-db.ts:165:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw error` with `{throw error}`.
+packages/socket/src/services/account-db.ts:177:5: error eslint(curly): Expected { after 'while' condition. help: Replace `existing = dirname(existing)` with `{existing = dirname(existing)}`.
+packages/socket/src/services/account-db.ts:183:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsafe configured startup root")` with `{throw new Error("Unsafe configured startup root")}`.
+packages/socket/src/services/account-db.ts:201:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Startup owner metadata changed")` with `{throw new Error("Startup owner metadata changed")}`.
+packages/socket/src/services/account-db.ts:211:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Missing account metadata with retained tenant namespace")` with `{throw new Error("Missing account metadata with retained tenant namespace")}`.
+packages/socket/src/services/account-db.ts:219:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Tenant namespace appeared after legacy admission")` with `{throw new Error("Tenant namespace appeared after legacy admission")}`.
+packages/socket/src/services/account-db.ts:224:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Conflicting native account store root")` with `{throw new Error("Conflicting native account store root")}`.
+packages/socket/src/services/account-db.ts:226:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Account metadata is not a regular file")` with `{throw new Error("Account metadata is not a regular file")}`.
+packages/socket/src/services/account-db.ts:236:5: error eslint(curly): Expected { after 'if' condition. help: Replace `ownerCaptureChanged()` with `{ownerCaptureChanged()}`.
+packages/socket/src/services/account-db.ts:243:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid account database header")` with `{throw new Error("Invalid account database header")}`.
+packages/socket/src/services/account-db.ts:245:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Account rollback journal unresolved")` with `{throw new Error("Account rollback journal unresolved")}`.
+packages/socket/src/services/account-db.ts:247:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsupported account database mode")` with `{throw new Error("Unsupported account database mode")}`.
+packages/socket/src/services/account-db.ts:255:7: error eslint(curly): Expected { after 'if' condition. help: Replace `ownerCaptureChanged()` with `{ownerCaptureChanged()}`.
+packages/socket/src/services/account-db.ts:260:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Private owner snapshot must be outside the source root")` with `{throw new Error("Private owner snapshot must be outside the source root")}`.
+packages/socket/src/services/account-db.ts:262:15: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+packages/socket/src/services/account-db.ts:307:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Read-only account owner snapshot failed")` with `{throw new Error("Read-only account owner snapshot failed")}`.
+packages/socket/src/services/account-db.ts:309:31: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid owner snapshot result")` with `{throw new Error("Invalid owner snapshot result")}`.
+packages/socket/src/services/account-db.ts:319:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid, duplicate or conflicting recovery owner")` with `{throw new Error("Invalid, duplicate or conflicting recovery owner")}`.
+packages/socket/src/services/account-db.ts:337:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unsafe known recovery root")` with `{throw new Error("Unsafe known recovery root")}`.
+packages/socket/src/services/account-db.ts:348:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Known recovery root changed after admission")` with `{throw new Error("Known recovery root changed after admission")}`.
+packages/socket/src/services/account-db.ts:360:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Refusing non-owned private snapshot cleanup")` with `{throw new Error("Refusing non-owned private snapshot cleanup")}`.
+packages/socket/src/services/account-db.ts:360:7: error eslint(no-unsafe-finally): Unsafe `finally` block. help: Control flow inside `try` or `catch` blocks will be overwritten by this statement.
+packages/socket/src/services/account-db.ts:153:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+packages/socket/src/services/account-db.ts:15:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:20:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:32:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:38:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:42:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:44:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:46:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:48:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:57:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:72:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:74:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:81:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:84:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:86:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:87:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:89:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:91:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:93:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:109:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:110:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:111:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:113:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:117:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:119:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:121:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:123:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:131:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:132:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:134:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:135:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:142:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:143:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:169:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:176:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:178:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:184:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:194:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:203:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:212:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:218:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:223:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:225:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:227:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:229:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:232:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:237:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:238:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:244:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:246:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:248:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:251:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:259:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:261:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:265:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:268:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:277:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:306:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:308:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:309:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:310:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:314:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:320:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:332:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:338:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:341:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:347:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:361:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:175:42: error eslint(no-inline-comments): Unexpected comment inline with code help: Move the comment to a separate line
+extensions/src/server/storage/startup-recovery.test.ts:375:64: error eslint(no-shadow): 'file' is already declared in the upper scope. help: Consider renaming 'file' to avoid shadowing the variable from the outer scope.
+extensions/src/server/storage/startup-recovery.test.ts:24:5: error eslint(init-declarations): Variable 'fixture' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:25:5: error eslint(init-declarations): Variable 'priorConfig' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:25:38: error eslint(init-declarations): Variable 'priorAccounts' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:37:13: error eslint(no-empty): Unexpected empty block statements help: Remove this block or add a comment inside it
+extensions/src/server/storage/startup-recovery.test.ts:40:34: error eslint(curly): Expected { after 'if' condition. help: Replace `delete process.env.CONFIG_PATH` with `{delete process.env.CONFIG_PATH}`.
+extensions/src/server/storage/startup-recovery.test.ts:41:8: error eslint(curly): Expected { after 'else'. help: Replace `process.env.CONFIG_PATH = priorConfig` with `{process.env.CONFIG_PATH = priorConfig}`.
+extensions/src/server/storage/startup-recovery.test.ts:42:36: error eslint(curly): Expected { after 'if' condition. help: Replace `delete process.env.TADAZZ_ACCOUNTS_ENABLED` with `{delete process.env.TADAZZ_ACCOUNTS_ENABLED}`.
+extensions/src/server/storage/startup-recovery.test.ts:43:8: error eslint(curly): Expected { after 'else'. help: Replace `process.env.TADAZZ_ACCOUNTS_ENABLED = priorAccounts` with `{process.env.TADAZZ_ACCOUNTS_ENABLED = priorAccounts}`.
+extensions/src/server/storage/startup-recovery.test.ts:48:12: error eslint(curly): Expected { after 'if' condition. help: Replace `db.exec("PRAGMA journal_mode=WAL")` with `{db.exec("PRAGMA journal_mode=WAL")}`.
+extensions/src/server/storage/startup-recovery.test.ts:51:5: error eslint(curly): Expected { after 'for-of'. help: Replace `db.prepare("INSERT INTO accounts VALUES(?,1,NULL)").run(id as string)` with `{db.prepare("INSERT INTO accounts VALUES(?,1,NULL)").run(id as string)}`.
+extensions/src/server/storage/startup-recovery.test.ts:77:33: error eslint(curly): Expected { after 'if' condition. help: Replace `return [name, null]` with `{return [name, null]}`.
+extensions/src/server/storage/startup-recovery.test.ts:93:18: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/server/storage/startup-recovery.test.ts:96:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Linked owner proof root")` with `{throw new Error("Linked owner proof root")}`.
+extensions/src/server/storage/startup-recovery.test.ts:99:5: error eslint(prefer-template): Unexpected string concatenation. help: Use template literals instead of string concatenation.
+extensions/src/server/storage/startup-recovery.test.ts:174:31: error eslint(curly): Expected { after 'for' condition. help: Replace `db.exec("UPDATE accounts SET disabled=disabled+1")` with `{db.exec("UPDATE accounts SET disabled=disabled+1")}`.
+extensions/src/server/storage/startup-recovery.test.ts:174:26: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:301:5: error eslint(curly): Expected { after 'for-of'. help: Replace `fs.mkdirSync(path.join(fixture.root, "tenants", owner), { recursive: true })` with `{fs.mkdirSync(path.join(fixture.root, "tenants", owner), { recursive: true })}`.
+extensions/src/server/storage/startup-recovery.test.ts:304:5: error eslint(curly): Expected { after 'for' condition. help: Replace `expect( recoverStartupOwnerJournals(readStartupOwnerSnapshot()).map( (v) => v.report.status, ), ).toEqual(["clean", "clean", "clean"])` with `{expect( recoverStartupOwnerJournals(readStartupOwnerSnapshot()).map( (v) => v.report.status, ), ).toEqual(["clean", "clean", "clean"])}`.
+extensions/src/server/storage/startup-recovery.test.ts:303:26: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:377:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("EACCES synthetic tenant quarantine cleanup")` with `{throw new Error("EACCES synthetic tenant quarantine cleanup")}`.
+extensions/src/server/storage/startup-recovery.test.ts:411:5: error eslint(init-declarations): Variable 'afterWriter' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:420:11: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:429:36: error eslint(curly): Expected { after 'for-of'. help: Replace `expect(fs.existsSync(root)).toBe(false)` with `{expect(fs.existsSync(root)).toBe(false)}`.
+extensions/src/server/storage/startup-recovery.test.ts:445:5: error eslint(init-declarations): Variable 'afterWriter' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:453:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:463:36: error eslint(curly): Expected { after 'for-of'. help: Replace `expect(fs.existsSync(root)).toBe(false)` with `{expect(fs.existsSync(root)).toBe(false)}`.
+extensions/src/server/storage/startup-recovery.test.ts:478:5: error eslint(init-declarations): Variable 'afterWriter' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:484:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:175:42: error @stylistic(line-comment-position): Expected comment to be above code.
+extensions/src/server/storage/startup-recovery.test.ts:40:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:42:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:48:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:49:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:52:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:65:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:74:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:77:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:78:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:79:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:93:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:94:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:95:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:97:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:332:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:378:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:388:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:415:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:420:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:449:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:481:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:515:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:40:30: error typescript(no-unnecessary-condition): Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined. help: The checked value has type `number`.
+packages/socket/src/services/account-db.ts:115:30: error typescript(no-unnecessary-condition): Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined. help: The checked value has type `number`.
+packages/socket/src/services/account-db.ts:313:13: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+packages/socket/src/services/account-db.ts:313:23: error typescript(no-unsafe-member-access): Unsafe member access .id on an `any` value.

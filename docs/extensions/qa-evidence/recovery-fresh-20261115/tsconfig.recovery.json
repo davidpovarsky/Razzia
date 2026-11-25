@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", "module": "ESNext", "moduleResolution": "bundler",
+    "strict": true, "skipLibCheck": true, "noEmit": true, "esModuleInterop": true,
+    "allowImportingTsExtensions": true, "resolveJsonModule": true,
+    "types": ["node"],
+    "typeRoots": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/@types"],
+    "paths": {
+      "@razzia/common/*": ["../../../../packages/common/src/*"],
+      "zod": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/zod"],
+      "uuid": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/uuid"],
+      "http-status-codes": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/http-status-codes"],
+      "vitest": ["C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions/node_modules/vitest"]
+    }
+  },
+  "include": ["../../../../extensions/src/server/storage/**/*.ts", "../../../../extensions/src/server/media-library-recovery.test.ts"]
+}

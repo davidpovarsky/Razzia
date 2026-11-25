@@ -1,0 +1,38 @@
+{
+  "status": "DEPLOYED_AND_READ_ONLY_SMOKE_VERIFIED",
+  "userAuthorization": "בצע דחיפה ופרוס לשרת tadazz!",
+  "sourceRevision": "bff12a63ec3f69a58123c0299eea991901680b94",
+  "implementationRevision": "3570689c073014cb78ec0b33a572d414594ce3a2",
+  "branch": "codex/tadazz-design-system-20261110",
+  "url": "https://tadazz.com",
+  "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+  "container": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+  "startedUTC": "2026-11-12T03:38:48.157101207Z",
+  "publicEntry": "/assets/index-D4sBj2w1.js",
+  "candidateBrowserCases": 4,
+  "publicBrowserCases": 4,
+  "publicPageErrors": 0,
+  "publicFailedAssets": 0,
+  "webArtifactFilesVerified": 154,
+  "privatePayloadFilesUnchanged": 337,
+  "sqliteReadOnlyIntegrityChecks": {
+    "databases": 2,
+    "allPassed": true
+  },
+  "environmentMountHostConfigPreserved": true,
+  "backendNginxSupervisorPreserved": true,
+  "phoneGatewayIdentityImageStartPreserved": true,
+  "rollbackContainer": "tadazz-pre-unified-site-bff12a6",
+  "privateBackupRetainedServerOnly": true,
+  "privateBackupMode": "0600",
+  "ownedCandidateStoppedAfterVerification": true,
+  "mainMerged": false,
+  "productionAccountGameMailPSTNOrBillingWorkflowCreated": false,
+  "asanaUpdated": false,
+  "remainingQualifications": [
+    "Physical devices and projector hardware",
+    "40 Chromium / 20 WebKit capacity soak",
+    "External CI",
+    "Authenticated production editor/game/payment/mail/PSTN flows"
+  ]
+}

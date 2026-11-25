@@ -1,0 +1,1 @@
+{"$schema":"https://json.schemastore.org/prettierrc","semi":false,"tabWidth":2,"singleQuote":false,"printWidth":80,"trailingComma":"all","plugins":["/work/node_modules/.pnpm/prettier-plugin-tailwindcss@0.8.1_prettier@3.9.10/node_modules/prettier-plugin-tailwindcss/dist/index.mjs"]}

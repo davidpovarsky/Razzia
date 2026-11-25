@@ -1,0 +1,14 @@
+{
+  "status": "PHASE3_TRANSFER_VERIFIED",
+  "archiveSha256": "26b67063b2cffef87bf665c05480b841338af94daba9aee9f6bab2b64f30d485",
+  "fileCount": 15,
+  "criticalPins": {
+    "activate_and_verify_timer.py": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+    "phase3-admission.json": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+    "phase3-independent-review.json": "74772fce7e9e446c4466b89832b0298d1cf462d6719ff2444b52da7ed1328078",
+    "timer-input-manifest.json": "eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de"
+  },
+  "observedAt": "2026-11-19T15:48:48.607501+00:00",
+  "serviceChanged": false,
+  "productionStoreAccessed": false
+}

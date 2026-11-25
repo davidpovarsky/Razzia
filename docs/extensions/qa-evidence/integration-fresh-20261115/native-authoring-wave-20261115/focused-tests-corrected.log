@@ -1,0 +1,24 @@
+COMMAND: ["C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe", "node_modules/vitest/vitest.mjs", "run", "--config", "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\vitest.config.ts", "--root", "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions", "src/core/show-library/composition-repository.test.ts", "src/core/show-library/preview-port.test.ts", "--maxWorkers", "1", "--reporter", "default", "--reporter", "json", "--outputFile", "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\native-authoring-wave-20261115\\tests-integrated-corrected.json"]
+CWD: C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-integration-20261115
+SOURCE: 75f74e3dc321109469b140eab6be03d3353509c0
+START: 2026-11-15T15:08:33.849266+00:00
+EXIT: 0
+STDOUT:
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions
+
+ ✓ src/core/show-library/composition-repository.test.ts (11 tests) 81ms
+ ✓ src/core/show-library/preview-port.test.ts (14 tests) 240ms
+
+ Test Files  2 passed (2)
+      Tests  25 passed (25)
+   Start at  17:08:35
+   Duration  6.76s (import 48%, transform 46%, tests 5%)
+
+  Transform  transforming modules took 2.72s · 46% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/docs/extensions/qa-evidence/integration-fresh-20261115/native-authoring-wave-20261115/tests-integrated-corrected.json
+
+STDERR:

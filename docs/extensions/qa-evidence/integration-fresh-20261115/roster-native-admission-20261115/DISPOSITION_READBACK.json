@@ -1,0 +1,47 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "modified_at": "2026-11-15T20:19:34.674Z",
+    "completed": false,
+    "preservedNotesExact": true,
+    "block": "2026-11-15 SOLE MANAGER INTAKE | code/source d2bd26815bfb7b9a306beb67288f2b775a6b3a30; evidence1081c48; full evidence HEAD51f36b3746ca86f4698c9751b35989854c396d6a. B902412c resolved-roster40 internal admission integrated preserving common/web/join-ticket24 and accepted C Game hooks; actual manager19PASS, affected current Game-composition TypeScript0, format0, unchanged source hashes/native create+warm-rebind body. Independent Cfd66f52 evidence-only83paths integrated: 3 original Oracle30720B archives/39rawfile bytes==Git, terminal PID0/noOOM including retained failures, 103 immutable Git/mode/hash/size inputs independently verified. Actual unchanged C21f+B902 invitation consumer2PASS proves original25-character roster join once/oneplayer plus policy/refusal/removal controls; exact Btwo blobs==manager. Earlier Cc1ed LIVE fifth-choice/threeepochs/score1000,1999,1999 remains historical at original source (full helper/backend hash bridge verified), not rerun with B or all-head acceptance. Original failures retained. Phone source tasks OPEN, no provider/PSTN/device/capacity/freshOS/persistent key/power-loss claim.\nA229f2c7 native language source integrated0f441fd, source review ce0430c. Actual 1234 frozen source rows, old/new152-file artifact hashes/inode aliases, seven terminal containers and five protected services independently verified. Earlier native harness0PASS4FAIL becomes fixed4PASS ja/tr Chromium+WebKit; actual source browser4PASS/build+TC0; current manager focused TC/format0 and formatting BabelAST bridge verified. New152 artifact PROPOSED ONLY, not selected/published; native index e5d2c9e772ca5da640ba8eaa6b43a0af714efcf64c1f2877a0d1447fd82f4d6d. A13ae967 startup-pageerror classification integrated cb495ae: preserved raw logs show first POST session502 before backend listening and seven later200, unchanged auth/branding code; 0700 optional tenant config not exercised. No extra probe/rebuild or permission change. Future fixture needs actual API readiness. All Site/release broader tasks OPEN, Production HOLD. No old TDS/CreatingWorlds/source tasks reopened, no new compute/cleanup."
+  },
+  "deliveries": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"threadId\":\"01a1dfa9-5c5a-7723-8993-110f2dfe4892\"}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"threadId\":\"01a1dfa9-87af-79f3-a855-8a93c517b4f5\"}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"threadId\":\"01a1dfa9-3316-7a02-afef-3dccd5939e79\"}"
+          }
+        ],
+        "isError": false
+      }
+    }
+  ]
+}

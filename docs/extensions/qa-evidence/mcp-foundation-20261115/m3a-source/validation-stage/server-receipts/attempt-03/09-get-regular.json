@@ -1,0 +1,17 @@
+{
+  "command": [
+    "node",
+    "node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "/evidence/get-observer.mjs",
+    "regular"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 5.403,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 480,
+  "logSha256": "03f5f0c9883c16e8d4a4097167072a1d184b75fbb860abc1be118767fd92faee"
+}

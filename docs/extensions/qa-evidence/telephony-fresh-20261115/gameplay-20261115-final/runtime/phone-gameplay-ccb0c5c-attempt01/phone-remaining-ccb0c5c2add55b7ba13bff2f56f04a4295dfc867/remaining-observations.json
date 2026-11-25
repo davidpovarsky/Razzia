@@ -1,0 +1,26 @@
+{
+  "scope": "new actual isolated fresh-composition gameplay acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "test": "INVITE-COMPOSED-01",
+      "defaultOpenControl": true,
+      "explicitInviteOnlyRefusal": "admission_outcome_unknown",
+      "invitedOriginalRoster": true,
+      "noUnknownRetryRepairAfterPolicyChange": true,
+      "removedRosterCachedReceiptsDenied": 2,
+      "providerInvitationOrPSTN": false
+    },
+    {
+      "test": "INVITE-COMPOSED-02",
+      "acceptedRosterNameLength": 25,
+      "expectedInvitedAdmission": true,
+      "actualReceiptOK": false,
+      "actualStatus": "admission_outcome_unknown",
+      "actualNativeError": "errors:auth.usernameTooLong",
+      "nativeJoinCalls": 1,
+      "players": 0,
+      "sourceContractMismatch": "roster maximum40 versus username maximum24",
+      "productionFixApplied": false
+    }
+  ]
+}

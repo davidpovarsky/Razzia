@@ -1,0 +1,449 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts
+[22m[39mGame cleanup task started
+
+ [2m[90m↓[39m[22m src/server/real-telephony-e2e.test.ts[2m > [22mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22mScenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant
+ [2m[90m↓[39m[22m src/server/real-telephony-e2e.test.ts[2m > [22mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22mScenario 6: Negative & Edge Case Security Verification
+ [2m[90m↓[39m[22m src/server/real-telephony-e2e.test.ts[2m > [22mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22mScenario 7: Real Player Reconnection & State Synchronization
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mNew game created: 034639 subject: Real Telephony Acceptance Quiz
+Game 01a1dfc5-e8bf-7000-98e6-a2a2fd46e2ff added. Total games: 1
+Game 01a1dfc5-e8bf-7000-98e6-a2a2fd46e2ff marked as empty. Total empty games: 1
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: ieLvBKWxzoaB1qEQAAAA, clientId: 01a1dfc5-e805-71f7-879a-83134dbe665f
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mGame 01a1dfc5-e8bf-7000-98e6-a2a2fd46e2ff reactivated. Remaining empty games: 0
+Manager reconnected to game 034639
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: vE1suL_62dL2A990AAAB, clientId: 01a1dfc5-eab1-772e-b194-92ce6e53b9d6
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 80XK-SX4mdDPT3kTAAAC, clientId: 01a1dfc5-eab5-776c-abea-cbf6313073e8
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: Tu1TIIZTpB4xUoY6AAAD, clientId: 01a1dfc5-eab8-7374-96f8-6ff964b9d819
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: PTae_HD0Ow1qJfXwAAAE, clientId: 01a1dfc5-eb13-726e-af01-777549eb164d
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: n_S98GNM3K3YbMTyAAAF, clientId: 01a1dfc5-eb18-76c7-adb1-083ed9983a2c
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: g9tSoh7Hd1FAeDAvAAAG, clientId: 01a1dfc5-eb1b-73ce-9adf-8bf77f33eec1
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 5LPdVyGvELKqa9QxAAAH, clientId: 01a1dfc5-eb77-7655-80cf-10c8b77a2ce5
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: jvJTPotGbENW4Y4-AAAI, clientId: 01a1dfc5-eb7c-7000-9c4c-08bec54c7fde
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 330sBsqvaQvq_bYIAAAJ, clientId: 01a1dfc5-eb80-7257-b253-8009d25d31ec
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: o8C9Aa9nF-y5iMQeAAAK, clientId: 01a1dfc5-ebdb-7188-b326-b7001a5b00b3
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: LA3ilOEXoqCQG8H5AAAL, clientId: 01a1dfc5-ebe6-720c-a8aa-a7e2b42f40f3
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: VuomnCfSyD5veGSDAAAM, clientId: 01a1dfc5-ec40-70de-a388-1283248e80fc
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: pH7PUTsqWMKAn-LIAAAN, clientId: 01a1dfc5-ec48-7208-a845-4feeb04f05f0
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 0S5GrrmHMwih3nqEAAAO, clientId: 01a1dfc5-eca5-7353-aae1-1fc659ea0498
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: MZq15-t4-G0BwCVnAAAP, clientId: 01a1dfc5-eca9-7718-a75c-ceeca9486198
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: MuHvmZ4V7wSLqZNuAAAQ, clientId: 01a1dfc5-ea52-7787-9b52-c2c7fe43978e
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: iQ1XBOZkwkq9RRUAAAAR, clientId: 01a1dfc5-ecae-7038-a41f-221741d77f1e
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: qBIsPaa2Z5IuTz0uAAAS, clientId: 01a1dfc5-ed08-720e-9cc9-61a9d31ce99c
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: A-BGH3nWip-_8cfEAAAT, clientId: 01a1dfc5-ea53-7551-926f-9a11ecc56362
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 5yyqIzQeZ3wtPhCTAAAU, clientId: 01a1dfc5-ed0b-71a4-ac71-0b5a77c51c6e
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: UNiZ8HjUyOH-VWhgAAAV, clientId: 01a1dfc5-ef6a-718e-bb66-5b6e7fc80f56
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: iGdXldwKleIQofROAAAW, clientId: 01a1dfc5-ef6a-718e-bb66-5e76d0ae7293
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: uT1xvKs8KqcUl4vDAAAX, clientId: 01a1dfc5-ef6b-7423-b0b6-9425057fec90
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: ASHurvq39fq3sRtRAAAY, clientId: 01a1dfc5-ef6b-7423-b0b6-9ac92583c544
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: YWn57JNHldvZ-V6aAAAZ, clientId: 01a1dfc5-ef6c-7055-9228-92a8ed044259
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 4g0JTsRqyLtIXnmqAAAa, clientId: 01a1dfc5-ef6c-7055-9228-973481b2c2cc
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: JMLBap91PpzkZ57sAAAb, clientId: 01a1dfc5-efc1-724b-b534-098efd780ec4
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: upzwYzOLEfLrcu_zAAAc, clientId: 01a1dfc5-efc1-724b-b534-0f59689e06f8
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: wZvCrB3pPVyE-PdiAAAd, clientId: 01a1dfc5-efc2-75bc-ae16-d003c33d2550
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 3BdkCou79lH3eCMSAAAe, clientId: 01a1dfc5-efc2-75bc-ae16-d45bb6dcc590
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: jYafPmmpE63Y_ns0AAAf, clientId: 01a1dfc5-efc2-75bc-ae16-db5707ba9736
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: rgG_caakF89KgAZpAAAg, clientId: 01a1dfc5-efc3-76b6-ae4d-9d3d6becb515
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: heobzKcO6BpMne51AAAh, clientId: 01a1dfc5-efc3-76b6-ae4d-a1525195901f
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 648W84CoEn6Z7urDAAAi, clientId: 01a1dfc5-efc3-76b6-ae4d-a49cee143ad3
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 9RWi0gNID9n6ZRRgAAAj, clientId: 01a1dfc5-efc4-744f-b9e6-8ec6eb8d2f75
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 62kIMAxkvR-ULAfpAAAk, clientId: 01a1dfc5-efc4-744f-b9e6-920eef3955e5
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: OqAtMclzgkF2kaGiAAAl, clientId: 01a1dfc5-efc4-744f-b9e6-9407d541ceb2
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: Yay0eUXbS13h53brAAAm, clientId: 01a1dfc5-efc5-72b4-bce3-d9e5c5a0e4cb
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: qzn2CAXK3KyFrBcfAAAn, clientId: 01a1dfc5-efc5-72b4-bce3-dd3e84f3868b
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 0mKEAZr-2xUCyDvAAAAo, clientId: 01a1dfc5-efc5-72b4-bce3-e2c51e92c551
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: Nu7Ow-F_BM3018HJAAAp, clientId: 01a1dfc5-f2e5-71b1-9992-f6c8fdbd69a5
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: q2Hq0aX6bGw40ORpAAAq, clientId: 01a1dfc5-f2e5-71b1-9992-f97289f6fb4d
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: i2zIcPw0_jSqXhILAAAr, clientId: 01a1dfc5-f2e5-71b1-9992-fcb358400e66
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: r2_Zvpcu51zbHfdiAAAs, clientId: 01a1dfc5-f2e6-734d-af51-ff8058d7f66b
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 71XlOXEcK9vxCEInAAAt, clientId: 01a1dfc5-f2e6-734d-af52-00f587df41d3
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: a0furChYoW_KepLFAAAu, clientId: 01a1dfc5-f2e7-76d2-8842-be9f7a86b265
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 4j8cTvAuPBmCbGnPAAAv, clientId: 01a1dfc5-f2e7-76d2-8842-c04acd07addd
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: t9Nf7TACAGTdTU9RAAAw, clientId: 01a1dfc5-f2e7-76d2-8842-c56309eb95cd
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: ZotCag3sTCeN3GnuAAAx, clientId: 01a1dfc5-f2e8-776d-83b3-0998e9381e16
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 5AM59X_1ooVJ3U8pAAAy, clientId: 01a1dfc5-f2e8-776d-83b3-0e7a44a9b374
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: EfA_hm3oX3QaVVG6AAAz, clientId: 01a1dfc5-f2e8-776d-83b3-12d9df884ba4
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: VEc27BPF8WBfI9G_AAA0, clientId: 01a1dfc5-f2e9-726e-a62f-824de25bafe1
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: yU0kZL4cAr1VGci3AAA1, clientId: 01a1dfc5-f2e9-726e-a62f-84a927e93415
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: z1NxgKBUCyd1---4AAA2, clientId: 01a1dfc5-f2ea-75a1-a1c4-639bafa70dac
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: rU8003dGdU80Sh1sAAA3, clientId: 01a1dfc5-f2ea-75a1-a1c4-6579ce97d45b
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: xVaUMdDWIAbLfuhlAAA4, clientId: 01a1dfc5-f2ea-75a1-a1c4-69aa9ddd3976
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: t45P5gutJ37LJjlGAAA5, clientId: 01a1dfc5-f2eb-771e-8563-a9fa76042cbd
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: LEfV-5OVWD8iDYT3AAA6, clientId: 01a1dfc5-f2eb-771e-8563-aed256836566
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: A8bFLVoMWcFVrffXAAA7, clientId: 01a1dfc5-f2eb-771e-8563-b3781ba3fc01
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 2s52wpeG7o9TkrSrAAA8, clientId: 01a1dfc5-f2ec-7625-83ab-143e0e23b2d7
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: j0DnQUecO1I8s_z0AAA9, clientId: 01a1dfc5-f794-7264-b118-21a782c26614
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: _e03U1o9NJtXaxmdAAA-, clientId: 01a1dfc5-f794-7264-b118-254dd289ff91
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: -uNO1NbkQ8gLS8hwAAA_, clientId: 01a1dfc5-f794-7264-b118-28cedad6d874
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: D2mE159AOZsC4yf0AABA, clientId: 01a1dfc5-f795-7405-bca7-b4249341a6e1
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: CFdn5HCS5fnNXbAEAABB, clientId: 01a1dfc5-f795-7405-bca7-b9dd6c4b5e01
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: MjAS46wuLo5VBvkAAABC, clientId: 01a1dfc5-f795-7405-bca7-be567f74733c
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: TBZyOp9uzEqdJCKiAABD, clientId: 01a1dfc5-f796-753c-ba6e-3fdad7c20ee5
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: a-c-tNgkAcmVx7SFAABE, clientId: 01a1dfc5-f796-753c-ba6e-41c745ad60d1
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: wtSsyMbYmtZXp8APAABF, clientId: 01a1dfc5-f796-753c-ba6e-47dedfebec09
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: XYmfRyVeCUrlGMfWAABG, clientId: 01a1dfc5-f797-70e1-9b2f-448de5d9f405
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: EizIdAOaAvVgLl3hAABH, clientId: 01a1dfc5-f798-72e2-b6fd-980e8bb56feb
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: seWLCMHPzReu2DoDAABI, clientId: 01a1dfc5-f798-72e2-b6fd-9db7d03a0ac9
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: x3INg5ButZpmBAGXAABJ, clientId: 01a1dfc5-f799-7071-82d9-53b1da310cc2
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: k1zp0mNMmIsMxB97AABK, clientId: 01a1dfc5-f799-7071-82d9-54381c043cb7
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: YFVtz_6Q_qlV1BwkAABL, clientId: 01a1dfc5-f799-7071-82d9-5b6ea9221cff
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: axEI3JqvBcAxF-MOAABM, clientId: 01a1dfc5-f79a-740a-9f5c-95d8768eb56b
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: OqD3cTEmpwIgOaE0AABN, clientId: 01a1dfc5-f79a-740a-9f5c-9b0a6a90aa26
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 74YSJzD_1fiQ5W7DAABO, clientId: 01a1dfc5-f79a-740a-9f5c-9f71e5694343
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 91Q8-a0regtZG4bzAABP, clientId: 01a1dfc5-f79b-7314-911f-51c056c660d9
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: vVTOJlrnI19jF9ucAABQ, clientId: 01a1dfc5-f79b-7314-911f-561a8845374e
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 2fv82PjzhrryiNu9AABS, clientId: 01a1dfc5-fb28-77c6-a3b3-7a12f2a239eb
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: fZSi0Hse33v2Vyo8AABR, clientId: 01a1dfc5-fb27-73f0-a4e9-40a55a47ac7c
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: x1-J8C12iGtTAU7bAABT, clientId: 01a1dfc5-fb28-77c6-a3b3-7e3966afa49f
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: v23jxVrIM9G4hB2aAABU, clientId: 01a1dfc5-fb28-77c6-a3b3-8339d4a4435c
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: wN-BDh1VfwPK_n6yAABV, clientId: 01a1dfc5-fb29-721e-854b-cbdee7445221
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: oKLy_lOWezIYk6OOAABW, clientId: 01a1dfc5-fb29-721e-854b-cc91c22936f3
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: pF2YpqmXvF2bLLrPAABX, clientId: 01a1dfc5-fb29-721e-854b-d073d106cc12
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: dIMARNVH68PUU7AvAABY, clientId: 01a1dfc5-fb79-73b6-bbce-aa8880503124
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 8e3TMkvN-aQfB6u6AABZ, clientId: 01a1dfc5-fb79-73b6-bbce-ad3561d7dd48
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: bYleCi5AdAjt4AzPAABa, clientId: 01a1dfc5-fb7a-7462-9423-605e57f30f63
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 8pr6wRzthGPOkfU5AABb, clientId: 01a1dfc5-fb7a-7462-9423-6696ae2fa941
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: HFSYzXDMRhxA11sVAABc, clientId: 01a1dfc5-fb7a-7462-9423-6a715233b8b0
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: SVavWqP9vcQDSby_AABd, clientId: 01a1dfc5-fb7b-7468-8856-42af3e0681c7
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: RYnZ4iLwFpa3O_YgAABe, clientId: 01a1dfc5-fb7b-7468-8856-45d8e13b72d6
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: SorOT0c10PPTSEtyAABf, clientId: 01a1dfc5-fb7b-7468-8856-4a6446eac86f
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: j6dwfFuNDoc43SmmAABg, clientId: 01a1dfc5-fb7c-7541-8c54-f96f0df68ae3
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: fpgUOAX6rUHI6cxTAABh, clientId: 01a1dfc5-fb7c-7541-8c54-fc9102550591
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: XKetXaH_wTPU4gaEAABi, clientId: 01a1dfc5-fb7c-7541-8c55-034141db6104
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 39UCzQhy9svoHfh8AABj, clientId: 01a1dfc5-fb7d-7653-95b8-896e5b52b300
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39mA user connected: socketId: 9hZdQ04RhHlw-Zz8AABk, clientId: 01a1dfc5-fb7d-7653-95b8-8e04d95f6b74
+
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22m[2mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+[22m[39m=== REAL SERVER TELEPHONY 100 PARTICIPANTS METRICS ===
+Join total time (100 sockets): 5503.09 ms
+Answer submission total time: 2475.53 ms
+Participants: 100
+Server Authoritative Answers Recorded: 0/100
+Server Scored Participants: 100/100 (50 correct: >0 pts, 50 incorrect: 0 pts)
+Client DTMF Latency - min: 57.41ms, mean: 59.59ms, p50: 59.63ms, p95: 61.57ms, p99: 61.89ms
+=====================================================
+
+ [32m✓[39m src/server/real-telephony-e2e.test.ts[2m > [22mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)[2m > [22mScenario 10: 100 Concurrent Telephone Participants Load Test against Real Server[33m 12206[2mms[22m[39m
+[90mstdout[2m | src/server/real-telephony-e2e.test.ts[2m > [22m[2mGATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)
+[22m[39mA user disconnected : ieLvBKWxzoaB1qEQAAAA
+Manager disconnected from game 034639
+Game 01a1dfc5-e8bf-7000-98e6-a2a2fd46e2ff marked as empty. Total empty games: 1
+A user disconnected : vE1suL_62dL2A990AAAB
+A user disconnected : 80XK-SX4mdDPT3kTAAAC
+A user disconnected : Tu1TIIZTpB4xUoY6AAAD
+A user disconnected : PTae_HD0Ow1qJfXwAAAE
+A user disconnected : n_S98GNM3K3YbMTyAAAF
+A user disconnected : g9tSoh7Hd1FAeDAvAAAG
+A user disconnected : 5LPdVyGvELKqa9QxAAAH
+A user disconnected : jvJTPotGbENW4Y4-AAAI
+A user disconnected : 330sBsqvaQvq_bYIAAAJ
+A user disconnected : o8C9Aa9nF-y5iMQeAAAK
+A user disconnected : LA3ilOEXoqCQG8H5AAAL
+A user disconnected : VuomnCfSyD5veGSDAAAM
+A user disconnected : pH7PUTsqWMKAn-LIAAAN
+A user disconnected : 0S5GrrmHMwih3nqEAAAO
+A user disconnected : MZq15-t4-G0BwCVnAAAP
+A user disconnected : MuHvmZ4V7wSLqZNuAAAQ
+A user disconnected : iQ1XBOZkwkq9RRUAAAAR
+A user disconnected : qBIsPaa2Z5IuTz0uAAAS
+A user disconnected : A-BGH3nWip-_8cfEAAAT
+A user disconnected : 5yyqIzQeZ3wtPhCTAAAU
+A user disconnected : UNiZ8HjUyOH-VWhgAAAV
+A user disconnected : iGdXldwKleIQofROAAAW
+A user disconnected : uT1xvKs8KqcUl4vDAAAX
+A user disconnected : ASHurvq39fq3sRtRAAAY
+A user disconnected : YWn57JNHldvZ-V6aAAAZ
+A user disconnected : 4g0JTsRqyLtIXnmqAAAa
+A user disconnected : JMLBap91PpzkZ57sAAAb
+A user disconnected : upzwYzOLEfLrcu_zAAAc
+A user disconnected : wZvCrB3pPVyE-PdiAAAd
+A user disconnected : 3BdkCou79lH3eCMSAAAe
+A user disconnected : jYafPmmpE63Y_ns0AAAf
+A user disconnected : rgG_caakF89KgAZpAAAg
+A user disconnected : heobzKcO6BpMne51AAAh
+A user disconnected : 648W84CoEn6Z7urDAAAi
+A user disconnected : 9RWi0gNID9n6ZRRgAAAj
+A user disconnected : 62kIMAxkvR-ULAfpAAAk
+A user disconnected : OqAtMclzgkF2kaGiAAAl
+A user disconnected : Yay0eUXbS13h53brAAAm
+A user disconnected : qzn2CAXK3KyFrBcfAAAn
+A user disconnected : 0mKEAZr-2xUCyDvAAAAo
+A user disconnected : Nu7Ow-F_BM3018HJAAAp
+A user disconnected : q2Hq0aX6bGw40ORpAAAq
+A user disconnected : i2zIcPw0_jSqXhILAAAr
+A user disconnected : r2_Zvpcu51zbHfdiAAAs
+A user disconnected : 71XlOXEcK9vxCEInAAAt
+A user disconnected : a0furChYoW_KepLFAAAu
+A user disconnected : 4j8cTvAuPBmCbGnPAAAv
+A user disconnected : t9Nf7TACAGTdTU9RAAAw
+A user disconnected : ZotCag3sTCeN3GnuAAAx
+A user disconnected : 5AM59X_1ooVJ3U8pAAAy
+A user disconnected : EfA_hm3oX3QaVVG6AAAz
+A user disconnected : VEc27BPF8WBfI9G_AAA0
+A user disconnected : yU0kZL4cAr1VGci3AAA1
+A user disconnected : z1NxgKBUCyd1---4AAA2
+A user disconnected : rU8003dGdU80Sh1sAAA3
+A user disconnected : xVaUMdDWIAbLfuhlAAA4
+A user disconnected : t45P5gutJ37LJjlGAAA5
+A user disconnected : LEfV-5OVWD8iDYT3AAA6
+A user disconnected : A8bFLVoMWcFVrffXAAA7
+A user disconnected : 2s52wpeG7o9TkrSrAAA8
+A user disconnected : j0DnQUecO1I8s_z0AAA9
+A user disconnected : _e03U1o9NJtXaxmdAAA-
+A user disconnected : -uNO1NbkQ8gLS8hwAAA_
+A user disconnected : D2mE159AOZsC4yf0AABA
+A user disconnected : CFdn5HCS5fnNXbAEAABB
+A user disconnected : MjAS46wuLo5VBvkAAABC
+A user disconnected : TBZyOp9uzEqdJCKiAABD
+A user disconnected : a-c-tNgkAcmVx7SFAABE
+A user disconnected : wtSsyMbYmtZXp8APAABF
+A user disconnected : XYmfRyVeCUrlGMfWAABG
+A user disconnected : EizIdAOaAvVgLl3hAABH
+A user disconnected : seWLCMHPzReu2DoDAABI
+A user disconnected : x3INg5ButZpmBAGXAABJ
+A user disconnected : k1zp0mNMmIsMxB97AABK
+A user disconnected : YFVtz_6Q_qlV1BwkAABL
+A user disconnected : axEI3JqvBcAxF-MOAABM
+A user disconnected : OqD3cTEmpwIgOaE0AABN
+A user disconnected : 74YSJzD_1fiQ5W7DAABO
+A user disconnected : 91Q8-a0regtZG4bzAABP
+A user disconnected : vVTOJlrnI19jF9ucAABQ
+A user disconnected : 2fv82PjzhrryiNu9AABS
+A user disconnected : fZSi0Hse33v2Vyo8AABR
+A user disconnected : x1-J8C12iGtTAU7bAABT
+A user disconnected : v23jxVrIM9G4hB2aAABU
+A user disconnected : wN-BDh1VfwPK_n6yAABV
+A user disconnected : oKLy_lOWezIYk6OOAABW
+A user disconnected : pF2YpqmXvF2bLLrPAABX
+A user disconnected : dIMARNVH68PUU7AvAABY
+A user disconnected : 8e3TMkvN-aQfB6u6AABZ
+A user disconnected : bYleCi5AdAjt4AzPAABa
+A user disconnected : 8pr6wRzthGPOkfU5AABb
+A user disconnected : HFSYzXDMRhxA11sVAABc
+A user disconnected : SVavWqP9vcQDSby_AABd
+A user disconnected : RYnZ4iLwFpa3O_YgAABe
+A user disconnected : SorOT0c10PPTSEtyAABf
+A user disconnected : j6dwfFuNDoc43SmmAABg
+A user disconnected : fpgUOAX6rUHI6cxTAABh
+A user disconnected : XKetXaH_wTPU4gaEAABi
+A user disconnected : 39UCzQhy9svoHfh8AABj
+A user disconnected : 9hZdQ04RhHlw-Zz8AABk
+Game cleanup task stopped
+Registry cleaned up
+
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (4)[39m
+[2m   Start at [22m 15:13:57
+[2m   Duration [22m 26.80s[2m (tests 50%, transform 37%, import 12%)[22m
+
+[2m  Transform [22m [33mtransforming modules took 9.71s[39m[2m · 37% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m
+

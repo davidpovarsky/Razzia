@@ -1,0 +1,983 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.acceptance.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.acceptance.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-12-route-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-acceptance.spec.ts",
+          "tds-site.spec.ts",
+          "tds-site-layout.spec.ts",
+          "tds-site-account.spec.ts"
+        ],
+        "timeout": 150000
+      },
+      {
+        "outputDir": "/evidence/phase-12-route-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-acceptance.spec.ts",
+          "tds-site.spec.ts",
+          "tds-site-layout.spec.ts",
+          "tds-site-account.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-12-route-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-acceptance.spec.ts",
+          "tds-site.spec.ts",
+          "tds-site-layout.spec.ts",
+          "tds-site-account.spec.ts"
+        ],
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-12-route-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-acceptance.spec.ts",
+          "tds-site.spec.ts",
+          "tds-site-layout.spec.ts",
+          "tds-site-account.spec.ts"
+        ],
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-12-routes.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-acceptance.spec.ts",
+      "file": "tds-acceptance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "historical Razzia theme keeps its own viewport while fifty participants use canonical host management",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5336,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:26:49.894Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-28e9ca3743450269ecc3",
+          "file": "tds-acceptance.spec.ts",
+          "line": 12,
+          "column": 1
+        },
+        {
+          "title": "public routes, six viewport sizes and scoped title retain lazy entry and real navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4653,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:26:55.379Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "local-entry-performance",
+                      "contentType": "application/json",
+                      "body": "eyJyZWFkeU1zIjo1NzgsInJlc291cmNlcyI6W3sicGF0aCI6Ii9hc3NldHMvaW5kZXgtRDRzQmoydzEuanMiLCJkZWNvZGVkQnl0ZXMiOjIxODM0OX0seyJwYXRoIjoiL2Fzc2V0cy9yb2xsZG93bi1ydW50aW1lLWhlUFc4MFZMLmpzIiwiZGVjb2RlZEJ5dGVzIjo3MTZ9LHsicGF0aCI6Ii9hc3NldHMvZGlzdC1EcEJCOEMtbS5qcyIsImRlY29kZWRCeXRlcyI6NzYzMzR9LHsicGF0aCI6Ii9hc3NldHMvbG9jYWxlcy1CSmFoN0lobS5qcyIsImRlY29kZWRCeXRlcyI6NTY4ODgwfSx7InBhdGgiOiIvYXNzZXRzL3BsYXRmb3JtLWNvbnRyb2xzLURmdlIyQmtHLmpzIiwiZGVjb2RlZEJ5dGVzIjoxMjI5MzR9LHsicGF0aCI6Ii9hc3NldHMvUXVlcnlDbGllbnRQcm92aWRlci1DMjlWdENOYS5qcyIsImRlY29kZWRCeXRlcyI6MTE5MjN9LHsicGF0aCI6Ii9hc3NldHMvQ2FyZC1CcVV0Uy1Scy5qcyIsImRlY29kZWRCeXRlcyI6MzI4fSx7InBhdGgiOiIvYXNzZXRzL3NvY2tldC1jb250ZXh0LTRMeGhpVEwxLmpzIiwiZGVjb2RlZEJ5dGVzIjo0Mjc0M30seyJwYXRoIjoiL2Fzc2V0cy9saW5rLVJjYkpUOTAyLmpzIiwiZGVjb2RlZEJ5dGVzIjo1OTQ1Nn0seyJwYXRoIjoiL2Fzc2V0cy91c2VNYXRjaC1MY215QjdHVy5qcyIsImRlY29kZWRCeXRlcyI6MTU5Mn0seyJwYXRoIjoiL2Fzc2V0cy9jaXJjbGUteC1DZ2NxWVhwZy5qcyIsImRlY29kZWRCeXRlcyI6NDc3fSx7InBhdGgiOiIvYXNzZXRzL3ByZWxvYWQtaGVscGVyLUM4TzdDa3ZoLmpzIiwiZGVjb2RlZEJ5dGVzIjo4NjY2fSx7InBhdGgiOiIvYXNzZXRzL3F1ZXJ5LXNEX25Ka2FELmpzIiwiZGVjb2RlZEJ5dGVzIjo3NjIyfSx7InBhdGgiOiIvYXNzZXRzL211dGF0aW9uLUQ1U1M0S0dELmpzIiwiZGVjb2RlZEJ5dGVzIjozNDUwfSx7InBhdGgiOiIvYXNzZXRzL19fcm9vdC1DS0d3MHJDMi5qcyIsImRlY29kZWRCeXRlcyI6MTg0MTV9LHsicGF0aCI6Ii9hc3NldHMvY2xpZW50LTY3RGNzeENnLmpzIiwiZGVjb2RlZEJ5dGVzIjoxMTQwfSx7InBhdGgiOiIvYXNzZXRzL01hcmtldGluZ1NpdGUtRDE2ejlwejIuanMiLCJkZWNvZGVkQnl0ZXMiOjkxMDIzfSx7InBhdGgiOiIvYXNzZXRzL3VzZVJvdXRlclN0YXRlLUNSY3BoV3dLLmpzIiwiZGVjb2RlZEJ5dGVzIjoyMDJ9LHsicGF0aCI6Ii9hc3NldHMvYXJyb3ctcmlnaHQtRGgzQVl3LW8uanMiLCJkZWNvZGVkQnl0ZXMiOjE5M30seyJwYXRoIjoiL2Fzc2V0cy9wbGF0Zm9ybS1DQno4YkppMC5qcyIsImRlY29kZWRCeXRlcyI6NTk4N30seyJwYXRoIjoiL2Fzc2V0cy9wb3J0YWwtVWJnbENtRXEuanMiLCJkZWNvZGVkQnl0ZXMiOjc5MzQ2fSx7InBhdGgiOiIvYXNzZXRzL3BsYXktQXh0VEZFR3guanMiLCJkZWNvZGVkQnl0ZXMiOjIxOH0seyJwYXRoIjoiL2Fzc2V0cy9zZWFyY2gtRENlTndNOWsuanMiLCJkZWNvZGVkQnl0ZXMiOjMyN30seyJwYXRoIjoiL2Fzc2V0cy9TaXRlTGluay1CV3Ezbl8xMy5qcyIsImRlY29kZWRCeXRlcyI6NTA1fSx7InBhdGgiOiIvYXNzZXRzL1NpdGVCdXR0b24tRDdVMkpsaE0uanMiLCJkZWNvZGVkQnl0ZXMiOjI2NX0seyJwYXRoIjoiL2Fzc2V0cy9wbGF0Zm9ybS11aS05WXpfZVc5RC5qcyIsImRlY29kZWRCeXRlcyI6MTYzMDN9LHsicGF0aCI6Ii9hc3NldHMvZGlzdC0wcENkRnJ0Ti5qcyIsImRlY29kZWRCeXRlcyI6NDI5N30seyJwYXRoIjoiL2Fzc2V0cy9SZWZlcmVuY2VDYW52YXMtQldGOFJuTXcuanMiLCJkZWNvZGVkQnl0ZXMiOjkzNjUzfSx7InBhdGgiOiIvYXNzZXRzL3JlYWN0LUNUOFdrMHFLLmpzIiwiZGVjb2RlZEJ5dGVzIjoxMjY1MDV9XSwic2NvcGUiOiJTaW5nbGUgbG9jYWwgdW50aHJvdHRsZWQgc2FtcGxlOyBub3QgYSBwaHlzaWNhbC1kZXZpY2Ugb3IgcHJvZHVjdGlvbiBsYXRlbmN5IGJlbmNobWFyayJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-801a35a10ecd2a3d6c77",
+          "file": "tds-acceptance.spec.ts",
+          "line": 65,
+          "column": 1
+        },
+        {
+          "title": "owned Studio routes, loading/error/empty recovery, legacy redirect and read-only editor keep real state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9389,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:00.052Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-eb685357f43e16a307e1",
+          "file": "tds-acceptance.spec.ts",
+          "line": 140,
+          "column": 1
+        },
+        {
+          "title": "touch tablet portrait/landscape, keyboard and 200% CSS zoom retain Studio controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3616,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:09.460Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-9725a541acf8454f3e71",
+          "file": "tds-acceptance.spec.ts",
+          "line": 222,
+          "column": 1
+        },
+        {
+          "title": "historical Razzia theme keeps its own viewport while fifty participants use canonical host management",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12670,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:53.502Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-b755188d3f1508a792b6",
+          "file": "tds-acceptance.spec.ts",
+          "line": 12,
+          "column": 1
+        },
+        {
+          "title": "public routes, six viewport sizes and scoped title retain lazy entry and real navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24616,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:28:06.317Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "local-entry-performance",
+                      "contentType": "application/json",
+                      "body": "eyJyZWFkeU1zIjoxNjIwLCJyZXNvdXJjZXMiOlt7InBhdGgiOiIvYXNzZXRzL2luZGV4LUQ0c0JqMncxLmpzIiwiZGVjb2RlZEJ5dGVzIjoyMTgzNDl9LHsicGF0aCI6Ii9hc3NldHMvcm9sbGRvd24tcnVudGltZS1oZVBXODBWTC5qcyIsImRlY29kZWRCeXRlcyI6NzE2fSx7InBhdGgiOiIvYXNzZXRzL0NhcmQtQnFVdFMtUnMuanMiLCJkZWNvZGVkQnl0ZXMiOjMyOH0seyJwYXRoIjoiL2Fzc2V0cy9kaXN0LURwQkI4Qy1tLmpzIiwiZGVjb2RlZEJ5dGVzIjo3NjMzNH0seyJwYXRoIjoiL2Fzc2V0cy9RdWVyeUNsaWVudFByb3ZpZGVyLUMyOVZ0Q05hLmpzIiwiZGVjb2RlZEJ5dGVzIjoxMTkyM30seyJwYXRoIjoiL2Fzc2V0cy9zb2NrZXQtY29udGV4dC00THhoaVRMMS5qcyIsImRlY29kZWRCeXRlcyI6NDI3NDN9LHsicGF0aCI6Ii9hc3NldHMvY2lyY2xlLXgtQ2djcVlYcGcuanMiLCJkZWNvZGVkQnl0ZXMiOjQ3N30seyJwYXRoIjoiL2Fzc2V0cy91c2VNYXRjaC1MY215QjdHVy5qcyIsImRlY29kZWRCeXRlcyI6MTU5Mn0seyJwYXRoIjoiL2Fzc2V0cy9wbGF0Zm9ybS1jb250cm9scy1EZnZSMkJrRy5qcyIsImRlY29kZWRCeXRlcyI6MTIyOTM0fSx7InBhdGgiOiIvYXNzZXRzL2xpbmstUmNiSlQ5MDIuanMiLCJkZWNvZGVkQnl0ZXMiOjU5NDU2fSx7InBhdGgiOiIvYXNzZXRzL3ByZWxvYWQtaGVscGVyLUM4TzdDa3ZoLmpzIiwiZGVjb2RlZEJ5dGVzIjo4NjY2fSx7InBhdGgiOiIvYXNzZXRzL2xvY2FsZXMtQkphaDdJaG0uanMiLCJkZWNvZGVkQnl0ZXMiOjU2ODg4MH0seyJwYXRoIjoiL2Fzc2V0cy9xdWVyeS1zRF9uSmthRC5qcyIsImRlY29kZWRCeXRlcyI6NzYyMn0seyJwYXRoIjoiL2Fzc2V0cy9tdXRhdGlvbi1ENVNTNEtHRC5qcyIsImRlY29kZWRCeXRlcyI6MzQ1MH0seyJwYXRoIjoiL2Fzc2V0cy9fX3Jvb3QtQ0tHdzByQzIuanMiLCJkZWNvZGVkQnl0ZXMiOjE4NDE1fSx7InBhdGgiOiIvYXNzZXRzL2NsaWVudC02N0Rjc3hDZy5qcyIsImRlY29kZWRCeXRlcyI6MTE0MH0seyJwYXRoIjoiL2Fzc2V0cy9NYXJrZXRpbmdTaXRlLUQxNno5cHoyLmpzIiwiZGVjb2RlZEJ5dGVzIjo5MTAyM30seyJwYXRoIjoiL2Fzc2V0cy91c2VSb3V0ZXJTdGF0ZS1DUmNwaFd3Sy5qcyIsImRlY29kZWRCeXRlcyI6MjAyfSx7InBhdGgiOiIvYXNzZXRzL2Fycm93LXJpZ2h0LURoM0FZdy1vLmpzIiwiZGVjb2RlZEJ5dGVzIjoxOTN9LHsicGF0aCI6Ii9hc3NldHMvcGxhdGZvcm0tQ0J6OGJKaTAuanMiLCJkZWNvZGVkQnl0ZXMiOjU5ODd9LHsicGF0aCI6Ii9hc3NldHMvcG9ydGFsLVViZ2xDbUVxLmpzIiwiZGVjb2RlZEJ5dGVzIjo3OTM0Nn0seyJwYXRoIjoiL2Fzc2V0cy9wbGF5LUF4dFRGRUd4LmpzIiwiZGVjb2RlZEJ5dGVzIjoyMTh9LHsicGF0aCI6Ii9hc3NldHMvc2VhcmNoLURDZU53TTlrLmpzIiwiZGVjb2RlZEJ5dGVzIjozMjd9LHsicGF0aCI6Ii9hc3NldHMvU2l0ZUxpbmstQldxM25fMTMuanMiLCJkZWNvZGVkQnl0ZXMiOjUwNX0seyJwYXRoIjoiL2Fzc2V0cy9TaXRlQnV0dG9uLUQ3VTJKbGhNLmpzIiwiZGVjb2RlZEJ5dGVzIjoyNjV9LHsicGF0aCI6Ii9hc3NldHMvZGlzdC0wcENkRnJ0Ti5qcyIsImRlY29kZWRCeXRlcyI6NDI5N30seyJwYXRoIjoiL2Fzc2V0cy9wbGF0Zm9ybS11aS05WXpfZVc5RC5qcyIsImRlY29kZWRCeXRlcyI6MTYzMDN9LHsicGF0aCI6Ii9hc3NldHMvUmVmZXJlbmNlQ2FudmFzLUJXRjhSbk13LmpzIiwiZGVjb2RlZEJ5dGVzIjo5MzY1M30seyJwYXRoIjoiL2Fzc2V0cy9yZWFjdC1DVDhXazBxSy5qcyIsImRlY29kZWRCeXRlcyI6MTI2NTA1fV0sInNjb3BlIjoiU2luZ2xlIGxvY2FsIHVudGhyb3R0bGVkIHNhbXBsZTsgbm90IGEgcGh5c2ljYWwtZGV2aWNlIG9yIHByb2R1Y3Rpb24gbGF0ZW5jeSBiZW5jaG1hcmsifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-16250f7e587958303e02",
+          "file": "tds-acceptance.spec.ts",
+          "line": 65,
+          "column": 1
+        },
+        {
+          "title": "owned Studio routes, loading/error/empty recovery, legacy redirect and read-only editor keep real state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23997,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:28:30.976Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-970af122a0091fa9a306",
+          "file": "tds-acceptance.spec.ts",
+          "line": 140,
+          "column": 1
+        },
+        {
+          "title": "touch tablet portrait/landscape, keyboard and 200% CSS zoom retain Studio controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9280,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:28:54.998Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "313a451f4fe6e5dacaa1-5898b9d07f62add23298",
+          "file": "tds-acceptance.spec.ts",
+          "line": 222,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tds-site-account.spec.ts",
+      "file": "tds-site-account.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "account config stays authoritative over cached capacity and exposes genuine unavailable status",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3649,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:13.103Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f20d915abaf7cd7265fb-97897d1fa5d5669c092a",
+          "file": "tds-site-account.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "account config stays authoritative over cached capacity and exposes genuine unavailable status",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9110,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:29:04.331Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f20d915abaf7cd7265fb-83182d8200f666de12f0",
+          "file": "tds-site-account.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tds-site-layout.spec.ts",
+      "file": "tds-site-layout.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real gallery/list covers retain 16:9 and one creation CTA across responsive widths",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5022,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:16.779Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9748ee4df4ea5942c825-47dcc6197de3a841e664",
+          "file": "tds-site-layout.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "all eight locale labels, compact account and real unavailable billing state remain usable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10951,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:21.826Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9748ee4df4ea5942c825-e93a53ee2c6f2e8b0957",
+          "file": "tds-site-layout.spec.ts",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "title": "marketing demo exposes choose then reveal then replay with explicit synthetic disclosure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1591,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:32.806Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9748ee4df4ea5942c825-575d92fbde8f3f07aa8f",
+          "file": "tds-site-layout.spec.ts",
+          "line": 129,
+          "column": 1
+        },
+        {
+          "title": "real gallery/list covers retain 16:9 and one creation CTA across responsive widths",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17197,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:29:13.477Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9748ee4df4ea5942c825-de294f685b2522002f26",
+          "file": "tds-site-layout.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "all eight locale labels, compact account and real unavailable billing state remain usable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 25154,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:29:30.693Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9748ee4df4ea5942c825-c627eb37eb3b96f21994",
+          "file": "tds-site-layout.spec.ts",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "title": "marketing demo exposes choose then reveal then replay with explicit synthetic disclosure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4951,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:29:55.873Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9748ee4df4ea5942c825-23f44faff82f49332537",
+          "file": "tds-site-layout.spec.ts",
+          "line": 129,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tds-site.spec.ts",
+      "file": "tds-site.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real duplicate and all four export handlers retain formats and import preflight",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9322,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:34.430Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "137195d1248d4dc5b81f-aa2ff5d9d5be1f1a297b",
+          "file": "tds-site.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5124,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:43.762Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "137195d1248d4dc5b81f-66e6498191a57829ccb0",
+          "file": "tds-site.spec.ts",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "title": "advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3728,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:27:48.901Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "137195d1248d4dc5b81f-469114da31b1186591ff",
+          "file": "tds-site.spec.ts",
+          "line": 147,
+          "column": 1
+        },
+        {
+          "title": "real duplicate and all four export handlers retain formats and import preflight",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18415,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:30:00.863Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "137195d1248d4dc5b81f-8fce624018216ad04ffb",
+          "file": "tds-site.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:30:19.305Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "137195d1248d4dc5b81f-67b4ab6b72036345b0cf",
+          "file": "tds-site.spec.ts",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "title": "advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9514,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:30:32.433Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "137195d1248d4dc5b81f-8512b0d35bb1a692b7b9",
+          "file": "tds-site.spec.ts",
+          "line": 147,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T23:26:41.835Z",
+    "duration": 240436.913,
+    "expected": 22,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

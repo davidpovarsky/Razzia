@@ -1,0 +1,33 @@
+{
+  "installed_graph_sha256": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+  "product_head": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+  "reason": "Same85e product source, unchanged root/private locks and exact installed-graph log hash. Only5 previously omitted natural parent-config imports were added to the QA view; private sources and graph unchanged. Reuse identical-SHA receipts; do not rerun41 cases.",
+  "results": {
+    "private-tests": {
+      "command": [
+        "pnpm",
+        "--dir",
+        "extensions/src/mcp-app",
+        "test"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "7e3d68ef4bdbc788e315a812f1470cafc14da77f3a505a6d0eca5a353a69b62f",
+      "seconds": 27.52
+    },
+    "private-types": {
+      "command": [
+        "pnpm",
+        "--dir",
+        "extensions/src/mcp-app",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "70685b4df7789c854b9e1ceab7d78a6d0f9a0831c11eb0010b7b5fdbe0e50c39",
+      "seconds": 16.701
+    }
+  },
+  "source": "run-r6 actual freshly installed root graph"
+}

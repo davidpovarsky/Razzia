@@ -1,5 +1,9 @@
 import { defineConfig, devices } from "@playwright/test"
-import { CONFIG_PATH, MANAGER_PASSWORD } from "@razzia/e2e/utils/constants"
+import {
+  CONFIG_PATH,
+  MANAGER_PASSWORD,
+  TZILA_PILOT_SECRET,
+} from "@razzia/e2e/utils/constants"
 import fs from "fs"
 import { join } from "path"
 
@@ -17,6 +21,8 @@ if (!process.env.TEST_WORKER_INDEX) {
 
 export default defineConfig({
   testDir: "tests",
+  // The remote theme lab requires its explicit seed receipt and dedicated config.
+  testIgnore: "**/theme-lab.spec.ts",
   outputDir: "test-results",
   timeout: 90_000,
   expect: { timeout: 20_000 },
@@ -40,16 +46,21 @@ export default defineConfig({
       env: {
         CONFIG_PATH,
         MANAGER_PASSWORD,
+        TADA_PILOT_SECRET: TZILA_PILOT_SECRET,
         JWT_SECRET: "e2e-secret-that-is-at-least-32-characters",
         GAME_SPEED: "10",
       },
     },
     {
       command:
-        "node node_modules/vite/bin/vite.js build && node node_modules/vite/bin/vite.js preview --strictPort",
+        "node --experimental-strip-types node_modules/vite/bin/vite.js build && node node_modules/vite/bin/vite.js preview --strictPort",
       cwd: join(root, "packages/web"),
       url: "http://localhost:3000",
       reuseExistingServer: false,
+      env: {
+        CONFIG_PATH,
+        NODE_OPTIONS: "--experimental-strip-types",
+      },
     },
   ],
 })

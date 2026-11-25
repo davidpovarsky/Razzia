@@ -1,0 +1,526 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.motion.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.motion.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-10-motion-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-motion.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/evidence/phase-10-motion-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-motion.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-10-motion-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-motion.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4330",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-10-motion-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-motion.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4330",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-10-motion.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js --config ../../extensions/tds.fixture.vite.config.ts",
+      "env": {
+        "TDS_FIXTURE": "components"
+      },
+      "url": "http://127.0.0.1:4330",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "tds-motion.spec.ts",
+      "file": "tds-motion.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "menu reentry during submenu exit keeps the newly opened menu active",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7713,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('menuitem', { name: 'host first action', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('menuitem', { name: 'host first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'host first action', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('menuitem', { name: 'host first action', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('menuitem', { name: 'host first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'host first action', exact: true })\u001b[22m\n\n    at /cleanup/extensions/qa/tds-motion.spec.ts:45:9",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-motion.spec.ts",
+                      "column": 9,
+                      "line": 45
+                    },
+                    "snippet": "  43 |           exact: true,\n  44 |         }),\n> 45 |       ).toBeVisible()\n     |         ^\n  46 |       await page.keyboard.press(\"Escape\")\n  47 |       await expect(page.getByRole(\"menu\")).toHaveCount(0)\n  48 |       await expect(trigger).toBeFocused()"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-motion.spec.ts",
+                        "column": 9,
+                        "line": 45
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('menuitem', { name: 'host first action', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('menuitem', { name: 'host first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'host first action', exact: true })\u001b[22m\n\n\n  43 |           exact: true,\n  44 |         }),\n> 45 |       ).toBeVisible()\n     |         ^\n  46 |       await page.keyboard.press(\"Escape\")\n  47 |       await expect(page.getByRole(\"menu\")).toHaveCount(0)\n  48 |       await expect(trigger).toBeFocused()\n    at /cleanup/extensions/qa/tds-motion.spec.ts:45:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:09:50.405Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-motion.spec.ts",
+                    "column": 9,
+                    "line": 45
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-0f8ce0bce87be1353613",
+          "file": "tds-motion.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8271,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:09:59.129Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-416daea4843d2761a868",
+          "file": "tds-motion.spec.ts",
+          "line": 53,
+          "column": 1
+        },
+        {
+          "title": "reopening during dialog exit cancels stale dismissal in both portal contexts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3351,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:10:07.576Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-09a627d6347b1e6a3486",
+          "file": "tds-motion.spec.ts",
+          "line": 183,
+          "column": 1
+        },
+        {
+          "title": "reduced motion removes platform animation without changing keyboard state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2142,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:10:10.953Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-0502e4880bb383c0f311",
+          "file": "tds-motion.spec.ts",
+          "line": 210,
+          "column": 1
+        },
+        {
+          "title": "menu reentry during submenu exit keeps the newly opened menu active",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 24986,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\n    at /cleanup/extensions/qa/tds-motion.spec.ts:45:9",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-motion.spec.ts",
+                      "column": 9,
+                      "line": 45
+                    },
+                    "snippet": "  43 |           exact: true,\n  44 |         }),\n> 45 |       ).toBeVisible()\n     |         ^\n  46 |       await page.keyboard.press(\"Escape\")\n  47 |       await expect(page.getByRole(\"menu\")).toHaveCount(0)\n  48 |       await expect(trigger).toBeFocused()"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-motion.spec.ts",
+                        "column": 9,
+                        "line": 45
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('menuitem', { name: 'site first action', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menuitem', { name: 'site first action', exact: true })\u001b[22m\n\n\n  43 |           exact: true,\n  44 |         }),\n> 45 |       ).toBeVisible()\n     |         ^\n  46 |       await page.keyboard.press(\"Escape\")\n  47 |       await expect(page.getByRole(\"menu\")).toHaveCount(0)\n  48 |       await expect(trigger).toBeFocused()\n    at /cleanup/extensions/qa/tds-motion.spec.ts:45:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:10:13.745Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-10-motion-traces/tds-motion-menu-reentry-du-e3ca1-he-newly-opened-menu-active-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-motion.spec.ts",
+                    "column": 9,
+                    "line": 45
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-1f55d25aed23a1445df2",
+          "file": "tds-motion.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22326,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:10:39.775Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-b605fb65198eda2831f4",
+          "file": "tds-motion.spec.ts",
+          "line": 53,
+          "column": 1
+        },
+        {
+          "title": "reopening during dialog exit cancels stale dismissal in both portal contexts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5853,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:11:02.252Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-b1a9a1656e13578b007e",
+          "file": "tds-motion.spec.ts",
+          "line": 183,
+          "column": 1
+        },
+        {
+          "title": "reduced motion removes platform animation without changing keyboard state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4952,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:11:08.122Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c99ae2f8b1da0b0851d3-84bc2704b01b3fb29f9e",
+          "file": "tds-motion.spec.ts",
+          "line": 210,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T23:09:48.429Z",
+    "duration": 84816.216,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "owned_source_evidence_fixture_blocks_bytes": 35463168,
+  "owned_container_bookkeeping_bytes": 1007616,
+  "combined_measured_owned_bytes": 36470784,
+  "physical_total_cap_bytes": 67108864,
+  "free_host_bytes": 2868477952,
+  "reserve_bytes": 2147483648,
+  "running_owned_containers": [
+    "/integrator-root-85e-20261115-metadata-keeper"
+  ],
+  "small_docker_local_volume_option_metadata_not_individually_attributed": true
+}

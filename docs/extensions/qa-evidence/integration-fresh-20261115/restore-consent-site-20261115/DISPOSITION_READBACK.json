@@ -1,0 +1,28 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "completed": false,
+    "modified_at": "2026-11-15T18:16:33.122Z",
+    "exactPreservedNotesReadback": true
+  },
+  "handoffs": [
+    {
+      "lane": "D",
+      "delivered": true
+    },
+    {
+      "lane": "A",
+      "delivered": true
+    },
+    {
+      "lane": "E",
+      "delivered": true
+    },
+    {
+      "lane": "F",
+      "delivered": true
+    }
+  ],
+  "FTestPendingActualCommittedEClient": true,
+  "noPeriodicPolling": true
+}

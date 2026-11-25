@@ -1,0 +1,28 @@
+{
+  "source": "Linux pin preparation tadazz-editor-pins-41b546a3a300-77821a48",
+  "manifestSha256": "7c21e991be4126b11470b819a9706039c4d17219e7fe73403cde0948bcff25dc",
+  "manifestUnchanged": true,
+  "files": {
+    "renderer.mjs": {
+      "bytes": 2570157,
+      "sha256": "5d434a876a9974adbd2db617ea5b6518b26549602823ed5ed758d95f8da57ea2"
+    },
+    "renderer.css": {
+      "bytes": 453992,
+      "sha256": "175e926448f583a07839bf34ae4592f3951e5e27ba08a036fc86ef30fa779e26"
+    },
+    "artifact.json": {
+      "bytes": 861534,
+      "sha256": "0ac7c77047395983b2c808676a645ec2192f8637fc581946f840aa16b9810493"
+    },
+    "registry.json": {
+      "bytes": 101346,
+      "sha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f"
+    },
+    "verification.json": {
+      "bytes": 813,
+      "sha256": "473cdbaf95d4c1f8e2569cc856ec9dea5fb1431012fa9ad8ab6323f058499265"
+    }
+  },
+  "releaseQualification": false
+}

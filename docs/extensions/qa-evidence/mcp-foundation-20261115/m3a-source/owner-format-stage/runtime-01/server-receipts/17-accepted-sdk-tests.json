@@ -1,0 +1,29 @@
+{
+  "command": [
+    "node",
+    "/ram/work-corrected/extensions/src/mcp-app/node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "--test",
+    "--test-concurrency=1",
+    "tests/server/access-token.nodecheck.ts",
+    "tests/server/authorization.nodecheck.ts",
+    "tests/server/boundaries.nodecheck.ts",
+    "tests/server/canonical.nodecheck.ts",
+    "tests/server/drafts.nodecheck.ts",
+    "tests/server/http.nodecheck.ts",
+    "tests/server/ingress.nodecheck.ts",
+    "tests/server/integrity.nodecheck.ts",
+    "tests/server/lifecycle.nodecheck.ts",
+    "tests/server/protocol.nodecheck.ts",
+    "tests/server/replay.nodecheck.ts",
+    "tests/server/send.nodecheck.ts"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 69.596,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 7826,
+  "logSha256": "188f07114ad85915a96fb18d2619c8bfccaae96dad5c99cf630054538a1f1087"
+}

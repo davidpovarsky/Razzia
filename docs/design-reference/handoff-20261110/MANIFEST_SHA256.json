@@ -1,0 +1,249 @@
+{
+  "package": "TADAZZ_AGENT_HANDOFF_WITH_HTML_20261110",
+  "created_utc": "2026-11-10T11:45:02.077148+00:00",
+  "purpose": "Agent prompt and original design sources for downstream-only unified TADAZZ integration",
+  "source_branch_observed": "feat/tadazz-site-library-parity-20261110",
+  "source_commit_observed": "08ddc42",
+  "files": [
+    {
+      "path": "TADAZZ_UNIFIED_SITE_AGENT_PROMPT.md",
+      "size": 23483,
+      "sha256": "a197973564b154cd717a764fe4ac035911cf262c46d0c3644f5a640aa53796d4"
+    },
+    {
+      "path": "README_FIRST.md",
+      "size": 1252,
+      "sha256": "c0f3f222d6eeba7fdea479e31b896cbadbb026be007d99e66205b864efa3a6ca"
+    },
+    {
+      "path": "documentation/ARCHITECTURE.md",
+      "size": 2442,
+      "sha256": "974a35668186a4d1a9e77bd691a6fdc554af45a7639ff6fc415a4029232d2137"
+    },
+    {
+      "path": "documentation/COMPONENT_SOURCES.md",
+      "size": 10058,
+      "sha256": "4ae3017989b998ab2b12a692d5fb49090a431ee571b2ead28f44aa6dbee91b68"
+    },
+    {
+      "path": "documentation/DEPLOYED_STATIC_PREVIEW_HISTORICAL.md",
+      "size": 4484,
+      "sha256": "6968498f456491f724172ac417d68c60c3864b298aa478e4f5740d3b1cd9f864"
+    },
+    {
+      "path": "documentation/DESIGN_LANGUAGE.md",
+      "size": 2403,
+      "sha256": "bab8373ac04fbe6624f34597744bf9f3b21650b4844206b4da3d0eeacc566d4e"
+    },
+    {
+      "path": "documentation/FILE_OWNERSHIP_HISTORICAL.md",
+      "size": 5817,
+      "sha256": "b348785d7664d65340cb11d8a671db140cdb18f9ca1913542ba1c1d00c76f88f"
+    },
+    {
+      "path": "documentation/IMPLEMENTATION_STATUS_HISTORICAL.md",
+      "size": 4344,
+      "sha256": "7b7feb849387fe22930bcda3004db63020bfed9e00b9d4acf05b9163747f4687"
+    },
+    {
+      "path": "documentation/INTEGRATION_CONTRACT.md",
+      "size": 4343,
+      "sha256": "1c861df92f07fc21480ec438562cae8d402b523593200a572142d858e8a85cff"
+    },
+    {
+      "path": "documentation/INTEGRATION_POINTS.md",
+      "size": 9198,
+      "sha256": "8c9d674a321f636101362d8fcc89575108a8ceb05fbbf4ec46219cf91a234642"
+    },
+    {
+      "path": "documentation/UNIFIED_SITE_INTEGRATION.md",
+      "size": 8915,
+      "sha256": "baac6d7d45dc5a7040884c38f4f85b31533176b2f9d7e4effbe22727c2be0c4a"
+    },
+    {
+      "path": "documentation/WORKING_RULES.md",
+      "size": 2377,
+      "sha256": "e4e52b6550cd55ab8a258b7589b00f58a34a83ce3bf526427d0e8970ca759675"
+    },
+    {
+      "path": "existing-implementation/ReferenceCanvas.tsx",
+      "size": 1647,
+      "sha256": "bb53842ec07a0cc1b9c031ba2b7c0f95c6e499540afa1027b8c54efd29364304"
+    },
+    {
+      "path": "existing-implementation/SiteAccountGateway.tsx",
+      "size": 13576,
+      "sha256": "f6764e9b860a6e12d2f3e1997e4c3058aae7bb2dc522145dd05dfde4f687b6e3"
+    },
+    {
+      "path": "existing-implementation/SitePreview.tsx",
+      "size": 45658,
+      "sha256": "4494f5cfd11778e51e1fcbe1561fdeffcd6476059eb5d8d265cdf9e208e39456"
+    },
+    {
+      "path": "existing-implementation/components/HoverDevTiltCard.tsx",
+      "size": 2415,
+      "sha256": "1a4b8103acaf3d73af6a69233f0fa86b25fcfc46159a8908a608900d8c456780"
+    },
+    {
+      "path": "existing-implementation/components/MagicBorderBeam.tsx",
+      "size": 3054,
+      "sha256": "71b1552af016015687ef8cf0c788c972c849da6911ef2a328f88adfeaebc3095"
+    },
+    {
+      "path": "existing-implementation/routes/index.tsx",
+      "size": 218,
+      "sha256": "1522dd9e209dc055ef81ee88d55371a25ccbf8349a7d3fc3d321999c1707162b"
+    },
+    {
+      "path": "existing-implementation/routes/login.tsx",
+      "size": 267,
+      "sha256": "9ad2bd7a2cb6630e951a794caeb806efae335ddd4d5660ca65fb6a3dda2d98f2"
+    },
+    {
+      "path": "existing-implementation/routes/signup.tsx",
+      "size": 271,
+      "sha256": "c93da54cbaf30028255e26fe1c85c60f0d44a7a3152dc65eb2904ea4a48241fa"
+    },
+    {
+      "path": "existing-implementation/routes/studio.tsx",
+      "size": 221,
+      "sha256": "2e91d1b28b166bb6c792174ae1dac5cb4e63500599a3530eee3c98e893c41ec8"
+    },
+    {
+      "path": "existing-implementation/tadazz-preview.vite.config.ts",
+      "size": 405,
+      "sha256": "075ab2d9560e292ea82b3a757ff6ed0c6b2423bfa713e422d290de911ea0bd24"
+    },
+    {
+      "path": "existing-implementation/tadazz-standalone-preview-main.tsx",
+      "size": 1324,
+      "sha256": "5ae7ba2d13daf2cfd00f870a92068985febe1ab26bb79f07489e79fed0a9c43c"
+    },
+    {
+      "path": "reference/TADAZZ-Animated-Modern.html",
+      "size": 1185298,
+      "sha256": "4414d32c0e8f5b87519470d824ff72325bd0041776060c21c09ec9300acb7e0f"
+    },
+    {
+      "path": "reference/TADAZZ-My-Studio-Modern.html",
+      "size": 2916862,
+      "sha256": "f054e110766b7a21798de4e3efffdad8939127bab9846c8d8a6fba2b75c169a7"
+    },
+    {
+      "path": "reference/asset-manifest.json",
+      "size": 3181,
+      "sha256": "7e731359793f8c1ea178799e1acbe12a276ec7fd778d64aeab4e2f4af00494a3"
+    },
+    {
+      "path": "reference/design_assets/marketing-exclaim.webp",
+      "size": 19460,
+      "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1"
+    },
+    {
+      "path": "reference/design_assets/marketing-icons.svg",
+      "size": 3571,
+      "sha256": "bca131a95be247ba5789580406e85bc70ee8859e2268fd0d48052083a14d9b9a"
+    },
+    {
+      "path": "reference/design_assets/marketing-logo.webp",
+      "size": 187692,
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+    },
+    {
+      "path": "reference/design_assets/marketing-questions.webp",
+      "size": 79910,
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+    },
+    {
+      "path": "reference/design_assets/marketing-rays.webp",
+      "size": 35080,
+      "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4"
+    },
+    {
+      "path": "reference/design_assets/marketing-stage.webp",
+      "size": 242306,
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+    },
+    {
+      "path": "reference/design_assets/marketing-worlds.webp",
+      "size": 56520,
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+    },
+    {
+      "path": "reference/design_assets/marketing-zb.webp",
+      "size": 53972,
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+    },
+    {
+      "path": "reference/design_assets/marketing-zl.webp",
+      "size": 48894,
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+    },
+    {
+      "path": "reference/design_assets/marketing.css",
+      "size": 72036,
+      "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309"
+    },
+    {
+      "path": "reference/design_assets/studio-blue.webp",
+      "size": 53972,
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+    },
+    {
+      "path": "reference/design_assets/studio-icons.svg",
+      "size": 3352,
+      "sha256": "f51ebefd4edfc2cd3cf4854b6257e76d9b4ece1ff4a9b75f56c555a51d9e807e"
+    },
+    {
+      "path": "reference/design_assets/studio-lime.webp",
+      "size": 48894,
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+    },
+    {
+      "path": "reference/design_assets/studio-logo.webp",
+      "size": 187692,
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+    },
+    {
+      "path": "reference/design_assets/studio-questions.webp",
+      "size": 79910,
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+    },
+    {
+      "path": "reference/design_assets/studio-stage.webp",
+      "size": 242306,
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+    },
+    {
+      "path": "reference/design_assets/studio-worlds.webp",
+      "size": 56520,
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+    },
+    {
+      "path": "reference/design_assets/studio.css",
+      "size": 1927702,
+      "sha256": "119e2a3edc6050f778e7db424bb9242bb3e0815f2535f0d3e42c01c32b7acea4"
+    },
+    {
+      "path": "reference/screenshots/marketing-reference-1440.png",
+      "size": 861287,
+      "sha256": "b3b0cf781243131a86b1262db88afad77e8eb0684e1417c86ac9c43b1615d6f4"
+    },
+    {
+      "path": "reference/screenshots/marketing-reference-mobile-390.png",
+      "size": 285832,
+      "sha256": "a1aaaedbbb3f6f7a9a7a3b822d4b32aefd24789b627db8ddf4ca0fba8c3f49ce"
+    },
+    {
+      "path": "reference/screenshots/studio-reference-1440.png",
+      "size": 943516,
+      "sha256": "2a6587cb43b514782500e76a9a2f8021f03f653fe2a86cf6f0f20cc17128164e"
+    },
+    {
+      "path": "reference/screenshots/studio-reference-mobile-390.png",
+      "size": 318644,
+      "sha256": "d7b3164471ca37b7e2fa282883388fdd708d020855dbf7435354d0155415315e"
+    }
+  ]
+}

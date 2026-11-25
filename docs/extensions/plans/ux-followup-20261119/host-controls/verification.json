@@ -1,0 +1,153 @@
+{
+  "verifiedAtUtc": "2026-11-19T14:24:15.466830+00:00",
+  "headAtVerification": "9318a764bd922b2c7970e4866b91d62ade9a1d40",
+  "workingTreeSource": true,
+  "syntheticOnly": true,
+  "productionDeployed": false,
+  "browser": {
+    "engine": "Chromium via installed Microsoft Edge",
+    "tests": 2,
+    "passed": 2,
+    "unexpected": 0,
+    "finalRunSeconds": 74.4,
+    "configuration": "packages/e2e/playwright.host-controls-followup.config.ts",
+    "fixtureAudio": "Real local MP3 bytes are served at an allowed synthetic /media URL; native HTMLAudioElement.play is observed, never mocked.",
+    "scope": "Historical full two-case browser run before the final screenKey hardening; retained without rerunning."
+  },
+  "units": {
+    "serverPublicDirectoryAndAudioPolicy": 20,
+    "frontendPublicLobbyProjection": 2
+  },
+  "types": {
+    "extensions": "pass",
+    "webApp": "pass"
+  },
+  "lint": {
+    "ownedProductAndTestFiles": 9,
+    "latestTestAndConfigFiles": 2,
+    "warnings": 0,
+    "errors": 0
+  },
+  "portsClosed": {
+    "3260": true,
+    "3261": true
+  },
+  "sourceSha256": {
+    "extensions/package.json": "d44bd3416954ee4526115929a0ad47285210b01fb9c377564c8d62ccae09a21e",
+    "extensions/src/presentation/audio-cue-player.tsx": "b3f7923282179e208bb7831aae77a9c9320ce42fc8e40c11ab412af162733c0f",
+    "packages/web/src/features/game/components/GameWrapper.tsx": "b54009be8e406afe2743432545712f2afefd03a15f17e32d0673ee00368948fd",
+    "packages/web/src/features/game/components/HostPlayersModal.tsx": "bb305343febb1ea775466cc9b13c38455bd96c19ced89aa0537499f8fb057698",
+    "packages/web/src/features/game/components/host-players-modal.css": "342f2ab25cb283c5467cbe2d1c20d806658ad74900352785894b1f16092ac7e3",
+    "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx": "5b91181012406a7365fbb427240820ccf149bdb39c781ade0f35eafbbaed0198",
+    "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx": "a527a4ec47a26b80e2e130beb0556ffe1ac6e0b0df149a1ddaffa6d488d2d26f",
+    "packages/web/src/features/game/components/tadazz-show/NativeAudioCuePlayer.tsx": "969858f681148d59c47fc736bbe6c5692a39e08bc3aa4fafbd005772ba3f0f5f",
+    "packages/web/src/features/game/components/tadazz-show/lobby-directory.ts": "6593c9c8062ab6153d2686f0150368b1dc89b5d6f8202a424cb09f813227e1d9",
+    "packages/web/src/features/game/components/tadazz-show/lobby-directory.test.ts": "27954ae17ae42db1ca4c92a4d223cb85cdfb04046a431ce5cdf3299011c65430",
+    "packages/e2e/tests/host-followup.spec.ts": "0b2190a7d80acd0490f0f6186e39cf8d54ab951fde3e21ae196366a406c9407a",
+    "packages/e2e/tests/browser-acceptance.spec.ts": "c806a847750d2b404bbe4d976896a2f818a62d1b0416a1a936b5d08f248ab60e",
+    "packages/e2e/playwright.host-controls-followup.config.ts": "c395855d9c8e109e451f98b7afb0c997f6604d23aae624150602282a019e7b02",
+    "extensions/qa/tds-roster.spec.ts": "8c352fd855a70e37de036c39caa03622288c1866f044e4fdc1a0e7cf5a370b34",
+    "extensions/src/locales/en/extensions.json": "ca59ffac5cb668dc3ed42d150d3231ed6e3daa7f4cd66a486998e8922ea5718a",
+    "extensions/src/locales/he/extensions.json": "92cf0f0a7358764597f828f4642b6e6a6d84ae9da07623c3231548860009ac01",
+    "extensions/src/locales/fr/extensions.json": "d5bc1a734e9bd316bf8099c21df405f8b8daf86ebd39975bbdb399db43421ede",
+    "extensions/src/locales/de/extensions.json": "47dba28b6041a8ba6d268277c7cd1beebf851f809419479b1d35552a36ef14b4",
+    "extensions/src/locales/es/extensions.json": "47f119800a22c046a67e1b2e4dcea018dd059de9beb40193fc7f6273d58a40ed",
+    "extensions/src/locales/it/extensions.json": "806256f9e8874621f30cb07d4069d838241767cfc4da5bf0ecc7ed3635ba4006",
+    "extensions/src/locales/ja/extensions.json": "552aa1e724acca81e672d58925f13463c9fa6ed1927ad99fb9583c773be47d1e",
+    "extensions/src/locales/tr/extensions.json": "98e47a2c615c93f8191fe071c819534e4e1c0f58550c63a4d2ab428ef3bcfc1d",
+    "extensions/src/locales/vi/extensions.json": "fe0f7b84be12e974bc123daa85e80e5b223e5ee2030deeb6ea679788a192a202",
+    "extensions/src/presentation/host-audio-scope.test-fixture.tsx": "346d8f5655d2318cdeecd36138cb7746988b6d5fb987e9bbe47a769ae1683771"
+  },
+  "visualReview": [
+    "roster-1440x900.png",
+    "roster-320-hebrew.png",
+    "host-directory-controls.png"
+  ],
+  "notes": [
+    "A 320px Hebrew filter-label clipping issue found by screenshot review was fixed and the entire focused browser suite rerun successfully.",
+    "Preliminary package export, fixture and interrupted browser attempts remain under work/host-followup-20261119; none are claimed as passes.",
+    "No real customer room, live participant or payment operation was used.",
+    "The final manual screen identity patch was verified with one focused browser regression, typed lint on its four files, and both actual TypeScript projects. The earlier full two-case browser run remains explicitly historical; no unnecessary full rerun was performed."
+  ],
+  "historicalSourceSha256": {
+    "verifiedAtUtc": "2026-11-19T14:05:54.404402+00:00",
+    "scope": "Full two-case browser run before the final manual-only screenKey hardening",
+    "hashes": {
+      "extensions/package.json": "d44bd3416954ee4526115929a0ad47285210b01fb9c377564c8d62ccae09a21e",
+      "extensions/src/presentation/audio-cue-player.tsx": "5716716d694897ec230f091eaed812f7d25ce4b33177c50de03ac2780bcb02ee",
+      "packages/web/src/features/game/components/GameWrapper.tsx": "b54009be8e406afe2743432545712f2afefd03a15f17e32d0673ee00368948fd",
+      "packages/web/src/features/game/components/HostPlayersModal.tsx": "bb305343febb1ea775466cc9b13c38455bd96c19ced89aa0537499f8fb057698",
+      "packages/web/src/features/game/components/host-players-modal.css": "342f2ab25cb283c5467cbe2d1c20d806658ad74900352785894b1f16092ac7e3",
+      "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx": "8a79029e953f295a84fde19b28a23af249f0596b2fbb10fa10a1c8b82fd41103",
+      "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx": "a527a4ec47a26b80e2e130beb0556ffe1ac6e0b0df149a1ddaffa6d488d2d26f",
+      "packages/web/src/features/game/components/tadazz-show/NativeAudioCuePlayer.tsx": "969858f681148d59c47fc736bbe6c5692a39e08bc3aa4fafbd005772ba3f0f5f",
+      "packages/web/src/features/game/components/tadazz-show/lobby-directory.ts": "6593c9c8062ab6153d2686f0150368b1dc89b5d6f8202a424cb09f813227e1d9",
+      "packages/web/src/features/game/components/tadazz-show/lobby-directory.test.ts": "27954ae17ae42db1ca4c92a4d223cb85cdfb04046a431ce5cdf3299011c65430",
+      "packages/e2e/tests/host-followup.spec.ts": "8af8f3f0209553927f525cc167834aab84081b6fa832cc12dbf1353099b9c480",
+      "packages/e2e/tests/browser-acceptance.spec.ts": "c806a847750d2b404bbe4d976896a2f818a62d1b0416a1a936b5d08f248ab60e",
+      "packages/e2e/playwright.host-controls-followup.config.ts": "c395855d9c8e109e451f98b7afb0c997f6604d23aae624150602282a019e7b02",
+      "extensions/qa/tds-roster.spec.ts": "8c352fd855a70e37de036c39caa03622288c1866f044e4fdc1a0e7cf5a370b34",
+      "extensions/src/locales/en/extensions.json": "ca59ffac5cb668dc3ed42d150d3231ed6e3daa7f4cd66a486998e8922ea5718a",
+      "extensions/src/locales/he/extensions.json": "92cf0f0a7358764597f828f4642b6e6a6d84ae9da07623c3231548860009ac01",
+      "extensions/src/locales/fr/extensions.json": "d5bc1a734e9bd316bf8099c21df405f8b8daf86ebd39975bbdb399db43421ede",
+      "extensions/src/locales/de/extensions.json": "47dba28b6041a8ba6d268277c7cd1beebf851f809419479b1d35552a36ef14b4",
+      "extensions/src/locales/es/extensions.json": "47f119800a22c046a67e1b2e4dcea018dd059de9beb40193fc7f6273d58a40ed",
+      "extensions/src/locales/it/extensions.json": "806256f9e8874621f30cb07d4069d838241767cfc4da5bf0ecc7ed3635ba4006",
+      "extensions/src/locales/ja/extensions.json": "552aa1e724acca81e672d58925f13463c9fa6ed1927ad99fb9583c773be47d1e",
+      "extensions/src/locales/tr/extensions.json": "98e47a2c615c93f8191fe071c819534e4e1c0f58550c63a4d2ab428ef3bcfc1d",
+      "extensions/src/locales/vi/extensions.json": "fe0f7b84be12e974bc123daa85e80e5b223e5ee2030deeb6ea679788a192a202"
+    }
+  },
+  "manualScope": {
+    "tests": 1,
+    "passed": 1,
+    "unexpected": 0,
+    "screenIdentity": "The actual authored scene ID scopes manual overrides only. Existing automatic cue identity and continuity grouping are unchanged.",
+    "verifiedBehavior": [
+      "A manual results choice survives a rerender of the same screen.",
+      "The next authored screen with identical game, question, epoch, phase, soundtrack slot and automatic audio group returns to Automatic.",
+      "The automatic cue identity remains identical across both authored screens.",
+      "Returning to the first screen does not revive its expired manual override."
+    ],
+    "fixture": "extensions/src/presentation/host-audio-scope.test-fixture.tsx",
+    "fixturePlayback": "autoPlay=false isolates the state-lifetime regression. Prior two-case browser evidence covers real native audio playback.",
+    "checks": [
+      {
+        "check": "manual-scope-browser",
+        "command": "node packages/e2e/node_modules/@playwright/test/cli.js test --config work/host-followup-20261119/manual-scope.playwright.config.ts",
+        "exit": 0,
+        "seconds": 48.97,
+        "receipt": "manual-scope-playwright.json",
+        "log": "manual-scope-browser.log",
+        "jobId": "job_07d891f2ec30"
+      },
+      {
+        "check": "manual-scope-lint",
+        "command": "node node_modules/oxlint/bin/oxlint extensions/src/presentation/audio-cue-player.tsx packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx extensions/src/presentation/host-audio-scope.test-fixture.tsx packages/e2e/tests/host-followup.spec.ts",
+        "exit": 0,
+        "seconds": 3.33,
+        "warnings": 0,
+        "errors": 0,
+        "log": "manual-scope-lint.log",
+        "jobId": "job_07d891f2ec30"
+      },
+      {
+        "check": "manual-scope-extension-types",
+        "command": "node node_modules/typescript/bin/tsc --noEmit --project extensions/tsconfig.json",
+        "exit": 0,
+        "seconds": 5.36,
+        "log": "manual-scope-extension-types.log",
+        "jobId": "job_07d891f2ec30"
+      },
+      {
+        "check": "manual-scope-web-types",
+        "command": "node node_modules/typescript/bin/tsc --noEmit --project packages/web/tsconfig.app.json",
+        "exit": 0,
+        "seconds": 4.45,
+        "log": "manual-scope-web-types.log",
+        "jobId": "job_06d6a5dcc14a"
+      }
+    ],
+    "productionDeployed": false
+  }
+}

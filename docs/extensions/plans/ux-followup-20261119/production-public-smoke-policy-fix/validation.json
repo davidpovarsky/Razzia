@@ -1,0 +1,14 @@
+[
+  {
+    "name": "syntax",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "policy-self-test",
+    "exit": 0,
+    "stdout": "{\"status\":\"PASS\",\"checks\":[{\"name\":\"exact anonymous bootstrap admitted once\",\"passed\":true},{\"name\":\"Cookie header rejected\",\"passed\":true},{\"name\":\"Authorization header rejected\",\"passed\":true},{\"name\":\"mixed-case authorization rejected\",\"passed\":true},{\"name\":\"query rejected\",\"passed\":true},{\"name\":\"token body rejected\",\"passed\":true},{\"name\":\"empty body rejected\",\"passed\":true},{\"name\":\"GET bootstrap rejected\",\"passed\":true},{\"name\":\"PUT bootstrap rejected\",\"passed\":true},{\"name\":\"wrong content type rejected\",\"passed\":true},{\"name\":\"subframe bootstrap rejected\",\"passed\":true},{\"name\":\"second bootstrap rejected\",\"passed\":true},{\"name\":\"cross-origin bootstrap rejected\",\"passed\":true},{\"name\":\"contact write rejected\",\"passed\":true},{\"name\":\"private API read rejected\",\"passed\":true},{\"name\":\"game socket polling rejected\",\"passed\":true},{\"name\":\"public auth mode GET retained\",\"passed\":true},{\"name\":\"anonymous response schema accepted without recording credentials\",\"passed\":true},{\"name\":\"401 response rejected\",\"passed\":true},{\"name\":\"Set-Cookie rejected\",\"passed\":true},{\"name\":\"manager role rejected\",\"passed\":true},{\"name\":\"extra response key rejected\",\"passed\":true},{\"name\":\"server-session claim rejected\",\"passed\":true},{\"name\":\"invalid expiry rejected\",\"passed\":true},{\"name\":\"exact optional branding404 classified\",\"passed\":true},{\"name\":\"other branding HTTP errors retained\",\"passed\":true},{\"name\":\"branding query404 retained\",\"passed\":true},{\"name\":\"correlated optional branding console classified\",\"passed\":true},{\"name\":\"unattributed console error retained\",\"passed\":true},{\"name\":\"uncorrelated console error retained\",\"passed\":true},{\"name\":\"missing built-in fallback retained as failure\",\"passed\":true}],\"networkUsed\":false,\"browserLaunched\":false,\"filesWritten\":false,\"tokenValuesRecorded\":false}\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "kind": "observed start of own dcc standard qualification; not a completed gate receipt",
+  "observedAt": "2026-11-19T20:48:53.162827+00:00",
+  "candidate": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "jobIdReportedByCoordinator": "job6f2799b0e01b",
+  "mode": "standard",
+  "startedAt": "2026-11-19T20:47:01.242701+00:00",
+  "statusAtObservation": "running",
+  "admissionLockHeldAtObservation": true,
+  "otherHeavyQaAtAdmission": [],
+  "sourceEvidence": "docs/extensions/plans/phase-continuity-20261119/shared-qa-lock-standard-dccfd9d22a46.json",
+  "sourceEvidenceSha256AtObservation": "e67c30e0869a6b5957d0f13468081ee496bbd3d8f2bfe10e019b93ac126d0003",
+  "sourceEvidenceMutableUntilJobCompletion": true,
+  "finalLockCleanupVerified": false,
+  "completedQualification": false,
+  "releaseQualified": false,
+  "deployed": false,
+  "helperCopy": "docs/extensions/plans/phase-continuity-20261119/release-tools/with_shared_qa_lock.py",
+  "helperSha256": "b441d0f7a2e2f8886cc8bc3732dee06c7b85ce759797c8a474c66ee6f3378ecb",
+  "noActionsByCurator": true
+}

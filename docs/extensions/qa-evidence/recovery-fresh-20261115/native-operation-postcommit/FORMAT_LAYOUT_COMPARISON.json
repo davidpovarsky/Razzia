@@ -1,0 +1,6 @@
+{
+  "rawBundlesIdentical": false,
+  "initialBundleSha256": "f2f76a86ca418d8ffaecd00a8430f76df2e446793310741c6847118745ae5011",
+  "formattedBundleSha256": "a5348696c40dd738ee32b3f02b2fb513cb84b47315fe6d7b6bdf1c29c82b961a",
+  "reason": "Formatting changed emitted layout; exact-byte bridge assertion stopped as intended. Qualify the formatted new three-case bundle directly; no original15 cases imported or rerun."
+}

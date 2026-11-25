@@ -1,0 +1,91 @@
+{
+  "passed": false,
+  "sourceSha": "diagnostic-iteration8-uncommitted",
+  "isolatedNativeHost": true,
+  "customerMountUsed": false,
+  "realEmailSent": false,
+  "manualListeningPerformed": false,
+  "results": [
+    {
+      "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+      "passed": true,
+      "originals": 8,
+      "rounds": 32,
+      "anonymousInstallDenied": true,
+      "crossAccountReadDenied": true
+    },
+    {
+      "name": "native-editor-eight-theme-round-trip-save-reload-and-history",
+      "passed": true,
+      "switches": 8,
+      "preservedQuestionCount": 6
+    },
+    {
+      "name": "public-back-clears-current-and-future-votes",
+      "passed": true,
+      "retainedScore": 1000,
+      "clearedQuestions": [
+        2,
+        3
+      ],
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-royal-quiz",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-neon-arcade",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-retro-tv",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-magic-storybook",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-crystal-future",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-carnival-pop",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    },
+    {
+      "name": "normal-motion-complete-public-show-sports-arena",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: Question geometry remains stable: {\"phase\":\"results\",\"at\":14652.900000095367,\"questionAt\":11058.299999952316,\"changed\":[\"x\",\"y\"],\"baseline\":{\"phase\":\"question\",\"at\":12926.600000143051,\"heading\":{\"x\":198.47763061523438,\"y\":345.8670959472656,\"width\":423.0221252441406,\"height\":149.34814453125,\"fontSize\":\"63px\",\"lineHeight\":\"71.82px\",\"fontWeight\":\"500\",\"transform\":\"identity\",\"opacity\":\"1\"},\"panel\":{\"x\":197.05343627929688,\"y\":264.2756042480469,\"width\":425.8704528808594,\"height\":312.5311584472656,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"stage\":{\"x\":87.095458984375,\"y\":69.484375,\"width\":1265.77783203125,\"height\":712,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"matrix(0.659259, 0, 0, 0.659259, -960, -540)\",\"opacity\":\"1\"},\"root\":{\"x\":12,\"y\":69,\"width\":1416,\"height\":0,\"fontSize\":\"15px\",\"lineHeight\":\"22.5px\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"scroll\":{\"x\":0,\"y\":0,\"dialogLeft\":0,\"dialogTop\":0},\"viewport\":{\"width\":1440,\"height\":900}},\"actual\":{\"heading\":{\"x\":-106.7593994140625,\"y\":77.54859161376953,\"width\":423.0220947265625,\"height\":149.34814453125,\"fontSize\":\"63px\",\"lineHeight\":\"71.82px\",\"fontWeight\":\"500\",\"transform\":\"identity\",\"opacity\":\"1\"},\"panel\":{\"x\":-108.18359375,\"y\":-4.04290771484375,\"width\":425.8704833984375,\"height\":312.5311279296875,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"stage\":{\"x\":87.095458984375,\"y\":69.484375,\"width\":1265.77783203125,\"height\":712,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"matrix(0.659259, 0, 0, 0.659259, -960, -540)\",\"opacity\":\"1\"},\"root\":{\"x\":12,\"y\":69,\"width\":1416,\"height\":0,\"fontSize\":\"15px\",\"lineHeight\":\"22.5px\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"scroll\":{\"x\":0,\"y\":0,\"dialogLeft\":0,\"dialogTop\":0},\"viewport\":{\"width\":1440,\"height\":900}}}\n\nfalse !== true\n\n    at readQuestionSequence (file:///source/extensions/qa/public-gallery/question-sequence-verify.mjs:526:10)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:541:9)\n    at async verifyPublic (file:///source/extensions/qa/original-themes/browser-verify.mjs:584:24)\n    at async verifyOriginalThemeBrowser (file:///source/extensions/qa/original-themes/browser-verify.mjs:1170:5)\n    at async <anonymous> (/source/extensions/qa/original-themes/account-verify.mjs:249:3)"
+}

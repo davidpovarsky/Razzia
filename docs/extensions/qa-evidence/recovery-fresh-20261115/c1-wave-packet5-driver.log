@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<stdin>", line 48, in <module>
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet5-wave/server-run.py", line 12, in <module>
+    runner.run(pathlib.Path(sys.argv[1]))
+  File "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet5-wave/runner_base.py", line 401, in run
+    self.verify('before', access=True)
+  File "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet5-wave/runner_host.py", line 100, in verify
+    self.initialize_process_accounting()
+  File "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet5-wave/runner_host.py", line 95, in initialize_process_accounting
+    require(time.monotonic() - start < 5, 'Original Node supervisor baseline unavailable')
+  File "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet5-wave/runner_base.py", line 21, in require
+    raise RuntimeError(message)
+RuntimeError: Original Node supervisor baseline unavailable

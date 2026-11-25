@@ -1,0 +1,15 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 [chromium] › qa/theme-builder/oauth-consent.spec.ts:20:1 › cancel during inspection ignores its late response (3.9s)
+  ✓   2 [chromium] › qa/theme-builder/oauth-consent.spec.ts:57:1 › trusted native click approves once and navigates only to exact issuer response (3.2s)
+  ✓   3 [chromium] › qa/theme-builder/oauth-consent.spec.ts:79:1 › cancel discards proof and does not submit approval (2.5s)
+  ✓   4 [chromium] › qa/theme-builder/oauth-consent.spec.ts:93:1 › native session change invalidates inspected proof before approval (3.3s)
+  ✓   5 [chromium] › qa/theme-builder/oauth-consent.spec.ts:106:1 › expired ticket and missing actual page headers fail closed (9.0s)
+  ✓   6 [webkit] › qa/theme-builder/oauth-consent.spec.ts:20:1 › cancel during inspection ignores its late response (21.9s)
+  ✓   7 [webkit] › qa/theme-builder/oauth-consent.spec.ts:57:1 › trusted native click approves once and navigates only to exact issuer response (10.9s)
+  ✓   8 [webkit] › qa/theme-builder/oauth-consent.spec.ts:79:1 › cancel discards proof and does not submit approval (9.3s)
+  ✓   9 [webkit] › qa/theme-builder/oauth-consent.spec.ts:93:1 › native session change invalidates inspected proof before approval (10.2s)
+  ✓  10 [webkit] › qa/theme-builder/oauth-consent.spec.ts:106:1 › expired ticket and missing actual page headers fail closed (13.2s)
+
+  10 passed (1.7m)

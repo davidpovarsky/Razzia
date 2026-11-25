@@ -1,0 +1,1 @@
+../../../packages/socket/src/services/account-db.ts(8,35): error TS2307: Cannot find module './config-scope' or its corresponding type declarations.

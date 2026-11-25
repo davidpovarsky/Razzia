@@ -1,0 +1,11 @@
+{
+  "sha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "sourceRun": "tadazz-codex-730cb4579d22-d298324d",
+  "run": "tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07",
+  "inputManifestSha256": "f2a8689c21efccc567b73c9b405c6b682aa6c1be903fb8bdf04c6d4edaf9771b",
+  "overlayPath": "extensions/qa/phase3-full-show/browser-verify.mjs",
+  "overlaySha256": "68250f4a6919907f5a5e02444b07911f9a30f3884a36f766d6c00775477a33be",
+  "widgetManifestSha256": "b5016791c480d583a84f1bcb4076ef5bc7054ebac8fdaa417ce30962c4aee4d4",
+  "widgetHtmlSha256": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+  "rendererBuildId": "0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80"
+}

@@ -1,0 +1,68 @@
+{
+  "productSource": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "managerAcceptedScopedSource": "e444b48",
+  "managerEvidence": "8786d8e",
+  "productionCodeChanged": false,
+  "newCases": 3,
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "injectedIoFaults": [
+    "outcome rename ENOSPC",
+    "outcome directory fsync EIO",
+    "committed private cleanup unlink EACCES"
+  ],
+  "distinctFreshChildren": 13,
+  "allChildProcessesExitZero": true,
+  "expectedLogicalDenials": 2,
+  "publicEditsAndSentinelsPreserved": true,
+  "cases": [
+    {
+      "name": "outcome-directory-fence",
+      "freshChildren": 5,
+      "committedIntentPreservedOnInitialFailure": true
+    },
+    {
+      "name": "outcome-rename-enospc",
+      "freshChildren": 3,
+      "committedIntentPreservedOnInitialFailure": true
+    },
+    {
+      "name": "resolved-private-cleanup",
+      "freshChildren": 5,
+      "committedIntentPreservedOnInitialFailure": true
+    }
+  ],
+  "receipts": [
+    {
+      "path": "formatted-receipts/outcome-directory-fence.json",
+      "bytes": 44358,
+      "sha256": "433755bcc2d063ba1d5bf21da530754e04e3b4cf799e7b109e3a5ba5292bc617"
+    },
+    {
+      "path": "formatted-receipts/outcome-rename-enospc.json",
+      "bytes": 40847,
+      "sha256": "d3e4c1f1f603d12b01751850583f86ca2881e9bf5dba3f400fcf1a7243e25be4"
+    },
+    {
+      "path": "formatted-receipts/resolved-private-cleanup.json",
+      "bytes": 44865,
+      "sha256": "37d81bfc5973c914d94d11d032742c55dee3da91a1df2266a48865feb164275e"
+    }
+  ],
+  "bundleSha256": "a5348696c40dd738ee32b3f02b2fb513cb84b47315fe6d7b6bdf1c29c82b961a",
+  "actualBundledInputs": 187,
+  "unchangedRuntimeInputsFromAcceptedProducer": 186,
+  "newEntryOnly": [
+    "docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-postcommit/postcommit-tests.ts"
+  ],
+  "old15Executed": false,
+  "FConsumerExecuted": false,
+  "typesExit": 0,
+  "format": "Prettier.check API true for both source files",
+  "runtime": "Existing local WSL Ubuntu Linux6.18/Node26.11.1; real persistent ext4 owned /tmp fixtures; fs error injection, not actual full disk/media failure/hardware proof",
+  "target": "esbuild0.28.2 targetnode24; not pinned Node24 execution",
+  "preservedInheritedUntracked": 16,
+  "oracleJobs": 0,
+  "installationOrProviderOrCustomerOrProductionActions": 0
+}

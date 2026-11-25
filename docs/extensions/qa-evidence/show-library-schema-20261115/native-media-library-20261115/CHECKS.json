@@ -1,0 +1,64 @@
+{
+  "sourceBaseCommit": "f546be8983b2058bbaab7dc52c104be28f9bc8d2",
+  "sourceSha256": {
+    "extensions/src/core/show-library/native-media-library.ts": "e76afd11e0f39afbd723b4dc7354886bbc0629c83b49e71630d891d206d5ca0f",
+    "extensions/src/core/show-library/native-media-library.test.ts": "d8e7a27149b4c309fae37e89d950ec647cccb93c4cd7fb461620ac943205b3ae",
+    "extensions/src/core/show-library/index.ts": "07b7650f9e21505be40e7fce6a7e3f8430e44e6293f5cb305b696991ebcdf006"
+  },
+  "unchangedDuringChecks": true,
+  "checks": [
+    {
+      "label": "tests",
+      "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "argv": [
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/native-media-library.test.ts",
+        "--maxWorkers",
+        "1",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\docs\\extensions\\qa-evidence\\show-library-schema-20261115\\native-media-library-20261115\\tests.json"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+      "startedUtc": "2026-11-15T15:26:33.082317+00:00",
+      "finishedUtc": "2026-11-15T15:26:35.892044+00:00",
+      "exitCode": 1
+    },
+    {
+      "label": "types",
+      "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "argv": [
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+      "startedUtc": "2026-11-15T15:26:35.892044+00:00",
+      "finishedUtc": "2026-11-15T15:26:37.871604+00:00",
+      "exitCode": 0
+    },
+    {
+      "label": "format",
+      "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "argv": [
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/native-media-library.ts",
+        "extensions/src/core/show-library/native-media-library.test.ts",
+        "extensions/src/core/show-library/index.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+      "startedUtc": "2026-11-15T15:26:37.871604+00:00",
+      "finishedUtc": "2026-11-15T15:26:38.774826+00:00",
+      "exitCode": 0
+    }
+  ],
+  "remoteJobs": 0,
+  "runtimeActivation": false,
+  "c35Rerun": false
+}

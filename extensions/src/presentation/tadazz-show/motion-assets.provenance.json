@@ -1,0 +1,44 @@
+{
+  "source": "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html",
+  "sourceSha256": "1eea4698bc97080c7fc82f5c0376a6ac8c6efb25a8223a178062628fa14a8669",
+  "sourceBytes": 993635,
+  "note": "Assets decoded byte-for-byte from the canonical HTML. The HTML is a reference only and is never served or executed.",
+  "assets": [
+    {
+      "file": "/tadazz-show/motion/backdrop.webp",
+      "role": ".tz-backdrop background (CSS line 15)",
+      "mime": "image/webp",
+      "bytes": 94502,
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+    },
+    {
+      "file": "/tadazz-show/motion/logo.webp",
+      "role": "TADAZZ! logo used by .tz-win-logo and .tz-intro-logo",
+      "mime": "image/webp",
+      "bytes": 151654,
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672"
+    }
+  ],
+  "stylesheet": {
+    "file": "extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+    "sha256": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8",
+    "droppedDocumentAndDemoRules": [
+      ":root { color-scheme: dark; }",
+      "* { box-sizing: border-box; }",
+      "html,body { padding:0; margin:0; width:100%; height:100%; ba",
+      "button,input { font: inherit; }",
+      "#viewport { position:absolute; inset:0 0 96px; overflow:hidd",
+      "/* Demo controls intentionally outside the projected 16:9 st",
+      ".tz-demo-controls {position:absolute;left:0;right:0;bottom:0",
+      ".tz-demo-controls button {padding:12px 15px;border-radius:10",
+      ".tz-demo-controls button:hover {background:#4b1b81;border-co",
+      ".tz-demo-controls button:focus-visible {outline:3px solid #e",
+      ".tz-demo-controls button.accent {color:#251044;background:#e",
+      ".tz-demo-controls .tz-control-sep {width:1px;height:39px;bac",
+      ".tz-demo-controls .tz-helper {font-size:12px;color:#b4a3d1;f",
+      ".tz-demo-controls label {font-size:13px;color:#cdbcea;displa",
+      "/* When the stage viewport enters browser fullscreen, reclai",
+      "#viewport:fullscreen { position:fixed; inset:0; width:100vw;"
+    ]
+  }
+}

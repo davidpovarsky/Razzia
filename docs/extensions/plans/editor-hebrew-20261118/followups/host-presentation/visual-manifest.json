@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-11-18T15:34:10.072204+00:00",
+  "applicationHead": "0f64b7bf2a76d9f7f51ee74bc6dfcff1d5067a39",
+  "images": [
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/lobby-display-1920x1080.png",
+      "sha256": "47f115f6fa2bd797013ec4e011bfeebe612cf9d5fb5bd9e601832cb3e77714e1",
+      "bytes": 893805
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/lobby-host-present-1024x768.png",
+      "sha256": "4289ad40cfe0a1a15a0221004ce3c0124fe1903656f3c2a26a7a2346837e2aa1",
+      "bytes": 382364
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/lobby-host-present-1280x720.png",
+      "sha256": "bda0f4448ee559d2640a2eea32c8971cb7765084e37513284db2fdba6882d927",
+      "bytes": 544957
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/lobby-host-present-1366x768.png",
+      "sha256": "8c1f7c66d41784097fd4c5204fb3b9959d848a2a8ecde5ad384d48f29e85bc76",
+      "bytes": 628108
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/lobby-host-present-1920x1080.png",
+      "sha256": "848ecc1563b6212fce53cab1364dc2a4e333c655123c1099abd45af344a0592f",
+      "bytes": 1065920
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/results-host-present.png",
+      "sha256": "2d764d8a75d0ae0c800e5f9961abab080e7fad2d9102988119ff48a8b118c91a",
+      "bytes": 505308
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/results-player-390.png",
+      "sha256": "24888915d4a47388fab0d19a548dea47a4681080ccc4f2c13167afa476129f53",
+      "bytes": 128609
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/voting-paused-host.png",
+      "sha256": "388481b146d52fa2e17e37cd87449c3b8456c06c9338027ea42221a63a2b223c",
+      "bytes": 538377
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots/voting-player-390.png",
+      "sha256": "03f09200131d90fca51fa83b267fbdf1abf18ec9875e0290222f9196fd774123",
+      "bytes": 97184
+    }
+  ]
+}

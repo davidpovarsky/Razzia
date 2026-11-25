@@ -1,0 +1,31 @@
+{
+  "steps": [
+    {
+      "name": "fix",
+      "exitCode": 0,
+      "stdout": "Found 0 warnings and 0 errors.\nFinished in 640ms on 1 file with 233 rules using 12 threads.\n",
+      "stderr": ""
+    },
+    {
+      "name": "format",
+      "exitCode": 0,
+      "stdout": "extensions/qa/ux-followup-site-smoke.mjs 145ms\n",
+      "stderr": ""
+    },
+    {
+      "name": "lint",
+      "exitCode": 0,
+      "stdout": "Found 0 warnings and 0 errors.\nFinished in 634ms on 1 file with 233 rules using 12 threads.\n",
+      "stderr": ""
+    },
+    {
+      "name": "syntax",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "sha256": "1542bad1c3e2c31aee5e05e9fc61729a2087d86ac6ed42ad798242efa707b162",
+  "observedAt": "2026-11-19T14:12:47.093165+00:00"
+}

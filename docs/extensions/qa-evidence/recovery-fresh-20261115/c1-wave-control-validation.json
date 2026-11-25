@@ -1,0 +1,62 @@
+{
+  "localControlValidationCases": [
+    {
+      "case": "current developer synthetic successor accepted",
+      "result": "PASS"
+    },
+    {
+      "case": "retired issuer refused",
+      "result": "PASS",
+      "rejection": "Independent packet review/execution hold"
+    },
+    {
+      "case": "production scope refused",
+      "result": "PASS",
+      "rejection": "Delegated control lacks exact owner authority or misstates its issuer"
+    },
+    {
+      "case": "invented independent review refused",
+      "result": "PASS",
+      "rejection": "Delegated control lacks exact owner authority or misstates its issuer"
+    },
+    {
+      "case": "wrong owner provenance refused",
+      "result": "PASS",
+      "rejection": "Delegated control lacks exact owner authority or misstates its issuer"
+    },
+    {
+      "case": "wrong source refused",
+      "result": "PASS",
+      "rejection": "Admission does not bind this exact source and packet"
+    },
+    {
+      "case": "wrong packet refused",
+      "result": "PASS",
+      "rejection": "Admission does not bind this exact source and packet"
+    },
+    {
+      "case": "expired admission refused",
+      "result": "PASS",
+      "rejection": "ROOT admission/ledger is not fresh"
+    },
+    {
+      "case": "larger own memory grant refused",
+      "result": "PASS",
+      "rejection": "C1 grant differs from reviewed cap"
+    },
+    {
+      "case": "aggregate CPU overflow refused",
+      "result": "PASS",
+      "rejection": "Fresh aggregate grant exceeds ROOT admission"
+    },
+    {
+      "case": "lower disk floor refused",
+      "result": "PASS",
+      "rejection": "ROOT disk floor below 2 GiB"
+    }
+  ],
+  "passed": 11,
+  "applicationTestsRun": 0,
+  "serverOperations": 0,
+  "scope": "Control content validation only; filesystem admission is exercised by the eventual native runner"
+}

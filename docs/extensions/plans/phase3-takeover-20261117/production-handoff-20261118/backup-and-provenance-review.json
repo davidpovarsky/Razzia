@@ -1,0 +1,459 @@
+{
+  "schemaVersion": 1,
+  "kind": "tadazz-independent-backup-and-operator-provenance-review",
+  "applicationRevision": "e30133c7dfb03412cfb898705f1115d206548668",
+  "scope": {
+    "source": "Previously completed independent read-only checks; this JSON adds no server observations or QA.",
+    "limitations": [
+      "Receipt statements about restore/SQLite checks are explicitly reported evidence, not a new execution of those checks.",
+      "Observed current operator hashes and mtimes do not establish which bytes ran historically.",
+      "This proof contains no authenticated ChatGPT or Claude connection result."
+    ],
+    "noArchiveExtraction": true,
+    "noSqliteOpened": true,
+    "noProductionMutation": true,
+    "noCustomerContentPrinted": true,
+    "noRawLogsIncluded": true,
+    "noArchivePathsIncluded": true
+  },
+  "observations": {
+    "oldContainerUtc": "2026-11-18T11:32:52.471353+00:00",
+    "receiptDiscoveryUtc": "2026-11-18T11:33:31.322318+00:00",
+    "backupMetadataUtc": "2026-11-18T11:34:22.813844+00:00",
+    "originalOperatorCodeUtc": "2026-11-18T11:35:06.081616+00:00",
+    "operatorVariantsUtc": "2026-11-18T11:35:48.358981+00:00",
+    "archiveHashTimestampUtc": null,
+    "archiveHashTimestampNote": "The completed hashing command did not emit a UTC timestamp; no timestamp has been inferred.",
+    "archiveHashCommandDurationSeconds": 2.12,
+    "archiveHashCommandReturnCode": 0
+  },
+  "retainedOldContainer": {
+    "exitCode": 0,
+    "finishedAt": "2026-11-18T11:23:20.490425129Z",
+    "id": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "name": "/tadazz-pre-mcp-e30133c7dfb0-20261118T112319Z-f5b3c25d",
+    "oomKilled": false,
+    "restartCount": 0,
+    "running": false,
+    "startedAt": "2026-11-18T11:20:53.610418457Z",
+    "status": "exited"
+  },
+  "retainedQualifiedClone": {
+    "exitCode": 0,
+    "finishedAt": "2026-11-18T11:19:55.390144491Z",
+    "id": "89e53a3b72042bf414c13357eee560171efa2ea462eb85c6caf0f317ef217ad7",
+    "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+    "running": false,
+    "status": "exited"
+  },
+  "releaseReceipts": {
+    "stage": {
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-result.json",
+      "sha256": "7b9695d8d2fb33765333b377271d75abb2fb5f4a9de85f68456ba0647930c244",
+      "bytes": 707,
+      "ownerUid": 0,
+      "mode": "0o600",
+      "mtimeUtc": "2026-11-18T11:16:28.519164+00:00",
+      "reported": {
+        "customerMountUsed": false,
+        "image": "tadazz:mcp-e30133c-20261118-a2",
+        "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "ok": true,
+        "productionTouched": false,
+        "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668"
+      }
+    },
+    "stageManifest": {
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-manifest.json",
+      "sha256": "9a28980ba2084963b76b32294d7c759a590a7e43bbeb32f8fd57f3ae08063dc7",
+      "bytes": 31883,
+      "ownerUid": 0,
+      "mode": "0o600",
+      "mtimeUtc": "2026-11-18T11:16:28.370157+00:00",
+      "reported": {
+        "createdAt": "2026-11-18T11:16:28Z",
+        "customerMountUsed": false,
+        "format": "tadazz-mcp-stage",
+        "image": "tadazz:mcp-e30133c-20261118-a2",
+        "imageId": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "productionTouched": false,
+        "sourceRun": "tadazz-codex-e30133c7dfb0-630fa724",
+        "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668",
+        "version": 2,
+        "webSourceRun": "tadazz-codex-e30133c7dfb0-630fa724"
+      }
+    },
+    "syntheticSmoke": {
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/synthetic-smoke-result.json",
+      "sha256": "b23dedbe1273d93340e8adb59252b58268e59513d25b60104d9a85927db2dd1b",
+      "bytes": 7168,
+      "ownerUid": 0,
+      "mode": "0o600",
+      "mtimeUtc": "2026-11-18T11:16:28.235601+00:00",
+      "reported": {
+        "container": "d00844afef1be846fde22c75cc8d148ad7f3cf95fbb959a6638f7d576c199514",
+        "customerMountUsed": false,
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "network": "none",
+        "ok": true,
+        "productionTouched": false,
+        "retainedStopped": true,
+        "sourceSha": "e30133c7dfb03412cfb898705f1115d206548668"
+      }
+    },
+    "backupQualification": {
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+      "sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3",
+      "bytes": 2635,
+      "ownerUid": 0,
+      "mode": "0o600",
+      "mtimeUtc": "2026-11-18T11:19:55.452597+00:00",
+      "reported": {
+        "backup": {
+          "bytes": 125302944,
+          "consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+          "files": 344,
+          "productionRestorePerformed": false,
+          "restoreProof": "isolated extracted bytes/modes and SQLite backup/integrity",
+          "restoredBytesAndModesVerified": true,
+          "sha256": "f44735f8c29b5039620e87ccddc3346c298bd9e75c9d755646bdd4537998138e",
+          "sqliteDatabasesVerified": 2,
+          "treeSha256": "56dd656b77a82207b750dd19829cc524fc90fa38c4b33d0f500bd2773fb25354"
+        },
+        "candidateCloneBoot": {
+          "container": "89e53a3b72042bf414c13357eee560171efa2ea462eb85c6caf0f317ef217ad7",
+          "liveConfigMounted": false,
+          "network": "none",
+          "passed": true,
+          "publishedPorts": false,
+          "retainedStopped": true
+        },
+        "configSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+        "deploymentPerformed": false,
+        "finishedAt": "2026-11-18T11:19:55.452907+00:00",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "kind": "backup-qualification",
+        "oldApplicationResumed": true,
+        "oldContainerRetained": true,
+        "phase": "qualified",
+        "productionDataRestored": false,
+        "releaseEligible": true,
+        "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+        "roomGate": {
+          "checkStopRaceEliminated": false,
+          "count": 0,
+          "lastCountAt": "2026-11-12T12:01:30.941422185Z",
+          "observedAt": "2026-11-18T11:19:40.926371+00:00",
+          "source": "complete-retained-container-log-events"
+        },
+        "sourceContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "sourceImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "stopToHealthySeconds": 8.469,
+        "success": true
+      }
+    },
+    "failedDeploymentWithRollback": {
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112048Z-bb3d5a9c/deployment-result.json",
+      "sha256": "6d21894cbab96e67de76cf5b0eb924db2b2016af34a9fff2474be89133347540",
+      "bytes": 1827,
+      "ownerUid": 0,
+      "mode": "0o600",
+      "mtimeUtc": "2026-11-18T11:20:55.857621+00:00",
+      "reported": {
+        "backup": {
+          "bytes": 125302944,
+          "consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+          "files": 344,
+          "productionRestorePerformed": false,
+          "restoredBytesAndModesVerified": false,
+          "sha256": "67e249a4978cb351f8e2f52f594b90ce7295a59b8b3903d3e21d6424f17550dc",
+          "treeSha256": "755ea6b8ec9a0e1fc82b6f8636aa5243526cdc08b61d447322acc0ccade4d330"
+        },
+        "currentCustomerWritesPreserved": true,
+        "dataRestorePerformed": false,
+        "failureCode": "REPLACEMENT_HOST_CONFIG_CHANGED",
+        "finishedAt": "2026-11-18T11:20:55.857395+00:00",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "phase": "create-replacement",
+        "previousContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "previousImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "priorRestoreBootQualification": {
+          "ageSeconds": 53,
+          "candidateCloneBootPassed": true,
+          "sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3"
+        },
+        "replacementContainer": "54cc4aeb6c3987d18ca706679d91726630cdd9934e7620fa5623afc07f623d87",
+        "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+        "rollbackContainer": "tadazz-pre-mcp-e30133c7dfb0-20261118T112048Z-bb3d5a9c",
+        "rollbackDataRestored": false,
+        "rolledBack": true,
+        "roomGate": {
+          "checkStopRaceEliminated": false,
+          "count": 0,
+          "lastCountAt": "2026-11-18T11:19:47.235901904Z",
+          "observedAt": "2026-11-18T11:20:48.105180+00:00",
+          "source": "retained-startup-empty-registry-no-subsequent-game-events"
+        },
+        "success": false,
+        "version": 1
+      }
+    },
+    "successfulDeployment": {
+      "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112319Z-f5b3c25d/deployment-result.json",
+      "sha256": "5dc60033383b530511601e440b1481157b0ef7b250c0d4bdfa175aeab576b733",
+      "bytes": 3758,
+      "ownerUid": 0,
+      "mode": "0o600",
+      "mtimeUtc": "2026-11-18T11:23:31.116989+00:00",
+      "reported": {
+        "backup": {
+          "bytes": 125302944,
+          "consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+          "files": 344,
+          "productionRestorePerformed": false,
+          "restoreProof": "isolated extracted bytes/modes and SQLite backup/integrity",
+          "restoredBytesAndModesVerified": true,
+          "sha256": "d7d5db86330b1903d9be03c2f6637cfef693b05ad78c4016d3a0bf85baa2d2cb",
+          "sqliteDatabasesVerified": 2,
+          "treeSha256": "755ea6b8ec9a0e1fc82b6f8636aa5243526cdc08b61d447322acc0ccade4d330"
+        },
+        "dataRestorePerformed": false,
+        "finishedAt": "2026-11-18T11:23:31.116672+00:00",
+        "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "loopback": {
+          "authenticatedGameplayTest": false,
+          "consentGetHead": true,
+          "engineIoOpenClose": true,
+          "indexAndEntryAssets": 30,
+          "installedHostTest": false,
+          "oauthAndMcp": true
+        },
+        "phase": "verified",
+        "previousContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "previousContainerRetainedStopped": true,
+        "previousImage": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+        "priorRestoreBootQualification": {
+          "ageSeconds": 204,
+          "candidateCloneBootPassed": true,
+          "sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3"
+        },
+        "publicHttps": {
+          "authenticatedGameplayTest": false,
+          "consentGetHead": true,
+          "engineIoOpenClose": true,
+          "indexAndEntryAssets": 30,
+          "installedHostTest": false,
+          "oauthAndMcp": true
+        },
+        "replacementContainer": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+        "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+        "rollbackContainer": "tadazz-pre-mcp-e30133c7dfb0-20261118T112319Z-f5b3c25d",
+        "roomGate": {
+          "checkStopRaceEliminated": false,
+          "count": 0,
+          "lastCountAt": "2026-11-18T11:20:53.610418457Z",
+          "observedAt": "2026-11-18T11:23:19.953752+00:00",
+          "source": "retained-startup-empty-registry-no-subsequent-game-events"
+        },
+        "success": true,
+        "version": 1
+      }
+    }
+  },
+  "archiveHashProof": [
+    {
+      "role": "qualification",
+      "compressedBytes": 121080125,
+      "sha256": "f44735f8c29b5039620e87ccddc3346c298bd9e75c9d755646bdd4537998138e",
+      "shaMatchesReceipt": true,
+      "receiptPath": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+      "receiptSha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3",
+      "receiptHashVerifiedBeforeArchiveRead": true,
+      "mode": "0600",
+      "rootRegular": true,
+      "singleHardLinkVerified": true,
+      "noSymlinkOpen": true,
+      "descriptorStability": {
+        "deviceAndInodeMatchedAtOpen": true,
+        "bytesReadEqualsSize": true,
+        "sizeUnchangedDuringRead": true,
+        "mtimeUnchangedDuringRead": true,
+        "ctimeUnchangedDuringRead": true
+      },
+      "method": "SHA-256 streamed in 1 MiB blocks from O_RDONLY | O_NOFOLLOW descriptor.",
+      "noExtraction": true,
+      "noSqliteOpened": true,
+      "restoreDirectoryExistenceObserved": true,
+      "restoreProofSource": "Existing receipt only; no new extraction, tree comparison or SQL execution.",
+      "receiptReports": {
+        "payloadBytes": 125302944,
+        "fileCount": 344,
+        "restoredBytesAndModesVerified": true,
+        "sqliteDatabasesVerified": 2,
+        "treeSha256": "56dd656b77a82207b750dd19829cc524fc90fa38c4b33d0f500bd2773fb25354",
+        "consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+        "productionRestorePerformed": false
+      }
+    },
+    {
+      "role": "deployment",
+      "compressedBytes": 121080107,
+      "sha256": "d7d5db86330b1903d9be03c2f6637cfef693b05ad78c4016d3a0bf85baa2d2cb",
+      "shaMatchesReceipt": true,
+      "receiptPath": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112319Z-f5b3c25d/deployment-result.json",
+      "receiptSha256": "5dc60033383b530511601e440b1481157b0ef7b250c0d4bdfa175aeab576b733",
+      "receiptHashVerifiedBeforeArchiveRead": true,
+      "mode": "0600",
+      "rootRegular": true,
+      "singleHardLinkVerified": true,
+      "noSymlinkOpen": true,
+      "descriptorStability": {
+        "deviceAndInodeMatchedAtOpen": true,
+        "bytesReadEqualsSize": true,
+        "sizeUnchangedDuringRead": true,
+        "mtimeUnchangedDuringRead": true,
+        "ctimeUnchangedDuringRead": true
+      },
+      "method": "SHA-256 streamed in 1 MiB blocks from O_RDONLY | O_NOFOLLOW descriptor.",
+      "noExtraction": true,
+      "noSqliteOpened": true,
+      "restoreDirectoryExistenceObserved": true,
+      "restoreProofSource": "Existing receipt only; no new extraction, tree comparison or SQL execution.",
+      "receiptReports": {
+        "payloadBytes": 125302944,
+        "fileCount": 344,
+        "restoredBytesAndModesVerified": true,
+        "sqliteDatabasesVerified": 2,
+        "treeSha256": "755ea6b8ec9a0e1fc82b6f8636aa5243526cdc08b61d447322acc0ccade4d330",
+        "consistency": "application-stopped; raw SQLite/WAL/SHM retained",
+        "productionRestorePerformed": false
+      }
+    }
+  ],
+  "operatorProvenance": {
+    "originalFiles": [
+      {
+        "path": "/home/ubuntu/tadazz-mcp-release-tools-e30133c7dfb0-20261118/stage-mcp-site.py",
+        "bytes": 80480,
+        "ownerUid": 0,
+        "mode": "0o700",
+        "mtimeUtc": "2026-11-18T10:29:18.239053+00:00",
+        "sha256": "29e002d042c38aa3c7e21e449ddb3c17e1b79a6fa5bbe967ba7cda8e0c9107ba",
+        "baselineSha256": "29e002d042c38aa3c7e21e449ddb3c17e1b79a6fa5bbe967ba7cda8e0c9107ba",
+        "byteIdenticalToApplicationBaseline": true
+      },
+      {
+        "path": "/home/ubuntu/tadazz-mcp-release-tools-e30133c7dfb0-20261118/deploy-mcp-site.py",
+        "bytes": 62521,
+        "ownerUid": 0,
+        "mode": "0o700",
+        "mtimeUtc": "2026-11-18T10:29:18.239368+00:00",
+        "sha256": "58888da24b38746efbbfebfa3367c66c39590a64bd4f64f409e76de65cbcd65b",
+        "baselineSha256": "58888da24b38746efbbfebfa3367c66c39590a64bd4f64f409e76de65cbcd65b",
+        "byteIdenticalToApplicationBaseline": true
+      }
+    ],
+    "variants": [
+      {
+        "path": "/home/ubuntu/tadazz-mcp-release-tools-e30133c7dfb0-20261118/deploy-mcp-site-docker-defaults.py",
+        "bytes": 62742,
+        "ownerUid": 0,
+        "mode": "0o700",
+        "mtimeUtc": "2026-11-18T11:22:39.423016+00:00",
+        "sha256": "6793f3234cc4399c0ec87957de7bf671ec86db2d4903c1f487ca9a820839593c",
+        "inspectedChange": "Only verify_replacement HostConfig equality changes: both OomKillDisable fields are converted with bool(...get(...)); every other HostConfig field, image, Env and mounts remain fully compared.",
+        "executionByThisHashProven": false
+      },
+      {
+        "path": "/home/ubuntu/tadazz-mcp-release-tools-e30133c7dfb0-20261118/stage-mcp-site-isolated-installer-qa.py",
+        "bytes": 80543,
+        "ownerUid": 0,
+        "mode": "0o700",
+        "mtimeUtc": "2026-11-18T11:16:06.031964+00:00",
+        "sha256": "5eb37823e66f1d5a2fe8659c8fd61aca92aebd9654949a37cb31a6260c80bf79",
+        "inspectedChange": "Only the synthetic smoke container environment adds TADAZZ_PACKAGE_INSTALLER_ENABLED=true. Dockerfile/image build inputs and production environment code are unchanged.",
+        "executionByThisHashProven": false
+      }
+    ],
+    "hostConfigAssessment": {
+      "codeReviewOnly": true,
+      "retainedGuard": "All HostConfig fields are still compared after normalization of OomKillDisable only.",
+      "equivalenceIntroduced": "For this field, missing/null and false normalize to False; true versus false still fails comparison.",
+      "historicalActualHostConfigValuesNotReconstructed": true
+    },
+    "invocationEvidence": {
+      "proven": false,
+      "searchedReleaseDirectory": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2",
+      "searchScope": "Bounded file-name/receipt-field search to depth 2; excludes restore-private, synthetic-config and packaged artifact trees.",
+      "matchingInvocationCandidateCount": 0,
+      "inspectedReceipts": [
+        {
+          "matchingFields": [],
+          "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-result.json",
+          "sha256": "7b9695d8d2fb33765333b377271d75abb2fb5f4a9de85f68456ba0647930c244"
+        },
+        {
+          "matchingFields": [],
+          "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/stage-manifest.json",
+          "sha256": "9a28980ba2084963b76b32294d7c759a590a7e43bbeb32f8fd57f3ae08063dc7"
+        },
+        {
+          "matchingFields": [],
+          "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/synthetic-smoke-result.json",
+          "sha256": "b23dedbe1273d93340e8adb59252b58268e59513d25b60104d9a85927db2dd1b"
+        },
+        {
+          "matchingFields": [],
+          "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112319Z-f5b3c25d/deployment-result.json",
+          "sha256": "5dc60033383b530511601e440b1481157b0ef7b250c0d4bdfa175aeab576b733"
+        },
+        {
+          "matchingFields": [],
+          "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/deployment-20261118T112048Z-bb3d5a9c/deployment-result.json",
+          "sha256": "6d21894cbab96e67de76cf5b0eb924db2b2016af34a9fff2474be89133347540"
+        },
+        {
+          "matchingFields": [],
+          "path": "/home/ubuntu/tadazz-mcp-release-e30133c-20261118-a2/backup-qualification-20261118T111940Z-71e3277e/backup-qualification-result.json",
+          "sha256": "ac6ed78a7aff7f462b2110e577dc7dffea947c350b4840eac8e0740528423cd3"
+        }
+      ],
+      "attribution": "No actor is attributed; no current file hash is asserted to be the historical executable hash."
+    },
+    "laterApprovedTooling": {
+      "revision": "21ef71e4e5e803aa55a6ba60a4c5d1a17c94c100",
+      "evidenceSource": "Root's commit/push confirmation; not a new independent Git readback in this proof.",
+      "historicalExecutionEstablished": false,
+      "note": "The observed successful deployment finished before root's later v2 tooling snapshot. This proof does not claim that later tooling performed it."
+    }
+  },
+  "historicalDependencyAuditSummary": {
+    "status": "AUDIT_COMPLETED_WITH_FINDINGS",
+    "evidenceBasis": "Earlier completed audit and assessment in this session, retained in the release work; not rerun or reread from a remote system while drafting this JSON.",
+    "fullWorkspaceLockfileCounts": {
+      "critical": 0,
+      "high": 1,
+      "moderate": 9,
+      "low": 2
+    },
+    "productionLockfileCounts": {
+      "critical": 0,
+      "high": 1,
+      "moderate": 8,
+      "low": 1
+    },
+    "limitations": [
+      "The audit was not clean; findings remain dependency debt.",
+      "A workspace lockfile audit does not by itself prove complete coverage of every dependency from the separate read-only SDK build cache.",
+      "Bounded reachability review did not establish an enabled protected-route authorization bypass. That finding is not a guarantee of absence of vulnerabilities.",
+      "No dependency was upgraded or findings ignored during release qualification."
+    ]
+  },
+  "remainingHostBoundary": {
+    "chatgptPluginCreated": false,
+    "evidenceSource": "Root reported create_plugin HTTP 403 due to workspace MCP permissions; this proof makes no independent tool invocation.",
+    "authenticatedHostConnectionNotEstablished": true,
+    "browserOrPermissionBypassAttemptedByThisReview": false
+  }
+}

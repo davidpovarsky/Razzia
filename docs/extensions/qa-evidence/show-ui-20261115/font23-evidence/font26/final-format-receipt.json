@@ -1,0 +1,7 @@
+{
+  "initialEightFilesSameAst": true,
+  "finalCorrectedSpecSameAst": true,
+  "canonicalSpecSha256": "20871e3f84ece6d0da4d9d5ee1507bb5959d2b3dabdc1d623e47f6197b508029",
+  "formattedSpecSha256": "fce22dbd161c0aa05288ace066ff09b9df63b7814cbf7a268778216bf1d640f1",
+  "distinction": "Exact resource bytes and tested raw source hashes retained. Final source formatting is normalized AST equivalence, not a claim of identical source or harness SRI bytes."
+}

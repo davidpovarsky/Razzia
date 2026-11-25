@@ -1,0 +1,13 @@
+{
+  "sourceSha": "b03e07cd003347da46802b046dccc3d09214e78c",
+  "reason": "Partial local source archive from failed task-owned pin preparation",
+  "diskFreeBefore": 6500773888,
+  "deleted": [
+    {
+      "path": "C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-editor-pins-b03e07cd0033-5a952aa0kqvet4f8\\source.tar.gz",
+      "bytes": 56098816,
+      "sha256": "d26a9d08b82e7aa18cb3a172b6b517304bd5956e0d574bfae1dfd4b9205e6e91"
+    }
+  ],
+  "diskFreeAfter": 6556078080
+}

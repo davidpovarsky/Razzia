@@ -1,0 +1,1 @@
+{"status": "PASS", "vectors": 42, "encoder": "Python utf-16-be surrogatepass", "hash": "hashlib.sha256"}

@@ -1,0 +1,67 @@
+{
+  "archiveSha256": "26b67063b2cffef87bf665c05480b841338af94daba9aee9f6bab2b64f30d485",
+  "bytes": 467309,
+  "files": {
+    "inputs/replacement/activate_and_verify_timer.py": {
+      "bytes": 27471,
+      "sha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164"
+    },
+    "inputs/replacement/check_phase3_admission.py": {
+      "bytes": 5389,
+      "sha256": "f59056c5c4a138191c34b2eff10cf4b0cbd1e429671d875f8268b1419a627537"
+    },
+    "inputs/replacement/phase3-admission-records/deployment-deploy-execution.json": {
+      "bytes": 5524,
+      "sha256": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315"
+    },
+    "inputs/replacement/phase3-admission-records/post-deploy-execution.json": {
+      "bytes": 6150,
+      "sha256": "802654edaeefde8c0e2d64cf86f486905f179514c428a5331c35fa1ace28db82"
+    },
+    "inputs/replacement/phase3-admission-records/post-deploy-observation.json": {
+      "bytes": 7952,
+      "sha256": "88a19398695dc5c9c35df81da90dffb9045dda1874487129051cf018cc410553"
+    },
+    "inputs/replacement/phase3-admission-records/stage-execution.json": {
+      "bytes": 1475,
+      "sha256": "a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62"
+    },
+    "inputs/replacement/phase3-admission.json": {
+      "bytes": 1344,
+      "sha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26"
+    },
+    "inputs/replacement/phase3-independent-review.json": {
+      "bytes": 7233,
+      "sha256": "74772fce7e9e446c4466b89832b0298d1cf462d6719ff2444b52da7ed1328078"
+    },
+    "inputs/replacement/phase3-offline-guards.json": {
+      "bytes": 942,
+      "sha256": "5c73ab9a1ed2b23e0875cf8a880de1f0436de4f9872507a6185e0b379b3751d2"
+    },
+    "inputs/replacement/phase3-unit-review.json": {
+      "bytes": 1155,
+      "sha256": "30ac1cbcbf5efb2d2c395cdd2a00d6c68409c05680df30d0d9bc3843e2c85336"
+    },
+    "inputs/replacement/phase3-unit.diff": {
+      "bytes": 586,
+      "sha256": "6e34db709527baf30f0f8f210eb71de6ab94e1f567ad15637fbfa9fe822b0107"
+    },
+    "inputs/replacement/timer-fixture/fixture-summary.json": {
+      "bytes": 746,
+      "sha256": "fbfc55aa2d853847b825b2e51f326584a9592fa3cf3a5a9fe3bb01eab198d978"
+    },
+    "inputs/replacement/timer-fixture/request.json": {
+      "bytes": 241,
+      "sha256": "facba34ed49354984a7dddea6df6e40edb6d7c18e769afc00a8a3e3a472ac053"
+    },
+    "inputs/replacement/timer-fixture/source.tadazz": {
+      "bytes": 520223,
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d"
+    },
+    "inputs/replacement/timer-input-manifest.json": {
+      "bytes": 1374,
+      "sha256": "eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de"
+    }
+  },
+  "reviewSha256": "74772fce7e9e446c4466b89832b0298d1cf462d6719ff2444b52da7ed1328078"
+}

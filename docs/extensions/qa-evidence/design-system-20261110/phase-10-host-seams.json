@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "base": "2dd112613ffbace71420242f4e302afe13d2067b",
+  "scope": "Unapproved host state/actions remain AST-identical to TDS-07; the two owner-approved TDS-09 policy/error seams are pinned to exact reviewed AST hashes; final UI composition is validated in browsers",
+  "results": [
+    {
+      "path": "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+      "component": "ManagerControlToolbar",
+      "nonUiAstSha256": "9018ac8769249e23ccd77306e1f9dc907dce271997c0f4f4a4133485eaeb9082",
+      "guardedAgainst": "2dd112613ffbace71420242f4e302afe13d2067b",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameWrapper.tsx",
+      "component": "GameWrapperView",
+      "nonUiAstSha256": "e61c597c044c95d4f1b0f68de068e6c8f46fa8b318a528fb39af9088b096c818",
+      "guardedAgainst": "2dd112613ffbace71420242f4e302afe13d2067b",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/HostPlayersModal.tsx",
+      "component": "HostPlayersModal",
+      "nonUiAstSha256": "911e8a2099bc623dde59cad15c0c673fab758864b3d3766fc5f7b33d126f61f2",
+      "guardedAgainst": "TDS-09 approved seam",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/HistoryDialog.tsx",
+      "component": "HistoryDialog",
+      "nonUiAstSha256": "981682959126fa3cc6ea3d589b91a0cd08b1e778c1f623350853dfd62dd7ef6d",
+      "guardedAgainst": "2dd112613ffbace71420242f4e302afe13d2067b",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/HostShortcutsDialog.tsx",
+      "component": "HostShortcutsDialog",
+      "nonUiAstSha256": "3810cbe5f5d483da1fd939030992ce6af741f7bd71cd86caaf71f44be21d5322",
+      "guardedAgainst": "2dd112613ffbace71420242f4e302afe13d2067b",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+      "component": "GameSettingsModal",
+      "nonUiAstSha256": "2d2de7b76eb7776d95c2fa71ddda3309c9b529e81a1709b5cf2440abb16867e7",
+      "guardedAgainst": "TDS-09 approved seam",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/states/Room.tsx",
+      "component": "Room",
+      "nonUiAstSha256": "7fd8fbbaa9059ddf78945fcf8cd33515180125bb7c6b85649aaa2f30fbc1bec9",
+      "guardedAgainst": "2dd112613ffbace71420242f4e302afe13d2067b",
+      "unchanged": true
+    },
+    {
+      "path": "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx",
+      "component": "TadazzLobbyScreen",
+      "nonUiAstSha256": "e51405d3bf7620dcd5fd592835f1fee2c7615370ea12fd3118775496a2bb3804",
+      "guardedAgainst": "2dd112613ffbace71420242f4e302afe13d2067b",
+      "unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "7c5c5ec6012459c09b9bb8193cdbc0673634121364f133165f9dd067c41b5a3e",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-11-15T07:56:03.99628522Z",
+    "FinishedAt": "2026-11-15T08:06:56.945808573Z"
+  },
+  "sizeRw": 16384
+}

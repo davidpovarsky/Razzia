@@ -1,0 +1,81 @@
+{
+  "container": "4888271663dcc2bb3b8688f08d25e80852aac3c08eabcc80432453cfa351afdd",
+  "customerMountUsed": false,
+  "failureCode": "SYNTHETIC_SMOKE_PROCESS_FAILED",
+  "image": "sha256:08c67f10cf12208b7afd3f5fc951458943f86eb54f0db52bfe5d7cbd664edc90",
+  "network": "none",
+  "ok": false,
+  "packagePolicy": {
+    "accountsEnabled": true,
+    "expectedStatus": 404,
+    "installerEnabled": false
+  },
+  "probeExitCode": 1,
+  "probeStderrBytes": 0,
+  "probeStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "productionTouched": false,
+  "retainedStopped": true,
+  "routes": {
+    "GET /.well-known/oauth-authorization-server/oauth": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /.well-known/oauth-protected-resource": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/accounts/me": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/auth/mode": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/billing": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/billing/config": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/health": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/packages/capabilities": {
+      "contentType": "application/json",
+      "expectedStatus": 404,
+      "status": 404
+    },
+    "GET /api/quizz": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/results": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /mcp": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /oauth/jwks.json": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    }
+  },
+  "sourceSha": "8b063c17800dffe4f91a7f2c9ae6aa882389e614"
+}

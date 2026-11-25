@@ -1,0 +1,12 @@
+$ vitest run "--maxWorkers" "2"
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-unified-site-20261110/extensions
+
+
+ Test Files  80 passed (80)
+      Tests  672 passed (672)
+   Start at  18:55:11
+   Duration  44.52s (tests 52%, import 39%, transform 8%, worker 1%)
+
+    Isolate  80 workers spawned · ~227ms startup each (spawn + environment, per file)
+             at least ~8.84s faster with isolate: false — reuses workers across files instead of one per file

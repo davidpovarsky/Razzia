@@ -1,0 +1,19 @@
+[36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 2696 modules transformed.
+rendering chunks...
+computing gzip size...
+extensions/src/mcp-app/widget/dist/full-show-entry-inputs.json    765.94 kB │ gzip: 132.85 kB
+extensions/src/mcp-app/widget/dist/full-show.css                  475.38 kB │ gzip: 183.66 kB
+extensions/src/mcp-app/widget/dist/full-show.js                 2,066.57 kB │ gzip: 518.34 kB
+
+transforming...
+✓ 2696 modules transformed.
+rendering chunks...
+computing gzip size...
+extensions/src/mcp-app/widget/dist/full-show-entry-inputs.json    765.94 kB │ gzip: 132.85 kB
+extensions/src/mcp-app/widget/dist/full-show.css                  475.38 kB │ gzip: 183.66 kB
+extensions/src/mcp-app/widget/dist/full-show.js                 2,066.57 kB │ gzip: 518.34 kB
+
+[32m✓ built in 1m 4s[39m
+{"rendererBuildId":"0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80","sha256":"ceb8fbd063e3a6a1cc3ef8a18cb44a144ef3433054a04fe20fd1013734ee9dac","bytes":3019211,"publicAssets":85}

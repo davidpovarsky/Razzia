@@ -1,0 +1,160 @@
+{
+  "files": [
+    {
+      "path": "extensions/src/mcp-app/contracts/canonical.ts",
+      "bytes": 2551,
+      "sha256": "4c77e968c2225df6064acb85027816fb8b2495da70ce48175292cb40ae86d4da"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/index.ts",
+      "bytes": 87,
+      "sha256": "e5a8fda9b4ae401e48d6d7c538d997bf8b0848d7ae9f6724375df5103110fa02"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/schemas.ts",
+      "bytes": 3415,
+      "sha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656"
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/tools.ts",
+      "bytes": 4844,
+      "sha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6"
+    },
+    {
+      "path": "extensions/src/mcp-app/package.json",
+      "bytes": 786,
+      "sha256": "f04ba9e0dd45857c8e27c3e62e1f7e264da0de0462f114e0cf0caa691f865d5f"
+    },
+    {
+      "path": "extensions/src/mcp-app/pnpm-lock.yaml",
+      "bytes": 20780,
+      "sha256": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/README.md",
+      "bytes": 6280,
+      "sha256": "df93544cf83538dc7597f34148201a50569aff88c7ed5355f95eb71748b4cc0f"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authoring.ts",
+      "bytes": 4270,
+      "sha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authorization.ts",
+      "bytes": 2983,
+      "sha256": "23f09d866f9f38137e16364db0357ded2ef7741c82669ef6e3c8ee4943c3df9d"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/connection.ts",
+      "bytes": 9001,
+      "sha256": "3aef9d707d1d920ca7890d436aef3f468a1f0d55273a33a7eb96b8facdf619ea"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dependencies.ts",
+      "bytes": 4480,
+      "sha256": "3aaacdd866043de66bc3a187ad5976102ccb1ecdbff8333140cc8b32c8855600"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dispatch.ts",
+      "bytes": 6794,
+      "sha256": "2dc7f792dfefe3f1429f82006a608c1b12c1b3044763fb973e055a8995d75ec1"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/drafts.ts",
+      "bytes": 1462,
+      "sha256": "3a15de742e0baf6fb4747d916b133dec567e168ba257be706d8281b106e709cc"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/errors.ts",
+      "bytes": 880,
+      "sha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/factory.ts",
+      "bytes": 4685,
+      "sha256": "533094d88faa4dbd686442d4f5bd0d382e200f96fe0065c8aad4c402135e47d5"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/preview.ts",
+      "bytes": 3014,
+      "sha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/request-boundary.ts",
+      "bytes": 4002,
+      "sha256": "31aedb9a56a332c0cc65506781aacfdde8a07d99454dc556bf398c872a014173"
+    },
+    {
+      "path": "extensions/src/mcp-app/server/results.ts",
+      "bytes": 1776,
+      "sha256": "ab1eb5393a693c431688d2e2f0d4f69cc7d99c1d81f9bf5d4fafb14b68009263"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/authorization.nodecheck.ts",
+      "bytes": 4700,
+      "sha256": "363d1f4bf2c5401a17fd576a3daaadf3686e25b6784e6ed1174f5aeb723b778a"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts",
+      "bytes": 2374,
+      "sha256": "2406fbb92db3204faef1dc9236bd7bc93589e7cdb02920fcd22016bfda9a6302"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/canonical.nodecheck.ts",
+      "bytes": 2447,
+      "sha256": "2a782e417312a7ccc0d7a2525046505104d148aa9029bc094ee503e0c6d8a44c"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/delivery-fixture.ts",
+      "bytes": 2832,
+      "sha256": "59a7045ce966bd28bc42fff1df6a31d918e54c02974221fccbfb34bb649a127a"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/drafts.nodecheck.ts",
+      "bytes": 3479,
+      "sha256": "9a90571e0923340db3dfbe901900460e62dbe71b2dece405c4d0917479827dbc"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/fixtures.ts",
+      "bytes": 5698,
+      "sha256": "b30f33d4b9f7e188f7d60d5b44e94ba3fe0d53c779c0c4857137600ba7303395"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/ingress.nodecheck.ts",
+      "bytes": 4046,
+      "sha256": "d3f41a29f36519c1e17ef7117ae10ec10445e559223ce264613ce94d547f0934"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/integrity.nodecheck.ts",
+      "bytes": 1920,
+      "sha256": "2a5ef1c323e13d14e88cf1c7c2b361511a675cc7dbe52b0a3651af2b029deb75"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/lifecycle-fixture.ts",
+      "bytes": 4677,
+      "sha256": "05dfa6167e9a71ea1d02d468772ddbffbe24f69c0b430865cffb0ec06adacc32"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts",
+      "bytes": 9069,
+      "sha256": "20632188a27dcc4529710c9093b284191255a40466f0b59a2a528069ce6832e3"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+      "bytes": 1191,
+      "sha256": "ce048dd8ca1a95304a7820a54a29818c8ba04c1d67f54828596be54a67fc3fd8"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/replay.nodecheck.ts",
+      "bytes": 3625,
+      "sha256": "992195429728d625fe59fe4d5a12d9f759ba193465759c5233c0d3a03e1781ba"
+    },
+    {
+      "path": "extensions/src/mcp-app/tsconfig.json",
+      "bytes": 622,
+      "sha256": "5809a3ff0ad270f8e20a920110efe7edad1edf17cc09f14c6b39dd1ff42dd3e3"
+    }
+  ],
+  "zipSha256": "59f4958b09a2cad12914dfb5aeda640596b0ffcea5567c9c1f5724f6640f1988"
+}

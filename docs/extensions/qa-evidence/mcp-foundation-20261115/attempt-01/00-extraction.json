@@ -1,0 +1,9 @@
+{
+  "status": "PASS_EXACT_SOURCE_EXTRACTION",
+  "manifest_sha256": "76634efa3162227a54c7b0cedaf6e28c0facab55f0e127a8b469a8e4b9f97ffc",
+  "archive_sha256": "8b989820b2433953f76630a6f3ef551454395f33dad7149a46ee2c4d959a5351",
+  "files": 113,
+  "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-foundation-76634efa3162227a54c7b0cedaf6e28c0facab55f0e127a8b469a8e4b9f97ffc/app",
+  "no_symlinks_or_traversal": true,
+  "runtime_tests": "NOT_RUN"
+}

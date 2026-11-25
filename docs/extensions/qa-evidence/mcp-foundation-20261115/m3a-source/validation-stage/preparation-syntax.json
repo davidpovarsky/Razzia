@@ -1,0 +1,37 @@
+{
+  "kind": "PREPARATION_SYNTAX_ONLY",
+  "applicationImported": false,
+  "functionalTests": "NOT_RUN",
+  "checks": [
+    {
+      "file": "analyze-get-trace.mjs",
+      "kind": "JAVASCRIPT_PARSE_ONLY",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "file": "check-source.mjs",
+      "kind": "JAVASCRIPT_PARSE_ONLY",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "file": "get-observer.mjs",
+      "kind": "JAVASCRIPT_PARSE_ONLY",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "file": "materialize-source.mjs",
+      "kind": "JAVASCRIPT_PARSE_ONLY",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "file": "validate-private.sh",
+      "kind": "BASH_SYNTAX_ONLY_NO_EXECUTION",
+      "exit": 0,
+      "stderr": ""
+    }
+  ]
+}

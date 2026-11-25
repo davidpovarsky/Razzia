@@ -1,0 +1,1 @@
+{"status":"COMPOSED_INPUTS_VERIFIED","base_sha":"003cf88b6cba19989388dca20efcfaa01cc8f9ad","overlay_sha":"88a64501e622a9db072f3f7d89a989feef6a182d","base_files":549,"overlay_files":26,"source_graph":"immutable /work native hooks; canonical /delta authority; /base unchanged downstream; shared /work account/Registry"}

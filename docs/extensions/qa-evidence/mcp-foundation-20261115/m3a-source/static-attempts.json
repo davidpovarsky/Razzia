@@ -1,0 +1,20 @@
+{
+  "kind": "SOURCE_INSPECTION_ATTEMPTS_NOT_APPLICATION_TESTS",
+  "attempts": [
+    {
+      "command": "python .../m3a-source/inspect-source.py",
+      "exit": 0,
+      "result": "Windows system32 python shim returned no output; expected artifact absent. Not treated as an inspection pass."
+    },
+    {
+      "command": "Python312/python.exe .../m3a-source/inspect-source.py",
+      "exit": 1,
+      "result": "Static inspector failed reading non-ASCII approved-seams JSON with Windows cp1252 default. Corrected explicit UTF-8 reads; no application code executed."
+    },
+    {
+      "command": "Python312/python.exe .../m3a-source/inspect-source.py (corrected UTF-8)",
+      "exit": 0,
+      "result": "Source inspection completed. Raw unmodified freeze subprocess exit1 retained: leased MCP allowlist denials, mismatches empty. Subsequently optimized Git blob comparison to one ls-tree snapshot and retained the same results. No functional tests/typecheck/install."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "base": "dd18d31c8a54307394e66bbeb3b347f90a12c12d",
+  "originalBootstrapAuthCloseByteIdentical": true,
+  "paths": [
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "bytes": 15317,
+      "sha256": "c7af66387f58979a7164f2f3601026c83e4aa4856ef5b9a17b589eec79cc04d2"
+    },
+    {
+      "path": "packages/socket/src/index.ts",
+      "bytes": 1527,
+      "sha256": "bf8d72701901621eed97a151ac2604d7bbde08135184ef7015cf1f9517b7441e"
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "bytes": 1406,
+      "sha256": "4f575050d155090527213cf516e01a6e897b4fd0f14edb0a0bc1caf0546f7c7f"
+    },
+    {
+      "path": "extensions/src/server/storage/startup-recovery.ts",
+      "bytes": 3354,
+      "sha256": "16f16feffd8d8b97d08581de76ecae39d4f109deb986a5e4d9eb619a358ee9ba"
+    },
+    {
+      "path": "extensions/src/server/storage/startup-recovery.test.ts",
+      "bytes": 16622,
+      "sha256": "8e152070ed6eb84a5ca59c70cebf052772567f1895ba0fd47ae4493fad45fa04"
+    }
+  ],
+  "scope": "Two approved protected paths, server export and new downstream recovery/tests only",
+  "sourcePrivateCopyLimitBytes": 16777216,
+  "maximumCaptureAttempts": 3
+}

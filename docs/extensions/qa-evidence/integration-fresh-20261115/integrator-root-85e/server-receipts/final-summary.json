@@ -1,0 +1,276 @@
+{
+  "status": "PASS_NORMAL_FROZEN_ROOT_AND_SCOPED_TYPES_SDK",
+  "product_head": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+  "checked_utc": "2026-11-15T09:34:40.226426+00:00",
+  "checks": {
+    "frozen-install": {
+      "command": [
+        "pnpm",
+        "install",
+        "--offline",
+        "--frozen-lockfile",
+        "--store-dir=/work/store",
+        "--package-import-method=copy",
+        "--verify-store-integrity=true",
+        "--reporter=append-only"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "99d2fccae32327d52778e94ed4ac332a70bd7869034446ace3fd254606a1fd0a",
+      "seconds": 5.676,
+      "raw_namespace": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r7"
+    },
+    "installed-graph": {
+      "command": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import {createRequire} from 'node:module';import fs from 'node:fs';const expected={'@modelcontextprotocol/server':'2.4.0','@modelcontextprotocol/client':'2.4.0','@modelcontextprotocol/core':'2.4.0','@modelcontextprotocol/ext-apps':'2.1.0','@types/node':'22.10.0','typescript':'5.9.3','tsx':'4.21.0'};for(const [p,want] of Object.entries(expected)){const file=fs.realpathSync(process.cwd()+'/extensions/src/mcp-app/node_modules/'+p+'/package.json');const version=JSON.parse(fs.readFileSync(file)).version;if(version!==want)throw Error(p+' version mismatch');if(!file.startsWith(process.cwd()+'/node_modules/.pnpm/'))throw Error('package outside actual root graph');console.log(JSON.stringify({package:p,path:file,version}));}const q=createRequire(process.cwd()+'/extensions/package.json');console.log('parent-typescript',q('typescript/package.json').version);console.log('parent-node-types',q('@types/node/package.json').version);"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+      "seconds": 0.092,
+      "raw_namespace": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r7"
+    },
+    "parent-types": {
+      "command": [
+        "pnpm",
+        "--dir",
+        "extensions",
+        "exec",
+        "tsc",
+        "--noEmit",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "seconds": 27.896,
+      "raw_namespace": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r7"
+    },
+    "private-types": {
+      "command": [
+        "pnpm",
+        "--dir",
+        "extensions/src/mcp-app",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "70685b4df7789c854b9e1ceab7d78a6d0f9a0831c11eb0010b7b5fdbe0e50c39",
+      "seconds": 16.701,
+      "raw_namespace": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r6"
+    },
+    "private-tests": {
+      "command": [
+        "pnpm",
+        "--dir",
+        "extensions/src/mcp-app",
+        "test"
+      ],
+      "cwd": "/work/project",
+      "exit": 0,
+      "log_sha256": "7e3d68ef4bdbc788e315a812f1470cafc14da77f3a505a6d0eca5a353a69b62f",
+      "seconds": 27.52,
+      "raw_namespace": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r6"
+    }
+  },
+  "sdk_tests": {
+    "tests": 41,
+    "pass": 41,
+    "fail": 0,
+    "skipped": 0
+  },
+  "private_checks_reused_from_r6": {
+    "installed_graph_sha256": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+    "product_head": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+    "reason": "Same85e product source, unchanged root/private locks and exact installed-graph log hash. Only5 previously omitted natural parent-config imports were added to the QA view; private sources and graph unchanged. Reuse identical-SHA receipts; do not rerun41 cases.",
+    "results": {
+      "private-tests": {
+        "command": [
+          "pnpm",
+          "--dir",
+          "extensions/src/mcp-app",
+          "test"
+        ],
+        "cwd": "/work/project",
+        "exit": 0,
+        "log_sha256": "7e3d68ef4bdbc788e315a812f1470cafc14da77f3a505a6d0eca5a353a69b62f",
+        "seconds": 27.52
+      },
+      "private-types": {
+        "command": [
+          "pnpm",
+          "--dir",
+          "extensions/src/mcp-app",
+          "run",
+          "typecheck"
+        ],
+        "cwd": "/work/project",
+        "exit": 0,
+        "log_sha256": "70685b4df7789c854b9e1ceab7d78a6d0f9a0831c11eb0010b7b5fdbe0e50c39",
+        "seconds": 16.701
+      }
+    },
+    "source": "run-r6 actual freshly installed root graph"
+  },
+  "source": {
+    "entries": 918,
+    "mismatches": []
+  },
+  "original_cache_preserved": {
+    "exact_hash_size_mode_mtime_inode_equality": true
+  },
+  "metadata_after": {
+    "changed": [],
+    "files": 459
+  },
+  "hydrated_metadata": {
+    "all_file_sha256_match_hydration_receipt": true,
+    "expanded_bytes": 400260954,
+    "files": 459,
+    "hydration_receipt_sha256": "3b571703dcfdb4f4248fc21ab8cd08418c8ab85e9660737d903e5f468942cf77",
+    "inventory_sha256": "6f2126891ed74af76c8b6644a25e0faec29e438d248107010d808bbd49649c80",
+    "metadata_mount_readonly": true,
+    "prior_verification_verdicts_copied": false,
+    "raw_https_response_bodies_verified": 412
+  },
+  "resources": {
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "memory_peak": "2198347776",
+    "tmpfs_used_bytes": 508715008
+  },
+  "shared_ram": {
+    "aggregate_mount_cap": 1610612736,
+    "cgroup_memory_current": "620429312",
+    "metadata_tmpfs_capacity": 805306368,
+    "metadata_tmpfs_used": 435142656,
+    "note": "Shared tmpfs pages from the exited hydrator may be charged to ancestor cgroup; not duplicated by this read-only mount. Work tmpfs is charged to this consumer; the two physical mount limits bound all file data.",
+    "work_tmpfs_capacity": 805306368,
+    "work_tmpfs_used": 508715008
+  },
+  "own_source_evidence_fixture_new_blocks_bytes": 21753856,
+  "physical_limit_bytes": 67108864,
+  "free_host_bytes": 2960637952,
+  "reserve_bytes": 2147483648,
+  "docker_bookkeeping_not_in_above_block_count": true,
+  "private_archive": {
+    "private_archive_path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\integrator-root-85e\\local-artifacts\\metadata-full-85e.tar.gz",
+    "archive_sha256": "6f1d6c6a60e2f7de3f11d2bf1b85ac1f6003c78f74aae8351195a2bbe896ed98",
+    "archive_bytes": 62574556,
+    "server_export_sha256_matches": true,
+    "server_export": {
+      "files": 459,
+      "bytes": 62574556,
+      "sha256": "6f1d6c6a60e2f7de3f11d2bf1b85ac1f6003c78f74aae8351195a2bbe896ed98",
+      "inventory_sha256": "6f2126891ed74af76c8b6644a25e0faec29e438d248107010d808bbd49649c80",
+      "destination": "binary stdout over existing SSH directly to private Windows artifact; no server archive",
+      "all_mirror_files_verified_before_stream": true
+    },
+    "not_committed_to_git": true,
+    "streamed_directly_without_server_archive": true
+  },
+  "readonly_cache_descriptor": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+  "validated_index_sha256": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+  "runner_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T09:29:39.630546927Z",
+    "FinishedAt": "2026-11-15T09:30:24.429092613Z"
+  },
+  "guard": "Existing raw failures preserved; no new guard run, production build/release/browser/provider/physical-device proof",
+  "raw_file_sha256": {
+    "run-r6/cache-after.json": "283219fcd2758457189c63d5cfff4877b5d982ff4bf054c9534e2fee68e1d5d7",
+    "run-r6/cache-before.json": "982cd4689cf8d364fd21202596f06ee864e377f240630f44ef63d2984a5f5030",
+    "run-r6/cache-preserved.json": "b8e80775c2cd91617203d86f1eeee379e5d4752c311c03b2fbcc703b0cb4be77",
+    "run-r6/failure.json": "fcb5295670d2a588c13936828f044aecee862dffeb5f324310767c178ada7716",
+    "run-r6/frozen-install.json": "42fe11ae9290f676f483995e2f376c6202606b59e32ea976cc14e2f61785f3f6",
+    "run-r6/frozen-install.log": "c950204f47ac14c07beef3a891c2a660c3d4d69a07f2d37edbbcb9c3ea785209",
+    "run-r6/hydrated-metadata.json": "608acca0bbf392a63a66689538cfee3225a07fca6030618f88f8d5affe5831d3",
+    "run-r6/import-inodes.json": "8b223429ff9acc8c7dca52c2215e3e522212161d6bc91c16e6a5aee51a0052c6",
+    "run-r6/installed-graph.json": "bf1192a9b0ba83c199ab0d4373a5723b421af434cd0bb5246cc9aec59f44eefa",
+    "run-r6/installed-graph.log": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+    "run-r6/launch-ram-consumer.py": "d57a1c5d57837c8c781cb58fb6c7eb8f6ed0df31d40362fb80d0cd1bb9882318",
+    "run-r6/launch.json": "0d898426e71d76ea2625e4a12fe9a4f5be76cedc455813c9c0eaee6f1c841170",
+    "run-r6/launch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-r6/launch.stdout": "2dbb6fa2356914b7fe3f368fb3c4a7db6f300528fa36c84552c3874c0ded70a1",
+    "run-r6/manifest.json": "638239526baa724a0d8b32834e7ccd3e6196847a0c74c566bb3c65ac8b341f75",
+    "run-r6/metadata-after.json": "8691dcf62b240a88603e5053912f0f01a687d05e5b06c6b6eabdf65554ad107d",
+    "run-r6/native-work-execution.json": "285851da7a903f586fc7701263c00f757ae7d15e428726df56393cf28f83e73e",
+    "run-r6/native-work-execution.log": "0c55317d08fb0a195c34f82536e8fc6ccc267a33850d18135cd7fd17e869eafa",
+    "run-r6/parent-types.json": "a23253aae4bf523bf92179c85ac4cfbce0f7caeeb7ec301319f2ed9b976fec3a",
+    "run-r6/parent-types.log": "a4045896b1ae54eb6074e628e7a6e9715c439299cd9c625783a1f0ef0539a23a",
+    "run-r6/private-tests.json": "3b261d82514ca967ee2a414c24ac8bf5e7266560674e770ad047d62f64087755",
+    "run-r6/private-tests.log": "7e3d68ef4bdbc788e315a812f1470cafc14da77f3a505a6d0eca5a353a69b62f",
+    "run-r6/private-types.json": "a9f8a87dd075c8ad80624357c02743dd92ebccff7796d2abc38a3cc94c5f5215",
+    "run-r6/private-types.log": "70685b4df7789c854b9e1ceab7d78a6d0f9a0831c11eb0010b7b5fdbe0e50c39",
+    "run-r6/resource-end.json": "f6d21ba7778ca31800697a47e93b36fbd4348c298b5877a6cd894579577fdbef",
+    "run-r6/runner.py": "4f375e92c9a7b516f675010ca6c81d0e2b37caa829e3a3e4e9f8dbb949bbe3e6",
+    "run-r6/shared-ram-accounting.json": "ea240b05c2b3692a20f92267daf501ee7432b558b7dc21dbc42d76105d530cfc",
+    "run-r6/shared-row-comparison.json": "d4e99ee46e75b608626196d0d7b90013535e6f5d9dffb82edd198a6efbf4d9ef",
+    "run-r6/source-after.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r6/source-before.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r6/union-result.json": "e1e2f40b02deb0e942954b2ea23bee2be10d13706d38d03cd5321cd913ed2db9",
+    "run-r6/versions.json": "31fa2898fcb7441a77e2180af09e06a1946dab1472ba6d1c7bd3309cabaec355",
+    "run-r6/versions.log": "db0a2ca74e1ab49078c4ba2213d9389be1ba9f4a1583a8773225feaccde8b329",
+    "run-r6/work-source-after.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r6/work-source-before.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r7/cache-after.json": "283219fcd2758457189c63d5cfff4877b5d982ff4bf054c9534e2fee68e1d5d7",
+    "run-r7/cache-before.json": "982cd4689cf8d364fd21202596f06ee864e377f240630f44ef63d2984a5f5030",
+    "run-r7/cache-preserved.json": "b8e80775c2cd91617203d86f1eeee379e5d4752c311c03b2fbcc703b0cb4be77",
+    "run-r7/frozen-install.json": "df9280227d35d4a78ce8f4a7aa7de6370795feaecb449caa79782b0abf88d5b4",
+    "run-r7/frozen-install.log": "99d2fccae32327d52778e94ed4ac332a70bd7869034446ace3fd254606a1fd0a",
+    "run-r7/hydrated-metadata.json": "608acca0bbf392a63a66689538cfee3225a07fca6030618f88f8d5affe5831d3",
+    "run-r7/import-inodes.json": "8b223429ff9acc8c7dca52c2215e3e522212161d6bc91c16e6a5aee51a0052c6",
+    "run-r7/installed-graph.json": "c20a012f2f3f7e11797db9db81dd438d2834dfb7c9031a18f89d508c8ca4020c",
+    "run-r7/installed-graph.log": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+    "run-r7/launch-ram-consumer.py": "ea36f8615af66ae577699c3a2238e6e482d82e31ff4aa995b1ed3e556ec21c77",
+    "run-r7/launch.json": "f09bd592847cd29aab128ec7d6ab2a1f73d3148dd18981a851df9fa2befa87fd",
+    "run-r7/launch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-r7/launch.stdout": "4c7a4bd4cd955b5ba94968e32cbdfb0d3f87dc5581d1f28d6e105b2971a99f06",
+    "run-r7/manifest.json": "8bf00fa11280afc3bbe7e8afee70df27d18d7f087851a5af9ec399b7c12e81c5",
+    "run-r7/metadata-after.json": "8691dcf62b240a88603e5053912f0f01a687d05e5b06c6b6eabdf65554ad107d",
+    "run-r7/native-work-execution.json": "a3f8dcad5f6bb3a6f32f6f5e6a9bdfd74342a7e1079140c6bb85dec1819973f4",
+    "run-r7/native-work-execution.log": "0c55317d08fb0a195c34f82536e8fc6ccc267a33850d18135cd7fd17e869eafa",
+    "run-r7/parent-types.json": "9bbe39eea4bdd8b47c75da8e52b4c57429341a9b03f787ab08f4ecdcba7b1264",
+    "run-r7/parent-types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-r7/resource-end.json": "091eaa62f80f27831f6bed3f1b8b46ceefcef657b13d0f9036a22577a6d1c276",
+    "run-r7/reused-private-results.json": "0885a74cf0d30a1c8aaa8fe6cd4bf88ceb154376406a132258211d8bb8721eea",
+    "run-r7/runner.py": "4cb002a2f8f63f3ab1fb8e16ba3d51d5cdb3cddbd09edb520ccdddc5a4d930a1",
+    "run-r7/shared-ram-accounting.json": "99833c492fb3eda3fda2ac707a1f24317ba4c12ce02a8afb559e4a00a1fd4a39",
+    "run-r7/shared-row-comparison.json": "d4e99ee46e75b608626196d0d7b90013535e6f5d9dffb82edd198a6efbf4d9ef",
+    "run-r7/source-after.json": "aab6dd4d8d221ec027f5330cf683c0e40dcf03588625d4b0de9ab29b0e0b7392",
+    "run-r7/source-before.json": "aab6dd4d8d221ec027f5330cf683c0e40dcf03588625d4b0de9ab29b0e0b7392",
+    "run-r7/union-result.json": "e1e2f40b02deb0e942954b2ea23bee2be10d13706d38d03cd5321cd913ed2db9",
+    "run-r7/versions.json": "7d24292738a6321355c2e2cc411172f3c04363cee3282fcb0c317c3ec77275b4",
+    "run-r7/versions.log": "93ee010d78b369dc5e0b55b66d7601cff17d4e734737e21af44a4d090ca7f8f0",
+    "run-r7/view-completion.json": "80103bf3563bb3f4986e55a752709fa22ad766486ce9b1475be8f0419bc2dfc6",
+    "run-r7/work-source-after.json": "aab6dd4d8d221ec027f5330cf683c0e40dcf03588625d4b0de9ab29b0e0b7392",
+    "run-r7/work-source-before.json": "aab6dd4d8d221ec027f5330cf683c0e40dcf03588625d4b0de9ab29b0e0b7392",
+    "metadata-hydration-r2/allocation.json": "acd14f011b87b7681cb0c748d76ffa29c163d479421ad59e6b690fc9c71a6670",
+    "metadata-hydration-r2/archive-export.json": "0c86b51b193a4aa2b64c57c09a7dfd6a0abd73ec50373dddef373a5b6561724c",
+    "metadata-hydration-r2/export-first.py": "79a66129ef53f552712e2b25044064f951d495054e083868fe6d36f836fe1d54",
+    "metadata-hydration-r2/export-ram.py": "1135f845de2cf07543b5e35b450bc0fb4a2326a833f040038cd8a3d0fad385d8",
+    "metadata-hydration-r2/hydrate-ram.py": "d35cb8d015c93742c4f4c3a6d4fd38991f37f102b1710fd873be4be27ac5d015",
+    "metadata-hydration-r2/hydration-receipt.json": "95f1b78d6b9db0b4fa4d07d5d8f4139fa2a2154a62d8180043a02120bec7c46a",
+    "metadata-hydration-r2/hydrator-start.json": "8a76ece1f522a5fdf0354a8d98b5e5aa82f860ab45e9da4f98205220650cc35a",
+    "metadata-hydration-r2/keeper-start.json": "3feadea2e65a046f3c9512b280ce452db7077a0dd86678f766b2b79ff6ba1cb2",
+    "metadata-hydration-r2/launch-ram.py": "f9a4779b5c3dbdac63df319262bbcbaadb78b2d216baabe7fbe2ea892a07ca60",
+    "metadata-hydration-r2/volume-create.json": "43072f08b0b70bdfce307c6e2146fea9d8e68a67566dab6041f800ff2765143b",
+    "metadata-vite-repair/hydration-receipt.json": "3b571703dcfdb4f4248fc21ab8cd08418c8ab85e9660737d903e5f468942cf77",
+    "metadata-vite-repair/launch.json": "9fb55f3297eb5ed57015448439b855583102c0ed809451345d0359d8b1341144",
+    "metadata-vite-repair/launch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "metadata-vite-repair/launch.stdout": "4fdf99ce2248b95aca833d1de68e6c13b83fb8e906c73e691c9815ab4033025c",
+    "metadata-vite-repair/repair-vite.py": "3397622222d55ac65d7c185e503d337a2bad22ba34a3073de3a227eaab5b984b"
+  }
+}

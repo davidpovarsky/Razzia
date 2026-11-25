@@ -1,0 +1,9 @@
+{
+  "exact_actual_counts_match": true,
+  "exit": 0,
+  "expected": 25,
+  "failed": 0,
+  "files": 4,
+  "passed": 25,
+  "pending": 0
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "check": "qa-lint-fix",
+    "exitCode": 0,
+    "stdout": "Found 0 warnings and 0 errors.\nFinished in 5.0s on 3 files with 233 rules using 12 threads.\n",
+    "stderr": ""
+  },
+  {
+    "check": "format",
+    "exitCode": 0,
+    "stdout": "extensions/src/mcp-app/widget/full-show-entry.tsx 1357ms\nextensions/qa/phase3-full-show/browser-verify.mjs 276ms\n\u001b[90mextensions/qa/phase3-full-show/preference-race.mjs\u001b[39m 58ms (unchanged)\nextensions/qa/phase3-full-show/transport-race.mjs 21ms\n",
+    "stderr": ""
+  },
+  {
+    "check": "lint",
+    "exitCode": 0,
+    "stdout": "Found 0 warnings and 0 errors.\nFinished in 4.5s on 4 files with 233 rules using 12 threads.\n",
+    "stderr": ""
+  },
+  {
+    "check": "diff-check",
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

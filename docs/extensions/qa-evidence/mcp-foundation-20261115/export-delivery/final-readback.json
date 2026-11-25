@@ -1,0 +1,22 @@
+{
+  "source": "2d6d11d251f05da8a97c9f69888cee031b53f316",
+  "sourceInputs": 172,
+  "everyOriginalAndCommittedInputMatches": true,
+  "manifestSha256": "f912779e8059689e76413bbc8b8bcf3e79f59623255c647f4057e6859d330f6f",
+  "directDependenciesVerified": 12,
+  "focusedTypecheckExit": 0,
+  "exports": {
+    "pass": 7,
+    "fail": 0,
+    "skip": 0
+  },
+  "selectedOauthRegression": {
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "omitted": "Existing Linux0600 assertion is not a Windows check; original failures retained"
+  },
+  "sameFrozenLocalNpmGraph": true,
+  "noNewPrivateOrRootLockChanges": true,
+  "noOracleJob": true
+}

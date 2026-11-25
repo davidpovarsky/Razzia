@@ -1,0 +1,56 @@
+{
+  "initial": {
+    "originalFiles": 341,
+    "modifiedOriginals": 111,
+    "unchangedOriginals": 230,
+    "unchangedPercent": 67.4,
+    "addedTrackedFiles": 730,
+    "originalInsertions": 10702,
+    "originalDeletions": 1074,
+    "newFileLines": 129359
+  },
+  "current": {
+    "originalFiles": 341,
+    "modifiedOriginals": 96,
+    "unchangedOriginals": 245,
+    "unchangedPercent": 71.8,
+    "addedTrackedFiles": 821,
+    "originalInsertions": 9241,
+    "originalDeletions": 1069,
+    "newFileLines": 145265
+  },
+  "perArea": {
+    "packages/web": {
+      "originals": 54,
+      "added": 4445,
+      "removed": 717
+    },
+    "packages/socket": {
+      "originals": 20,
+      "added": 4324,
+      "removed": 241
+    },
+    "packages/common": {
+      "originals": 10,
+      "added": 170,
+      "removed": 9
+    },
+    "packages/e2e": {
+      "originals": 6,
+      "added": 92,
+      "removed": 7
+    },
+    "root": {
+      "originals": 6,
+      "added": 210,
+      "removed": 95
+    }
+  },
+  "upstreamOverlap": [
+    "Dockerfile",
+    "packages/socket/package.json",
+    "packages/web/package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml"
+  ]
+}

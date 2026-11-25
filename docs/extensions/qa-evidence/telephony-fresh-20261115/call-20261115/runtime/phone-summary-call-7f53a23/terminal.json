@@ -1,0 +1,23 @@
+{
+  "name": "phone-call-7f53a23-attempt01",
+  "id": "648ea59ef79b2b614c59f9e589ca777bb445cc80c2e523957b234137b2ddd5d0",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T20:38:12.780914688Z",
+    "FinishedAt": "2026-11-15T20:38:33.484023125Z"
+  },
+  "size_rw": 32768,
+  "memory_bytes": 1073741824,
+  "nano_cpus": 250000000,
+  "network": "none",
+  "readonly_rootfs": true
+}

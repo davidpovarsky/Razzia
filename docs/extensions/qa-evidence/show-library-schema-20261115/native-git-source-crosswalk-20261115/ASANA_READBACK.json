@@ -1,0 +1,18 @@
+[
+  {
+    "gid": "1220486196096692",
+    "evidenceCommit": "c39b62f76db2a6f038e2a491fecd9e862fb38e5a",
+    "modifiedAt": "2026-11-15T21:29:54.997Z",
+    "completed": false,
+    "previousNotesPreserved": true,
+    "exactAppendMatch": true
+  },
+  {
+    "gid": "1220486252116561",
+    "evidenceCommit": "c39b62f76db2a6f038e2a491fecd9e862fb38e5a",
+    "modifiedAt": "2026-11-15T21:29:55.043Z",
+    "completed": false,
+    "previousNotesPreserved": true,
+    "exactAppendMatch": true
+  }
+]

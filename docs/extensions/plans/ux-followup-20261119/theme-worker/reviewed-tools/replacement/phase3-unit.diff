@@ -1,0 +1,5 @@
+--- /etc/systemd/system/tadazz-package-builder.service (before)
++++ /etc/systemd/system/tadazz-package-builder.service (proposed)
+@@ -13,1 +13,1 @@
+-ExecStart=/usr/bin/python3 /opt/tadazz-package-runtime/package-build-worker.py /var/lib/tadazz-release-5312660/config/extensions/packages --image sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5
++ExecStart=/usr/bin/python3 /opt/tadazz-package-runtime/package-build-worker.py /var/lib/tadazz-release-5312660/config/extensions/packages --image sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411

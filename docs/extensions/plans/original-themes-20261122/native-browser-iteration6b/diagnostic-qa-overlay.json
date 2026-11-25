@@ -1,0 +1,11 @@
+{
+  "diagnosticOnly": true,
+  "runtimeQaSourceEqualsCandidate": false,
+  "omittedForFocusedDiagnosis": [
+    "editor",
+    "public"
+  ],
+  "retained": "all native gameplay assertions and original fixture creation",
+  "originalQaSha256": "4684dc37cfadc0b8344dfdd282ce84701bbc2433c3160488577739a64371e505",
+  "diagnosticQaSha256": "c2cb8a2d949195c0d4cb229c22187d3a4def635450af7f1262387e8b398ae240"
+}

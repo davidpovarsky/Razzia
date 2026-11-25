@@ -1,0 +1,38 @@
+2026-11-19T20:25:26.759Z pw:browser <launching> C:\Users\DAVID\AppData\Local\ms-playwright\webkit-2370\Playwright.exe --inspector-pipe --disable-accelerated-compositing --headless --no-startup-window
+2026-11-19T20:25:26.866Z pw:browser <launched> pid=19096
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] [WebKitWin:Media:-] MediaSessionManagerInterface::dumpSessionStates(0)  Sessions:
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (9E8E6FC7C345FE01): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (343A41A9D8DBB9F1): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (F1F69620FB2B19CB): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (8E972B09F0AA6AAF): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (BE76386CA3254511): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (5C8BAE11559B56B9): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] (EF0AD185938430A6): Audio, Paused, 
+2026-11-19T20:25:45.429Z pw:browser [pid=19096][err] 
+webkit / tadazz-classic readonly transport supersedes automatic preview: locator.isDisabled: Target page, context or browser has been closed
+Call log:
+[2m  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')[22m
+
+2026-11-19T20:25:59.212Z pw:browser [pid=19096] <gracefully close start>
+2026-11-19T20:25:59.375Z pw:browser [pid=19096] <process did exit: exitCode=0, signal=null>
+2026-11-19T20:25:59.403Z pw:browser [pid=19096] starting temporary directories cleanup
+2026-11-19T20:25:59.524Z pw:browser [pid=19096] finished temporary directories cleanup
+2026-11-19T20:25:59.525Z pw:browser [pid=19096] <gracefully close end>
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: Target crashed 
+    at prepareHostNavigation (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-transport-race-20261119\extensions\qa\phase3-full-show\workspace-controls.mjs:26:32)
+    at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-transport-race-20261119\extensions\qa\phase3-full-show\browser-verify.mjs:889:15 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.22.1

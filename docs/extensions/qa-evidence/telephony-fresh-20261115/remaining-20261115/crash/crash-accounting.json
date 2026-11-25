@@ -1,0 +1,43 @@
+{
+  "source_sha": "66d794a4c7947af355de7dc27217e03b72b1a759",
+  "phase": "crash",
+  "container": "phone-crash-66d794a-attempt01",
+  "recorded_utc": "2026-11-15T16:48:05.174986+00:00",
+  "prior_cumulative_bytes": 6787072,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-remaining-receipts-crash-66d794a.tar",
+  "archive_sha256": "8b158ca79404fbf419c78ae9376b41e65ecc3fbea37cc664f4442786faa3396d",
+  "archive_bytes": 51200,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-remaining-66d794a4c7947af355de7dc27217e03b72b1a759",
+      "allocated_bytes": 307200
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-66d794a4c7947af355de7dc27217e03b72b1a759",
+      "allocated_bytes": 421888
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-crash-66d794a-attempt01",
+      "allocated_bytes": 94208
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-crash-66d794a",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-remaining-receipts-crash-66d794a.tar",
+      "allocated_bytes": 53248
+    },
+    {
+      "path": "/var/lib/docker/containers/8ad80a9532afe5878c9d654d63728a7101ca12befb8fca5f289af93002e220b3",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/phone-crash-66d794a4c7947af355de7dc27217e03b72b1a759",
+      "allocated_bytes": 1433600
+    }
+  ],
+  "new_allocated_bytes": 2363392,
+  "cumulative_allocated_bytes": 9150464
+}

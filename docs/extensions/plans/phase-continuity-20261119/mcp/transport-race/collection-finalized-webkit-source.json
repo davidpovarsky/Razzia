@@ -1,0 +1,109 @@
+{
+  "kind": "exact finalized Windows WebKit-only transport failure and source-only integration evidence collection",
+  "createdUtc": "2026-11-19T20:32:17.415197+00:00",
+  "sourceRoot": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119",
+  "destinationRoot": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119",
+  "files": [
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/before.json",
+      "bytes": 1122,
+      "sourceBeforeSha256": "5ea80adab3237a89219726149554d290d7d0f4ca4126632440b91046c0edacb5",
+      "copiedSha256": "5ea80adab3237a89219726149554d290d7d0f4ca4126632440b91046c0edacb5",
+      "sourceAfterSha256": "5ea80adab3237a89219726149554d290d7d0f4ca4126632440b91046c0edacb5"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/browser-exit-excerpt.log",
+      "bytes": 1527,
+      "sourceBeforeSha256": "d849ba4fd03300cdd513acc8cc2447f424039147dfda0faa6c5805f406d8aaf9",
+      "copiedSha256": "d849ba4fd03300cdd513acc8cc2447f424039147dfda0faa6c5805f406d8aaf9",
+      "sourceAfterSha256": "d849ba4fd03300cdd513acc8cc2447f424039147dfda0faa6c5805f406d8aaf9"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/owned-process.json",
+      "bytes": 245,
+      "sourceBeforeSha256": "c5ddff57c97bd800775cdf86289d14813b6395c15967f7d24e88395b0247709d",
+      "copiedSha256": "c5ddff57c97bd800775cdf86289d14813b6395c15967f7d24e88395b0247709d",
+      "sourceAfterSha256": "c5ddff57c97bd800775cdf86289d14813b6395c15967f7d24e88395b0247709d"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/qa/progress.json",
+      "bytes": 7056,
+      "sourceBeforeSha256": "d36cca0223226daca9f72ce077d80c96c35aae2b70f19ba3e5832ed4234cc0a5",
+      "copiedSha256": "d36cca0223226daca9f72ce077d80c96c35aae2b70f19ba3e5832ed4234cc0a5",
+      "sourceAfterSha256": "d36cca0223226daca9f72ce077d80c96c35aae2b70f19ba3e5832ed4234cc0a5"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/qa/receipt.json",
+      "bytes": 13089,
+      "sourceBeforeSha256": "2fef7773de8eaefb2dda3b711222e5a01aa00b967ec4a93f67f83f085c4ef8b5",
+      "copiedSha256": "2fef7773de8eaefb2dda3b711222e5a01aa00b967ec4a93f67f83f085c4ef8b5",
+      "sourceAfterSha256": "2fef7773de8eaefb2dda3b711222e5a01aa00b967ec4a93f67f83f085c4ef8b5"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/qa/webkit-tadazz-classic-transport-race.json",
+      "bytes": 1813,
+      "sourceBeforeSha256": "47b31c730aefcb5d3ebe2758d29548e734f3489134c090c9d8a9b59eb7fee9a1",
+      "copiedSha256": "47b31c730aefcb5d3ebe2758d29548e734f3489134c090c9d8a9b59eb7fee9a1",
+      "sourceAfterSha256": "47b31c730aefcb5d3ebe2758d29548e734f3489134c090c9d8a9b59eb7fee9a1"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/run.json",
+      "bytes": 2428,
+      "sourceBeforeSha256": "1981f3298dc8560867e38597bad37afbc6388d58201c5283632d7c4ac252228d",
+      "copiedSha256": "1981f3298dc8560867e38597bad37afbc6388d58201c5283632d7c4ac252228d",
+      "sourceAfterSha256": "1981f3298dc8560867e38597bad37afbc6388d58201c5283632d7c4ac252228d"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/run.stderr.log",
+      "bytes": 3231,
+      "sourceBeforeSha256": "1e4d38257dde2615db2efb390956afa9da59ff76225b32ce47d73e876db3778d",
+      "copiedSha256": "1e4d38257dde2615db2efb390956afa9da59ff76225b32ce47d73e876db3778d",
+      "sourceAfterSha256": "1e4d38257dde2615db2efb390956afa9da59ff76225b32ce47d73e876db3778d"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/fixed-webkit-only/run.stdout.log",
+      "bytes": 583,
+      "sourceBeforeSha256": "de260886a5f3a958ccb6b0ba7e72368e65eceded56cc11bb3dd1d9de8b0e4c23",
+      "copiedSha256": "de260886a5f3a958ccb6b0ba7e72368e65eceded56cc11bb3dd1d9de8b0e4c23",
+      "sourceAfterSha256": "de260886a5f3a958ccb6b0ba7e72368e65eceded56cc11bb3dd1d9de8b0e4c23"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/README.md",
+      "bytes": 5058,
+      "sourceBeforeSha256": "b5242cceb83c9a05302d845859f5db5580a97b89571f62c1ac9bfedc10dd486b",
+      "copiedSha256": "b5242cceb83c9a05302d845859f5db5580a97b89571f62c1ac9bfedc10dd486b",
+      "sourceAfterSha256": "b5242cceb83c9a05302d845859f5db5580a97b89571f62c1ac9bfedc10dd486b"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/source-commit.json",
+      "bytes": 1316,
+      "sourceBeforeSha256": "dfab275c1c28dcb6953511d33bdb849fba8ebf992d0e49a2b81863fea03590d9",
+      "copiedSha256": "dfab275c1c28dcb6953511d33bdb849fba8ebf992d0e49a2b81863fea03590d9",
+      "sourceAfterSha256": "dfab275c1c28dcb6953511d33bdb849fba8ebf992d0e49a2b81863fea03590d9"
+    },
+    {
+      "path": "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/summary.json",
+      "bytes": 2459,
+      "sourceBeforeSha256": "eee6f9d5e1fad2ecc7099f460e6171795c08ef00709f93da72b448a48eb4a11f",
+      "copiedSha256": "eee6f9d5e1fad2ecc7099f460e6171795c08ef00709f93da72b448a48eb4a11f",
+      "sourceAfterSha256": "eee6f9d5e1fad2ecc7099f460e6171795c08ef00709f93da72b448a48eb4a11f"
+    }
+  ],
+  "earlier37CopiesPreservedUnchanged": true,
+  "sourceCommit": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+  "sourceCommitEvidenceSha256": "dfab275c1c28dcb6953511d33bdb849fba8ebf992d0e49a2b81863fea03590d9",
+  "webkitRepeatReceiptSha256": "2fef7773de8eaefb2dda3b711222e5a01aa00b967ec4a93f67f83f085c4ef8b5",
+  "outcome": "Failed page crash during post-automatic-ACK Pause snapshot; no accepted WebKit transport completion. Cause not established.",
+  "integrationReceipt": "docs/extensions/plans/phase-continuity-20261119/transport-integration.json",
+  "noFurtherWindowsRuns": true,
+  "originalEvidenceModified": false,
+  "productEdited": false,
+  "testsRun": false,
+  "gitMutation": false,
+  "deployed": false,
+  "releaseQualified": false,
+  "screening": {
+    "findings": [],
+    "matchedValuesPrinted": false
+  }
+}

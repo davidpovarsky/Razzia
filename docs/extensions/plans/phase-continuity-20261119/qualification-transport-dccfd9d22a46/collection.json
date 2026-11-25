@@ -1,0 +1,130 @@
+{
+  "kind": "exact completed own transportRace evidence collection",
+  "createdUtc": "2026-11-19T21:14:26.297863+00:00",
+  "remoteRoot": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "run": "tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+  "files": [
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/browser-resource-evidence.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/browser-resource-evidence.json",
+      "bytes": 854,
+      "remoteSha256": "19dac97660dad7e926ad1a9ef42be9e0fb5032b2ef42dd14fcf4f9a7c50f05a1",
+      "copiedSha256": "19dac97660dad7e926ad1a9ef42be9e0fb5032b2ef42dd14fcf4f9a7c50f05a1"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/browser.stderr.log",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/browser.stderr.log",
+      "bytes": 6336,
+      "remoteSha256": "70d8391f0118bc0a87a22803083e2329da2be7b262f7b7af4f8cca397030a8be",
+      "copiedSha256": "70d8391f0118bc0a87a22803083e2329da2be7b262f7b7af4f8cca397030a8be"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/browser.stdout.log",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/browser.stdout.log",
+      "bytes": 417,
+      "remoteSha256": "61afed37e5f5ed3c7e81c543be39a5031e6d8e7cab2d1518f1fb01816eb60f6d",
+      "copiedSha256": "61afed37e5f5ed3c7e81c543be39a5031e6d8e7cab2d1518f1fb01816eb60f6d"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/chromium-tadazz-classic-next-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-next-transport-race.png",
+      "bytes": 632227,
+      "remoteSha256": "98db7ab621656525529a519e68e874ee8da0a07e515906b00fd2f1009afb2f09",
+      "copiedSha256": "98db7ab621656525529a519e68e874ee8da0a07e515906b00fd2f1009afb2f09"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/chromium-tadazz-classic-pause-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-pause-transport-race.png",
+      "bytes": 587411,
+      "remoteSha256": "c547e3191e6f8dd97305477892b8473aa890c0d4aa6fc4753b47f04dee53dde4",
+      "copiedSha256": "c547e3191e6f8dd97305477892b8473aa890c0d4aa6fc4753b47f04dee53dde4"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/chromium-tadazz-classic-previous-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-previous-transport-race.png",
+      "bytes": 631764,
+      "remoteSha256": "ccfeaa3ac783e0ef457cbfe77de64cc986b09674fe55a772e461b92510057d6d",
+      "copiedSha256": "ccfeaa3ac783e0ef457cbfe77de64cc986b09674fe55a772e461b92510057d6d"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/chromium-tadazz-classic-replay-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-replay-transport-race.png",
+      "bytes": 632131,
+      "remoteSha256": "06d4b57caf05729a0dcc2902b635d9d17c7e4e0ad486ff911754040e424dadc6",
+      "copiedSha256": "06d4b57caf05729a0dcc2902b635d9d17c7e4e0ad486ff911754040e424dadc6"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/chromium-tadazz-classic-transport-race.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/chromium-tadazz-classic-transport-race.json",
+      "bytes": 14932,
+      "remoteSha256": "0c6dedf6adbe3a055e8c47ae53e7c49d84284d9c9243200dced2c48c235c736b",
+      "copiedSha256": "0c6dedf6adbe3a055e8c47ae53e7c49d84284d9c9243200dced2c48c235c736b"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/receipt.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/receipt.json",
+      "bytes": 102959,
+      "remoteSha256": "350a20c395fdaf50c3a686656e93b421f0e807ea39fc5d858481e04d20c0042c",
+      "copiedSha256": "350a20c395fdaf50c3a686656e93b421f0e807ea39fc5d858481e04d20c0042c"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/webkit-tadazz-classic-next-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-next-transport-race.png",
+      "bytes": 640839,
+      "remoteSha256": "a46f576df86730c72337fbb14ba3ed430683260447258a0c643c6209aa322761",
+      "copiedSha256": "a46f576df86730c72337fbb14ba3ed430683260447258a0c643c6209aa322761"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/webkit-tadazz-classic-pause-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-pause-transport-race.png",
+      "bytes": 619397,
+      "remoteSha256": "a3c0fe1534637528f29fad5d8f84174573536082bcf95b168bc2edf45f28902d",
+      "copiedSha256": "a3c0fe1534637528f29fad5d8f84174573536082bcf95b168bc2edf45f28902d"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/webkit-tadazz-classic-previous-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-previous-transport-race.png",
+      "bytes": 640218,
+      "remoteSha256": "f49f89c363ba22dda0bfa37d8049949ff3aed6e795a7921e81b77f542672de11",
+      "copiedSha256": "f49f89c363ba22dda0bfa37d8049949ff3aed6e795a7921e81b77f542672de11"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/webkit-tadazz-classic-replay-transport-race.png",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-replay-transport-race.png",
+      "bytes": 640780,
+      "remoteSha256": "9ff13ed3cd9fc7327b7ca23759078e62af27359c6ae2967cde56abb422199ad0",
+      "copiedSha256": "9ff13ed3cd9fc7327b7ca23759078e62af27359c6ae2967cde56abb422199ad0"
+    },
+    {
+      "remote": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/webkit-tadazz-classic-transport-race.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-transport-dccfd9d22a46/full-show/webkit-tadazz-classic-transport-race.json",
+      "bytes": 14747,
+      "remoteSha256": "c88cb3b6f5556245c7905a932d111c3d5740d9113edeca9d6fc47d98beca1088",
+      "copiedSha256": "c88cb3b6f5556245c7905a932d111c3d5740d9113edeca9d6fc47d98beca1088"
+    }
+  ],
+  "outerReceipt": {
+    "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/receipt.json",
+    "sha256": "0676174b7b12524c5b43d385c149f40729eb824f3c8fd34198cea976ce816458",
+    "innerEqualsCopiedReceipt": true
+  },
+  "results": {
+    "entryStatuses": {
+      "PASS": 2
+    },
+    "rendererFixtureStatuses": {},
+    "errors": 0,
+    "pageErrorEvents": 0,
+    "requestFailures": 0,
+    "diagnosticMode": "transport-race"
+  },
+  "excludedRemoteFiles": [
+    "full-show/progress.json"
+  ],
+  "exclusionReason": "Final complete receipt retained; superseded progress stays remote. No dependencies, source archives, customer configuration or private-key contents copied.",
+  "originalEvidenceModified": false,
+  "testsRunByCurator": false,
+  "productionChangedByCurator": false,
+  "deploymentClaim": false
+}

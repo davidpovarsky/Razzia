@@ -1,0 +1,18 @@
+{
+  "id": "7106e77b1bdf2c3390056fa753f58f93b3c7bf0a48dd819431cabd7590110e0c",
+  "name": "/tadazz-show-ui-E-boundary27",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T22:36:59.125523714Z",
+    "FinishedAt": "2026-11-15T22:42:42.625047334Z"
+  }
+}

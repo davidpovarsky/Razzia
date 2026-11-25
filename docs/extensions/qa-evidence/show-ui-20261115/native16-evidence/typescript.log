@@ -1,0 +1,7 @@
+src/presentation/show-library-preview/renderer-entry-v2.tsx(52,9): error TS18047: 'theme' is possibly 'null'.
+src/presentation/show-library-preview/renderer-entry-v2.tsx(61,13): error TS2322: Type 'ResolvedShowTheme | null' is not assignable to type 'ResolvedShowTheme | undefined'.
+  Type 'null' is not assignable to type 'ResolvedShowTheme | undefined'.
+src/presentation/show-library-preview/renderer-entry-v2.tsx(64,37): error TS2322: Type 'ResolvedShowTheme | null' is not assignable to type 'ResolvedShowTheme'.
+  Type 'null' is not assignable to type 'ResolvedShowTheme'.
+src/presentation/show-library-preview/renderer-entry-v2.tsx(67,15): error TS2322: Type 'ResolvedShowTheme | null' is not assignable to type 'ResolvedShowTheme'.
+  Type 'null' is not assignable to type 'ResolvedShowTheme'.

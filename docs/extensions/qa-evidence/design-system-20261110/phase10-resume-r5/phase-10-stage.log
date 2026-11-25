@@ -1,0 +1,23 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 10 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   1 [chromium] › qa/tds-stage.spec.ts:3:1 › public join fails closed, decodes current room QR, follows live lock and omits cookies (16.7s)
+  ✓   2 [chromium] › qa/tds-stage.spec.ts:67:1 › real HTTP credentials-omit neither sends nor accepts cookies (1.7s)
+  ✓   3 [chromium] › qa/tds-stage.spec.ts:96:1 › room navigation ignores a late response from the previous PIN; manager performs no public probe (5.3s)
+  ✓   4 [chromium] › qa/tds-stage.spec.ts:134:1 › a hanging public probe expires, hides the QR, and recovers on the next bounded attempt (1.7s)
+  ✓   5 [chromium] › qa/tds-stage.spec.ts:168:1 › selected backdrop owns entire viewport on resize, decorative layers occur once, original theme stays independent (2.2s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   6 [webkit] › qa/tds-stage.spec.ts:3:1 › public join fails closed, decodes current room QR, follows live lock and omits cookies (16.9s)
+  ✓   7 [webkit] › qa/tds-stage.spec.ts:67:1 › real HTTP credentials-omit neither sends nor accepts cookies (2.1s)
+  ✓   8 [webkit] › qa/tds-stage.spec.ts:96:1 › room navigation ignores a late response from the previous PIN; manager performs no public probe (6.4s)
+  ✓   9 [webkit] › qa/tds-stage.spec.ts:134:1 › a hanging public probe expires, hides the QR, and recovers on the next bounded attempt (2.2s)
+  ✓  10 [webkit] › qa/tds-stage.spec.ts:168:1 › selected backdrop owns entire viewport on resize, decorative layers occur once, original theme stays independent (5.2s)
+
+  10 passed (1.1m)

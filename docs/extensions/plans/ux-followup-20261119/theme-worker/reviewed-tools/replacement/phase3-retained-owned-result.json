@@ -1,0 +1,54 @@
+{
+  "observedAt": "2026-11-19T15:55:28.799507+00:00",
+  "scope": "Exact task-owned failed-attempt fixture only; no customer data or queue listing",
+  "priorFailureReceiptSha256": "d05873d0ad9c016e4e3e25f4e9787783ca04997b6a48c479c14f02b3aeeae6e4",
+  "tenant": "975cf0bc96ad9d54014b0cb115ae3a841ff1f80a72511a3ea428083ce3da4639",
+  "uploadId": "c1869a7e-4587-4edd-acc8-c28244723d52",
+  "files": {
+    "source.tadazz": {
+      "bytes": 520223,
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d"
+    },
+    "request.json": {
+      "bytes": 241,
+      "sha256": "facba34ed49354984a7dddea6df6e40edb6d7c18e769afc00a8a3e3a472ac053"
+    },
+    "result.json": {
+      "bytes": 242,
+      "sha256": "9f4d6ec7dd8a1fd166f57c1d7bcb2598ab876840ae2a825cd4c576b94d7455c8"
+    },
+    "bundle.json": {
+      "bytes": 752963,
+      "sha256": "a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6"
+    }
+  },
+  "result": {
+    "sourceDigest": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+    "outputDigest": "a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6",
+    "mediaValidated": true,
+    "toolchain": "esbuild@0.28.2;react@19.3.0;ffmpeg@5.1.9"
+  },
+  "compiledThemeIds": [
+    "fixture-arcade"
+  ],
+  "beforeTimer": {
+    "Unit": "tadazz-package-builder.service",
+    "LastTriggerUSec": "Thu 2026-11-19 15:51:00 UTC",
+    "LastTriggerUSecMonotonic": "2w 1d 13h 19min 8.755471s",
+    "Triggers": "tadazz-package-builder.service",
+    "ActiveState": "active",
+    "SubState": "waiting",
+    "UnitFileState": "enabled"
+  },
+  "currentTimer": {
+    "LastTriggerUSec": "Thu 2026-11-19 15:51:13 UTC",
+    "LastTriggerUSecMonotonic": "2w 1d 13h 19min 21.755332s",
+    "Triggers": "tadazz-package-builder.service",
+    "ActiveState": "inactive",
+    "UnitFileState": "enabled"
+  },
+  "currentUnitSha256": "64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053",
+  "retainedOwnedResultValidated": true,
+  "cleanupPerformed": false,
+  "serviceChanged": false
+}

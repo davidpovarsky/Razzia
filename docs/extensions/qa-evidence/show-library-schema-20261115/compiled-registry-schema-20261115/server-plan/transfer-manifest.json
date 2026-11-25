@@ -1,0 +1,59 @@
+{
+  "format": "tadazz-exact-new-fixture-transfer",
+  "schemaVersion": 1,
+  "authorization": "PREPARED_NOT_GRANTED",
+  "sourceCommit": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+  "sourceBundleSha256": "4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "fixturePath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "files": [
+    {
+      "name": "audit-view.cjs",
+      "localSource": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/audit-view.cjs",
+      "bytes": 2896,
+      "sha256": "201ec1337ebea59cda27c597884b981ad89cfd59fcd0f6028bdfcb76abdf3e94"
+    },
+    {
+      "name": "compiled-index-authority.ts",
+      "localSource": "extensions/src/core/show-library/compiled-index-authority.ts",
+      "bytes": 4381,
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55"
+    },
+    {
+      "name": "compiled-index-schema.ts",
+      "localSource": "extensions/src/core/show-library/compiled-index-schema.ts",
+      "bytes": 22530,
+      "sha256": "a6bad0c603af33508a8b157c541490a9b9e113b7a1c4c080de517b63852034e9"
+    },
+    {
+      "name": "compiled-index-validation.ts",
+      "localSource": "extensions/src/core/show-library/compiled-index-validation.ts",
+      "bytes": 6046,
+      "sha256": "bf11b1ea664d13ef8038e4649351195a8c528a703f79933f03d210f6322ad0ec"
+    },
+    {
+      "name": "compiled-index.test.ts",
+      "localSource": "extensions/src/core/show-library/compiled-index.test.ts",
+      "bytes": 31259,
+      "sha256": "8fcdbddd5d2dc21199edc3760995189cff38270dbd6ae16259f9572b8f767207"
+    },
+    {
+      "name": "compiled-index.tsconfig.json",
+      "localSource": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/compiled-index.tsconfig.json",
+      "bytes": 604,
+      "sha256": "d9e26fb3ee96dd9f33f05494c0abcf45d6029046b02f619a890b5bd9f4b4ea20"
+    },
+    {
+      "name": "overlay-plan.json",
+      "localSource": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/overlay-plan.json",
+      "bytes": 36869,
+      "sha256": "123093f622de1e5055b83e3e4a31793f75a9c01be4c199e8a4ed7ff5d93dc8e1"
+    },
+    {
+      "name": "run-compiled-index.py",
+      "localSource": "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/run-compiled-index.py",
+      "bytes": 14847,
+      "sha256": "3e492e8f72d958910239508c6e858b5407f5c1cfb68d85ca43127a72369bb7eb"
+    }
+  ],
+  "excludes": "No .git, dependency/store, original26, old documents, image/font/browser artifact or full source archive copied"
+}

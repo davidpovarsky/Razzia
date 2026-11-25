@@ -1,0 +1,17 @@
+{
+  "product_head": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+  "entries": 918,
+  "added_natural_imports": {
+    "extra_paths": [
+      "extensions/qa/site-touch.ts",
+      "extensions/site.playwright.config.ts",
+      "extensions/site.baseline.playwright.config.ts",
+      "packages/web/vite.config.ts",
+      "packages/web/vite/private-media.ts"
+    ],
+    "reason": "Natural unmodified imports required by extensions/tsconfig.json; initial913-file view omitted these5 tracked dependencies. No source/dependency/test exclusion or product source edit."
+  },
+  "source_files_written": 0,
+  "files_hardlinked_from_exact_existing_Git_blobs": 918,
+  "private_receipts_reuse": "run-r6 exit0/41 tests; same85e product and graph, verified again by consumer installed-graph log SHA"
+}

@@ -1,0 +1,43 @@
+{
+  "source_sha": "2a888de9c832670ca657a5774a85f70f9a38e3ad",
+  "phase": "auth5",
+  "container": "phone-remaining-2a888de-attempt02",
+  "recorded_utc": "2026-11-15T16:41:03.655598+00:00",
+  "prior_cumulative_bytes": 5898240,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-remaining-receipts-auth5-2a888de.tar",
+  "archive_sha256": "4caf1232d2c5bf887999426a360a14e76f00bfca0b0b18a1521081ab45a81422",
+  "archive_bytes": 40960,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-remaining-2a888de9c832670ca657a5774a85f70f9a38e3ad",
+      "allocated_bytes": 307200
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-2a888de9c832670ca657a5774a85f70f9a38e3ad",
+      "allocated_bytes": 417792
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-remaining-2a888de-attempt02",
+      "allocated_bytes": 65536
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-remaining-2a888de-attempt01",
+      "allocated_bytes": 4096
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-auth5-2a888de",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-remaining-receipts-auth5-2a888de.tar",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/509ca42c3a803ad5ccf334cb8ee53f804999ea274a5e3d681004ddb9854eaf5f",
+      "allocated_bytes": 40960
+    }
+  ],
+  "new_allocated_bytes": 888832,
+  "cumulative_allocated_bytes": 6787072
+}

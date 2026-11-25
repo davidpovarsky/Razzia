@@ -1,0 +1,12 @@
+{
+  "canonicalPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\billing-public-server.ts",
+  "canonicalSHA256": "1b8bbf5eb10f66638984d22b568bf885583734921d3c588b54682b241c6d5e60",
+  "executedPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\.phase-continuity-ggo-20261119T171325Z-1a8574ec.ts",
+  "executedSHA256": "2bc256b4336593a00d7d8b8bc2e01c236d4132b8e79a538f31bb2de491dd3647",
+  "onlyReplacement": {
+    "from": "server.listen(4393, \"127.0.0.1\")",
+    "to": "server.listen(4413, \"127.0.0.1\")"
+  },
+  "smokeSHA256": "5d025148b26bac3c0878238b2410ce20084a33bed657daa024c8b70ff8b32fec",
+  "viteConfigSHA256": "d601f5824b889617995677857edd55f5dd9050957a6f2c62207033eb475b80f6"
+}

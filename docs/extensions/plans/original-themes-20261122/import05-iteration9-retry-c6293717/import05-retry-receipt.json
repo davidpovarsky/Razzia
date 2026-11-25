@@ -1,0 +1,82 @@
+{
+  "actualInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "wave1-show-import-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 7756,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 13268.167,
+      "expected": 1,
+      "flaky": 0,
+      "skipped": 0,
+      "startTime": "2026-11-22T17:55:34.767Z",
+      "unexpected": 0
+    }
+  },
+  "applicationEntry": "ordinary",
+  "candidateSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "containerStopped": true,
+  "createdOwnedOutputDirectory": "/home/ubuntu/tadazz-original-themes-preflight-20261122/import05-iteration9-retry-c6293717/runtime/packages/e2e/test-results/show-import-acceptance",
+  "customerMountUsed": false,
+  "exactTestCopyVerifiedBeforeAfter": true,
+  "exit": 0,
+  "gameSpeed": 10,
+  "hostAvailableBytesBefore": 10462605312,
+  "listedInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "wave1-show-import-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 1788.248,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 1,
+      "startTime": "2026-11-22T17:55:32.237Z",
+      "unexpected": 0
+    }
+  },
+  "network": "none",
+  "noOom": true,
+  "ordinaryArtifactAfterSha256": "870d3e23c1dfd9612cdebaf9ed9096557d3e1631aee7efaa1547514b855ef8b4",
+  "ordinaryArtifactBeforeSha256": "870d3e23c1dfd9612cdebaf9ed9096557d3e1631aee7efaa1547514b855ef8b4",
+  "ordinaryArtifactHashesVerifiedBeforeAfter": true,
+  "originalExpectTimeout": 20000,
+  "originalTestTimeout": 90000,
+  "passed": true,
+  "priorReceiptSha256": "f9155472372faca94c62a7f4892a4674da0d6ce86a6f73a87ea556aaae854eca",
+  "priorRun": "p0-import05-iteration9-58287324",
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "rebuiltArtifact": false,
+  "releaseQualified": false,
+  "replayedP0": false,
+  "retries": 0,
+  "run": "import05-iteration9-retry-c6293717",
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 18.55,
+  "sourceAfterSha256": "da61e0328d821809a982b000170aaec470cef12599152453e48551eb973aff72",
+  "sourceAndBuiltHashesVerifiedBeforeAfter": true,
+  "sourceBeforeSha256": "da61e0328d821809a982b000170aaec470cef12599152453e48551eb973aff72",
+  "sourceFileCount": 2678
+}

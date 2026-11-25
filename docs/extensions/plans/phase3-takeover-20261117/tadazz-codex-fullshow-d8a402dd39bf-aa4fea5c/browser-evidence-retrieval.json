@@ -1,0 +1,24 @@
+{
+  "kind": "read-only-browser-evidence-retrieval",
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "run": "tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c",
+  "retrievedAt": "2026-11-19T05:39:40.785589+00:00",
+  "outerReceiptSha256": "22e7c37d6984abd326eac2b73e2dc0af5011909afd6928cbd3180858078246a0",
+  "outerEmbeddedObjectsMatchActualFiles": true,
+  "exactBytesPreserved": true,
+  "productionChanged": false,
+  "files": [
+    {
+      "sourcePath": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/full-show/receipt.json",
+      "localPath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/full-show/receipt.json",
+      "sha256": "e5bbbeedc2f9556354a84acfb44f346016d47e32621c39a261f1e815da7d07e7",
+      "bytes": 2355751
+    },
+    {
+      "sourcePath": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/browser-resource-evidence.json",
+      "localPath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/browser-resource-evidence.json",
+      "sha256": "1a256bd6abdbd6a2d19d2a8a40964bb90c5b92dbb3c57e609d69125f77acfd69",
+      "bytes": 854
+    }
+  ]
+}

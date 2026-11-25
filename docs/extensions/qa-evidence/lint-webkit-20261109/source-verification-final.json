@@ -1,0 +1,8 @@
+{
+  "verified": 1752,
+  "mismatches": [],
+  "sourceRoot": "/verify",
+  "sourceCommit": "ca5cadbedb7a185148cbf523ac055f54eda170c4",
+  "immutableFilesVerified": 791,
+  "note": "Final local bytes match Oracle /verify. Since the full passing suites, only the two acceptance/repair Markdown reports changed; final lint and format were rerun. The source-parity export test regenerates the historical native_scenes_harness.html evidence output; that archived file was restored to its unchanged local baseline bytes before final source comparison."
+}

@@ -1,0 +1,604 @@
+import {
+  type CSSProperties,
+  type ReactNode,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
+import {
+  StageAmbientV4,
+  StageBackdropV4,
+  StageSceneV4,
+  ZWipeV4,
+} from "./components"
+import { showThemeStyle, useOptionalShowTheme } from "../show-themes/context"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families"
+import {
+  OriginalThemeAtmosphere,
+  OriginalThemeScene,
+} from "../original-themes/OriginalThemeScene"
+import "./full-show.css"
+import { TadazzV4Motion } from "./motion"
+import {
+  pausedCountdownRemainingMsFor,
+  scenePlaybackFor,
+} from "./live-playback"
+import { observeQuestionPresentation } from "../question-lead-in"
+import "./source-layout.css"
+import "./tadazz-v4.css"
+import originalThemeCss from "../original-themes/original-themes.css?inline"
+import {
+  continuesQuestionStage,
+  normalizeData,
+  TADAZZ_V4_ASSET_BASE,
+  TADAZZ_V4_SHOW_SCENES,
+  type TadazzV4Data,
+  type TadazzV4Scene,
+  type TadazzV4StageHandle,
+  type TadazzV4StageProps,
+} from "./types"
+interface CurrentScene {
+  scene: TadazzV4Scene
+  data: TadazzV4Data
+  revision: number
+  contentRevision: number
+}
+
+/**
+ * Pure React stage compositions + precise WAAPI choreography.
+ * No embedded HTML, no demo toolbar, no upstream Razzia mutation.
+ * The host owns game logic, data, scene scheduling and network transport.
+ */
+export const TadazzV4Stage = forwardRef<
+  TadazzV4StageHandle,
+  TadazzV4StageProps
+>(function TadazzV4Stage(
+  {
+    initialScene,
+    initialData = {},
+    assetBase = TADAZZ_V4_ASSET_BASE,
+    motionScale = 1,
+    showPercentages = true,
+    reducedMotion = false,
+    livePlayback,
+    fitRevision = 0,
+    className,
+    underlay,
+    overlay,
+    customScreen,
+    onCue,
+    onComplete,
+    onQuestionPresented,
+  },
+  ref,
+) {
+  const theme = useOptionalShowTheme()
+  const originalFamily =
+    theme?.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+      ? theme.definition.id
+      : undefined
+  const paletteTheme =
+    theme?.definition.kind === "declarative" &&
+    theme.definition.rendererId === "tadazz-classic-stage"
+      ? theme
+      : null
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const engineRef = useRef<TadazzV4Motion | null>(null)
+  const pausedCountdownRemainingMsRef = useRef<number | undefined>(undefined)
+  const livePlaybackRef = useRef(livePlayback)
+  livePlaybackRef.current = livePlayback
+  const [view, setView] = useState<CurrentScene | null>(
+    initialScene
+      ? {
+          scene: initialScene,
+          data: normalizeData(initialData),
+          revision: 0,
+          contentRevision: 0,
+        }
+      : null,
+  )
+  const viewRef = useRef(view)
+  viewRef.current = view
+  const [overridePercentages, setOverridePercentages] = useState<
+    boolean | null
+  >(null)
+  const sequence = useRef(0)
+  const resolutions = useRef(new Map<number, (completed: boolean) => void>())
+  const callbackRef = useRef({
+    onCue,
+    onComplete,
+    onQuestionPresented,
+  })
+  callbackRef.current = {
+    onCue,
+    onComplete,
+    onQuestionPresented,
+  }
+  const motionScaleRef = useRef(motionScale)
+  motionScaleRef.current = motionScale
+  const reducedMotionRef = useRef(reducedMotion)
+  reducedMotionRef.current = reducedMotion
+  useEffect(() => {
+    engineRef.current?.setReducedMotion(reducedMotion)
+  }, [reducedMotion])
+  useLayoutEffect(() => {
+    const element = stageRef.current
+    const viewport = viewportRef.current
+
+    if (!viewport || !element) {
+      return
+    }
+
+    const fit = () => {
+      // Fit in local CSS layout space. Bounding rectangles already include
+      // an enclosing editor/preview transform and would apply its scale twice.
+      const vw = Math.max(1, viewport.clientWidth)
+      const vh = Math.max(1, viewport.clientHeight)
+      const scale = Math.min(vw / 1920, vh / 1080)
+      element.style.setProperty("--scale", String(scale > 0 ? scale : 0.0001))
+    }
+    fit()
+    const observer =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(fit)
+    observer?.observe(viewport)
+    window.addEventListener("resize", fit)
+
+    return () => {
+      observer?.disconnect()
+      window.removeEventListener("resize", fit)
+    }
+  }, [fitRevision])
+  const start = useCallback(
+    (scene: TadazzV4Scene, data: TadazzV4Data): Promise<boolean> => {
+      const revision = sequence.current + 1
+      // Superseded play requests settle predictably, including pending React renders.
+      sequence.current = revision
+      for (const [key, resolve] of resolutions.current) {
+        if (key !== revision) {
+          resolve(false)
+          resolutions.current.delete(key)
+        }
+      }
+      engineRef.current?.stop()
+      const remainingMs = pausedCountdownRemainingMsFor(
+        livePlaybackRef.current,
+        pausedCountdownRemainingMsRef.current,
+      )
+      const nextData =
+        scene === "countdown" && remainingMs !== undefined
+          ? { ...data, remainingSeconds: remainingMs / 1000 }
+          : data
+      setView((previous) => ({
+        scene,
+        data: normalizeData(nextData),
+        revision,
+        contentRevision:
+          previous && continuesQuestionStage(previous, { scene, data })
+            ? previous.contentRevision
+            : revision,
+      }))
+
+      return new Promise<boolean>((resolve) => {
+        resolutions.current.set(revision, resolve)
+      })
+    },
+    [],
+  )
+  const clear = useCallback(() => {
+    sequence.current += 1
+    for (const [, resolve] of resolutions.current) {
+      resolve(false)
+    }
+    resolutions.current.clear()
+    engineRef.current?.stop()
+    setView(null)
+  }, [])
+
+  // Overlay Z-wipe: plays the canonical z-wipe choreography ABOVE the current
+  // scene so the host can swap the underlying content exactly at "wipe-covered".
+  const wipeLayerRef = useRef<HTMLDivElement>(null)
+  const wipeEngineRef = useRef<TadazzV4Motion | null>(null)
+  const wipeCounter = useRef(0)
+  const [wipeRev, setWipeRev] = useState(0)
+  const wipeRequest = useRef<{
+    rev: number
+    onCovered?: () => void | Promise<void>
+    resolve: (ok: boolean) => void
+  } | null>(null)
+  const livePaused = livePlayback?.paused
+  const liveCountdownRemainingMs = livePlayback?.countdownRemainingMs
+  useLayoutEffect(() => {
+    if (livePaused === undefined) {
+      return
+    }
+
+    // Freeze an existing live scene in place. New scene engines separately
+    // reconstruct the paused snapshot below, before the browser paints it.
+    if (livePaused) {
+      engineRef.current?.pause(liveCountdownRemainingMs)
+      wipeEngineRef.current?.pause()
+    } else {
+      engineRef.current?.resume()
+      wipeEngineRef.current?.resume()
+    }
+  }, [livePaused, liveCountdownRemainingMs])
+  const wipe = useCallback(
+    (onCovered?: () => void | Promise<void>): Promise<boolean> => {
+      wipeEngineRef.current?.stop()
+      wipeRequest.current?.resolve(false)
+      const rev = wipeCounter.current + 1
+      wipeCounter.current = rev
+
+      return new Promise<boolean>((resolve) => {
+        wipeRequest.current = {
+          rev,
+          onCovered,
+          resolve,
+        }
+        setWipeRev(rev)
+      })
+    },
+    [],
+  )
+  useLayoutEffect(() => {
+    const layer = wipeLayerRef.current
+    const req = wipeRequest.current
+
+    if (!layer || !req || req.rev !== wipeRev) {
+      return
+    }
+
+    let covered = false
+    const fireCovered = () => {
+      if (covered) {
+        return
+      }
+
+      covered = true
+      void Promise.resolve(req.onCovered?.()).catch(() => undefined)
+    }
+    const engine = new TadazzV4Motion(layer, {
+      motionScale: motionScaleRef.current,
+      reducedMotion:
+        reducedMotionRef.current || livePlaybackRef.current?.paused === true,
+      originalFamily,
+      onCue: (cue) => {
+        if (cue.name === "wipe-covered") {
+          fireCovered()
+        }
+
+        callbackRef.current.onCue?.(cue)
+      },
+    })
+    wipeEngineRef.current = engine
+    let alive = true
+    const playing = engine.play("z-wipe", {})
+
+    if (livePlaybackRef.current?.paused) {
+      engine.finishAll()
+    }
+
+    void playing.then((ok) => {
+      if (!alive) {
+        return
+      }
+
+      fireCovered()
+
+      if (wipeRequest.current === req) {
+        wipeRequest.current = null
+      }
+
+      req.resolve(ok)
+      // Remove the blades: zero stuck blocking layers after the wipe.
+      /* oxlint-disable max-nested-callbacks -- The stage callback structure follows the existing animation lifecycle and render tree. */
+      setWipeRev((r) => (r === req.rev ? 0 : r))
+      /* oxlint-enable max-nested-callbacks */
+    })
+
+    return () => {
+      alive = false
+      engine.dispose()
+
+      if (wipeEngineRef.current === engine) {
+        wipeEngineRef.current = null
+      }
+    }
+  }, [wipeRev, originalFamily])
+  const showPercentagesRef = useRef(showPercentages)
+  showPercentagesRef.current = overridePercentages ?? showPercentages
+  /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
+  useImperativeHandle(
+    ref,
+    () => ({
+      play: start,
+      clear,
+      wipe,
+      patchData: (patch) => {
+        const remainingMs = pausedCountdownRemainingMsFor(
+          livePlaybackRef.current,
+          pausedCountdownRemainingMsRef.current,
+        )
+        const nextPatch =
+          remainingMs === undefined
+            ? patch
+            : { ...patch, remainingSeconds: remainingMs / 1000 }
+        engineRef.current?.syncCountdown(nextPatch)
+        setView((prev) =>
+          prev
+            ? {
+                ...prev,
+                data: normalizeData({
+                  ...prev.data,
+                  ...nextPatch,
+                }),
+              }
+            : prev,
+        )
+      },
+      replay: async () => {
+        const { current } = viewRef
+
+        return current
+          ? start(current.scene, {
+              ...current.data,
+              questionAlreadyOnStage: false,
+              cardsAlreadyOnStage: false,
+            })
+          : false
+      },
+      pause: (countdownRemainingMs) => {
+        pausedCountdownRemainingMsRef.current = countdownRemainingMs
+        engineRef.current?.pause(countdownRemainingMs)
+        wipeEngineRef.current?.pause()
+      },
+      resume: () => {
+        pausedCountdownRemainingMsRef.current = undefined
+        engineRef.current?.resume()
+        wipeEngineRef.current?.resume()
+      },
+      skipToEnd: () => {
+        engineRef.current?.finishAll()
+        wipeEngineRef.current?.finishAll()
+      },
+      stop: () => {
+        engineRef.current?.stop()
+        wipeEngineRef.current?.stop()
+      },
+      setPercentagesVisible: (value) => {
+        setOverridePercentages(value)
+        const { current } = viewRef
+
+        if (current?.scene === "survey-results") {
+          void start(current.scene, {
+            ...current.data,
+            showPercentages: value,
+          })
+        }
+      },
+    }),
+    [start, clear, wipe],
+  )
+  /* oxlint-enable require-await, typescript/require-await */
+  useLayoutEffect(() => {
+    const el = stageRef.current
+
+    if (!el || !view) {
+      return
+    }
+
+    const cueHandler = (cue: { name: string; scene: TadazzV4Scene }) => {
+      const taggedCue = {
+        ...cue,
+        questionKey: view.data.questionKey,
+        questionNumber: view.data.number,
+      }
+      el.dispatchEvent(
+        new CustomEvent("tadazz:cue", {
+          detail: taggedCue,
+          bubbles: false,
+        }),
+      )
+      callbackRef.current.onCue?.(taggedCue)
+    }
+    const playback = scenePlaybackFor(view.scene, {
+      reducedMotion: reducedMotionRef.current,
+      livePlayback: livePlaybackRef.current,
+      imperativeRemainingMs: pausedCountdownRemainingMsRef.current,
+    })
+    const engine = new TadazzV4Motion(el, {
+      motionScale: motionScaleRef.current,
+      reducedMotion: playback.reducedMotion,
+      originalFamily,
+      onCue: cueHandler,
+    })
+    engineRef.current?.dispose()
+    engineRef.current = engine
+    let alive = true
+    const playing = engine.play(view.scene, {
+      ...view.data,
+      showPercentages: view.data.showPercentages ?? showPercentagesRef.current,
+    })
+
+    // A paused live snapshot must paint its final authoritative results now,
+    // while a real countdown keeps its frozen remainder instead of finishing.
+    if (playback.settleScene) {
+      engine.finishAll()
+    } else if (playback.pauseAfterCommit) {
+      engine.pause(playback.countdownRemainingMs)
+    }
+
+    void playing.then((completed) => {
+      if (!alive) {
+        return
+      }
+
+      resolutions.current.get(view.revision)?.(completed)
+      resolutions.current.delete(view.revision)
+
+      if (completed) {
+        el.dispatchEvent(
+          new CustomEvent("tadazz:animation-complete", {
+            detail: {
+              scene: view.scene,
+            },
+          }),
+        )
+        callbackRef.current.onComplete?.(view.scene)
+      }
+    })
+
+    return () => {
+      alive = false
+      resolutions.current.get(view.revision)?.(false)
+      resolutions.current.delete(view.revision)
+      engine.dispose()
+
+      if (engineRef.current === engine) {
+        engineRef.current = null
+      }
+    }
+  }, [view?.revision, view?.scene, originalFamily])
+  useLayoutEffect(() => {
+    const element = stageRef.current
+
+    if (
+      !element ||
+      view?.scene !== "question" ||
+      !view.data.questionKey ||
+      !callbackRef.current.onQuestionPresented
+    ) {
+      return
+    }
+
+    const { questionKey } = view.data
+
+    return observeQuestionPresentation(element, () => {
+      if (sequence.current === view.revision) {
+        callbackRef.current.onQuestionPresented?.(questionKey)
+      }
+    })
+  }, [view?.revision, view?.scene])
+  useEffect(
+    () => () => {
+      engineRef.current?.dispose()
+      wipeEngineRef.current?.dispose()
+      wipeRequest.current?.resolve(false)
+      wipeRequest.current = null
+      for (const resolve of resolutions.current.values()) {
+        resolve(false)
+      }
+      resolutions.current.clear()
+    },
+    [],
+  )
+  const scene = view?.scene ?? "interlude"
+  const data = view?.data ?? initialData
+  const isShow = view ? TADAZZ_V4_SHOW_SCENES.has(view.scene) : true
+  const stageStyle: CSSProperties = {
+    ...(paletteTheme ? showThemeStyle(paletteTheme) : {}),
+    width: 1920,
+    height: 1080,
+  }
+  let sceneContent: ReactNode = null
+
+  if (view) {
+    const sceneData = {
+      ...data,
+      showPercentages: data.showPercentages ?? showPercentagesRef.current,
+    }
+    sceneContent = originalFamily ? (
+      <OriginalThemeScene
+        family={originalFamily}
+        scene={view.scene}
+        data={sceneData}
+        motionOwnsCountdownText
+      />
+    ) : (
+      <StageSceneV4
+        scene={view.scene}
+        data={sceneData}
+        assetBase={assetBase}
+        motionOwnsCountdownText
+      />
+    )
+  }
+
+  return (
+    <div
+      ref={viewportRef}
+      className={`tz-viewport tzv4-viewport${className ? ` ${className}` : ""}`}
+      data-testid="tadazz-stage-viewport"
+    >
+      <div
+        ref={stageRef}
+        className={["tzv4-stage", isShow && "stage-show"]
+          .filter(Boolean)
+          .join(" ")}
+        data-theme-palette={paletteTheme?.definition.id}
+        data-original-family={originalFamily}
+        data-original-theme={originalFamily}
+        data-v4-scene={view?.scene ?? "idle"}
+        data-stage-mode={view?.scene ?? (customScreen ? "custom" : "idle")}
+        data-question-key={data.questionKey ?? ""}
+        data-reduced-motion={reducedMotion ? "true" : "false"}
+        style={stageStyle}
+        data-testid="tadazz-stage"
+      >
+        {originalFamily ? (
+          <style data-original-theme-styles>{originalThemeCss}</style>
+        ) : null}
+        <StageBackdropV4 scene={scene} data={data} assetBase={assetBase} />
+        <div className="veil" />
+        {underlay as ReactNode}
+        {originalFamily ? (
+          <OriginalThemeAtmosphere family={originalFamily} />
+        ) : (
+          <StageAmbientV4 />
+        )}
+        {view &&
+          data.eventArtworkUrl &&
+          ![
+            "company-opening",
+            "grand-opening",
+            "grand-finale",
+            "story-assembly",
+            "story-live",
+          ].includes(view.scene) && (
+            <img
+              className="stage-teaser"
+              src={data.eventArtworkUrl}
+              alt={data.photoAlt || ""}
+            />
+          )}
+        <div className="tzv4-scene-root" key={view?.contentRevision}>
+          {sceneContent}
+        </div>
+        {customScreen ? (
+          <div className="tzv4-custom-root">{customScreen as ReactNode}</div>
+        ) : null}
+        {overlay as ReactNode}
+        <div className="tzv4-fx-root" aria-hidden="true" />
+        <div className="tzv4-screen-flash" aria-hidden="true" />
+        {wipeRev > 0 && (
+          <div
+            ref={wipeLayerRef}
+            className="tzv4-wipe-layer"
+            aria-hidden="true"
+            data-testid="tadazz-v4-wipe-layer"
+          >
+            <ZWipeV4 />
+            <div className="tzv4-fx-root" />
+            <div className="tzv4-screen-flash" />
+          </div>
+        )}
+      </div>
+    </div>
+  )
+})

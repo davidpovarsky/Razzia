@@ -1,0 +1,13 @@
+{
+  "receiptPath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/backup-qualification-20261119T054131Z-4f3f364d/backup-qualification-result.json",
+  "receiptSha256": "a20d232084af90541c3f09dd3c1c783c2603641686623620ea5af1f33b164a16",
+  "bytes": 5874,
+  "mode": "0600",
+  "rootOwned": true,
+  "singleLink": true,
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "candidateImage": "sha256:ca3717033dc0206e3b64f697e74b344637eb3b197f9910c1018c74e8b22c2001",
+  "releaseEligible": true,
+  "candidateCloneBootPassed": true,
+  "oldApplicationResumed": true
+}

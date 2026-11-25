@@ -1,0 +1,36 @@
+{
+  "managerSource": "d2bd26815bfb7b9a306beb67288f2b775a6b3a30",
+  "managerEvidenceCommit": "1081c48",
+  "completeManagerEvidenceCommit": "51f36b3746ca86f4698c9751b35989854c396d6a",
+  "twoProductionBlobsMatch": true,
+  "pinnedReferences": [
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/roster-native-admission-20261115/MANAGER_HANDOFF.md",
+      "bytes": 2670,
+      "sha256": "c50a838a1826e741cbc4c75809747848f55f531f5b8786d2a82e216874f357d1"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/roster-native-admission-20261115/MANAGER_RESULT.json",
+      "bytes": 3460,
+      "sha256": "0ff03284af826119b89c0d82f804f0e381fbd15ac334e855b158050c6721a350"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/roster-native-admission-20261115/C_CONSUMER_REVIEW.json",
+      "bytes": 45329,
+      "sha256": "ddea20831f6ac5672d5206820e6918a9a1ddd8012674fba3c99a93e4b3268092"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/invite-b902-20261115/producer-successor-match.json",
+      "bytes": 484,
+      "sha256": "54558e12ecbf256584fc890baeb95a1b584a035c0845c38fb4a9394da6b58223"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/invite-b902-20261115/asana-readback.json",
+      "bytes": 8082,
+      "sha256": "f7ac39b333a7d5781b37bf78a9f309d14efba99178e1df9b5b16a22f8636df57"
+    }
+  ],
+  "newTestsRun": false,
+  "newArchiveCollection": false,
+  "meaning": "Read-only committed manager acceptance evidence; no consumer/roster rerun or polling; original broader tasks remainOPEN"
+}

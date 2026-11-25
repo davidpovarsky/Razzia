@@ -1,0 +1,133 @@
+{
+  "deltaSourcePin": "b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418",
+  "baseOverlaySha256": "f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+  "status": "FINISHED_CHECK_RECEIPTS",
+  "commands": [
+    {
+      "label": "container-create",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "run",
+        "-d",
+        "--pull=never",
+        "--name",
+        "tadazz-hq-sb-metadata-20261115",
+        "--read-only",
+        "--cpus=0.25",
+        "--memory=2g",
+        "--pids-limit=128",
+        "--network=none",
+        "--workdir=/workspace",
+        "--env",
+        "XDG_DATA_HOME=/tmp/vitest-private",
+        "--tmpfs",
+        "/tmp:rw,nosuid,size=128m",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0,dst=/workspace,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418-xdg,dst=/delta,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418-xdg/stage-metadata.test.ts,dst=/workspace/extensions/src/core/show-library/stage-metadata.test.ts,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/port3-manifest-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0.json,dst=/baseline-manifest.json,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/evidence/sb-metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418-xdg,dst=/evidence",
+        "--entrypoint=sleep",
+        "tadazz:design-system-qa-20261110",
+        "infinity"
+      ],
+      "exitCode": 0,
+      "seconds": 0.188,
+      "logSha256": "943907ee7f53fad8c96579f5b6e300b09008057a4c5b1a8705ea65ce25afd620"
+    },
+    {
+      "label": "source-before",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "-e",
+        "const fs=require('fs'),c=require('crypto');const m=JSON.parse(fs.readFileSync('/baseline-manifest.json')),d=JSON.parse(fs.readFileSync('/delta/metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418.json'));let errors=[];for(const e of m.baseline){const b=fs.readFileSync('/workspace/'+e.path);if(b.length!==e.bytes||c.createHash('sha1').update(Buffer.from('blob '+b.length+'\\0')).update(b).digest('hex')!==e.gitBlob)errors.push(e.path)}for(const e of d.files){const b=fs.readFileSync('/workspace/'+e.path);if(b.length!==e.bytes||c.createHash('sha256').update(b).digest('hex')!==e.sha256)errors.push(e.path)}console.log(JSON.stringify({status:errors.length?'FAIL':'PASS',baselineFiles:m.baseline.length,overlayFiles:d.files.length,errors}));if(errors.length)process.exit(1)"
+      ],
+      "exitCode": 0,
+      "seconds": 2.592,
+      "logSha256": "defe72e6173a0e6bc556e0c498e9117dc8e5f07f5b49312d03f78b41515e6f2c"
+    },
+    {
+      "label": "focused-tests",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "-w",
+        "/workspace/extensions",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/core/show-library/stage-metadata.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--no-cache",
+        "--configLoader=runner",
+        "--reporter=json",
+        "--outputFile=/evidence/focused-tests.json"
+      ],
+      "exitCode": 0,
+      "seconds": 7.597,
+      "logSha256": "2326169433718593fcd18e813b9e6028a0fff4aebedf32617523b132b1c89c66"
+    },
+    {
+      "label": "source-after",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "-e",
+        "const fs=require('fs'),c=require('crypto');const m=JSON.parse(fs.readFileSync('/baseline-manifest.json')),d=JSON.parse(fs.readFileSync('/delta/metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418.json'));let errors=[];for(const e of m.baseline){const b=fs.readFileSync('/workspace/'+e.path);if(b.length!==e.bytes||c.createHash('sha1').update(Buffer.from('blob '+b.length+'\\0')).update(b).digest('hex')!==e.gitBlob)errors.push(e.path)}for(const e of d.files){const b=fs.readFileSync('/workspace/'+e.path);if(b.length!==e.bytes||c.createHash('sha256').update(b).digest('hex')!==e.sha256)errors.push(e.path)}console.log(JSON.stringify({status:errors.length?'FAIL':'PASS',baselineFiles:m.baseline.length,overlayFiles:d.files.length,errors}));if(errors.length)process.exit(1)"
+      ],
+      "exitCode": 0,
+      "seconds": 2.789,
+      "logSha256": "defe72e6173a0e6bc556e0c498e9117dc8e5f07f5b49312d03f78b41515e6f2c"
+    }
+  ],
+  "diskFreeBefore": 2825453568,
+  "sourceReadonly": true,
+  "install": "NOT_RUN",
+  "newClone": "NONE",
+  "broaderRegressions": "NOT_REPEATED_UNCHANGED_BYTES",
+  "overlayBytes": 21545,
+  "immutableBefore": {
+    "status": "PASS",
+    "moduleFiles": 26
+  },
+  "lastDiskFreeBytes": 2825310208,
+  "allocation": {
+    "nanoCpus": 250000000,
+    "memoryBytes": 2147483648,
+    "network": "none",
+    "readonlyRootfs": true,
+    "ports": {},
+    "imageId": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647"
+  },
+  "focusedTypes": "PASS_IN_PRIOR_DELTA_SAME_26_EFFECTIVE_FILE_HASHES",
+  "priorDeltaEvidence": "sb-metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418",
+  "immutableAfter": {
+    "status": "PASS",
+    "moduleFiles": 26
+  },
+  "containerWritableBytes": 16384,
+  "evidenceAndOverlayBytes": 37141,
+  "allocationReleased": true,
+  "finishedUtc": "2026-11-15T07:43:36.946442+00:00",
+  "diskFreeAfter": 2825404416
+}

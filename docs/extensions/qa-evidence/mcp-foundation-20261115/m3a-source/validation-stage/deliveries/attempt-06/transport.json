@@ -1,0 +1,9 @@
+{
+  "kind": "THIN_SOURCE_AND_RUNNER_DELIVERY",
+  "archiveBytes": 57709,
+  "archiveSha256": "14dd56b85edb4e0118f0cb5e5256e4d03491c9c0166e8dc6aef8c16ab48dc2e2",
+  "exit": 0,
+  "stdout": "{\"deliveryArchiveSha256\": \"14dd56b85edb4e0118f0cb5e5256e4d03491c9c0166e8dc6aef8c16ab48dc2e2\", \"selectedSourceFiles\": 24, \"fullGraphFiles\": 150}\n",
+  "stderr": "",
+  "localApplicationExecuted": false
+}

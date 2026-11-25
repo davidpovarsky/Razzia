@@ -1,0 +1,321 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.package-admin.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.package-admin.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/src/site/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-09-package-admin-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/src/site/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "site.spec.ts"
+        ],
+        "timeout": 150000
+      },
+      {
+        "outputDir": "/evidence/phase-09-package-admin-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/src/site/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "site.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-09-package-admin-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/src/site/tests/browser",
+        "snapshotDir": "/cleanup/extensions/src/site/tests/browser",
+        "testIgnore": [],
+        "testMatch": "site.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-09-package-admin-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/src/site/tests/browser",
+        "snapshotDir": "/cleanup/extensions/src/site/tests/browser",
+        "testIgnore": [],
+        "testMatch": "site.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-09-package-admin.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "site.spec.ts",
+      "file": "site.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Studio keeps navigation warm, protects initial verification and styles actual package actions",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23825,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'My account', exact: true }).first()\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'My account', exact: true }).first()\u001b[22m\n\n    at /cleanup/extensions/src/site/tests/browser/site.spec.ts:234:6",
+                    "location": {
+                      "file": "/cleanup/extensions/src/site/tests/browser/site.spec.ts",
+                      "column": 6,
+                      "line": 234
+                    },
+                    "snippet": "  232 |     .getByRole(\"link\", { name: \"My account\", exact: true })\n  233 |     .first()\n> 234 |     .click()\n      |      ^\n  235 |   await expect(\n  236 |     page.getByRole(\"heading\", { name: \"Account & licences\", exact: true }),\n  237 |   ).toBeVisible()"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/src/site/tests/browser/site.spec.ts",
+                        "column": 6,
+                        "line": 234
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'My account', exact: true }).first()\u001b[22m\n\n\n  232 |     .getByRole(\"link\", { name: \"My account\", exact: true })\n  233 |     .first()\n> 234 |     .click()\n      |      ^\n  235 |   await expect(\n  236 |     page.getByRole(\"heading\", { name: \"Account & licences\", exact: true }),\n  237 |   ).toBeVisible()\n    at /cleanup/extensions/src/site/tests/browser/site.spec.ts:234:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:30:33.128Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-09-package-admin-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-09-package-admin-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/src/site/tests/browser/site.spec.ts",
+                    "column": 6,
+                    "line": 234
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5c02723ad68c2a0d50c5-7f2d51e5eb96be909775",
+          "file": "site.spec.ts",
+          "line": 54,
+          "column": 1
+        },
+        {
+          "title": "Studio keeps navigation warm, protects initial verification and styles actual package actions",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 35328,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'My account', exact: true }).first()\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'My account', exact: true }).first()\u001b[22m\n\n    at /cleanup/extensions/src/site/tests/browser/site.spec.ts:234:6",
+                    "location": {
+                      "file": "/cleanup/extensions/src/site/tests/browser/site.spec.ts",
+                      "column": 6,
+                      "line": 234
+                    },
+                    "snippet": "  232 |     .getByRole(\"link\", { name: \"My account\", exact: true })\n  233 |     .first()\n> 234 |     .click()\n      |      ^\n  235 |   await expect(\n  236 |     page.getByRole(\"heading\", { name: \"Account & licences\", exact: true }),\n  237 |   ).toBeVisible()"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/src/site/tests/browser/site.spec.ts",
+                        "column": 6,
+                        "line": 234
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'My account', exact: true }).first()\u001b[22m\n\n\n  232 |     .getByRole(\"link\", { name: \"My account\", exact: true })\n  233 |     .first()\n> 234 |     .click()\n      |      ^\n  235 |   await expect(\n  236 |     page.getByRole(\"heading\", { name: \"Account & licences\", exact: true }),\n  237 |   ).toBeVisible()\n    at /cleanup/extensions/src/site/tests/browser/site.spec.ts:234:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:30:58.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-09-package-admin-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-09-package-admin-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/src/site/tests/browser/site.spec.ts",
+                    "column": 6,
+                    "line": 234
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5c02723ad68c2a0d50c5-207d0cc7ed5ff66ccf55",
+          "file": "site.spec.ts",
+          "line": 54,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T09:30:26.296Z",
+    "duration": 67642.281,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

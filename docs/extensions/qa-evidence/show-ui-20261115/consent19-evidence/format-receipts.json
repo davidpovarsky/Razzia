@@ -1,0 +1,12 @@
+[
+  {
+    "path": "extensions/src/components/oauth-consent/OAuthConsentPage.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/oauth-consent.spec.ts",
+    "sameAst": true,
+    "changed": true
+  }
+]

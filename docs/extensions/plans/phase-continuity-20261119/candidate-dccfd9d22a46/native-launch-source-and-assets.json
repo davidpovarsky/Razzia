@@ -1,0 +1,24 @@
+{
+  "at": "2026-11-19T20:55:13.151378+00:00",
+  "source": {
+    "count": 1873,
+    "expectedMapSha256": "617f0610d446805b072740f0fd21eea4aac6d67d6d54e1e3009a7f056342e830",
+    "actualMapSha256": "617f0610d446805b072740f0fd21eea4aac6d67d6d54e1e3009a7f056342e830",
+    "mismatches": []
+  },
+  "web": {
+    "expectedCount": 203,
+    "actualCount": 203,
+    "expectedMapSha256": "5bdd7771972fc51e1f63d65a87a3a2b65470bcb7fc9b2c3de8974972985c9657",
+    "actualMapSha256": "5bdd7771972fc51e1f63d65a87a3a2b65470bcb7fc9b2c3de8974972985c9657",
+    "missing": [],
+    "extra": [],
+    "mismatches": []
+  },
+  "widget": {
+    "physicalSourceCount": 748,
+    "publicAssetCount": 85,
+    "physicalMismatches": [],
+    "publicMismatches": []
+  }
+}

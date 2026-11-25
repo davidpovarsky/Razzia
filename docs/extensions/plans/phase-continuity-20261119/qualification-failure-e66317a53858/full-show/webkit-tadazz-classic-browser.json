@@ -1,0 +1,71 @@
+{
+  "browserVersion": "27.2",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "status": "FAIL",
+      "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n",
+      "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n\n    at pause (/source/extensions/qa/phase3-full-show/workspace-controls.mjs:145:51)\n    at async verifyWorkspaceControls (/source/extensions/qa/phase3-full-show/workspace-controls.mjs:150:3)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1018:13\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1012:7",
+      "budgetMs": 300000,
+      "ms": 14469
+    },
+    {
+      "name": "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 9091
+    },
+    {
+      "name": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 102936
+    },
+    {
+      "name": "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 50156
+    },
+    {
+      "name": "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 28019
+    },
+    {
+      "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Replay must remount the native question or scene\n\ntrue !== false\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Replay must remount the native question or scene\n\ntrue !== false\n\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2037:20\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1841:7",
+      "budgetMs": 120000,
+      "ms": 8088
+    },
+    {
+      "name": "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 68678
+    },
+    {
+      "name": "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 52886
+    },
+    {
+      "name": "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 10008
+    },
+    {
+      "name": "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 103
+    }
+  ]
+}

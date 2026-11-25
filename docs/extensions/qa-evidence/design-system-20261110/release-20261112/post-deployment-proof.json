@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "timestampUTC": "2026-11-12T03:40:04.588563+00:00",
+  "sourceRevision": "bff12a63ec3f69a58123c0299eea991901680b94",
+  "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+  "container": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+  "started": "2026-11-12T03:38:48.157101207Z",
+  "webArtifactFilesVerified": 154,
+  "protectedBackendAndConfigurationUnchanged": {
+    "/app/socket/index.cjs": "83f75aac39d14e92eb849cca17d3848e13dd140fee5ce3a1c946694c289d6476",
+    "/etc/nginx/nginx.conf": "ca4278d6b81120988a6056c2a71891ea2719aad4535d2fc4f7ab7ac8da560c2f",
+    "/etc/nginx/http.d/default.conf": "3edfd96a46ed0346c2631ca30cdfd206e300a2637f3f86afa10b966dd657a0e2",
+    "/etc/nginx/tadazz/server.conf": "17e42c8281fd9a0f673e87332f02f6130e8f471a4a977b0bba26389ef083ea7f",
+    "/etc/supervisord.conf": "d58d111a1d4dfb0e936f0fa0048cc61ee120ff52979980bb57d8bbbee683c26b"
+  },
+  "environmentUnchanged": true,
+  "hostConfigurationUnchanged": true,
+  "gatewayIdentityImageAndStartUnchanged": true,
+  "rollbackContainerRetainedStopped": "tadazz-pre-unified-site-bff12a6",
+  "privateBackupMode": "0600",
+  "sqliteReadOnlyIntegrityChecks": {
+    "databases": 2,
+    "allPassed": true
+  },
+  "configMountUnchanged": true
+}

@@ -1,0 +1,191 @@
+{
+  "action": "observe",
+  "revision": "e30133c7dfb03412cfb898705f1115d206548668",
+  "operatorSha256": "0057bf915a6df3a673c99345ca6e18f07eb94adbca86f56b97221f0125fb5fce",
+  "startedAt": "2026-11-18T11:37:32.502436+00:00",
+  "finishedAt": "2026-11-18T11:38:02.835393+00:00",
+  "exitCode": 0,
+  "operationDirectory": "/home/ubuntu/tadazz-mcp-operation-records-e30133c7dfb0-20261118/observe-20261118T113732Z-39d58821",
+  "stdoutSha256": "19753bb7efbf898289ab7fc121a619b8ce8e4bc7b50d9985725ed8f3af0f0df1",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdoutBytes": 4881,
+  "stderrBytes": 0,
+  "stdoutJsonParsed": true,
+  "result": {
+    "kind": "post-deploy-observation",
+    "version": 1,
+    "startedAt": "2026-11-18T11:37:32.612142+00:00",
+    "container": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+    "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+    "gateway": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "finishedAt": "2026-11-18T11:38:02.817890+00:00",
+    "probes": 15,
+    "medianProbeMs": 12.94,
+    "maxProbeMs": 17.4,
+    "restartsDuringWindow": 0,
+    "passed": true,
+    "rawLogsEmitted": false,
+    "customerContentEmitted": false,
+    "mutationsPerformed": false,
+    "installedHostVerified": false,
+    "longTermReliabilityVerified": false,
+    "samples": [
+      {
+        "at": "2026-11-18T11:37:32.613883+00:00",
+        "restartCount": 0,
+        "probes": [
+          {
+            "path": "/api/health",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 14.69
+          },
+          {
+            "path": "/.well-known/oauth-protected-resource",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 13.06
+          },
+          {
+            "path": "/.well-known/oauth-authorization-server/oauth",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 11.57
+          },
+          {
+            "path": "/oauth/jwks.json",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 11.58
+          },
+          {
+            "path": "/mcp",
+            "expectedStatus": 401,
+            "passed": true,
+            "status": 401,
+            "contentType": "application/json",
+            "milliseconds": 12.15
+          }
+        ]
+      },
+      {
+        "at": "2026-11-18T11:37:47.678645+00:00",
+        "restartCount": 0,
+        "probes": [
+          {
+            "path": "/api/health",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 12.94
+          },
+          {
+            "path": "/.well-known/oauth-protected-resource",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 12.89
+          },
+          {
+            "path": "/.well-known/oauth-authorization-server/oauth",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 11.56
+          },
+          {
+            "path": "/oauth/jwks.json",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 11.47
+          },
+          {
+            "path": "/mcp",
+            "expectedStatus": 401,
+            "passed": true,
+            "status": 401,
+            "contentType": "application/json",
+            "milliseconds": 11.49
+          }
+        ]
+      },
+      {
+        "at": "2026-11-18T11:38:02.740751+00:00",
+        "restartCount": 0,
+        "probes": [
+          {
+            "path": "/api/health",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 17.4
+          },
+          {
+            "path": "/.well-known/oauth-protected-resource",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 13.92
+          },
+          {
+            "path": "/.well-known/oauth-authorization-server/oauth",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 13.47
+          },
+          {
+            "path": "/oauth/jwks.json",
+            "expectedStatus": 200,
+            "passed": true,
+            "status": 200,
+            "contentType": "application/json",
+            "milliseconds": 13.83
+          },
+          {
+            "path": "/mcp",
+            "expectedStatus": 401,
+            "passed": true,
+            "status": 401,
+            "contentType": "application/json",
+            "milliseconds": 13.94
+          }
+        ]
+      }
+    ],
+    "logObservation": {
+      "available": true,
+      "maximumBytes": 1048576,
+      "maximumLinesRequested": 1000,
+      "bytesRead": 1042,
+      "linesRead": 8,
+      "errorKeywordLines": 0,
+      "http5xxLines": 0,
+      "completeTrafficErrorRate": false,
+      "rawLogsEmitted": false
+    },
+    "endingSnapshot": {
+      "at": "2026-11-18T11:38:02.817871+00:00",
+      "restartCount": 0,
+      "releaseIdentityVerified": true,
+      "gatewayIdentityVerified": true
+    }
+  },
+  "projectionOmissions": []
+}

@@ -1,0 +1,74 @@
+{
+  "mode": "STATIC_SOURCE_ONLY_NO_PROJECT_MODULE_EXECUTION",
+  "sourceFiles": [
+    {
+      "path": "extensions/src/core/show-library/compiled-index-schema.ts",
+      "bytes": 20142,
+      "sha256": "3f95cf37b37564aca83aaf852a005870a49ce6c716ff5895018de63fb9f19f31",
+      "imports": [
+        "zod",
+        "./digest",
+        "./primitives"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-authority.ts",
+      "bytes": 4381,
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55",
+      "imports": [
+        "node:crypto",
+        "./digest",
+        "./primitives",
+        "./compiled-index-schema"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-validation.ts",
+      "bytes": 5181,
+      "sha256": "c9b1f7c3bd3c6e9747cb8e06df6ddd291abe535ef0d277fd1dcbc84a7b85a345",
+      "imports": [
+        "node:crypto",
+        "zod",
+        "./digest",
+        "./primitives",
+        "./compiled-index-schema",
+        "./compiled-index-authority"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index.test.ts",
+      "bytes": 23020,
+      "sha256": "54d4de52dbe0cc694cc7718a56e3c091bec61a29e433443811bee57adbbc5896",
+      "imports": [
+        "node:crypto",
+        "vitest",
+        "./digest",
+        "./compiled-index-schema",
+        "./compiled-index-authority",
+        "./compiled-index-validation"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    }
+  ],
+  "authoredTestCases": 29,
+  "testsExecuted": 0,
+  "typecheck": "NOT_RUN",
+  "acceptedCoreHashesMatched": 26,
+  "existingFileChanges": 0,
+  "existingRuntimeImports": 0,
+  "rootReceiptRegistries": "EMPTY",
+  "pinActivation": "NONE",
+  "lockAndPackageFilesUnchanged": true,
+  "uiCheck": "FAIL_NODE22_TS_EXTENSION_AFTER_UNEXPECTED_PNPM_CACHE_LINK",
+  "directFreezeGuard": "FAIL_31_DENIED_PATHS_MISMATCHES_EMPTY",
+  "unexpectedPnpmCacheLink": {
+    "reused": 354,
+    "added": 354,
+    "downloaded": 0,
+    "trackedChanges": 0,
+    "cleanup": "PRESERVED_IGNORED_FILES_NO_DELETE"
+  }
+}

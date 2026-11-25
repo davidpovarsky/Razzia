@@ -13,6 +13,7 @@ const LANGUAGES = [
   { code: "en", label: "common:language.en" },
   { code: "es", label: "common:language.es" },
   { code: "fr", label: "common:language.fr" },
+  { code: "he", label: "common:language.he" },
   { code: "it", label: "common:language.it" },
   { code: "ja", label: "common:language.ja" },
   { code: "tr", label: "common:language.tr" },
@@ -21,7 +22,10 @@ const LANGUAGES = [
 
 const LanguageSwitcher = () => {
   const { t, i18n } = useTranslation()
-  const normalizedLanguage = i18n.language.slice(0, 2)
+  const normalizedLanguage = (i18n.resolvedLanguage ?? i18n.language).slice(
+    0,
+    2,
+  )
 
   return (
     <Select
@@ -39,7 +43,7 @@ const LanguageSwitcher = () => {
       <SelectContent className="w-auto min-w-32">
         {LANGUAGES.map((l) => (
           <SelectItem key={l.code} value={l.code}>
-            {t(l.label)}
+            <bdi>{t(l.label)}</bdi>
           </SelectItem>
         ))}
       </SelectContent>

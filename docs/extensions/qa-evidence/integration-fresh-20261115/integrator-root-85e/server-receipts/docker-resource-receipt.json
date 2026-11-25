@@ -1,0 +1,129 @@
+{
+  "own_containers": [
+    {
+      "name": "/integrator-root-85e-pin-runtime-index",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-r7",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-r6",
+      "bookkeeping_allocated_bytes": 49152,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-native-exec-profile",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-r5",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-metadata-vite-repair",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-metadata-hydration-r2",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-metadata-keeper",
+      "bookkeeping_allocated_bytes": 36864,
+      "running": true,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-metadata-hydration",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-view-help",
+      "bookkeeping_allocated_bytes": 53248,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-metadata-inventory",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-metadata-names",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-metadata-list",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-metadata-size",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-metadata-inspect",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-r3",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115-r2",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-20261115",
+      "bookkeeping_allocated_bytes": 45056,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-format",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    },
+    {
+      "name": "/integrator-root-85e-inspect",
+      "bookkeeping_allocated_bytes": 40960,
+      "running": false,
+      "read_only_root": true
+    }
+  ],
+  "container_bookkeeping_bytes": 868352,
+  "own_source_evidence_fixture_bytes": 21753856,
+  "sum_bytes": 22622208,
+  "limit_bytes": 67108864,
+  "note": "Per-container exact owned directories, source/evidence/fixture unique blocks; Docker local-driver volume option metadata is small bookkeeping, RAM contents excluded from physical disk. All roots read-only; no application writable layers."
+}

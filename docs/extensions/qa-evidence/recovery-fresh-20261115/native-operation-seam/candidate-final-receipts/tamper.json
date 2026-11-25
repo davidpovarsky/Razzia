@@ -1,0 +1,27 @@
+{
+  "original": {
+    "quizId": "tXfIhyPQFNgB4z123L1YT",
+    "revision": 1,
+    "baseDigest": "2a5eab272523e6c7f761a4d2682f9b8c65f23f7e821dc13e816f5afdd963f344"
+  },
+  "before": {
+    ".owner": "746050f64914910ca3753102388c542ab2f17580aa5c028b32236e655738f20f",
+    ".tadazz-creation-operations-v1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/operation.json": "df65fd86f441dfcbda9c33ecada68f17f57cb810df2fd987f8ffe2d41f8ce91c",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/tXfIhyPQFNgB4z123L1YT.json": "2e8e0f5c589f2b0b98498acea2eb1eccacbfc24875b878875b9fb9138cb33142",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-32Se4nB2.json": "dc75a522c5a7a60c7c8679bd9647f4acf47775e39733b8f6f0a3b49a2601f94e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098",
+    "tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098"
+  },
+  "after": {
+    ".owner": "746050f64914910ca3753102388c542ab2f17580aa5c028b32236e655738f20f",
+    ".tadazz-creation-operations-v1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/operation.json": "df65fd86f441dfcbda9c33ecada68f17f57cb810df2fd987f8ffe2d41f8ce91c",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/extensions/quizzes/tXfIhyPQFNgB4z123L1YT.json": "2e8e0f5c589f2b0b98498acea2eb1eccacbfc24875b878875b9fb9138cb33142",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/durable-op-32Se4nB2.json": "dc75a522c5a7a60c7c8679bd9647f4acf47775e39733b8f6f0a3b49a2601f94e",
+    "tenants/00000000-0000-4000-8000-0000000000a1/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098",
+    "tenants/00000000-0000-4000-8000-0000000000b2/extensions/quizzes/sentinel.txt": "59f66c99eeab11e2161da66cbb3f7651cfabd87a07cb02888beeceb4d98f348e",
+    "tenants/00000000-0000-4000-8000-0000000000b2/quizz/sentinel.txt": "aa34a091ce05534cb535a244cb4711329b600f83a7270e9220b4782f0bb05098"
+  }
+}

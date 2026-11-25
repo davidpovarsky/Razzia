@@ -1,0 +1,44 @@
+{
+  "name": "@tadazz/mcp-foundation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./server": "./server/factory.ts",
+    "./remote": "./server/http.ts",
+    "./access-token": "./server/access-token.ts",
+    "./composition-preview-v2": "./server/composition-preview-v2.ts",
+    "./oauth": "./first-party/oauth.ts",
+    "./contracts": "./contracts/index.ts",
+    "./native-save-contracts": "./contracts/native-save.ts",
+    "./preview-candidate-v2": "./server/preview-candidate-v2.ts",
+    "./preview-candidate-contracts": "./contracts/preview-candidate-v2.ts",
+    "./preview-candidate-consumer": "./client/preview-candidate-v2.ts",
+    "./preview-resource": "./server/preview-resource.ts",
+    "./first-party": "./first-party/index.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.nodecheck.ts",
+    "test:first-party": "tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/first-party/*.nodecheck.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/core": "2.4.0",
+    "@modelcontextprotocol/ext-apps": "2.1.0",
+    "zod": "4.6.6",
+    "uuid": "14.0.3",
+    "socket.io": "4.8.4",
+    "hono": "4.13.13",
+    "http-status-codes": "2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

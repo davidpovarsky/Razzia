@@ -4,10 +4,12 @@
     "target": "ESNext",
     "module": "ESNext",
     "types": ["node"],
+    "jsx": "react-jsx",
     "moduleResolution": "bundler",
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true
   }
 }

@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en (3.4s)
+  ✓  2 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: es (2.6s)
+  ✓  3 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:93:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal (4.1s)
+  ✓  4 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en (11.3s)
+  ✓  5 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: es (15.8s)
+  ✓  6 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:93:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal (15.4s)
+
+  6 passed (1.2m)

@@ -1,0 +1,85 @@
+{
+  "checkId": "THEME-PARSER-RECEIPT",
+  "owner": "/root/theme_inventory",
+  "classification": "VERIFY_REGRESSION",
+  "status": "PASSED",
+  "executedAt": "2026-11-23T00:25:31.693947+00:00",
+  "sourceMergeSha": "b00cbe0058a1b83b613d9c64fc99eb1b09c548ff",
+  "python": "3.12.3",
+  "host": "torah-social",
+  "inputs": {
+    "originalController": {
+      "path": "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source/faa-successor-preparation-oracle-v1.py",
+      "sha256": "1470fbe64a7dff858aeddadcfd8b8102653d545b5fcd561f5e9f8bd64316ed24",
+      "bytes": 41048
+    },
+    "patchedController": {
+      "path": "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source/faa-successor-preparation-oracle.py",
+      "sha256": "5e371b971f5b0c995c57e77f0068c4ce0c6f83a2c4f92ea0a5769b0e6a284083",
+      "bytes": 41056
+    },
+    "originalReceipt": {
+      "path": "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source/original-failed-preflight-receipt.json",
+      "sha256": "31933d02350eac417777ad760e82d331f0b3d3f425d17001b91af8cd11f2d96a",
+      "bytes": 33637
+    },
+    "stdout": {
+      "path": "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source/builtin-and-signed-catalog-policy.stdout.log",
+      "sha256": "8aaa50c5f57002e5e7aa62799ca4e32a40dbfe3d01a36734e09a7afa0aba4865",
+      "bytes": 10030
+    },
+    "stderr": {
+      "path": "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source/builtin-and-signed-catalog-policy.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "originalParserReplay": {
+    "status": "FAILED_REPRODUCED",
+    "message": "Missing unambiguous policy count: tests"
+  },
+  "preparedParserReplay": {
+    "status": "PASSED",
+    "measuredPolicy": {
+      "tests": 16,
+      "pass": 16,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "originalPreflightOutcomeUnchanged": {
+    "passed": false,
+    "prepared": false,
+    "releaseQualified": false
+  },
+  "existingPolicyProcessExit": 0,
+  "executedScope": "Only the AST-extracted measured_counts function from each existing controller. No controller orchestration, product suites, builds, server launch, or deployment.",
+  "productSuitesExecuted": 0,
+  "releaseAcceptance": "INCOMPLETE",
+  "allInputBytesUnchanged": true,
+  "command": [
+    "python3",
+    "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/verify-node-summary-parser.py",
+    "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source"
+  ],
+  "verifierSha256": "33e3839565fc1cbd97d126334c9b2acbe3ab7c3c4d6818a769963baaade85909",
+  "attempts": [
+    {
+      "status": "HARNESS_ENCODING_FAILED",
+      "parserFunctionsExecuted": false,
+      "cause": "PowerShell transport replaced a literal Unicode info marker in the verifier expectation with '?'. Corrected verifier to use chr(0x2139), preserving the exact source comparison and original inputs.",
+      "stderr": "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-validation.attempt1.stderr.log"
+    },
+    {
+      "status": "PASSED",
+      "parserFunctionsExecuted": true,
+      "command": [
+        "python3",
+        "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/verify-node-summary-parser.py",
+        "/mnt/development/projects/diagnostics/tadazz-themes-continuation-20261123/parser-source"
+      ]
+    }
+  ]
+}

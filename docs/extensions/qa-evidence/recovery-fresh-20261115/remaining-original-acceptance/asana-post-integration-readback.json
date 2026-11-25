@@ -1,0 +1,34 @@
+{
+  "localSource": "6144ce0b22a55fcde3549129ae440cb7aa290031",
+  "reconciliationCommit": "266bdaa5614472c0c255463e0cb2de46765da4bc",
+  "receipts": [
+    {
+      "gid": "1220109925694179",
+      "completed": false,
+      "oldNotesLength": 40164,
+      "newNotesLength": 42061,
+      "priorNotesPreservedExactly": true,
+      "exactReadback": true,
+      "modifiedAt": "2026-11-15T18:04:08.986Z"
+    },
+    {
+      "gid": "1220111293723790",
+      "completed": false,
+      "oldNotesLength": 39351,
+      "newNotesLength": 41248,
+      "priorNotesPreservedExactly": true,
+      "exactReadback": true,
+      "modifiedAt": "2026-11-15T18:04:08.996Z"
+    },
+    {
+      "gid": "1219882508725158",
+      "completed": false,
+      "oldNotesLength": 31561,
+      "newNotesLength": 33458,
+      "priorNotesPreservedExactly": true,
+      "exactReadback": true,
+      "modifiedAt": "2026-11-15T18:04:09.027Z"
+    }
+  ],
+  "append": "\n\n[2026-11-15 — ACCEPTED MANAGER INTEGRATION / ORIGINAL RECOVERY RECONCILIATION]\nSingle-manager handoff accepted owner-aware startup in27d218d; current manager product abd4dcb7573807cb2a15e75c2383be463b7cbace, evidence c30c8dce8ef70b166a1800a09eda82177ff7dcde. Actual manager root owner26/26PASS at543841486e7c2c3007b41ef73c0a7072eff19d52; these are included in187 executed selected tests. After type-only correction, actual parent/private/socket TypeScript exit0, changed host case rerun1PASS and186 reused on unchanged source/installed graph. This is manager evidence, not a new local187 rerun;99 receipts verified by manager, four committed evidence references pinned locally.\nRecovery branch preserved the manager pure startup-owner-snapshot type leaf and exact package export at6144ce0b22a55fcde3549129ae440cb7aa290031. Actual installed esbuild shows identical emitted JS for both production modules; hashes match manager bridge. Local scoped types/lint/format exit0; original account bootstrap/auth/close suffix and all16 inherited untracked files unchanged. No runtime tests repeated or resources claimed.\nOriginal criteria mapped in committed docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/POST_INTEGRATION_ACCEPTANCE.md at266bdaa5614472c0c255463e0cb2de46765da4bc. Existing R2 Media/V2 crash/fault/idempotency proof, qualified C1 native/cooperating-writer path and now integrated owner-startup proof cover the assigned source corrections. No additional unimplemented source correction identified within current approved Recovery scope. Task remains OPEN: independent aggregate/release acceptance and separate unleased opaque legacy route/all-writer B/F1/hardware/storage-migration/production gates are not claimed passed or newly implemented. Historical full813PASS/6FAIL unchanged; no full819 rerun, customer/provider/deploy action or additional agent.\n"
+}

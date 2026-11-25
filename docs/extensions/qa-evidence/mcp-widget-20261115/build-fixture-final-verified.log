@@ -1,0 +1,89 @@
+23:35:59 [vite] (inline) warning: 
+C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/mcp-app/widget/vite.config.ts
+8  |  let entryName = "entry";
+9  |  const require = createRequire(new URL("../../../../packages/web/package.json", import.meta.url));
+10 |  const tailwindModule = await import(pathToFileURL(require.resolve("@tailwindcss/vite")).href);
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |  const tailwind = tailwindModule.default;
+12 |  const root = fileURLToPath(new URL("../../../../", import.meta.url));
+The above dynamic import cannot be analyzed by Vite.
+See https://vite.dev/guide/features#dynamic-import for supported dynamic import formats. If this is intended to be left as-is, you can use the /* @vite-ignore */ comment inside the import() call to suppress this warning.
+
+  Plugin: vite:import-analysis
+  File: C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/mcp-app/widget/vite.config.ts
+vite v8.3.4 building client environment for production...
+transforming...
+
+/tadazz-show/motion/backdrop.webp referenced in /tadazz-show/motion/backdrop.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-show/v4/question-bg.webp referenced in /tadazz-show/v4/question-bg.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-show/v4/show-stage.webp referenced in /tadazz-show/v4/show-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-show/story/84acdb923677d591.webp referenced in /tadazz-show/story/84acdb923677d591.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 2205 modules transformed.
+rendering chunks...
+computing gzip size...
+extensions/src/mcp-app/widget/dist/fixture-entry-inputs.json  640.28 kB │ gzip: 106.61 kB
+extensions/src/mcp-app/widget/dist/fixture.css                445.49 kB │ gzip: 177.87 kB
+extensions/src/mcp-app/widget/dist/fixture.js                 992.75 kB │ gzip: 292.96 kB
+
+[MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+   ╭─[ ../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+   │
+ 2 │ "use client";
+   │ ──────┬──────  
+   │       ╰──────── module level directive may not be preserved
+   │ 
+   │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+───╯
+
+[MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+   ╭─[ ../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+   │
+ 2 │ "use client";
+   │ ──────┬──────  
+   │       ╰──────── module level directive may not be preserved
+   │ 
+   │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+───╯
+
+transforming...
+✓ 2205 modules transformed.
+rendering chunks...
+computing gzip size...
+extensions/src/mcp-app/widget/dist/fixture-entry-inputs.json  640.28 kB │ gzip: 106.61 kB
+extensions/src/mcp-app/widget/dist/fixture.css                445.49 kB │ gzip: 177.87 kB
+extensions/src/mcp-app/widget/dist/fixture.js                 992.75 kB │ gzip: 292.96 kB
+
+[MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+   ╭─[ ../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+   │
+ 2 │ "use client";
+   │ ──────┬──────  
+   │       ╰──────── module level directive may not be preserved
+   │ 
+   │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+───╯
+
+[MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+   ╭─[ ../tadazz-hq-show-library-20261115/node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+   │
+ 2 │ "use client";
+   │ ──────┬──────  
+   │       ╰──────── module level directive may not be preserved
+   │ 
+   │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+───╯
+
+✓ built in 1m 34s
+[PLUGIN_TIMINGS] JavaScript callbacks ran for 85.8s of this 93.8s build (91%).
+The slowest callbacks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+  - plugin widget-physical-input-receipt generateBundle (54%, 50.7s, 2 calls)
+  - plugin @tailwindcss/vite:generate:build transform (33%, 31.2s, 20 calls)
+  - plugin bundled-native-definition-digests load (1%, 1.2s, 4408 calls)
+Additional callback time came from the callbacks below and from callbacks under 1s.
+1 callback is listed without a time. Its calls overlapped, so the time inside one call includes work from other calls. To find its cost, profile the build with `node --cpu-prof`:
+  - plugin vite:css transform (20 calls)
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
+

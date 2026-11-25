@@ -1,0 +1,23 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/server/storage/process-interruption.test.ts",
+    "-t",
+    "interrupts at (?!quiz-)",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/recovery-process-media.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "5cff66d72a2299e489f835ee6fa8b0efb65669d5d662d74601c9fbe8b8a500a7",
+  "seconds": 52.185
+}

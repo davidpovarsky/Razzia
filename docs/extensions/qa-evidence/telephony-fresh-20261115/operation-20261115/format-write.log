@@ -1,0 +1,10 @@
+docs/extensions/qa-evidence/telephony-fresh-20261115/operation-source/actual-operation-backend.ts 1720ms
+docs/extensions/qa-evidence/telephony-fresh-20261115/operation-source/operation.node.ts 1023ms
+docs/extensions/qa-evidence/telephony-fresh-20261115/operation-source/prepare-overlay.mjs 263ms (unchanged)
+extensions/src/telephony/pilot-runtime/gateway-v2/contracts.ts 793ms
+extensions/src/telephony/pilot-runtime/gateway-v2/adapter.ts 698ms
+extensions/src/telephony/pilot-runtime/gateway-v2/call-precommit.ts 275ms
+extensions/src/telephony/pilot-runtime/gateway-v2/private-immutable-record.ts 477ms
+extensions/src/telephony/pilot-runtime/gateway-v2/operation-precommit.ts 155ms
+docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/call.node.ts 303ms (unchanged)
+extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts 613ms

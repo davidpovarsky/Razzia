@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": [],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "baseUrl": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115",
+    "paths": {
+      "zod": [
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\contracts\\native-save.ts"
+  ]
+}

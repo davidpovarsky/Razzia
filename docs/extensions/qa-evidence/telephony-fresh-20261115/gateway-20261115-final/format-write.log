@@ -1,0 +1,7 @@
+docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/gateway.node.ts 570ms
+docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source/prepare-overlay.mjs 82ms (unchanged)
+extensions/src/telephony/pilot-runtime/gateway-v2/adapter.ts 218ms (unchanged)
+extensions/src/telephony/pilot-runtime/gateway-v2/codec.ts 83ms (unchanged)
+extensions/src/telephony/pilot-runtime/gateway-v2/contracts.ts 39ms (unchanged)
+extensions/src/telephony/pilot-runtime/gateway-v2/private-custody.ts 162ms (unchanged)
+extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts 188ms (unchanged)

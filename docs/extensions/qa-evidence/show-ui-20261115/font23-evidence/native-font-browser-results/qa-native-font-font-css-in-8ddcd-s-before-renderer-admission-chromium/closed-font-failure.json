@@ -1,0 +1,7 @@
+{
+  "kind": "css-integrity",
+  "errors": [
+    "qa:font-css-integrity"
+  ],
+  "rendererAdmitted": false
+}

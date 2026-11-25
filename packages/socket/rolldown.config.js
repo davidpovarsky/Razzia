@@ -9,7 +9,9 @@ export default defineConfig({
     },
   },
   output: {
-    file: "dist/index.cjs",
+    dir: "dist",
+    entryFileNames: "index.cjs",
+    chunkFileNames: "[name]-[hash].cjs",
     format: "cjs",
     minify: true,
     sourcemap: true,

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+    "extensions/node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\gateway-custody-20261115\\affected-current-r2.tsconfig.json"
+  ],
+  "exit": 0,
+  "streams": {
+    "stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "resolutionCorrection": "Owned docs fixture needed two genuine installed Hono package export type paths; existing workspace aliases preserved as absolute paths, no replacement module/declaration/source or weaker compiler options. Original failure retained.",
+  "packages": {
+    "hono": {
+      "version": "4.13.13",
+      "packageJsonSha256": "169a02072e32d85aacb089ad14b62b027d975479d811f741771fbd0f559fb5c9"
+    },
+    "@hono/node-server": {
+      "version": "2.1.4",
+      "packageJsonSha256": "a4ba06f0f93910b1358d6454e4635422fdc8a078bf33860ac35abae88adb4428"
+    }
+  }
+}

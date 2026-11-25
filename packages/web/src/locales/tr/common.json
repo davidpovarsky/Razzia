@@ -1,4 +1,6 @@
 {
+  "edit": "Düzenle",
+  "retry": "Yeniden dene",
   "cancel": "İptal",
   "confirm": "Onayla",
   "connecting": "Bağlanıyor...",
@@ -14,7 +16,8 @@
     "it": "Italiano - İtalyanca",
     "ja": "日本語 - Japonca",
     "tr": "Türkçe - Türkçe",
-    "vi": "Tiếng Việt - Vietnamca"
+    "vi": "Tiếng Việt - Vietnamca",
+    "he": "עברית"
   },
   "loading": "Yükleniyor...",
   "next": "İleri",
@@ -24,5 +27,6 @@
   "submit": "Gönder",
   "close": "Kapat",
   "previous": "Geri",
-  "changeLanguage": "Dili değiştir"
+  "changeLanguage": "Dili değiştir",
+  "untitledQuiz": "Başlıksız test"
 }

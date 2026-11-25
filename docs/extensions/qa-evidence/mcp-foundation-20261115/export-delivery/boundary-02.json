@@ -1,0 +1,126 @@
+{
+  "before": {
+    "sourceFiles": 172,
+    "changed": [],
+    "allMatch": true
+  },
+  "after": {
+    "sourceFiles": 172,
+    "changed": [],
+    "allMatch": true
+  },
+  "runs": [
+    {
+      "phase": "focused-types",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app\\node_modules\\typescript\\lib\\tsc.js",
+        "--noEmit",
+        "-p",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\consent-focused.tsconfig.json"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app",
+      "started": "2026-11-15T18:32:36.507Z",
+      "ended": "2026-11-15T18:32:47.906Z",
+      "exit": 0,
+      "signal": null,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "exports",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs",
+        "--tsconfig",
+        "tsconfig.json",
+        "--test",
+        "--test-concurrency=1",
+        "tests/first-party/oauth-export.nodecheck.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app",
+      "started": "2026-11-15T18:32:47.910Z",
+      "ended": "2026-11-15T18:32:52.448Z",
+      "exit": 1,
+      "signal": null,
+      "logSha256": "0377a92598427a45d6b96a10ef882f54d17966927d5ba25aa26baa52384f72ea"
+    },
+    {
+      "phase": "oauth-regression",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs",
+        "--tsconfig",
+        "tsconfig.json",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^(?!real account PKCE flow stores only token digests).*",
+        "tests/first-party/oauth.nodecheck.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-02\\extensions\\src\\mcp-app",
+      "started": "2026-11-15T18:32:52.448Z",
+      "ended": "2026-11-15T18:32:56.185Z",
+      "exit": 1,
+      "signal": null,
+      "logSha256": "8b10afce4f01a73f0644636934c06eac1e76016a522e65039eda7a39613a2327"
+    }
+  ],
+  "packages": {
+    "@modelcontextprotocol/server": {
+      "version": "2.4.0",
+      "packageJsonSha256": "c82767fbf0247c56e39a2b757245d56109a538a12ea0b6162fd65a1d3c0a3c52"
+    },
+    "@modelcontextprotocol/client": {
+      "version": "2.4.0",
+      "packageJsonSha256": "a93ec75fda93a16032c092b30a36d16c7ade5eab6306ef429dce3e80ae53af45"
+    },
+    "@modelcontextprotocol/core": {
+      "version": "2.4.0",
+      "packageJsonSha256": "b98e66c50eae2a8bf234d929cd6114e091fd5027be201a4ad9057628efa449a9"
+    },
+    "@modelcontextprotocol/ext-apps": {
+      "version": "2.1.0",
+      "packageJsonSha256": "9e07f52b3b55e80f3c87a41cc7ef3454ccff9e4063ba37ca1ae96aed76c02599"
+    },
+    "zod": {
+      "version": "4.6.6",
+      "packageJsonSha256": "cff7e142055a9dd9bc2947a71ca3fb5e3aacdfda966d7728993ff3656245b94a"
+    },
+    "uuid": {
+      "version": "14.0.3",
+      "packageJsonSha256": "da6bb61e393eb364b83daab9e897e88acbf4c32e7d1d2af20597cbeff866b429"
+    },
+    "socket.io": {
+      "version": "4.8.4",
+      "packageJsonSha256": "6ecffdc4e5b6e9b3495c5262c11d5c1188e15d542dc0b657896218a2a7ae67d6"
+    },
+    "hono": {
+      "version": "4.13.13",
+      "packageJsonSha256": "169a02072e32d85aacb089ad14b62b027d975479d811f741771fbd0f559fb5c9"
+    },
+    "http-status-codes": {
+      "version": "2.3.0",
+      "packageJsonSha256": "98d6da60c21baffd8d71779edfdf67424e92332edead59b84191dbd8977895ea"
+    },
+    "@types/node": {
+      "version": "26.6.5",
+      "packageJsonSha256": "e9bf302124358d90ec233c509c4f9fb2223129b988da8147b5c1bf835f652e86"
+    },
+    "tsx": {
+      "version": "4.21.0",
+      "packageJsonSha256": "6e764b21991c21595441f82387c1451ccd10a3e7a3f0973cc5e3649a12dea7d2"
+    },
+    "typescript": {
+      "version": "5.9.3",
+      "packageJsonSha256": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6"
+    }
+  },
+  "node": "v22.17.0",
+  "inputManifestSha256": "e71fdd74639c32edab485ab768f2e6f1eec5f404d3a342e370631f08134b08c4",
+  "npmLockSha256": "9e8e01fd0b023b574a9a8f4be931e3b2255aa0b66d6bc0a9cb8d86e5eb3cb7b3",
+  "privatePnpmLockSha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838",
+  "normalFrozenQaNpmCiScriptsOff": true,
+  "sameRootPnpmGraphClaimed": false,
+  "oracleJob": false,
+  "actualBrowserClick": false,
+  "actualTlsOrPrivateHostInstallation": false
+}

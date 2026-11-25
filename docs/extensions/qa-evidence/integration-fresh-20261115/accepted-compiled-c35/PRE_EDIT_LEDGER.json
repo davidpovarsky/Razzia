@@ -1,0 +1,104 @@
+{
+  "recordedUtc": "2026-11-15T11:42:28.764427+00:00",
+  "beforeHead": "bfbe82b3987ae8d051fc049ef5d2ab519f631d88",
+  "acceptedSource": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+  "acceptedEvidence": "9ccd0921c48cd6117cdd2f2fc536b8073103b125",
+  "sourcePaths": {
+    "extensions/src/core/show-library/compiled-index-authority.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob 32aff4cdd4e5980d365600eabbcda56af2275537\textensions/src/core/show-library/compiled-index-authority.ts",
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55"
+    },
+    "extensions/src/core/show-library/compiled-index-schema.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob 7eda7e97dfc09c244370d749fe8731b1f3198c94\textensions/src/core/show-library/compiled-index-schema.ts",
+      "sha256": "a6bad0c603af33508a8b157c541490a9b9e113b7a1c4c080de517b63852034e9"
+    },
+    "extensions/src/core/show-library/compiled-index-validation.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob b9b6a357cc13a94b1214794cf875ab7ac661506f\textensions/src/core/show-library/compiled-index-validation.ts",
+      "sha256": "bf11b1ea664d13ef8038e4649351195a8c528a703f79933f03d210f6322ad0ec"
+    },
+    "extensions/src/core/show-library/compiled-index.test.ts": {
+      "owner": "accepted Show Core producer; integrator exact-blob pick only",
+      "before": "ABSENT",
+      "accepted": "100644 blob 5d6f131799dd2ef349c173a7629b99556ccba893\textensions/src/core/show-library/compiled-index.test.ts",
+      "sha256": "8fcdbddd5d2dc21199edc3760995189cff38270dbd6ae16259f9572b8f767207"
+    }
+  },
+  "cherryPickExactCommits": [
+    "155c6b84df84c900872162e2a8c0267c90641153",
+    "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+    "9ccd0921c48cd6117cdd2f2fc536b8073103b125"
+  ],
+  "evidencePathsByCommit": {
+    "155c6b84df84c900872162e2a8c0267c90641153": [
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/FINAL_STATIC_RECEIPT.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/HANDOFF.md",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/PNPM_STATIC_CHECK_INCIDENT.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/PRE_EDIT_LEDGER.md",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/evidence-manifest.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format-check.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format-receipts.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/final-format.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/freeze-guard.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/raw-command-logs.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/source-ast-audit.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/source-format.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/static-command-receipts.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/static-source-audit.cjs",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/ui-check-receipt.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/ui-check.log"
+    ],
+    "c35a65d97132f64c1ebd0112ebd7ae0a82273fda": [
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/CORRECTED_STATIC_RECEIPT.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/HANDOFF.md",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/PRE_EDIT_LEDGER.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/review-correction/static-correction-audit.cjs"
+    ],
+    "9ccd0921c48cd6117cdd2f2fc536b8073103b125": [
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/EVIDENCE_MANIFEST.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/HANDOFF.md",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/RESULT.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/download.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/fixture-create.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-before-upload.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-launch-supervisor.py",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/operator-probe-syntax-failure.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/remote-final-files.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/root-grant.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/compiled-index-tests.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/compiled-index-tests.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/container-create.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/focused-types.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/operator-resource-monitor.jsonl",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/operator-resource-receipt.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/receipt.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/release.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/view-after.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/server-raw/view-before.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/single-job-exit.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/single-job-operator.log",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/upload-receipt.json",
+      "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-c35-9632e805/upload.log"
+    ]
+  },
+  "planEvidenceRef": "d3eec6778680e1b237ec8900b73ee18c39a68cb5",
+  "planEvidencePaths": [
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/PREPARATION_RECEIPT.json",
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/RUN_PLAN.md",
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/audit-view.cjs",
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/compiled-index.tsconfig.json",
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/overlay-plan.json",
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/run-compiled-index.py",
+    "docs/extensions/qa-evidence/show-library-schema-20261115/compiled-registry-schema-20261115/server-plan/transfer-manifest.json"
+  ],
+  "reviewSha256": "42474d541023b40ad6abc9ff67fd06e9ddd7a84f9ab74122aa81e8e25673ef85",
+  "protectedPackages": "040000 tree a349087af926330bb800f1cd935b4d97389e62fe\tpackages",
+  "authorization": "Root native assignment: integrate exactly four new accepted source leaves and relevant evidence; no unapproved ancestry, build/test/install/push/main/deploy or resource job.",
+  "scope": "Diagnostic only; empty immutable authority, false executable acceptance, zero pins. No existing source/barrel/runtime or root/private lock edits.",
+  "validation": "Producer server 53/53 + focused TC accepted separately. No integrated execution; parent TC deferred until next accepted M3A batch. ui:check/freeze guard not rerun under explicit no-test instruction; producer historical incident/failures preserved."
+}

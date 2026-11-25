@@ -1,0 +1,3 @@
+docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts(33,46): error TS2307: Cannot find module '@hono/node-server' or its corresponding type declarations.
+docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts(43,38): error TS2307: Cannot find module 'socket.io-client' or its corresponding type declarations.
+docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts(114,23): error TS7006: Parameter 'value' implicitly has an 'any' type.

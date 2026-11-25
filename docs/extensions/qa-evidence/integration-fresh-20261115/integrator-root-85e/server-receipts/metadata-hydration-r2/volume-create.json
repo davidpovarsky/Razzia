@@ -1,0 +1,25 @@
+{
+  "command": [
+    "sudo",
+    "-n",
+    "docker",
+    "volume",
+    "create",
+    "--driver",
+    "local",
+    "--opt",
+    "type=tmpfs",
+    "--opt",
+    "device=tmpfs",
+    "--opt",
+    "o=size=805306368,mode=1777",
+    "--label",
+    "tadazz.owner=integrator-01a1de4d-71ba-76d1-b4ca-b7ae28236a40",
+    "--label",
+    "tadazz.scope=85e-public-metadata",
+    "integrator-root-85e-20261115-metadata-ram"
+  ],
+  "exit": 0,
+  "stdout": "integrator-root-85e-20261115-metadata-ram\n",
+  "stderr": ""
+}

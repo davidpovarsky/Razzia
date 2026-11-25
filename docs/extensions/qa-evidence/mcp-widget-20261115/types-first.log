@@ -1,0 +1,74 @@
+extensions/src/core/show-library/native-library.ts(1,60): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+extensions/src/core/show-library/native-library.ts(2,58): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+extensions/src/core/show-themes/registry.ts(1,53): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+extensions/src/core/show-themes/registry.ts(2,55): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
+extensions/src/mcp-app/contracts/tools.ts(13,8): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/Widget.tsx(3,20): error TS6142: Module '../../../../packages/web/src/components/Button' was resolved to 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/packages/web/src/components/Button.tsx', but '--jsx' is not set.
+extensions/src/mcp-app/widget/Widget.tsx(7,32): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/Widget.tsx(7,32): error TS6142: Module './stage.tsx' was resolved to 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/mcp-app/widget/stage.tsx', but '--jsx' is not set.
+extensions/src/mcp-app/widget/Widget.tsx(8,68): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/Widget.tsx(24,10): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(24,51): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(67,10): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(68,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(69,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(70,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(70,73): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(70,271): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(72,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(73,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(74,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(74,182): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(75,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(76,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(77,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(77,49): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(77,245): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(77,292): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(78,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(78,60): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(80,45): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(81,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(82,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(83,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(84,75): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(85,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(87,17): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(87,77): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(87,120): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(87,195): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(88,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(90,36): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(91,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(91,45): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(91,223): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(92,23): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(93,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(94,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(95,19): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(96,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(98,7): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/Widget.tsx(100,85): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/bridge.ts(2,24): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/bridge.ts(3,34): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/controller.ts(2,48): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/controller.ts(3,37): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/controller.ts(63,42): error TS18046: 'parsed.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(64,31): error TS18046: 'parsed.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(66,52): error TS18046: 'parsed.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(67,22): error TS2322: Type 'unknown' is not assignable to type '{ draftId: string; revision: number; previewVersion: 1; summary: { title: string; cardCount: number; questionCount: number; themeId: string; themeVersion: string; diagnostics: { code: string; path: string; messageKey: string; severity: "error" | "warning"; }[]; }; rendererStatus: "ready" | "unavailable" | "unsupportedTheme"; projectionDigest: string; sbRegistryVersion: string | null; } | null | undefined'.
+extensions/src/mcp-app/widget/controller.ts(67,87): error TS18046: 'parsed.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(88,11): error TS18046: 'result.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(89,44): error TS18046: 'result.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(90,32): error TS18046: 'result.data' is of type 'unknown'.
+extensions/src/mcp-app/widget/controller.ts(93,93): error TS2698: Spread types may only be created from object types.
+extensions/src/mcp-app/widget/entry.tsx(2,24): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/entry.tsx(2,24): error TS6142: Module './Widget.tsx' was resolved to 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/mcp-app/widget/Widget.tsx', but '--jsx' is not set.
+extensions/src/mcp-app/widget/entry.tsx(3,36): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+extensions/src/mcp-app/widget/entry.tsx(7,34): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/i18n.ts(32,86): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'initImmediate' does not exist in type 'InitOptions<unknown>'.
+extensions/src/mcp-app/widget/stage.tsx(2,52): error TS6142: Module '../../presentation/show-library-preview/renderer-entry-v2' was resolved to 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx', but '--jsx' is not set.
+extensions/src/mcp-app/widget/stage.tsx(34,10): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+extensions/src/mcp-app/widget/vite.config.ts(4,38): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.

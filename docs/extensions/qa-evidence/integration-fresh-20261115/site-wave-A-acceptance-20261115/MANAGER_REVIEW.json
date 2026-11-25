@@ -1,0 +1,38 @@
+{
+  "captured_utc": "2026-11-15T15:16:47.361053+00:00",
+  "reviewer": "manager01a1dfa1-57d8-7223-a965-2f4f31fe8b23",
+  "source": "6c87f0431ebc3786752a5492bb988497241db7b6",
+  "status": "PASS_SCOPED_SYNTHETIC_ROLLBACK_EVIDENCE_NOT_PRODUCTION",
+  "live": 242,
+  "backup": 202,
+  "retainedAdditions": 40,
+  "observations": 87,
+  "runningObservations": 79,
+  "answers": 3,
+  "unchangedPageTimeOrigins": true,
+  "httpSamples": 291,
+  "metadata": {
+    "chromium": 48,
+    "webkit": 48
+  },
+  "remoteRehashed": [
+    {
+      "path": "/run/tadazz-atomic-qa/175b5f805067a9953b75954abff0e839/phase2-wave-A/after.json",
+      "bytes": 69217,
+      "sha256": "eb33b2072f571ddbfdd22088ac132ad2a0fbe23af6fde7395784b4f1a3aeddcb"
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-175b5f805067a9953b75954abff0e839/control/production-operation-hold.json",
+      "bytes": 1720,
+      "sha256": "f1e41324302a6bd5f764e1444b55a01eec85aa1faa3903c1db354cc63aa820b1"
+    }
+  ],
+  "sourceHelperUnchanged": true,
+  "retainedOriginalPublishLink": true,
+  "limitations": [
+    "active game during original publish not proven",
+    "no fresh WebKit active rollback",
+    "production and live acceptance open",
+    "rights/customer/provider/powerloss unchanged"
+  ]
+}

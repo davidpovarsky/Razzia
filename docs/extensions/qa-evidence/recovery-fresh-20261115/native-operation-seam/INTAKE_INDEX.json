@@ -1,0 +1,65 @@
+{
+  "productSource": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "completeProducerHandoff": "30bd603d0555446b8760fb54406b724512ac254b",
+  "status": "Source accepted in scoped manager intake; pinned runtime and real F consumer acceptance remain separate",
+  "sourceFiles": [
+    {
+      "path": "extensions/src/server/storage/creation-reservation.ts",
+      "sha256": "58d38c6cccbf2dc7a1d7d65ea7263d7f1b1d16ddb32ddb05c1f1565d573ca8e1",
+      "stillMatchesFrozenSource": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-record.ts",
+      "sha256": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c",
+      "stillMatchesFrozenSource": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-store.ts",
+      "sha256": "e850e4c1f4482cea1d54a7d7340af81d9e14e0e06577e2ac316054e0c687c51e",
+      "stillMatchesFrozenSource": true
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-types.ts",
+      "sha256": "c40464a399fe5a54bd867765cdc5eb8c18741fd61c9abf60be09100808eeffee",
+      "stillMatchesFrozenSource": true
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "sha256": "99d70df1091431c9cead45c2d7e0a87207e0a6a571e5363e1650e8295f81011e",
+      "stillMatchesFrozenSource": true
+    }
+  ],
+  "producerEvidence": "FINAL_COMPLETE_VERIFICATION.json",
+  "producerProof": {
+    "cases": 15,
+    "SIGKILL": 5,
+    "distinctChildren": 22,
+    "runtime": "Local WSL Ubuntu Linux6.18 Node26.11.1 ext4; compiled targetnode24, not pinnedNode24 execution"
+  },
+  "noNewRuntime": true,
+  "remainingOwnedAcceptance": [
+    "Independent integrated/pinned-runtime source qualification",
+    "Real F consumer authorization/session/grant/exact-consent and cross-ledger outcome integration"
+  ],
+  "separateUnleasedGates": [
+    "All-writer B/F1",
+    "Hardware power loss/storage migration",
+    "Production adoption"
+  ],
+  "unchangedOriginalSourceTask": "1219882508725158 remainsOPEN",
+  "statusAtPreparation": "Separate source intake pending; not approved by roster acceptance",
+  "acceptedManagerIntake": {
+    "source": "e444b480aea76fee5bf17f1b96998432134c5ba6",
+    "evidence": "8786d8e6ea13b07084d9d576786e369dc4187331",
+    "meaning": "Source/15-case test review,187inputs/18rawreceipts/22children independently verified; current types/format0; original Node26 producer15 reused, not fresh pinned24/F-ledger proof"
+  },
+  "additionalOwnedAcceptance": {
+    "evidence": "9faa62dc1466f19ced59e6326226a3f68039dcda",
+    "entry": "../native-operation-postcommit/HANDOFF.md",
+    "newCases": 3,
+    "freshChildren": 13,
+    "sourceChanged": false,
+    "original15Rerun": false,
+    "FConsumerRun": false
+  }
+}

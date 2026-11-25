@@ -1,40 +1,70 @@
-import { MEDIA_TYPES } from "@razzia/common/constants"
+import { useQuestionPresentation } from "../tadazz-show/use-question-presentation"
+import { NativeRazziaQuestion } from "@razzia/extensions/presentation"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
+import { type QuestionReveal } from "@razzia/extensions/core"
+
 import { SFX } from "@razzia/web/features/game/utils/constants"
 import { useEffect } from "react"
 import useSound from "use-sound"
 
 interface Props {
   data: CommonStatusDataMap["SHOW_QUESTION"]
+  hideHeading?: boolean
 }
 
-const Question = ({ data: { question, media, cooldown } }: Props) => {
+const Question = ({
+  data: { question, media, cooldown },
+  hideHeading,
+}: Props) => {
   const [sfxShow] = useSound(SFX.SHOW_SOUND, { volume: 0.5 })
+  const {
+    effectiveExtensionState,
+    stageAnimations,
+    questionDecoration,
+    animationEpochKey: activeKey,
+  } = useQuestionPresentation(question, "show")
 
   useEffect(() => {
+    // When extensionState is present, GameWrapper's unified AudioCuePlayer manages phase audio
+    if (effectiveExtensionState?.gameId) {
+      return
+    }
+
     sfxShow()
-  }, [sfxShow])
+  }, [sfxShow, effectiveExtensionState?.gameId])
+
+  const pause = effectiveExtensionState?.pause
+  const remaining = pause?.remainingMs
+  const questionElapsed =
+    typeof remaining === "number"
+      ? Math.max(0, cooldown * 1000 - remaining)
+      : undefined
+  const startedAt =
+    typeof pause?.deadline === "number"
+      ? pause.deadline - cooldown * 1000
+      : effectiveExtensionState?.startedAt
 
   return (
-    <section className="relative mx-auto flex h-full w-full max-w-7xl flex-1 flex-col items-center px-4">
-      <div className="flex flex-1 flex-col items-center justify-center gap-5">
-        <h2 className="anim-show text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
-          {question}
-        </h2>
-
-        {media?.type === MEDIA_TYPES.IMAGE && (
-          <img
-            alt={question}
-            src={media.url}
-            className="max-h-60 w-auto rounded-md sm:max-h-100"
-          />
-        )}
-      </div>
-      <div
-        className="bg-primary mb-20 h-4 self-start justify-self-end rounded-full"
-        style={{ animation: `progressBar ${cooldown}s linear forwards` }}
-      ></div>
-    </section>
+    <NativeRazziaQuestion
+      data={{ question, media, cooldown }}
+      hideHeading={hideHeading}
+      stageAnimations={stageAnimations}
+      questionDecoration={questionDecoration}
+      epoch={activeKey}
+      reveal={
+        effectiveExtensionState?.extras.reveal as QuestionReveal | undefined
+      }
+      serverStartedAt={startedAt}
+      currentEpoch={effectiveExtensionState?.epoch}
+      isManuallyRevealed={
+        (
+          effectiveExtensionState?.extras.reveal as
+            { isRevealed?: boolean } | undefined
+        )?.isRevealed
+      }
+      revealTimeMs={pause?.paused ? questionElapsed : undefined}
+      controlledPaused={pause?.paused}
+    />
   )
 }
 

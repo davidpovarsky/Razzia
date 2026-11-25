@@ -1,0 +1,286 @@
+{
+  "status": "ACTUAL_DATA_PLAN_NO_RUNTIME_OR_ACCEPTANCE",
+  "uiSourceCommit": "dd3cd1347981ac6fd934f90d870ff57bba82d470",
+  "uiEvidenceCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+  "uiOutputProofCommit": "7240e858087008bed1293856c03c8c9a80dadd91",
+  "reportedFrozenPaths": {
+    "rendererOutput": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-dc76-browser-c2/artifact-dd3",
+    "sixImageFixture": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/show-ui-dc76-browser-six",
+    "reportedDirectoryMode": "0555",
+    "reportedFileMode": "0444",
+    "independentlyReadByCoreThisPhase": false,
+    "rehashBeforeUse": true,
+    "protection": "ordinary-discretionary-not-immutable-filesystem"
+  },
+  "provisionalTwoFileIndexSha256": "38d36c62b57b0e90c00feebebe9c66256a55b60ab617b65632ae1e75f07d586e",
+  "rendererJsCssBytes": 1192061,
+  "nativeImageBytes": 2821369,
+  "observedEightFileBytes": 4013430,
+  "trackedSourceRecordCount": 67,
+  "packageSourceRecordsComplete": 0,
+  "packageFilesAwaitingBytes": 106,
+  "resourceIndexCandidate": {
+    "path": "resource-index.json",
+    "kind": "metadata",
+    "mime": "application/json",
+    "bytes": 5098,
+    "sha256": "30b0cc05466fa002232aaa02582cf51bb5f2692cc2d5e258b9913bef0f620ca9"
+  },
+  "coreLeafGraphPaths": [
+    "/work/extensions/src/core/show-library/stage-metadata-schema.ts"
+  ],
+  "buildRecipe": {
+    "kind": "git-tracked",
+    "gitCommit": "dd3cd1347981ac6fd934f90d870ff57bba82d470",
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-renderer-graph.vite.config.ts",
+    "gitBlob": "f5c8b64a6ae702c9c96b70279ba586125f5c4b92",
+    "sha256": "1d1ad37286afb4b5d8194122bef666c02cec1e707559c91c54b96b8dfb2b008d"
+  },
+  "toolchainFacts": {
+    "node": "24.22.2 (UI-reported)",
+    "bundler": "Vite8.3.4 (build log)",
+    "arch": "ARM64 (UI-reported)",
+    "pnpm": "MISSING",
+    "actualProcessPlatformAndImageDigest": "MISSING",
+    "exactBuildArgvAndOutputOverride": "MISSING_FROM_AVAILABLE_PACKET"
+  },
+  "additionalCoreDependencyReview": {
+    "paths": [
+      "extensions/src/core/packages/protocol.ts",
+      "extensions/src/core/packages/manifest.ts",
+      "extensions/src/core/packages/paths.ts"
+    ],
+    "relationship": "NativePreviewStage -> show-themes/context -> show-themes/index -> definition -> packages/protocol -> packages/manifest",
+    "distinction": "Package digest/descriptor schemas and RendererMessageGuard, not ShowLibrary compiled-preview manifest/host authority",
+    "emittedContribution": "UNKNOWN_GETMODULEIDS_IS_RESOLVED_GRAPH",
+    "status": "ROOT_CORE_REVIEW_REQUIRED_NO_SOURCE_CHANGE"
+  },
+  "baseBuildConfig": {
+    "kind": "git-tracked",
+    "gitCommit": "dd3cd1347981ac6fd934f90d870ff57bba82d470",
+    "path": "extensions/show-preview.vite.config.ts",
+    "gitBlob": "81ca9f0fe7e6772ff113e73fbd3f80daacd9a0b2",
+    "sha256": "adcc377795651bda7b5efa286e0c9deedd5215cb050b00312281397cbf8aa355"
+  },
+  "lockfile": {
+    "kind": "git-tracked",
+    "gitCommit": "dd3cd1347981ac6fd934f90d870ff57bba82d470",
+    "path": "pnpm-lock.yaml",
+    "gitBlob": "b75087466384ce2e404bbd794d985622b51f0ad8",
+    "sha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0"
+  },
+  "entryModuleObserved": "renderer.js",
+  "entryExportObserved": "mountPreviewCandidate",
+  "nativeTheme": {
+    "id": "tadazz-classic",
+    "version": "1.0.0",
+    "rendererId": "tadazz-classic-stage"
+  },
+  "previewRendererRef": "MISSING_DO_NOT_DERIVE_FROM_NATIVE_THEME_OR_INVENT_VERSION",
+  "completeArtifactIndexEmitted": false,
+  "completeIndexMissing": [
+    "root-reviewed preview renderer Ref/ABI identity",
+    "actual raw package source bytes/sha256 and byte inventory",
+    "exact build command/overrides and complete toolchain including pnpm/platform/arch",
+    "raw byte rehash of reported frozen output/fixture paths under a separate grant",
+    "source/runtime contribution and license closure; explicit review of separate core/packages protocol+manifest dependency"
+  ],
+  "separateAuthorityGates": {
+    "sourcePackageMembership": "MISSING_DENIED_INDEPENDENT_ROOT_REVIEWED_CAFS_RECEIPTS",
+    "nativeImageRights": "UNKNOWN_ALL_SIX_DENY_EXECUTABLE_EXPORT",
+    "immutableLoaderBinding": "PRIVATE_CHECKED_BUFFER_FIXTURE_OBSERVED_PRODUCTION_UNACCEPTED",
+    "environmentFonts": "NO_EMITTED_FONT_RUBIK_ABSENT_COMPUTED_GLYPH_RECEIPT_MISSING_NON_HERMETIC",
+    "reviewedExecutableAuthority": "EMPTY_UNAVAILABLE_ZERO_PIN"
+  },
+  "browserEvidence": {
+    "d095": "FAILED_HISTORY",
+    "dd3FiveImage": {
+      "passed": 22,
+      "failed": 1,
+      "authored": 23
+    },
+    "dd3SixImageAffected": {
+      "passed": 3,
+      "failed": 0,
+      "priorUnaffectedCasesNotRepeated": 20
+    },
+    "completeSameFixtureMatrix": false,
+    "consoleCspAttachmentBodies": "MISSING",
+    "fixtureContent": "English synthetic single-choice quiz/five options; UI label locales exercised separately"
+  },
+  "requestEvidence": {
+    "sixFixtureRequests": 34,
+    "intentionalNon200": [
+      {
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "status": 400,
+        "mime": "text/plain",
+        "sha256": "c7ccdfa9e9321e06af510e64d6bea6d7b93c6cc48667db5387644abbfae24c90"
+      },
+      {
+        "path": "/tadazz-show/v4/%71uestion-bg.webp",
+        "status": 400,
+        "mime": "text/plain",
+        "sha256": "c7ccdfa9e9321e06af510e64d6bea6d7b93c6cc48667db5387644abbfae24c90"
+      },
+      {
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "status": 404,
+        "mime": "text/plain",
+        "sha256": "ba691ba042bcedd9a61a36f5969026bc95859dccdc7e47f24e6bce35673baf2f"
+      }
+    ],
+    "nativeResources": [
+      {
+        "artifactPath": "tadazz-show/motion/backdrop.webp",
+        "sourceGitBytes": "MATCHED_LOCALLY_FROM_DD3_COMMIT",
+        "fixtureBeforeModeDecimal": 436,
+        "successfulSixFixtureRequestCount": 1,
+        "dimensionEvidence": "UI reported Chromium createImageBitmap/assertions; no decode run by Core",
+        "licenseFiles": "MISSING_UNKNOWN_NOT_REPOSITORY_MIT_CLEARANCE",
+        "privateQaScope": "manager-authorized-six-existing-files-only",
+        "customerExport": "DENIED"
+      },
+      {
+        "artifactPath": "tadazz-show/second-library/teaser-screen-source.jpg",
+        "sourceGitBytes": "MATCHED_LOCALLY_FROM_DD3_COMMIT",
+        "fixtureBeforeModeDecimal": 436,
+        "successfulSixFixtureRequestCount": 2,
+        "dimensionEvidence": "UI reported Chromium createImageBitmap/assertions; no decode run by Core",
+        "licenseFiles": "MISSING_UNKNOWN_NOT_REPOSITORY_MIT_CLEARANCE",
+        "privateQaScope": "manager-authorized-six-existing-files-only",
+        "customerExport": "DENIED"
+      },
+      {
+        "artifactPath": "tadazz-show/story/84acdb923677d591.webp",
+        "sourceGitBytes": "MATCHED_LOCALLY_FROM_DD3_COMMIT",
+        "fixtureBeforeModeDecimal": 436,
+        "successfulSixFixtureRequestCount": 1,
+        "dimensionEvidence": "UI reported Chromium createImageBitmap/assertions; no decode run by Core",
+        "licenseFiles": "MISSING_UNKNOWN_NOT_REPOSITORY_MIT_CLEARANCE",
+        "privateQaScope": "manager-authorized-six-existing-files-only",
+        "customerExport": "DENIED"
+      },
+      {
+        "artifactPath": "tadazz-show/v4/question-bg.webp",
+        "sourceGitBytes": "MATCHED_LOCALLY_FROM_DD3_COMMIT",
+        "fixtureBeforeModeDecimal": 436,
+        "successfulSixFixtureRequestCount": 2,
+        "dimensionEvidence": "UI reported Chromium createImageBitmap/assertions; no decode run by Core",
+        "licenseFiles": "MISSING_UNKNOWN_NOT_REPOSITORY_MIT_CLEARANCE",
+        "privateQaScope": "manager-authorized-six-existing-files-only",
+        "customerExport": "DENIED"
+      },
+      {
+        "artifactPath": "tadazz-show/v4/show-stage.webp",
+        "sourceGitBytes": "MATCHED_LOCALLY_FROM_DD3_COMMIT",
+        "fixtureBeforeModeDecimal": 436,
+        "successfulSixFixtureRequestCount": 2,
+        "dimensionEvidence": "UI reported Chromium createImageBitmap/assertions; no decode run by Core",
+        "licenseFiles": "MISSING_UNKNOWN_NOT_REPOSITORY_MIT_CLEARANCE",
+        "privateQaScope": "manager-authorized-six-existing-files-only",
+        "customerExport": "DENIED"
+      },
+      {
+        "artifactPath": "tadazz-show/v4/tadazz-brand-logo.png",
+        "sourceGitBytes": "MATCHED_LOCALLY_FROM_DD3_COMMIT",
+        "fixtureBeforeModeDecimal": 436,
+        "successfulSixFixtureRequestCount": 2,
+        "dimensionEvidence": "UI reported Chromium createImageBitmap/assertions; no decode run by Core",
+        "licenseFiles": "MISSING_UNKNOWN_NOT_REPOSITORY_MIT_CLEARANCE",
+        "privateQaScope": "manager-authorized-six-existing-files-only",
+        "customerExport": "DENIED"
+      }
+    ]
+  },
+  "sourceInputs": [
+    {
+      "gitCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/browser-dd3-raw-evidence.zip",
+      "bytes": 504735,
+      "sha256": "69bef5430977ecc3dbe52e5ceb3cdb82488c02a17e113d6c6afcb26de60118cf"
+    },
+    {
+      "gitCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/browser-six-raw-evidence.zip",
+      "bytes": 4143,
+      "sha256": "7f782d1077b655716ec38c2fec4a70e7c271c85e7f0327a0551891b5049ab14d"
+    },
+    {
+      "archive": "browser-dd3-raw-evidence.zip",
+      "member": "renderer-module-graph.json",
+      "bytes": 43818,
+      "sha256": "bbca71f4a14564980e5f91504a5eaad706995d9e1b4b64c5da13886427fce072"
+    },
+    {
+      "gitCommit": "7240e858087008bed1293856c03c8c9a80dadd91",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/OUTPUT_GRAPH_AND_PROOF_PLAN.md",
+      "bytes": 9435,
+      "sha256": "a5b4de7d67202293f65abeff2f60bea7cd8bbefbcc4cfdfeabb3297a2eeaec74"
+    },
+    {
+      "gitCommit": "7240e858087008bed1293856c03c8c9a80dadd91",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/renderer-module-graph-dd3.json",
+      "bytes": 43818,
+      "sha256": "bbca71f4a14564980e5f91504a5eaad706995d9e1b4b64c5da13886427fce072"
+    },
+    {
+      "archive": "browser-dd3-raw-evidence.zip",
+      "member": "artifact-index-dd3.json",
+      "bytes": 422,
+      "sha256": "38d36c62b57b0e90c00feebebe9c66256a55b60ab617b65632ae1e75f07d586e"
+    },
+    {
+      "archive": "browser-six-raw-evidence.zip",
+      "member": "fixture-six-before.json",
+      "bytes": 1441,
+      "sha256": "b63859cecdfea1b7e3bba2d76dd2ab0c9dff8354d3ce0d4b431b784e12c33e54"
+    },
+    {
+      "archive": "browser-six-raw-evidence.zip",
+      "member": "requests-six.json",
+      "bytes": 4909,
+      "sha256": "bece0a0b699612e7920bd74eb1655943d2659d61eba06c2c0e32a0f02103c552"
+    },
+    {
+      "archive": "browser-dd3-raw-evidence.zip",
+      "member": "build-dd3.log",
+      "bytes": 1058,
+      "sha256": "e8bad622ec7fb0c99aa0029640daad9742f8f477b1d2304d12792886c0f31b47",
+      "displaySha256": "e8bad622ec7fb0c99aa0029640daad9742f8f477b1d2304d12792886c0f31b47"
+    },
+    {
+      "archive": "browser-six-raw-evidence.zip",
+      "member": "playwright-six.log",
+      "bytes": 660,
+      "sha256": "adc6b76a571bc1c937a40c564c6d515370136a4bf7f8f44f0c826def5a1bb029",
+      "displaySha256": "adc6b76a571bc1c937a40c564c6d515370136a4bf7f8f44f0c826def5a1bb029"
+    },
+    {
+      "gitCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/private-fixture-resource-inventory.json",
+      "bytes": 4449,
+      "sha256": "df7d3cbce19e3827d89eb433195adf6c9583e66cd462908bfe76187a193049fb"
+    },
+    {
+      "gitCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/BROWSER_DD3_RESULTS.md",
+      "bytes": 6135,
+      "sha256": "d8877115d32047490d471aff2f474d3db917f60277babc9d878e59081a002b65"
+    },
+    {
+      "gitCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/BROWSER_SIX_RESULTS.md",
+      "bytes": 4037,
+      "sha256": "b0e0871aa01e1a6feb2f565c4c864cc09adb3bfdc3c5ecc6905a32572e7fe5ee"
+    },
+    {
+      "gitCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/BROWSER_D095_STARTUP.md",
+      "bytes": 1733,
+      "sha256": "dcdc1708938505928c7296e3d2fd53a9d898627da35a7673560aaa9da9f11204"
+    }
+  ],
+  "newCoreSchemaRevision": "NONE",
+  "compiledPins": []
+}

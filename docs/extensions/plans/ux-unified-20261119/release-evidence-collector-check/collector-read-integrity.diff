@@ -1,0 +1,26 @@
+--- before/collect_release_evidence.py
++++ after/collect_release_evidence.py
+@@ -94,12 +94,20 @@
+     before = path.stat()
+     need(before.st_size <= MAX_FILE_BYTES, "LOCAL_FILE_TOO_LARGE")
+     with path.open("rb") as stream:
++        opened_before = os.fstat(stream.fileno())
+         data = stream.read(MAX_FILE_BYTES + 1)
+-        opened = os.fstat(stream.fileno())
++        opened_after = os.fstat(stream.fileno())
+     plain_local(path)
+     after = path.stat()
+-    signature = lambda info: (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+-    need(signature(before) == signature(opened) == signature(after), "LOCAL_FILE_CHANGED")
++    # CPython 3.12 on Windows reports legacy st_ctime differently through
++    # path.stat() and os.fstat(). Compare those clocks only within the same
++    # API, while still binding the path and opened handle by file identity,
++    # type, link count, length and nanosecond modification time.
++    signature = lambda info: (info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
++                              info.st_size, info.st_mtime_ns)
++    clock = lambda info: (info.st_ctime_ns, getattr(info, "st_birthtime_ns", None))
++    need(signature(before) == signature(opened_before) == signature(opened_after) == signature(after), "LOCAL_FILE_CHANGED")
++    need(clock(before) == clock(after) and clock(opened_before) == clock(opened_after), "LOCAL_FILE_CHANGED")
+     need(len(data) == before.st_size and len(data) <= MAX_FILE_BYTES, "LOCAL_FILE_SIZE")
+     return data
+ 

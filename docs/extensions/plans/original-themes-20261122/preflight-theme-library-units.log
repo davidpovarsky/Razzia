@@ -1,0 +1,13 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Startup Error [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯⎯[39m
+Error: Failed to create Vitest API token at /root/.local/share/vitest/.vitest-secret-token or /evidence/source/node_modules/.vitest/.vitest-secret-token
+    at resolveApiToken (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.DpLw24bj.js:9701:8)
+    at resolveConfig$1 (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.DpLw24bj.js:14857:34)
+    at async createVitest (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/cli-api.C4x4GGip.js:26:17)
+    at async prepareVitest (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/cli-api.C4x4GGip.js:421:14)
+    at async startVitest (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/cli-api.C4x4GGip.js:340:14)
+    at async start (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/cac.DfDGTQ9W.js:2370:15)
+    at async CAC.run (file:///cleanup/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/cac.DfDGTQ9W.js:2346:2)
+
+
+

@@ -1,0 +1,7 @@
+[
+  {
+    "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+    "sameAst": true,
+    "changed": true
+  }
+]

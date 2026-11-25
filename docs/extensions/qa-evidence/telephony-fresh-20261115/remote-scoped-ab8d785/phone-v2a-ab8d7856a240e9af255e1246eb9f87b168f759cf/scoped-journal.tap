@@ -1,0 +1,38 @@
+Game cleanup task started
+New game created: 244793 subject: Synthetic unmounted V2-A
+Game 01a1dea8-310d-72af-bb01-372c82ba626b added. Total games: 1
+Game 01a1dea8-310d-72af-bb01-372c82ba626b marked as empty. Total empty games: 1
+A user connected: socketId: nEEvaLqqBUB6oRcNAAAA, clientId: 01a1dea8-3045-7743-a88b-07134442ba34
+Game 01a1dea8-310d-72af-bb01-372c82ba626b reactivated. Remaining empty games: 0
+Manager reconnected to game 244793
+✔ SCOPED-01 exited writer's complete durable tuple reopens before actual coordinator registration (4186.0954ms)
+New game created: 423902 subject: Synthetic unmounted V2-A
+Game 01a1dea8-3eb2-77fb-8774-a3af958cb8d6 added. Total games: 2
+Game 01a1dea8-3eb2-77fb-8774-a3af958cb8d6 marked as empty. Total empty games: 1
+A user connected: socketId: q4yJIhWnq39zNVurAAAB, clientId: 01a1dea8-3e5c-775d-ae4f-c8159a41eebc
+Game 01a1dea8-3eb2-77fb-8774-a3af958cb8d6 reactivated. Remaining empty games: 0
+Manager reconnected to game 423902
+✔ SCOPED-02 missing/mismatched durable records cause zero dispatch and unchanged real Game/SQLite (296.134335ms)
+New game created: 598204 subject: Synthetic unmounted V2-A
+Game 01a1dea8-3f87-7320-a052-5f66507f43d7 added. Total games: 3
+Game 01a1dea8-3f87-7320-a052-5f66507f43d7 marked as empty. Total empty games: 1
+A user connected: socketId: yoy6moKWUcX1JdUwAAAC, clientId: 01a1dea8-3f83-7368-a584-f8b1bb6ecc89
+Game 01a1dea8-3f87-7320-a052-5f66507f43d7 reactivated. Remaining empty games: 0
+Manager reconnected to game 598204
+Game 01a1dea8-310d-72af-bb01-372c82ba626b removed. Total games: 2
+Game 01a1dea8-3eb2-77fb-8774-a3af958cb8d6 removed. Total games: 1
+Game 01a1dea8-3f87-7320-a052-5f66507f43d7 removed. Total games: 0
+Game cleanup task stopped
+Registry cleaned up
+A user disconnected : nEEvaLqqBUB6oRcNAAAA
+A user disconnected : q4yJIhWnq39zNVurAAAB
+A user disconnected : yoy6moKWUcX1JdUwAAAC
+✔ SCOPED-03 journal scope cannot manufacture independently trusted expected authority (102.656963ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17302.230531

@@ -1,0 +1,154 @@
+{
+  "stage": "after",
+  "startedUtc": "2026-11-15T16:33:30.075684+00:00",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "sourceBaseCommit": "aae068050e6859d4b0c75d739239ab624e1d35ee",
+  "sourceBefore": {
+    "extensions/src/core/show-library/native-preview-renderer-v2.ts": {
+      "bytes": 8057,
+      "sha256": "fa8d94d11faff8ab5868d60b409dfe69b5edaf0f6b4c8a4609fd5e0ff783d3b6"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": {
+      "bytes": 19329,
+      "sha256": "a066bff54fd5bd3b4346af5ca765e6e73700e9ed6ff13320fadb1c055381ec08"
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": {
+      "bytes": 3514,
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.ts": {
+      "bytes": 4803,
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730"
+    },
+    "extensions/src/core/show-library/native-presentation-settings.ts": {
+      "bytes": 3222,
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603"
+    }
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/composition-preview-v2.test.ts",
+        "src/core/show-library/consumer-contract.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 241,
+          "sha256": "7393113fadab1cd7e1e1797df55de05056890a234d79b7351f92767071883c01",
+          "rawBase64": "CiBSVU4gIHY1LjAuMyBDOi9Vc2Vycy9EQVZJRC9Db2RlL1JhenppYS13b3JrdHJlZXMvdGFkYXp6LWhxLXNob3ctbGlicmFyeS0yMDI2MTExNS9leHRlbnNpb25zCgoKIFRlc3QgRmlsZXMgIDIgcGFzc2VkICgyKQogICAgICBUZXN0cyAgMTggcGFzc2VkICgxOCkKICAgU3RhcnQgYXQgIDE4OjMzOjMxCiAgIER1cmF0aW9uICAzLjE0cyAoaW1wb3J0IDU3JSwgdHJhbnNmb3JtIDM1JSwgdGVzdHMgNyUsIHdvcmtlciAxJSkKCg=="
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "types",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/native-preview-renderer-v2.ts",
+        "extensions/src/core/show-library/composition-preview-v2.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 66,
+          "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+          "rawBase64": "Q2hlY2tpbmcgZm9ybWF0dGluZy4uLgpBbGwgbWF0Y2hlZCBmaWxlcyB1c2UgUHJldHRpZXIgY29kZSBzdHlsZSEK"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "lint",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/oxlint/bin/oxlint",
+        "--threads",
+        "1",
+        "--format",
+        "json",
+        "extensions/src/core/show-library/native-preview-renderer-v2.ts",
+        "extensions/src/core/show-library/composition-preview-v2.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 192,
+          "sha256": "23754de30de51559322dadca8ac395d25f14ae698fb437bc7d4d4ee272f80107",
+          "rawBase64": "eyAiZGlhZ25vc3RpY3MiOiBbXSwKICAgICAgICAgICAgICAibnVtYmVyX29mX2ZpbGVzIjogMiwKICAgICAgICAgICAgICAibnVtYmVyX29mX3J1bGVzIjogMjMzLAogICAgICAgICAgICAgICJ0aHJlYWRzX2NvdW50IjogMSwKICAgICAgICAgICAgICAic3RhcnRfdGltZSI6IDMuMTY3OTc5CiAgICAgICAgICAgIH0KICAgICAgICAgICAg"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/native-preview-renderer-v2.ts": {
+      "bytes": 8057,
+      "sha256": "fa8d94d11faff8ab5868d60b409dfe69b5edaf0f6b4c8a4609fd5e0ff783d3b6"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": {
+      "bytes": 19329,
+      "sha256": "a066bff54fd5bd3b4346af5ca765e6e73700e9ed6ff13320fadb1c055381ec08"
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": {
+      "bytes": 3514,
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.ts": {
+      "bytes": 4803,
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730"
+    },
+    "extensions/src/core/show-library/native-presentation-settings.ts": {
+      "bytes": 3222,
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603"
+    }
+  },
+  "sourceUnchangedDuringChecks": true,
+  "finishedUtc": "2026-11-15T16:33:39.736391+00:00"
+}

@@ -1,0 +1,991 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import {
+  type SceneConfig,
+  type TimelineItem,
+  createDefaultQuizExtrasV2,
+} from "../../core/studio-timeline-schema"
+import { completeCreatingWorldsShow } from "../../core/creating-worlds-show"
+import { ExtensionGameSession } from "./session"
+import { StudioShowCoordinator } from "./studio-show-coordinator"
+describe("StudioShowCoordinator", () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+  const dummyDefaults = {
+    newQuestionMode: "quiz" as const,
+    leaderboardPolicy: "cardOnly" as const,
+    advanceMode: "auto" as const,
+  }
+  const q1Id = "11111111-1111-4111-8111-111111111111"
+  const q2Id = "22222222-2222-4222-8222-222222222222"
+  const q3Id = "33333333-3333-4333-8333-333333333333"
+  const openId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+  const transId = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+  const mediaId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
+  const animId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
+  const lbId = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
+  const interimId = "ffffffff-ffff-4fff-8fff-ffffffffffff"
+  const cdId = "12121212-1212-4212-8212-121212121212"
+  const closeId = "34343434-3434-4434-8434-343434343434"
+  const scenes: Record<string, SceneConfig> = {
+    [openId]: {
+      id: openId,
+      kind: "opening",
+      title: "Show Intro",
+      durationMs: 4000,
+      advance: "auto",
+    },
+    [transId]: {
+      id: transId,
+      kind: "transition",
+      title: "Moving On",
+      durationMs: 3000,
+      advance: "manual",
+    },
+    [mediaId]: {
+      id: mediaId,
+      kind: "media",
+      mediaUrl: "https://example.com/clip.mp4",
+      mediaType: "video",
+      durationMs: 5000,
+      advance: "auto",
+    },
+    [animId]: {
+      id: animId,
+      kind: "animation",
+      preset: "spotlight",
+      durationMs: 2000,
+      advance: "auto",
+    },
+    [lbId]: {
+      id: lbId,
+      kind: "leaderboard",
+      title: "Top Scores",
+      durationMs: 4000,
+      advance: "manual",
+    },
+    [interimId]: {
+      id: interimId,
+      kind: "interimResults",
+      title: "Interim Standings",
+      durationMs: 3000,
+      advance: "auto",
+    },
+    [cdId]: {
+      id: cdId,
+      kind: "countdown",
+      durationSeconds: 5,
+      advance: "auto",
+    },
+    [closeId]: {
+      id: closeId,
+      kind: "closing",
+      title: "Goodnight",
+      durationMs: 5000,
+      advance: "auto",
+    },
+  }
+  const timeline: TimelineItem[] = [
+    {
+      id: "s-open",
+      kind: "opening",
+      sceneId: openId,
+    },
+    {
+      id: "s-q1",
+      kind: "question",
+      questionId: q1Id,
+    },
+    {
+      id: "s-trans",
+      kind: "transition",
+      sceneId: transId,
+    },
+    {
+      id: "s-q2",
+      kind: "question",
+      questionId: q2Id,
+    },
+    {
+      id: "s-media",
+      kind: "media",
+      sceneId: mediaId,
+    },
+    {
+      id: "s-anim",
+      kind: "animation",
+      sceneId: animId,
+    },
+    {
+      id: "s-lb",
+      kind: "leaderboard",
+      sceneId: lbId,
+    },
+    {
+      id: "s-interim",
+      kind: "interimResults",
+      sceneId: interimId,
+    },
+    {
+      id: "s-cd",
+      kind: "countdown",
+      sceneId: cdId,
+    },
+    {
+      id: "s-q3",
+      kind: "question",
+      questionId: q3Id,
+    },
+    {
+      id: "s-close",
+      kind: "closing",
+      sceneId: closeId,
+    },
+  ]
+  const questionIds = [q1Id, q2Id, q3Id]
+  it("hands the paused terminal finale clock to the product ending without replay", () => {
+    vi.setSystemTime(100000)
+    const finished = vi.fn()
+    const coordinator = new StudioShowCoordinator({
+      timeline: [{ id: "terminal-finale", kind: "animation", sceneId: animId }],
+      scenes: {
+        [animId]: {
+          id: animId,
+          kind: "animation",
+          preset: "grand-finale",
+          durationMs: 9200,
+          advance: "auto",
+        },
+      },
+      questionIds: [],
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: finished,
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    vi.advanceTimersByTime(7000)
+    expect(coordinator.pauseGame()).toBe(true)
+    vi.advanceTimersByTime(20000)
+    expect(finished).not.toHaveBeenCalled()
+    expect(coordinator.resumeGame()).toBe(true)
+    vi.advanceTimersByTime(2200)
+    expect(finished).toHaveBeenCalledTimes(1)
+    expect(finished).toHaveBeenCalledWith(120000)
+    expect(coordinator.currentPhase).toBe("finished")
+  })
+  it("skips every authored scene owned by a skipped question", () => {
+    const startedQuestions: number[] = []
+    let finished = false
+    const coordinator = new StudioShowCoordinator({
+      timeline,
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (questionIndex) => {
+          startedQuestions.push(questionIndex)
+        },
+        onFinish: () => {
+          finished = true
+        },
+        onBroadcastState: () => undefined,
+      },
+    })
+    coordinator.start()
+    vi.advanceTimersByTime(4000)
+    expect(startedQuestions).toEqual([0])
+    expect(coordinator.skipQuestionSequence()).toBe(true)
+    expect(coordinator.currentStep?.item).toMatchObject({
+      kind: "question",
+      questionId: q2Id,
+    })
+    expect(startedQuestions).toEqual([0, 1])
+    expect(coordinator.skipQuestionSequence()).toBe(true)
+    expect(coordinator.currentStep?.item).toMatchObject({
+      kind: "question",
+      questionId: q3Id,
+    })
+    expect(startedQuestions).toEqual([0, 1, 2])
+    expect(coordinator.skipQuestionSequence()).toBe(true)
+    expect(coordinator.currentPhase).toBe("finished")
+    expect(finished).toBe(true)
+  })
+  it("advances through full 10-kind timeline: opening -> Q1 -> transition -> Q2 -> media -> animation -> leaderboard -> interimResults -> countdown -> Q3 -> closing -> FINISHED", () => {
+    const startedQuestions: number[] = []
+    let isFinished = false
+    let broadcasts = 0
+    const coordinator = new StudioShowCoordinator({
+      timeline,
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
+        onFinish: () => {
+          isFinished = true
+        },
+        onBroadcastState: () => {
+          broadcasts += 1
+        },
+      },
+    })
+    expect(coordinator.currentPhase).toBe("lobby")
+    expect(coordinator.canAcceptAnswers()).toBe(false)
+
+    // 1. Start -> Step 0 (opening, auto 4000ms)
+    coordinator.start()
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.isSceneActive()).toBe(true)
+    expect(coordinator.canAcceptAnswers()).toBe(false)
+    expect(coordinator.currentStep?.item.kind).toBe("opening")
+    expect(coordinator.getQuestionOrdinal()).toBe(0)
+    expect(startedQuestions).toEqual([])
+
+    // Auto-advance after 4000ms -> Step 1 (Q1, question)
+    vi.advanceTimersByTime(4000)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(coordinator.isSceneActive()).toBe(false)
+    expect(coordinator.canAcceptAnswers()).toBe(true)
+    expect(coordinator.currentStep?.item.kind).toBe("question")
+    expect(coordinator.getQuestionOrdinal()).toBe(1)
+    // Q1 is index 0
+    expect(startedQuestions).toEqual([0])
+
+    // Complete Q1 -> Step 2 (transition, manual)
+    coordinator.onQuestionCompleted(0)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.isSceneActive()).toBe(true)
+    expect(coordinator.canAcceptAnswers()).toBe(false)
+    expect(coordinator.currentStep?.item.kind).toBe("transition")
+
+    // Advance manually -> Step 3 (Q2, question)
+    coordinator.advanceScene()
+    expect(coordinator.currentPhase).toBe("question")
+    expect(coordinator.canAcceptAnswers()).toBe(true)
+    expect(coordinator.getQuestionOrdinal()).toBe(2)
+    // Q2 is index 1
+    expect(startedQuestions).toEqual([0, 1])
+
+    // Complete Q2 -> Step 4 (media, auto 5000ms)
+    coordinator.onQuestionCompleted(1)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("media")
+
+    // Auto-advance -> Step 5 (animation, auto 2000ms)
+    vi.advanceTimersByTime(5000)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("animation")
+
+    // Auto-advance -> Step 6 (leaderboard, manual)
+    vi.advanceTimersByTime(2000)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("leaderboard")
+
+    // Advance manually -> Step 7 (interimResults, auto 3000ms)
+    coordinator.advanceScene()
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("interimResults")
+
+    // Auto-advance -> Step 8 (countdown, auto 5000ms)
+    vi.advanceTimersByTime(3000)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("countdown")
+
+    // Auto-advance -> Step 9 (Q3, question)
+    vi.advanceTimersByTime(5000)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(coordinator.canAcceptAnswers()).toBe(true)
+    expect(coordinator.getQuestionOrdinal()).toBe(3)
+    // Q3 is index 2
+    expect(startedQuestions).toEqual([0, 1, 2])
+
+    // Complete Q3 -> Step 10 (closing, auto 5000ms)
+    coordinator.onQuestionCompleted(2)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("closing")
+
+    // Auto-advance closing -> FINISHED
+    vi.advanceTimersByTime(5000)
+    expect(coordinator.currentPhase).toBe("finished")
+    expect(isFinished).toBe(true)
+  })
+  it("guards against double advance from simultaneous manual skip and auto-advance timer", () => {
+    let isFinished = false
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-open",
+          kind: "opening",
+          sceneId: openId,
+        },
+        {
+          id: "s-anim",
+          kind: "animation",
+          sceneId: animId,
+        },
+      ],
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: () => {
+          isFinished = true
+        },
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    expect(coordinator.currentIndex).toBe(0)
+
+    // Advance 1000ms into opening (duration 4000ms)
+    vi.advanceTimersByTime(1000)
+
+    // User clicks manual advance to animation (duration 2000ms)
+    const advanced = coordinator.advanceScene()
+    expect(advanced).toBe(true)
+    // Moved to animation
+    expect(coordinator.currentIndex).toBe(1)
+
+    // Advance 1000ms: animation is still active (1000ms / 2000ms)
+    vi.advanceTimersByTime(1000)
+    expect(coordinator.currentIndex).toBe(1)
+    expect(isFinished).toBe(false)
+
+    // Now advance remaining 1000ms for animation -> finishes
+    vi.advanceTimersByTime(1000)
+    expect(isFinished).toBe(true)
+  })
+  it("strictly rejects advance if step epoch or sceneId does not match", () => {
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-open",
+          kind: "opening",
+          sceneId: openId,
+        },
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+      ],
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    const { currentEpoch } = coordinator
+
+    // Stale epoch rejected
+    const rejectedStale = coordinator.advanceScene(undefined, currentEpoch - 1)
+    expect(rejectedStale).toBe(false)
+    expect(coordinator.currentIndex).toBe(0)
+
+    // Wrong sceneId rejected
+    const rejectedWrongId = coordinator.advanceScene(
+      "wrong-scene-id",
+      currentEpoch,
+    )
+    expect(rejectedWrongId).toBe(false)
+    expect(coordinator.currentIndex).toBe(0)
+
+    // Correct epoch accepted
+    const accepted = coordinator.advanceScene(openId, currentEpoch)
+    expect(accepted).toBe(true)
+    expect(coordinator.currentIndex).toBe(1)
+  })
+  it("returns authoritative step envelope with monotonic epoch and seq", () => {
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-open",
+          kind: "opening",
+          sceneId: openId,
+        },
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+      ],
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    const env = coordinator.getAuthoritativeStepEnvelope("player")
+    expect(env).not.toBeNull()
+    expect(env?.kind).toBe("opening")
+    expect(env?.sceneId).toBe(openId)
+    expect(env?.advance).toBe("auto")
+    expect(env?.durationMs).toBe(4000)
+    expect(env?.epoch).toBe(1)
+    expect(env?.seq).toBe(1)
+    expect(env?.totalSteps).toBe(2)
+  })
+  it("P1: supports safe backward navigation with previousScene()", () => {
+    const startedQuestions: number[] = []
+    const reopenedQuestions: number[] = []
+    const completedResultsShown: number[] = []
+    let broadcasts = 0
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-open",
+          kind: "opening",
+          sceneId: openId,
+        },
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+        {
+          id: "s-trans",
+          kind: "transition",
+          sceneId: transId,
+        },
+      ],
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
+        onReopenQuestion: (qIdx) => {
+          reopenedQuestions.push(qIdx)
+        },
+        onShowCompletedQuestionResults: (qIdx) => {
+          completedResultsShown.push(qIdx)
+        },
+        onFinish: vi.fn(),
+        onBroadcastState: () => {
+          broadcasts += 1
+        },
+      },
+    })
+
+    // At lobby
+    expect(coordinator.canPrevious().can).toBe(false)
+
+    // Step 0: opening
+    coordinator.start()
+    expect(coordinator.currentIndex).toBe(0)
+    // At start of show
+    expect(coordinator.canPrevious().can).toBe(false)
+
+    // Advance to Step 1: Q1 (question)
+    coordinator.advanceScene(openId)
+    expect(coordinator.currentIndex).toBe(1)
+    expect(coordinator.canPrevious().can).toBe(true)
+    expect(startedQuestions).toEqual([0])
+
+    // Advance to Step 2: Transition (manual)
+    coordinator.onQuestionCompleted(0)
+    expect(coordinator.currentIndex).toBe(2)
+    expect(coordinator.currentStep?.item.kind).toBe("transition")
+    expect(coordinator.isSceneActive()).toBe(true)
+    expect(coordinator.canPrevious().can).toBe(true)
+
+    // Previous from Step 2 (transition) -> Step 1 (reopens Q1 fresh)
+    const backToQ1 = coordinator.previousScene()
+    expect(backToQ1).toBe(true)
+    expect(coordinator.currentIndex).toBe(1)
+    // Reopens question for fresh voting!
+    expect(reopenedQuestions).toEqual([0])
+
+    // Previous from Step 1 (Q1) -> Step 0 (opening)
+    const backToOpen = coordinator.previousScene()
+    expect(backToOpen).toBe(true)
+    expect(coordinator.currentIndex).toBe(0)
+    expect(coordinator.currentStep?.item.kind).toBe("opening")
+    expect(coordinator.isSceneActive()).toBe(true)
+
+    // At Step 0, cannot go back further
+    expect(coordinator.canPrevious().can).toBe(false)
+    expect(coordinator.previousScene()).toBe(false)
+  })
+  it("hasAuthoredOpeningAtStart returns true only when timeline[0] is an opening scene", () => {
+    const withOpening = new StudioShowCoordinator({
+      timeline,
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    expect(withOpening.hasAuthoredOpeningAtStart()).toBe(true)
+    const withoutOpening = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+      ],
+      scenes: {},
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    expect(withoutOpening.hasAuthoredOpeningAtStart()).toBe(false)
+  })
+  it("supports advance: onMediaEnd with immediate manager mediaEnded signal and safety timer fallback", () => {
+    const startedQuestions: number[] = []
+    const onMediaEndSceneId = "99999999-9999-4999-8999-999999999999"
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-intro-vid",
+          kind: "opening",
+          sceneId: onMediaEndSceneId,
+        },
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+      ],
+      scenes: {
+        [onMediaEndSceneId]: {
+          id: onMediaEndSceneId,
+          kind: "opening",
+          title: "Cinema Intro",
+          mediaUrl: "/media/intro.mp4",
+          mediaType: "video",
+          stageLayout: "cinema",
+          mediaFit: "cover",
+          durationMs: 12000,
+          advance: "onMediaEnd",
+        },
+      },
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.advanceMode).toBe("onMediaEnd")
+
+    // Video finishes after 3500ms -> manager sends advanceScene(sceneId, epoch, stepIndex)
+    vi.advanceTimersByTime(3500)
+    const epochAtOpen = coordinator.currentEpoch
+    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(
+      true,
+    )
+    expect(coordinator.currentPhase).toBe("question")
+    expect(startedQuestions).toEqual([0])
+
+    // Duplicate/late mediaEnded signal for step 0 is rejected idempotently
+    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(
+      false,
+    )
+  })
+  it("does NOT prematurely cut an 8s or 20s video at default durationMs=5000 when advance is onMediaEnd", () => {
+    const startedQuestions: number[] = []
+    const videoSceneId = "98888888-8888-4888-8888-888888888888"
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-intro-vid",
+          kind: "opening",
+          sceneId: videoSceneId,
+        },
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+      ],
+      scenes: {
+        [videoSceneId]: {
+          id: videoSceneId,
+          kind: "opening",
+          title: "8s Cinema Intro with 5s Default Duration",
+          mediaUrl: "/media/intro-8s.mp4",
+          mediaType: "video",
+          stageLayout: "cinema",
+          mediaFit: "cover",
+          durationMs: 5000,
+          advance: "onMediaEnd",
+        },
+      },
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    const epochAtOpen = coordinator.currentEpoch
+    expect(coordinator.currentPhase).toBe("scene")
+
+    // At 5000ms (legacy default durationMs) and 7500ms, the video MUST still be playing!
+    vi.advanceTimersByTime(5000)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(startedQuestions).toEqual([])
+    vi.advanceTimersByTime(2500)
+    expect(coordinator.currentPhase).toBe("scene")
+
+    // At 8000ms, genuine foreground video ends -> manager sends advanceScene once
+    vi.advanceTimersByTime(500)
+    expect(coordinator.advanceScene(videoSceneId, epochAtOpen, 0)).toBe(true)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(startedQuestions).toEqual([0])
+  })
+  it("honors explicit mediaEndFallbackMs when video ended event is blocked and resolves loop:true + onMediaEnd safely", () => {
+    const startedQuestions: number[] = []
+    const fallbackSceneId = "97777777-7777-4777-8777-777777777777"
+    const loopConflictSceneId = "96666666-6666-4666-8666-666666666666"
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "s-fb",
+          kind: "opening",
+          sceneId: fallbackSceneId,
+        },
+        {
+          id: "s-loop",
+          kind: "media",
+          sceneId: loopConflictSceneId,
+        },
+        {
+          id: "s-q1",
+          kind: "question",
+          questionId: q1Id,
+        },
+      ],
+      scenes: {
+        [fallbackSceneId]: {
+          id: fallbackSceneId,
+          kind: "opening",
+          title: "Fallback Test",
+          mediaUrl: "/media/intro.mp4",
+          mediaType: "video",
+          durationMs: 5000,
+          mediaEndFallbackMs: 11000,
+          advance: "onMediaEnd",
+        },
+        [loopConflictSceneId]: {
+          id: loopConflictSceneId,
+          kind: "media",
+          title: "Loop Conflict",
+          mediaUrl: "/media/loop.mp4",
+          mediaType: "video",
+          loop: true,
+          durationMs: 4000,
+          advance: "onMediaEnd",
+        },
+      },
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    expect(coordinator.currentIndex).toBe(0)
+
+    // Does not advance at 5000ms; advances at explicit mediaEndFallbackMs (11000ms)
+    vi.advanceTimersByTime(10900)
+    expect(coordinator.currentIndex).toBe(0)
+    vi.advanceTimersByTime(200)
+    expect(coordinator.currentIndex).toBe(1)
+
+    // Step 1 has loop:true + onMediaEnd -> safely falls back to durationMs (4000ms) instead of hanging forever
+    vi.advanceTimersByTime(4000)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(startedQuestions).toEqual([0])
+  })
+  it("populates activeSceneData.answerRecap in ExtensionGameSession for manager and player snapshots", () => {
+    const recapSceneId = "77777777-7777-4777-8777-777777777777"
+    const extras = createDefaultQuizExtrasV2(
+      "quiz-recap",
+      [q1Id, q2Id],
+      "a".repeat(64),
+    )
+    extras.timeline = [
+      {
+        id: "s-q1",
+        kind: "question",
+        questionId: q1Id,
+      },
+      {
+        id: "s-q2",
+        kind: "question",
+        questionId: q2Id,
+      },
+      {
+        id: "s-recap",
+        kind: "answerRecap",
+        sceneId: recapSceneId,
+      },
+    ]
+    extras.scenes[recapSceneId] = {
+      id: recapSceneId,
+      kind: "answerRecap",
+      title: "Round 1 Recap",
+      startQuestionId: q1Id,
+      mode: "mostSelected",
+      maxItemsPerPage: 4,
+      showCounts: true,
+      showPercentages: true,
+      durationMs: 8000,
+      advance: "manual",
+    }
+    const coordinator = new StudioShowCoordinator({
+      timeline: extras.timeline,
+      scenes: extras.scenes,
+      questionIds: [q1Id, q2Id],
+      defaults: extras.defaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    const session = new ExtensionGameSession("game-1", extras)
+    session.setShowCoordinator(coordinator)
+    session.setDelegate({
+      advanceTimelineScene: (sceneId, epoch, stepIdx) =>
+        coordinator.advanceScene(sceneId, epoch, stepIdx),
+      getAnswerRecapSummary: (scene, _stepIdx) => ({
+        title: "title" in scene ? scene.title : "Recap",
+        startQuestionId: q1Id,
+        endQuestionId: q2Id,
+        totalQuestionsInRange: 2,
+        completedQuestionsCount: 1,
+        mode: "mostSelected",
+        maxItemsPerPage: 4,
+        showCounts: true,
+        showPercentages: true,
+        items: [
+          {
+            questionId: q1Id,
+            questionNumber: 1,
+            questionText: "Favorite color?",
+            playMode: "survey",
+            badgeType: "mostSelected",
+            totalResponders: 5,
+            isTie: false,
+            winningOptions: [
+              {
+                answerIndex: 0,
+                label: "Blue",
+                count: 4,
+                percentage: 80,
+              },
+            ],
+          },
+        ],
+      }),
+    })
+
+    // Q1
+    coordinator.start()
+    // Q2
+    coordinator.onQuestionCompleted(0)
+    // AnswerRecap scene at stepIndex 2
+    coordinator.onQuestionCompleted(1)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("answerRecap")
+    const playerSnap = session.getStateSnapshot("player", [])
+    const activeData = playerSnap.extras.activeSceneData as {
+      answerRecap?: {
+        items: Array<{
+          questionText: string
+        }>
+      }
+    }
+    expect(activeData?.answerRecap?.items).toHaveLength(1)
+    expect(activeData?.answerRecap?.items[0].questionText).toBe(
+      "Favorite color?",
+    )
+  })
+})
+describe("P0 authoritative scene pause", () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+  it("preserves an authored scene deadline and rejects stale media advance while paused", () => {
+    const sceneId = "71111111-1111-4111-8111-111111111111"
+    let finished = false
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        {
+          id: "opening",
+          kind: "opening",
+          sceneId,
+        },
+      ],
+      scenes: {
+        [sceneId]: {
+          id: sceneId,
+          kind: "opening",
+          title: "Opening",
+          durationMs: 5000,
+          advance: "auto",
+        },
+      },
+      questionIds: [],
+      defaults: createDefaultQuizExtrasV2("quiz", [], "0".repeat(64)).defaults,
+      callbacks: {
+        onStartQuestion: () => undefined,
+        onFinish: () => {
+          finished = true
+        },
+        onBroadcastState: () => undefined,
+      },
+    })
+    coordinator.start()
+    vi.advanceTimersByTime(2000)
+    expect(coordinator.pauseGame()).toBe(true)
+    const remaining = coordinator.getPauseSnapshot().remainingMs
+    expect(remaining).toBe(3000)
+    expect(coordinator.getSceneElapsedMs()).toBe(2000)
+    expect(coordinator.advanceScene(sceneId, coordinator.currentEpoch, 0)).toBe(
+      false,
+    )
+    vi.advanceTimersByTime(10000)
+    expect(finished).toBe(false)
+    expect(coordinator.getPauseSnapshot().remainingMs).toBe(remaining)
+    expect(coordinator.getSceneElapsedMs()).toBe(2000)
+    expect(coordinator.resumeGame()).toBe(true)
+    vi.advanceTimersByTime(2999)
+    expect(coordinator.getSceneElapsedMs()).toBe(4999)
+    expect(finished).toBe(false)
+    vi.advanceTimersByTime(1)
+    expect(finished).toBe(true)
+  })
+})
+it("keeps both five-position round boundaries when all ten questions are skipped", () => {
+  const ids = Array.from(
+    {
+      length: 10,
+    },
+    () => crypto.randomUUID(),
+  )
+  const extras = completeCreatingWorldsShow(
+    createDefaultQuizExtrasV2("quiz", ids, "a".repeat(64)),
+  )
+  const coordinator = new StudioShowCoordinator({
+    timeline: extras.timeline,
+    scenes: extras.scenes,
+    questionIds: ids,
+    defaults: extras.defaults,
+    callbacks: {
+      onStartQuestion: () => {
+        /* Intentional no-op callback. */
+      },
+      onFinish: () => {
+        /* Intentional no-op callback. */
+      },
+      onBroadcastState: () => {
+        /* Intentional no-op callback. */
+      },
+    },
+  })
+  coordinator.start()
+  coordinator.advanceScene()
+  coordinator.skipQuestionSequence()
+  expect(coordinator.currentStep?.item).toMatchObject({
+    questionId: ids[1],
+  })
+  expect(coordinator.restoreQuestionPosition(0)).toBe(true)
+  coordinator.skipQuestionSequence()
+  expect(coordinator.currentStep?.item).toMatchObject({
+    questionId: ids[1],
+  })
+  coordinator.restoreQuestionPosition(0)
+  for (let index = 0; index < 5; index += 1) {
+    coordinator.skipQuestionSequence()
+  }
+  expect(coordinator.currentScene).toMatchObject({
+    kind: "animation",
+    preset: "round-recap",
+    round: 1,
+  })
+  // Mixer
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({
+    preset: "story-assembly",
+    round: 1,
+  })
+  // Story
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({
+    preset: "story-live",
+    round: 1,
+  })
+  // Wipe
+  coordinator.advanceScene()
+  // Round two
+  coordinator.advanceScene()
+  // Q6
+  coordinator.advanceScene()
+  for (let index = 0; index < 5; index += 1) {
+    coordinator.skipQuestionSequence()
+  }
+  expect(coordinator.currentScene).toMatchObject({
+    kind: "animation",
+    preset: "round-recap",
+    round: 2,
+  })
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({
+    preset: "story-assembly",
+    round: 2,
+  })
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({
+    preset: "story-live",
+    round: 2,
+  })
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({
+    kind: "animation",
+    preset: "grand-finale",
+  })
+  coordinator.dispose()
+})

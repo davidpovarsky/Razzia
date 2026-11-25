@@ -1,0 +1,73 @@
+{
+  "mode": "STATIC_SOURCE_ONLY_NO_PROJECT_MODULE_EXECUTION",
+  "sourceFiles": [
+    {
+      "path": "extensions/src/core/show-library/compiled-index-schema.ts",
+      "bytes": 22530,
+      "sha256": "a6bad0c603af33508a8b157c541490a9b9e113b7a1c4c080de517b63852034e9",
+      "imports": [
+        "zod",
+        "./digest",
+        "./primitives"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-authority.ts",
+      "bytes": 4381,
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55",
+      "imports": [
+        "node:crypto",
+        "./digest",
+        "./primitives",
+        "./compiled-index-schema"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-validation.ts",
+      "bytes": 6046,
+      "sha256": "bf11b1ea664d13ef8038e4649351195a8c528a703f79933f03d210f6322ad0ec",
+      "imports": [
+        "node:crypto",
+        "zod",
+        "./digest",
+        "./primitives",
+        "./compiled-index-schema",
+        "./compiled-index-authority"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index.test.ts",
+      "bytes": 31259,
+      "sha256": "8fcdbddd5d2dc21199edc3760995189cff38270dbd6ae16259f9572b8f767207",
+      "imports": [
+        "node:crypto",
+        "vitest",
+        "./digest",
+        "./compiled-index-schema",
+        "./compiled-index-authority",
+        "./compiled-index-validation"
+      ],
+      "staticSyntaxAndFormat": "PASS"
+    }
+  ],
+  "authoredTestCases": 53,
+  "testsExecuted": 0,
+  "typecheck": "NOT_RUN",
+  "acceptedCoreHashesMatched": 26,
+  "acceptedExistingFileChanges": 0,
+  "correctedNewLeafChanges": [
+    "extensions/src/core/show-library/compiled-index-schema.ts",
+    "extensions/src/core/show-library/compiled-index-validation.ts",
+    "extensions/src/core/show-library/compiled-index.test.ts"
+  ],
+  "originalRuntimeImports": 0,
+  "rootReceiptRegistries": "EMPTY",
+  "pinActivation": "NONE",
+  "lockAndPackageFilesUnchanged": true,
+  "uiCheck": "NOT_REPEATED_ROOT_INSTRUCTION_PRIOR_RAW_FAIL_RETAINED",
+  "directFreezeGuard": "PRIOR_RAW_FAIL31_MISMATCHES_EMPTY_RETAINED_NOT_REPEATED",
+  "pnpm": "NOT_INVOKED_IGNORED_LINKS_PRESERVED"
+}

@@ -1,0 +1,312 @@
+{
+  "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+  "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+  "sha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "widgetManifestSha256": "1d3c52b68aec8648c6cfe86e85d1de6544fd08834f276240bf858b41a3c62139",
+  "widgetHtmlSha256": "ceb8fbd063e3a6a1cc3ef8a18cb44a144ef3433054a04fe20fd1013734ee9dac",
+  "sourceHashesUnchanged": true,
+  "diagnosticMode": "preference-race",
+  "productionChanged": false,
+  "customerMountAccessed": false,
+  "oauthSession": {
+    "kind": "actual-issuer-oauth-refresh",
+    "scheduler": "wall-clock",
+    "accessTokenLifetimeSeconds": 300,
+    "refreshCount": 0,
+    "rejected": false,
+    "automaticReauthorization": false,
+    "refreshes": []
+  },
+  "network": "none",
+  "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+  "outboundDenied": [],
+  "engines": [
+    {
+      "name": "chromium",
+      "version": "157.0.4341.60",
+      "outcomes": [
+        {
+          "name": "chromium / tadazz-classic preferences supersede automatic preview",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n",
+          "stack": "AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n\n    at verifyPreferenceRace (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/preference-race.mjs:170:14)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:868:15\n    at async run (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:864:9",
+          "budgetMs": 60000,
+          "ms": 4625
+        }
+      ]
+    }
+  ],
+  "requiredChecks": [
+    "chromium / tadazz-classic native opening, five phases, transitions and closing",
+    "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+    "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+    "chromium / tadazz-classic CSP, native media resources and browser errors",
+    "chromium / razzia-original native opening, five phases, transitions and closing",
+    "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+    "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+    "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / razzia-original native pause, resume, replay and adjacent skip",
+    "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / razzia-original tamper, cancellation and tool-context teardown",
+    "chromium / razzia-original CSP, native media resources and browser errors",
+    "webkit / tadazz-classic native opening, five phases, transitions and closing",
+    "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+    "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+    "webkit / tadazz-classic CSP, native media resources and browser errors",
+    "webkit / razzia-original native opening, five phases, transitions and closing",
+    "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+    "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+    "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / razzia-original native pause, resume, replay and adjacent skip",
+    "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / razzia-original tamper, cancellation and tool-context teardown",
+    "webkit / razzia-original CSP, native media resources and browser errors"
+  ],
+  "failureCount": 1,
+  "rendererBuildId": "0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80",
+  "artifactSha256": "ceb8fbd063e3a6a1cc3ef8a18cb44a144ef3433054a04fe20fd1013734ee9dac",
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic preferences supersede automatic preview",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n\n    at verifyPreferenceRace (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/preference-race.mjs:170:14)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:868:15\n    at async run (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:864:9",
+      "budgetMs": 60000,
+      "ms": 4625
+    }
+  ],
+  "observations": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:12:12.536Z",
+      "reason": "motion preference race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T19:12:12.536Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:12:17.140Z",
+      "reason": "close preference race context",
+      "url": "http://127.0.0.1:52861/host?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "status": "drained",
+      "receipt": {
+        "documentId": "a225d73d-f8d2-449c-8bec-2335d96d7deb",
+        "url": "http://127.0.0.1:52861/host?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:12:17.144Z",
+        "finishedAt": "2026-11-19T19:12:17.145Z",
+        "elapsedMs": 0.8999999761581421,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 2,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:12:13.347Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:12:13.615Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:12:13.708Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:12:14.068Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:12:16.754Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:12:17.135Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:12:17.149Z"
+    }
+  ],
+  "rendererFixtures": [],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "53fe007cca707aa7c4de401b1a3ecd6c8464ff01fe34b5109369d3290a97c5db",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "500d24a2-1ec3-40ce-a190-78d70a8293cf",
+        "data": {
+          "draftId": "agLdNw5bNDUYzNOqXXjMc7Wj8JzkOozF",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "09323e58ab25d3c0a7b132beb9d23f3bea6f252fd33b00a7fc7fb58b102d54f0",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "5c8d5c08-25c0-42f9-935c-d26385e20fe5",
+        "data": {
+          "draftId": "agLdNw5bNDUYzNOqXXjMc7Wj8JzkOozF",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "063bc7b35aa4fa8c71bd5ed971eb0c9e5bb611a44b9a9d05581c0e24ea9a0449"
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    }
+  ],
+  "requestFailures": [],
+  "pageErrorEvents": [],
+  "qaRequestEvents": [
+    {
+      "at": "2026-11-19T19:12:13.349Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "chromium / tadazz-classic preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:52861/host?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "url": "http://127.0.0.1:52861/qa/initial?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:12:13.626Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:12:13.728Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "chromium / tadazz-classic preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:52861/host?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "url": "http://127.0.0.1:52861/qa/call?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:12:14.076Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:12:16.756Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:52861/host?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "url": "http://127.0.0.1:52861/qa/call?scenario=8AzLm2Cjfo9h5DjUOCcHTzzZ",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:12:17.141Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "requests": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    }
+  ]
+}

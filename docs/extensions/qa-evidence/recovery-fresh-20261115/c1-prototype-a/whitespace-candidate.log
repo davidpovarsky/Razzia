@@ -1,0 +1,74 @@
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/format-candidate.exit:1: trailing whitespace.
++0
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/format.exit:1: trailing whitespace.
++0
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/format.log:1: trailing whitespace.
++Checking formatting...
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/format.log:2: trailing whitespace.
++All matched files use Prettier code style!
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.exit:1: trailing whitespace.
++1
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:1: trailing whitespace.
++file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/qa/tds-boundary.mjs:78
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:2: trailing whitespace.
++    throw new Error(JSON.stringify({ denied, mismatches }))
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:3: trailing whitespace.
++          ^
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:4: trailing whitespace.
++
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:5: trailing whitespace.
++Error: {"denied":[],"mismatches":["packages/socket/src/api/index.ts","packages/socket/src/index.ts","packages/socket/src/services/config.ts"]}
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:6: trailing whitespace.
++    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/qa/tds-boundary.mjs:78:11
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:7: trailing whitespace.
++    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:8: trailing whitespace.
++    at async node:internal/modules/esm/loader:647:26
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:9: trailing whitespace.
++    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:10: trailing whitespace.
++
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze-candidate.log:11: trailing whitespace.
++Node.js v24.22.1
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.exit:1: trailing whitespace.
++1
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:1: trailing whitespace.
++file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/qa/tds-boundary.mjs:78
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:2: trailing whitespace.
++    throw new Error(JSON.stringify({ denied, mismatches }))
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:3: trailing whitespace.
++          ^
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:4: trailing whitespace.
++
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:5: trailing whitespace.
++Error: {"denied":[],"mismatches":["packages/socket/src/api/index.ts","packages/socket/src/index.ts","packages/socket/src/services/config.ts"]}
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:6: trailing whitespace.
++    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/qa/tds-boundary.mjs:78:11
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:7: trailing whitespace.
++    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:8: trailing whitespace.
++    at async node:internal/modules/esm/loader:647:26
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:9: trailing whitespace.
++    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:10: trailing whitespace.
++
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/freeze.log:11: trailing whitespace.
++Node.js v24.22.1
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/source-audit.exit:1: trailing whitespace.
++0
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types-candidate.exit:1: trailing whitespace.
++0
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types-final.exit:1: trailing whitespace.
++0
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types.exit:1: trailing whitespace.
++1
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types.log:1: trailing whitespace.
++extensions/src/server/storage/creation-child.ts(83,3): error TS2322: Type '(directory: any, options: any) => void' is not assignable to type '(path: PathLike) => void'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types.log:2: trailing whitespace.
++  Target signature provides too few arguments. Expected 2 or more, but got 1.
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types.log:3: trailing whitespace.
++extensions/src/server/storage/creation-child.ts(83,19): error TS7006: Parameter 'directory' implicitly has an 'any' type.
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types.log:4: trailing whitespace.
++extensions/src/server/storage/creation-child.ts(83,30): error TS7006: Parameter 'options' implicitly has an 'any' type.
+docs/extensions/qa-evidence/recovery-fresh-20261115/c1-prototype-a/types.log:5: trailing whitespace.
++extensions/src/server/storage/creation-child.ts(89,32): error TS2554: Expected 1 arguments, but got 2.

@@ -1,0 +1,23 @@
+{
+  "name": "phone-operation-3a38a47-attempt01",
+  "id": "d25530cc3024bcfc9a971791af2b344ca0b4e7302719ce6cdd2acd2258916451",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T21:50:04.895410073Z",
+    "FinishedAt": "2026-11-15T21:51:14.622533177Z"
+  },
+  "size_rw": 32768,
+  "memory_bytes": 1073741824,
+  "nano_cpus": 250000000,
+  "network": "none",
+  "readonly_rootfs": true
+}

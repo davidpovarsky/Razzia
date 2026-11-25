@@ -1,0 +1,145 @@
+{
+  "kind": "supplementary-existing-host-controls-diagnostic",
+  "releaseQualification": false,
+  "qaSourceHashes": {
+    "browser-host.ts": "314047a5ff1cba6b238931653f9d0381b7698ea5a309b0bd989e83c0248a74b9",
+    "workspace-controls.mjs": "f813ba08bf45e874c18ae37ff680b8493eff26e765442e1f8ca470b4671009fe",
+    "browser-verify.mjs": "cb4658c74f38071637f13340be6845565f20c1a82843ef84eb65f8a98fea8f8f",
+    "host-controls.mjs": "f41c151bb028fa937d563239ca84beee80849e7f7c1002e5d9ae87f754677deb",
+    "layout-diagnostic.mjs": "78e666315a3646eb1e713b47a7fd7573f072b72453979fb0bbca2d2a0f1eb480"
+  },
+  "exit": 0,
+  "seconds": 27.28,
+  "qaSourcesUnchanged": true,
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic synthetic host UI controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 4786
+    }
+  ],
+  "errors": [],
+  "lifecycle": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T03:20:34.752Z",
+      "reason": "navigate host",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T03:20:34.752Z",
+      "receipt": {}
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T03:20:38.122Z",
+      "reason": "unsupported host fixture",
+      "url": "http://127.0.0.1:51925/host?scenario=3b1EQpJ4XPUoAD5YXkc5pUMd",
+      "status": "drained",
+      "finishedAt": "2026-11-19T03:20:38.126Z",
+      "receipt": {
+        "documentId": "7a00225f-6272-41da-bdc7-231fa4a58dc6",
+        "url": "http://127.0.0.1:51925/host?scenario=3b1EQpJ4XPUoAD5YXkc5pUMd",
+        "status": "drained",
+        "startedAt": "2026-11-19T03:20:38.124Z",
+        "finishedAt": "2026-11-19T03:20:38.124Z",
+        "elapsedMs": 0.5,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 7,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "errors": []
+      }
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T03:20:38.836Z",
+      "reason": "restore supported host",
+      "url": "http://127.0.0.1:51925/host?scenario=3b1EQpJ4XPUoAD5YXkc5pUMd&unsupported=1",
+      "status": "drained",
+      "finishedAt": "2026-11-19T03:20:38.840Z",
+      "receipt": {
+        "documentId": "d155185b-e507-40af-99b6-d7a5c2863c1d",
+        "url": "http://127.0.0.1:51925/host?scenario=3b1EQpJ4XPUoAD5YXkc5pUMd&unsupported=1",
+        "status": "drained",
+        "startedAt": "2026-11-19T03:20:38.838Z",
+        "finishedAt": "2026-11-19T03:20:38.838Z",
+        "elapsedMs": 0.19999998807907104,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 0,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "errors": []
+      }
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T03:20:39.533Z",
+      "reason": "close context",
+      "url": "http://127.0.0.1:51925/host?scenario=3b1EQpJ4XPUoAD5YXkc5pUMd",
+      "status": "drained",
+      "finishedAt": "2026-11-19T03:20:39.847Z",
+      "receipt": {
+        "documentId": "dfc32212-85ac-4f3d-81d8-7624f9f7220f",
+        "url": "http://127.0.0.1:51925/host?scenario=3b1EQpJ4XPUoAD5YXkc5pUMd",
+        "status": "drained",
+        "startedAt": "2026-11-19T03:20:39.536Z",
+        "finishedAt": "2026-11-19T03:20:39.846Z",
+        "elapsedMs": 309.5,
+        "initial": {
+          "http": 1,
+          "handlers": 1,
+          "initialization": 0,
+          "replies": 1,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 1,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "errors": []
+      }
+    }
+  ],
+  "stderrTail": "responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n"
+}

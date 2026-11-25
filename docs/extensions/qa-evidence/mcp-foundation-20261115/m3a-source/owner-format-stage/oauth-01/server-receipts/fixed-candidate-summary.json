@@ -1,0 +1,12 @@
+{
+  "phases": {
+    "06-fixed-format": 0,
+    "07-fixed-typecheck": 0,
+    "08-fixed-first-party-oauth": 1
+  },
+  "sourceInputs": 170,
+  "manifestSha256": "b23d05a51a28d2b939f0ba2799684364b28e860aa6786f6386d322f8b7850671",
+  "originalAttemptPreserved": true,
+  "actualCustomerOrHostAccount": false,
+  "dependencyInstallRepeated": false
+}

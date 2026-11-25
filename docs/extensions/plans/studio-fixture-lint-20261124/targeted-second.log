@@ -1,0 +1,12 @@
+
+  x typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy.
+    ,-[docs/extensions/plans/studio-recovery-20261124/browser-fixture.tsx:70:11]
+ 69 | 
+ 70 |       if (!start) {throw new Error("The browser fixture requires its start cue")}
+    :           ^^^^^^
+ 71 | 
+    `----
+  help: The checked value has type `{ source: "default" | "media"; url?: string | undefined; volume: number; enabled: boolean; loop: boolean; }`.
+
+Found 0 warnings and 1 error.
+Finished in 1.7s on 3 files with 233 rules using 2 threads.

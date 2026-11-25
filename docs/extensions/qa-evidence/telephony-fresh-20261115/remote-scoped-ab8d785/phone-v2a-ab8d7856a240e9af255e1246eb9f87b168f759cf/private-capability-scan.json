@@ -1,0 +1,10 @@
+{
+  "status": "NO_RAW_CAPABILITIES_IN_PUBLIC_EVIDENCE_OR_SERVER_DB",
+  "private_journals": 3,
+  "capabilities_checked": 3,
+  "evidence_files": 8,
+  "database_files": 3,
+  "fixture_filesystem_type": 16914836,
+  "expected_tmpfs_type": 16914836,
+  "real_gateway_or_auth_proof": false
+}

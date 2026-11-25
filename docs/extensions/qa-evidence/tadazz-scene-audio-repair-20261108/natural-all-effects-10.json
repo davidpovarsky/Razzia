@@ -1,0 +1,119 @@
+{
+  "passed": true,
+  "questions": 10,
+  "strict": true,
+  "mixedNaturalManualEnd": false,
+  "rows": [
+    {
+      "question": 1,
+      "timerPlaying": true,
+      "timerSamples": 242,
+      "resultsSamples": 75,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 2,
+      "timerPlaying": true,
+      "timerSamples": 242,
+      "resultsSamples": 73,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 3,
+      "timerPlaying": true,
+      "timerSamples": 243,
+      "resultsSamples": 75,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 4,
+      "timerPlaying": true,
+      "timerSamples": 244,
+      "resultsSamples": 73,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 5,
+      "timerPlaying": true,
+      "timerSamples": 243,
+      "resultsSamples": 75,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 6,
+      "timerPlaying": true,
+      "timerSamples": 239,
+      "resultsSamples": 74,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 7,
+      "timerPlaying": true,
+      "timerSamples": 243,
+      "resultsSamples": 72,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 8,
+      "timerPlaying": true,
+      "timerSamples": 243,
+      "resultsSamples": 74,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 9,
+      "timerPlaying": true,
+      "timerSamples": 244,
+      "resultsSamples": 72,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    },
+    {
+      "question": 10,
+      "timerPlaying": true,
+      "timerSamples": 243,
+      "resultsSamples": 73,
+      "effectStarts": {
+        "timer-ended": 0,
+        "survey-reveal": 1,
+        "top-pick-reveal": 1
+      }
+    }
+  ],
+  "pageErrors": []
+}

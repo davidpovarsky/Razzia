@@ -1,0 +1,7 @@
+unit=0
+types=0
+browser=0
+editor=0
+freeze=0
+design=0
+registry=0

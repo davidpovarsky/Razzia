@@ -1,0 +1,25 @@
+{
+  "productionChanged": false,
+  "qaImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "checks": [
+    {
+      "label": "artwork",
+      "exitCode": 0,
+      "seconds": 7.47,
+      "stdout": "{\"ok\":true,\"count\":16,\"bytes\":9259534,\"inventory\":\"extensions/src/core/show-themes/original-theme-assets.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "label": "audio",
+      "exitCode": 0,
+      "seconds": 84.14,
+      "stdout": "{\"family\": \"royal-quiz\", \"audioFiles\": 12}\n{\"family\": \"neon-arcade\", \"audioFiles\": 12}\n{\"family\": \"retro-tv\", \"audioFiles\": 12}\n{\"family\": \"magic-storybook\", \"audioFiles\": 12}\n{\"family\": \"crystal-future\", \"audioFiles\": 12}\n{\"family\": \"carnival-pop\", \"audioFiles\": 12}\n{\"family\": \"sports-arena\", \"audioFiles\": 12}\n{\"family\": \"mystery-noir\", \"audioFiles\": 12}\n",
+      "stderr": ""
+    }
+  ],
+  "archive": {
+    "path": "/home/ubuntu/tadazz-original-themes-assets-20261122/generated-assets.tar.gz",
+    "bytes": 54177238,
+    "sha256": "086a9fb5146c00005001433c582be32312b940f33ac49c9277307ea19561861e"
+  }
+}

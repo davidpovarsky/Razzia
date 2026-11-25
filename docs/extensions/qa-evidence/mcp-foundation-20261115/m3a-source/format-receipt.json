@@ -1,0 +1,24 @@
+{
+  "kind": "SOURCE_FORMAT_ONLY_NO_APPLICATION_IMPORT_OR_FUNCTIONAL_CHECK",
+  "files": [
+    "extensions/src/mcp-app/package.json",
+    "extensions/src/mcp-app/tsconfig.json",
+    "extensions/src/mcp-app/first-party/bindings.ts",
+    "extensions/src/mcp-app/first-party/http.ts",
+    "extensions/src/mcp-app/first-party/index.ts",
+    "extensions/src/mcp-app/first-party/ingress.ts",
+    "extensions/src/mcp-app/first-party/owner.ts",
+    "extensions/src/mcp-app/first-party/README.md",
+    "extensions/src/mcp-app/first-party/schema.ts",
+    "extensions/src/mcp-app/first-party/store.ts",
+    "extensions/src/mcp-app/tests/first-party/auth.nodecheck.ts",
+    "extensions/src/mcp-app/tests/first-party/filesystem.nodecheck.ts",
+    "extensions/src/mcp-app/tests/first-party/fixtures.ts",
+    "extensions/src/mcp-app/tests/first-party/hot-journal-worker.mjs",
+    "extensions/src/mcp-app/tests/first-party/http.nodecheck.ts",
+    "extensions/src/mcp-app/tests/first-party/store.nodecheck.ts"
+  ],
+  "formatter": "3.9.10",
+  "dependencyUse": "Read-only installed formatter and plugin; no application source alias",
+  "status": "FORMATTED"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "ACCEPTED_FOR_BOUNDED_RETRY",
+  "reviewer": "/root",
+  "helperSha256": "8eb521e3178599246acaf6927735a61e458bc092ea4fcab10b82b8ec1b43f384",
+  "fullDiffReviewed": true,
+  "sourceChanged": false,
+  "anonymousStatelessPlayerBootstrapAccepted": true,
+  "pageErrorsStillFatal": true,
+  "onlyExactOptionalBranding404Classified": true,
+  "originalFailuresPreserved": true,
+  "policyChecksReviewed": 31
+}

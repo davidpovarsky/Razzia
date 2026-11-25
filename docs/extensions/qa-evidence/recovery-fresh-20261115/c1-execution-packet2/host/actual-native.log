@@ -1,0 +1,316 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work[39m
+
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22muses the actual validator, one preparer and independent random8 native basename without opaque save[33m 404[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22mkeeps idless legacy bytes unchanged during pure preparation and rejects missing enabled owner before allocation[32m 5[2mms[22m[39m
+[90mstdout[2m | packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22m[2mC1 actual native creation composition[2m > [22m[2muses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change
+[22m[39mGame cleanup task started
+
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22muses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change[33m 6491[2mms[22m[39m
+[31m   → runtime: failed to create new OS thread (have 4 already; errno=11)
+runtime: may need to increase max user processes (ulimit -u)
+fatal error: newosproc
+
+runtime stack:
+runtime.throw({0x5b1c1b?, 0xffffd8f47490?})
+	runtime/panic.go:1229 +0x38 fp=0xffffd8f47460 sp=0xffffd8f47430 pc=0x90158
+runtime.newosproc(0x7a9c7fec1008)
+	runtime/os_linux.go:199 +0x130 fp=0xffffd8f474d0 sp=0xffffd8f47460 pc=0x55cd0
+runtime.newm1(0x7a9c7fec1008)
+	runtime/proc.go:2927 +0xa0 fp=0xffffd8f47510 sp=0xffffd8f474d0 pc=0x60690
+runtime.newm(0xffffd8f47578?, 0x7a9c7feaa008, 0xffffd8f47578?)
+	runtime/proc.go:2902 +0x128 fp=0xffffd8f47540 sp=0xffffd8f47510 pc=0x60588
+runtime.startm(0x7a9c7feaa008?, 0x0, 0x0)
+	runtime/proc.go:3096 +0x128 fp=0xffffd8f47590 sp=0xffffd8f47540 pc=0x60b48
+runtime.handoffp(0xffffd8f47678?)
+	runtime/proc.go:3137 +0x3f0 fp=0xffffd8f475c0 sp=0xffffd8f47590 pc=0x610d0
+runtime.stoplockedm()
+	runtime/proc.go:3259 +0x44 fp=0xffffd8f47620 sp=0xffffd8f475c0 pc=0x61134
+runtime.schedule()
+	runtime/proc.go:4143 +0x34 fp=0xffffd8f47660 sp=0xffffd8f47620 pc=0x63974
+runtime.park_m(0x7a9c7fe761e0)
+	runtime/proc.go:4304 +0x244 fp=0xffffd8f476c0 sp=0xffffd8f47660 pc=0x63e54
+runtime.mcall()
+	runtime/asm_arm64.s:339 +0x54 fp=0xffffd8f476d0 sp=0xffffd8f476c0 pc=0x954f4
+
+goroutine 1 gp=0x7a9c7fe761e0 m=nil [runnable, locked to thread]:
+runtime.gopark(0x80010100000000?, 0x0?, 0x8?, 0xe1?, 0xec34d3ba7880?)
+	runtime/proc.go:462 +0xbc fp=0x7a9c7febc650 sp=0x7a9c7febc630 pc=0x9026c
+runtime.chanrecv(0x7a9c7fedc000, 0x0, 0x1)
+	runtime/chan.go:667 +0x470 fp=0x7a9c7febc6d0 sp=0x7a9c7febc650 pc=0x253f0
+runtime.chanrecv1(0x0?, 0x2?)
+	runtime/chan.go:509 +0x14 fp=0x7a9c7febc700 sp=0x7a9c7febc6d0 pc=0x24f44
+runtime.gcenable()
+	runtime/mgc.go:216 +0xb8 fp=0x7a9c7febc730 sp=0x7a9c7febc700 pc=0x36ab8
+runtime.main()
+	runtime/proc.go:213 +0x15c fp=0x7a9c7febc7d0 sp=0x7a9c7febc730 pc=0x5b93c
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febc7d0 sp=0x7a9c7febc7d0 pc=0x97574
+
+goroutine 2 gp=0x7a9c7fe76780 m=nil [force gc (idle)]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	runtime/proc.go:462 +0xbc fp=0x7a9c7febcf90 sp=0x7a9c7febcf70 pc=0x9026c
+runtime.goparkunlock(...)
+	runtime/proc.go:468
+runtime.forcegchelper()
+	runtime/proc.go:375 +0xb4 fp=0x7a9c7febcfd0 sp=0x7a9c7febcf90 pc=0x5bdb4
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febcfd0 sp=0x7a9c7febcfd0 pc=0x97574
+created by runtime.init.7 in goroutine 1
+	runtime/proc.go:363 +0x24
+
+goroutine 3 gp=0x7a9c7fe76d20 m=nil [GC sweep wait]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	runtime/proc.go:462 +0xbc fp=0x7a9c7febd770 sp=0x7a9c7febd750 pc=0x9026c
+runtime.goparkunlock(...)
+	runtime/proc.go:468
+runtime.bgsweep(0x7a9c7fedc000)
+	runtime/mgcsweep.go:279 +0x9c fp=0x7a9c7febd7b0 sp=0x7a9c7febd770 pc=0x4555c
+runtime.gcenable.gowrap1()
+	runtime/mgc.go:214 +0x20 fp=0x7a9c7febd7d0 sp=0x7a9c7febd7b0 pc=0x36b50
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febd7d0 sp=0x7a9c7febd7d0 pc=0x97574
+created by runtime.gcenable in goroutine 1
+	runtime/mgc.go:214 +0x6c
+
+goroutine 4 gp=0x7a9c7fe76f00 m=nil [runnable]:
+runtime.gcenable.gowrap2()
+	runtime/mgc.go:215 fp=0x7a9c7febdfd0 sp=0x7a9c7febdfd0 pc=0x36af0
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febdfd0 sp=0x7a9c7febdfd0 pc=0x97574
+created by runtime.gcenable in goroutine 1
+	runtime/mgc.go:215 +0xac
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: The service was stopped
+    at /work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1001:38
+    at responseCallbacks.<computed> (/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:886:9)
+    at Socket.afterClose (/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:877:28)
+    at Socket.emit (node:events:526:24)
+    at endReadableNT (node:internal/streams/readable:1783:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  name: 'TransformError'
+}
+
+Node.js v24.22.2
+: expected null to be 'SIGKILL' // Object.is equality[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22mkeeps actual HTTP create/import failures private before durable intent[33m 331[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22mretains explicit accounts-off legacy import with no sidecar publication[32m 278[2mms[22m[39m
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-public SIGKILL and two fresh startup replays[33m 920[2mms[22m[39m
+[31m   → ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-GRPMCv/.c1-interrupted.json'[39m
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native after-sidecar SIGKILL and two fresh startup replays[33m 907[2mms[22m[39m
+[31m   → ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-Yxvkp3/.c1-interrupted.json'[39m
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-id-return SIGKILL and two fresh startup replays[33m 895[2mms[22m[39m
+[31m   → ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-N56Jem/.c1-interrupted.json'[39m
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native committed-visible SIGKILL and two fresh startup replays[33m 902[2mms[22m[39m
+[31m   → ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-9rbXTW/.c1-interrupted.json'[39m
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native private-cleanup SIGKILL and two fresh startup replays[33m 1086[2mms[22m[39m
+[31m   → ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-cq19KY/.c1-interrupted.json'[39m
+ [31m×[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-slot-removal SIGKILL and two fresh startup replays[33m 924[2mms[22m[39m
+[31m   → ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-RSc3iL/.c1-interrupted.json'[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 7 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22muses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change
+[31m[1mAssertionError[22m: runtime: failed to create new OS thread (have 4 already; errno=11)
+runtime: may need to increase max user processes (ulimit -u)
+fatal error: newosproc
+
+runtime stack:
+runtime.throw({0x5b1c1b?, 0xffffd8f47490?})
+	runtime/panic.go:1229 +0x38 fp=0xffffd8f47460 sp=0xffffd8f47430 pc=0x90158
+runtime.newosproc(0x7a9c7fec1008)
+	runtime/os_linux.go:199 +0x130 fp=0xffffd8f474d0 sp=0xffffd8f47460 pc=0x55cd0
+runtime.newm1(0x7a9c7fec1008)
+	runtime/proc.go:2927 +0xa0 fp=0xffffd8f47510 sp=0xffffd8f474d0 pc=0x60690
+runtime.newm(0xffffd8f47578?, 0x7a9c7feaa008, 0xffffd8f47578?)
+	runtime/proc.go:2902 +0x128 fp=0xffffd8f47540 sp=0xffffd8f47510 pc=0x60588
+runtime.startm(0x7a9c7feaa008?, 0x0, 0x0)
+	runtime/proc.go:3096 +0x128 fp=0xffffd8f47590 sp=0xffffd8f47540 pc=0x60b48
+runtime.handoffp(0xffffd8f47678?)
+	runtime/proc.go:3137 +0x3f0 fp=0xffffd8f475c0 sp=0xffffd8f47590 pc=0x610d0
+runtime.stoplockedm()
+	runtime/proc.go:3259 +0x44 fp=0xffffd8f47620 sp=0xffffd8f475c0 pc=0x61134
+runtime.schedule()
+	runtime/proc.go:4143 +0x34 fp=0xffffd8f47660 sp=0xffffd8f47620 pc=0x63974
+runtime.park_m(0x7a9c7fe761e0)
+	runtime/proc.go:4304 +0x244 fp=0xffffd8f476c0 sp=0xffffd8f47660 pc=0x63e54
+runtime.mcall()
+	runtime/asm_arm64.s:339 +0x54 fp=0xffffd8f476d0 sp=0xffffd8f476c0 pc=0x954f4
+
+goroutine 1 gp=0x7a9c7fe761e0 m=nil [runnable, locked to thread]:
+runtime.gopark(0x80010100000000?, 0x0?, 0x8?, 0xe1?, 0xec34d3ba7880?)
+	runtime/proc.go:462 +0xbc fp=0x7a9c7febc650 sp=0x7a9c7febc630 pc=0x9026c
+runtime.chanrecv(0x7a9c7fedc000, 0x0, 0x1)
+	runtime/chan.go:667 +0x470 fp=0x7a9c7febc6d0 sp=0x7a9c7febc650 pc=0x253f0
+runtime.chanrecv1(0x0?, 0x2?)
+	runtime/chan.go:509 +0x14 fp=0x7a9c7febc700 sp=0x7a9c7febc6d0 pc=0x24f44
+runtime.gcenable()
+	runtime/mgc.go:216 +0xb8 fp=0x7a9c7febc730 sp=0x7a9c7febc700 pc=0x36ab8
+runtime.main()
+	runtime/proc.go:213 +0x15c fp=0x7a9c7febc7d0 sp=0x7a9c7febc730 pc=0x5b93c
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febc7d0 sp=0x7a9c7febc7d0 pc=0x97574
+
+goroutine 2 gp=0x7a9c7fe76780 m=nil [force gc (idle)]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	runtime/proc.go:462 +0xbc fp=0x7a9c7febcf90 sp=0x7a9c7febcf70 pc=0x9026c
+runtime.goparkunlock(...)
+	runtime/proc.go:468
+runtime.forcegchelper()
+	runtime/proc.go:375 +0xb4 fp=0x7a9c7febcfd0 sp=0x7a9c7febcf90 pc=0x5bdb4
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febcfd0 sp=0x7a9c7febcfd0 pc=0x97574
+created by runtime.init.7 in goroutine 1
+	runtime/proc.go:363 +0x24
+
+goroutine 3 gp=0x7a9c7fe76d20 m=nil [GC sweep wait]:
+runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+	runtime/proc.go:462 +0xbc fp=0x7a9c7febd770 sp=0x7a9c7febd750 pc=0x9026c
+runtime.goparkunlock(...)
+	runtime/proc.go:468
+runtime.bgsweep(0x7a9c7fedc000)
+	runtime/mgcsweep.go:279 +0x9c fp=0x7a9c7febd7b0 sp=0x7a9c7febd770 pc=0x4555c
+runtime.gcenable.gowrap1()
+	runtime/mgc.go:214 +0x20 fp=0x7a9c7febd7d0 sp=0x7a9c7febd7b0 pc=0x36b50
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febd7d0 sp=0x7a9c7febd7d0 pc=0x97574
+created by runtime.gcenable in goroutine 1
+	runtime/mgc.go:214 +0x6c
+
+goroutine 4 gp=0x7a9c7fe76f00 m=nil [runnable]:
+runtime.gcenable.gowrap2()
+	runtime/mgc.go:215 fp=0x7a9c7febdfd0 sp=0x7a9c7febdfd0 pc=0x36af0
+runtime.goexit({})
+	runtime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febdfd0 sp=0x7a9c7febdfd0 pc=0x97574
+created by runtime.gcenable in goroutine 1
+	runtime/mgc.go:215 +0xac
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: The service was stopped
+    at /work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1001:38
+    at responseCallbacks.<computed> (/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:886:9)
+    at Socket.afterClose (/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:877:28)
+    at Socket.emit (node:events:526:24)
+    at endReadableNT (node:internal/streams/readable:1783:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  name: 'TransformError'
+}
+
+Node.js v24.22.2
+: expected null to be 'SIGKILL' // Object.is equality[39m
+
+[32m- Expected:[39m
+"SIGKILL"
+
+[31m+ Received:[39m
+null
+
+[90m [2m❯[22m node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:[2m1001:38[22m[39m
+[90m [2m❯[22m responseCallbacks.<computed> node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:[2m886:9[22m[39m
+[90m [2m❯[22m Socket.afterClose node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:[2m877:28[22m[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m162:54[22m[39m
+    [90m160|[39m         owners[0],
+    [90m161|[39m       )
+    [90m162|[39m       expect(interrupted.signal, interrupted.stderr).toBe("SIGKILL")
+    [90m   |[39m                                                      [31m^[39m
+    [90m163|[39m       expect(interrupted.timedOut).toBe(false)
+    [90m164|[39m       process.env.TADAZZ_ACCOUNTS_ENABLED = "false"
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-public SIGKILL and two fresh startup replays
+[31m[1mError[22m: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-GRPMCv/.c1-interrupted.json'[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m232:16[22m[39m
+    [90m230|[39m           )
+    [90m231|[39m           const checkpoint = JSON.parse(
+    [90m232|[39m             fs.readFileSync(
+    [90m   |[39m                [31m^[39m
+    [90m233|[39m               path.join(fixture.root, ".c1-interrupted.json"),
+    [90m234|[39m               "utf8",
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/scratch/c1/tadazz-c1-native-synthetic-GRPMCv/.c1-interrupted.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native after-sidecar SIGKILL and two fresh startup replays
+[31m[1mError[22m: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-Yxvkp3/.c1-interrupted.json'[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m232:16[22m[39m
+    [90m230|[39m           )
+    [90m231|[39m           const checkpoint = JSON.parse(
+    [90m232|[39m             fs.readFileSync(
+    [90m   |[39m                [31m^[39m
+    [90m233|[39m               path.join(fixture.root, ".c1-interrupted.json"),
+    [90m234|[39m               "utf8",
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/scratch/c1/tadazz-c1-native-synthetic-Yxvkp3/.c1-interrupted.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-id-return SIGKILL and two fresh startup replays
+[31m[1mError[22m: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-N56Jem/.c1-interrupted.json'[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m232:16[22m[39m
+    [90m230|[39m           )
+    [90m231|[39m           const checkpoint = JSON.parse(
+    [90m232|[39m             fs.readFileSync(
+    [90m   |[39m                [31m^[39m
+    [90m233|[39m               path.join(fixture.root, ".c1-interrupted.json"),
+    [90m234|[39m               "utf8",
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/scratch/c1/tadazz-c1-native-synthetic-N56Jem/.c1-interrupted.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native committed-visible SIGKILL and two fresh startup replays
+[31m[1mError[22m: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-9rbXTW/.c1-interrupted.json'[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m232:16[22m[39m
+    [90m230|[39m           )
+    [90m231|[39m           const checkpoint = JSON.parse(
+    [90m232|[39m             fs.readFileSync(
+    [90m   |[39m                [31m^[39m
+    [90m233|[39m               path.join(fixture.root, ".c1-interrupted.json"),
+    [90m234|[39m               "utf8",
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/scratch/c1/tadazz-c1-native-synthetic-9rbXTW/.c1-interrupted.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native private-cleanup SIGKILL and two fresh startup replays
+[31m[1mError[22m: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-cq19KY/.c1-interrupted.json'[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m232:16[22m[39m
+    [90m230|[39m           )
+    [90m231|[39m           const checkpoint = JSON.parse(
+    [90m232|[39m             fs.readFileSync(
+    [90m   |[39m                [31m^[39m
+    [90m233|[39m               path.join(fixture.root, ".c1-interrupted.json"),
+    [90m234|[39m               "utf8",
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/scratch/c1/tadazz-c1-native-synthetic-cq19KY/.c1-interrupted.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-slot-removal SIGKILL and two fresh startup replays
+[31m[1mError[22m: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-RSc3iL/.c1-interrupted.json'[39m
+[36m [2m❯[22m packages/socket/src/services/quiz-creation-reservation.test.ts:[2m232:16[22m[39m
+    [90m230|[39m           )
+    [90m231|[39m           const checkpoint = JSON.parse(
+    [90m232|[39m             fs.readFileSync(
+    [90m   |[39m                [31m^[39m
+    [90m233|[39m               path.join(fixture.root, ".c1-interrupted.json"),
+    [90m234|[39m               "utf8",
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -2, code: 'ENOENT', syscall: 'open', path: '/scratch/c1/tadazz-c1-native-synthetic-RSc3iL/.c1-interrupted.json' }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 11:33:56
+[2m   Duration [22m 19.18s[2m (tests 71%, transform 22%, import 7%)[22m
+
+JSON report written to /qa/results/actual-native.results.json

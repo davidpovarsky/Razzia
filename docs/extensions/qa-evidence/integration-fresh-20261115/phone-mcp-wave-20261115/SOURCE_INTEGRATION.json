@@ -1,0 +1,1645 @@
+{
+  "C": "227ec0d1e73856397eaeb40e7549d97462cdd436",
+  "F": "1ac016e5deb8f695b78ceb95f7309b42e956879d",
+  "changes": [
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/FORMATTER_SUCCESSOR_20261115.md",
+      "beforeSha256": null,
+      "afterSha256": "4f3bacaab6d98cd6e0a573e07259e74ac99bef0057b165bd763d5d711636707c"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/NATIVE_ADOPTION_PRE_EDIT_WAVE.md",
+      "beforeSha256": null,
+      "afterSha256": "eb737af0c574669462cbc4546250d19d1034299735aa9989ab6254e46dddb780"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/WAVE_C_HANDOFF_20261115.md",
+      "beforeSha256": null,
+      "afterSha256": "f6c131f1d14a2cd0472137e8e4ef2a773088fc974121f6fd3933704c52eeb0ec"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/authority-first-batch.node.ts",
+      "beforeSha256": null,
+      "afterSha256": "b962adeb91687673115a4c66f2d054929ee0f1c1feb60096ed3ff47bfdf97d84"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/package.json",
+      "beforeSha256": null,
+      "afterSha256": "a90fc33418afa2b9cbf4768524b021135b965ecdf993457505bfae3ac44a8428"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/prepare-overlay.mjs",
+      "beforeSha256": null,
+      "afterSha256": "07a37b4d9a9ec757f0d2dc9a7db4fd52f7c72cb51a58dd6b0fdcd683898dc2b7"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/revoke-after-sql-wait.child.ts",
+      "beforeSha256": null,
+      "afterSha256": "a6de2f2cd12e280942abb9a21c69ce8d06057ad6ccbe0c78f3d902789beddc83"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/run-first-batch.sh",
+      "beforeSha256": null,
+      "afterSha256": "8fbc3f02f5b42f6812610d1566e573e36956ad599510ea58f7ec2f3bdf745bfa"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/safe-extract.py",
+      "beforeSha256": null,
+      "afterSha256": "7d144aced19491e6ae914700acd961d4f288c8d1f225bb623b54c4b6d77766a6"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/tsconfig.json",
+      "beforeSha256": null,
+      "afterSha256": "c1e3ea2e7425d694c706d134c48f6d7fb97d9fc8311f4ff3f9e553b79c9b218e"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/typecheck.mjs",
+      "beforeSha256": null,
+      "afterSha256": "ced2bd2914118bd620d3c838b1989bfb9baa7b16dbe0169c2d421894f45bb1fe"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-composed.mjs",
+      "beforeSha256": null,
+      "afterSha256": "389cc20ec31a44074dc0ca60adf671bf28b5bd393da0fe9ef225649b7b7b9379"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-overlay.mjs",
+      "beforeSha256": null,
+      "afterSha256": "9634ba939777b31f0d2ae875cac8e69213ae52c0f5e89004664bc2a4db12b876"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/format-source/format-successor.mjs",
+      "beforeSha256": null,
+      "afterSha256": "f6aaaf91f7e90dd4fd1e928c4b98cf0d60ad2a21447031f38849020e7bbd0fd1"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/format-source/typecheck-local.ps1",
+      "beforeSha256": null,
+      "afterSha256": "ada24455cf3f2f45c727126aca953b4c337354b6ab5e608435f7bafd45f5ce0c"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/affected.tsconfig.json",
+      "beforeSha256": null,
+      "afterSha256": "f1a8c7e39b6fac0b2c9e7b4b3fbdd009ad2c63c1064d53563ce2eceaaf3c4e9c"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/asana-readbacks.json",
+      "beforeSha256": null,
+      "afterSha256": "ed30269a05073d6626c408531f2d4134f0deb575873c1ffbc1d4f4b82eb1cef9"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/prettier-check.log",
+      "beforeSha256": null,
+      "afterSha256": "f20510a9da4717c51c4cffee6d0dd88d6c9a723d0a83711d01216f5b48961283"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/prettier-provisioning-failure.log",
+      "beforeSha256": null,
+      "afterSha256": "004987e1fe605c12f3e723f720d70c0031dfa815d99c257d3ba8a89c11b0800d"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/semantic-format.json",
+      "beforeSha256": null,
+      "afterSha256": "2cc6ab971ef135e0f6ec08bdec40124cf7ddaf9f7db8adc7d6182135df9dc348"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/typecheck-provisioning-failure.json",
+      "beforeSha256": null,
+      "afterSha256": "be7cb634efef40a1195a6e58068ab187a721209c29daf37adbddc7af88f9bc82"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/typecheck-provisioning-failure.log",
+      "beforeSha256": null,
+      "afterSha256": "2a53ddf58ae9f6d5eed2378b93c77de941604bb2cea8e0f20939a3f9d84880c5"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/formatter-successor-20261115/typecheck-result.json",
+      "beforeSha256": null,
+      "afterSha256": "2be39c195b486ebecbec530171f6c097c13dc86b947af0988ea815fbce7c816c"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/accounting.json",
+      "beforeSha256": null,
+      "afterSha256": "87c4a987db5a32eea5165955ac19a21d44c566bde836e29d0c922d416f999453"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/asana-readbacks.json",
+      "beforeSha256": null,
+      "afterSha256": "da28aadb54cf71c9413c85fa0a21c8098ba4ef9d0a3635333b252961a730e1f6"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/authority-observations.json",
+      "beforeSha256": null,
+      "afterSha256": "0f9d79e8bb41c7c5bd71de851d563da80f9c1972bad97913e356fd153d0b22da"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/authority.tap",
+      "beforeSha256": null,
+      "afterSha256": "9cd2d9650953fc7ac67f3e5fe27b6eadf88263f21c92a164c5fc547478d94446"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/base-after.json",
+      "beforeSha256": null,
+      "afterSha256": "8a0ca5b99fb24db3eaa14f2892d25719b146066223addd28636cc56e7728ff92"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/base-before.json",
+      "beforeSha256": null,
+      "afterSha256": "8a0ca5b99fb24db3eaa14f2892d25719b146066223addd28636cc56e7728ff92"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/overlay-after.json",
+      "beforeSha256": null,
+      "afterSha256": "058ebc5657c115d052a442a1043597b2fb090e5cfa0e033b759926f0aa49f785"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/overlay-before.json",
+      "beforeSha256": null,
+      "afterSha256": "058ebc5657c115d052a442a1043597b2fb090e5cfa0e033b759926f0aa49f785"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/run-finished.json",
+      "beforeSha256": null,
+      "afterSha256": "87da64f8ab4822187a3b3f7bb1c7fcc3ccc1fd674e7881325b76b824c91d4cd9"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/run-started.json",
+      "beforeSha256": null,
+      "afterSha256": "545ec7ea469d6b8b4ab1232a0d2aa78af81fc1067b66a364309f3144783e0d30"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/auth/typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "752fa473466bbde39ced8a5241ed39229a7682986267fffbd0bfca72c5ad5b0e"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/baseline/after.json",
+      "beforeSha256": null,
+      "afterSha256": "249ddba78bb0e96a9bcf2bb5ddaf9b038c2191663ccb44a636151f2c2758c20b"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/baseline/authority-observations.json",
+      "beforeSha256": null,
+      "afterSha256": "8ca5ada5875029bfe2904968682d620599c9bec82bd4af52f81f59e684ee3668"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/baseline/baseline.tap",
+      "beforeSha256": null,
+      "afterSha256": "a9e409424fbc2dd6b1985e40be36932589b25895a33722913ecbba12189c0f4e"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/baseline/before.json",
+      "beforeSha256": null,
+      "afterSha256": "249ddba78bb0e96a9bcf2bb5ddaf9b038c2191663ccb44a636151f2c2758c20b"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/baseline/finished.json",
+      "beforeSha256": null,
+      "afterSha256": "d08eeb3360c6e91548b0963b75494d60f9800e0c79c3db9bf8fa34447b25c03e"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/actual-api-observations.json",
+      "beforeSha256": null,
+      "afterSha256": "e82e8faa150ff10196ae12de172107deaef1a935a4c5ed5dc99315906d6bd48d"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/after.json",
+      "beforeSha256": null,
+      "afterSha256": "b0a91497c27c4898b545eae45a5b53cb79e84fa8497cffde98fc71ebbdbe524d"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/before.json",
+      "beforeSha256": null,
+      "afterSha256": "b0a91497c27c4898b545eae45a5b53cb79e84fa8497cffde98fc71ebbdbe524d"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/finished.json",
+      "beforeSha256": null,
+      "afterSha256": "4a3cf9166067df4fe9da74b81cae8c4d505a0aa33e726f9bde506de07513289e"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/legacy18.tap",
+      "beforeSha256": null,
+      "afterSha256": "db95af804d8be8266c1d70674a1be458f935dde68dd69702eaf1512a7a335bd1"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/overlay-after.json",
+      "beforeSha256": null,
+      "afterSha256": "e1d9938cd8d903290fc7e4d791bd420ab61ee78dca01228c3f9434dd7cf30ce3"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/legacy/overlay-before.json",
+      "beforeSha256": null,
+      "afterSha256": "e1d9938cd8d903290fc7e4d791bd420ab61ee78dca01228c3f9434dd7cf30ce3"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/load100/finished.json",
+      "beforeSha256": null,
+      "afterSha256": "ed63139dee28fbc8bfcc57545aefd43bebcdb165bbed72d46364bab50e681149"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/load100/load100.log",
+      "beforeSha256": null,
+      "afterSha256": "537e70cd193ed275e8c745377cc450c006c1e33223496cd5963562a9e41f77fb"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/load100/overlay-after.json",
+      "beforeSha256": null,
+      "afterSha256": "e1d9938cd8d903290fc7e4d791bd420ab61ee78dca01228c3f9434dd7cf30ce3"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/load100/overlay-before.json",
+      "beforeSha256": null,
+      "afterSha256": "e1d9938cd8d903290fc7e4d791bd420ab61ee78dca01228c3f9434dd7cf30ce3"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/load100/source-after.json",
+      "beforeSha256": null,
+      "afterSha256": "b0a91497c27c4898b545eae45a5b53cb79e84fa8497cffde98fc71ebbdbe524d"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/load100/source-before.json",
+      "beforeSha256": null,
+      "afterSha256": "b0a91497c27c4898b545eae45a5b53cb79e84fa8497cffde98fc71ebbdbe524d"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/source-provenance.json",
+      "beforeSha256": null,
+      "afterSha256": "00adfeebabb460f4c211f8eeb8cd141d4387820ad2572c75417b918bf6770d55"
+    },
+    {
+      "owner": "C",
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/wave-C-20261115/terminal-containers.json",
+      "beforeSha256": null,
+      "afterSha256": "99cf06e322d440b085dae0d2c01b6b6086b0e47616e1b2cb18839e6dde3cd6d4"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/index.ts",
+      "beforeSha256": "0a2d299f7d06445236121a31f6ac345afc580c2f308ec0a32299fefaba85bb38",
+      "afterSha256": "641a7c532887fc24989d2fa532c1da3636e5da6a00ed6e26f2a39f21cfd074d0"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "beforeSha256": null,
+      "afterSha256": "22186133c2af777367c37288d33f09acd53531bf54661bfa67d9cfd153cbd5b2"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
+      "beforeSha256": null,
+      "afterSha256": "2d57f8ca1d51c125818b9940e1a78d4028dfb0c79410f4be89c54303fbd422ff"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "beforeSha256": null,
+      "afterSha256": "1705535650977ba5985e975810aff7f4ca82edf45e381b8f70fe4ba22cd24c5d"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "beforeSha256": null,
+      "afterSha256": "58e36ff0d02673fb77456291a813cddfe77db4df1f1fbd8ca02d4d311ec5cc39"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "beforeSha256": null,
+      "afterSha256": "831244cd581a24e78794c60d12839a24e798c5b411f112e43ffaa75b4f95927f"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "beforeSha256": null,
+      "afterSha256": "d7ce6a8f26559598c4625d6a6d192cf2d85abd3c00f75526d89044e124b1b6b0"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "beforeSha256": null,
+      "afterSha256": "b4c1fdd6843d122044ef46a1e192c42bdae79d742b6cbafe342e180537afa088"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/native-adoption.ts",
+      "beforeSha256": null,
+      "afterSha256": "ec98f77fd59bf99be1ec04d602d6e81e71eb0f5e0cd50066aae040b1a68ffbf3"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "beforeSha256": null,
+      "afterSha256": "5430ca64e15c4e01be961a338f75d290fe68cb7a5834048b96abab79045434ec"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "beforeSha256": null,
+      "afterSha256": "bc365f05e6a3e0135322fc357a3c6c338e088c94f3ef9f48a736b1e4aa80239f"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "beforeSha256": null,
+      "afterSha256": "acb3c038caa5b1899020a00fca4f44d1f88344d3f390f330ef4d6ba9aaebaae0"
+    },
+    {
+      "owner": "C",
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "beforeSha256": null,
+      "afterSha256": "7a67361869eb67d4d48438bc441f6af3d2b5418c2e74b728a9ae0434f1d6dc01"
+    },
+    {
+      "owner": "C",
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "beforeSha256": "e25874d6f24a85ac7c2176f8ded0895cd706f266db5c3cf286970fb2d7b1ac37",
+      "afterSha256": "7ea07761f84468820e0eb1679ab0d36601e4fe5671f528ae4190c0c2f14caf1a"
+    },
+    {
+      "owner": "C",
+      "path": "packages/socket/src/api/routes/games.ts",
+      "beforeSha256": "ad8cf13ac31800447a076a2582748eee47cbd756f9b54d0fcc66a9d11b7dae3d",
+      "afterSha256": "eac9cb37379a15c562d89aca4813350f3139aef90dcc6902eb124f06759ef411"
+    },
+    {
+      "owner": "C",
+      "path": "packages/socket/src/services/game/index.ts",
+      "beforeSha256": "81995753aa63ecc4ffb6c3304db8657e2026b860cec2efbbfd01e87c6f93540e",
+      "afterSha256": "ef9f3b5e3c9dd810ea878b25f6eea089d11f8c2b3d0e28a897f82a101164ff07"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/RESULT.md",
+      "beforeSha256": null,
+      "afterSha256": "9c4f3ca38a397b6ca4be57a41cbef8c258ef49f44de5381530ce5ff8a85ded3c"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/activation.json",
+      "beforeSha256": null,
+      "afterSha256": "c14bf022663f8018e96b6d50e8960719035f7064164b3dbc98a3473c779aa687"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/claim-runtime.ps1",
+      "beforeSha256": null,
+      "afterSha256": "f49e590d44b58d838c4df5ed826c9ecb54bf92ee25b2dbfbe06b3e1ef74b501a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/claim.ps1",
+      "beforeSha256": null,
+      "afterSha256": "b719d101cbb25915ee232e9afc6e1c9d35862e0e4804d3d9dc7caaeecfa697ee"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/close-runtime.py",
+      "beforeSha256": null,
+      "afterSha256": "46525f608af661268d2d2a2158501b8a1c56856d2e157daf757d99db3af5b93e"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/collect-successor.py",
+      "beforeSha256": null,
+      "afterSha256": "d7f7d7d7894ebf4da88dab35f744ea4690ebfcd0a9d0f3e9dd23aeb7b1e2b28e"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/consumer.pre-restart.py.disabled",
+      "beforeSha256": null,
+      "afterSha256": "54f4c09860c4d15078c76896e57ed9c896f8ee06d508cef97a09ac5f6fdd89f0"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/consumer.py",
+      "beforeSha256": null,
+      "afterSha256": "11e584e88f35b6ab497318e590cdf133bed52f27dd5be54bce9d4c34348bef9e"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/format-and-compare.mjs",
+      "beforeSha256": null,
+      "afterSha256": "f5932899607153f7b6150afde0a92a7793a46a55f63bf5feba1a2b1acf710b8c"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/launch.py",
+      "beforeSha256": null,
+      "afterSha256": "8d42b609421cbbb2971a7d668b3961e27d7987e908c1532e436fcf5869bb82fe"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/preparation.json",
+      "beforeSha256": null,
+      "afterSha256": "3dc4000ac9cb838659dc256981f0b219ebab245e3e6619421f6171578d744cc3"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/prepare-remote-format.py",
+      "beforeSha256": null,
+      "afterSha256": "c2fd1367645e7c55034735abdf862e3b3fe1b7ec6036c8d7816152b3b9ea7fc2"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/prepare-runtime.py",
+      "beforeSha256": null,
+      "afterSha256": "b23421a6fbc980c1872c56e5eef667ce2185a5cc7dd207512299ee5cca16bb41"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/prepare-successor.py",
+      "beforeSha256": null,
+      "afterSha256": "4e9348399a5526204b1bb59b4da42a91b96565f75ffc537c4a0d9072fd95a0b9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/progress-receipt.json",
+      "beforeSha256": null,
+      "afterSha256": "c2f411c747e3b5f52b732b344a4b7beddcfa3bab7486559e04504c936d0e305f"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/run-accepted-candidate.py",
+      "beforeSha256": null,
+      "afterSha256": "e6bb7ae838378ec655d43658b5038f75cca4822dd86f4ff8efdfd7a00225bb0b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/run-corrected-candidate.py",
+      "beforeSha256": null,
+      "afterSha256": "ae5f10b1fb4b7132a262fbbe2e8d86807e00cb49db08ca37bdf5b4c9ed884cf8"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/run-final-candidate.py",
+      "beforeSha256": null,
+      "afterSha256": "fabea7e063f9c6ca24341bb9d766618ea3c3ee4a36879a0b171b7f3481b02449"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/run-phase.py",
+      "beforeSha256": null,
+      "afterSha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/accepted-candidate-dispatch.json",
+      "beforeSha256": null,
+      "afterSha256": "2899830b6b66cc126b60ff6ea1a27ea662af1bdfd6de47100d22de00a50b2a9f"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/activation.json",
+      "beforeSha256": null,
+      "afterSha256": "99f3f32c21243a9543f47376199bfb7ea714c81f68c117afe6ddc16119715821"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/consumer.py",
+      "beforeSha256": null,
+      "afterSha256": "621080768499f2b982c5110b1dfcc1da9ef9b941ef4dff96910a0a1c1a1bf617"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/corrected-candidate-dispatch.json",
+      "beforeSha256": null,
+      "afterSha256": "4e142d5b6178738e0bf806076a8b2d7fc179aed48012edcc99fe878c5dd12990"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/final-candidate-dispatch.json",
+      "beforeSha256": null,
+      "afterSha256": "57d78933b2cb64d03eebb1348216f42e6fe5f035598ec54415dbf5df5963ebbb"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/format-and-compare.mjs",
+      "beforeSha256": null,
+      "afterSha256": "f5932899607153f7b6150afde0a92a7793a46a55f63bf5feba1a2b1acf710b8c"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/format-remote.mjs",
+      "beforeSha256": null,
+      "afterSha256": "8ee9f26bf29d1a963d26011b6b4a2a47ee4acf10879bb6e1ead1c6aac1ddb8df"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/launch.py",
+      "beforeSha256": null,
+      "afterSha256": "fd21e5231b272176cca50ec03ce490e7e3ceb761a449c26b684080e25261e616"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/remote-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "0e9246c607d94e0aa69f61e8e738e734992d8e71dfd716c5ea8dd9b1fff3925d"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/run-phase.py",
+      "beforeSha256": null,
+      "afterSha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/01-frozen-bootstrap-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "c4232820c762177d3465f43686478b562d0d80d93dcdc01cf91605c0cb5d2b20"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/01-frozen-bootstrap.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/01-frozen-bootstrap.json",
+      "beforeSha256": null,
+      "afterSha256": "cc43a95ba3f66e2760dc16850fe2bb382c5c5db74f41311777f907b378b78ea4"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/01-frozen-bootstrap.log",
+      "beforeSha256": null,
+      "afterSha256": "043bca2650711eae1dcdb6920aac6df7651aef63db923199405f8067936271f8"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/02-semantic-format-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "b82c7274c80db56fdca3b7b86f259e3b0e1f7db3b9e264f93fd6b77f35981c91"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/02-semantic-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/02-semantic-format.json",
+      "beforeSha256": null,
+      "afterSha256": "099f530b3429acf0454eed3edb8ddc13947ef9ed44c9716170515d6dc3011d21"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/02-semantic-format.log",
+      "beforeSha256": null,
+      "afterSha256": "2a88ac6cbc7e1733e902b998a792a669d94ad3439ee4b8b7ab32ec6443323de9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/03-typecheck-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "ad81b8fd5d0e870d37f1bacd40d834673bb2921f3cff5b00c88c3f2d22d175c6"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/03-typecheck.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/03-typecheck.json",
+      "beforeSha256": null,
+      "afterSha256": "2d3d9cda22a55e4c597e12e2a3beb52e4e8b36afc6b3fcb8548b05316ff10d79"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/03-typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "70685b4df7789c854b9e1ceab7d78a6d0f9a0831c11eb0010b7b5fdbe0e50c39"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/06-remote-format-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "7d2a54701534045829a8fcb092500abb3b0930a639a7bd7950ed450854fe1023"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/06-remote-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/06-remote-format.json",
+      "beforeSha256": null,
+      "afterSha256": "e6288d6f00f12e84998a40da63a42de4deaec01f747e7bb36a054582cc597f21"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/06-remote-format.log",
+      "beforeSha256": null,
+      "afterSha256": "2f2a764c2ee59b99f4aefbc972a140d52089d4dc245405e4bc46a8b4c978263b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/07-remote-typecheck-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "ebe9be082bce3981c6ea4fbb0b8096a47db37ab6672cdfd37ab5f05e147e9592"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/07-remote-typecheck.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/07-remote-typecheck.json",
+      "beforeSha256": null,
+      "afterSha256": "b6d142ee772edc1420934f3c84466738f99dc62f0ffcbdef3ca5ccf1d95c9c01"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/07-remote-typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "70685b4df7789c854b9e1ceab7d78a6d0f9a0831c11eb0010b7b5fdbe0e50c39"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/08-remote-sdk-tests-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "646ab0df26c49884cec95c5b8d307415f6beff3e71ce349d837b5a08f608f47c"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/08-remote-sdk-tests.exit",
+      "beforeSha256": null,
+      "afterSha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/08-remote-sdk-tests.json",
+      "beforeSha256": null,
+      "afterSha256": "1968fdb2cd3ffb038afc6f2017373bc901061fa4e4e58c308bbc0b58567a059d"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/08-remote-sdk-tests.log",
+      "beforeSha256": null,
+      "afterSha256": "de29ea70c0267fbef5c35dd28f25b80d646d24fff31452ebc2c8ecdc1001cf12"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/09-final-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/09-final-format.json",
+      "beforeSha256": null,
+      "afterSha256": "073a987f843db8452625824442ee898640516845a7038341964f23a8953955fd"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/09-final-format.log",
+      "beforeSha256": null,
+      "afterSha256": "2f2a764c2ee59b99f4aefbc972a140d52089d4dc245405e4bc46a8b4c978263b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/10-final-typecheck.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/10-final-typecheck.json",
+      "beforeSha256": null,
+      "afterSha256": "cb6927223b1455acced4082433ca35120897834ed5271f51a9bb9dbf1a3a0312"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/10-final-typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "04a56023fb11b9c6d13b934771ec56058bca9563022b555a8db2375634764f43"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/11-final-sdk-tests.exit",
+      "beforeSha256": null,
+      "afterSha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/11-final-sdk-tests.json",
+      "beforeSha256": null,
+      "afterSha256": "60ff4ab1d369f8b30a41cc864516838464229e2f3acb9351b8f6165406855ea5"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/11-final-sdk-tests.log",
+      "beforeSha256": null,
+      "afterSha256": "eae1d629b2c13d882dd8a6a9ea139c80435fd51f36a3160ee914c79653b5985a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/12-corrected-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/12-corrected-format.json",
+      "beforeSha256": null,
+      "afterSha256": "3a35b1ed30a3473670c8c15383edf963deaa9e2a6da09a8f30d83977705418c4"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/12-corrected-format.log",
+      "beforeSha256": null,
+      "afterSha256": "2f2a764c2ee59b99f4aefbc972a140d52089d4dc245405e4bc46a8b4c978263b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/13-corrected-typecheck.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/13-corrected-typecheck.json",
+      "beforeSha256": null,
+      "afterSha256": "1aefabf23902c2aa40280888c4cd788d2aa43c3139f44a565e28481b89da2ce7"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/13-corrected-typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/14-corrected-sdk-tests.exit",
+      "beforeSha256": null,
+      "afterSha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/14-corrected-sdk-tests.json",
+      "beforeSha256": null,
+      "afterSha256": "6c1942fda29dfec0ae17620ff977f64c9963bbd507dcf5ec4b9a48624d863af7"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/14-corrected-sdk-tests.log",
+      "beforeSha256": null,
+      "afterSha256": "3b49a036f8b16a75df75c80d0841c32ad369b79a8173f8ff9cadad80c44fed48"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/15-accepted-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/15-accepted-format.json",
+      "beforeSha256": null,
+      "afterSha256": "a5f69910124376280bd9f6f17391528f71f83ac18859e463b0d4cf0e0d5596c5"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/15-accepted-format.log",
+      "beforeSha256": null,
+      "afterSha256": "2f2a764c2ee59b99f4aefbc972a140d52089d4dc245405e4bc46a8b4c978263b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/16-accepted-typecheck.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/16-accepted-typecheck.json",
+      "beforeSha256": null,
+      "afterSha256": "ff6fa2c227db008c5d864696d5d0b06e3ce075d6c7cf2993d66fb451fd306d06"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/16-accepted-typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/17-accepted-sdk-tests.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/17-accepted-sdk-tests.json",
+      "beforeSha256": null,
+      "afterSha256": "ab1cd0988cf0f38d8ab01010a605bc3bc9a4762f58e1bbaf9876cc22af2fe063"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/17-accepted-sdk-tests.log",
+      "beforeSha256": null,
+      "afterSha256": "188f07114ad85915a96fb18d2619c8bfccaae96dad5c99cf630054538a1f1087"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/accepted-candidate-summary.json",
+      "beforeSha256": null,
+      "afterSha256": "c4c311b9fab6c75e828aa6e6e6616cfaf1c0687f99e31bfd0db4904787ed164b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/accepted-formatted-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "b32bfa99d245f6aab1d9a813882138a235962e81378dda58df1d216b32c4b471"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/accepted-raw-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "6c7e0f9a0882ceaccdaa775a838a928d50a26a551eb50e86670fedc2146f2511"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/accepted-semantic-equivalence.json",
+      "beforeSha256": null,
+      "afterSha256": "ff11af970259b1d532b71a244868fb4d144514648757e1d9339c83378e3989db"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/awaiting-owned-finish.json",
+      "beforeSha256": null,
+      "afterSha256": "01f87da86f534ca8b710ae3ca4488813cd6ef4a830778d5697e93359c8a99eb8"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/cache-after.json",
+      "beforeSha256": null,
+      "afterSha256": "4c055cf8ed9fd67f7c2241b85a0fd0c2e489322dd35090d957c88ec289d59a23"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/cache-before.json",
+      "beforeSha256": null,
+      "afterSha256": "4c055cf8ed9fd67f7c2241b85a0fd0c2e489322dd35090d957c88ec289d59a23"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/cache-materialization.json",
+      "beforeSha256": null,
+      "afterSha256": "611be418a6ead3ed9f36e3e5a5c549150d958e66720a5160966e27aee82b81b9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/cache-pin.json",
+      "beforeSha256": null,
+      "afterSha256": "d26653f7152ebad759e4498f21ec146773cf293669cca11fff8b7d00de67d24b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/corrected-candidate-summary.json",
+      "beforeSha256": null,
+      "afterSha256": "74a557d146d5756438a1be4bdd411b84e2674709526f60c9b8b0a0e18ccc8ec2"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/corrected-formatted-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "7be83819539aed5bacb634a6d1871c36abf37b47cbb2ed4553a3b95a5d971023"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/corrected-raw-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "283fae241364d15e238a943bb20f9dcd9a107ab305c6c995ac2d2ad49fd334e8"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/corrected-semantic-equivalence.json",
+      "beforeSha256": null,
+      "afterSha256": "2a95462d745a2ed914ba839b174240cca52ddbff3eae619e2cac29f3bf79d1a4"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/final-candidate-summary.json",
+      "beforeSha256": null,
+      "afterSha256": "0d4a1ac641620e56ee43090e918365ca4af5d39c38eeffe7ca2fdcd1adff573b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/final-formatted-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "85342e6e460d959b2be5b63a6c63a0ebb9ea2965e7984b7e052760f78bbd8a94"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/final-raw-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "e48c6c44ea95a8f481c2842e733e2a980f563b1f847dae26f2a79dd757e15599"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/final-semantic-equivalence.json",
+      "beforeSha256": null,
+      "afterSha256": "7f2673b0f0caf6599b88afa29da6fc55f7d603235d4b00e80092de2dceb4830f"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/final-source-dependency-check.json",
+      "beforeSha256": null,
+      "afterSha256": "d18fe56a52893a5404342d39b1e358a932cf982a46b229fd94090206546d1b1d"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/first-party34-compat-format-reuse.json",
+      "beforeSha256": null,
+      "afterSha256": "c8d0700621d5c6a55702e20b6129c095db34dbdbde7926a446c82242768491d6"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/format-accepted.mjs",
+      "beforeSha256": null,
+      "afterSha256": "ef30e2e899ef39f02fd86b32e9194d71343908a2342f867ff375d50023faeae9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/format-corrected.mjs",
+      "beforeSha256": null,
+      "afterSha256": "82500436a3f3f9d5b9f03e269174bf11f582c3bc1b6115f8b71a98d17921567a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/format-final.mjs",
+      "beforeSha256": null,
+      "afterSha256": "d3d85adb351ab56232fda6a09a7b6f9f6e18dbc63a75c68fb072c39f2ced26f1"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/formatted-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "6d4183ad30bd8f1b1decf96cae47a487d6e126b134bf9e5ae31e5a691d06c76f"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/launch.json",
+      "beforeSha256": null,
+      "afterSha256": "570780f9f88ddba405bde63af755307a58a84150c8efec7c947703c6bc76cad2"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/node.version",
+      "beforeSha256": null,
+      "afterSha256": "6a0cec2e157365c1a8ac6d1715733b7c3321a7c5565862a701ca71ef00359d04"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/pnpm.version",
+      "beforeSha256": null,
+      "afterSha256": "1da91f75a836cc9db37c70680f1264ce13377f5e2ee31d6e1f057655ab12924d"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/readonly-mounts.json",
+      "beforeSha256": null,
+      "afterSha256": "60621ef942ba2c07b9b18d2b0563de518da2f0f1c9f03cca8552cd09a123b4f6"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/remote-formatted-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "597b2193bed881ba9dbf6a0ed29fda096313531228ac97439301e8cd67972e0f"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/remote-semantic-equivalence.json",
+      "beforeSha256": null,
+      "afterSha256": "3cf0bc74966be2926469c8f6199bfa5b8b528535e8e6ad8e151ff04b00ba66d1"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/remote-source-before.json",
+      "beforeSha256": null,
+      "afterSha256": "da5e42345b593ebe04a3d8d02ce5e723f373c5cf9ca9361b76d43ecacb23d3f9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/resource-end.json",
+      "beforeSha256": null,
+      "afterSha256": "15b54b0b55ba25842bdbac8442230a10fb60f349ad1ec1ce18f1802d112ce96c"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/resource-start.json",
+      "beforeSha256": null,
+      "afterSha256": "1ffebce7087f9902a8722d660ff3c9b5384ca4caaa5b58e52b630bf7be69d665"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/sdk41-reuse.json",
+      "beforeSha256": null,
+      "afterSha256": "73e02b48ab85d866202a615a47c7950d85568052032274f907bdc59d831787b8"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/semantic-equivalence.json",
+      "beforeSha256": null,
+      "afterSha256": "5046dc3716e9021b67c50b326530d4177f035d9ae72bbd862c89bb162f5038af"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/source-after.json",
+      "beforeSha256": null,
+      "afterSha256": "da5e42345b593ebe04a3d8d02ce5e723f373c5cf9ca9361b76d43ecacb23d3f9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/source-before.json",
+      "beforeSha256": null,
+      "afterSha256": "1b01d311dc584f413434aea359c14ef34315878089bb34d701af8df2f08c929a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/source-finally.json",
+      "beforeSha256": null,
+      "afterSha256": "da5e42345b593ebe04a3d8d02ce5e723f373c5cf9ca9361b76d43ecacb23d3f9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/source-selections.json",
+      "beforeSha256": null,
+      "afterSha256": "536ca943abab39acc29c9b492a14e364ca9f56657fec5e0b8db1945b557f73fc"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/stage-summary.json",
+      "beforeSha256": null,
+      "afterSha256": "3f37cd1255034992fbf706e56bf10bdc34b08be8a158b1bdbeeb264368beb63a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/server-receipts/terminal.json",
+      "beforeSha256": null,
+      "afterSha256": "52c7ac91cf4b738ce74a519292e4b94c0866c33be044d180bf8e5e9b6c1848cd"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/transport-receipt.json",
+      "beforeSha256": null,
+      "afterSha256": "c52767763768717c324b3ed49cfae2ff8c4f9273af2718a611f2c1d7b6cae804"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/runtime-01/transport.py",
+      "beforeSha256": null,
+      "afterSha256": "0b9ed26431985e35a8e1313d2ae78c45cfb687237c31c66b1353f26eb216c95a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/01-frozen-bootstrap-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "9de3ab003c98c65891de9c7ff76c6232baff9fefd4bc8a7ffd9b5846109c65d2"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/01-frozen-bootstrap.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/01-frozen-bootstrap.json",
+      "beforeSha256": null,
+      "afterSha256": "539f6abadaba113afbbe6288d15b591b01aa40b01aa502f70dd3880b2ba03f7a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/01-frozen-bootstrap.log",
+      "beforeSha256": null,
+      "afterSha256": "066f041f32377501dbb57b80b6707f253132d5fa09f01e486556b8ebd40e8516"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/02-semantic-format-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "6dc02df5ad3e337af3b4fcede6742dec8bea959c94184dcb2358d2d4b2085786"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/02-semantic-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/02-semantic-format.json",
+      "beforeSha256": null,
+      "afterSha256": "449bde870bb5c2a4f35f1903cab8bad06521c5f9ade065deb18d6a52dba74aee"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/02-semantic-format.log",
+      "beforeSha256": null,
+      "afterSha256": "2a88ac6cbc7e1733e902b998a792a669d94ad3439ee4b8b7ab32ec6443323de9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/03-typecheck-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "23586b90fe70ce9cd04d08a7c320f247e182e4a9c606550c0ffa196ffd475070"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/03-typecheck.exit",
+      "beforeSha256": null,
+      "afterSha256": "e3b9c2844b5a5c2677b3a2279db2ec8487491dd9a23d6b22fac153391b3bb63c"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/03-typecheck.json",
+      "beforeSha256": null,
+      "afterSha256": "ebdfe55994b1e9e8ade54cc783f6d2006260af5e0e080252e3c12d087daca60b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/03-typecheck.log",
+      "beforeSha256": null,
+      "afterSha256": "7fe049b2b2686f534f872cce0dbcbd1d2a41d1d402dc149959c5765f1d139f94"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/04-first-party-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "b6de453cfe3ab3d4ada6443a79c9832a5908f37894c6576511f04ccb9bca97f9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/04-first-party.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/04-first-party.json",
+      "beforeSha256": null,
+      "afterSha256": "11bd79016196cd9334c5c2486623ee4c3a7b6bbbd7b850d3f352e3eef6676991"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/04-first-party.log",
+      "beforeSha256": null,
+      "afterSha256": "d6febbc61ca6890a60f48588e1262577ed798964dd86e3c7caa288388255ee58"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/05-actual-producer-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "f75e3830a22642c3f0d7eb17f9b938bdd3a44bf707a35c3bceb299c4206bee45"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/05-actual-producer.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/05-actual-producer.json",
+      "beforeSha256": null,
+      "afterSha256": "3c24b06a0ab28870a24454f803c7cd063c5ee90723f96bee010f90d38c9ccdc1"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/05-actual-producer.log",
+      "beforeSha256": null,
+      "afterSha256": "77d2bcbb3c1805a4e746a320d8f5ea4fa9cd676489a86de5751b4fcae6a8ca40"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/06-format-resources.json",
+      "beforeSha256": null,
+      "afterSha256": "24a3cbac79fc7edd6264466a8bb1cb465a5124554597be919ab5bfd13d22be27"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/06-format.exit",
+      "beforeSha256": null,
+      "afterSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/06-format.json",
+      "beforeSha256": null,
+      "afterSha256": "acb0d7497aff45997eb4005591575712c6c504ace3d4dd4f31e0c6da5b009a21"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/06-format.log",
+      "beforeSha256": null,
+      "afterSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/cache-after.json",
+      "beforeSha256": null,
+      "afterSha256": "4c055cf8ed9fd67f7c2241b85a0fd0c2e489322dd35090d957c88ec289d59a23"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/cache-before.json",
+      "beforeSha256": null,
+      "afterSha256": "4c055cf8ed9fd67f7c2241b85a0fd0c2e489322dd35090d957c88ec289d59a23"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/cache-materialization.json",
+      "beforeSha256": null,
+      "afterSha256": "611be418a6ead3ed9f36e3e5a5c549150d958e66720a5160966e27aee82b81b9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/cache-pin.json",
+      "beforeSha256": null,
+      "afterSha256": "d26653f7152ebad759e4498f21ec146773cf293669cca11fff8b7d00de67d24b"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/format-options.json",
+      "beforeSha256": null,
+      "afterSha256": "4bbcade66f6ac8f190fec4e8e73e87f585094c11c6b58a198158e74c612a3ba3"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/formatted-input-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "6d4183ad30bd8f1b1decf96cae47a487d6e126b134bf9e5ae31e5a691d06c76f"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/launch.json",
+      "beforeSha256": null,
+      "afterSha256": "290744ce4b4a14a1198ba3596584250211548901c624f1dfcb6b0925df964be0"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/node.version",
+      "beforeSha256": null,
+      "afterSha256": "6a0cec2e157365c1a8ac6d1715733b7c3321a7c5565862a701ca71ef00359d04"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/pnpm.version",
+      "beforeSha256": null,
+      "afterSha256": "1da91f75a836cc9db37c70680f1264ce13377f5e2ee31d6e1f057655ab12924d"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/readonly-mounts.json",
+      "beforeSha256": null,
+      "afterSha256": "721ec2751760ecc2b3c3907cad65b10bcced10cf843aa908c20aafa657272e37"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/resource-end.json",
+      "beforeSha256": null,
+      "afterSha256": "4c4ac9ca0f8dddda2cd2fa3487f1a6b42551d30d9d8a2783b1366dfad3a9c1c9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/resource-start.json",
+      "beforeSha256": null,
+      "afterSha256": "310d847160f4833cf2dcbca75b76e88a0db034f2a54f3402ee55ebdb086a45c6"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/sdk41-reuse.json",
+      "beforeSha256": null,
+      "afterSha256": "73e02b48ab85d866202a615a47c7950d85568052032274f907bdc59d831787b8"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/semantic-equivalence.json",
+      "beforeSha256": null,
+      "afterSha256": "5046dc3716e9021b67c50b326530d4177f035d9ae72bbd862c89bb162f5038af"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/source-after.json",
+      "beforeSha256": null,
+      "afterSha256": "1b01d311dc584f413434aea359c14ef34315878089bb34d701af8df2f08c929a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/source-before.json",
+      "beforeSha256": null,
+      "afterSha256": "1b01d311dc584f413434aea359c14ef34315878089bb34d701af8df2f08c929a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/source-finally.json",
+      "beforeSha256": null,
+      "afterSha256": "1b01d311dc584f413434aea359c14ef34315878089bb34d701af8df2f08c929a"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/source-selections.json",
+      "beforeSha256": null,
+      "afterSha256": "536ca943abab39acc29c9b492a14e364ca9f56657fec5e0b8db1945b557f73fc"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/stage-summary.json",
+      "beforeSha256": null,
+      "afterSha256": "1fce545af6499348ec151d5c21021fad31948fda88ad63fc8520f306ba1b21a9"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/server-receipts/terminal.json",
+      "beforeSha256": null,
+      "afterSha256": "7c647dc40409cde58393291fd4e1fd81c2ef1227fbb7a024d8f304dae52fc802"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/transport-attempt01-provisioning-failure.json",
+      "beforeSha256": null,
+      "afterSha256": "0e9b3612c2b59d6e1a872e6458a6610d984915ddbe5ef2f984764b4b07602bbf"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/transport-receipt.json",
+      "beforeSha256": null,
+      "afterSha256": "a5507faa8d43d51cfcdc8e84483a45340e3658818e0e4f9d87dac8c00cfe0745"
+    },
+    {
+      "owner": "F",
+      "path": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/owner-format-stage/transport-successor.py",
+      "beforeSha256": null,
+      "afterSha256": "27240a3e00b08f51998d7bb88461763ce8867f6912347d1082e3596eef7ee089"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/README.md",
+      "beforeSha256": null,
+      "afterSha256": "de5bc344ea889e2e4dcd55dde9181ed8482530d425b19e617dd4774f868c6320"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/bindings.ts",
+      "beforeSha256": null,
+      "afterSha256": "a72e164bd24ec3bbc5e7f736b769196da8bad22e61a218e9f8ea866bf3801372"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/http.ts",
+      "beforeSha256": null,
+      "afterSha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/index.ts",
+      "beforeSha256": null,
+      "afterSha256": "8e6478aed9de8e63707b849093c44129af8070a889d05ca56884591b0e8880d8"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/ingress.ts",
+      "beforeSha256": null,
+      "afterSha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/owner.ts",
+      "beforeSha256": null,
+      "afterSha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/schema-manifest.ts",
+      "beforeSha256": null,
+      "afterSha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/schema.ts",
+      "beforeSha256": null,
+      "afterSha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/first-party/store.ts",
+      "beforeSha256": null,
+      "afterSha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/package.json",
+      "beforeSha256": "f04ba9e0dd45857c8e27c3e62e1f7e264da0de0462f114e0cf0caa691f865d5f",
+      "afterSha256": "e496aeb95f7b2ef6101038789bf56ed4e10c56b2a775b18019539833d0c56297"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/pnpm-lock.yaml",
+      "beforeSha256": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe",
+      "afterSha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/server/REMOTE_SERVICE.md",
+      "beforeSha256": null,
+      "afterSha256": "6e34bb728fc29409f96e17a0fce0b58cdca1a3c93b9fe2f3613c550ea8501dd3"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/server/access-token.ts",
+      "beforeSha256": null,
+      "afterSha256": "d41ed8b5602132e53ee837696c35053d5503fc9f9b9855e0df7cdffe77afc74b"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/server/factory.ts",
+      "beforeSha256": "533094d88faa4dbd686442d4f5bd0d382e200f96fe0065c8aad4c402135e47d5",
+      "afterSha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/server/http.ts",
+      "beforeSha256": null,
+      "afterSha256": "bd9523839d9378a3d8bd9403e913783d651a70488862535d36b807b121892170"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/abort.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "16b43bfd57efe6247c284a534af36181029224e357514abf25bf592a2f8f9f6f"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/contracts/schemas.ts",
+      "beforeSha256": null,
+      "afterSha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/first-party/schema.ts",
+      "beforeSha256": null,
+      "afterSha256": "19c73e2a850515bb5bbef078aafbad4185306f7741f78a194a365716de929986"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/provenance.json",
+      "beforeSha256": null,
+      "afterSha256": "306f771ef1e9cf5db4b89fca736dfe26c7387e465426140a24ea2a698ba27fc6"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/ad895-producer/server/errors.ts",
+      "beforeSha256": null,
+      "afterSha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/auth.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "c68e4d302ec66580999e66a6ec634e8865d542afcb7eea296f3f9fbb5d3413ea"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/compatibility.observation.ts",
+      "beforeSha256": null,
+      "afterSha256": "0b41007c658dd1e0ff674aacb345efce8ec94dfd88bd12f918da2bac8190f18a"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/filesystem.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "806c68086d943ba1fdc02c41d127602c18398c2f196489010f8b1d39251ac729"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/fixtures.ts",
+      "beforeSha256": null,
+      "afterSha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/hot-journal-worker.mjs",
+      "beforeSha256": null,
+      "afterSha256": "eb08820ff6e323ad6be85f324a6a756fa7e18046a1573e39adadb9a8a6c0f818"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/http.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "b87357dccd000ce9b85ae5f9571bf2a080f2d7f81035fa3f78a1e602a70955da"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/review-evidence.fixture.ts",
+      "beforeSha256": null,
+      "afterSha256": "55be6af19d6ca85883984f9d23524e4c5df36d6c2f30ed7e41590857b1366bef"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/schema-ad895.fixture.ts",
+      "beforeSha256": null,
+      "afterSha256": "05de36dbf288f9f95fa07b9d7ba582872cea13c2e52b30962eadcb8ec17dad3c"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/schema.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "6ad7fb368c9139f79214e88d0b42cedb5cd741f6ce5ce1f3d4c18dbbd2936085"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/first-party/store.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "148de4c0c945a0aac6a5b11cdce5f873e427b52493cc132f7adfe9c242d4551a"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/server/access-token.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "9f0032f4fce9217f0574cb8fe2a6e4290f37bd378f6f593585f3280ecd063ea8"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tests/server/http.nodecheck.ts",
+      "beforeSha256": null,
+      "afterSha256": "788ce7100897e93c58769e95a6a149e0d76175c38fb33b703fcbafd627b43f71"
+    },
+    {
+      "owner": "F",
+      "path": "extensions/src/mcp-app/tsconfig.json",
+      "beforeSha256": "5809a3ff0ad270f8e20a920110efe7edad1edf17cc09f14c6b39dd1ff42dd3e3",
+      "afterSha256": "7bbb3e351f4edd22dedaa5011a117b4fb9d9667aed24eb115f38bb86bd37f68d"
+    }
+  ],
+  "rootLock": {
+    "beforeSha256": "ef4c7513fd4f9e56e9e38a8d7b1555d3c00f84650b400b1e8280c8d49ed37df2",
+    "afterSha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952",
+    "onlyImporterChanged": "extensions/src/mcp-app",
+    "allPackageAndSnapshotNodesIdentical": true,
+    "packageCount": 509
+  }
+}

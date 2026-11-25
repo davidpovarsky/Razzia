@@ -1,0 +1,394 @@
+{
+  "root": "docs/extensions/qa-evidence/recovery-fresh-20261115/r2-server-8b9593/review-after",
+  "count": 14,
+  "receipts": [
+    {
+      "file": "already-restored-positive.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 429,
+          "processPid": 429,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "recovered"
+        },
+        {
+          "pid": 443,
+          "processPid": 443,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean"
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-7.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 121,
+          "processPid": 121,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 135,
+          "processPid": 135,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-false.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 149,
+          "processPid": 149,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 163,
+          "processPid": 163,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-null.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 93,
+          "processPid": 93,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 107,
+          "processPid": 107,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-[].json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 204,
+          "processPid": 204,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 218,
+          "processPid": 218,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "ambiguous-{}.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 177,
+          "processPid": 177,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 191,
+          "processPid": 191,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "default-wrapper-positive.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 289,
+          "processPid": 289,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "recovered"
+        },
+        {
+          "pid": 303,
+          "processPid": 303,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean"
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "missing-nonnull-sidecar.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 64,
+          "processPid": 64,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 78,
+          "processPid": 78,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "null-sidecar-backup-positive.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 261,
+          "processPid": 261,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "status": "recovered"
+        },
+        {
+          "pid": 275,
+          "processPid": 275,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean"
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-immediate-corrupt.json",
+      "state": "PASS",
+      "faultActivations": 1,
+      "immediateChangedFiles": [],
+      "runs": [
+        {
+          "pid": 345,
+          "processPid": 345,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 359,
+          "processPid": 359,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-immediate-missing.json",
+      "state": "PASS",
+      "faultActivations": 1,
+      "immediateChangedFiles": [],
+      "runs": [
+        {
+          "pid": 317,
+          "processPid": 317,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 331,
+          "processPid": 331,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-startup-corrupt.json",
+      "state": "PASS",
+      "faultActivations": 1,
+      "immediateChangedFiles": [],
+      "runs": [
+        {
+          "pid": 401,
+          "processPid": 401,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 415,
+          "processPid": 415,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "private-startup-missing.json",
+      "state": "PASS",
+      "faultActivations": 1,
+      "immediateChangedFiles": [],
+      "runs": [
+        {
+          "pid": 373,
+          "processPid": 373,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        },
+        {
+          "pid": 387,
+          "processPid": 387,
+          "exit": 2,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "changedFiles": []
+        }
+      ],
+      "distinctPids": 2
+    },
+    {
+      "file": "string-foreign-positive.json",
+      "state": "PASS",
+      "runs": [
+        {
+          "pid": 232,
+          "processPid": 232,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 1,
+          "deletes": 0,
+          "status": "recovered",
+          "changedFiles": [
+            "quizz/native-r1-IAj-u5WN.json",
+            "extensions/quizzes/.journal/S6UHawaUwIc-ibzXlklRk.journal.json",
+            "extensions/quizzes/S6UHawaUwIc-ibzXlklRk.json"
+          ]
+        },
+        {
+          "pid": 247,
+          "processPid": 247,
+          "exit": 0,
+          "timedOut": false,
+          "writes": 0,
+          "deletes": 0,
+          "status": "clean",
+          "changedFiles": [
+            "quizz/native-r1-IAj-u5WN.json",
+            "extensions/quizzes/.journal/S6UHawaUwIc-ibzXlklRk.journal.json",
+            "extensions/quizzes/S6UHawaUwIc-ibzXlklRk.json"
+          ]
+        }
+      ],
+      "distinctPids": 2
+    }
+  ]
+}

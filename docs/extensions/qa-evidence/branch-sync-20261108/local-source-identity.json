@@ -1,0 +1,15 @@
+{
+  "verifiedSourceCommit": "10a0851",
+  "historyMergeCommit": "2836e25",
+  "matchedDeltaFiles": [
+    "extensions/src/core/studio-timeline-schema.ts",
+    "extensions/src/server/game/public-directory.test.ts",
+    "extensions/src/server/game/public-directory.ts",
+    "extensions/src/server/game/session-bridge.ts",
+    "extensions/src/server/game/session.ts",
+    "packages/e2e/playwright.branch-sync.config.ts",
+    "packages/e2e/tests/branch-sync.spec.ts"
+  ],
+  "allMatched": true,
+  "runtimeIdentityAcrossUnitAndBrowserRuns": "summary.json records identical runtime hashes; run2 changes only the corrected new browser assertion."
+}

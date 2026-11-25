@@ -1,0 +1,7 @@
+{ "diagnostics": [{"message": "Unnecessary conditional, value is always truthy.","code": "typescript(no-unnecessary-condition)","severity": "error","url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unnecessary-condition.html","help": "The checked value has type `true`.","filename": "extensions/src/presentation/room-join/use-room-join.ts","labels": [{"span": {"offset": 2226,"length": 5,"line": 74,"column": 11}}]},
+{"message": "'copy.extras.roster' is possibly 'undefined'.","code": "typescript(TS18048)","severity": "error","filename": "extensions/qa/tds-site.spec.ts","labels": [{"span": {"offset": 1246,"length": 18,"line": 37,"column": 10}}]}],
+              "number_of_files": 78,
+              "number_of_rules": 233,
+              "threads_count": 2,
+              "start_time": 5.910403532
+            }

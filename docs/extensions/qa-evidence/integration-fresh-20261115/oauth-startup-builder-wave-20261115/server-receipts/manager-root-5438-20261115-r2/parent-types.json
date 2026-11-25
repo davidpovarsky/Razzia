@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "tsconfig.json"
+  ],
+  "cwd": "/work/project/extensions",
+  "exit": 1,
+  "log_sha256": "869a5f86366785b37d039ee9f69296419ed799448cf90eb2c3906d834d055dc7",
+  "seconds": 36.36
+}

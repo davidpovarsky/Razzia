@@ -1,0 +1,21 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "completed": false,
+    "modified_at": "2026-11-15T18:23:07.658Z",
+    "exactPreservedNotesReadback": true
+  },
+  "deliveries": [
+    {
+      "lane": "B",
+      "delivered": true
+    },
+    {
+      "lane": "F",
+      "delivered": true
+    }
+  ],
+  "implementationStatus": "B C1 and F consumer work assigned within existing scopes; no code change or new test claimed by contract decision",
+  "newAgents": 0,
+  "newApprovalStages": 0
+}

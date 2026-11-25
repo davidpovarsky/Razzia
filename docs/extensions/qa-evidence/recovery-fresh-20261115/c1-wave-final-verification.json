@@ -1,0 +1,134 @@
+{
+  "applicationSource": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "observerSource": "47b68268375b5adf8c56a8496882830bc5922de3",
+  "trials": [
+    {
+      "packet": 5,
+      "downloadedShaMatchedFiles": 8,
+      "frozenInputs": 11,
+      "stoppedContainer": "ef108b100c81b4a340f4d6998f1a0fa6e189c9fc19520110969b87890eb563e7",
+      "initEnabled": false,
+      "scheduler": "1",
+      "observedChildren": 0,
+      "sigkill": 0,
+      "exit0": 0,
+      "cumulativeConsumedBytes": 4124672,
+      "result": "PROVISIONING_ERROR before tests: supervisor comm MainThread"
+    },
+    {
+      "packet": 6,
+      "downloadedShaMatchedFiles": 134,
+      "frozenInputs": 11,
+      "stoppedContainer": "31f70757e9705e6976839a0ec50a9dbef4e28d02619b40c5530f7ebeeee441a9",
+      "initEnabled": false,
+      "scheduler": "1",
+      "observedChildren": 24,
+      "sigkill": 8,
+      "exit0": 16,
+      "cumulativeConsumedBytes": 8400896,
+      "result": {
+        "applicationSource": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+        "nodeObserver": "47b68268375b5adf8c56a8496882830bc5922de3",
+        "summaries": [
+          {
+            "name": "failed-startup-witness",
+            "passed": 1,
+            "explicitlyDeselected": 10
+          },
+          {
+            "name": "actual-native",
+            "passed": 11,
+            "explicitlyDeselected": 0
+          }
+        ],
+        "nativeKillChecks": [
+          {
+            "boundary": "before-public",
+            "killedPid": 180,
+            "replayPids": [
+              193,
+              206
+            ]
+          },
+          {
+            "boundary": "after-sidecar",
+            "killedPid": 219,
+            "replayPids": [
+              232,
+              245
+            ]
+          },
+          {
+            "boundary": "before-id-return",
+            "killedPid": 258,
+            "replayPids": [
+              271,
+              284
+            ]
+          },
+          {
+            "boundary": "committed-visible",
+            "killedPid": 297,
+            "replayPids": [
+              310,
+              323
+            ]
+          },
+          {
+            "boundary": "private-cleanup",
+            "killedPid": 336,
+            "replayPids": [
+              349,
+              362
+            ]
+          },
+          {
+            "boundary": "before-slot-removal",
+            "killedPid": 375,
+            "replayPids": [
+              387,
+              400
+            ]
+          }
+        ],
+        "old37": {
+          "passed": 37,
+          "profile": "OLD packet2 evidence only; not rerun"
+        },
+        "originalTrial": "41 PASS / 7 FAIL unchanged",
+        "result": "One selected witness plus 11 native cases passed; not a new 48-case run",
+        "qualification": "Cooperating-writer scope only; no B/F1/hardware/production adoption"
+      }
+    },
+    {
+      "packet": 7,
+      "downloadedShaMatchedFiles": 48,
+      "frozenInputs": 11,
+      "stoppedContainer": "0a2905259bf922c51df87a00bfeb82b147aa1ce868b3aab4c6a988f0b405ede9",
+      "initEnabled": false,
+      "scheduler": "unset",
+      "observedChildren": 3,
+      "sigkill": 1,
+      "exit0": 2,
+      "cumulativeConsumedBytes": 11984896,
+      "result": {
+        "diagnosticOnly": true,
+        "scheduler": "GOMAXPROCS unset",
+        "selectedPassed": 1,
+        "explicitlyDeselected": 10,
+        "witnessPids": [
+          58,
+          72,
+          86
+        ],
+        "applicationClaim": "No new native11 or 48-case result"
+      }
+    }
+  ],
+  "preservedInheritedFiles": 16,
+  "applicationSourceUnchangedFromActivation": true,
+  "old37": "REUSED old packet2 profile only, hash verified; not rerun",
+  "originalResultsUnchanged": "C1 41PASS/7FAIL; R2 full813PASS/6FAIL",
+  "historicalGoCause": "Not established; both isolated scheduler witnesses passed; old live counters unavailable",
+  "allOriginalSourceTasks": "OPEN"
+}

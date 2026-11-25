@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "reviewedCommit": "66b4535632ee6cd4bbc4515e7d3ab9004fe1915e",
+  "unchangedReviewedBlobs": 12,
+  "files": [
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/verify-review-scope.mjs",
+      "expected": "f808240f782d13281e6307a4dc1a251e3fa01d94549b571b4eb47c87e8286706",
+      "actual": "f808240f782d13281e6307a4dc1a251e3fa01d94549b571b4eb47c87e8286706"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/vitest.baseline.config.mts",
+      "expected": "e36f1afcc543d3ce21e9b4a4b3db84e72a259391bc554172a1d25b5550348180",
+      "actual": "e36f1afcc543d3ce21e9b4a4b3db84e72a259391bc554172a1d25b5550348180"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/vitest.recovery.config.mts",
+      "expected": "d2ed7eee8c7e7976af211991d43e7f14011e19e50308e4013c372d66ba7dd680",
+      "actual": "d2ed7eee8c7e7976af211991d43e7f14011e19e50308e4013c372d66ba7dd680"
+    },
+    {
+      "path": "extensions/src/server/media-library-recovery.test.ts",
+      "expected": "2e67007ed95fe1391f5782b5742dbd763886273bc338bb72b5c06f09e787064f",
+      "actual": "2e67007ed95fe1391f5782b5742dbd763886273bc338bb72b5c06f09e787064f"
+    },
+    {
+      "path": "extensions/src/server/media-library.test.ts",
+      "expected": "089b70f4c038070cec9161c49b3facafb0bace3c326604ec27b4a941fc12866f",
+      "actual": "089b70f4c038070cec9161c49b3facafb0bace3c326604ec27b4a941fc12866f"
+    },
+    {
+      "path": "extensions/src/server/media-library.ts",
+      "expected": "f49d16b750e4c261d932a5b8f025b47fae058af9a52f4de44af9a5517e6d2024",
+      "actual": "f49d16b750e4c261d932a5b8f025b47fae058af9a52f4de44af9a5517e6d2024"
+    },
+    {
+      "path": "extensions/src/server/storage/create-recovery.test.ts",
+      "expected": "363e0688af4ec8fadedf942681f2529965cc34e08fd00a7f19ae87c05435d5dc",
+      "actual": "363e0688af4ec8fadedf942681f2529965cc34e08fd00a7f19ae87c05435d5dc"
+    },
+    {
+      "path": "extensions/src/server/storage/journal-recovery.test.ts",
+      "expected": "7d5b260e543112692777a533375435d6511c95e5dfb9b01260804e865402f37d",
+      "actual": "7d5b260e543112692777a533375435d6511c95e5dfb9b01260804e865402f37d"
+    },
+    {
+      "path": "extensions/src/server/storage/journal.ts",
+      "expected": "7024738b021c2de022383b41d32c5aeffa7d2f9f7a7a6d3cb31e02219ade375a",
+      "actual": "7024738b021c2de022383b41d32c5aeffa7d2f9f7a7a6d3cb31e02219ade375a"
+    },
+    {
+      "path": "extensions/src/server/storage/recovery-fixture.ts",
+      "expected": "630ff9e73623e65bf9d13583e3e8dfe5371927a6e11c7683b71fd58a358d509c",
+      "actual": "630ff9e73623e65bf9d13583e3e8dfe5371927a6e11c7683b71fd58a358d509c"
+    },
+    {
+      "path": "extensions/src/server/storage/recovery-state.ts",
+      "expected": "ee5e944338c534e4e3d83ec8935193b8ee6d3386d4b16c41b4638dd16af82a01",
+      "actual": "ee5e944338c534e4e3d83ec8935193b8ee6d3386d4b16c41b4638dd16af82a01"
+    },
+    {
+      "path": "extensions/src/server/storage/service.ts",
+      "expected": "3c4f2a85ca53d9c02286f539eb9ec290070f0839357fdb79032bfb841d4dafe4",
+      "actual": "3c4f2a85ca53d9c02286f539eb9ec290070f0839357fdb79032bfb841d4dafe4"
+    }
+  ]
+}

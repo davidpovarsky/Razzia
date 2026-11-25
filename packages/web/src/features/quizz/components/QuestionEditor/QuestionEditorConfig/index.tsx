@@ -1,12 +1,8 @@
-import { QUIZZ_MODES } from "@razzia/common/constants"
+import { useState } from "react"
+import AlertDialog from "@razzia/web/components/AlertDialog"
+import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import type { QuestionType } from "@razzia/common/types/game"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@razzia/web/components/Select"
+import { resolveQuestionPlayMode } from "@razzia/extensions/core"
 import {
   QUESTION_REGISTRY,
   QUESTION_TYPE_LIST,
@@ -24,18 +20,68 @@ const QuestionEditorConfig = () => {
     currentIndex,
     gameMode,
     updateQuestion,
+    extras,
+    setExtras,
   } = useQuizzEditor()
   const { t } = useTranslation()
   const questionType = currentQuestion.type
+  const [pendingType, setPendingType] = useState<{
+    questionId: string
+    type: QuestionType
+  } | null>(null)
 
-  const handleTypeChange = (nextType: QuestionType) => {
+  const applyTypeChange = (nextType: QuestionType) => {
     const { defaultOptions, initialValues } = QUESTION_REGISTRY[nextType]
 
     updateQuestion(currentIndex, {
       type: nextType,
       options: defaultOptions,
       ...initialValues(currentQuestion),
+      ...(nextType === "single" && currentQuestion.type === "multi"
+        ? { solutions: currentQuestion.solutions?.slice(0, 1) ?? [0] }
+        : {}),
     })
+
+    if (nextType === "estimation" && currentQuestionId) {
+      setExtras((previous) => {
+        if (!previous?.perQuestion[currentQuestionId]) {
+          return previous
+        }
+
+        const { answerVisuals: _answerVisuals, ...rest } =
+          previous.perQuestion[currentQuestionId]
+
+        return {
+          ...previous,
+          perQuestion: { ...previous.perQuestion, [currentQuestionId]: rest },
+        }
+      })
+    }
+
+    setPendingType(null)
+  }
+
+  const handleTypeChange = (nextType: QuestionType) => {
+    if (nextType === questionType) {
+      return
+    }
+
+    const replacesAnswers =
+      nextType === "estimation" || questionType === "estimation"
+    const hasAnswerContent =
+      currentQuestion.answers.some((answer) => answer.trim()) ||
+      Boolean(extras?.perQuestion[currentQuestionId]?.answerVisuals?.length) ||
+      (questionType === "estimation" &&
+        JSON.stringify(currentQuestion.options) !==
+          JSON.stringify(QUESTION_REGISTRY.estimation.defaultOptions))
+
+    if (replacesAnswers && hasAnswerContent) {
+      setPendingType({ questionId: currentQuestionId, type: nextType })
+
+      return
+    }
+
+    applyTypeChange(nextType)
   }
 
   const { ConfigComponent } = QUESTION_REGISTRY[questionType]
@@ -46,29 +92,49 @@ const QuestionEditorConfig = () => {
   }))
 
   return (
-    <aside className="bg-background z-10 m-3 flex max-h-[calc(100%-1.5rem)] w-68 shrink-0 flex-col gap-3 self-start overflow-y-auto rounded-xl p-4 shadow-sm">
+    <aside
+      data-testid="question-config"
+      aria-label={t("quizz:question.config.answerMode")}
+      className="bg-background z-10 m-2 flex w-[calc(100%-1rem)] shrink-0 flex-col gap-3 rounded-xl p-3 shadow-sm lg:m-3 lg:max-h-[calc(100%-1.5rem)] lg:w-64 lg:self-start lg:overflow-y-auto lg:p-4 xl:w-68"
+    >
       <ConfigField>
         <ConfigField.Label
           icon={<LayoutList className="size-4" />}
           label={t("quizz:question.config.answerMode")}
         />
-        <Select value={questionType} onValueChange={handleTypeChange}>
-          <SelectTrigger aria-label={t("quizz:question.config.answerMode")}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {typeOptions.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ToggleGroup
+          aria-label={t("quizz:question.config.answerMode")}
+          value={questionType}
+          onChange={handleTypeChange}
+          items={typeOptions}
+          itemMetadata={(value) => ({ "data-testid": `answer-type-${value}` })}
+          className="h-auto flex-wrap [&>button]:min-h-9 [&>button]:min-w-0 [&>button]:flex-1 [&>button]:justify-center [&>button]:px-2 [&>button]:text-xs"
+        />
       </ConfigField>
 
-      {gameMode === QUIZZ_MODES.QUIZ && <CategoryField />}
+      {resolveQuestionPlayMode(currentQuestion, gameMode) === "quiz" && (
+        <CategoryField />
+      )}
 
       <ConfigComponent key={currentQuestionId} />
+      <AlertDialog
+        open={Boolean(
+          pendingType && pendingType.questionId === currentQuestionId,
+        )}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingType(null)
+          }
+        }}
+        title={t("extensions:editor.answerTypeChangeTitle")}
+        description={t("extensions:editor.answerTypeChangeDescription")}
+        confirmLabel={t("extensions:editor.confirmAnswerTypeChange")}
+        onConfirm={() => {
+          if (pendingType?.questionId === currentQuestionId) {
+            applyTypeChange(pendingType.type)
+          }
+        }}
+      />
     </aside>
   )
 }

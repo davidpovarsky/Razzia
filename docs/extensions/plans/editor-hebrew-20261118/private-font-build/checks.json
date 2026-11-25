@@ -1,0 +1,37 @@
+[
+  {
+    "name": "lint-fix",
+    "code": 0,
+    "output": "Found 0 warnings and 0 errors.\nFinished in 2.5s on 3 files with 233 rules using 12 threads.\n"
+  },
+  {
+    "name": "format",
+    "code": 0,
+    "output": "\u001b[90mextensions/src/presentation/show-library-preview/application-runtime-entry.tsx\u001b[39m 678ms (unchanged)\n\u001b[90mextensions/src/presentation/show-library-preview/native-fonts.ts\u001b[39m 72ms (unchanged)\n\u001b[90mextensions/src/presentation/show-library-preview/native-fonts.test.ts\u001b[39m 76ms (unchanged)\n\u001b[90mpackages/e2e/editor-native-font-iframe-audit.mjs\u001b[39m 278ms (unchanged)\n"
+  },
+  {
+    "name": "lint",
+    "code": 0,
+    "output": "Found 0 warnings and 0 errors.\nFinished in 4.5s on 3 files with 233 rules using 12 threads.\n"
+  },
+  {
+    "name": "font-tests",
+    "code": 0,
+    "output": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv5.0.3 \u001b[39m\u001b[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions\u001b[39m\n\n \u001b[32m✓\u001b[39m src/presentation/show-library-preview/native-fonts.test.ts \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 24\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m1 passed\u001b[39m\u001b[22m\u001b[90m (1)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m5 passed\u001b[39m\u001b[22m\u001b[90m (5)\u001b[39m\n\u001b[2m   Start at \u001b[22m 16:08:45\n\u001b[2m   Duration \u001b[22m 795ms\u001b[2m (import 61%, transform 27%, tests 7%, worker 4%)\u001b[22m\n\n"
+  },
+  {
+    "name": "types",
+    "code": 0,
+    "output": ""
+  },
+  {
+    "name": "build",
+    "code": 0,
+    "output": "{\n  \"format\": \"tadazz-application-preview-build\",\n  \"available\": true,\n  \"files\": [\n    {\n      \"name\": \"renderer.mjs\",\n      \"bytes\": 2566741,\n      \"sha256\": \"2dd9bb67dc9183fb4dfcb202881b4e6a6c759c32146659ca012ad3b9907d1afc\"\n    },\n    {\n      \"name\": \"renderer.css\",\n      \"bytes\": 454185,\n      \"sha256\": \"91d23320b35de4d81c17e20e21b6874574d8e2304d2f3157dda0aa232f6207e9\"\n    }\n  ],\n  \"pins\": [\n    {\n      \"portVersion\": 3,\n      \"identityRuleVersion\": 2,\n      \"registry\": {\n        \"id\": \"tadazz-native-application\",\n        \"version\": \"1.0.0\"\n      },\n      \"registrySha256\": \"d197cadf86c27e88f0141f4dac9ba60486a725b25cce20c6bdb6a24428c9df1d\",\n      \"renderer\": {\n        \"id\": \"tadazz-classic-stage\",\n        \"version\": \"1.0.0\"\n      },\n      \"rendererBuildSha256\": \"43f06f59ecd2e5985bb88c4dea20e9686cd51c2126120e8c39c4761e3f290ceb\"\n    },\n    {\n      \"portVersion\": 3,\n      \"identityRuleVersion\": 2,\n      \"registry\": {\n        \"id\": \"tadazz-native-application\",\n        \"version\": \"1.0.0\"\n      },\n      \"registrySha256\": \"d197cadf86c27e88f0141f4dac9ba60486a725b25cce20c6bdb6a24428c9df1d\",\n      \"renderer\": {\n        \"id\": \"razzia-native-stage\",\n        \"version\": \"1.0.0\"\n      },\n      \"rendererBuildSha256\": \"43f06f59ecd2e5985bb88c4dea20e9686cd51c2126120e8c39c4761e3f290ceb\"\n    }\n  ],\n  \"verification\": {\n    \"format\": \"tadazz-application-preview-verification\",\n    \"mode\": \"generate-manifest\",\n    \"verifiedManifest\": false,\n    \"manifestSha256\": \"dabc00df0ebc0cbf11c2dd0c33f911f6567a2ef6c1a6883ef2175c0d5853cffb\",\n    \"artifactSha256\": \"f27d79be8479d0c525e7c7589877b252317b2a117547f80576b695833889f541\",\n    \"registrySha256\": \"d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f\",\n    \"files\": [\n      {\n        \"name\": \"renderer.mjs\",\n        \"bytes\": 2566741,\n        \"sha256\": \"2dd9bb67dc9183fb4dfcb202881b4e6a6c759c32146659ca012ad3b9907d1afc\"\n      },\n      {\n        \"name\": \"renderer.css\",\n        \"bytes\": 454185,\n        \"sha256\": \"91d23320b35de4d81c17e20e21b6874574d8e2304d2f3157dda0aa232f6207e9\"\n      }\n    ],\n    \"inputFiles\": 3772,\n    \"generatedSourceChanged\": true,\n    \"liveAuthorityInputs\": [],\n    \"productionChanged\": false\n  }\n}\n"
+  },
+  {
+    "name": "iframe-harness",
+    "code": 0,
+    "output": "{\"passed\":true,\"checks\":[\"parentBefore\",\"original\",\"duplicate\",\"otherDocument\",\"afterFirstDispose\",\"afterLastDispose\",\"otherStillOwned\",\"disposedBeforeReady\",\"fallback\",\"final\"],\"errors\":[]}\n"
+  }
+]

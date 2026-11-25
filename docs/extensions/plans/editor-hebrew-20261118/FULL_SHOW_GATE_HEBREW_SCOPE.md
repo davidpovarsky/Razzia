@@ -1,0 +1,3 @@
+# Full show browser gate expansion — 2026-11-18
+
+Before source freeze, root requested expansion of the existing full show browser acceptance from eight to nine languages. Update expected Hebrew previous/edit/pause/aspect text, require all nine language expectations, verify Hebrew RTL plus root lang and computed direction, and include a Hebrew control screenshot. Preserve both engines, both themes and every existing assertion. Rename only the localized-check label consistently in browser-verify.mjs and deployment/stage-mcp-site.py so the same required 40 checks remain enforced. Root runs the actual Linux Chromium/WebKit gate against rebuilt source-pinned artifacts.

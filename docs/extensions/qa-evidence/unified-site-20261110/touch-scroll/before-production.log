@@ -1,0 +1,33 @@
+
+Running 1 test using 1 worker
+
+(node:8288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 extensions\qa\site-public-production.spec.ts:85:1 › real touch swipes scroll the public site on iPad portrait, landscape and phone (6.4s)
+
+
+  1) extensions\qa\site-public-production.spec.ts:85:1 › real touch swipes scroll the public site on iPad portrait, landscape and phone
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 100
+    Received:   0
+
+    Call Log:
+    - Timeout 3000ms exceeded while waiting on the predicate
+
+       at site-touch.ts:36
+
+      34 |   await expect
+      35 |     .poll(() => page.evaluate(() => window.scrollY), { timeout: 3000 })
+    > 36 |     .toBeGreaterThan(before + 100)
+         |      ^
+      37 | }
+      38 |
+        at swipePage (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110\extensions\qa\site-touch.ts:36:6)
+        at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110\extensions\qa\site-public-production.spec.ts:98:7
+
+    Error Context: docs\extensions\qa-evidence\unified-site-20261110\traces\production\site-public-production-rea-b4274-ortrait-landscape-and-phone\error-context.md
+
+  1 failed
+    extensions\qa\site-public-production.spec.ts:85:1 › real touch swipes scroll the public site on iPad portrait, landscape and phone

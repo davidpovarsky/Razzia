@@ -1,0 +1,26 @@
+{
+  "kind": "READ_ONLY_PREPARATION_CONTEXT",
+  "events": [
+    {
+      "operation": "Initial combined df/free/source inventory read",
+      "exit": 1,
+      "cause": "The final ls glob looked at the shared base rather than its source subdirectory.",
+      "stderr": "ls: cannot access '/home/ubuntu/tadazz-hq-qa-20261115/*mcp*': No such file or directory",
+      "diskAndRamReadsSucceeded": true,
+      "applicationOrContainerExecution": false,
+      "followup": "A scoped read-only source/evidence-subdirectory inventory succeeded, exit0. No install/test job was retried."
+    },
+    {
+      "operation": "Minimal runner syntax and source preparation",
+      "result": "Four Python runner files parsed; all160 source input hashes preserved",
+      "applicationOrSqliteImport": false
+    },
+    {
+      "operation": "Grant-bound server sequence",
+      "attempts": 1,
+      "firstFailure": "05-format exit1",
+      "retry": false,
+      "sourceEdit": false
+    }
+  ]
+}

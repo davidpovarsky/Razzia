@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: baseline: optional trusted seam is present only when selected
+ok 1 - baseline: optional trusted seam is present only when selected
+  ---
+  duration_ms: 12.618138
+  type: 'test'
+  ...
+# Subtest: binding, content and owner mismatches preserve result and all bytes
+ok 2 - binding, content and owner mismatches preserve result and all bytes
+  ---
+  duration_ms: 256.277667
+  type: 'test'
+  ...
+# Subtest: original outcome survives later native edits and deletion
+ok 3 - original outcome survives later native edits and deletion
+  ---
+  duration_ms: 960.257543
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: bound-before-public
+ok 4 - fresh-process crash/reconcile: bound-before-public
+  ---
+  duration_ms: 1555.617014
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: commit-before-operation
+ok 5 - fresh-process crash/reconcile: commit-before-operation
+  ---
+  duration_ms: 1232.286106
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: after-native-commit
+ok 6 - fresh-process crash/reconcile: after-native-commit
+  ---
+  duration_ms: 1350.888161
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: after-f-outcome
+ok 7 - fresh-process crash/reconcile: after-f-outcome
+  ---
+  duration_ms: 1620.501832
+  type: 'test'
+  ...
+# Subtest: tampered committed outcome remains unresolved and byte preserved
+ok 8 - tampered committed outcome remains unresolved and byte preserved
+  ---
+  duration_ms: 253.905017
+  type: 'test'
+  ...
+# Subtest: operation directory lost-CAS cannot allocate a native target
+ok 9 - operation directory lost-CAS cannot allocate a native target
+  ---
+  duration_ms: 41.930955
+  type: 'test'
+  ...
+# Subtest: live cooperating writer contention is rejected before binding allocation
+ok 10 - live cooperating writer contention is rejected before binding allocation
+  ---
+  duration_ms: 168.955007
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7960.730443

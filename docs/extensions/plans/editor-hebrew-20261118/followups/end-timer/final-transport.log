@@ -1,0 +1,14 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-timer-20261118[39m
+
+[90mstdout[2m | packages/socket/src/handlers/end-answer-timer.test.ts[2m > [22m[2mauthorizes End Timer over real Socket.IO and delivers one reveal before a tick
+[22m[39m{"proof":"real authoritative Socket.IO End Timer","deliveryMs":4.581600000001345,"tickMs":1000,"resultTransitions":1,"epoch":1,"acceptedAnswers":1}
+
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/handlers/end-answer-timer.test.ts[2m > [22mauthorizes End Timer over real Socket.IO and delivers one reveal before a tick[33m 9164[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 16:47:54
+[2m   Duration [22m 15.39s[2m (tests 60%, import 24%, transform 15%)[22m
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-timer-20261118/docs/extensions/plans/editor-hebrew-20261118/followups/end-timer/final-transport.json

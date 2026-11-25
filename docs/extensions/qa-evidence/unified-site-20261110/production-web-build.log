@@ -1,0 +1,38 @@
+$ pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js build --config ../../extensions/site.vite.config.ts
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:5:23). Add the file extension
+  - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 3209 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                0.98 kB │ gzip:     0.52 kB
+dist/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2            9.34 kB
+dist/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2     12.38 kB
+dist/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2         15.11 kB
+dist/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2        19.40 kB
+dist/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2           32.46 kB
+dist/assets/rubik-latin-wght-normal-CnQIisVs.woff2            35.34 kB
+dist/assets/tadazz-question-background-BnsH8I8M.png        1,610.33 kB
+dist/assets/background-CMjhDDHd.png                        2,777.38 kB
+dist/assets/index-DpoUs08e.css                               288.47 kB │ gzip:    55.30 kB
+dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:     0.42 kB
+dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:     9.60 kB
+dist/assets/index-utt8Akjm.js                              4,597.60 kB │ gzip: 1,866.68 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 2000 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 11.58s
+[PLUGIN_TIMINGS] JavaScript callbacks ran for 4.4s of this 11.6s build (38%).
+The slowest callbacks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+  - plugin vite:asset load (23%, 2.7s, 1 call)
+Additional callback time came from the callbacks below and from callbacks under 1s.
+2 callbacks are listed without a time. Their calls overlapped, so the time inside one call includes work from other calls. To find their cost, profile the build with `node --cpu-prof`:
+  - plugin @tailwindcss/vite:generate:build transform (15 calls)
+  - plugin vite:css transform (15 calls)
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.

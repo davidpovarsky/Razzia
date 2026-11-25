@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "original-eight",
+      "theme": "razzia-original",
+      "max": 8,
+      "value": 8
+    },
+    {
+      "name": "classic-six-effective",
+      "theme": "tadazz-classic",
+      "max": 6,
+      "value": 6
+    },
+    {
+      "name": "original-eight-preserved",
+      "theme": "razzia-original",
+      "max": 8,
+      "value": 8
+    },
+    {
+      "name": "classic-limit",
+      "theme": "tadazz-classic",
+      "max": 6,
+      "value": 6
+    },
+    {
+      "name": "explicit-edit-persists-six",
+      "theme": "razzia-original",
+      "max": 8,
+      "value": 6
+    }
+  ],
+  "errors": []
+}

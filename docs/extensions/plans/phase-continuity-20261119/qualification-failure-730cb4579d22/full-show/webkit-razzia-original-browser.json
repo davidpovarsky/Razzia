@@ -1,0 +1,79 @@
+{
+  "browserVersion": "27.2",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "webkit / razzia-original native opening, five phases, transitions and closing",
+      "status": "FAIL",
+      "error": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-full-show-chapter=\"preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results\"]') to be visible\n",
+      "stack": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-full-show-chapter=\"preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:results\"]') to be visible\n\n    at waitChapter (/source/extensions/qa/phase3-full-show/workspace-controls.mjs:139:56)\n    at verifyWorkspaceControls (/source/extensions/qa/phase3-full-show/workspace-controls.mjs:140:9)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:988:13\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:623:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:982:7",
+      "budgetMs": 300000,
+      "ms": 14245
+    },
+    {
+      "name": "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 16871
+    },
+    {
+      "name": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "FAIL",
+      "error": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-revision').filter({ hasText: /^Revision 4$/ }) to be visible\n",
+      "stack": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-revision').filter({ hasText: /^Revision 4$/ }) to be visible\n\n    at waitRevision (/source/extensions/qa/phase3-full-show/browser-verify.mjs:1149:16)\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1335:17\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:623:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1135:7",
+      "budgetMs": 300000,
+      "ms": 66127
+    },
+    {
+      "name": "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 33675
+    },
+    {
+      "name": "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "FAIL",
+      "error": "TypeError: scenario.go is not a function",
+      "stack": "TypeError: scenario.go is not a function\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1627:26\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1618:7",
+      "budgetMs": 120000,
+      "ms": 70
+    },
+    {
+      "name": "webkit / razzia-original native pause, resume, replay and adjacent skip",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: undefined == true",
+      "stack": "AssertionError [ERR_ASSERTION]: undefined == true\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1819:11\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1811:7",
+      "budgetMs": 120000,
+      "ms": 64
+    },
+    {
+      "name": "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "status": "FAIL",
+      "error": "TypeError: scenario.go is not a function",
+      "stack": "TypeError: scenario.go is not a function\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2053:26\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2049:7",
+      "budgetMs": 120000,
+      "ms": 67
+    },
+    {
+      "name": "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: undefined == true",
+      "stack": "AssertionError [ERR_ASSERTION]: undefined == true\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2266:11\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2263:7",
+      "budgetMs": 120000,
+      "ms": 58
+    },
+    {
+      "name": "webkit / razzia-original tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 10537
+    },
+    {
+      "name": "webkit / razzia-original CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 189
+    }
+  ]
+}

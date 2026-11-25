@@ -1,0 +1,100 @@
+{
+  "pass": true,
+  "voted": true,
+  "noAutoplayOverride": true,
+  "naturalTimer": true,
+  "simulatedMusicNetworkDelayMs": 4000,
+  "onsetMs": 124,
+  "preloadLeadMs": 23823,
+  "clearGain": true,
+  "cutieSamples": 54,
+  "spans": [
+    {
+      "key": "/media/tzila-determined-pursuit-20261105.mp3|picture-answers|false",
+      "elapsed": 0.198,
+      "playing": [
+        {
+          "url": "/media/tzila-determined-pursuit-20261105.mp3",
+          "volume": 0.38,
+          "position": 0
+        },
+        {
+          "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+          "volume": 0.55,
+          "position": 0
+        }
+      ]
+    },
+    {
+      "key": "/media/tzila-determined-pursuit-20261105.mp3|countdown|false",
+      "elapsed": 2.285,
+      "playing": [
+        {
+          "url": "/media/tzila-determined-pursuit-20261105.mp3",
+          "volume": 0.38,
+          "position": 1.678932
+        }
+      ]
+    },
+    {
+      "key": "/tadazz-show/music/cutie-patootie.mp3|countdown|false",
+      "elapsed": 24.107,
+      "playing": [
+        {
+          "url": "/media/tzila-determined-pursuit-20261105.mp3",
+          "volume": 0.34104999999999996,
+          "position": 23.495329
+        },
+        {
+          "url": "/tadazz-show/music/cutie-patootie.mp3",
+          "volume": 0.076875,
+          "position": 0.010289
+        }
+      ]
+    },
+    {
+      "key": "/tadazz-show/music/cutie-patootie.mp3|vote-locked|false",
+      "elapsed": 24.231,
+      "playing": [
+        {
+          "url": "/media/tzila-determined-pursuit-20261105.mp3",
+          "volume": 0.22515000000000002,
+          "position": 23.615599
+        },
+        {
+          "url": "/tadazz-show/music/cutie-patootie.mp3",
+          "volume": 0.305625,
+          "position": 0.134407
+        }
+      ]
+    },
+    {
+      "key": "/tadazz-show/music/cutie-patootie.mp3|survey-results|false",
+      "elapsed": 25.983,
+      "playing": [
+        {
+          "url": "/tadazz-show/music/cutie-patootie.mp3",
+          "volume": 0.75,
+          "position": 1.886717
+        }
+      ]
+    },
+    {
+      "key": "/media/tadazz-determination-20261106.mp3|top-pick|false",
+      "elapsed": 31.033,
+      "playing": [
+        {
+          "url": "/tadazz-show/music/cutie-patootie.mp3",
+          "volume": 0.75,
+          "position": 6.936956
+        },
+        {
+          "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+          "volume": 0.55,
+          "position": 0
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

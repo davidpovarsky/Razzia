@@ -1,0 +1,51 @@
+{
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "productCommit": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+  "integratedBase": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "status": "deployed-and-postdeploy-verified",
+  "manifestSha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+  "nativePinReceipt": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d99b9c78a803-e7048ebe/receipt.json",
+  "focusedBrowserCases": 8,
+  "ggoPassed": true,
+  "createdAt": "2026-11-19T17:30:04.149125+00:00",
+  "originalContinuityCommit": "33b35be347c46ec012a28a800ed1b7504096b294",
+  "qaControllerCommit": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "preferenceBrowserCases": 4,
+  "preferenceRaces": 8,
+  "updatedAt": "2026-11-19T21:35:53.669745+00:00",
+  "nativePinSourceSha": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+  "transportQualification": {
+    "status": "passed-isolated-linux-both-engines",
+    "chromiumWindowsCasesPassed": 4,
+    "windowsWebkitAccepted": false,
+    "windowsWebkitFailuresPreserved": 2,
+    "linuxBrowserActionsPassed": 8,
+    "fulfilledResponseGates": 14,
+    "receipt": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/receipt.json",
+    "receiptSha256": "0676174b7b12524c5b43d385c149f40729eb824f3c8fd34198cea976ce816458"
+  },
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "qualificationAcceptance": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/root-qualification-acceptance.json",
+  "qualificationAcceptanceSha256": "fe5eb66dfe04a93fea8a0361ded4d61bc30fcd67b6359621ca98bf223deedaec",
+  "deployed": true,
+  "deployedAt": "2026-11-19T21:24:19.374152+00:00",
+  "verifiedAt": "2026-11-19T21:26:15.322243+00:00",
+  "liveContainer": "fe741fb4db4ce0d18910abf7c96061ad53051b3f426a85456cbf69d1f52e40b4",
+  "liveImage": "sha256:f56cdcc5f5302128f9b259f19d6008e954dbddc1f4fddbe6d8a5dabbba297b70",
+  "stageManifestSha256": "75b4a7c5452760b812e6e2968866eb3acb6b83f2ce567e172292e9c397f6f95a",
+  "deploymentReceiptSha256": "cce0e13f79f6674d1c7f9cc971fccc2d7fe21b7be019142db37c56da3bc5d437",
+  "postDeploymentObservationSha256": "49c583a8bae28609aefc63dacea71869f830715e0dde458aa70e4e9dbca648d5",
+  "independentReleaseAcceptanceSha256": "2d7ac9d1b4c92495a85db0a5ef3a8a50004de9a82e77412a75522ee38aae047b",
+  "asana": {
+    "taskId": "1220670147437352",
+    "completed": true,
+    "completedAt": "2026-11-19T21:35:48.644Z",
+    "readbackSha256": "5fd03aa727e2a2deebf3e93d3780cab19c0c0032390f4751b905a3c6274e090c"
+  },
+  "connectedMcp": {
+    "draftReadPassed": true,
+    "previewAcknowledged": true,
+    "authoredDraftUnchanged": true,
+    "currentChatGPTHostVisualInspection": false
+  }
+}

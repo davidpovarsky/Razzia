@@ -1,3 +1,4 @@
+import { registerGameExtensionHandlers } from "./game-extensions"
 import { EVENTS } from "@razzia/common/constants"
 import type { SocketContext } from "@razzia/socket/handlers/types"
 import { verifyJoinTicket } from "@razzia/socket/services/auth"
@@ -5,10 +6,12 @@ import Game from "@razzia/socket/services/game"
 import Registry from "@razzia/socket/services/registry"
 import { withManagerGame, withPlayerGame } from "@razzia/socket/utils/game"
 import { getClientId } from "@razzia/socket/utils/socket"
+import { canSocketHostGame } from "@razzia/socket/services/managed-client-authorization"
 
 export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   const registry = Registry.getInstance()
   const clientId = getClientId(socket)
+  registerGameExtensionHandlers(socket, registry)
 
   const closeLobby = (game: Game) => {
     game.abortCooldown()
@@ -66,7 +69,7 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   socket.on(EVENTS.MANAGER.RECONNECT, ({ gameId }) => {
     const game = registry.getManagerGame(gameId, clientId)
 
-    if (game) {
+    if (game && canSocketHostGame(socket, game)) {
       game.reconnect(socket)
 
       return
@@ -92,7 +95,11 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
           return
         }
 
-        const error = game.join(socket, claims.username)
+        const error = game.join(socket, claims.username, {
+          rosterPlayerId: claims.rosterPlayerId,
+          phoneE164: claims.phoneE164,
+          source: claims.source,
+        })
 
         if (error) {
           socket.emit(EVENTS.GAME.RESET, error)
@@ -115,11 +122,16 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     withManagerGame(gameId, socket, (game) => game.start(socket)),
   )
 
-  socket.on(EVENTS.PLAYER.SELECTED_ANSWER, ({ gameId, data }) =>
-    withPlayerGame(gameId, socket, (game) =>
-      game.selectAnswer(socket, data.answerKeys),
-    ),
-  )
+  socket.on(EVENTS.PLAYER.SELECTED_ANSWER, ({ gameId, data }, ack) => {
+    let result: { accepted: boolean; reason?: string } = {
+      accepted: false,
+      reason: "unauthorized",
+    }
+    withPlayerGame(gameId, socket, (game) => {
+      result = game.selectAnswer(socket, data.answerKeys)
+    })
+    ack?.(result)
+  })
 
   socket.on(EVENTS.MANAGER.ADVANCE, ({ gameId }) =>
     withManagerGame(gameId, socket, (game) => game.advance()),
@@ -128,7 +140,7 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   socket.on(EVENTS.MANAGER.LEAVE, ({ gameId }) => {
     const game = registry.getManagerGame(gameId, clientId)
 
-    if (game) {
+    if (game && canSocketHostGame(socket, game)) {
       console.log(`Manager left game ${game.inviteCode}`)
       handleManagerLeave(game)
     }
@@ -158,6 +170,14 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
 
     if (playerGame) {
       playerGame.setPlayerDisconnected(socket.id, reason === "ping timeout")
+
+      return
+    }
+
+    const spectatorGame = registry.getGameBySpectatorSocketId(socket.id)
+
+    if (spectatorGame) {
+      spectatorGame.leaveSpectator(socket)
     }
   })
 }

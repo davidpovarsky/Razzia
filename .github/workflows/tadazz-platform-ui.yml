@@ -2,6 +2,18 @@ name: Tadazz platform UI
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "extensions/src/platform-ui/**"
+      - "extensions/src/site/**"
+      - "extensions/src/presentation/room-join/**"
+      - "extensions/src/presentation/show-themes/viewport*"
+      - "extensions/qa/tds*"
+      - "extensions/tds*"
+      - "extensions/package.json"
+      - "docs/extensions/plans/**"
+      - "packages/web/src/features/game/components/**"
+      - ".github/workflows/tadazz-platform-ui.yml"
 
 permissions:
   contents: read
