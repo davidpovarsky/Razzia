@@ -532,13 +532,15 @@ export function executeMediaDeleteTransaction(
   const journalPrefix = `media-${cleanMediaName}-`
   if (
     fs.existsSync(journalParent) &&
-    fs.readdirSync(journalParent).some(
-      (file) =>
-        file.startsWith(journalPrefix) &&
-        /^[a-f0-9-]{36}\.media-journal\.json$/iu.test(
-          file.slice(journalPrefix.length),
-        ),
-    )
+    fs
+      .readdirSync(journalParent)
+      .some(
+        (file) =>
+          file.startsWith(journalPrefix) &&
+          /^[a-f0-9-]{36}\.media-journal\.json$/iu.test(
+            file.slice(journalPrefix.length),
+          ),
+      )
   ) {
     return {
       allowed: false,
@@ -895,11 +897,7 @@ export function executeMediaDeleteTransaction(
     if (allSucceeded) {
       try {
         if (durable) {
-          syncRolledBackMediaDelete(
-            getPath,
-            physicalBindings,
-            cleanMediaName,
-          )
+          syncRolledBackMediaDelete(getPath, physicalBindings, cleanMediaName)
         }
 
         if (quarantinePath && fs.existsSync(quarantinePath)) {
@@ -1693,11 +1691,7 @@ export function recoverMediaDeleteJournals(
         }
 
         if (durable) {
-          syncRolledBackMediaDelete(
-            getPath,
-            bindings,
-            cleanMediaName,
-          )
+          syncRolledBackMediaDelete(getPath, bindings, cleanMediaName)
         }
 
         cleanupPhysicalBindings(getPath, bindings)
