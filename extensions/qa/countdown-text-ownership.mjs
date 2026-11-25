@@ -6,17 +6,23 @@ import { createRequire } from "node:module"
 import path from "node:path"
 import { parseArgs } from "node:util"
 
-const { values } = parseArgs({ options: {
-  "source-root": { type: "string" },
-  dependencies: { type: "string" },
-  out: { type: "string" },
-}, strict: true })
+const { values } = parseArgs({
+  options: {
+    "source-root": { type: "string" },
+    dependencies: { type: "string" },
+    out: { type: "string" },
+  },
+  strict: true,
+})
 const sourceRoot = values["source-root"]
-const dependencies = values.dependencies
-const out = values.out
-assert(sourceRoot && dependencies && out &&
-  [sourceRoot, dependencies, out].every(path.isAbsolute),
-  "Explicit absolute --source-root, --dependencies and --out are required")
+const { dependencies, out } = values
+assert(
+  sourceRoot &&
+    dependencies &&
+    out &&
+    [sourceRoot, dependencies, out].every(path.isAbsolute),
+  "Explicit absolute --source-root, --dependencies and --out are required",
+)
 const expectedChecks = [
   "live-v4-text-ownership",
   "live-original-text-ownership",
@@ -29,12 +35,24 @@ const digest = (bytes) => createHash("sha256").update(bytes).digest("hex")
 const sourcePins = {}
 const result = {
   kind: "COUNTDOWN_TEXT_OWNERSHIP_REGRESSION",
-  version: 1, sourceRoot, dependencies, sourcePins,
-  setup: { dependenciesResolved: false, bundleBuilt: false,
-    browserLaunched: false, fixtureReady: false },
-  expectedChecks, checks: [], passed: false, failureKind: null,
-  network: "loopback-only", customerData: false,
-  fixture: "Real production Stage/Scenes/Motion, React DOM and native Chromium WAAPI",
+  version: 1,
+  sourceRoot,
+  dependencies,
+  sourcePins,
+  setup: {
+    dependenciesResolved: false,
+    bundleBuilt: false,
+    browserLaunched: false,
+    fixtureReady: false,
+  },
+  expectedChecks,
+  checks: [],
+  passed: false,
+  failureKind: null,
+  network: "loopback-only",
+  customerData: false,
+  fixture:
+    "Real production Stage/Scenes/Motion, React DOM and native Chromium WAAPI",
   scope: "Focused regression only; not a full-game or release qualification",
 }
 const fixtureSource = `import React, { createRef } from "react"
@@ -308,11 +326,15 @@ void i18next.init({ lng: "en", fallbackLng: "en", resources: { en: { translation
   .catch((error) => { (window as any).__countdownRegressionError = String(error) })
 `
 await fs.mkdir(out, { recursive: true })
-const write = (name, raw) => fs.writeFile(path.join(out, name), raw, { flag: "wx" })
-let browser
-let server
+const write = (name, raw) =>
+  fs.writeFile(path.join(out, name), raw, { flag: "wx" })
+let browser = undefined
+let server = undefined
+
 try {
-  const requireDependencies = createRequire(path.join(dependencies, "package.json"))
+  const requireDependencies = createRequire(
+    path.join(dependencies, "package.json"),
+  )
   const { build } = requireDependencies("esbuild")
   const { chromium } = requireDependencies("@playwright/test")
   result.setup.dependenciesResolved = true
@@ -322,163 +344,259 @@ try {
   }
   const recordSource = async (filename) => {
     const rel = path.relative(sourceRoot, filename)
-    if (rel && !rel.startsWith(".." + path.sep) && !path.isAbsolute(rel)) {
-      sourcePins[rel.split(path.sep).join("/")] = digest(await fs.readFile(filename))
+
+    if (rel && !rel.startsWith(`..${path.sep}`) && !path.isAbsolute(rel)) {
+      sourcePins[rel.split(path.sep).join("/")] = digest(
+        await fs.readFile(filename),
+      )
     }
   }
   const resolveDependency = async (builder, args) => {
-    const requested = args.path === "react-dom/server" ? "react-dom/server.browser" : args.path
+    const requested =
+      args.path === "react-dom/server" ? "react-dom/server.browser" : args.path
     const reactSingleton = /^(?:react|react-dom)(?:\/|$)/.test(requested)
-    const cachedRelative = typeof args.importer === "string" && path.isAbsolute(args.importer)
-      ? path.relative(path.resolve(dependencies, ".."), args.importer)
-      : null
-    const fromCachedPackage = cachedRelative !== null &&
-      !path.isAbsolute(cachedRelative) && cachedRelative !== ".." &&
-      !cachedRelative.startsWith(".." + path.sep) &&
+    const cachedRelative =
+      typeof args.importer === "string" && path.isAbsolute(args.importer)
+        ? path.relative(path.resolve(dependencies, ".."), args.importer)
+        : null
+    const fromCachedPackage =
+      cachedRelative !== null &&
+      !path.isAbsolute(cachedRelative) &&
+      cachedRelative !== ".." &&
+      !cachedRelative.startsWith(`..${path.sep}`) &&
       cachedRelative.split(path.sep).includes("node_modules")
-    const resolveDirs = fromCachedPackage && !reactSingleton
-      ? [args.resolveDir || path.dirname(args.importer)]
-      : [dependencies, path.resolve(dependencies, "../packages/web")]
-    let lastResolution
+    const resolveDirs =
+      fromCachedPackage && !reactSingleton
+        ? [args.resolveDir || path.dirname(args.importer)]
+        : [dependencies, path.resolve(dependencies, "../packages/web")]
+    let lastResolution = undefined
     for (const resolveDir of resolveDirs) {
       // Native esbuild resolution preserves browser exports and import/require kind.
       const resolved = await builder.resolve(requested, {
-        kind: args.kind, importer: args.importer, namespace: args.namespace,
-        resolveDir, pluginData: { countdownDependencyResolution: true },
+        kind: args.kind,
+        importer: args.importer,
+        namespace: args.namespace,
+        resolveDir,
+        pluginData: { countdownDependencyResolution: true },
       })
       // The reentry marker applies only to this nested resolve, never child imports.
       const resolution = { ...resolved }
       delete resolution.pluginData
-      if (resolution.errors.length === 0) return resolution
+
+      if (resolution.errors.length === 0) {
+        return resolution
+      }
+
       lastResolution = resolution
     }
+
     return lastResolution
   }
   const bundled = await build({
-    stdin: { contents: fixtureSource, loader: "tsx", sourcefile: "countdown-regression-fixture.tsx",
-      resolveDir: sourceRoot },
-    absWorkingDir: sourceRoot, outfile: path.join(out, "fixture.js"),
-    bundle: true, write: false, format: "iife", platform: "browser",
-    target: "es2022", jsx: "automatic", logLevel: "silent",
+    stdin: {
+      contents: fixtureSource,
+      loader: "tsx",
+      sourcefile: "countdown-regression-fixture.tsx",
+      resolveDir: sourceRoot,
+    },
+    absWorkingDir: sourceRoot,
+    outfile: path.join(out, "fixture.js"),
+    bundle: true,
+    write: false,
+    format: "iife",
+    platform: "browser",
+    target: "es2022",
+    jsx: "automatic",
+    logLevel: "silent",
     define: { "process.env.NODE_ENV": '"development"' },
-    plugins: [{
-      name: "countdown-regression-source-and-existing-dependencies",
-      setup(builder) {
-        builder.onResolve({ filter: /^\/tadazz-show\// }, (args) => {
-          if (args.kind !== "url-token") return undefined
-          return { path: args.path, external: true }
-        })
-        builder.onResolve({ filter: /\.css\?inline$/ }, (args) => ({
-          path: path.resolve(args.resolveDir, args.path.slice(0, -"?inline".length)),
-          namespace: "countdown-inline-css",
-        }))
-        builder.onLoad({ filter: /.*/, namespace: "countdown-inline-css" }, async (args) => {
-          await recordSource(args.path)
-          return { contents: "export default " + JSON.stringify(await fs.readFile(args.path, "utf8")),
-            loader: "js" }
-        })
-        builder.onResolve({ filter: /^[^./]/ }, async (args) => {
-          if (args.pluginData?.countdownDependencyResolution === true) return undefined
-          if (path.isAbsolute(args.path)) return undefined
-          const roots = {
-            "@countdown-source/": sourceRoot,
-            "@razzia/common/": path.join(sourceRoot, "packages/common/src"),
-            "@razzia/extensions/": path.join(sourceRoot, "extensions/src"),
-            "@razzia/web/": path.join(sourceRoot, "packages/web/src"),
-            "@razzia/socket/": path.join(sourceRoot, "packages/socket/src"),
-          }
-          for (const [prefix, root] of Object.entries(roots)) {
-            if (args.path.startsWith(prefix)) {
-              return builder.resolve(path.join(root, args.path.slice(prefix.length)), {
-                kind: args.kind, resolveDir: sourceRoot,
-              })
+    plugins: [
+      {
+        name: "countdown-regression-source-and-existing-dependencies",
+        setup(builder) {
+          builder.onResolve({ filter: /^\/tadazz-show\// }, (args) => {
+            if (args.kind !== "url-token") {
+              return undefined
             }
-          }
-          for (const [prefix, root] of Object.entries(roots)) {
-            if (args.path === prefix.slice(0, -1)) {
-              return builder.resolve(root, { kind: args.kind, resolveDir: sourceRoot })
+
+            return { path: args.path, external: true }
+          })
+          builder.onResolve({ filter: /\.css\?inline$/ }, (args) => ({
+            path: path.resolve(
+              args.resolveDir,
+              args.path.slice(0, -"?inline".length),
+            ),
+            namespace: "countdown-inline-css",
+          }))
+          builder.onLoad(
+            { filter: /.*/, namespace: "countdown-inline-css" },
+            async (args) => {
+              await recordSource(args.path)
+
+              return {
+                contents: `export default ${JSON.stringify(await fs.readFile(args.path, "utf8"))}`,
+                loader: "js",
+              }
+            },
+          )
+          builder.onResolve({ filter: /^[^./]/ }, (args) => {
+            if (args.pluginData?.countdownDependencyResolution === true) {
+              return undefined
             }
-          }
-          return resolveDependency(builder, args)
-        })
-        builder.onLoad({ filter: /.*/, namespace: "file" }, async (args) => {
-          await recordSource(args.path)
-          return undefined
-        })
+
+            if (path.isAbsolute(args.path)) {
+              return undefined
+            }
+
+            const roots = {
+              "@countdown-source/": sourceRoot,
+              "@razzia/common/": path.join(sourceRoot, "packages/common/src"),
+              "@razzia/extensions/": path.join(sourceRoot, "extensions/src"),
+              "@razzia/web/": path.join(sourceRoot, "packages/web/src"),
+              "@razzia/socket/": path.join(sourceRoot, "packages/socket/src"),
+            }
+            for (const [prefix, root] of Object.entries(roots)) {
+              if (args.path.startsWith(prefix)) {
+                return builder.resolve(
+                  path.join(root, args.path.slice(prefix.length)),
+                  {
+                    kind: args.kind,
+                    resolveDir: sourceRoot,
+                  },
+                )
+              }
+            }
+            for (const [prefix, root] of Object.entries(roots)) {
+              if (args.path === prefix.slice(0, -1)) {
+                return builder.resolve(root, {
+                  kind: args.kind,
+                  resolveDir: sourceRoot,
+                })
+              }
+            }
+
+            return resolveDependency(builder, args)
+          })
+          builder.onLoad({ filter: /.*/, namespace: "file" }, async (args) => {
+            await recordSource(args.path)
+
+            return undefined
+          })
+        },
       },
-    }],
+    ],
   })
-  const js = bundled.outputFiles.find((file) => file.path.endsWith(".js"))?.contents
-  const css = bundled.outputFiles.find((file) => file.path.endsWith(".css"))?.contents ?? Buffer.from("")
-  assert(js && Object.keys(sourcePins).length > 0, "Actual production bundle inputs required")
+  const js = bundled.outputFiles.find((file) =>
+    file.path.endsWith(".js"),
+  )?.contents
+  const css =
+    bundled.outputFiles.find((file) => file.path.endsWith(".css"))?.contents ??
+    Buffer.from("")
+
+  assert(
+    js && Object.keys(sourcePins).length > 0,
+    "Actual production bundle inputs required",
+  )
   await write("fixture.tsx", fixtureSource)
   await write("fixture.js", js)
   await write("fixture.css", css)
   result.fixtureSha256 = digest(fixtureSource)
   result.bundleSha256 = digest(js)
   result.setup.bundleBuilt = true
-  const blankSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>'
+  const blankSvg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>'
   server = http.createServer((request, response) => {
     const url = new URL(request.url ?? "/", "http://127.0.0.1")
+
     if (url.pathname === "/fixture.js") {
-      response.writeHead(200, { "content-type": "text/javascript" }); response.end(js)
+      response.writeHead(200, { "content-type": "text/javascript" })
+      response.end(js)
     } else if (url.pathname === "/fixture.css") {
-      response.writeHead(200, { "content-type": "text/css" }); response.end(css)
+      response.writeHead(200, { "content-type": "text/css" })
+      response.end(css)
     } else if (url.pathname === "/") {
       response.writeHead(200, { "content-type": "text/html" })
-      response.end('<!doctype html><html><head><meta charset="utf-8"/><link rel="stylesheet" href="/fixture.css"/></head><body><script src="/fixture.js"></script></body></html>')
+      response.end(
+        '<!doctype html><html><head><meta charset="utf-8"/><link rel="stylesheet" href="/fixture.css"/></head><body><script src="/fixture.js"></script></body></html>',
+      )
     } else {
       // Clock tests use no authored media; decorative asset requests stay local.
-      response.writeHead(200, { "content-type": "image/svg+xml" }); response.end(blankSvg)
+      response.writeHead(200, { "content-type": "image/svg+xml" })
+      response.end(blankSvg)
     }
   })
-  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve))
+  await new Promise((resolve) => {
+    server.listen(0, "127.0.0.1", resolve)
+  })
   const address = server.address()
   assert(address && typeof address !== "string")
-  const origin = "http://127.0.0.1:" + address.port
+  const origin = `http://127.0.0.1:${address.port}`
   browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] })
   result.setup.browserLaunched = true
   result.browserVersion = browser.version()
   for (const name of expectedChecks) {
-    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
+    const page = await browser.newPage({
+      viewport: { width: 1920, height: 1080 },
+    })
     const pageErrors = []
     const externalRequests = []
     page.on("pageerror", (error) => pageErrors.push(error.message))
     await page.route("**/*", (route) => {
-      if (new URL(route.request().url()).origin === origin) return route.continue()
+      if (new URL(route.request().url()).origin === origin) {
+        return route.continue()
+      }
+
       externalRequests.push(route.request().url().split("?")[0])
+
       return route.abort()
     })
+
     try {
       await page.goto(origin, { waitUntil: "load", timeout: 10000 })
-      await page.waitForFunction(() => window.__countdownRegression?.ready === true,
-        undefined, { timeout: 10000 })
+      await page.waitForFunction(
+        () => window.__countdownRegression?.ready === true,
+        undefined,
+        { timeout: 10000 },
+      )
       result.setup.fixtureReady = true
-      let timeout
+      let timeout = undefined
       const check = await Promise.race([
-        page.evaluate((checkName) => window.__countdownRegression.run(checkName), name),
+        page.evaluate(
+          (checkName) => window.__countdownRegression.run(checkName),
+          name,
+        ),
         new Promise((_, reject) => {
-          timeout = setTimeout(() => reject(new Error("CASE_TIMEOUT:" + name)), 15000)
+          timeout = setTimeout(
+            () => reject(new Error(`CASE_TIMEOUT:${name}`)),
+            15000,
+          )
         }),
       ]).finally(() => clearTimeout(timeout))
+
       if (pageErrors.length || externalRequests.length) {
         check.passed = false
-        check.error = (check.error ? check.error + "," : "") + "BROWSER_OR_EXTERNAL_REQUEST_ERROR"
+        check.error = `${check.error ? `${check.error},` : ""}BROWSER_OR_EXTERNAL_REQUEST_ERROR`
       }
+
       check.details.pageErrors = pageErrors
       check.details.externalRequests = externalRequests
       result.checks.push(check)
-      await write(name + ".json", JSON.stringify(check, null, 2) + "\n")
+      await write(`${name}.json`, `${JSON.stringify(check, null, 2)}\n`)
     } finally {
       await page.close()
     }
   }
   for (const [name, sha] of Object.entries(sourcePins)) {
-    assert.equal(digest(await fs.readFile(path.join(sourceRoot, name))), sha,
-      "Source changed during regression: " + name)
+    assert.equal(
+      digest(await fs.readFile(path.join(sourceRoot, name))),
+      sha,
+      `Source changed during regression: ${name}`,
+    )
   }
-  result.passed = result.checks.length === expectedChecks.length &&
-    result.checks.every((check, index) => check.name === expectedChecks[index] && check.passed)
+  result.passed =
+    result.checks.length === expectedChecks.length &&
+    result.checks.every(
+      (check, index) => check.name === expectedChecks[index] && check.passed,
+    )
   result.failureKind = result.passed ? null : "BEHAVIORAL_FAILURE"
 } catch (error) {
   result.failureKind = "SETUP_FAILURE"
@@ -486,10 +604,37 @@ try {
   result.fatalStack = error instanceof Error ? error.stack : undefined
 } finally {
   await browser?.close()
-  if (server) await new Promise((resolve) => server.close(resolve))
+
+  if (server) {
+    await new Promise((resolve) => {
+      server.close(resolve)
+    })
+  }
 }
-result.sourcePins = Object.fromEntries(Object.entries(sourcePins).sort())
-await write("result.json", JSON.stringify(result, null, 2) + "\n")
-console.log(JSON.stringify({ passed: result.passed, failureKind: result.failureKind,
-  result: path.join(out, "result.json"), checks: result.checks.map(({ name, passed }) => ({ name, passed })) }))
+
+result.sourcePins = Object.fromEntries(
+  Object.entries(sourcePins).sort((left, right) => {
+    const leftValue = String(left)
+    const rightValue = String(right)
+
+    if (leftValue < rightValue) {
+      return -1
+    }
+
+    if (leftValue > rightValue) {
+      return 1
+    }
+
+    return 0
+  }),
+)
+await write("result.json", `${JSON.stringify(result, null, 2)}\n`)
+console.log(
+  JSON.stringify({
+    passed: result.passed,
+    failureKind: result.failureKind,
+    result: path.join(out, "result.json"),
+    checks: result.checks.map(({ name, passed }) => ({ name, passed })),
+  }),
+)
 process.exitCode = result.passed ? 0 : 1

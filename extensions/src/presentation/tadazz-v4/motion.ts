@@ -231,7 +231,8 @@ export class TadazzV4Motion {
         1,
         Math.max(
           0,
-          (performance.now() - startTime - delay) / (this.countdownTotal * 1000),
+          (performance.now() - startTime - delay) /
+            (this.countdownTotal * 1000),
         ),
       )
     }
