@@ -345,7 +345,17 @@ export function PackageStage({
     pin?.buildDigest,
     role,
   ])
-  const [, setRuntimeFailure] = useState(0)
+  const [runtimeFailure, setRuntimeFailure] = useState<string | null>(null)
+
+  if (
+    runtimeFailure !== null &&
+    (!questionFamily || runtimeFailure !== questionIdentity)
+  ) {
+    setRuntimeFailure(null)
+  }
+
+  const retainingRuntimeFallback =
+    questionFamily && runtimeFailure === questionIdentity
   const runtimeFallbackPending = useRef(false)
   const usingSandbox = questionFamily
     ? questionAdmission.select({
@@ -444,7 +454,7 @@ export function PackageStage({
   )
 
   // Explicit unsupported slots/roles always use the existing compiled stage.
-  if (!usingSandbox) {
+  if (!usingSandbox && !retainingRuntimeFallback) {
     // Do not paint a native question while its chosen renderer is still loading:
     // replacing that visible fallback with the sandbox repeats the question.
     if (awaitingSandbox) {
@@ -506,7 +516,9 @@ export function PackageStage({
             if (questionAdmission.reject(questionIdentity)) {
               // Notify the host after its replacement native stage mounts.
               runtimeFallbackPending.current = true
-              setRuntimeFailure((value) => value + 1)
+              // Keep the failed host and its native fallback mounted for this
+              // question, preserving the error and the replacement stage ref.
+              setRuntimeFailure(questionIdentity)
             }
 
             return
@@ -515,8 +527,8 @@ export function PackageStage({
           onFallback()
         }}
         fallback={children}
+        overlay={trustedOverlay}
       />
-      {trustedOverlay}
     </div>
   )
 }

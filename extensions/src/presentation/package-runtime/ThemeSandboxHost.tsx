@@ -21,6 +21,7 @@ export function ThemeSandboxHost({
   onReady,
   onFallback,
   fallback,
+  overlay,
   title,
 }: {
   url: string
@@ -30,6 +31,7 @@ export function ThemeSandboxHost({
   /** Fires once after the frame's authenticated READY, not its load event. */
   onReady?: () => void
   fallback: ReactNode
+  overlay?: ReactNode
   title: string
   onFallback?: () => void
 }) {
@@ -234,17 +236,20 @@ export function ThemeSandboxHost({
   }
 
   return (
-    <iframe
-      ref={frame}
-      src={url}
-      sandbox="allow-scripts"
-      referrerPolicy="no-referrer"
-      allow="camera 'none'; microphone 'none'; geolocation 'none'; autoplay 'none'; clipboard-read 'none'; clipboard-write 'none'"
-      title={title}
-      onLoad={() => send(true)}
-      onError={() => fail("FRAME_LOAD_FAILED")}
-      data-testid="package-runtime-frame"
-      className="h-full w-full border-0"
-    />
+    <>
+      <iframe
+        ref={frame}
+        src={url}
+        sandbox="allow-scripts"
+        referrerPolicy="no-referrer"
+        allow="camera 'none'; microphone 'none'; geolocation 'none'; autoplay 'none'; clipboard-read 'none'; clipboard-write 'none'"
+        title={title}
+        onLoad={() => send(true)}
+        onError={() => fail("FRAME_LOAD_FAILED")}
+        data-testid="package-runtime-frame"
+        className="h-full w-full border-0"
+      />
+      {overlay}
+    </>
   )
 }
