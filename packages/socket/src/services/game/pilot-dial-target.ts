@@ -92,14 +92,19 @@ export function resolvePublicDialNumber<T extends DialPilotGame>(
         selectDialedPilotTarget(games, number, configuration).game === room,
     )
 
-    if (numbers.length === 1) {
-      return numbers[0]
-    }
+    const number =
+      numbers.length === 1
+        ? numbers[0]
+        : (numbers.find(
+            (candidate) => getLobbyPhoneRegion(candidate) === "il",
+          ) ??
+          numbers.find((candidate) => getLobbyPhoneRegion(candidate) === "uk"))
 
-    return (
-      numbers.find((number) => getLobbyPhoneRegion(number) === "il") ??
-      numbers.find((number) => getLobbyPhoneRegion(number) === "uk")
-    )
+    // Inbound routing keys contain only digits. Restore the international
+    // prefix for callers while keeping nationally formatted lines intact.
+    return number?.match(/^(?:44[0-9]{10}|972[2-9][0-9]{7,8})$/u)
+      ? `+${number}`
+      : number
   } catch {
     return undefined
   }

@@ -98,7 +98,7 @@ it("publishes only a line of the requested region that routes to this exact room
   )
   expect(
     resolvePublicDialNumber(games, ownRoom, { configuration, region: "uk" }),
-  ).toBe("442079460000")
+  ).toBe("+442079460000")
   expect(
     resolvePublicDialNumber(games, otherRoom, { configuration, region: "il" }),
   ).toBeUndefined()
