@@ -69,10 +69,7 @@ export function GameCard({
           label={game.subject}
           disabled={busy}
         >
-          <GamePoster className="site-game-cover" posterUrl={game.posterUrl} />
-          {!game.posterUrl && (
-            <span className="site-cover-label">{t("Default cover")}</span>
-          )}
+          <GamePoster className="site-game-cover" game={game} />
         </GamePreviewSurface>
       </div>
       <div className="site-game-body">

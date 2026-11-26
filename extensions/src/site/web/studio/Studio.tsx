@@ -533,7 +533,7 @@ function StudioWorkspace({ account }: { account: Account }) {
                       {recentGame && (
                         <article className="spotlight editing">
                           <div className="thumb">
-                            <GamePoster posterUrl={recentGame.posterUrl} />
+                            <GamePoster game={recentGame} />
                           </div>
                           <div className="spotlight-info">
                             <h3>{recentGame.subject}</h3>
