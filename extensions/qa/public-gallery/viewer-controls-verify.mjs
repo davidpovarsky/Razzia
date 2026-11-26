@@ -156,6 +156,12 @@ export async function verifyViewerGeometry(
   await expect
     .poll(() => dialog.evaluate((node) => node.matches(":modal")))
     .toBe(true)
+  const buttons = dialog.locator(
+    ":is(.game-viewer-header, .game-viewer-controls) [data-presentation-action]",
+  )
+  for (const button of await buttons.all()) {
+    await expect(button).toHaveCSS("border-radius", "8px")
+  }
   const measure = () =>
     dialog.evaluate((node) => {
       const box = (selector) => {

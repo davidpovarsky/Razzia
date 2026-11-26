@@ -107,6 +107,10 @@ export const gameViewerCss = `
 .game-viewer-header > .tds-presentation-controls {
   flex: 0 0 auto;
 }
+.game-viewer :is(.game-viewer-header, .game-viewer-controls)
+  .tds-presentation-controls .tds-presentation-control {
+  border-radius: var(--radius-lg, 0.5rem);
+}
 .game-viewer-stage {
   position: relative;
   isolation: isolate;
