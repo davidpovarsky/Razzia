@@ -7,5 +7,6 @@ LABEL org.opencontainers.image.revision=${TADAZZ_SOURCE_REVISION}
 LABEL com.tadazz.site.enabled="true"
 COPY web/ /app/web/
 COPY socket/ /app/socket/
+COPY mcp/ /app/mcp/
 # Windows-created tar entries can be 0600; Nginx serves as an unprivileged user.
 RUN chmod -R a+rX /app/web
