@@ -65,6 +65,7 @@ export function Pricing({ custom }: { custom: () => void }) {
     plan.prices.some((price) => price.currency === selectedCurrency),
   )
   const available = Boolean(plans?.length)
+  const purchasesOpen = Boolean(data?.enabled && data.configured)
   const locale = i18n.resolvedLanguage ?? i18n.language
   const number = (value: number) => new Intl.NumberFormat(locale).format(value)
 
@@ -117,6 +118,11 @@ export function Pricing({ custom }: { custom: () => void }) {
       )}
       {available && selectedCurrency && (
         <>
+          {!purchasesOpen && (
+            <p className="prose" role="status">
+              {t("Billing is disabled. No purchases are available.")}
+            </p>
+          )}
           <div style={{ maxWidth: 280, marginBlockEnd: 24 }}>
             <Select
               id="site-billing-currency"
@@ -200,13 +206,22 @@ export function Pricing({ custom }: { custom: () => void }) {
               )
             })}
           </div>
-          <p className="note" style={{ marginBlock: 24 }}>
+          {purchasesOpen && (
+            <p className="note" style={{ marginBlock: 24 }}>
+              {t(
+                "Select and purchase a licence in your account. Final tax is shown at checkout.",
+              )}
+            </p>
+          )}
+          <SiteLink
+            className={purchasesOpen ? "btn btn-primary" : "btn btn-outline"}
+            href="/studio/account"
+          >
             {t(
-              "Select and purchase a licence in your account. Final tax is shown at checkout.",
+              purchasesOpen
+                ? "Continue to account & licences"
+                : "Account & licences",
             )}
-          </p>
-          <SiteLink className="btn btn-primary" href="/studio/account">
-            {t("Continue to account & licences")}
           </SiteLink>
         </>
       )}

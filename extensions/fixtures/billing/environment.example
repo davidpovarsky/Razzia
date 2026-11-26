@@ -1,5 +1,8 @@
 # Copy settings into an ignored environment file; never commit real values.
 TADAZZ_BILLING_ENABLED=false
+# Publish the reviewed live catalog for website review while checkout stays off.
+# This flag grants no games, enables no payments and never publishes sandbox prices.
+TADAZZ_PRICING_PUBLISHED=false
 PADDLE_ENVIRONMENT=sandbox
 PADDLE_API_KEY=
 PADDLE_CLIENT_TOKEN=

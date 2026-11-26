@@ -9,8 +9,12 @@ export function publicBillingCatalog(
   config: BillingConfig,
 ): BillingPublicCatalog {
   const configured = isBillingCheckoutConfigured(config)
+  const pricingPublished =
+    config.publishPricing === true &&
+    config.environment === "live" &&
+    config.catalog.length > 0
   const plans: BillingPublicCatalog["plans"] =
-    configured && config.environment === "live"
+    (configured || pricingPublished) && config.environment === "live"
       ? config.catalog
           .filter((plan) => plan.kind !== "upgrade")
           .map((plan) => ({
@@ -30,6 +34,7 @@ export function publicBillingCatalog(
   return {
     enabled: config.enabled,
     configured,
+    ...(pricingPublished ? { pricingPublished: true as const } : {}),
     environment: config.environment,
     currencies: billingCurrencies.filter((currency) =>
       plans.some((plan) =>

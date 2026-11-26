@@ -98,6 +98,34 @@ def asset_manifest(root):
             and not any(part.endswith(("-wal", "-shm")) for part in path.parts)}
 
 
+def pricing_environment(original, filename):
+    """Publish reviewed prices while retaining disabled billing and all other env."""
+    if filename is None:
+        return original
+    path = Path(filename)
+    info = path.lstat()
+    if path.is_symlink() or not path.is_file() or info.st_mode & 0o077:
+        raise RuntimeError("Pricing environment file must be a private regular file")
+    values = json.loads(path.read_text())
+    expected = {"TADAZZ_BILLING_ENABLED", "TADAZZ_PRICING_PUBLISHED",
+                "PADDLE_ENVIRONMENT", "PADDLE_API_KEY", "PADDLE_CLIENT_TOKEN",
+                "PADDLE_WEBHOOK_SECRET", "TADAZZ_BILLING_CATALOG_PATH"}
+    if not isinstance(values, dict) or set(values) != expected or any(
+        not isinstance(value, str) or not value or "\n" in value or "\r" in value
+        for value in values.values()
+    ):
+        raise RuntimeError("Unexpected pricing environment keys or values")
+    if (values["TADAZZ_BILLING_ENABLED"] != "false" or
+            values["TADAZZ_PRICING_PUBLISHED"] != "true" or
+            values["PADDLE_ENVIRONMENT"] != "live" or
+            values["TADAZZ_BILLING_CATALOG_PATH"] != "/app/config/billing-live-catalog.json" or
+            not values["PADDLE_API_KEY"].startswith("pdl_live_apikey_") or
+            not re.fullmatch(r"live_[A-Za-z0-9]{27}", values["PADDLE_CLIENT_TOKEN"])):
+        raise RuntimeError("Pricing publication must keep live billing disabled")
+    retained = [item for item in original if item.split("=", 1)[0] not in expected]
+    return retained + [key + "=" + value for key, value in values.items()]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", required=True)
@@ -105,6 +133,7 @@ def main():
     parser.add_argument("--expected-image", required=True)
     parser.add_argument("--release-dir", required=True)
     parser.add_argument("--revision", required=True)
+    parser.add_argument("--pricing-environment-file")
     args = parser.parse_args()
     os.umask(0o077)
     release = Path(args.release_dir).resolve(strict=True)
@@ -135,6 +164,7 @@ def main():
     probe("https://tadazz.com/api/auth/mode", expected={"accountsEnabled": True})
     probe("https://tadazz.com/api/billing/config", expected={"enabled": False})
     payload = dict(original["Config"])
+    payload["Env"] = pricing_environment(original["Config"]["Env"], args.pricing_environment_file)
     payload["Image"] = image["Id"]
     payload["Labels"] = {**(payload.get("Labels") or {}),
                          "org.opencontainers.image.revision": args.revision,
@@ -160,7 +190,7 @@ def main():
         docker_api("POST", "/containers/tadazz/start")
         wait_health()
         current = inspect("tadazz")
-        if current["Config"]["Env"] != original["Config"]["Env"]:
+        if current["Config"]["Env"] != payload["Env"]:
             raise RuntimeError("Runtime environment changed")
         if current["Mounts"] != original["Mounts"]:
             raise RuntimeError("Production mounts changed")
@@ -181,7 +211,9 @@ def main():
             raise RuntimeError("Telephone gateway changed")
         report.update(success=True, container=created_container["Id"],
                       privatePayloadFilesUnchanged=len(before_assets),
-                      environmentUnchanged=True, mountsUnchanged=True,
+                      environmentUnchanged=args.pricing_environment_file is None,
+                      pricingPublicationConfigured=args.pricing_environment_file is not None,
+                      mountsUnchanged=True,
                       hostConfigurationUnchanged=True, gatewayContainerUnchanged=True,
                       preflightHealth=json.loads(health_before))
     except Exception as error:

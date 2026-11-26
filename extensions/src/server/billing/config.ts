@@ -4,6 +4,7 @@ import { BillingError } from "./errors"
 
 export interface BillingConfig {
   enabled: boolean
+  publishPricing?: boolean
   environment: "sandbox" | "live"
   apiKey: string
   clientToken: string
@@ -26,7 +27,9 @@ export function readBillingConfig(env = process.env): BillingConfig {
 
   let catalog: BillingPlan[] = []
 
-  if (enabled && env.TADAZZ_BILLING_CATALOG_PATH) {
+  const publishPricing = env.TADAZZ_PRICING_PUBLISHED === "true"
+
+  if ((enabled || publishPricing) && env.TADAZZ_BILLING_CATALOG_PATH) {
     catalog = billingCatalogSchema.parse(
       JSON.parse(readFileSync(env.TADAZZ_BILLING_CATALOG_PATH, "utf8")),
     )
@@ -40,6 +43,7 @@ export function readBillingConfig(env = process.env): BillingConfig {
 
   return {
     enabled,
+    publishPricing,
     environment,
     catalog,
     graceMs: graceHours * 3_600_000,

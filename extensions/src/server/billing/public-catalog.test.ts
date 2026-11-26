@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest"
+import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import { billingPublicCatalogSchema } from "../../core/billing"
 import {
   hasBillingClientToken,
@@ -125,6 +128,72 @@ describe("billing readiness and public offers", () => {
 
   it("rejects provider IDs and sandbox offers at the browser contract boundary", () => {
     const published = publicBillingCatalog(live)
+    expect(() =>
+      billingPublicCatalogSchema.parse({
+        ...published,
+        environment: "sandbox",
+      }),
+    ).toThrow()
+    expect(() =>
+      billingPublicCatalogSchema.parse({ ...published, plans: [plan] }),
+    ).toThrow()
+  })
+
+  it("publishes explicitly approved live pricing without enabling billing or requiring accounts", () => {
+    const root = mkdtempSync(join(tmpdir(), "tadazz-published-pricing-"))
+    const catalogPath = join(root, "catalog.json")
+    writeFileSync(catalogPath, JSON.stringify([plan]))
+
+    try {
+      const env = {
+        PADDLE_ENVIRONMENT: "live",
+        TADAZZ_BILLING_CATALOG_PATH: catalogPath,
+      }
+      expect(publicBillingCatalog(readBillingConfig(env)).plans).toEqual([])
+      const current = readBillingConfig({
+        ...env,
+        TADAZZ_PRICING_PUBLISHED: "true",
+      })
+      const published = publicBillingCatalog(current)
+      expect(published).toMatchObject({
+        enabled: false,
+        configured: false,
+        pricingPublished: true,
+        environment: "live",
+        currencies: ["GBP"],
+      })
+      expect(published.plans).toHaveLength(1)
+      expect(published.plans[0].prices).toEqual([
+        { currency: "GBP", amountMinor: 100 },
+      ])
+      expect(billingPublicCatalogSchema.parse(published)).toEqual(published)
+      expect(isBillingCheckoutConfigured(current)).toBe(false)
+      expect(JSON.stringify(published)).not.toContain("priceId")
+      expect(readdirSync(root)).toEqual(["catalog.json"])
+    } finally {
+      rmSync(root, { recursive: true, force: true })
+    }
+  })
+
+  it("never publishes sandbox pricing even when publication is explicitly requested", () => {
+    const published = publicBillingCatalog({ ...config, publishPricing: true })
+    expect(published.plans).toEqual([])
+    expect(published.currencies).toEqual([])
+    expect(published.pricingPublished).toBeUndefined()
+  })
+
+  it("requires an explicit live publication marker when checkout is closed", () => {
+    const published = publicBillingCatalog({
+      ...live,
+      enabled: false,
+      publishPricing: true,
+      apiKey: "",
+      webhookSecret: "",
+      clientToken: "",
+    })
+    const { pricingPublished, ...unpublished } = published
+    expect(pricingPublished).toBe(true)
+    expect(() => billingPublicCatalogSchema.parse(unpublished)).toThrow()
     expect(() =>
       billingPublicCatalogSchema.parse({
         ...published,

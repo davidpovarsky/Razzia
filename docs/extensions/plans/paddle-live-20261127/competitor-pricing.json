@@ -1,0 +1,231 @@
+{
+  "asOf": "2026-11-27",
+  "competitor": "Trix trivia (amoked)",
+  "sources": {
+    "pricing": "https://trix.amoked.com/",
+    "terms": "https://amoked.com/Troy/registration.php",
+    "fx": "https://boi.org.il/en/economic-roles/financial-markets/exchange-rates/pound/",
+    "paddleRefunds": "https://www.paddle.com/legal/refund-policy"
+  },
+  "exchangeRate": {
+    "asOf": "2026-11-26",
+    "gbpInIls": 4.3695
+  },
+  "formula": {
+    "targetMarkupPercent": 7.5,
+    "rounding": "nearest GBP",
+    "requiredActualMarkupRange": [
+      5,
+      10
+    ]
+  },
+  "comparison": [
+    {
+      "plan": "single-20",
+      "trixILS": 180,
+      "convertedGBP": 41.1946,
+      "proposedGBP": 44,
+      "actualMarkupPercent": 6.81,
+      "withinRequestedRange": true
+    },
+    {
+      "plan": "single-50",
+      "trixILS": 250,
+      "convertedGBP": 57.2148,
+      "proposedGBP": 62,
+      "actualMarkupPercent": 8.3636,
+      "withinRequestedRange": true
+    },
+    {
+      "plan": "single-100",
+      "trixILS": 320,
+      "convertedGBP": 73.2349,
+      "proposedGBP": 79,
+      "actualMarkupPercent": 7.872,
+      "withinRequestedRange": true
+    },
+    {
+      "plan": "single-250",
+      "trixILS": 500,
+      "convertedGBP": 114.4296,
+      "proposedGBP": 123,
+      "actualMarkupPercent": 7.4897,
+      "withinRequestedRange": true
+    },
+    {
+      "plan": "six-month",
+      "trixILS": 650,
+      "convertedGBP": 148.7584,
+      "proposedGBP": 160,
+      "actualMarkupPercent": 7.5569,
+      "withinRequestedRange": true
+    },
+    {
+      "plan": "twelve-month",
+      "trixILS": 950,
+      "convertedGBP": 217.4162,
+      "proposedGBP": 234,
+      "actualMarkupPercent": 7.6277,
+      "withinRequestedRange": true
+    }
+  ],
+  "createdLiveOffers": [
+    {
+      "plan_id": "single-20",
+      "product_id": "pro_01m8cypmj7pm23thqwzfksqq6h",
+      "price_id": "pri_01m8cypmsnwm3fa0ty4168zp00",
+      "name": "Tadazz — one game, up to 20 participants",
+      "participants": 20,
+      "games": 1,
+      "amount_minor": 4400,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    },
+    {
+      "plan_id": "single-50",
+      "product_id": "pro_01m8cypna68v3nx5pt3vzdnybv",
+      "price_id": "pri_01m8cypnk5wst9y7c47ksah99h",
+      "name": "Tadazz — one game, up to 50 participants",
+      "participants": 50,
+      "games": 1,
+      "amount_minor": 6200,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    },
+    {
+      "plan_id": "single-100",
+      "product_id": "pro_01m8cypp4pqaan25x994a158gv",
+      "price_id": "pri_01m8cyppbk1jc7t7jfxsesqvna",
+      "name": "Tadazz — one game, up to 100 participants",
+      "participants": 100,
+      "games": 1,
+      "amount_minor": 7900,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    },
+    {
+      "plan_id": "single-250",
+      "product_id": "pro_01m8cyppwnt5r7dymm8hdna38r",
+      "price_id": "pri_01m8cypq3bsc1qst6hy7wgx655",
+      "name": "Tadazz — one game, up to 250 participants",
+      "participants": 250,
+      "games": 1,
+      "amount_minor": 12300,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    }
+  ],
+  "timeLicences": {
+    "status": "requires tier-specific pricing and supported entitlements before sale",
+    "competitorSixMonthIls": 650,
+    "competitorTwelveMonthIls": 950,
+    "sourceParticipantCaps": "Not specified for time licences on the public competitor page.",
+    "ownerDirection": "Each participant limit must have a separate licence."
+  },
+  "refundDirection": {
+    "ownerRequested": "Commercial policy equivalent to Trix",
+    "draft": "Except where mandatory consumer law or Paddle's Buyer Terms and Refund Policy give you a refund or withdrawal right, purchases are non-refundable. Discretionary refund requests are considered case by case. This does not limit remedies where the service is faulty, not as described or not supplied.",
+    "policyPublished": false
+  },
+  "activation": {
+    "productionBillingEnabled": false,
+    "phoneAllowanceApproved": false,
+    "pilotMigrationComplete": false
+  },
+  "pricingBasisSuperseded": true,
+  "currentPricingBasis": "Owner instruction on 2026-11-27: GBP 100 for one game up to 50 participants. Earlier 5-10 percent markup instruction superseded.",
+  "currentLiveOffers": [
+    {
+      "plan_id": "single-20",
+      "product_id": "pro_01m8cypmj7pm23thqwzfksqq6h",
+      "price_id": "pri_01m8cypmsnwm3fa0ty4168zp00",
+      "name": "Tadazz — one game, up to 20 participants",
+      "participants": 20,
+      "games": 1,
+      "amount_minor": 7200,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    },
+    {
+      "plan_id": "single-50",
+      "product_id": "pro_01m8cypna68v3nx5pt3vzdnybv",
+      "price_id": "pri_01m8cypnk5wst9y7c47ksah99h",
+      "name": "Tadazz — one game, up to 50 participants",
+      "participants": 50,
+      "games": 1,
+      "amount_minor": 10000,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    },
+    {
+      "plan_id": "single-100",
+      "product_id": "pro_01m8cypp4pqaan25x994a158gv",
+      "price_id": "pri_01m8cyppbk1jc7t7jfxsesqvna",
+      "name": "Tadazz — one game, up to 100 participants",
+      "participants": 100,
+      "games": 1,
+      "amount_minor": 12800,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    },
+    {
+      "plan_id": "single-250",
+      "product_id": "pro_01m8cyppwnt5r7dymm8hdna38r",
+      "price_id": "pri_01m8cypq3bsc1qst6hy7wgx655",
+      "name": "Tadazz — one game, up to 250 participants",
+      "participants": 250,
+      "games": 1,
+      "amount_minor": 20000,
+      "currency": "GBP",
+      "billing_cycle": null,
+      "quantity": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tax_category": "saas",
+      "tax_mode": "location"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "owner": "current primary Codex chat (solo)",
+  "baseCommit": "70a117c83780d90e56d1a108ddf8859c3773aee3",
+  "scope": "Opt-in publication of approved live pricing before checkout activation, without starting billing enforcement or exposing provider identifiers.",
+  "protectedUpstreamEdits": [],
+  "authoringEditorEdits": [],
+  "checks": [
+    { "id": "billing-pricing-publication", "owner": "current primary chat", "kind": "quick", "status": "PASS", "scope": "48 focused billing tests across seven files, including default-off behavior, live-only publication and secret filtering; run on the isolated Oracle development worktree before whitespace-only formatting of contracts.ts and public-catalog.test.ts" },
+    { "id": "billing-pricing-format-lint", "owner": "current primary chat", "kind": "quick", "status": "PASS", "scope": "Direct installed Prettier and oxlint entrypoints: seven changed TypeScript/TSX/JavaScript files, zero lint warnings or errors" },
+    { "id": "billing-pricing-browser", "owner": "current primary chat", "kind": "quick", "status": "PASS", "scope": "Actual Pricing component in an isolated Vite preview with synthetic approved GBP offers: 72/100/128/200 for 20/50/100/250 participants. Desktop and 390px viewport checked; checkout closed. This is not production or full-site acceptance." }
+  ],
+  "deployment": "not performed",
+  "businessVerification": "pending",
+  "currentPricingBasis": "Owner instruction: one game with 50 participants costs GBP 100; participant tiers retain the researched 180:250:320:500 ratio.",
+  "fixedTermLicences": "Not created: current runtime has no fixed-term unlimited-use licence kind. Earlier term prices are superseded.",
+  "productionBillingEnabled": false,
+  "policyPublication": "Complete bundle including public seller name/address approved by the owner; integrated in source; release pending",
+  "runtimeApiKey": "Created following explicit owner approval; stored outside Git with private ACL; live authentication and exact five scopes verified",
+  "webhook": "Created and saved privately; destination inactive until runtime activation",
+  "releaseAuthorization": "Owner explicitly requested publication and deployment on 27 November 2026",
+  "deploymentEnvironment": "Opt-in public pricing, live credentials installed, billing disabled during Paddle verification; authentication and all unrelated settings preserved"
+}

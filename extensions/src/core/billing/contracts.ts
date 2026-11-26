@@ -50,18 +50,26 @@ export const billingPublicCatalogSchema = z
   .strictObject({
     enabled: z.boolean(),
     configured: z.boolean(),
+    pricingPublished: z.literal(true).optional(),
     environment: z.enum(["sandbox", "live"]),
     currencies: z.array(billingCurrencySchema).max(4),
     plans: z.array(billingPublicPlanSchema).max(100),
   })
   .superRefine((catalog, ctx) => {
     if (
-      (!catalog.enabled ||
-        !catalog.configured ||
-        catalog.environment !== "live") &&
+      (catalog.environment !== "live" ||
+        ((!catalog.enabled || !catalog.configured) &&
+          !catalog.pricingPublished)) &&
       (catalog.plans.length > 0 || catalog.currencies.length > 0)
     ) {
       ctx.addIssue({ code: "custom", message: "Public catalog is unavailable" })
+    }
+
+    if (catalog.pricingPublished && catalog.environment !== "live") {
+      ctx.addIssue({
+        code: "custom",
+        message: "Published pricing must be live",
+      })
     }
   })
 

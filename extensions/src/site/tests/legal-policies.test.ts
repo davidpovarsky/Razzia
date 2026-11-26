@@ -55,9 +55,22 @@ function approved(): LegalPolicyBundle {
 }
 
 describe("legal policy publication", () => {
-  it("keeps the real configuration unpublished until actual owner approval", () => {
-    expect(publishedLegalPolicies).toBeNull()
-    expect(resolveLegalPolicy("terms", publishedLegalPolicies)).toBeNull()
+  it("publishes the complete bundle following the owner's explicit approval", () => {
+    expect(publishedLegalPolicies).not.toBeNull()
+    expect(validateLegalPolicies(publishedLegalPolicies).errors).toEqual([])
+    expect(publishedLegalPolicies).toMatchObject({
+      status: "approved",
+      version: "2026-11-27-1",
+      effectiveDate: "2026-11-27",
+      approvedAt: "2026-11-26T22:42:28Z",
+      seller: {
+        name: "Golda Sterling trading as Tadazz",
+        contactEmail: "hello@tadazz.com",
+      },
+    })
+    for (const kind of ["terms", "privacy", "refunds"] as const) {
+      expect(resolveLegalPolicy(kind, publishedLegalPolicies)).toBe(kind)
+    }
   })
 
   it("admits all three complete owner-approved documents together", () => {
@@ -128,6 +141,7 @@ describe("legal policy publication", () => {
       search: "?view=privacy&token=private",
       origin: "https://example.invalid",
       products: [],
+      legalPolicies: null,
     })
     expect(metadata.isHome).toBe(true)
     expect(metadata.canonical).toBe("https://example.invalid/")

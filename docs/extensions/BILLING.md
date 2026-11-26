@@ -76,6 +76,17 @@ Live and sandbox keys, prices and endpoint secrets are separate. Live activation
 requires a separate deployment decision and a verified seller/domain. Nothing in
 the implementation changes the production configuration automatically.
 
+### Publish reviewed prices before opening checkout
+
+Set `PADDLE_ENVIRONMENT=live`, `TADAZZ_PRICING_PUBLISHED=true` and the reviewed
+`TADAZZ_BILLING_CATALOG_PATH` to show prices for website approval while leaving
+`TADAZZ_BILLING_ENABLED=false`. The public response explicitly marks this state
+with `pricingPublished: true`; `enabled` and `configured` remain false. The site
+shows that purchases are unavailable. No account setup, provider credential,
+billing database or entitlement enforcement is started by publishing prices.
+Without this explicit flag, the previous unavailable behavior is preserved.
+Sandbox prices and provider identifiers remain excluded in both cases.
+
 ## Accounting behavior
 
 - SQLite file: `<CONFIG_PATH>/tadazz-billing.sqlite` with WAL and transactional
