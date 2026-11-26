@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "Timer beenden",
-    "presentFromHost": "Vom Host präsentieren",
+    "presentFromHost": "Das Spiel hier im Vollbild präsentieren.",
     "pauseGame": "Pausieren",
     "resumeGame": "Fortsetzen",
     "presentationFullscreenError": "Die Vollbildpräsentation konnte nicht gestartet werden.",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "Spiel verlassen?",
     "exitConfirmDesc": "Die Spielsitzung wird beendet und alle Spieler werden getrennt.",
     "noHistoryAvailable": "Noch keine vergangenen Fragen verfügbar.",
-    "openDisplay": "Zuschauerbildschirm",
+    "openDisplay": "Spielanzeige",
+    "openDisplayNewTab": "Die Spielanzeige in einem neuen Tab öffnen.",
     "copyDisplayUrl": "Zuschauer-Link kopieren",
     "displayUrlCopied": "Zuschauer-Link kopiert",
     "questionNum": "Frage {{num}}",

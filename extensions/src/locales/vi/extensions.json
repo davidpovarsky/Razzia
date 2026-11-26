@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "Dừng thời gian",
-    "presentFromHost": "Trình chiếu từ máy chủ",
+    "presentFromHost": "Trình chiếu trò chơi toàn màn hình tại đây.",
     "pauseGame": "Tạm dừng",
     "resumeGame": "Tiếp tục",
     "presentationFullscreenError": "Không thể bắt đầu trình chiếu toàn màn hình.",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "Thoát trò chơi?",
     "exitConfirmDesc": "Phiên chơi sẽ kết thúc và tất cả người chơi sẽ bị ngắt kết nối.",
     "noHistoryAvailable": "Chưa có câu hỏi nào trước đó.",
-    "openDisplay": "Màn hình khán giả",
+    "openDisplay": "Màn hình trò chơi",
+    "openDisplayNewTab": "Mở màn hình trò chơi trong thẻ mới.",
     "copyDisplayUrl": "Sao chép liên kết khán giả",
     "displayUrlCopied": "Đã sao chép liên kết khán giả",
     "questionNum": "Câu hỏi {{num}}",

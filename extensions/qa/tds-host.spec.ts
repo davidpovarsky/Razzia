@@ -102,7 +102,7 @@ async function doubleKey(page: Page, key: string) {
 }
 async function fullscreen(page: Page) {
   if (!(await page.evaluate(() => Boolean(document.fullscreenElement)))) {
-    await page.getByRole("button", { name: "Fullscreen", exact: true }).click()
+    await page.evaluate(() => document.documentElement.requestFullscreen())
     await expect
       .poll(() => page.evaluate(() => Boolean(document.fullscreenElement)))
       .toBe(true)
@@ -162,11 +162,48 @@ test("phone-only lobby defaults and host overrides reach the audience live", asy
   await audience.close()
 })
 
-test("display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus", async ({
+test("one presentation fullscreen, a separate game tab, and one desktop footer row", async ({
   page,
   context,
-}) => {
+}, testInfo) => {
+  await page.setViewportSize({ width: 1700, height: 880 })
   const room = await openHost(page)
+  const fullscreenButton = page.getByRole("button", {
+    name: "Fullscreen",
+    exact: true,
+  })
+  await expect(fullscreenButton).toHaveCount(1)
+  await expect(fullscreenButton).toHaveAttribute(
+    "data-testid",
+    "host-present-from-host-btn",
+  )
+
+  const footer = page.getByTestId("host-footer-row")
+  const mute = footer.getByTestId("host-toggle-audio-mute")
+  const settings = footer.getByRole("button", {
+    name: "Game settings",
+    exact: true,
+  })
+  const guest = footer.getByRole("switch", {
+    name: "Allow unregistered participants",
+  })
+  await expect(guest).toBeVisible()
+  for (const control of [settings, guest]) {
+    const center = async (locator: Locator) => {
+      const rect = await locator.boundingBox()
+
+      return rect ? rect.y + rect.height / 2 : Number.NaN
+    }
+    await expect
+      .poll(async () =>
+        Math.abs((await center(mute)) - (await center(control))),
+      )
+      .toBeLessThan(3)
+  }
+  await page.screenshot({
+    path: testInfo.outputPath("host-compact-controls.png"),
+    animations: "disabled",
+  })
   await expect(
     page.getByTestId("host-display-controls").getByRole("button"),
   ).toHaveCount(3)
@@ -181,8 +218,16 @@ test("display modes stay distinct; actual clipboard, clean audience/local presen
   await expect
     .poll(() => page.evaluate(() => navigator.clipboard.readText()))
     .toBe(`http://127.0.0.1:4310/display/${room.gameId}`)
+  const gameScreen = page.getByRole("button", {
+    name: "Game screen",
+    exact: true,
+  })
+  await gameScreen.hover()
+  await expect(page.getByRole("tooltip")).toHaveText(
+    "Open the game screen in a new tab.",
+  )
   const popupPromise = page.waitForEvent("popup")
-  await page.getByTestId("host-open-display-btn").click()
+  await gameScreen.click()
   const audience = await popupPromise
   await expect(audience).toHaveURL(new RegExp(`/display/${room.gameId}$`, "u"))
   await expect(audience.getByTestId("tadazz-show")).toHaveAttribute(
@@ -210,26 +255,25 @@ test("display modes stay distinct; actual clipboard, clean audience/local presen
   await expect(
     audienceQr.getByRole("button", { name: "Close", exact: true }),
   ).toBeFocused()
+  const audienceQrImage = testInfo.outputPath("phase-08-audience-qr.png")
   await audienceQr
     .locator("svg[data-qr-url]")
-    .screenshot({ path: "/evidence/phase-08-audience-qr.png" })
+    .screenshot({ path: audienceQrImage })
   expect(
-    execFileSync(
-      "zbarimg",
-      ["--quiet", "--raw", "/evidence/phase-08-audience-qr.png"],
-      { encoding: "utf8" },
-    ).trim(),
+    execFileSync("zbarimg", ["--quiet", "--raw", audienceQrImage], {
+      encoding: "utf8",
+    }).trim(),
   ).toBe(room.url)
   await audience.keyboard.press("Escape")
   await expect(audienceQr).toHaveCount(0)
   await audience.close()
-  await page.getByTestId("host-present-from-host-btn").click()
+  await fullscreenButton.click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-host-presenting",
     "true",
   )
   await expect(page.getByTestId("manager-control-toolbar")).toHaveCount(0)
-  await expect(page.getByTestId("host-control-footer")).toHaveCount(0)
+  await expect(footer).toHaveCount(0)
   await expect(page.getByTestId("host-audio-scope")).toHaveCount(0)
   await expect
     .poll(() => page.evaluate(() => Boolean(document.fullscreenElement)))
@@ -261,7 +305,7 @@ test("display modes stay distinct; actual clipboard, clean audience/local presen
       await dialog.evaluate((node) => node.contains(document.activeElement)),
     ).toBe(true)
     await page.screenshot({
-      path: `/evidence/phase-08-fullscreen-${name}.png`,
+      path: testInfo.outputPath(`phase-08-fullscreen-${name}.png`),
       animations: "disabled",
     })
     await page.keyboard.press("Escape")
@@ -283,15 +327,12 @@ test("display modes stay distinct; actual clipboard, clean audience/local presen
   await expect(
     qr.getByRole("button", { name: "Close", exact: true }),
   ).toBeFocused()
-  await qr
-    .locator("svg[data-qr-url]")
-    .screenshot({ path: "/evidence/phase-08-host-qr.png" })
+  const hostQrImage = testInfo.outputPath("phase-08-host-qr.png")
+  await qr.locator("svg[data-qr-url]").screenshot({ path: hostQrImage })
   expect(
-    execFileSync(
-      "zbarimg",
-      ["--quiet", "--raw", "/evidence/phase-08-host-qr.png"],
-      { encoding: "utf8" },
-    ).trim(),
+    execFileSync("zbarimg", ["--quiet", "--raw", hostQrImage], {
+      encoding: "utf8",
+    }).trim(),
   ).toBe(room.url)
   await page.keyboard.press("Escape")
   await expect(qr).toHaveCount(0)
@@ -301,7 +342,7 @@ test("display modes stay distinct; actual clipboard, clean audience/local presen
 test("real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once", async ({
   page,
   browser,
-}) => {
+}, testInfo) => {
   const room = await openHost(page)
   const playerContext = await browser.newContext({
     baseURL: "http://127.0.0.1:4310",
@@ -376,7 +417,7 @@ test("real game pause/audio/half-second shortcuts remain separate; end timer kee
   await expect.poll(() => commandCount(page, "REPLAY_FROM_CHECKPOINT")).toBe(1)
   await expect(history).toHaveCount(0)
   await page.screenshot({
-    path: "/evidence/phase-08-history-replay.png",
+    path: testInfo.outputPath("phase-08-history-replay.png"),
     animations: "disabled",
   })
   await playerContext.close()

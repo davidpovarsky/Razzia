@@ -2,7 +2,7 @@
 // oxlint-disable no-await-in-loop -- Scene choreography and ordered stage operations must complete before the next step starts.
 import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
-import { HostControlBar } from "@razzia/extensions/platform-ui"
+import { HostControlBar, HostFooter } from "@razzia/extensions/platform-ui"
 import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
@@ -68,7 +68,6 @@ import {
   ViewRoleContext,
   type ViewRole,
 } from "@razzia/web/features/game/contexts/view-role-context"
-import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
@@ -77,8 +76,6 @@ import {
   CircleQuestionMark,
   Image,
   LogOut,
-  Maximize,
-  Minimize,
   PhoneCall,
   SkipForward,
   Users,
@@ -216,7 +213,6 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   const playerStatus = usePlayerStore((s) => s.status)
   const { questionStates } = useQuestionStore()
   const currentQuestionNumber = questionStates?.current
-  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const [playersModalOpen, setPlayersModalOpen] = useState(false)
   const tieRequestPendingRef = useRef(false)
   const reduced = useMemo(prefersReducedMotion, [])
@@ -1796,208 +1792,190 @@ function TadazzShowContent(props: TadazzShowViewProps) {
               </div>
             )}
 
-          {extensionState && (
-            <AudioCuePlayer
-              eventOnly={
-                role === "player" ||
-                (scene.kind === "wait" && !waitingForFinale)
-              }
-              showTrack={referenceStoryTrack}
-              stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
-              cueId={
-                waitingForFinale
-                  ? undefined
-                  : resolveNativePhaseAudioCue(scene.kind, props.audioCueId)
-              }
-              audioExtras={
-                extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
-              }
-              cardAudioCues={
-                extensionState.extras.cardAudioCues as
-                  CardAudioOverrides | undefined
-              }
-              sceneAudio={
-                (isStoryReading || waitingForFinale
-                  ? undefined
-                  : props.sceneAudio) as never
-              }
-              gameId={extensionState.gameId}
-              activeCardKey={extensionState.questionId ?? props.activeCardKey}
-              screenKey={
-                scene.kind === "scene" ? scene.scene.id : props.activeCardKey
-              }
-              phase={
-                extensionState.phase === "scene"
-                  ? "scene"
-                  : (props.statusName ?? extensionState.phase)
-              }
-              epoch={extensionState.epoch}
-              soundtrackSlot={audioPolicy.slot}
-              continuityKey={audioPolicy.continuityKey}
-              paused={isPaused}
-              autoPlay={!manager || roomMediaReady}
-              showControls={manager && !isHostPresenting}
-              controlLabels={{
-                enable: t("extensions:audio.enableSound", "Enable sound"),
-                volume: t("extensions:audio.volume", "Volume"),
-                mute: t("extensions:audio.mute", "Mute"),
-                unmute: t("extensions:audio.unmute", "Unmute"),
-                pause: t("extensions:audio.pauseAudio", "Pause audio"),
-                play: t("extensions:audio.playAudio", "Play audio"),
-                track: t("extensions:audio.track", "Track"),
-                followShow: t("extensions:audio.followShow", "Follow show"),
-              }}
-              soundtrackLabels={{
-                openingIntro: t(
-                  "extensions:audio.slotOpeningIntro",
-                  "Opening intro",
-                ),
-                lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
-                roundStart: t("extensions:audio.slotRoundStart", "Round start"),
-                question: t("extensions:audio.slotQuestion", "Question"),
-                voting: t("extensions:audio.slotVoting", "Voting"),
-                results: t("extensions:audio.slotResults", "Results"),
-                leaderboard: t(
-                  "extensions:audio.slotLeaderboard",
-                  "Leaderboard",
-                ),
-                recap: t("extensions:audio.slotRecap", "Recap"),
-                finale: t("extensions:audio.slotFinale", "Finale"),
-              }}
-              hasCompetingMedia={props.hasCompetingMediaAudio}
-            />
-          )}
+          <HostFooter active={manager && !isHostPresenting}>
+            {extensionState && (
+              <AudioCuePlayer
+                eventOnly={
+                  role === "player" ||
+                  (scene.kind === "wait" && !waitingForFinale)
+                }
+                showTrack={referenceStoryTrack}
+                stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
+                cueId={
+                  waitingForFinale
+                    ? undefined
+                    : resolveNativePhaseAudioCue(scene.kind, props.audioCueId)
+                }
+                audioExtras={
+                  extensionState.extras.audio as
+                    QuizExtrasV1["audio"] | undefined
+                }
+                cardAudioCues={
+                  extensionState.extras.cardAudioCues as
+                    CardAudioOverrides | undefined
+                }
+                sceneAudio={
+                  (isStoryReading || waitingForFinale
+                    ? undefined
+                    : props.sceneAudio) as never
+                }
+                gameId={extensionState.gameId}
+                activeCardKey={extensionState.questionId ?? props.activeCardKey}
+                screenKey={
+                  scene.kind === "scene" ? scene.scene.id : props.activeCardKey
+                }
+                phase={
+                  extensionState.phase === "scene"
+                    ? "scene"
+                    : (props.statusName ?? extensionState.phase)
+                }
+                epoch={extensionState.epoch}
+                soundtrackSlot={audioPolicy.slot}
+                continuityKey={audioPolicy.continuityKey}
+                paused={isPaused}
+                autoPlay={!manager || roomMediaReady}
+                showControls={manager && !isHostPresenting}
+                controlLabels={{
+                  enable: t("extensions:audio.enableSound", "Enable sound"),
+                  volume: t("extensions:audio.volume", "Volume"),
+                  mute: t("extensions:audio.mute", "Mute"),
+                  unmute: t("extensions:audio.unmute", "Unmute"),
+                  pause: t("extensions:audio.pauseAudio", "Pause audio"),
+                  play: t("extensions:audio.playAudio", "Play audio"),
+                  track: t("extensions:audio.track", "Track"),
+                  followShow: t("extensions:audio.followShow", "Follow show"),
+                }}
+                soundtrackLabels={{
+                  openingIntro: t(
+                    "extensions:audio.slotOpeningIntro",
+                    "Opening intro",
+                  ),
+                  lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
+                  roundStart: t(
+                    "extensions:audio.slotRoundStart",
+                    "Round start",
+                  ),
+                  question: t("extensions:audio.slotQuestion", "Question"),
+                  voting: t("extensions:audio.slotVoting", "Voting"),
+                  results: t("extensions:audio.slotResults", "Results"),
+                  leaderboard: t(
+                    "extensions:audio.slotLeaderboard",
+                    "Leaderboard",
+                  ),
+                  recap: t("extensions:audio.slotRecap", "Recap"),
+                  finale: t("extensions:audio.slotFinale", "Finale"),
+                }}
+                hasCompetingMedia={props.hasCompetingMediaAudio}
+              />
+            )}
 
-          {(() => {
-            if (manager) {
-              if (isHostPresenting) {
+            {(() => {
+              if (manager) {
+                if (isHostPresenting) {
+                  return (
+                    <div className="absolute top-3 right-3 z-40">
+                      <HostShortcutsDialog compact />
+                    </div>
+                  )
+                }
+
                 return (
-                  <div className="absolute top-3 right-3 z-40">
-                    <HostShortcutsDialog compact />
-                  </div>
-                )
-              }
-
-              return (
-                <HostControlBar
-                  className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
-                  data-testid="tadazz-host-controls"
-                >
-                  {managerState.inviteCode &&
-                    props.statusName !== STATUS.SHOW_ROOM && (
-                      <div
-                        className="tz-x-pill flex shrink-0 items-center gap-2"
+                  <HostControlBar
+                    className="z-50 ms-auto box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
+                    data-testid="tadazz-host-controls"
+                  >
+                    {managerState.inviteCode &&
+                      props.statusName !== STATUS.SHOW_ROOM && (
+                        <div
+                          className="tz-x-pill flex shrink-0 items-center gap-2"
+                          style={{
+                            fontSize: 16,
+                            padding: "6px 14px",
+                          }}
+                        >
+                          {!managerState.locked &&
+                            readPublicLobbyDirectory(
+                              extensionState?.extras.lobbyFullShow,
+                            )?.showPin === true && (
+                              <>
+                                <span>{managerState.inviteCode}</span>
+                              </>
+                            )}
+                          <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                        </div>
+                      )}
+                    <HostGuestJoinToggle />
+                    <Tooltip
+                      content={t(
+                        "extensions:roster.liveModalTitle",
+                        "Players & Live Connection Status",
+                      )}
+                    >
+                      <NativeButton
+                        size="sm"
+                        type="button"
+                        onClick={() => setPlayersModalOpen(true)}
+                        data-testid="host-bottom-players-btn"
+                        className="tz-x-pill ml-auto flex shrink-0 items-center gap-1.5"
                         style={{
                           fontSize: 16,
                           padding: "6px 14px",
+                          opacity: isConnected ? 1 : 0.6,
                         }}
                       >
-                        {!managerState.locked &&
-                          readPublicLobbyDirectory(
-                            extensionState?.extras.lobbyFullShow,
-                          )?.showPin === true && (
-                            <>
-                              <span>{managerState.inviteCode}</span>
-                            </>
-                          )}
-                        <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
-                      </div>
-                    )}
-                  <HostGuestJoinToggle />
-                  <Tooltip
-                    content={t(
-                      "extensions:roster.liveModalTitle",
-                      "Players & Live Connection Status",
-                    )}
-                  >
-                    <NativeButton
-                      size="sm"
-                      type="button"
-                      onClick={() => setPlayersModalOpen(true)}
-                      data-testid="host-bottom-players-btn"
-                      className="tz-x-pill ml-auto flex shrink-0 items-center gap-1.5"
-                      style={{
-                        fontSize: 16,
-                        padding: "6px 14px",
-                        opacity: isConnected ? 1 : 0.6,
-                      }}
-                    >
-                      <Users className="size-5" />
-                      <span data-testid="host-connected-counter">
-                        {registeredCount > 0 &&
-                        (registeredCount !== connectedCount ||
-                          managerState.hostPresence)
-                          ? `${connectedCount} / ${registeredCount}`
-                          : String(totalPlayers ?? managerState.players.length)}
+                        <Users className="size-5" />
+                        <span data-testid="host-connected-counter">
+                          {registeredCount > 0 &&
+                          (registeredCount !== connectedCount ||
+                            managerState.hostPresence)
+                            ? `${connectedCount} / ${registeredCount}`
+                            : String(
+                                totalPlayers ?? managerState.players.length,
+                              )}
+                        </span>
+                        <PhoneCall className="size-3" />
+                      </NativeButton>
+                    </Tooltip>
+                    <GameSettingsModal
+                      onOpenRoster={() => setPlayersModalOpen(true)}
+                    />
+                    <HostPlayersModal
+                      open={playersModalOpen}
+                      onOpenChange={setPlayersModalOpen}
+                    />
+                  </HostControlBar>
+                )
+              }
+
+              if (role === "spectator") {
+                return null
+              }
+
+              return (
+                <div className="tz-player-bar" data-testid="tadazz-player-bar">
+                  <div className="flex items-center gap-2">
+                    <span>{player?.username}</span>
+                    {assignedTeam && (
+                      <span
+                        className="tz-player-team"
+                        style={{
+                          backgroundColor: assignedTeam.color,
+                        }}
+                      >
+                        {assignedTeam.name}
                       </span>
-                      <PhoneCall className="size-3" />
-                    </NativeButton>
-                  </Tooltip>
-                  <GameSettingsModal
-                    onOpenRoster={() => setPlayersModalOpen(true)}
-                  />
-                  <HostPlayersModal
-                    open={playersModalOpen}
-                    onOpenChange={setPlayersModalOpen}
-                  />
-                  <Tooltip
-                    content={t(
-                      isFullscreen
-                        ? "common:exitFullscreen"
-                        : "common:fullscreen",
                     )}
-                  >
-                    <NativeButton
-                      size="sm"
-                      type="button"
-                      onClick={toggleFullscreen}
-                      aria-label={t(
-                        isFullscreen
-                          ? "common:exitFullscreen"
-                          : "common:fullscreen",
-                      )}
-                      className="hover:bg-accent font-display flex items-center justify-center bg-white text-black"
-                      style={{
-                        padding: "6px 12px",
-                      }}
-                    >
-                      {isFullscreen ? (
-                        <Minimize className="size-5" />
-                      ) : (
-                        <Maximize className="size-5" />
-                      )}
-                    </NativeButton>
-                  </Tooltip>
-                </HostControlBar>
-              )
-            }
-
-            if (role === "spectator") {
-              return null
-            }
-
-            return (
-              <div className="tz-player-bar" data-testid="tadazz-player-bar">
-                <div className="flex items-center gap-2">
-                  <span>{player?.username}</span>
-                  {assignedTeam && (
-                    <span
-                      className="tz-player-team"
-                      style={{
-                        backgroundColor: assignedTeam.color,
-                      }}
-                    >
-                      {assignedTeam.name}
+                  </div>
+                  {(gameMode !== QUIZZ_MODES.SURVEY ||
+                    (player?.points !== undefined && player.points > 0)) && (
+                    <span className="tz-player-score">
+                      {player?.points ?? 0}
                     </span>
                   )}
                 </div>
-                {(gameMode !== QUIZZ_MODES.SURVEY ||
-                  (player?.points !== undefined && player.points > 0)) && (
-                  <span className="tz-player-score">{player?.points ?? 0}</span>
-                )}
-              </div>
-            )
-          })()}
+              )
+            })()}
+          </HostFooter>
         </section>
       </ViewRoleContext.Provider>
     </ExtensionStateProvider>

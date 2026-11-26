@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "סיום זמן המענה",
-    "presentFromHost": "הצגה ממסך המנחה",
+    "presentFromHost": "הקרנת המשחק במסך מלא כאן.",
     "pauseGame": "השהיה",
     "resumeGame": "המשך",
     "presentationFullscreenError": "לא ניתן לפתוח את ההצגה במסך מלא.",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "לצאת מהמשחק?",
     "exitConfirmDesc": "המשחק יסתיים וכל השחקנים ינותקו.",
     "noHistoryAvailable": "עדיין אין שאלות קודמות.",
-    "openDisplay": "מסך הקהל",
+    "openDisplay": "מסך המשחק",
+    "openDisplayNewTab": "פתיחת מסך המשחק בלשונית חדשה.",
     "copyDisplayUrl": "העתקת קישור לקהל",
     "displayUrlCopied": "הקישור לקהל הועתק",
     "questionNum": "שאלה {{num}}",

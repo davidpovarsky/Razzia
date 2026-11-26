@@ -16,7 +16,12 @@ import {
   preloadOpeningAssets,
   useResolvedShowTheme,
 } from "@razzia/extensions/presentation"
-import { Button, PlatformScope } from "@razzia/extensions/platform-ui"
+import {
+  Button,
+  HostControlBar,
+  HostFooter,
+  PlatformScope,
+} from "@razzia/extensions/platform-ui"
 import { STATUS } from "@razzia/common/types/game/status"
 import { Play, SkipForward } from "lucide-react"
 import { useReducedMotion } from "motion/react"
@@ -158,12 +163,6 @@ export function PlatformGameOpening({
           onPresent={onPresent}
         />
       )}
-      {manager && !isHostPresenting && (
-        <div className="flex shrink-0 justify-end gap-2 px-3 py-2">
-          <HostGuestJoinToggle />
-          <GameSettingsModal />
-        </div>
-      )}
       <div className="platform-game-opening__stage">
         {launch.stage === "opening" && !reducedMotion && (
           <TadazzOpening
@@ -238,28 +237,36 @@ export function PlatformGameOpening({
           </div>
         )}
       </div>
-      <NativeAudioCuePlayer
-        audioExtras={audio}
-        showTrack={showTrack}
-        soundtrackSlot="openingIntro"
-        gameId={extensionState.gameId}
-        activeCardKey="platform-opening"
-        phase="platform-opening"
-        epoch={extensionState.epoch}
-        paused={paused || launch.stage !== "opening"}
-        autoPlay={launch.stage === "opening"}
-        showControls={manager && !isHostPresenting}
-        controlLabels={{
-          enable: t("extensions:audio.enableSound", "Enable sound"),
-          volume: t("extensions:audio.volume", "Volume"),
-          mute: t("extensions:audio.mute", "Mute"),
-          unmute: t("extensions:audio.unmute", "Unmute"),
-          pause: t("extensions:audio.pauseAudio", "Pause audio"),
-          play: t("extensions:audio.playAudio", "Play audio"),
-          track: t("extensions:audio.track", "Track"),
-          followShow: t("extensions:audio.followShow", "Follow show"),
-        }}
-      />
+      <HostFooter active={manager && !isHostPresenting}>
+        <NativeAudioCuePlayer
+          audioExtras={audio}
+          showTrack={showTrack}
+          soundtrackSlot="openingIntro"
+          gameId={extensionState.gameId}
+          activeCardKey="platform-opening"
+          phase="platform-opening"
+          epoch={extensionState.epoch}
+          paused={paused || launch.stage !== "opening"}
+          autoPlay={launch.stage === "opening"}
+          showControls={manager && !isHostPresenting}
+          controlLabels={{
+            enable: t("extensions:audio.enableSound", "Enable sound"),
+            volume: t("extensions:audio.volume", "Volume"),
+            mute: t("extensions:audio.mute", "Mute"),
+            unmute: t("extensions:audio.unmute", "Unmute"),
+            pause: t("extensions:audio.pauseAudio", "Pause audio"),
+            play: t("extensions:audio.playAudio", "Play audio"),
+            track: t("extensions:audio.track", "Track"),
+            followShow: t("extensions:audio.followShow", "Follow show"),
+          }}
+        />
+        {manager && !isHostPresenting && (
+          <HostControlBar className="ms-auto flex max-w-full flex-wrap items-center gap-2 p-2">
+            <HostGuestJoinToggle />
+            <GameSettingsModal />
+          </HostControlBar>
+        )}
+      </HostFooter>
     </PlatformScope>
   )
 }

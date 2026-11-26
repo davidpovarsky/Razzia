@@ -1,5 +1,9 @@
-import { Check, Copy, Maximize, Monitor } from "lucide-react"
-import { createElement, type ComponentType } from "react"
+import { AppWindow, Check, Copy, Maximize } from "lucide-react"
+import {
+  createElement,
+  type ComponentType,
+  type PropsWithChildren,
+} from "react"
 import { useTranslation } from "react-i18next"
 import { Button, IconButton } from "./button"
 import { Tooltip } from "./menus"
@@ -33,19 +37,19 @@ export function HostDisplayControls({
 
   return (
     <ToolbarGroup
-      label={`${t("extensions:host.openDisplay")} · ${t("extensions:host.presentFromHost")}`}
+      label={`${t("extensions:host.openDisplay")} · ${t("common:fullscreen")}`}
       data-testid="host-display-controls"
     >
       {gameId && (
         <>
-          <Tooltip content={t("extensions:host.openDisplay")}>
+          <Tooltip content={t("extensions:host.openDisplayNewTab")}>
             <Button
               size="sm"
               aria-label={t("extensions:host.openDisplay")}
               onClick={onOpen}
               data-testid="host-open-display-btn"
             >
-              <Monitor style={iconStyle} aria-hidden="true" />
+              <AppWindow style={iconStyle} aria-hidden="true" />
               <span className="tds-host-display-label">
                 {t("extensions:host.openDisplay")}
               </span>
@@ -78,12 +82,12 @@ export function HostDisplayControls({
           <Button
             size="sm"
             onClick={onPresent}
-            aria-label={t("extensions:host.presentFromHost")}
+            aria-label={t("common:fullscreen")}
             data-testid="host-present-from-host-btn"
           >
             <Maximize style={iconStyle} aria-hidden="true" />
             <span className="tds-host-display-label">
-              {t("extensions:host.presentFromHost")}
+              {t("common:fullscreen")}
             </span>
           </Button>
         </Tooltip>
@@ -108,11 +112,30 @@ export function HostControlBar({
     <PlatformScope
       context="platform.host"
       role="group"
-      aria-label={`${t("extensions:roster.playersButton")} · ${t("game:settings.title")} · ${t("common:fullscreen")}`}
+      aria-label={`${t("extensions:roster.playersButton")} · ${t("game:settings.title")}`}
       data-testid="host-control-footer"
       {...props}
       className={`tds-host-control-bar ${className}`}
     />
+  )
+}
+
+/** Share the lower row between the audio and room controls on host surfaces. */
+export function HostFooter({
+  active,
+  children,
+}: PropsWithChildren<{ active?: boolean }>) {
+  return (
+    <div
+      className={
+        active
+          ? "flex w-full min-w-0 shrink-0 flex-wrap items-center justify-between"
+          : "contents"
+      }
+      data-testid={active ? "host-footer-row" : undefined}
+    >
+      {children}
+    </div>
   )
 }
 

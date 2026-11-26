@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "Finalizar temporizador",
-    "presentFromHost": "Presentar desde el host",
+    "presentFromHost": "Presentar el juego en pantalla completa aquí.",
     "pauseGame": "Pausar",
     "resumeGame": "Reanudar",
     "presentationFullscreenError": "No se pudo iniciar la presentación a pantalla completa.",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "¿Salir del juego?",
     "exitConfirmDesc": "La sesión de juego terminará y todos los jugadores serán desconectados.",
     "noHistoryAvailable": "Aún no hay preguntas anteriores disponibles.",
-    "openDisplay": "Pantalla de audiencia",
+    "openDisplay": "Pantalla del juego",
+    "openDisplayNewTab": "Abrir la pantalla del juego en una pestaña nueva.",
     "copyDisplayUrl": "Copiar enlace de audiencia",
     "displayUrlCopied": "Enlace de audiencia copiado",
     "questionNum": "Pregunta {{num}}",

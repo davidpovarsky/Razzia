@@ -40,6 +40,7 @@ import Button from "@razzia/web/components/Button"
 import {
   HostAudioControls,
   HostControlBar,
+  HostFooter,
   IconButton,
 } from "@razzia/extensions/platform-ui"
 import GameBackground from "@razzia/web/components/GameBackground"
@@ -515,126 +516,131 @@ const GameWrapperView = ({
                 </NativeGameSurface>
               </NativeCompositionBoundary>
 
-              <HostAudioControls
-                component={LegacyStageAudio}
-                extensionState={extensionState}
-                effectiveRole={effectiveRole}
-                manager={manager}
-                roomMediaReady={roomMediaReady}
-                activePhaseCueId={activePhaseCueId}
-                currentSceneObj={currentSceneObj}
-                activeCardKey={activeCardKey}
-                statusName={statusName}
-                isHostPresenting={isHostPresenting}
-                hasCompetingMediaAudio={hasCompetingMediaAudio}
-              />
+              <HostFooter active={manager && !isHostPresenting}>
+                <HostAudioControls
+                  component={LegacyStageAudio}
+                  extensionState={extensionState}
+                  effectiveRole={effectiveRole}
+                  manager={manager}
+                  roomMediaReady={roomMediaReady}
+                  activePhaseCueId={activePhaseCueId}
+                  currentSceneObj={currentSceneObj}
+                  activeCardKey={activeCardKey}
+                  statusName={statusName}
+                  isHostPresenting={isHostPresenting}
+                  hasCompetingMediaAudio={hasCompetingMediaAudio}
+                />
 
-              {(() => {
-                if (manager) {
-                  if (isHostPresenting) {
+                {(() => {
+                  if (manager) {
+                    if (isHostPresenting) {
+                      return null
+                    }
+
+                    return (
+                      <HostControlBar
+                        className={clsx(
+                          "z-50 ms-auto box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3",
+                          {
+                            "absolute inset-x-0 bottom-0":
+                              statusName === STATUS.FINISHED,
+                          },
+                        )}
+                      >
+                        {inviteCode && statusName !== STATUS.SHOW_ROOM && (
+                          <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
+                            {!locked && (
+                              <>
+                                <span className="max-w-[120px] truncate sm:max-w-none">
+                                  {window.location.host}
+                                </span>
+                                <span className="h-4 w-px bg-white/40 sm:h-5" />
+                                {(!isEnhancedQuiz ||
+                                  (
+                                    extensionState?.extras.lobbyFullShow as
+                                      { showPin?: boolean } | undefined
+                                  )?.showPin === true) && (
+                                  <span>{inviteCode}</span>
+                                )}
+                              </>
+                            )}
+                            <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                          </div>
+                        )}
+
+                        <HostGuestJoinToggle />
+
+                        <HostPresenceButton
+                          hostPresence={hostPresence}
+                          players={players}
+                          totalPlayers={totalPlayers}
+                          isConnected={isConnected}
+                          onClick={() => setPlayersModalOpen(true)}
+                        />
+
+                        <GameSettingsModal
+                          onOpenRoster={() => setPlayersModalOpen(true)}
+                        />
+
+                        <HostPlayersModal
+                          open={playersModalOpen}
+                          onOpenChange={setPlayersModalOpen}
+                        />
+
+                        {!isEnhancedQuiz && (
+                          <Tooltip
+                            content={t(
+                              isFullscreen
+                                ? "common:exitFullscreen"
+                                : "common:fullscreen",
+                            )}
+                          >
+                            <IconButton
+                              onClick={toggleFullscreen}
+                              label={t(
+                                isFullscreen
+                                  ? "common:exitFullscreen"
+                                  : "common:fullscreen",
+                              )}
+                              className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
+                            >
+                              {isFullscreen ? (
+                                <Minimize className="size-5" />
+                              ) : (
+                                <Maximize className="size-5" />
+                              )}
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </HostControlBar>
+                    )
+                  }
+
+                  if (effectiveRole === "spectator") {
                     return null
                   }
 
                   return (
-                    <HostControlBar
-                      className={clsx(
-                        "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
-                        {
-                          "absolute inset-x-0 bottom-0":
-                            statusName === STATUS.FINISHED,
-                        },
-                      )}
-                    >
-                      {inviteCode && statusName !== STATUS.SHOW_ROOM && (
-                        <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
-                          {!locked && (
-                            <>
-                              <span className="max-w-[120px] truncate sm:max-w-none">
-                                {window.location.host}
-                              </span>
-                              <span className="h-4 w-px bg-white/40 sm:h-5" />
-                              {(!isEnhancedQuiz ||
-                                (
-                                  extensionState?.extras.lobbyFullShow as
-                                    { showPin?: boolean } | undefined
-                                )?.showPin === true) && (
-                                <span>{inviteCode}</span>
-                              )}
-                            </>
-                          )}
-                          <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                    <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray-800">{player?.username}</p>
+                        <PlayerTeamBadge
+                          extensionState={extensionState}
+                          clientId={clientId}
+                          player={player}
+                        />
+                      </div>
+                      {(gameMode !== QUIZZ_MODES.SURVEY ||
+                        (player?.points !== undefined &&
+                          player.points > 0)) && (
+                        <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
+                          {player?.points}
                         </div>
                       )}
-
-                      <HostGuestJoinToggle />
-
-                      <HostPresenceButton
-                        hostPresence={hostPresence}
-                        players={players}
-                        totalPlayers={totalPlayers}
-                        isConnected={isConnected}
-                        onClick={() => setPlayersModalOpen(true)}
-                      />
-
-                      <GameSettingsModal
-                        onOpenRoster={() => setPlayersModalOpen(true)}
-                      />
-
-                      <HostPlayersModal
-                        open={playersModalOpen}
-                        onOpenChange={setPlayersModalOpen}
-                      />
-
-                      <Tooltip
-                        content={t(
-                          isFullscreen
-                            ? "common:exitFullscreen"
-                            : "common:fullscreen",
-                        )}
-                      >
-                        <IconButton
-                          onClick={toggleFullscreen}
-                          label={t(
-                            isFullscreen
-                              ? "common:exitFullscreen"
-                              : "common:fullscreen",
-                          )}
-                          className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
-                        >
-                          {isFullscreen ? (
-                            <Minimize className="size-5" />
-                          ) : (
-                            <Maximize className="size-5" />
-                          )}
-                        </IconButton>
-                      </Tooltip>
-                    </HostControlBar>
-                  )
-                }
-
-                if (effectiveRole === "spectator") {
-                  return null
-                }
-
-                return (
-                  <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
-                    <div className="flex items-center gap-2">
-                      <p className="text-gray-800">{player?.username}</p>
-                      <PlayerTeamBadge
-                        extensionState={extensionState}
-                        clientId={clientId}
-                        player={player}
-                      />
                     </div>
-                    {(gameMode !== QUIZZ_MODES.SURVEY ||
-                      (player?.points !== undefined && player.points > 0)) && (
-                      <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
-                        {player?.points}
-                      </div>
-                    )}
-                  </div>
-                )
-              })()}
+                  )
+                })()}
+              </HostFooter>
             </>
           )}
         </div>

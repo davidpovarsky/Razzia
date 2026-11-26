@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "Arrêter le chronomètre",
-    "presentFromHost": "Présenter depuis l’hôte",
+    "presentFromHost": "Présenter le jeu en plein écran ici.",
     "pauseGame": "Mettre en pause",
     "resumeGame": "Reprendre",
     "presentationFullscreenError": "La présentation en plein écran n’a pas pu démarrer.",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "Quitter la partie ?",
     "exitConfirmDesc": "La session de jeu sera terminée et tous les joueurs seront déconnectés.",
     "noHistoryAvailable": "Aucune question précédente disponible pour l'instant.",
-    "openDisplay": "Écran public",
+    "openDisplay": "Écran de jeu",
+    "openDisplayNewTab": "Ouvrir l’écran de jeu dans un nouvel onglet.",
     "copyDisplayUrl": "Copier le lien public",
     "displayUrlCopied": "Lien public copié",
     "questionNum": "Question {{num}}",

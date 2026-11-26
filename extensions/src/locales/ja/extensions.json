@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "タイマー終了",
-    "presentFromHost": "ホスト画面からプレゼン",
+    "presentFromHost": "この画面でゲームを全画面表示します。",
     "pauseGame": "一時停止",
     "resumeGame": "再開",
     "presentationFullscreenError": "全画面プレゼンテーションを開始できませんでした。",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "ゲームを終了しますか？",
     "exitConfirmDesc": "ゲームセッションは終了し、すべてのプレイヤーの接続が切断されます。",
     "noHistoryAvailable": "過去の質問はまだありません。",
-    "openDisplay": "観客用画面",
+    "openDisplay": "ゲーム画面",
+    "openDisplayNewTab": "ゲーム画面を新しいタブで開きます。",
     "copyDisplayUrl": "観客用リンクをコピー",
     "displayUrlCopied": "観客用リンクをコピーしました",
     "questionNum": "第{{num}}問",

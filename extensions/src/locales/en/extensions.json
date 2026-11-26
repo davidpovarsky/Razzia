@@ -207,7 +207,7 @@
   },
   "host": {
     "endTimer": "End Timer",
-    "presentFromHost": "Present from Host",
+    "presentFromHost": "Present the game in fullscreen on this screen.",
     "pauseGame": "Pause",
     "resumeGame": "Resume",
     "presentationFullscreenError": "Fullscreen presentation could not be started.",
@@ -224,7 +224,8 @@
     "exitConfirmTitle": "Exit game?",
     "exitConfirmDesc": "The game session will be terminated and all players will be disconnected.",
     "noHistoryAvailable": "No past questions available yet.",
-    "openDisplay": "Audience Display",
+    "openDisplay": "Game screen",
+    "openDisplayNewTab": "Open the game screen in a new tab.",
     "copyDisplayUrl": "Copy Audience Link",
     "displayUrlCopied": "Audience link copied",
     "questionNum": "Question {{num}}",

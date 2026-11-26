@@ -32,7 +32,7 @@ function HostMusicControls(state: AudioControlState) {
     <PlatformScope
       context="platform.host"
       dir={i18n.dir()}
-      className="relative z-50 flex shrink-0 flex-wrap items-center gap-2 px-3 py-2 text-sm font-semibold"
+      className="relative z-50 flex max-w-full min-w-0 shrink-0 flex-wrap items-center gap-2 px-3 py-2 text-sm font-semibold"
       data-testid="host-audio-controls"
     >
       {state.blocked && (

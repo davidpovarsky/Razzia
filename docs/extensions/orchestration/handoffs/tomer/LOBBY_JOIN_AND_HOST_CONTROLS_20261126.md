@@ -15,3 +15,10 @@ The authored manifest uses `defaults.lobby.joinMode` and `defaults.lobby.joinPri
 Phone-only is the default. In `defaults.lobby`, `phoneRegion` accepts `auto`, `il` and `uk`. Use `dialNumbers.il`, `dialNumbers.uk`, `showPin` and `showQr` to configure the lobby. The Host Settings override applies to the active room.
 
 - `packages/web/src/features/game/components/PlatformGameOpening.tsx`: expose the existing Host Settings dialog before the audience lobby appears. Verify opening, skip and lobby projection together.
+
+## Host display and footer follow-up
+
+- `packages/web/src/features/game/components/GameWrapper.tsx`: keep the legacy fullscreen fallback for rooms without the presentation session and align audio with the host footer.
+- `packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx`: use the existing host presentation handler as the sole fullscreen action and align audio and room controls.
+- `packages/web/src/features/game/components/PlatformGameOpening.tsx`: place the pre-show guest control and settings beside the opening audio.
+- Verify one fullscreen action, spectator tab, localized explanation, clipboard link, desktop alignment and Escape in the live browser fixture.
