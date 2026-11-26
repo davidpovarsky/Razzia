@@ -2,7 +2,10 @@ import { buildFullShowDirectory } from "./public-directory"
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve runtime guards for sparse legacy/authored snapshots at the extension boundary.
 import type { Player, QuestionResult, Quizz } from "@razzia/common/types/game"
 import type { Socket } from "@razzia/common/types/game/socket"
-import { type RevealDistributionSnapshot } from "../../core/index"
+import {
+  type LobbyPhoneRegion,
+  type RevealDistributionSnapshot,
+} from "../../core/index"
 import { buildAnswerRecap } from "./answer-recap"
 import { buildInterimResults } from "./interim-results"
 import type { ExtensionGameSession, ExtensionSessionDelegate } from "./session"
@@ -51,6 +54,7 @@ export interface SessionBridgeContext {
   hostSocket(): Socket | undefined
   start(socket: Socket): Promise<void>
   getVoteCompletionReason(): "elapsed" | "manual" | "allAnswered" | null
+  getAssignedDialNumber?(region: LobbyPhoneRegion): string | undefined
   lastCompletedDistribution(): RevealDistributionSnapshot | null
   clearQuestionVerdicts(index?: number): void
   syncRosterScoresFromPlayers(): void
@@ -249,7 +253,10 @@ export function createSessionDelegate(
         ctx.extensionSession?.extras ?? null,
       ),
     getFullShowData: () =>
-      buildFullShowDirectory(sidecar, [...ctx.roster.entries.values()]),
+      buildFullShowDirectory(sidecar, [...ctx.roster.entries.values()], {
+        presentation: ctx.extensionSession.getLobbyPresentation(),
+        getAssignedDialNumber: (region) => ctx.getAssignedDialNumber?.(region),
+      }),
     getAnswerRecapSummary: (scene, timelineStepIndex) =>
       buildAnswerRecap({
         scene,

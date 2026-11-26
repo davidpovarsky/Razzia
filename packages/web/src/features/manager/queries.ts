@@ -1,3 +1,4 @@
+import type { LobbyPresentation } from "@razzia/extensions/core"
 import type { GameSettings } from "@razzia/common/types/game"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import { api, unwrap, unwrapEmpty } from "@razzia/web/lib/api"
@@ -62,7 +63,7 @@ export const updateGameSettings = ({
   json,
 }: {
   gameId: string
-  json: Partial<GameSettings>
+  json: Partial<GameSettings> & { lobbyPresentation?: LobbyPresentation }
 }) => unwrap(api.games[":gameId"].settings.$patch({ param: { gameId }, json }))
 
 export const managerLogin = (password: string) =>

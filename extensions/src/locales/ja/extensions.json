@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "参加方法",
+    "channels": "参加手段",
+    "phoneOnly": "電話のみ",
+    "webOnly": "ウェブサイトのみ",
+    "both": "電話とウェブサイト",
+    "primary": "優先表示",
+    "phoneLine": "電話回線",
+    "auto": "自動",
+    "israel": "イスラエル",
+    "uk": "英国",
+    "showPin": "ルームPINを表示",
+    "invalidPhone": "有効な電話番号を入力してください。"
+  },
   "tabs": {
     "leaderboard": "リーダーボード設定",
     "teams": "チーム",

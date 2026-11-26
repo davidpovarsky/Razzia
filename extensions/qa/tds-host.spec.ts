@@ -3,11 +3,12 @@ import { execFileSync } from "node:child_process"
 import { registerSynthetic } from "./tds-site-fixture"
 import {
   createDefaultQuizExtrasV2,
+  lobbyPresentationSchema,
   computeCanonicalBaseDigest,
 } from "../src/core"
 import { joinGame, answer } from "../../packages/e2e/utils/player"
 
-async function openHost(page: Page) {
+async function openHost(page: Page, phone = false) {
   const headers = await registerSynthetic(page)
   const quizz = {
     subject: "Host controls QA",
@@ -30,6 +31,14 @@ async function openHost(page: Page) {
     quizz.questions.map(() => crypto.randomUUID()),
     computeCanonicalBaseDigest(quizz),
   )
+  extras.defaults.lobby = {
+    ...lobbyPresentationSchema.parse(
+      phone
+        ? { dialNumbers: { il: "+972 79 555 0000", uk: "+44 20 7946 0000" } }
+        : { joinMode: "web-only" },
+    ),
+    showRoster: false,
+  }
   expect(
     (
       await page.request.post("/api/extensions/quizzes", {
@@ -40,10 +49,19 @@ async function openHost(page: Page) {
   ).toBe(true)
   await page.goto("/studio/games")
   await page.getByRole("link", { name: "Prepare show", exact: true }).click()
-  await page
-    .getByRole("button", { name: "Open show room", exact: true })
-    .click()
-  await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
+  await expect(page).toHaveURL(/\/party\/manager\/[^/?#]+$/u)
+  await expect(
+    page.getByRole("button", { name: "Game settings", exact: true }),
+  ).toBeVisible()
+  await page.getByTestId("platform-opening-start").click()
+  await page.getByTestId("platform-opening-skip").click()
+  await expect(page.getByTestId("tadazz-screen-lobby")).toBeVisible()
+  const [, gameId] = /manager\/([^/?#]+)/u.exec(page.url())!
+
+  if (phone) {
+    return { gameId, pin: "", url: "" }
+  }
+
   const url = await page
     .locator("svg[data-qr-url]")
     .first()
@@ -59,7 +77,7 @@ async function openHost(page: Page) {
 
   return {
     pin: new URL(url!).searchParams.get("pin")!,
-    gameId: /manager\/([^/?#]+)/u.exec(page.url())![1],
+    gameId,
     url: url!,
   }
 }
@@ -104,6 +122,46 @@ async function assertPortal(dialog: Locator) {
   ).toBe("platform.host")
 }
 
+test("phone-only lobby defaults and host overrides reach the audience live", async ({
+  page,
+  context,
+}) => {
+  const { gameId } = await openHost(page, true)
+  const audience = await context.newPage()
+  await audience.goto(`/display/${gameId}`)
+  const assertPhone = async (surface: Page, number: string) => {
+    await expect(surface.getByTestId("tadazz-lobby-phone")).toHaveText(number)
+    await expect(surface.getByTestId("tadazz-lobby-qr")).toHaveCount(0)
+  }
+
+  await assertPhone(page, "+972 79 555 0000")
+  await assertPhone(audience, "+972 79 555 0000")
+  await expect(page.getByTestId("tadazz-lobby-url")).toHaveCount(0)
+  await expect(audience.getByTestId("tadazz-lobby-pin")).toHaveCount(0)
+  await expect(
+    page.getByRole("button", { name: "Lock the room", exact: true }),
+  ).toHaveCount(1)
+  await expect(page.getByTestId("host-previous-screen-btn")).toHaveCount(0)
+
+  await page.getByRole("button", { name: "Game settings", exact: true }).click()
+  const dialog = page.getByRole("dialog")
+  await dialog.getByLabel("Join methods").selectOption("both")
+  await dialog.getByLabel("Phone line").selectOption("uk")
+  await dialog.getByLabel("Emphasize").selectOption("web")
+  await dialog.getByLabel("Show QR code", { exact: true }).uncheck()
+  await dialog.getByRole("button", { name: "Save", exact: true }).click()
+
+  for (const surface of [page, audience]) {
+    await assertPhone(surface, "+44 20 7946 0000")
+    await expect(surface.getByTestId("tadazz-lobby-url")).toBeVisible()
+    await expect(surface.getByTestId("tadazz-lobby-pin")).toHaveText(/^\d{6}$/u)
+    await expect(
+      surface.getByTestId("tadazz-lobby-url").locator("../.."),
+    ).toHaveAttribute("data-join-primary", "web")
+  }
+  await audience.close()
+})
+
 test("display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus", async ({
   page,
   context,
@@ -112,7 +170,7 @@ test("display modes stay distinct; actual clipboard, clean audience/local presen
   await expect(
     page.getByTestId("host-display-controls").getByRole("button"),
   ).toHaveCount(3)
-  await expect(page.getByTestId("host-previous-screen-btn")).toBeDisabled()
+  await expect(page.getByTestId("host-previous-screen-btn")).toHaveCount(0)
   await expect(
     page.getByRole("button", { name: "Lock the room", exact: true }),
   ).toHaveCount(1)
@@ -327,7 +385,7 @@ test("real game pause/audio/half-second shortcuts remain separate; end timer kee
 test("restart and skip keep original confirmations and one command per explicit confirmation", async ({
   page,
   browser,
-}) => {
+}, testInfo) => {
   const room = await openHost(page)
   const context = await browser.newContext({ baseURL: "http://127.0.0.1:4310" })
   await joinGame(await context.newPage(), room.pin, "RestartPlayer")
@@ -358,7 +416,7 @@ test("restart and skip keep original confirmations and one command per explicit 
   await expect.poll(() => commandCount(page, "SKIP_QUESTION")).toBe(1)
   expect(await commandCount(page, "END_ANSWER_TIMER")).toBe(0)
   await page.screenshot({
-    path: "/evidence/phase-08-skip.png",
+    path: testInfo.outputPath("phase-08-skip.png"),
     animations: "disabled",
   })
   await context.close()

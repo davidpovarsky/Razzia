@@ -3,6 +3,8 @@ import { buildLobbyDirectory } from "./public-directory"
 import {
   extensionCommandSchema,
   isQuizExtrasV2,
+  lobbyPresentationSchema,
+  type LobbyPresentation,
   normalizeLegacyStageLook,
   resolveStageLook,
   type ActiveSceneData,
@@ -94,6 +96,7 @@ export class ExtensionGameSession {
   private readonly compositionTitle: string
   private readonly compositionMediaNames: ReadonlySet<string>
 
+  private lobbyPresentation: LobbyPresentation | undefined
   private seq = 0
   private epoch = 0
   private currentQuestionIndex = 0
@@ -355,6 +358,23 @@ export class ExtensionGameSession {
     )
   }
 
+  getLobbyPresentation(): LobbyPresentation {
+    if (this.lobbyPresentation) {
+      return this.lobbyPresentation
+    }
+
+    const lobby =
+      this.extras && isQuizExtrasV2(this.extras)
+        ? this.extras.defaults.lobby
+        : undefined
+
+    return lobbyPresentationSchema.strip().parse(lobby ?? {})
+  }
+
+  setLobbyPresentation(presentation: LobbyPresentation) {
+    this.lobbyPresentation = presentation
+  }
+
   /**
    * Generates authoritative state snapshot for either 'manager' or 'player'.
    * Never leaks solutions or answers to players during question phase.
@@ -411,12 +431,15 @@ export class ExtensionGameSession {
     }
 
     // Names/table assignments only; private contacts remain outside public snapshots.
-    const lobbyDirectory = buildLobbyDirectory(this.extras, () =>
-      this.delegate?.getFullShowData?.(),
+    const lobbyPolicy = this.getLobbyPresentation()
+    extrasPayload.lobbyFullShow = buildLobbyDirectory(
+      this.extras,
+      () => this.delegate?.getFullShowData?.(),
+      lobbyPolicy,
     )
 
-    if (lobbyDirectory) {
-      extrasPayload.lobbyFullShow = lobbyDirectory
+    if (forRole === "manager") {
+      extrasPayload.hostLobbyPresentation = lobbyPolicy
     }
 
     // Team scores and assignments
@@ -494,7 +517,9 @@ export class ExtensionGameSession {
 
     // Studio V2 timeline & scene payload
     if (this.extras && isQuizExtrasV2(this.extras)) {
-      extrasPayload.defaults = this.extras.defaults
+      const publicDefaults = { ...this.extras.defaults }
+      delete publicDefaults.lobby
+      extrasPayload.defaults = publicDefaults
 
       if (this.showCoordinator) {
         const activeStepEnvelope =

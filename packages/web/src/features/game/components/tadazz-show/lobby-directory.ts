@@ -1,10 +1,19 @@
+import {
+  lobbyJoinModeSchema,
+  lobbyJoinPrimarySchema,
+  type PublicFullShowData,
+} from "@razzia/extensions/core"
+
 export interface PublicLobbyDirectory {
   dialNumber?: string
   representatives?: Array<{ table: number; name: string }>
   connectedTables?: number[]
   seatingPlan?: boolean
   roster?: Array<{ id: string; label: string; connected: boolean }>
-  joinMode?: "standard" | "phone-only"
+  joinMode?: PublicFullShowData["joinMode"]
+  joinPrimary?: PublicFullShowData["joinPrimary"]
+  showPin?: boolean
+  showQr?: boolean
   instructions?: string[]
 }
 
@@ -17,6 +26,8 @@ export function readPublicLobbyDirectory(
   }
 
   const source = value as Record<string, unknown>
+  const joinMode = lobbyJoinModeSchema.safeParse(source.joinMode)
+  const joinPrimary = lobbyJoinPrimarySchema.safeParse(source.joinPrimary)
   const tableNumber = (entry: unknown): entry is number =>
     typeof entry === "number" &&
     Number.isSafeInteger(entry) &&
@@ -40,9 +51,10 @@ export function readPublicLobbyDirectory(
 
   return {
     ...(source.seatingPlan === true ? { seatingPlan: true } : {}),
-    ...(source.joinMode === "standard" || source.joinMode === "phone-only"
-      ? { joinMode: source.joinMode }
-      : {}),
+    ...(joinMode.success ? { joinMode: joinMode.data } : {}),
+    ...(joinPrimary.success ? { joinPrimary: joinPrimary.data } : {}),
+    ...(typeof source.showPin === "boolean" ? { showPin: source.showPin } : {}),
+    ...(typeof source.showQr === "boolean" ? { showQr: source.showQr } : {}),
     ...(Array.isArray(source.instructions)
       ? {
           instructions: source.instructions

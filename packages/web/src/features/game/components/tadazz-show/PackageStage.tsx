@@ -423,8 +423,16 @@ export function PackageStage({
       }),
       ...(scene.kind === "lobby"
         ? {
-            joinCode: scene.inviteCode ?? "",
-            joinUrl: `${window.location.origin}/game`,
+            joinCode:
+              (lobbyData?.showPin ??
+              (lobbyData?.joinMode !== undefined &&
+                lobbyData.joinMode !== "phone-only"))
+                ? (scene.inviteCode ?? "")
+                : "",
+            joinUrl:
+              lobbyData?.joinMode && lobbyData.joinMode !== "phone-only"
+                ? `${window.location.origin}/game`
+                : "",
           }
         : {}),
       locale: i18n.language,

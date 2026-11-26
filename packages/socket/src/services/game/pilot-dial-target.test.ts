@@ -1,5 +1,8 @@
 import { expect, it } from "vitest"
-import { selectDialedPilotTarget } from "./pilot-dial-target"
+import {
+  resolvePublicDialNumber,
+  selectDialedPilotTarget,
+} from "./pilot-dial-target"
 const game = (owner: string) => ({
   quizId: "tzila",
   started: true,
@@ -79,4 +82,29 @@ it("fails closed for malformed explicit show allowlists", () => {
       selectDialedPilotTarget([game("customer")], "443306131984", config).game,
     ).toBeNull()
   }
+})
+
+it("publishes only a line of the requested region that routes to this exact room", () => {
+  const ownRoom = game("test")
+  const otherRoom = game("customer")
+  const configuration = JSON.stringify({
+    "0795550000": { ownerId: "test", quizId: "tzila" },
+    "442079460000": { ownerId: "test", quizId: "tzila" },
+    "442079460001": { ownerId: "customer", quizId: "tzila" },
+  })
+  const games = [ownRoom, otherRoom]
+  expect(resolvePublicDialNumber(games, ownRoom, { configuration })).toBe(
+    "0795550000",
+  )
+  expect(
+    resolvePublicDialNumber(games, ownRoom, { configuration, region: "uk" }),
+  ).toBe("442079460000")
+  expect(
+    resolvePublicDialNumber(games, otherRoom, { configuration, region: "il" }),
+  ).toBeUndefined()
+  expect(
+    resolvePublicDialNumber([...games, game("test")], ownRoom, {
+      configuration,
+    }),
+  ).toBeUndefined()
 })

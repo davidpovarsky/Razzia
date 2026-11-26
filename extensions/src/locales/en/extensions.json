@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "How players join",
+    "channels": "Join methods",
+    "phoneOnly": "Phone only",
+    "webOnly": "Website only",
+    "both": "Phone and website",
+    "primary": "Emphasize",
+    "phoneLine": "Phone line",
+    "auto": "Automatic",
+    "israel": "Israel",
+    "uk": "United Kingdom",
+    "showPin": "Show room PIN",
+    "invalidPhone": "Enter a valid phone number."
+  },
   "tabs": {
     "leaderboard": "Leaderboard Policy",
     "teams": "Teams",

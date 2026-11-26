@@ -1,3 +1,4 @@
+import { lobbyPresentationSchema } from "@razzia/extensions/core"
 import { gameExtensionRoutes } from "@razzia/socket/api/extensions/game-routes"
 import { zValidator } from "@hono/zod-validator"
 import {
@@ -64,7 +65,13 @@ const routes = apiFactory
   .patch(
     "/:gameId/settings",
     requireRoomHost,
-    zValidator("json", gameSettingsValidator, i18nHook),
+    zValidator(
+      "json",
+      gameSettingsValidator.extend({
+        lobbyPresentation: lobbyPresentationSchema.optional(),
+      }),
+      i18nHook,
+    ),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
@@ -72,7 +79,9 @@ const routes = apiFactory
         return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
       }
 
-      if (!game.updateSettings(c.req.valid("json"))) {
+      const { lobbyPresentation, ...settings } = c.req.valid("json")
+
+      if (!game.updateSettings(settings, lobbyPresentation)) {
         return c.json(
           { error: "errors:game.alreadyStarted" },
           StatusCodes.CONFLICT,

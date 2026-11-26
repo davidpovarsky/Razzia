@@ -24,6 +24,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSocket } from "../contexts/socket-context"
 import ManagerControlToolbar from "./ManagerControlToolbar"
+import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
 import HostGuestJoinToggle from "./HostGuestJoinToggle"
 import { useTadazzShellText } from "./tadazz-show/useTadazzLabels"
 import { NativeAudioCuePlayer } from "./tadazz-show/NativeAudioCuePlayer"
@@ -158,8 +159,9 @@ export function PlatformGameOpening({
         />
       )}
       {manager && !isHostPresenting && (
-        <div className="flex shrink-0 justify-end px-3 py-2">
+        <div className="flex shrink-0 justify-end gap-2 px-3 py-2">
           <HostGuestJoinToggle />
+          <GameSettingsModal />
         </div>
       )}
       <div className="platform-game-opening__stage">

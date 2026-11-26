@@ -72,6 +72,44 @@ function legacyFixture(participantCount = 38, questionCount = 10) {
 }
 
 describe("reconciled branch seating directory", () => {
+  it("changes the public lobby from the host override while keeping the other line private", () => {
+    const extras = fixture(1, false)
+    extras.scenes = {}
+    extras.defaults.lobby = {
+      joinMode: "phone-only",
+      dialNumbers: { il: "+972 79 555 0000", uk: "+44 20 7946 0000" },
+      showRoster: false,
+    }
+    const session = new ExtensionGameSession("test-policy", extras)
+    const manifest = session.getLobbyPresentation()
+    expect(
+      session.getStateSnapshot("player", []).extras.lobbyFullShow,
+    ).toMatchObject({
+      joinMode: "phone-only",
+      dialNumber: "+972 79 555 0000",
+    })
+
+    session.setLobbyPresentation({
+      ...manifest,
+      phoneRegion: "uk",
+      joinMode: "both",
+      joinPrimary: "web",
+      showPin: false,
+    })
+    const publicExtras = session.getStateSnapshot("player", []).extras
+    expect(publicExtras.lobbyFullShow).toMatchObject({
+      joinMode: "both",
+      joinPrimary: "web",
+      dialNumber: "+44 20 7946 0000",
+      showPin: false,
+    })
+    expect(JSON.stringify(publicExtras)).not.toContain("+972 79 555 0000")
+    expect(publicExtras).not.toHaveProperty("hostLobbyPresentation")
+    expect(
+      session.getStateSnapshot("manager", []).extras.hostLobbyPresentation,
+    ).toMatchObject({ phoneRegion: "uk" })
+    expect(extras.defaults.lobby.joinMode).toBe("phone-only")
+  })
   it("supports a phone-only 23-question lobby without inventing or requiring a roster", () => {
     const extras = fixture(23, false)
     extras.scenes = {}
@@ -107,7 +145,7 @@ describe("reconciled branch seating directory", () => {
     }))
     const getLive = () => buildFullShowDirectory(extras, [first, second, guest])
     const result = buildLobbyDirectory(extras, getLive)
-    expect(result?.roster).toEqual([
+    expect(result.roster).toEqual([
       { id: first.rosterPlayerId, label: "Same name", connected: true },
       { id: second.rosterPlayerId, label: "Same name", connected: false },
     ])
@@ -117,7 +155,7 @@ describe("reconciled branch seating directory", () => {
     first.status = "disconnected"
     second.status = "connected"
     expect(
-      buildLobbyDirectory(extras, getLive)?.roster?.map((row) => row.connected),
+      buildLobbyDirectory(extras, getLive).roster?.map((row) => row.connected),
     ).toEqual([false, true])
     extras.defaults.lobby.showRoster = false
     expect(buildLobbyDirectory(extras, getLive)).not.toHaveProperty("roster")
@@ -130,11 +168,11 @@ describe("reconciled branch seating directory", () => {
     const second = entry("Replacement register", undefined, "not_joined")
     let liveEntries = [first, guest]
     const getLive = () => buildFullShowDirectory(extras, liveEntries)
-    expect(buildLobbyDirectory(extras, getLive)?.roster).toEqual([
+    expect(buildLobbyDirectory(extras, getLive).roster).toEqual([
       { id: first.rosterPlayerId, label: first.displayName, connected: true },
     ])
     liveEntries = [second, guest]
-    expect(buildLobbyDirectory(extras, getLive)?.roster).toEqual([
+    expect(buildLobbyDirectory(extras, getLive).roster).toEqual([
       {
         id: second.rosterPlayerId,
         label: second.displayName,
@@ -142,7 +180,7 @@ describe("reconciled branch seating directory", () => {
       },
     ])
     liveEntries = [guest]
-    expect(buildLobbyDirectory(extras, getLive)?.roster).toEqual([])
+    expect(buildLobbyDirectory(extras, getLive).roster).toEqual([])
   })
   it("accepts old explicit seating metadata and projects authored names before anyone connects", () => {
     const extras = quizExtrasV2Schema.parse(fixture())
@@ -150,6 +188,7 @@ describe("reconciled branch seating directory", () => {
     const result = session.getStateSnapshot("player", []).extras.lobbyFullShow
     expect(result).toEqual({
       isLive: false,
+      joinMode: "phone-only",
       seatingPlan: true,
       representatives: [
         { table: 5, name: "QA Representative" },
@@ -194,7 +233,9 @@ describe("reconciled branch seating directory", () => {
         tableNumber: 7,
       },
     ]
-    expect(buildLobbyDirectory(extras)).toBeNull()
+    expect(buildLobbyDirectory(extras)).toMatchObject({
+      joinMode: "phone-only",
+    })
   })
   it("preserves the current unflagged ten-question lobby and explicit roster table numbers", () => {
     const extras = fixture(10, false)
@@ -211,6 +252,7 @@ describe("reconciled branch seating directory", () => {
     ])
     expect(buildLobbyDirectory(extras, () => live)).toEqual({
       isLive: true,
+      joinMode: "phone-only",
       representatives: [{ table: 7, name: "Current Representative" }],
       connectedTables: [7],
       dialNumber: "TEST-NO-CALLS",
@@ -236,11 +278,11 @@ describe("reconciled branch seating directory", () => {
     }))
 
     for (const projection of [live, lobby, saved]) {
-      expect(projection?.seatingPlan).toBe(true)
-      expect(projection?.representatives).toEqual(expected)
-      expect(projection?.representatives).toHaveLength(38)
+      expect(projection.seatingPlan).toBe(true)
+      expect(projection.representatives).toEqual(expected)
+      expect(projection.representatives).toHaveLength(38)
       expect(
-        new Set(projection?.representatives?.map((row) => row.table)).size,
+        new Set(projection.representatives?.map((row) => row.table)).size,
       ).toBe(31)
       expect(JSON.stringify(projection)).not.toContain("+10000000000")
       expect(JSON.stringify(projection)).not.toContain("PRIVATE-CONTACT")
@@ -248,8 +290,8 @@ describe("reconciled branch seating directory", () => {
     }
 
     expect(live.connectedTables).toEqual([1])
-    expect(lobby?.connectedTables).toEqual([1])
-    expect(saved?.connectedTables).toEqual([])
+    expect(lobby.connectedTables).toEqual([1])
+    expect(saved.connectedTables).toEqual([])
     liveEntries.forEach((person) => {
       person.status = "disconnected"
     })
@@ -271,8 +313,8 @@ describe("reconciled branch seating directory", () => {
 
     for (const projection of [live, buildLobbyDirectory(extras, () => live)]) {
       expect(projection).not.toHaveProperty("seatingPlan")
-      expect(projection?.representatives).toHaveLength(40)
-      expect(projection?.representatives?.map((row) => row.name)).toEqual(
+      expect(projection.representatives).toHaveLength(40)
+      expect(projection.representatives?.map((row) => row.name)).toEqual(
         extras.roster.participants.map((person) => person.displayName),
       )
     }
@@ -300,7 +342,7 @@ describe("reconciled branch seating directory", () => {
     const extras = fixture(1, true)
 
     expect(buildFullShowDirectory(extras, []).seatingPlan).toBe(true)
-    expect(buildLobbyDirectory(extras)?.seatingPlan).toBe(true)
+    expect(buildLobbyDirectory(extras).seatingPlan).toBe(true)
   })
   it.each([undefined, 0, 32, 1.5])(
     "requires every saved table assignment to be an integer from 1 to 31, rejecting %s",
@@ -335,7 +377,9 @@ describe("reconciled branch seating directory", () => {
       expect(buildFullShowDirectory(extras, [])).not.toHaveProperty(
         "seatingPlan",
       )
-      expect(buildLobbyDirectory(extras)).toBeNull()
+      expect(buildLobbyDirectory(extras)).toMatchObject({
+        joinMode: "phone-only",
+      })
     },
   )
   it("does not infer seating over a modern lobby or authored representatives override", () => {
@@ -361,6 +405,8 @@ describe("reconciled branch seating directory", () => {
 
     extras.scenes = {}
     expect(buildFullShowDirectory(extras, [])).not.toHaveProperty("seatingPlan")
-    expect(buildLobbyDirectory(extras)).toBeNull()
+    expect(buildLobbyDirectory(extras)).toMatchObject({
+      joinMode: "phone-only",
+    })
   })
 })

@@ -24,6 +24,9 @@ export function SeatingPlan({
   representatives,
   connectedTables,
   dialNumber,
+  showPhone = true,
+  primary = "phone",
+  webAddress,
   pin,
   qr,
   labels,
@@ -34,7 +37,10 @@ export function SeatingPlan({
   }>
   connectedTables: number[]
   dialNumber?: string
-  pin: string
+  showPhone?: boolean
+  primary?: "phone" | "web"
+  webAddress?: string
+  pin?: string
   qr: ReactNode
   labels: SeatingLabels
 }) {
@@ -52,7 +58,7 @@ export function SeatingPlan({
     while (el.scrollWidth > 420 && size > 33) {
       el.style.fontSize = `${(size -= 1)}px`
     }
-  }, [dialNumber, labels.noPhone])
+  }, [dialNumber, labels.noPhone, showPhone])
   const connected = new Set(connectedTables)
   // Reference uses first name + surname initial; retain each real roster entry.
   const shortName = (name: string) => {
@@ -72,22 +78,47 @@ export function SeatingPlan({
         <aside className="left-panel">
           <div className="left-accent" aria-hidden="true" />
           <img className="logo" src={STORY_ASSETS.logo} alt="TADAZZ!" />
-          <section className="dial-info">
-            <div className="dial-caption">{labels.call}</div>
-            <div ref={dial} className="dial-number" dir="ltr">
-              {dialNumber?.trim() || labels.noPhone}
-            </div>
-            <div className="phone-rule" />
-            <div className="qr-and-pin">
-              <div className="qr" data-testid="tadazz-lobby-qr">
-                {qr}
-              </div>
-              <div className="pin-area">
-                <div className="pin-caption">{labels.pin}</div>
-                <div className="pin-number" data-testid="tadazz-lobby-pin">
-                  {pin}
+          <section className="dial-info" data-join-primary={primary}>
+            {showPhone && (
+              <div className="dial-phone">
+                <div className="dial-caption">{labels.call}</div>
+                <div
+                  ref={dial}
+                  className="dial-number"
+                  data-testid="tadazz-lobby-phone"
+                  dir="ltr"
+                >
+                  {dialNumber?.trim() || labels.noPhone}
                 </div>
+                {(webAddress || pin || qr) && <div className="phone-rule" />}
               </div>
+            )}
+            <div className="dial-web">
+              {webAddress && (
+                <div className="dial-caption" data-testid="tadazz-lobby-url">
+                  {webAddress}
+                </div>
+              )}
+              {(qr || pin) && (
+                <div className="qr-and-pin">
+                  {qr && (
+                    <div className="qr" data-testid="tadazz-lobby-qr">
+                      {qr}
+                    </div>
+                  )}
+                  {pin && (
+                    <div className="pin-area">
+                      <div className="pin-caption">{labels.pin}</div>
+                      <div
+                        className="pin-number"
+                        data-testid="tadazz-lobby-pin"
+                      >
+                        {pin}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </section>
           <HostQuickGuide />

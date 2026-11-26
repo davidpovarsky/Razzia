@@ -198,15 +198,55 @@
   left: 260px;
   right: 260px;
   height: 330px;
-  display: grid;
-  grid-template-columns: 1fr 1px 1fr 300px;
+  display: flex;
   align-items: center;
-  gap: 48px;
+  justify-content: space-around;
+  gap: 36px;
   padding: 0 54px;
 }
-.tz-lobby-join .tz-lobby-divider {
-  height: 220px;
-  background: linear-gradient(#ffffff00, #f2ab6c88, #ffffff00);
+.tz-lobby-join > div {
+  min-width: 0;
+}
+.tz-lobby-join[data-join-channels="both"] {
+  left: 184px;
+  right: 184px;
+  gap: 26px;
+  padding-inline: 38px;
+}
+.tz-lobby-phone-pin {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 44px;
+}
+.tz-lobby-join[data-join-channels="both"] .tz-lobby-qr {
+  width: 212px;
+  height: 212px;
+}
+.tz-lobby-join[data-join-channels="both"] .tz-lobby-url {
+  font-size: 30px;
+}
+.tz-lobby-telephone-number {
+  margin-top: 12px;
+  font-size: 66px;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #efff42;
+  overflow-wrap: anywhere;
+}
+.tz-lobby-join[data-join-channels="both"] .tz-lobby-pin {
+  font-size: 64px;
+}
+.tz-lobby-join[data-join-primary="web"] .tz-lobby-telephone {
+  order: 1;
+}
+.tz-lobby-join[data-join-primary="web"] .tz-lobby-telephone-number {
+  font-size: 44px;
+  color: #fff8ec;
+}
+.tz-lobby-show-join[data-join-primary="phone"] .tz-lobby-show-dial {
+  order: -1;
 }
 .tz-lobby-label {
   font-size: 24px;

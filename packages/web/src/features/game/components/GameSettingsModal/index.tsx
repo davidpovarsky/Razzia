@@ -1,4 +1,10 @@
 import {
+  lobbyPresentationSchema,
+  type LobbyPresentation,
+} from "@razzia/extensions/core"
+import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
+import LobbyPresentationSettings from "./LobbyPresentationSettings"
+import {
   EndOnAllAnsweredSetting,
   RosterGameSettings,
 } from "./ExtensionSettings"
@@ -30,6 +36,10 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
   const { gameId, updateManager } = manager
   const settings = hostRules(manager)
   const [open, setOpen] = useState(false)
+  const [lobbyDraft, setLobbyDraft] = useState<LobbyPresentation>()
+  const lobbyPolicy = lobbyPresentationSchema.safeParse(
+    useExtensionState()?.extras.hostLobbyPresentation,
+  ).data
   const { t } = useTranslation()
 
   const form = useForm<GameSettings>({
@@ -54,6 +64,7 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
   const handleOpenChange = (next: boolean) => {
     if (next) {
       form.reset(settings)
+      setLobbyDraft(lobbyPolicy)
     }
 
     setOpen(next)
@@ -71,6 +82,24 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
           JSON.stringify(settings[key as keyof GameSettings]),
       ),
     )
+
+    if (
+      lobbyDraft &&
+      JSON.stringify(lobbyDraft) !== JSON.stringify(lobbyPolicy)
+    ) {
+      const lobby = lobbyPresentationSchema.safeParse(lobbyDraft)
+
+      if (!lobby.success) {
+        toast.error(t("extensions:lobbyJoin.invalidPhone"))
+
+        return
+      }
+
+      save({ gameId, json: { ...changed, lobbyPresentation: lobby.data } })
+
+      return
+    }
+
     save({ gameId, json: changed })
   }
 
@@ -113,6 +142,12 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
                 <AnswersOnly />
                 <EndOnAllAnsweredSetting />
                 <AutoAdvance />
+                {lobbyDraft && (
+                  <LobbyPresentationSettings
+                    value={lobbyDraft}
+                    onChange={setLobbyDraft}
+                  />
+                )}
                 <RosterGameSettings
                   onOpenRoster={onOpenRoster}
                   onClose={() => setOpen(false)}

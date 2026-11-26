@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "Oyuna katılım",
+    "channels": "Katılım yolları",
+    "phoneOnly": "Yalnızca telefon",
+    "webOnly": "Yalnızca web sitesi",
+    "both": "Telefon ve web sitesi",
+    "primary": "Öne çıkar",
+    "phoneLine": "Telefon hattı",
+    "auto": "Otomatik",
+    "israel": "İsrail",
+    "uk": "Birleşik Krallık",
+    "showPin": "Oda PIN kodunu göster",
+    "invalidPhone": "Geçerli bir telefon numarası girin."
+  },
   "tabs": {
     "leaderboard": "Liderlik Tablosu Kuralı",
     "teams": "Takımlar",

@@ -68,11 +68,11 @@ import {
   ViewRoleContext,
   type ViewRole,
 } from "@razzia/web/features/game/contexts/view-role-context"
+import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
-import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import {
   CircleQuestionMark,
   Image,
@@ -1892,21 +1892,17 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                           padding: "6px 14px",
                         }}
                       >
-                        {!managerState.locked && (
-                          <>
-                            <span className="max-w-[160px] truncate sm:max-w-none">
-                              {window.location.host}
-                            </span>
-                            <span className="h-4 w-px bg-white/40" />
-                            <span>{managerState.inviteCode}</span>
-                          </>
-                        )}
+                        {!managerState.locked &&
+                          readPublicLobbyDirectory(
+                            extensionState?.extras.lobbyFullShow,
+                          )?.showPin === true && (
+                            <>
+                              <span>{managerState.inviteCode}</span>
+                            </>
+                          )}
                         <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
                       </div>
                     )}
-                  {props.statusName === STATUS.SHOW_ROOM && (
-                    <RoomLockButton className="hover:bg-accent font-display bg-white text-black" />
-                  )}
                   <HostGuestJoinToggle />
                   <Tooltip
                     content={t(

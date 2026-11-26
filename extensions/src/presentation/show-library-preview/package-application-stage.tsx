@@ -1,3 +1,4 @@
+import { projectLobbyJoin } from "../../core/studio-timeline-schema"
 import {
   useEffect,
   useLayoutEffect,
@@ -313,7 +314,7 @@ export function PackageApplicationPreviewStage({
     phaseElapsedMs: frame.clock.elapsedMs,
     revealStage,
     lobby: {
-      dialNumber: frame.show.defaults?.lobby?.dialNumber,
+      ...projectLobbyJoin(frame.show.defaults?.lobby),
       instructions: frame.show.defaults?.lobby?.instructions,
     },
     finalLeaderboard:

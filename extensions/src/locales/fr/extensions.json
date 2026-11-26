@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "Accès à la partie",
+    "channels": "Modes de participation",
+    "phoneOnly": "Téléphone uniquement",
+    "webOnly": "Site web uniquement",
+    "both": "Téléphone et site web",
+    "primary": "Mettre en avant",
+    "phoneLine": "Ligne téléphonique",
+    "auto": "Automatique",
+    "israel": "Israël",
+    "uk": "Royaume-Uni",
+    "showPin": "Afficher le code de la salle",
+    "invalidPhone": "Saisissez un numéro de téléphone valide."
+  },
   "tabs": {
     "leaderboard": "Politique du classement",
     "teams": "Équipes",

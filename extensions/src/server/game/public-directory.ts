@@ -1,5 +1,8 @@
 import {
   isQuizExtrasV2,
+  projectLobbyJoin,
+  type LobbyPhoneRegion,
+  type LobbyPresentation,
   type AnyQuizExtras,
   type PublicFullShowData,
 } from "../../core/index"
@@ -86,6 +89,10 @@ function attendanceRows(
 export function buildFullShowDirectory(
   extras: AnyQuizExtras | null,
   entries: readonly RosterEntry[],
+  options?: {
+    presentation: LobbyPresentation
+    getAssignedDialNumber: (region: LobbyPhoneRegion) => string | undefined
+  },
 ): PublicFullShowData {
   const directory = directoryScene(extras)
   const seatingPlan = usesSeatingPlan(extras, directory)
@@ -116,7 +123,11 @@ export function buildFullShowDirectory(
 
   return {
     isLive: true,
-    dialNumber: lobby?.dialNumber ?? directory?.dialNumber,
+    ...projectLobbyJoin(
+      options?.presentation ?? lobby,
+      directory?.dialNumber,
+      options?.getAssignedDialNumber,
+    ),
     ...(roster ? { roster } : {}),
     ...(seatingPlan ? { seatingPlan: true } : {}),
     connectedTables: [...connectedTables],
@@ -134,39 +145,48 @@ export function buildFullShowDirectory(
 export function buildLobbyDirectory(
   extras: AnyQuizExtras | null,
   getLive?: () => PublicFullShowData | undefined,
-): PublicFullShowData | null {
-  if (!extras || !isQuizExtrasV2(extras)) {
-    return null
-  }
-
+  policy?: LobbyPresentation,
+): PublicFullShowData {
+  const live = getLive?.()
   const directory = directoryScene(extras)
+  const lobby =
+    extras && isQuizExtrasV2(extras) ? extras.defaults.lobby : undefined
   const seatingPlan = usesSeatingPlan(extras, directory)
-  const { lobby } = extras.defaults
+  // The live delegate has already resolved the room policy against routed lines.
+  const projection = live?.joinMode
+    ? {
+        joinMode: live.joinMode,
+        ...(live.joinPrimary ? { joinPrimary: live.joinPrimary } : {}),
+        ...(live.dialNumber ? { dialNumber: live.dialNumber } : {}),
+        ...(live.showPin !== undefined ? { showPin: live.showPin } : {}),
+        ...(live.showQr !== undefined ? { showQr: live.showQr } : {}),
+      }
+    : projectLobbyJoin(
+        policy ?? lobby,
+        live?.dialNumber ?? directory?.dialNumber,
+      )
 
-  if (lobby) {
-    const live = getLive?.()
-
-    return {
-      isLive: live?.isLive ?? false,
-      joinMode: lobby.joinMode,
-      dialNumber: lobby.dialNumber ?? live?.dialNumber ?? directory?.dialNumber,
-      ...(lobby.instructions ? { instructions: lobby.instructions } : {}),
-      ...(lobby.showRoster
-        ? { roster: live?.roster ?? attendanceRows(extras) ?? [] }
-        : {}),
-    }
+  const base = {
+    isLive: live?.isLive ?? false,
+    ...projection,
+    ...(lobby?.instructions ? { instructions: lobby.instructions } : {}),
+    ...(lobby?.showRoster
+      ? { roster: live?.roster ?? attendanceRows(extras) ?? [] }
+      : {}),
   }
 
   if (
+    !extras ||
+    !isQuizExtrasV2(extras) ||
     !directory ||
     (!seatingPlan &&
-      (extras.questionIds.length !== 10 ||
+      (lobby !== undefined ||
+        extras.questionIds.length !== 10 ||
         extras.roster.participants.length === 0))
   ) {
-    return null
+    return base
   }
 
-  const live = getLive?.()
   const authored = seatingPlan ? (directory.representatives ?? []) : []
   const fallback =
     authored.length > 0
@@ -180,14 +200,13 @@ export function buildLobbyDirectory(
     : fallback
 
   if (!representatives.length) {
-    return null
+    return base
   }
 
   return {
-    isLive: live?.isLive ?? false,
+    ...base,
     ...(seatingPlan ? { seatingPlan: true } : {}),
     representatives,
     connectedTables: live?.connectedTables ?? [],
-    dialNumber: live?.dialNumber ?? directory.dialNumber,
   }
 }

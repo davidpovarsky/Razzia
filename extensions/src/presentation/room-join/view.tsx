@@ -40,8 +40,8 @@ export function RoomQrLabels({ join }: { join: RoomJoin }) {
         {t("game:showQrCode")}
       </AlertDialog.Title>
       <AlertDialog.Description className="sr-only">
-        {t("game:joinInstruction")} {join.webUrl} · {t("game:gamePinLabel")}{" "}
-        {join.displayPin}
+        {t("game:joinInstruction")} {join.webUrl}
+        {join.showPin && ` · ${t("game:gamePinLabel")} ${join.displayPin}`}
       </AlertDialog.Description>
     </>
   )
@@ -62,7 +62,13 @@ export function RoomQrCode(props: ComponentProps<typeof QRCodeSVG>) {
   )
 }
 
-export function RoomJoinMetadata({ join }: { join: RoomJoin }) {
+export function RoomJoinMetadata({
+  join,
+  includePhone = true,
+}: {
+  join: RoomJoin
+  includePhone?: boolean
+}) {
   const { t } = useTranslation()
   const theme = useOptionalShowTheme()
   const status = join.pending ? t("common:connecting") : t("errors:game.locked")
@@ -81,7 +87,7 @@ export function RoomJoinMetadata({ join }: { join: RoomJoin }) {
       }}
     >
       {(join.pending || join.locked) && <span role="status">{status}</span>}
-      {join.dialNumber && (
+      {includePhone && join.dialNumber && (
         <p>
           {t("extensions:roster.phoneLabel")}:{" "}
           <strong dir="ltr" data-testid="room-dial-number">

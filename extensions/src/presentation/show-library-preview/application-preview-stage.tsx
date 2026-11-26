@@ -1,3 +1,4 @@
+import { projectLobbyJoin } from "../../core/studio-timeline-schema"
 import NativeButton from "../../../../packages/web/src/components/Button"
 import { flushSync } from "react-dom"
 import { I18nextProvider } from "react-i18next"
@@ -323,8 +324,13 @@ function NativeApplicationPreviewStage({
   if (frame.stagePhase === "lobby") {
     auxiliary = (
       <NativeClassicLobbyPanel
-        join={resolveRoomJoin({ origin: "", role: frame.role })}
+        join={resolveRoomJoin({
+          origin: "",
+          role: frame.role,
+          directory: projectLobbyJoin(frame.show.defaults?.lobby),
+        })}
         isManager={frame.role === "manager"}
+        fullShowData={frame.show.defaults?.lobby}
         tx={(name, fallback, vars) =>
           labels.i18n.t(`extensions:tadazzShow.${name}`, {
             defaultValue: fallback,

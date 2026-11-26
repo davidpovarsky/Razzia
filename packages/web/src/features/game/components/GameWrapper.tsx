@@ -553,7 +553,13 @@ const GameWrapperView = ({
                                 {window.location.host}
                               </span>
                               <span className="h-4 w-px bg-white/40 sm:h-5" />
-                              <span>{inviteCode}</span>
+                              {(!isEnhancedQuiz ||
+                                (
+                                  extensionState?.extras.lobbyFullShow as
+                                    { showPin?: boolean } | undefined
+                                )?.showPin === true) && (
+                                <span>{inviteCode}</span>
+                              )}
                             </>
                           )}
                           <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />

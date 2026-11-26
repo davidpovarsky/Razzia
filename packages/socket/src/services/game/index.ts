@@ -25,6 +25,7 @@ import {
   computeCanonicalBaseDigest,
   RAZZIA_THEME_ID,
   type HostPresenceSnapshot,
+  type LobbyPresentation,
   type RevealDistributionSnapshot,
   type RosterParticipant,
 } from "@razzia/extensions/core"
@@ -63,6 +64,7 @@ import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { RoundManager } from "@razzia/socket/services/game/round-manager"
 import Registry from "@razzia/socket/services/registry"
+import { resolvePublicDialNumber } from "./pilot-dial-target"
 import { createInviteCode } from "@razzia/socket/utils/game"
 import { createNickname } from "@razzia/socket/utils/nickname"
 import { SECOND_MS } from "@razzia/socket/utils/sleep"
@@ -370,6 +372,11 @@ class Game {
           hostSocket: () => this.io.sockets.sockets.get(this.manager.id),
           start: (socket) => this.start(socket),
           getVoteCompletionReason: () => this.getVoteCompletionReason(),
+          getAssignedDialNumber: (region) =>
+            resolvePublicDialNumber(registry.getAllGames(), this, {
+              configuration: process.env.TADA_PILOT_DIAL_TARGETS,
+              region,
+            }),
           lastCompletedDistribution: () => this.lastCompletedDistribution,
           clearQuestionVerdicts: (index) => this.clearQuestionVerdicts(index),
           syncRosterScoresFromPlayers: () => this.syncRosterScoresFromPlayers(),
@@ -429,7 +436,10 @@ class Game {
     return (this.quizz as { id?: string }).id
   }
 
-  updateSettings(settings: Partial<GameSettings>): boolean {
+  updateSettings(
+    settings: Partial<GameSettings>,
+    lobbyPresentation?: LobbyPresentation,
+  ): boolean {
     if (
       this.started &&
       Object.keys(settings).some((key) => key !== "endOnAllAnswered")
@@ -447,6 +457,10 @@ class Game {
 
     if (settings.endOnAllAnswered) {
       this.round.endIfEveryoneAnswered()
+    }
+
+    if (lobbyPresentation && this.extensionSession) {
+      this.extensionSession.setLobbyPresentation(lobbyPresentation)
     }
 
     this.broadcastHostPresence()

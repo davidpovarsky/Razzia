@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "Tham gia trò chơi",
+    "channels": "Cách tham gia",
+    "phoneOnly": "Chỉ qua điện thoại",
+    "webOnly": "Chỉ qua trang web",
+    "both": "Điện thoại và trang web",
+    "primary": "Ưu tiên hiển thị",
+    "phoneLine": "Đường dây điện thoại",
+    "auto": "Tự động",
+    "israel": "Israel",
+    "uk": "Vương quốc Anh",
+    "showPin": "Hiển thị mã PIN của phòng",
+    "invalidPhone": "Nhập số điện thoại hợp lệ."
+  },
   "tabs": {
     "leaderboard": "Chính sách bảng xếp hạng",
     "teams": "Đội thi",

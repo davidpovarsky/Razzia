@@ -72,7 +72,7 @@ describe("Creating Worlds: authoritative lobby roster", () => {
     const session = new ExtensionGameSession("test-game", extras)
     expect(
       session.getStateSnapshot("manager", []).extras.lobbyFullShow,
-    ).toBeUndefined()
+    ).not.toHaveProperty("representatives")
   })
 
   it("keeps multiple representatives at a real table and never publishes private phones", () => {

@@ -1,15 +1,19 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import {
+  getLobbyPhoneRegion,
+  type LobbyPhoneRegion,
+} from "@razzia/extensions/core"
 import { selectQuizPilotTarget } from "./pilot-target"
 
+interface DialPilotGame {
+  quizId?: string
+  started: boolean
+  contentOwnerId?: string
+  manager: { connected: boolean; clientId: string }
+}
+
 /** Protected provider callbacks select an owner from server configuration, never the caller. */
-export function selectDialedPilotTarget<
-  T extends {
-    quizId?: string
-    started: boolean
-    contentOwnerId?: string
-    manager: { connected: boolean; clientId: string }
-  },
->(
+export function selectDialedPilotTarget<T extends DialPilotGame>(
   games: T[],
   dialedNumber: string,
   configuration: string,
@@ -59,5 +63,44 @@ export function selectDialedPilotTarget<
     return selectQuizPilotTarget(games, target.quizId, target.ownerId)
   } catch {
     return { game: null, error: "errors:game.notFound" }
+  }
+}
+
+/** Expose a routed line only when a call to that exact line would join this room. */
+export function resolvePublicDialNumber<T extends DialPilotGame>(
+  games: T[],
+  room: T,
+  options: { configuration: string | undefined; region?: LobbyPhoneRegion },
+): string | undefined {
+  const { configuration, region = "auto" } = options
+
+  if (!configuration) {
+    return undefined
+  }
+
+  try {
+    const targets: unknown = JSON.parse(configuration)
+
+    if (!targets || typeof targets !== "object" || Array.isArray(targets)) {
+      return undefined
+    }
+
+    const numbers = Object.keys(targets).filter(
+      (number) =>
+        /^\d{5,20}$/u.test(number) &&
+        (region === "auto" || getLobbyPhoneRegion(number) === region) &&
+        selectDialedPilotTarget(games, number, configuration).game === room,
+    )
+
+    if (numbers.length === 1) {
+      return numbers[0]
+    }
+
+    return (
+      numbers.find((number) => getLobbyPhoneRegion(number) === "il") ??
+      numbers.find((number) => getLobbyPhoneRegion(number) === "uk")
+    )
+  } catch {
+    return undefined
   }
 }

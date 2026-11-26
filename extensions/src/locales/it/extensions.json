@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "Accesso alla partita",
+    "channels": "Modalità di accesso",
+    "phoneOnly": "Solo telefono",
+    "webOnly": "Solo sito web",
+    "both": "Telefono e sito web",
+    "primary": "Metti in evidenza",
+    "phoneLine": "Linea telefonica",
+    "auto": "Automatica",
+    "israel": "Israele",
+    "uk": "Regno Unito",
+    "showPin": "Mostra il PIN della sala",
+    "invalidPhone": "Inserisci un numero di telefono valido."
+  },
   "tabs": {
     "leaderboard": "Regole classifica",
     "teams": "Squadre",

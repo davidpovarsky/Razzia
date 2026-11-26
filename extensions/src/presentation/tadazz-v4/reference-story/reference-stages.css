@@ -2606,6 +2606,13 @@
   left: 49px;
   right: 34px;
 }
+.tadazz-reference-seating .dial-info {
+  display: flex;
+  flex-direction: column;
+}
+.tadazz-reference-seating .dial-info[data-join-primary="web"] .dial-web {
+  order: -1;
+}
 .tadazz-reference-seating .dial-caption {
   font-size: 23px;
   font-weight: 850;

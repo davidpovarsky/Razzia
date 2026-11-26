@@ -1,4 +1,18 @@
 {
+  "lobbyJoin": {
+    "title": "Spielbeitritt",
+    "channels": "Teilnahmewege",
+    "phoneOnly": "Nur Telefon",
+    "webOnly": "Nur Website",
+    "both": "Telefon und Website",
+    "primary": "Hervorheben",
+    "phoneLine": "Telefonleitung",
+    "auto": "Automatisch",
+    "israel": "Israel",
+    "uk": "Vereinigtes Königreich",
+    "showPin": "Raum-PIN anzeigen",
+    "invalidPhone": "Gib eine gültige Telefonnummer ein."
+  },
   "tabs": {
     "leaderboard": "Bestenlisten-Richtlinie",
     "teams": "Teams",

@@ -22,10 +22,12 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
   const { gameId, players, locked: storeLocked } = useManagerStore()
   const { socket } = useSocket()
   const presence = useManagerStore((state) => state.hostPresence)
+  const envelope = useExtensionState()
   const join = useRoomJoin({
     inviteCode,
     managerLocked: readOnly ? undefined : storeLocked,
-    envelope: useExtensionState(),
+    envelope,
+    directory: envelope ? undefined : { joinMode: "web-only" },
     connectedCount: readOnly ? undefined : presence?.connectedNow,
     rosterCount: readOnly ? undefined : presence?.registeredTotal,
   })
@@ -66,7 +68,7 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
   }
 
   return (
-    <NativeRazziaRoomPanel join={join} inviteCode={inviteCode} text={text}>
+    <NativeRazziaRoomPanel join={join} text={text}>
       {!readOnly && (
         <>
           <LobbyTeamAssignmentAdapter

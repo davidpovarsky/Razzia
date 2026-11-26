@@ -6,8 +6,51 @@ const room = {
   inviteCode: "246810",
   role: "spectator" as const,
   locked: false,
+  directory: { joinMode: "web-only" },
 }
 describe("room join public contract", () => {
+  it("shows only the phone by default, with an independent PIN choice", () => {
+    expect(
+      resolveRoomJoin({
+        ...room,
+        directory: { dialNumber: "+44 20 7946 0000" },
+      }),
+    ).toMatchObject({
+      showPhone: true,
+      showWeb: false,
+      showPin: false,
+      showQr: false,
+      primary: "phone",
+    })
+    expect(
+      resolveRoomJoin({
+        ...room,
+        directory: { joinMode: "phone-only", showPin: true, showQr: true },
+      }),
+    ).toMatchObject({
+      showPin: true,
+      displayPin: "246810",
+      showQr: false,
+      qrUrl: undefined,
+    })
+    expect(
+      resolveRoomJoin({
+        ...room,
+        directory: {
+          joinMode: "both",
+          joinPrimary: "web",
+          showPin: false,
+          showQr: false,
+        },
+      }),
+    ).toMatchObject({
+      showPhone: true,
+      showWeb: true,
+      showPin: false,
+      showQr: false,
+      primary: "web",
+    })
+  })
   it("encodes the current live room at the public route, without stale path or PIN", () => {
     const join = resolveRoomJoin(room)
     expect(join.webUrl).toBe("https://show.example.invalid/game")

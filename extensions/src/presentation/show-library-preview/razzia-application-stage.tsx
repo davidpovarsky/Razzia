@@ -27,7 +27,10 @@ import {
   resolveCardStageAnimations,
 } from "../../core/card-appearance"
 import type { ResolvedShowTheme } from "../../core/show-themes/resolve"
-import type { SceneConfig } from "../../core/studio-timeline-schema"
+import {
+  projectLobbyJoin,
+  type SceneConfig,
+} from "../../core/studio-timeline-schema"
 import type { ApplicationPreviewFrame } from "../../core/show-library/application-preview-schema"
 import type { AuthoredPreviewChapter } from "../../core/show-library/full-show-preview-timeline"
 import { previewNativeLabels } from "./i18n"
@@ -161,7 +164,11 @@ export function RazziaApplicationStage({
   if (frame.stagePhase === "lobby") {
     content = (
       <NativeRazziaRoomPanel
-        join={resolveRoomJoin({ origin: "", role: frame.role })}
+        join={resolveRoomJoin({
+          origin: "",
+          role: frame.role,
+          directory: projectLobbyJoin(frame.show.defaults?.lobby),
+        })}
         text="game:waitingForPlayers"
       />
     )

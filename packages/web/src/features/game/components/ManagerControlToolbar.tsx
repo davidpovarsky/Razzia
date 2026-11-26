@@ -618,7 +618,7 @@ export const ManagerControlToolbar = ({
             </>
           )}
         </div>
-        <HostShortcutsDialog />
+        <HostShortcutsDialog compact />
       </div>
 
       {/* Keep the same control line during question, voting and results. */}
@@ -686,7 +686,7 @@ export const ManagerControlToolbar = ({
 
           <PresentationControls
             previous={
-              gameId && !isPreLobby
+              gameId && !isLobby && !isPreLobby
                 ? {
                     onClick: handlePreviousScreen,
                     disabled: !canPrevious || isPending,

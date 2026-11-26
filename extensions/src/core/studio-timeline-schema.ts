@@ -431,6 +431,92 @@ export interface PublicAnswerRecap {
   items: PublicAnswerRecapQuestionItem[]
 }
 
+export const lobbyJoinModeSchema = z.enum([
+  "standard",
+  "web-only",
+  "phone-only",
+  "both",
+])
+
+export const lobbyJoinPrimarySchema = z.enum(["phone", "web"])
+
+export const lobbyPhoneRegionSchema = z.enum(["auto", "il", "uk"])
+
+const lobbyDialNumberSchema = z
+  .string()
+  .trim()
+  .max(32)
+  .regex(/^[+0-9 ()-]+$/u)
+const regionalLobbyDialNumberSchema = lobbyDialNumberSchema.refine(
+  (number) =>
+    /^\+?[0-9 ()-]*\d[0-9 ()-]*$/u.test(number) &&
+    number.replace(/\D/gu, "").length >= 5,
+)
+
+export const lobbyPresentationSchema = z.strictObject({
+  joinMode: lobbyJoinModeSchema.default("phone-only"),
+  joinPrimary: lobbyJoinPrimarySchema.optional(),
+  phoneRegion: lobbyPhoneRegionSchema.optional(),
+  dialNumber: lobbyDialNumberSchema.optional(),
+  dialNumbers: z
+    .strictObject({
+      il: regionalLobbyDialNumberSchema.optional(),
+      uk: regionalLobbyDialNumberSchema.optional(),
+    })
+    .optional(),
+  showPin: z.boolean().optional(),
+  showQr: z.boolean().optional(),
+})
+
+export type LobbyPresentation = z.infer<typeof lobbyPresentationSchema>
+
+export type LobbyPhoneRegion = z.infer<typeof lobbyPhoneRegionSchema>
+
+export function getLobbyPhoneRegion(number: string): "il" | "uk" | undefined {
+  const digits = number.replace(/[^0-9]/gu, "").replace(/^00/u, "")
+
+  if (
+    /^972[2-9][0-9]{7,8}$/u.test(digits) ||
+    /^0(?:[23489][0-9]{7}|[57][0-9]{8})$/u.test(digits)
+  ) {
+    return "il"
+  }
+
+  return /^44[0-9]{10}$/u.test(digits) ? "uk" : undefined
+}
+
+/** Project only the chosen public line. Alternate numbers stay with the host. */
+export function projectLobbyJoin(
+  policy?: LobbyPresentation,
+  legacy?: string,
+  assigned?: (region: LobbyPhoneRegion) => string | undefined,
+): Pick<
+  PublicFullShowData,
+  "joinMode" | "joinPrimary" | "dialNumber" | "showPin" | "showQr"
+> {
+  const joinMode = policy?.joinMode ?? "phone-only"
+  const region = policy?.phoneRegion ?? "auto"
+  const authored = policy?.dialNumber ?? legacy
+  const dialNumber =
+    region === "auto"
+      ? (authored ??
+        policy?.dialNumbers?.il ??
+        policy?.dialNumbers?.uk ??
+        assigned?.(region))
+      : (policy?.dialNumbers?.[region] ??
+        (authored && getLobbyPhoneRegion(authored) === region
+          ? authored
+          : assigned?.(region)))
+
+  return {
+    joinMode,
+    ...(policy?.joinPrimary ? { joinPrimary: policy.joinPrimary } : {}),
+    ...(policy?.showPin !== undefined ? { showPin: policy.showPin } : {}),
+    ...(policy?.showQr !== undefined ? { showQr: policy.showQr } : {}),
+    ...(dialNumber && joinMode !== "web-only" ? { dialNumber } : {}),
+  }
+}
+
 export interface PublicFullShowData {
   winners?: Array<{ title: string; imageUrl?: string | null; alt?: string }>
   contestants?: Array<{ title: string; imageUrl?: string | null; alt?: string }>
@@ -446,7 +532,10 @@ export interface PublicFullShowData {
   representatives?: Array<{ table: number; name: string }>
   /** Explicitly published attendance rows. Contacts and call identifiers never leave the host. */
   roster?: Array<{ id: string; label: string; connected: boolean }>
-  joinMode?: "standard" | "phone-only"
+  joinMode?: z.infer<typeof lobbyJoinModeSchema>
+  joinPrimary?: z.infer<typeof lobbyJoinPrimarySchema>
+  showPin?: boolean
+  showQr?: boolean
   instructions?: string[]
   isLive?: boolean
   tieCandidates?: PublicInterimOption[]
@@ -475,15 +564,8 @@ export const studioDefaultsSchema = z.strictObject({
     .enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"])
     .optional(),
   /** Public lobby presentation is an explicit per-show choice. */
-  lobby: z
-    .strictObject({
-      joinMode: z.enum(["standard", "phone-only"]).default("standard"),
-      dialNumber: z
-        .string()
-        .trim()
-        .max(32)
-        .regex(/^[+0-9 ()-]+$/u)
-        .optional(),
+  lobby: lobbyPresentationSchema
+    .extend({
       instructions: z
         .array(z.string().trim().min(1).max(500))
         .max(8)

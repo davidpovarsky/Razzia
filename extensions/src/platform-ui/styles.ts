@@ -11,6 +11,11 @@ export const platformComponentCss = `
 .tds-scope.tds-host-audio-controls input[type="range"]{accent-color:var(--tds-action);min-height:var(--tds-button-min-height);cursor:pointer}
 .tds-scope.tds-host-audio-controls{flex-shrink:0}
 .tds-scope.tds-host-control-bar :where(button):focus-visible,.tds-scope.tds-host-toolbar :where(button[aria-pressed]):focus-visible,.tds-scope.tds-host-audio-controls :where(button,input):focus-visible{outline:2px solid var(--tds-focus);outline-offset:var(--tds-space-1)}
+.tds-scope.tds-host-toolbar .tds-presentation-controls .tds-presentation-control{border-radius:var(--tds-button-radius)}
+.tds-scope.tds-host-toolbar[data-host-lobby="true"]{flex-flow:row wrap;align-items:center}
+.tds-scope.tds-host-toolbar[data-host-lobby="true"] .tds-host-toolbar-session-band{flex:1 1 auto;justify-content:flex-start}
+.tds-scope.tds-host-toolbar[data-host-lobby="true"] .tds-host-toolbar-session-controls{flex:0 1 auto;min-inline-size:0}
+.tds-scope.tds-host-toolbar[data-host-lobby="true"] .tds-host-toolbar-actions{margin-inline-start:auto}
 .tds-scope.tds-host-toolbar[data-host-lobby="true"] .tds-host-previous:disabled{display:none}
 /* Keep phase actions in a separate wrapping band. Unavailable actions and both
    localized label widths reserve the same footprint without clipping controls. */
