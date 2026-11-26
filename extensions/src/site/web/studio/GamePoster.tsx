@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getClientId } from "@razzia/web/lib/session"
 import { useGamePreviewPage } from "../../components/game-preview/boundary"
 import { captureGamePoster } from "../../components/game-preview/capture-poster"
+import { createAccountPreviewProvider } from "../../components/game-preview/account-provider"
 import type { QuizMeta } from "./MyGames"
 
 const defaultPoster = "/tadazz-design-reference/marketing-stage.webp"
@@ -16,6 +17,7 @@ export function GamePoster({
 }) {
   const { id, updatedAt, posterUrl } = game
   const page = useGamePreviewPage()
+  const accountId = getClientId()
   const image = useRef<HTMLImageElement>(null)
   const [failedUrl, setFailedUrl] = useState<string>()
   const [inRange, setInRange] = useState(false)
@@ -23,7 +25,7 @@ export function GamePoster({
   const poster = posterUrl && posterUrl !== failedUrl ? posterUrl : undefined
   const { data } = useQuery({
     queryKey: [
-      getClientId(),
+      accountId,
       "game-poster",
       id,
       updatedAt,
@@ -32,17 +34,28 @@ export function GamePoster({
     enabled: Boolean(page?.enabled && page.provider && inRange && !poster),
     staleTime: Infinity,
     retry: false,
-    queryFn: ({ signal }) =>
-      page?.provider
-        ? captureGamePoster(
-            {
-              provider: page.provider,
-              selection: { kind: "account-owned", quizId: id },
-              preferences: page.preferences,
-            },
-            signal,
-          )
-        : Promise.resolve(null),
+    async queryFn({ signal }) {
+      if (!page?.provider) {
+        return null
+      }
+
+      const request = {
+        provider: page.provider,
+        selection: { kind: "account-owned" as const, quizId: id },
+        preferences: page.preferences,
+      }
+
+      return (
+        (await captureGamePoster(request, signal)) ??
+        captureGamePoster(
+          {
+            ...request,
+            provider: createAccountPreviewProvider(accountId, "poster"),
+          },
+          signal,
+        )
+      )
+    },
   })
 
   useEffect(() => {

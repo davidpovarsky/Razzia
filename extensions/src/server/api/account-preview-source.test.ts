@@ -19,6 +19,7 @@ import { computeCanonicalBaseDigest } from "../../core/digest"
 import { normalizeApplicationPreviewDraft } from "../../core/show-library/application-preview-input"
 import {
   readAccountPreviewSource,
+  readAccountPosterSource,
   readAccountPreviewAssets,
   PreviewSourceError,
 } from "./account-preview-source"
@@ -99,6 +100,49 @@ const digest = (file: string) =>
   createHash("sha256").update(readFileSync(file)).digest("hex")
 
 describe("account-owned preview source is a read-only projection", () => {
+  it("renders an authored poster question even when other questions use retired external media", () => {
+    const owner = fixture(false)
+    const file = owner.getPath("quizz/source.json")
+    const playable = {
+      type: "single",
+      question: "Which planet has rings?",
+      answers: ["Saturn", "Mars"],
+      solutions: [0],
+      cooldown: 3,
+      time: 15,
+    }
+    const base = {
+      id: "owned-game",
+      subject: "A legacy game",
+      gameMode: "quiz",
+      questions: [
+        {
+          ...playable,
+          question: "Old photo question",
+          media: { type: "image", url: "https://placehold.co/600x400.png" },
+        },
+        playable,
+      ],
+    }
+    writeFileSync(file, JSON.stringify(base))
+    const before = digest(file)
+
+    expect(() => readAccountPreviewSource(owner, base.id)).toThrow()
+    const poster = readAccountPosterSource(owner, base.id)
+    expect(poster.show.cards).toMatchObject([
+      { kind: "quiz", question: playable.question },
+    ])
+    expect(poster.assets).toEqual([])
+    expect(poster.chapters.some(({ phase }) => phase === "voting")).toBe(true)
+    expect(() =>
+      normalizeApplicationPreviewDraft(
+        { source: poster.source, show: poster.show, assets: poster.assets },
+        { locale: "en", role: "spectator", reducedMotion: true },
+      ),
+    ).not.toThrow()
+    expect(digest(file)).toBe(before)
+  })
+
   it("binds authored scene fragments to current owner bytes and preserves them through the native adapter", () => {
     const owner = fixture(true)
     const foreign = fixture(false)

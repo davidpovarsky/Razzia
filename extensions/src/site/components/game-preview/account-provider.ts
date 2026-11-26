@@ -45,7 +45,10 @@ const sourceSchema = z.strictObject({
 const mediaBindingsSchema = sourceSchema.shape.assets
 
 /** No private cache. Every open and chapter change rechecks the current account. */
-export function createAccountPreviewAccess(accountId: string) {
+export function createAccountPreviewAccess(
+  accountId: string,
+  purpose: "playback" | "poster" = "playback",
+) {
   const read = async (quizId: string, signal: AbortSignal) => {
     if (getClientId() !== accountId) {
       throw new SiteApiError(403, "preview-account-changed")
@@ -53,7 +56,7 @@ export function createAccountPreviewAccess(accountId: string) {
 
     const source = sourceSchema.parse(
       await siteRequest(
-        `/api/extensions/preview/quizzes/${encodeURIComponent(quizId)}`,
+        `/api/extensions/preview/quizzes/${encodeURIComponent(quizId)}${purpose === "poster" ? "?purpose=poster" : ""}`,
         { signal },
       ),
     )
@@ -172,8 +175,9 @@ export function createAccountPreviewAccess(accountId: string) {
 
 export function createAccountPreviewProvider(
   accountId: string,
+  purpose: "playback" | "poster" = "playback",
 ): GamePreviewProvider {
-  const access = createAccountPreviewAccess(accountId)
+  const access = createAccountPreviewAccess(accountId, purpose)
   const { readSource: read, readComposition } = access
 
   return {

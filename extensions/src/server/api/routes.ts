@@ -26,6 +26,7 @@ import { CompositeStorageError } from "../storage/error"
 import type { StorageInjections } from "../storage/sidecar"
 import {
   readAccountPreviewSource,
+  readAccountPosterSource,
   readAccountPreviewAssets,
   listAccountPreviewSources,
   PreviewSourceError,
@@ -220,7 +221,12 @@ export const createExtensionRoutes = (
     }
 
     try {
-      return c.json(readAccountPreviewSource(injections, c.req.param("id")))
+      const readSource =
+        c.req.query("purpose") === "poster"
+          ? readAccountPosterSource
+          : readAccountPreviewSource
+
+      return c.json(readSource(injections, c.req.param("id")))
     } catch (error) {
       return c.json(
         { error: "Preview unavailable" },

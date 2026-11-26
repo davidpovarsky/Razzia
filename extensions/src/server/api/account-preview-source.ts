@@ -217,7 +217,50 @@ export function readAccountPreviewSource(
   id: string,
   builtinAuthority?: AccountPreviewBuiltinAuthority,
 ) {
+  return bindAccountPreviewSource(
+    projectAccountPreviewContent(injections, id),
+    injections,
+    builtinAuthority,
+  )
+}
+
+/** A poster needs only one safe question. Unrelated legacy media must stay out. */
+export function readAccountPosterSource(
+  injections: AccountPreviewInjections,
+  id: string,
+) {
   const result = projectAccountPreviewContent(injections, id)
+  const candidates = result.show.cards
+    .filter(({ kind }) => kind === "quiz" || kind === "survey")
+    .slice(0, 8)
+
+  for (const card of candidates) {
+    const show = {
+      ...result.show,
+      cards: [card],
+      settings: result.show.settings.filter(
+        ({ scope }) => scope !== "leaderboard",
+      ),
+    }
+
+    try {
+      return bindAccountPreviewSource(
+        { ...result, show, chapters: compileFullShowPreviewTimeline(show) },
+        injections,
+      )
+    } catch {
+      // Try the next authored question if this one uses unavailable media.
+    }
+  }
+
+  throw new PreviewSourceError(422)
+}
+
+function bindAccountPreviewSource(
+  result: ReturnType<typeof projectAccountPreviewContent>,
+  injections: AccountPreviewInjections,
+  builtinAuthority?: AccountPreviewBuiltinAuthority,
+) {
   const { show } = result
   const builtinAssets = readAccountPreviewBuiltinAssets(show, builtinAuthority)
   const admittedPublicUrls = new Set(builtinAssets.map((asset) => asset.url))
