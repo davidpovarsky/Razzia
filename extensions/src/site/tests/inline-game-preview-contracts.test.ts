@@ -8,6 +8,11 @@ import {
   type PreviewChapter,
 } from "../components/game-preview/contracts"
 import { previewPlanSchema } from "../../core/show-library/preview-schemas"
+import { getPublicDemo } from "../../core/show-library/public-demo-catalogue"
+import { normalizeApplicationPreviewDraft } from "../../core/show-library/application-preview-input"
+import { resolveApplicationPreviewPlan } from "../../core/show-library/application-preview-resolve"
+import { compileFullShowPreviewTimeline } from "../../core/show-library/full-show-preview-timeline"
+import { applicationPreviewFrameSchema } from "../../core/show-library/application-preview-schema"
 
 const selection = { kind: "account-owned", quizId: "quiz-a" } as const
 const source = { ...selection, immutableRevision: "fixture-revision-a" }
@@ -20,7 +25,96 @@ const chapter: PreviewChapter = {
   seek: "unavailable",
 }
 
+function familySession() {
+  const familySelection = {
+    kind: "published-demo",
+    catalogueId: "family-mixup",
+  } as const
+  const demo = getPublicDemo(familySelection.catalogueId)
+
+  if (!demo) {
+    throw new Error("The reviewed family example is missing")
+  }
+
+  const draft = normalizeApplicationPreviewDraft(
+    {
+      source: { ...familySelection, immutableRevision: "a".repeat(64) },
+      show: demo.show,
+      assets: [],
+    },
+    { role: "spectator", locale: "en", reducedMotion: false },
+  )
+  const session: GamePreviewSession = {
+    source: draft.source,
+    plan: resolveApplicationPreviewPlan(draft),
+    coverage: "full-show",
+    sampleData: true,
+    chapters: compileFullShowPreviewTimeline(draft.show),
+    mount: vi.fn(),
+    snapshot: vi.fn(),
+    subscribe: vi.fn(),
+    play: vi.fn(),
+    pause: vi.fn(),
+    replay: vi.fn(),
+    seekChapter: vi.fn(),
+    dispose: vi.fn(),
+  }
+
+  return { familySelection, session }
+}
+
 describe("inline consumer source contract, not ACL/executable admission", () => {
+  it("admits all 261 native chapters of the reviewed 48-question family game", () => {
+    const { familySelection, session } = familySession()
+
+    expect(session.plan.resolution.kind).toBe("exact")
+    expect(session.plan.capabilities.questions).toHaveLength(48)
+    expect(session.chapters).toHaveLength(261)
+    expect(session.chapters.at(-1)?.phase).toBe("closing")
+    expect(sessionMatchesSelection(session, familySelection)).toBe(true)
+    expect(session.mount).not.toHaveBeenCalled()
+  })
+
+  it("keeps the native 1024-chapter bound and rejects duplicate or invalid chapters", () => {
+    const { familySelection, session } = familySession()
+    const chapters = Array.from({ length: 1024 }, (_, index) => ({
+      ...chapter,
+      id: `bounded-${index}`,
+    }))
+
+    expect(
+      applicationPreviewFrameSchema.shape.chapterIndex.safeParse(1023).success,
+    ).toBe(true)
+    expect(
+      applicationPreviewFrameSchema.shape.chapterIndex.safeParse(1024).success,
+    ).toBe(false)
+    expect(
+      sessionMatchesSelection({ ...session, chapters }, familySelection),
+    ).toBe(true)
+    expect(
+      sessionMatchesSelection(
+        { ...session, chapters: [...chapters, { ...chapter, id: "overflow" }] },
+        familySelection,
+      ),
+    ).toBe(false)
+
+    const invalid: PreviewChapter[][] = [
+      [],
+      [chapter, chapter],
+      [{ ...chapter, id: "" }],
+      [{ ...chapter, title: "   " }],
+      [{ ...chapter, duration: { kind: "known", milliseconds: 0 } }],
+      [{ ...chapter, duration: { kind: "known", milliseconds: Infinity } }],
+    ]
+
+    for (const chapters of invalid) {
+      expect(
+        sessionMatchesSelection({ ...session, chapters }, familySelection),
+      ).toBe(false)
+    }
+    expect(session.mount).not.toHaveBeenCalled()
+  })
+
   it("accepts only a tile ID, never caller-owned scope/revision/role/rights", () => {
     expect(previewSelectionSchema.parse(selection)).toEqual(selection)
     for (const extra of [

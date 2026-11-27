@@ -24,6 +24,7 @@ const report = {
   failedAssets: [],
   fontResponses: [],
   apiResponses: [],
+  authBootstrapAttempts: [],
   writes: [],
 }
 const correct = {
@@ -212,6 +213,26 @@ async function installObservations(page) {
   })
   await page.route("**/api/**", (route) => {
     const request = route.request()
+    const url = new URL(request.url())
+    // The root SocketProvider calls ensureSession() for a fresh browser. Keep
+    // its exact anonymous bootstrap blocked and visible in the report; this is
+    // not a game mutation or permission to allow any authentication request.
+    if (
+      request.method() === "POST" &&
+      url.origin === new URL(origin).origin &&
+      url.pathname === "/api/auth/session" &&
+      url.search === "" &&
+      request.postData() === "{}" &&
+      !request.headers().authorization
+    ) {
+      report.authBootstrapAttempts.push({
+        url: request.url(),
+        method: request.method(),
+        bodyShape: "empty-object",
+        action: "aborted",
+      })
+      return route.abort()
+    }
     if (!["GET", "HEAD", "OPTIONS"].includes(request.method())) {
       report.writes.push({ url: request.url(), method: request.method() })
       return route.abort()
@@ -748,8 +769,11 @@ try {
   )
   check(
     report.writes.length === 0,
-    "Gallery play makes no external write requests",
+    "Gallery play attempts no game-data or other non-bootstrap API writes",
     report.writes,
+  )
+  console.log(
+    `Recorded and aborted ${report.authBootstrapAttempts.length} anonymous app session bootstrap request(s)`,
   )
   report.completedAt = new Date().toISOString()
   report.status = report.issues.length ? "failed" : "passed"

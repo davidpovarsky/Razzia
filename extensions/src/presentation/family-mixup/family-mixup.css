@@ -1098,6 +1098,8 @@
 }
 .tzv4-stage[data-original-family="family-mixup"] .fm-world .fm-question::before,
 .tzv4-stage[data-original-family="family-mixup"] .fm-world .fm-question::after,
+.tzv4-stage[data-original-family="family-mixup"] .fm-world .fm-choice::before,
+.tzv4-stage[data-original-family="family-mixup"] .fm-world .fm-choice::after,
 .tzv4-stage[data-original-family="family-mixup"]
   .fm-world
   .fm-choice-body::before,
