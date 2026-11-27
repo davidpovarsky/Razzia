@@ -1,6 +1,7 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { useTranslation } from "react-i18next"
 import { PlatformButton } from "./platform-controls"
+import { answerImageTreatmentStyle } from "../media/answer-image-treatment"
 import type {
   ActiveSceneData,
   SceneConfig,
@@ -1349,6 +1350,9 @@ export const ScenePresenter = ({
                       percentage: opt.percentage ?? 0,
                       imageUrl: opt.imageUrl,
                       alt: opt.alt,
+                      ...(opt.imageTreatment
+                        ? { imageTreatment: opt.imageTreatment }
+                        : {}),
                     }))
                   const ranking = computePollRanking(pollOptions)
                   const { isZeroVotes, isTie, winners, runnersUp, allSorted } =
@@ -1607,6 +1611,9 @@ export const ScenePresenter = ({
                                     {winner.imageUrl && (
                                       <img
                                         src={winner.imageUrl}
+                                        style={answerImageTreatmentStyle(
+                                          winner.imageTreatment,
+                                        )}
                                         alt={winner.alt || winner.label}
                                         data-testid="winner-image"
                                         className="h-full w-full rounded-lg object-contain p-0.5 sm:p-1"
@@ -1790,6 +1797,9 @@ export const ScenePresenter = ({
                                       {runner.imageUrl && (
                                         <img
                                           src={runner.imageUrl}
+                                          style={answerImageTreatmentStyle(
+                                            runner.imageTreatment,
+                                          )}
                                           alt={runner.alt || runner.label}
                                           className="h-full w-full rounded-md object-contain p-0.5"
                                           loading="lazy"
@@ -1902,6 +1912,9 @@ export const ScenePresenter = ({
                                   {opt.imageUrl && (
                                     <img
                                       src={opt.imageUrl}
+                                      style={answerImageTreatmentStyle(
+                                        opt.imageTreatment,
+                                      )}
                                       alt={opt.alt || opt.label}
                                       className="h-full w-full rounded-lg object-contain p-1"
                                       loading="lazy"
@@ -2080,6 +2093,9 @@ export const ScenePresenter = ({
                                       {opt.imageUrl && (
                                         <img
                                           src={opt.imageUrl}
+                                          style={answerImageTreatmentStyle(
+                                            opt.imageTreatment,
+                                          )}
                                           alt={opt.alt || opt.label}
                                           data-testid="recap-option-image"
                                           className="size-7 shrink-0 rounded bg-black/25 object-contain sm:size-8"

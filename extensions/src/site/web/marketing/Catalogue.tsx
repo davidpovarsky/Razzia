@@ -133,7 +133,7 @@ export function GameCard({
           <p>{t(game.desc)}</p>
           <div className="game-meta">
             <span>{t(game.category)}</span>
-            <span>{t("{{count}} rounds", { count: game.questionCount })}</span>
+            <span>{t("{{count}} questions", { count: game.questionCount })}</span>
             <span>
               {t("{{range}} min", { range: game.time.replace(" min", "") })}
             </span>

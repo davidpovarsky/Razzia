@@ -6,6 +6,7 @@ are retained. No data restore is automated, to avoid overwriting customer writes
 """
 
 import argparse
+import datetime as dt
 import hashlib
 import http.client
 import json
@@ -81,32 +82,95 @@ def wait_health():
     raise RuntimeError("Replacement did not become healthy")
 
 
+def _docker_log_time(value):
+    # Docker emits UTC RFC3339Nano. datetime alone truncates sub-microsecond
+    # precision, so retain its fractional nanoseconds as an integer.
+    match = re.fullmatch(
+        r"(?P<seconds>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})"
+        r"(?:\.(?P<fraction>\d{1,9}))?Z", value)
+    if not match:
+        raise RuntimeError("Registry log timestamp is invalid")
+    try:
+        seconds = dt.datetime.fromisoformat(match["seconds"] + "+00:00")
+    except ValueError as error:
+        raise RuntimeError("Registry log timestamp is invalid") from error
+    nanoseconds = int((match["fraction"] or "").ljust(9, "0"))
+    return seconds, nanoseconds
+
+
+def _registry_count_evidence(original):
+    # Pin the immutable inspected container and retain its complete timestamped
+    # process lifetime. A quiet registry has no periodic count heartbeat.
+    started = _docker_log_time(original["State"]["StartedAt"])
+    logs = command("docker", "logs", "--timestamps", "--since",
+                   original["State"]["StartedAt"], "--tail", "all", original["Id"])
+    legacy_markers = {"Socket server is running", "Server is running",
+                      "Server running on port 3001"}
+    native_listener = "Tadazz protected native host listening on loopback"
+    cleanup_marker = "Game cleanup task started"
+    retained = set()
+    witnesses = []
+    for line in logs.splitlines():
+        timestamp, _, message = line.partition(" ")
+        marker = message in legacy_markers | {native_listener, cleanup_marker}
+        count = re.search(r"(?:Total games:|Remaining games:)\s*(\d+)", message)
+        if not marker and not count:
+            continue
+        observed = _docker_log_time(timestamp)
+        if observed < started:
+            raise RuntimeError("Registry log precedes the inspected container start")
+        if marker:
+            retained.add(message)
+        if count:
+            witnesses.append((observed, int(count.group(1)), timestamp, len(witnesses)))
+    legacy_started = bool(retained & legacy_markers)
+    native_started = native_listener in retained
+    if not legacy_started and not native_started:
+        raise RuntimeError(
+            "Could not establish current game count: startup log is not retained")
+    if not witnesses and not legacy_started:
+        # Native registry starts empty only after cleanup initialization and a
+        # successful listener. Rotation/unknown drivers cannot prove a complete
+        # no-event lifetime, even if a single startup-like line remains.
+        if (cleanup_marker not in retained or
+                original.get("HostConfig", {}).get("LogConfig") !=
+                {"Type": "json-file", "Config": {}}):
+            raise RuntimeError(
+                "Could not establish current game count from complete native startup")
+    latest = max(witnesses, key=lambda item: (item[0], item[3])) if witnesses else None
+    return {
+        "count": latest[1] if latest else 0,
+        "source": ("complete-retained-container-log-events" if latest else
+                   "retained-startup-empty-registry-no-subsequent-game-events"),
+        "lastCountAt": latest[2] if latest else original["State"]["StartedAt"],
+        "observedAt": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "container": original["Id"],
+        "logBytes": len(logs.encode("utf-8")),
+        "logSha256": hashlib.sha256(logs.encode("utf-8")).hexdigest(),
+        "checkStopRaceEliminated": False,
+    }
+
+
 def last_game_count(container=None):
     container = inspect("tadazz") if container is None else container
-    # Include this process lifetime, not a fixed tail that can omit its boot.
-    logs = command("docker", "logs", "--since",
-                   container["State"]["StartedAt"], "tadazz")
-    counts = re.findall(r"(?:Total games:|Remaining games:)\s*(\d+)", logs)
-    if not counts:
-        # An untouched fresh process has no registry until the first game.
-        # Both native boot messages must still be present. Registry starts empty;
-        # all native room creations/removals emit the count messages above.
-        # Requiring its initialization plus successful native listen avoids
-        # treating an unknown/truncated log or a failed startup as empty.
-        messages = set(logs.splitlines())
-        native_started = (
-            container["HostConfig"].get("LogConfig") ==
-            {"Type": "json-file", "Config": {}} and {
-                "Game cleanup task started",
-                "Tadazz protected native host listening on loopback",
-            } <= messages
-        )
-        if ("Socket server is running" in logs or
-                "Server is running" in logs or native_started):
-            return 0
-        raise RuntimeError("Could not establish current game count from logs")
-    return int(counts[-1])
+    return _registry_count_evidence(container)["count"]
 
+
+def game_count_evidence(original):
+    evidence = _registry_count_evidence(original)
+    if evidence["count"] != 0:
+        raise RuntimeError("Active rooms found; no cutover")
+    return evidence
+
+
+def pre_stop_game_evidence(original):
+    # Refresh after public/image probes, immediately before the stop request.
+    # This narrows the check/stop race; it does not claim an atomic room lock.
+    latest = inspect("tadazz")
+    if (latest["Id"] != original["Id"] or latest["Image"] != original["Image"] or
+            not latest["State"]["Running"]):
+        raise RuntimeError("Production identity or running state changed; no cutover")
+    return game_count_evidence(latest)
 
 def digest(filename):
     result = hashlib.sha256()
@@ -175,8 +239,9 @@ def main():
     gateway = inspect("tadazz-phone-gateway")
     if original["Id"] != args.expected_container or original["Image"] != args.expected_image:
         raise RuntimeError("Production changed since inspection")
-    if not original["State"]["Running"] or last_game_count(original) != 0:
-        raise RuntimeError("Application not running or active rooms found; no cutover")
+    if not original["State"]["Running"]:
+        raise RuntimeError("Application not running; no cutover")
+    room_evidence = game_count_evidence(original)
     mounts = original["Mounts"]
     if len(mounts) != 1 or mounts[0]["Destination"] != "/app/config":
         raise RuntimeError("Unexpected production mount layout")
@@ -199,14 +264,10 @@ def main():
     stopped = renamed = created = False
     report = {"revision": args.revision, "image": image["Id"],
               "previousImage": original["Image"], "previousContainer": original["Id"],
-              "rollbackContainer": backup_name, "activeGamesBefore": 0,
+              "rollbackContainer": backup_name, "activeGamesBefore": room_evidence["count"],
+              "activeGamesEvidence": room_evidence,
               "gatewayContainerUnchanged": False, "success": False}
-    # Public probes and image inspection may take time; refresh immediately
-    # before stopping so a newly created room or changed container blocks cutover.
-    latest = inspect("tadazz")
-    if (latest["Id"] != original["Id"] or latest["Image"] != original["Image"] or
-            not latest["State"]["Running"] or last_game_count(latest) != 0):
-        raise RuntimeError("Production identity or active rooms changed; no cutover")
+    report["preStopActiveGamesEvidence"] = pre_stop_game_evidence(original)
     try:
         docker_api("POST", "/containers/tadazz/stop?t=20")
         stopped = True

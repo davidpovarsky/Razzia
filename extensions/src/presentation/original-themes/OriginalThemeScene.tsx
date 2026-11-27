@@ -1,4 +1,6 @@
 import type { CSSProperties, ReactNode } from "react"
+import { answerImageTreatmentStyle } from "../../media/answer-image-treatment"
+import { FamilyMixupScene } from "../family-mixup/FamilyMixupScene"
 import { useTranslation } from "react-i18next"
 import type { OriginalThemeId } from "../../core/show-themes/original-theme-families"
 import { showThemeText } from "../../core/show-themes/definition"
@@ -201,7 +203,10 @@ const worlds = {
   "carnival-pop": CarnivalPop,
   "sports-arena": SportsArena,
   "mystery-noir": MysteryNoir,
-} satisfies Record<OriginalThemeId, (parts: WorldParts) => ReactNode>
+} satisfies Record<
+  Exclude<OriginalThemeId, "family-mixup">,
+  (parts: WorldParts) => ReactNode
+>
 
 const questionScenes = new Set<TadazzV4Scene>([
   "question",
@@ -413,6 +418,7 @@ function Answers({
                 <img
                   className="og-choice-image answer-image"
                   src={answer.imageUrl}
+                  style={answerImageTreatmentStyle(answer.imageTreatment)}
                   alt={answer.alt ?? label}
                   loading="eager"
                   decoding="async"
@@ -723,6 +729,16 @@ export function OriginalThemeScene({
   data: TadazzV4Data
   motionOwnsCountdownText?: boolean
 }) {
+  if (family === "family-mixup") {
+    return (
+      <FamilyMixupScene
+        scene={scene}
+        data={data}
+        motionOwnsCountdownText={motionOwnsCountdownText}
+      />
+    )
+  }
+
   const World = worlds[family]
 
   if (questionScenes.has(scene)) {

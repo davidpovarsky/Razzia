@@ -2,7 +2,7 @@ import { PLATFORM_AUDIO_ASSETS } from "../../core/platform-audio-assets.ts"
 import originalArtwork from "../../core/show-themes/original-theme-assets.json" with { type: "json" }
 import originalAudio from "../../core/show-themes/original-audio-assets.json" with { type: "json" }
 import {
-  ORIGINAL_THEME_IDS,
+  ORIGINAL_THEME_STYLES,
   isOriginalThemeId,
 } from "../../core/show-themes/original-theme-families.ts"
 
@@ -23,7 +23,7 @@ function originalReviewedAssets<P extends "background" | "audio">(
   names: readonly string[],
   purpose: P,
 ) {
-  if (inventory.length !== ORIGINAL_THEME_IDS.length * names.length) {
+  if (inventory.length !== ORIGINAL_THEME_STYLES.length * names.length) {
     throw new Error("Reviewed original asset inventory incomplete")
   }
 
@@ -36,6 +36,7 @@ function originalReviewedAssets<P extends "background" | "audio">(
 
       if (
         !isOriginalThemeId(asset.family) ||
+        !ORIGINAL_THEME_STYLES.some((style) => style.id === asset.family) ||
         !names.includes(asset.name) ||
         asset.kind !== (purpose === "audio" ? "audio" : "image") ||
         asset.url !== `/tadazz-show/originals/${key}.${extension}` ||

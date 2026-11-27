@@ -25,9 +25,10 @@ export const ORIGINAL_GALLERY_IDS = [
 
 export const PUBLIC_GALLERY_IDS = [
   ...LEGACY_GALLERY_IDS,
+  "family-mixup",
   ...ORIGINAL_GALLERY_IDS,
 ]
 
-export const GLOBAL_THEME_COUNT = 19
+export const GLOBAL_THEME_COUNT = 20
 
-export const PUBLIC_QUESTION_COUNT = 125
+export const PUBLIC_QUESTION_COUNT = 173

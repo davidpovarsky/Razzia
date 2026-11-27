@@ -57,6 +57,9 @@ export function buildInterimResults(
       percentage: dist.options?.[idx]?.percentage ?? 0,
       imageUrl: visual?.url,
       alt: visual?.alt,
+      ...(visual?.imageTreatment
+        ? { imageTreatment: visual.imageTreatment }
+        : {}),
     }
   })
 

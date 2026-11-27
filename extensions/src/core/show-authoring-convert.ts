@@ -122,6 +122,9 @@ export function authoredShowToNativeBundleDraft(
             display: ans.display,
             url: ans.imageUrl,
             alt: ans.alt ?? "",
+            ...(ans.imageTreatment
+              ? { imageTreatment: ans.imageTreatment }
+              : {}),
           })
         }
       }
@@ -835,6 +838,9 @@ export function nativeBundleToAuthoredShow(
           display: visual?.display ?? "text",
           imageUrl: visual?.url,
           alt: visual?.alt,
+          ...(visual?.imageTreatment
+            ? { imageTreatment: visual.imageTreatment }
+            : {}),
         }
       })
       const playMode =

@@ -1,3 +1,4 @@
+import { answerImageTreatmentStyle } from "../../media/answer-image-treatment"
 import { PlatformButton } from "../platform-controls"
 import { FullShowSceneView, isFullShowScene } from "./FullShowScenes"
 import type { CSSProperties } from "react"
@@ -247,6 +248,7 @@ export function AnswerSlotV4({
               <img
                 className="answer-image"
                 src={answer.imageUrl}
+                style={answerImageTreatmentStyle(answer.imageTreatment)}
                 alt={answer.alt ?? displayTitle}
                 loading="eager"
                 decoding="async"

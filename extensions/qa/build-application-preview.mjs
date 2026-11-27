@@ -63,12 +63,18 @@ const result = await build({
       setup(bundler) {
         // Vite's inline CSS query is a string import. Preserve that contract
         // in the isolated esbuild renderer, including its ShadowRoot.
-        const originalStyle = path.join(
-          root,
-          "extensions/src/presentation/original-themes/original-themes.css",
-        )
+        const nativeThemeStyles = new Set([
+          path.join(
+            root,
+            "extensions/src/presentation/original-themes/original-themes.css",
+          ),
+          path.join(
+            root,
+            "extensions/src/presentation/family-mixup/family-mixup.css",
+          ),
+        ])
         bundler.onResolve(
-          { filter: /original-themes\.css\?inline$/ },
+          { filter: /(?:original-themes|family-mixup)\.css\?inline$/ },
           (resolveArgs) => ({
             path: path.resolve(
               resolveArgs.resolveDir,
@@ -77,9 +83,9 @@ const result = await build({
           }),
         )
         bundler.onLoad(
-          { filter: /original-themes\.css$/ },
+          { filter: /(?:original-themes|family-mixup)\.css$/ },
           async (loadArgs) => {
-            if (loadArgs.path !== originalStyle) {
+            if (!nativeThemeStyles.has(loadArgs.path)) {
               return
             }
 

@@ -407,6 +407,9 @@ function NativeApplicationPreviewStage({
                 image: a.display === "text" ? undefined : a.imageUrl,
                 alt: a.alt,
                 display: a.display === "text" ? undefined : a.display,
+                ...(a.imageTreatment
+                  ? { imageTreatment: a.imageTreatment }
+                  : {}),
               })),
         ...(card.media?.type === "image" &&
         (!card.reveal || card.reveal.effect === "none")

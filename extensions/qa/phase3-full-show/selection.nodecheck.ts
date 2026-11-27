@@ -19,7 +19,10 @@ import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 import { after, before, test } from "node:test"
 import { createFirstPartyOAuth } from "../../src/mcp-app/first-party/oauth.ts"
 import { createFullShowSelectionPortV3 } from "../../src/mcp-app/server/full-show-selection.ts"
-import { normalizeDraft } from "../../src/mcp-app/server/authoring.ts"
+import {
+  normalizeDraft,
+  normalizeStoredDraft,
+} from "../../src/mcp-app/server/authoring.ts"
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { PREVIEW_RESOURCE } from "../../src/mcp-app/contracts/schemas.ts"
 import { sha256Hex } from "../../src/core/digest.ts"
@@ -1103,5 +1106,92 @@ test("semantic selected media cannot fall back to generic URL allowlist when pre
     invoked,
     false,
     "Denied media must stop before the asynchronous asset reader",
+  )
+})
+
+test("semantic silhouette projection survives the actual full-show wire without changing admitted image bytes", async () => {
+  const projected = await semanticProjectionFixture()
+  const stored = await projected.drafts.get(a, projected.record.draftId)
+  assert(stored)
+  const source = tadaShowV1Schema.parse(JSON.parse(stored.authoredShowJson))
+  const original = JSON.parse(stored.authoredShowJson) as typeof source
+  let questionOrdinal = 0
+  const cards = original.cards.map((card) => {
+    if (card.kind !== "quiz" && card.kind !== "survey") return card
+    questionOrdinal += 1
+    if (questionOrdinal !== 3) return card
+    return {
+      ...card,
+      answers: card.answers.map((answer, index) => ({
+        ...answer,
+        ...(index < 4 ? { imageTreatment: "silhouette" as const } : {}),
+      })),
+    }
+  })
+  const normalized = normalizeStoredDraft(
+    JSON.stringify({ ...original, cards }),
+    projected.authoring,
+  )
+  // The write uses the normal authoring allowlist for the exact bundled URLs
+  // already verified by semanticProjectionFixture. Preview admission stays on
+  // the unchanged semantic resolver and its physical-byte verification.
+  const writableDrafts = issuer.draftRepository({
+    ...projected.authoring,
+    allowedPublicAssetUrls: new Set(
+      source.cards.flatMap((card) =>
+        card.kind === "quiz" || card.kind === "survey"
+          ? card.answers.flatMap((answer) =>
+              answer.imageUrl ? [answer.imageUrl] : [],
+            )
+          : [],
+      ),
+    ),
+  })
+  const record = await writableDrafts.replace(
+    a,
+    stored.draftId,
+    stored.revision,
+    normalized,
+    mutation(normalized, stored),
+  )
+  projected.admitted.length = 0
+  const initial = await projected.preview.render(a, selection(record))
+  const answers = initial.inventory.chapters.find(
+    (chapter) =>
+      chapter.questionOrdinal === 3 && chapter.kind === "answerCards",
+  )
+  assert(answers)
+  const frame = await projected.preview.render(a, {
+    ...selection(record),
+    chapterId: answers.id,
+  })
+  const wire = fullShowFrameV3Schema.parse(JSON.parse(JSON.stringify(frame)))
+  assert.deepEqual(
+    wire.presentation.answerVisuals.map((visual) => visual.imageTreatment),
+    ["silhouette", "silhouette", "silhouette", "silhouette", undefined],
+  )
+  assert.equal(projected.admitted.at(-1)?.length, 5)
+  const originalQuestion = source.cards.filter(
+    (card) => card.kind === "quiz" || card.kind === "survey",
+  )[2]
+  assert.deepEqual(
+    wire.presentation.answerVisuals.map((visual) => visual.url),
+    originalQuestion.answers.map((answer) => answer.imageUrl),
+  )
+  assert.equal(
+    fullShowFrameV3Schema.safeParse({
+      ...wire,
+      presentation: {
+        ...wire.presentation,
+        answerVisuals: wire.presentation.answerVisuals.map((visual, index) =>
+          index === 0 ? { ...visual, imageTreatment: "blur" } : visual,
+        ),
+      },
+    }).success,
+    false,
+  )
+  assert.doesNotMatch(
+    JSON.stringify(wire),
+    /PRIVATE_NOTE_|FUTURE_QUESTION_[0134]|authoredShowJson|accountId|grantId/u,
   )
 })

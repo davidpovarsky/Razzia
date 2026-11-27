@@ -1,4 +1,5 @@
 import type { BackgroundPosition } from "../../core/card-appearance"
+import type { AnswerImageTreatment } from "../../core/media"
 
 /** Presentation-only TADAZZ V4 contracts. Does not import game or socket state. */
 export const TADAZZ_V4_SCENES = [
@@ -51,6 +52,7 @@ export interface TadazzV4Answer {
   display?: "image" | "both"
   title: string
   imageUrl?: string | null
+  imageTreatment?: AnswerImageTreatment
   alt?: string
 }
 

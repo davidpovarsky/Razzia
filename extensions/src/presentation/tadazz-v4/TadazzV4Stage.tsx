@@ -31,6 +31,7 @@ import { observeQuestionPresentation } from "../question-lead-in"
 import "./source-layout.css"
 import "./tadazz-v4.css"
 import originalThemeCss from "../original-themes/original-themes.css?inline"
+import familyMixupCss from "../family-mixup/family-mixup.css?inline"
 import {
   continuesQuestionStage,
   normalizeData,
@@ -552,7 +553,10 @@ export const TadazzV4Stage = forwardRef<
         data-testid="tadazz-stage"
       >
         {originalFamily ? (
-          <style data-original-theme-styles>{originalThemeCss}</style>
+          <style data-original-theme-styles>
+            {originalThemeCss}
+            {familyMixupCss}
+          </style>
         ) : null}
         <StageBackdropV4 scene={scene} data={data} assetBase={assetBase} />
         <div className="veil" />

@@ -217,6 +217,9 @@ export function RazziaApplicationStage({
       display: answer.display,
       url: answer.imageUrl,
       alt: answer.alt ?? answer.text,
+      ...(answer.imageTreatment
+        ? { imageTreatment: answer.imageTreatment }
+        : {}),
     }))
     const answers = card.answers.map((answer) => answer.text)
     const { phase } = chapter

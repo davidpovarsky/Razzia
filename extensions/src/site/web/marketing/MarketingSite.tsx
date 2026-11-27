@@ -625,7 +625,7 @@ export function MarketingSite() {
                     </span>
                     <span>{t(selected.category)}</span>
                     <span>
-                      {t("{{count}} rounds", { count: selected.questionCount })}
+                      {t("{{count}} questions", { count: selected.questionCount })}
                     </span>
                     <span>{t(selected.themeName)}</span>
                   </div>

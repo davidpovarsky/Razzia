@@ -1,5 +1,6 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { PlatformButton } from "../platform-controls"
+import { answerImageTreatmentStyle } from "../../media/answer-image-treatment"
 import { usePlatformClosingOwner } from "../platform-closing"
 import { ReferenceStoryScene } from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
@@ -100,6 +101,7 @@ const picture = (a: TadazzV4Answer | undefined, fallback: number) =>
     <img
       className="full-picture full-story-image"
       src={a.imageUrl}
+      style={answerImageTreatmentStyle(a.imageTreatment)}
       alt={a.alt || a.title || ""}
     />
   ) : (
@@ -510,6 +512,7 @@ export function StoryProgress({ data }: { data: FullShowInput }) {
                 {ready && answer?.imageUrl ? (
                   <img
                     src={answer.imageUrl}
+                    style={answerImageTreatmentStyle(answer.imageTreatment)}
                     alt={answer.alt || answer.title}
                     className="full-progress-image"
                   />

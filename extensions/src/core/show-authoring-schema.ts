@@ -10,6 +10,7 @@ import {
 } from "./card-appearance"
 import { ANSWER_DISPLAYS, LEADERBOARD_MODES } from "./constants"
 import {
+  answerImageTreatmentSchema,
   interludeSchema,
   isSafeMediaUrl,
   questionRevealSchema,
@@ -42,6 +43,7 @@ export const authoredAnswerSchema = z
     text: z.string().min(1, "errors:quizz.answerEmpty"),
     display: z.enum(ANSWER_DISPLAYS).default("text"),
     imageUrl: z.string().optional(),
+    imageTreatment: answerImageTreatmentSchema.optional(),
     alt: z.string().optional(),
   })
   .superRefine((data, ctx) => {

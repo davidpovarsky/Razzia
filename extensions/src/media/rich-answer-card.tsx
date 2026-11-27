@@ -1,3 +1,4 @@
+import { answerImageTreatmentStyle } from "./answer-image-treatment"
 import { PlatformButton } from "../presentation/platform-controls"
 import {
   answerVisualSchema,
@@ -127,6 +128,7 @@ export const RichAnswerCard = ({
             <div className="relative max-h-36 w-auto overflow-hidden rounded-lg bg-black/10">
               <img
                 src={visual.url}
+                style={answerImageTreatmentStyle(visual.imageTreatment)}
                 alt={visual.alt}
                 data-testid="rich-answer-image"
                 className="max-h-36 w-auto rounded-lg object-contain"

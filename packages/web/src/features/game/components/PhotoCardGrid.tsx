@@ -7,6 +7,7 @@ import type {
   StageAnimationSlot,
 } from "@razzia/extensions/core"
 import { isValidAnswerVisual } from "@razzia/extensions/media"
+import { answerImageTreatmentStyle } from "@razzia/extensions/media/answer-image-treatment"
 import {
   CANONICAL_ANSWER_COLORS,
   computePollRanking,
@@ -318,6 +319,7 @@ export const PhotoCardGrid = ({
                   {showImage && !hasError && winner.imageUrl ? (
                     <img
                       src={winner.imageUrl}
+                      style={answerImageTreatmentStyle(visual?.imageTreatment)}
                       alt={winner.alt || winner.label}
                       data-testid={`photo-card-image-${index}`}
                       loading="eager"
@@ -455,6 +457,9 @@ export const PhotoCardGrid = ({
                     {showImage && !hasError && runner.imageUrl ? (
                       <img
                         src={runner.imageUrl}
+                        style={answerImageTreatmentStyle(
+                          visual?.imageTreatment,
+                        )}
                         alt={runner.alt || runner.label}
                         data-testid={`photo-card-image-${index}`}
                         loading="eager"
@@ -634,6 +639,7 @@ export const PhotoCardGrid = ({
                   {showImage && !hasError && visual?.url ? (
                     <img
                       src={visual.url}
+                      style={answerImageTreatmentStyle(visual.imageTreatment)}
                       alt={visual.alt || answer}
                       data-testid={`photo-card-image-${index}`}
                       loading="eager"

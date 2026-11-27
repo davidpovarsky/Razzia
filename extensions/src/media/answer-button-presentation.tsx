@@ -1,4 +1,5 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve runtime guards for sparse legacy/authored snapshots at the extension boundary.
+import { answerImageTreatmentStyle } from "./answer-image-treatment"
 import type { AnswerVisual, StageAnimationSlot } from "../core/index"
 import type { CSSProperties, ReactNode } from "react"
 import { isValidAnswerVisual } from "./rich-answer-card"
@@ -87,6 +88,7 @@ export function AnswerVisualContent({
         <div className="relative max-h-20 w-auto overflow-hidden rounded-lg bg-black/10 sm:max-h-28 md:max-h-32">
           <img
             src={image.url}
+            style={answerImageTreatmentStyle(image.imageTreatment)}
             alt={image.alt}
             data-testid="answer-visual-image"
             className="max-h-20 w-auto rounded-lg object-contain sm:max-h-28 md:max-h-32"

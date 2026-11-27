@@ -24,7 +24,12 @@ import {
   teamsExtrasSchema,
 } from "./quiz-extras"
 import { createDefaultRosterExtras, rosterExtrasSchema } from "./phone-roster"
-import { isSafeMediaUrl, safeMediaUrlSchema } from "./media"
+import {
+  isSafeMediaUrl,
+  safeMediaUrlSchema,
+  answerImageTreatmentSchema,
+  type AnswerImageTreatment,
+} from "./media"
 
 export const TIMELINE_ITEM_KINDS = [
   "quiz",
@@ -179,6 +184,7 @@ export const animationSceneSchema = z.strictObject({
         title: z.string(),
         imageUrl: safeMediaUrlSchema.optional(),
         alt: z.string().optional(),
+        imageTreatment: answerImageTreatmentSchema.optional(),
       }),
     )
     .optional(),
@@ -188,6 +194,7 @@ export const animationSceneSchema = z.strictObject({
         title: z.string(),
         imageUrl: safeMediaUrlSchema.optional(),
         alt: z.string().optional(),
+        imageTreatment: answerImageTreatmentSchema.optional(),
       }),
     )
     .optional(),
@@ -376,6 +383,7 @@ export interface PublicInterimOption {
   percentage: number
   imageUrl?: string
   alt?: string
+  imageTreatment?: AnswerImageTreatment
 }
 
 export interface PublicInterimResults {
@@ -397,6 +405,7 @@ export interface PublicAnswerRecapWinnerOption {
   percentage: number
   imageUrl?: string
   alt?: string
+  imageTreatment?: AnswerImageTreatment
   isCorrect?: boolean
 }
 

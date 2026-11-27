@@ -78,10 +78,14 @@ export const safeMediaUrlSchema = z
   .string()
   .refine(isSafeMediaUrl, "errors:extensions.invalidMediaUrl")
 
+export const answerImageTreatmentSchema = z.literal("silhouette")
+export type AnswerImageTreatment = z.infer<typeof answerImageTreatmentSchema>
+
 export const answerVisualSchema = z
   .strictObject({
     answerIndex: z.number().int().min(0),
     display: z.enum(ANSWER_DISPLAYS),
+    imageTreatment: answerImageTreatmentSchema.optional(),
     url: z.string().optional(),
     alt: z.string(),
   })

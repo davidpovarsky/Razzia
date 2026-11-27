@@ -1,4 +1,6 @@
 import type { BackgroundPosition } from "../../core/card-appearance"
+import type { AnswerImageTreatment } from "../../core/media"
+import { answerImageTreatmentStyle } from "../../media/answer-image-treatment"
 import { PlatformButton } from "../platform-controls"
 import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 import {
@@ -52,6 +54,7 @@ export interface StageOption {
   label: string
   /** Real answer image URL (answerVisuals[answerIndex]); omitted for text answers. */
   image?: string
+  imageTreatment?: AnswerImageTreatment
   alt?: string
 }
 
@@ -1277,6 +1280,9 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                         {opt.image ? (
                           <img
                             src={opt.image}
+                            style={answerImageTreatmentStyle(
+                              opt.imageTreatment,
+                            )}
                             alt={opt.alt || opt.label || labels.answerOption}
                             loading="eager"
                             decoding="async"

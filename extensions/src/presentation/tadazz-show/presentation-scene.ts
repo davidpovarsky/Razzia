@@ -12,7 +12,11 @@ import type {
   ActiveSceneData,
   PublicRankEntry,
 } from "../../core/studio-timeline-schema"
-import type { AnswerVisual, Interlude } from "../../core/media"
+import type {
+  AnswerVisual,
+  AnswerImageTreatment,
+  Interlude,
+} from "../../core/media"
 import type { RevealDistributionSnapshot } from "../../core/reveal"
 import type { TeamDefinition } from "../../core"
 import {
@@ -54,7 +58,12 @@ export interface SceneDescriptor {
   preset?: string
   round?: number
   roundNumber?: number
-  recapItems?: Array<{ label: string; image?: string; alt?: string }>
+  recapItems?: Array<{
+    label: string
+    image?: string
+    alt?: string
+    imageTreatment?: AnswerImageTreatment
+  }>
   id?: string
   kind: string
   title?: string
@@ -230,6 +239,9 @@ export function buildStageQuestion(input: {
       return {
         label,
         image: showImage ? visual?.url : undefined,
+        ...(visual?.imageTreatment
+          ? { imageTreatment: visual.imageTreatment }
+          : {}),
         alt: visual?.alt || label || `Choice ${index + 1}`,
       }
     }),

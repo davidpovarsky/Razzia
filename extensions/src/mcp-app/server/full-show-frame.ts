@@ -186,6 +186,9 @@ export function createFullShowPreviewPortV3(
                 display: answer.display,
                 url: answer.imageUrl,
                 alt: answer.alt,
+                ...(answer.imageTreatment
+                  ? { imageTreatment: answer.imageTreatment }
+                  : {}),
               },
             ]
           })

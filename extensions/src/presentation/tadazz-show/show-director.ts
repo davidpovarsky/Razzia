@@ -1,5 +1,6 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 // oxlint-disable no-await-in-loop -- Scene choreography and ordered stage operations must complete before the next step starts.
+import type { AnswerImageTreatment } from "../../core/media"
 import {
   isFullShowScene,
   type FullShowInput,
@@ -110,6 +111,7 @@ export type StageStep =
         label: string
         image?: string
         alt?: string
+        imageTreatment?: AnswerImageTreatment
       }>
       round?: number | null
       title?: string
@@ -485,6 +487,7 @@ function planScene(
           label: o.label,
           image: o.imageUrl,
           alt: o.alt || o.label,
+          ...(o.imageTreatment ? { imageTreatment: o.imageTreatment } : {}),
         })),
       }
       const steps: StageStep[] = []
@@ -536,6 +539,7 @@ function planScene(
             label?: string
             image?: string
             alt?: string
+            imageTreatment?: AnswerImageTreatment
           }>
         }
       ).recapItems
@@ -563,12 +567,18 @@ function planScene(
                 label: option ? option.label : item.questionText,
                 image: option?.imageUrl,
                 alt: option?.alt || option?.label || item.questionText,
+                ...(option?.imageTreatment
+                  ? { imageTreatment: option.imageTreatment }
+                  : {}),
               }
             })
           : (fallbackItems ?? []).map((fi) => ({
               label: fi.label ?? "",
               image: fi.image,
               alt: fi.alt ?? fi.label,
+              ...(fi.imageTreatment
+                ? { imageTreatment: fi.imageTreatment }
+                : {}),
             }))
 
       return [
@@ -632,11 +642,13 @@ function planScene(
             title: string
             imageUrl?: string
             alt?: string
+            imageTreatment?: AnswerImageTreatment
           }>
           contestants?: Array<{
             title: string
             imageUrl?: string
             alt?: string
+            imageTreatment?: AnswerImageTreatment
           }>
           voteCount?: number
           resolvedIndex?: number | null
@@ -658,6 +670,9 @@ function planScene(
                 title: option.label,
                 imageUrl: option.imageUrl,
                 alt: option.alt,
+                ...(option.imageTreatment
+                  ? { imageTreatment: option.imageTreatment }
+                  : {}),
               }
             : {
                 title: "",
@@ -694,6 +709,9 @@ function planScene(
                   title: option.label,
                   imageUrl: option.imageUrl,
                   alt: option.alt,
+                  ...(option.imageTreatment
+                    ? { imageTreatment: option.imageTreatment }
+                    : {}),
                 })) ??
                 activeSceneData?.interimResults?.options
                   .filter((option) =>
@@ -705,6 +723,9 @@ function planScene(
                     title: option.label,
                     imageUrl: option.imageUrl,
                     alt: option.alt,
+                    ...(option.imageTreatment
+                      ? { imageTreatment: option.imageTreatment }
+                      : {}),
                   })) ??
                 authored.contestants,
               voteCount:
@@ -749,6 +770,12 @@ function planScene(
                       label: item.winningOptions[0].label,
                       image: item.winningOptions[0].imageUrl,
                       alt: item.winningOptions[0].alt,
+                      ...(item.winningOptions[0].imageTreatment
+                        ? {
+                            imageTreatment:
+                              item.winningOptions[0].imageTreatment,
+                          }
+                        : {}),
                     }
                   : {
                       label:
@@ -798,6 +825,9 @@ function planScene(
                 label: o.label,
                 image: o.imageUrl,
                 alt: o.alt || o.label,
+                ...(o.imageTreatment
+                  ? { imageTreatment: o.imageTreatment }
+                  : {}),
               })),
             }
           : prevQ

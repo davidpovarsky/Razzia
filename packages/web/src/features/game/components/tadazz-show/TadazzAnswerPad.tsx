@@ -82,6 +82,9 @@ export function TadazzAnswerPad({
                   url: opt.image,
                   display: "both",
                   alt: opt.label,
+                  ...(opt.imageTreatment
+                    ? { imageTreatment: opt.imageTreatment }
+                    : {}),
                 }
               : undefined
           }

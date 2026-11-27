@@ -71,7 +71,12 @@ export function packagePreviewScene(
         : card.answers.map((answer) => ({
             label: answer.text,
             ...(answer.display !== "text" && answer.imageUrl
-              ? { image: answer.imageUrl }
+              ? {
+                  image: answer.imageUrl,
+                  ...(answer.imageTreatment
+                    ? { imageTreatment: answer.imageTreatment }
+                    : {}),
+                }
               : {}),
           })),
     ...(card.media?.type === "image" ? { questionImage: card.media.url } : {}),

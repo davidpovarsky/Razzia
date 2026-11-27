@@ -3,6 +3,8 @@
  * Canonical answer colours matching Razzia palette tokens
  * (--color-answer-1 to --color-answer-5 in packages/web/src/index.css).
  */
+import type { AnswerImageTreatment } from "../core/media"
+
 export const CANONICAL_ANSWER_COLORS = [
   // 1 - Amber
   "#e69f00",
@@ -25,6 +27,7 @@ export interface PollOptionItem {
   percentage: number
   imageUrl?: string
   alt?: string
+  imageTreatment?: AnswerImageTreatment
 }
 
 export interface RankedPollOption extends PollOptionItem {

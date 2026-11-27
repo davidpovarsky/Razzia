@@ -168,7 +168,8 @@ export function sessionMatchesSelection(
     plan.resolution.kind !== "unavailable" &&
     plan.capabilities.supportedRoles.includes("spectator") &&
     chapters.length > 0 &&
-    chapters.length <= 256 &&
+    // Native frames admit chapter indices 0..1023, including question subphases.
+    chapters.length <= 1024 &&
     new Set(chapters.map((chapter) => chapter.id)).size === chapters.length &&
     chapters.every(
       (chapter) =>

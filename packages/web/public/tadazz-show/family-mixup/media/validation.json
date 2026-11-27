@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "assetCount": 76,
+  "totalAssetBytes": 32736521,
+  "checks": [
+    {
+      "name": "Every asset hash and size matches manifest",
+      "passed": true,
+      "count": 76
+    },
+    {
+      "name": "All nine H264 clips decode fully and have exact 24fps duration/frame counts",
+      "passed": true,
+      "count": 9
+    },
+    {
+      "name": "Source duck and silhouette distractors preserve real alpha",
+      "passed": true
+    },
+    {
+      "name": "Rotation source is chiral; reflected options B and D cannot be correct",
+      "passed": true
+    },
+    {
+      "name": "Fixed cup-position swaps end with ball at C and 3x3 square count is 14",
+      "passed": true
+    },
+    {
+      "name": "Breakfast observation re-encoded from approved photographic breakfast.png; full decode,8s,192frames passed",
+      "passed": true
+    }
+  ],
+  "visualReview": "Reviewed generated diagram contact sheet (12 boards), nine representative video frames including final car exit, race freeze/reveal, and partial/full whisk; reviewed macro/full toothbrush and new animal portraits. Correct shadow uses the approved duck alpha in runtime CSS. Breakfast observation now uses the approved photograph rather than the earlier deterministic stage; its encoded poster has been reviewed."
+}

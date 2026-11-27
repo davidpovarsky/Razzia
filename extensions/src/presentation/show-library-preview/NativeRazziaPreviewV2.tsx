@@ -62,6 +62,9 @@ export function NativeRazziaPreviewV2({
                 display: visual.display,
                 url: visual.url,
                 alt: visual.alt,
+                ...(visual.imageTreatment
+                  ? { imageTreatment: visual.imageTreatment }
+                  : {}),
               },
             ]
           : []
@@ -195,6 +198,9 @@ export function NativeRazziaPreviewV2({
                           display: visual.display,
                           url: visual.url,
                           alt: visual.alt,
+                          ...(visual.imageTreatment
+                            ? { imageTreatment: visual.imageTreatment }
+                            : {}),
                         }
                       : undefined
                   }

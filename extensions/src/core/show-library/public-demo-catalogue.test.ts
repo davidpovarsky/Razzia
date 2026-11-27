@@ -13,6 +13,8 @@ import { ORIGINAL_THEME_IDS } from "../show-themes/original-theme-families"
 import { normalizeApplicationPreviewDraft } from "./application-preview-input"
 import { getPublicDemo, publicDemoCatalogue } from "./public-demo-catalogue"
 
+const originalDemoIds = ORIGINAL_THEME_IDS.filter((id) => id !== "family-mixup")
+
 describe("published gallery games", () => {
   it("binds every gallery slot and every required audience to a real authored game", () => {
     expect(publicDemoCatalogue.map((game) => game.id)).toEqual([
@@ -26,7 +28,8 @@ describe("published gallery games", () => {
       "family",
       "classroom",
       "team",
-      ...ORIGINAL_THEME_IDS,
+      "family-mixup",
+      ...originalDemoIds,
     ])
     const audiences = new Set(
       publicDemoCatalogue.flatMap((game) => game.audience),
@@ -83,21 +86,27 @@ describe("published gallery games", () => {
     },
   )
 
-  it("preserves the legacy catalogue and adds eight original six-round shows", () => {
+  it("preserves the legacy catalogue and adds the family flagship plus eight original six-round shows", () => {
     expect(
       publicDemoCatalogue
         .slice(0, 10)
         .reduce((total, item) => total + item.questionCount, 0),
     ).toBe(77)
-    expect(publicDemoCatalogue.slice(10).map((item) => item.id)).toEqual(
-      ORIGINAL_THEME_IDS,
+    expect(publicDemoCatalogue[10]).toMatchObject({
+      id: "family-mixup",
+      themeId: "family-mixup",
+      questionCount: 48,
+      coverUrl: "/tadazz-show/family-mixup/poster.webp",
+    })
+    expect(publicDemoCatalogue.slice(11).map((item) => item.id)).toEqual(
+      originalDemoIds,
     )
     expect(
-      publicDemoCatalogue.slice(10).every((item) => item.questionCount === 6),
+      publicDemoCatalogue.slice(11).every((item) => item.questionCount === 6),
     ).toBe(true)
   })
 
-  it.each(ORIGINAL_THEME_IDS)(
+  it.each(originalDemoIds)(
     "%s has real checkpoints after each third and preserves the public master",
     (id) => {
       const demo = getPublicDemo(id)!
@@ -185,7 +194,7 @@ describe("site-wide gallery themes", () => {
         .size,
     ).toBe(9)
     const registry = createShowThemeRegistry()
-    expect(registry.list()).toHaveLength(19)
+    expect(registry.list()).toHaveLength(20)
     for (const definition of bundledGalleryThemes) {
       for (const role of ["manager", "player", "spectator"] as const) {
         const theme = resolveShowTheme({

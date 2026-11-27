@@ -112,15 +112,20 @@ class ActiveGameCountTests(unittest.TestCase):
                       "Tadazz protected native host listening on loopback\n")
 
     def container(self, log_config=None):
-        return {"State": {"StartedAt": "2026-11-26T23:18:12Z"},
+        return {"Id": "synthetic-pinned-container",
+                "State": {"StartedAt": "2026-11-26T23:18:12Z"},
                 "HostConfig": {"LogConfig": log_config if log_config is not None
                                else {"Type": "json-file", "Config": {}}}}
 
     def count(self, logs, log_config=None):
-        with patch.object(deploy, "command", return_value=logs) as command:
+        timestamped = "".join(
+            f"2026-11-26T23:18:{13+i:02d}Z {line}\n"
+            for i, line in enumerate(logs.splitlines()))
+        with patch.object(deploy, "command", return_value=timestamped) as command:
             result = deploy.last_game_count(self.container(log_config))
-        command.assert_called_once_with("docker", "logs", "--since",
-                                        "2026-11-26T23:18:12Z", "tadazz")
+        command.assert_called_once_with("docker", "logs", "--timestamps", "--since",
+                                        "2026-11-26T23:18:12Z", "--tail", "all",
+                                        "synthetic-pinned-container")
         return result
 
     def test_native_empty_start_requires_registry_and_listener(self):

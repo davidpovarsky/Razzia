@@ -1,0 +1,572 @@
+[
+  {
+    "id": "family-mixup.stage-bright",
+    "url": "/tadazz-show/family-mixup/stage-bright.webp",
+    "kind": "image",
+    "sha256": "37e9919a1a900822c8b359eab473fc6102c9b007147639031b469448f4184b81",
+    "bytes": 46084,
+    "rights": "owner-authorized",
+    "provenance": "Owner-approved family game-show art, generated from the approved mockups; typography and gameplay remain native React. Format conversion only.",
+    "preload": "critical"
+  },
+  {
+    "id": "family-mixup.stage-finale",
+    "url": "/tadazz-show/family-mixup/stage-finale.webp",
+    "kind": "image",
+    "sha256": "383f1156c0d35dceb3a6171aa1fc16a46804b20b8a73779754429778ed099422",
+    "bytes": 84312,
+    "rights": "owner-authorized",
+    "provenance": "Owner-approved family game-show art, generated from the approved mockups; typography and gameplay remain native React. Format conversion only.",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.family-emblem",
+    "url": "/tadazz-show/family-mixup/family-emblem.webp",
+    "kind": "image",
+    "sha256": "b05ba0081c4e7b4ba736725279545f85f5504827d581fba76fdfec4091ce352a",
+    "bytes": 149322,
+    "rights": "owner-authorized",
+    "provenance": "Owner-approved family game-show art, generated from the approved mockups; typography and gameplay remain native React. Format conversion only.",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.poster",
+    "url": "/tadazz-show/family-mixup/poster.webp",
+    "kind": "image",
+    "sha256": "bdd10ed3f5307eeb8e7345eafa274ece6b98cf77f4c8b126eea464afe498244e",
+    "bytes": 140836,
+    "rights": "owner-authorized",
+    "provenance": "Owner-approved family game-show art, generated from the approved mockups; typography and gameplay remain native React. Format conversion only.",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.biscuit-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/biscuit-observe-poster.png",
+    "kind": "image",
+    "sha256": "c247377acc89af3d494d760c0da7aae685a9c4b9354b39427cbda9eb896ef97e",
+    "bytes": 23977,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.biscuit-observe",
+    "url": "/tadazz-show/family-mixup/media/biscuit-observe.mp4",
+    "kind": "video",
+    "sha256": "65f7f50c461cb010d634da0b73ff2795ad67cf2f98bfde5a0d124db983ac1201",
+    "bytes": 68555,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.breakfast-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/breakfast-observe-poster.png",
+    "kind": "image",
+    "sha256": "8196df1ac11d3594d86ce8b4b793a97d7cfd42663edb3c80c090e892f07ecd1a",
+    "bytes": 1498064,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.breakfast-observe",
+    "url": "/tadazz-show/family-mixup/media/breakfast-observe.mp4",
+    "kind": "video",
+    "sha256": "6f3c641f16ece75e7feb6c9ef119e1a2199d26b93efd69f676538969354040c0",
+    "bytes": 166472,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.breakfast",
+    "url": "/tadazz-show/family-mixup/media/breakfast.png",
+    "kind": "image",
+    "sha256": "0731676838803b7333962eeba42c326fa5b2b3601755ec0d29463d174f67e1b4",
+    "bytes": 2058578,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.cake-boxes",
+    "url": "/tadazz-show/family-mixup/media/cake-boxes.png",
+    "kind": "image",
+    "sha256": "ecfcb0b13b0a61f31346a0831c104dd473d7b4a9d3ce6c5ca9f562ace4967300",
+    "bytes": 56656,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.car-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/car-observe-poster.png",
+    "kind": "image",
+    "sha256": "05f15f3c6c6e07da15069e21a2148929722dce393734b48d95d59e5338fcfdb8",
+    "bytes": 22971,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.car-observe",
+    "url": "/tadazz-show/family-mixup/media/car-observe.mp4",
+    "kind": "video",
+    "sha256": "fea28205d7c462921e6b6ac2e59d2977aa4ebe9c8ad0a63ddbcf2fde66b28625",
+    "bytes": 85239,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.cups-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/cups-observe-poster.png",
+    "kind": "image",
+    "sha256": "0d8edda00723f949476d0fa1847721ed39860c5277a5a784d0a7dbdf3dedb865",
+    "bytes": 24605,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.cups-observe",
+    "url": "/tadazz-show/family-mixup/media/cups-observe.mp4",
+    "kind": "video",
+    "sha256": "af7dc8db637440423a0c3c4b933c443aaaffbe00173fe3e212ddb0be8564908d",
+    "bytes": 106114,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.duck-question",
+    "url": "/tadazz-show/family-mixup/media/duck-question.png",
+    "kind": "image",
+    "sha256": "90f65a22b9874965074a16687eac6025b75b595e133892a1e5c6c8c789a46fbf",
+    "bytes": 81913,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.duck-shadow-1",
+    "url": "/tadazz-show/family-mixup/media/duck-shadow-1.png",
+    "kind": "image",
+    "sha256": "3a6977140db160ec730503491205e9e9ddede022057d79e3327ecfa4bd868499",
+    "bytes": 15205,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.duck-shadow-2",
+    "url": "/tadazz-show/family-mixup/media/duck-shadow-2.png",
+    "kind": "image",
+    "sha256": "98f344d6d5b33e231f58280b4b8aa1fac4dfeec118c74c143bfa8686f6c546ad",
+    "bytes": 15497,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.duck-shadow-3",
+    "url": "/tadazz-show/family-mixup/media/duck-shadow-3.png",
+    "kind": "image",
+    "sha256": "db408892209d20843e437e1ad10746795c918dd1c634c109dd1f9a7cf03826a4",
+    "bytes": 15286,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.duck-shadow-4",
+    "url": "/tadazz-show/family-mixup/media/duck-shadow-4.png",
+    "kind": "image",
+    "sha256": "c26f2be826a21b5e5dc37e2b48d3ebd5e5fd77bffbc74d466246bce6cd4f0a86",
+    "bytes": 15363,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.duck",
+    "url": "/tadazz-show/family-mixup/media/duck.png",
+    "kind": "image",
+    "sha256": "51c7ea0eb41e02cdb55474caa9c7005cedbf07a48e7a72fd331f2798cece2367",
+    "bytes": 1542771,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.elephant",
+    "url": "/tadazz-show/family-mixup/media/elephant.png",
+    "kind": "image",
+    "sha256": "d9c0b0e1776cd626ba43afc35912f1e5f7382da7ff239b9d1a5ef230b70f4467",
+    "bytes": 2986588,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.fox",
+    "url": "/tadazz-show/family-mixup/media/fox.png",
+    "kind": "image",
+    "sha256": "5523d443ef4a5a4276b8bccb0f04d4bf303d5282be8f526f8c967fdfa5fff162",
+    "bytes": 2826099,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.hidden-ducks",
+    "url": "/tadazz-show/family-mixup/media/hidden-ducks.png",
+    "kind": "image",
+    "sha256": "0228a20072fe9cb167670ac3d96346c7889733617d8e1d138b5530c4334c89ad",
+    "bytes": 90006,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.kangaroo",
+    "url": "/tadazz-show/family-mixup/media/kangaroo.png",
+    "kind": "image",
+    "sha256": "882909bc2bab316cbef4ddf6693c34d25aa0d9b04848aaee1a046f17b92ae76b",
+    "bytes": 2452501,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.missing-piece",
+    "url": "/tadazz-show/family-mixup/media/missing-piece.png",
+    "kind": "image",
+    "sha256": "eac68606364b9cda0c435faee1e19ba34122aece3359e0d2f75d99bced7d0dd9",
+    "bytes": 77757,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.objects-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/objects-observe-poster.png",
+    "kind": "image",
+    "sha256": "949202da3a9c64269e6d9f3802711863d4a703750a43d27bdbf92f5f74cdd213",
+    "bytes": 17705,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.objects-observe",
+    "url": "/tadazz-show/family-mixup/media/objects-observe.mp4",
+    "kind": "video",
+    "sha256": "5a47335e8a9245543ef8dadf62b00074e8962651d8c6943d213e57cdf603023f",
+    "bytes": 79811,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.octopus",
+    "url": "/tadazz-show/family-mixup/media/octopus.png",
+    "kind": "image",
+    "sha256": "42202dda2abdf40be98a6a8852a5cd558fb7bc1cff769b89b8b88525d4316aa2",
+    "bytes": 2849048,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.penguin",
+    "url": "/tadazz-show/family-mixup/media/penguin.png",
+    "kind": "image",
+    "sha256": "f9154088c11aefca8164e42da13f5eb5b8dc87b16e2446c5e19062e6bf98d288",
+    "bytes": 2270075,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.piece-a",
+    "url": "/tadazz-show/family-mixup/media/piece-a.png",
+    "kind": "image",
+    "sha256": "7d2e53c05509e83f14ce8c0497b495db271c0929dc6d3c6584339c712af10775",
+    "bytes": 37850,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.piece-b",
+    "url": "/tadazz-show/family-mixup/media/piece-b.png",
+    "kind": "image",
+    "sha256": "8dc205ed5b0eb7f0b76e3a976916edde1a789cc4f35de7613586189824e5938a",
+    "bytes": 37975,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.piece-c",
+    "url": "/tadazz-show/family-mixup/media/piece-c.png",
+    "kind": "image",
+    "sha256": "3519e4e5a6c6306e90ae4ee9dab171ba7fb8d832cb2ef27c9bfef32005420f45",
+    "bytes": 37557,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.piece-d",
+    "url": "/tadazz-show/family-mixup/media/piece-d.png",
+    "kind": "image",
+    "sha256": "6cc88d6c48f3d0d99519b34f1b4b4d543b6a1f245364a6c7e82a92f7b214aa91",
+    "bytes": 37727,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.polar-bear",
+    "url": "/tadazz-show/family-mixup/media/polar-bear.png",
+    "kind": "image",
+    "sha256": "d3d43993ceb1fef638321eb54fd57c001b9206b0ceb9ceb2d59a3419a265223a",
+    "bytes": 2376817,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.rabbit",
+    "url": "/tadazz-show/family-mixup/media/rabbit.png",
+    "kind": "image",
+    "sha256": "d73038398e294979969a71a235f5dfee9c93b2ee8da53ac71e619ccc65e6990d",
+    "bytes": 2749593,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.race-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/race-observe-poster.png",
+    "kind": "image",
+    "sha256": "dd60a30cc4a7f066007ef3892c4cbf4f733bc91b215724f7b2c18ca8e0628e42",
+    "bytes": 25721,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.race-observe",
+    "url": "/tadazz-show/family-mixup/media/race-observe.mp4",
+    "kind": "video",
+    "sha256": "c377cd52f057ec5c541bc03c5a2dc89ba3f78fcc5e463cc5e5eff41a1683fb15",
+    "bytes": 75144,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.race-reveal-poster",
+    "url": "/tadazz-show/family-mixup/media/race-reveal-poster.png",
+    "kind": "image",
+    "sha256": "16bf987cb6452776eff604b052cf4606afaa06f49de1f21172f1ea179cbdbef1",
+    "bytes": 20435,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.race-reveal",
+    "url": "/tadazz-show/family-mixup/media/race-reveal.mp4",
+    "kind": "video",
+    "sha256": "f10f941e744f2dd25dc4ae935c34316c75379b2f5a98395d4a6b2802a833f9d5",
+    "bytes": 51432,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.rebus-man-overboard",
+    "url": "/tadazz-show/family-mixup/media/rebus-man-overboard.png",
+    "kind": "image",
+    "sha256": "94fd22d7c5486c1aac9928d0addab6eff4aad9d1d5511bc8cded8cae7513ed45",
+    "bytes": 73039,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.rotation",
+    "url": "/tadazz-show/family-mixup/media/rotation.png",
+    "kind": "image",
+    "sha256": "ea48aa38eb5e2a38e4806df3361510f674039c3a4f56fcb3d93a1a48081e414f",
+    "bytes": 104183,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.shape-circle",
+    "url": "/tadazz-show/family-mixup/media/shape-circle.png",
+    "kind": "image",
+    "sha256": "b06f73805a6cf523d6f5bfc049e340eb8566d3a8625091b5cd056e9aee1b63d5",
+    "bytes": 31570,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.shape-pattern",
+    "url": "/tadazz-show/family-mixup/media/shape-pattern.png",
+    "kind": "image",
+    "sha256": "fd5b9704540b8dd0fbd1e0723fee2248fc40cf7c9f2c64369fe1fa1f4b1df5b0",
+    "bytes": 63814,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.shape-square",
+    "url": "/tadazz-show/family-mixup/media/shape-square.png",
+    "kind": "image",
+    "sha256": "3e38574f5834f328e5865dcf487c948987eba23a1a8ec3a13a035b75d06bf7f9",
+    "bytes": 27272,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.shape-star",
+    "url": "/tadazz-show/family-mixup/media/shape-star.png",
+    "kind": "image",
+    "sha256": "d9f3d13e07199a8398cf6826ae9f828bef58674b981b3b7c91c9a5a31e42297c",
+    "bytes": 31973,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.shape-triangle",
+    "url": "/tadazz-show/family-mixup/media/shape-triangle.png",
+    "kind": "image",
+    "sha256": "03249eea9bc5d64669533037bdd2d974bafc99022bf96f7df2f7f044694a56b7",
+    "bytes": 29238,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.square-grid",
+    "url": "/tadazz-show/family-mixup/media/square-grid.png",
+    "kind": "image",
+    "sha256": "961e5d2a68fcdc7be454a78e264ded7326d358468da7050f7813a9b7ce72cb1c",
+    "bytes": 52277,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.suitcases",
+    "url": "/tadazz-show/family-mixup/media/suitcases.png",
+    "kind": "image",
+    "sha256": "af31229ed34611449629cb9624aa9a169a6d9ebd8ae90bd57f1c0cde5550c0c1",
+    "bytes": 168500,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.toothbrush-full",
+    "url": "/tadazz-show/family-mixup/media/toothbrush-full.png",
+    "kind": "image",
+    "sha256": "9f3c98540e880a00466ac6b7095daebdce9cef33223101b1b87814769c21e1cc",
+    "bytes": 1727275,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.toothbrush-macro",
+    "url": "/tadazz-show/family-mixup/media/toothbrush-macro.png",
+    "kind": "image",
+    "sha256": "e3e62459f0b338405abd181302f17e5937be13fa58a2f0f8384cb7d675e4b9fe",
+    "bytes": 1846886,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.treasure-routes",
+    "url": "/tadazz-show/family-mixup/media/treasure-routes.png",
+    "kind": "image",
+    "sha256": "f7374ecc389a3c72d8469e53cb52dc6c5e448103b1f23c61bfabb3d40d9c6dc3",
+    "bytes": 75760,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.vault-closed",
+    "url": "/tadazz-show/family-mixup/media/vault-closed.png",
+    "kind": "image",
+    "sha256": "8fbecbaa88e2352a967f7bbd207950e73fa22491d8b4f595890d931eeb486fad",
+    "bytes": 104405,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.whisk-observe-poster",
+    "url": "/tadazz-show/family-mixup/media/whisk-observe-poster.png",
+    "kind": "image",
+    "sha256": "991c85a4a090ff27356df2934e1981de0aa4bfad55cd5e2ec8dcc799baa84e86",
+    "bytes": 25731,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.whisk-observe",
+    "url": "/tadazz-show/family-mixup/media/whisk-observe.mp4",
+    "kind": "video",
+    "sha256": "19a6def4fd7cdbab40a8f4230d6a4f5da7270decf0450ad9117ed437c04207dd",
+    "bytes": 177683,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.whisk-reveal-poster",
+    "url": "/tadazz-show/family-mixup/media/whisk-reveal-poster.png",
+    "kind": "image",
+    "sha256": "b03ffb2725cbdd02851f06e975d53ff613733fde1c9c9a62d7a93ef1b6efc542",
+    "bytes": 26666,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.whisk-reveal",
+    "url": "/tadazz-show/family-mixup/media/whisk-reveal.mp4",
+    "kind": "video",
+    "sha256": "4861b01e2ba60147ae4e1c768be8e6a0d0f6b24355c1a5ec61e96cf224ee3f97",
+    "bytes": 40166,
+    "rights": "owner-authorized",
+    "provenance": "Original deterministic code-authored diagram or finite observation film",
+    "preload": "slot"
+  },
+  {
+    "id": "family-mixup.media.wombat",
+    "url": "/tadazz-show/family-mixup/media/wombat.png",
+    "kind": "image",
+    "sha256": "849ab236212013f604ce780049e9ddf41356e6764b19e2548de5025d059f79a4",
+    "bytes": 3185794,
+    "rights": "owner-authorized",
+    "provenance": "Imagegen production artwork derived from approved design references",
+    "preload": "slot"
+  }
+]

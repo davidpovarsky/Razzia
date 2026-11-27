@@ -1,0 +1,938 @@
+{
+  "version": 1,
+  "provenance": "Original deterministic diagrams and silent observation films authored for Tadazz Family Mix-Up. Raster subject assets are separately attributed.",
+  "assets": [
+    {
+      "file": "biscuit-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/biscuit-observe-poster.png",
+      "bytes": 23977,
+      "sha256": "c247377acc89af3d494d760c0da7aae685a9c4b9354b39427cbda9eb896ef97e",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "biscuit-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/biscuit-observe.mp4",
+      "bytes": 68555,
+      "sha256": "65f7f50c461cb010d634da0b73ff2795ad67cf2f98bfde5a0d124db983ac1201",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 8,
+        "before": [
+          "Keys",
+          "Glasses",
+          "Biscuit",
+          "Spoon"
+        ],
+        "after": [
+          "Keys",
+          "Glasses",
+          "Spoon"
+        ]
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 8.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 192
+    },
+    {
+      "file": "breakfast-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/breakfast-observe-poster.png",
+      "bytes": 1498064,
+      "sha256": "8196df1ac11d3594d86ce8b4b793a97d7cfd42663edb3c80c090e892f07ecd1a",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "breakfast-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/breakfast-observe.mp4",
+      "bytes": 166472,
+      "sha256": "6f3c641f16ece75e7feb6c9ef119e1a2199d26b93efd69f676538969354040c0",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 8,
+        "toasterColor": "Yellow",
+        "source": "breakfast.png",
+        "presentation": "Approved photographic scene held for eight seconds"
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 8.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 192
+    },
+    {
+      "file": "breakfast.png",
+      "url": "/tadazz-show/family-mixup/media/breakfast.png",
+      "bytes": 2058578,
+      "sha256": "0731676838803b7333962eeba42c326fa5b2b3601755ec0d29463d174f67e1b4",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1672,
+      "height": 941,
+      "evidence": {
+        "toasterColor": "Yellow",
+        "usage": "Approved photographic source of breakfast-observe.mp4"
+      }
+    },
+    {
+      "file": "cake-boxes.png",
+      "url": "/tadazz-show/family-mixup/media/cake-boxes.png",
+      "bytes": 56656,
+      "sha256": "ecfcb0b13b0a61f31346a0831c104dd473d7b4a9d3ce6c5ca9f562ace4967300",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "leftToRight": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "correct": "D"
+      }
+    },
+    {
+      "file": "cake-boxes.svg",
+      "url": "/tadazz-show/family-mixup/media/cake-boxes.svg",
+      "bytes": 2551,
+      "sha256": "5d2e2c52420deab02b681427b0113f42020d87cee330bbec04bd06330bd015c1",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "leftToRight": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "correct": "D"
+      }
+    },
+    {
+      "file": "car-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/car-observe-poster.png",
+      "bytes": 22971,
+      "sha256": "05f15f3c6c6e07da15069e21a2148929722dce393734b48d95d59e5338fcfdb8",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "car-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/car-observe.mp4",
+      "bytes": 85239,
+      "sha256": "fea28205d7c462921e6b6ac2e59d2977aa4ebe9c8ad0a63ddbcf2fde66b28625",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 8,
+        "exitDoor": "D"
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 8.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 192
+    },
+    {
+      "file": "cups-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/cups-observe-poster.png",
+      "bytes": 24605,
+      "sha256": "0d8edda00723f949476d0fa1847721ed39860c5277a5a784d0a7dbdf3dedb865",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "cups-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/cups-observe.mp4",
+      "bytes": 106114,
+      "sha256": "af7dc8db637440423a0c3c4b933c443aaaffbe00173fe3e212ddb0be8564908d",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 8,
+        "correctPosition": "C",
+        "swaps": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "B",
+            "D"
+          ],
+          [
+            "D",
+            "C"
+          ]
+        ],
+        "labels": "fixed final positions"
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 8.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 192
+    },
+    {
+      "file": "duck-question.png",
+      "url": "/tadazz-show/family-mixup/media/duck-question.png",
+      "bytes": 81913,
+      "sha256": "90f65a22b9874965074a16687eac6025b75b595e133892a1e5c6c8c789a46fbf",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "usage": "Legacy deterministic source, unused by final Q6"
+      }
+    },
+    {
+      "file": "duck-question.svg",
+      "url": "/tadazz-show/family-mixup/media/duck-question.svg",
+      "bytes": 2396,
+      "sha256": "7aa87f4033a076384277641b4a701ed966e061ec5580f59a7f3c7e4cf4e42541",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "usage": "Legacy deterministic source, unused by final Q6"
+      }
+    },
+    {
+      "file": "duck-shadow-1.png",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-1.png",
+      "bytes": 15205,
+      "sha256": "3a6977140db160ec730503491205e9e9ddede022057d79e3327ecfa4bd868499",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 640,
+      "height": 560
+    },
+    {
+      "file": "duck-shadow-1.svg",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-1.svg",
+      "bytes": 1842,
+      "sha256": "1f5b2706dbf0aca90339e0c8978fde2e7d28981d84de72630f4aca81bc82178c",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "duck-shadow-2.png",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-2.png",
+      "bytes": 15497,
+      "sha256": "98f344d6d5b33e231f58280b4b8aa1fac4dfeec118c74c143bfa8686f6c546ad",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 640,
+      "height": 560
+    },
+    {
+      "file": "duck-shadow-2.svg",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-2.svg",
+      "bytes": 1842,
+      "sha256": "5d86f2a41f298b3232629638b068505bfdb6ed5819f2babe17f76e02cdc46174",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "duck-shadow-3.png",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-3.png",
+      "bytes": 15286,
+      "sha256": "db408892209d20843e437e1ad10746795c918dd1c634c109dd1f9a7cf03826a4",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 640,
+      "height": 560
+    },
+    {
+      "file": "duck-shadow-3.svg",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-3.svg",
+      "bytes": 1842,
+      "sha256": "a14ccb67a793fde71db8c2d1941a6bb0e1768d7810a702369f2aa66333f81064",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "duck-shadow-4.png",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-4.png",
+      "bytes": 15363,
+      "sha256": "c26f2be826a21b5e5dc37e2b48d3ebd5e5fd77bffbc74d466246bce6cd4f0a86",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 640,
+      "height": 560
+    },
+    {
+      "file": "duck-shadow-4.svg",
+      "url": "/tadazz-show/family-mixup/media/duck-shadow-4.svg",
+      "bytes": 1842,
+      "sha256": "39c8a9f974203f2870a816f4806f6863eb351739d8767f64e46af2d06d21854e",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "duck.png",
+      "url": "/tadazz-show/family-mixup/media/duck.png",
+      "bytes": 1542771,
+      "sha256": "51c7ea0eb41e02cdb55474caa9c7005cedbf07a48e7a72fd331f2798cece2367",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1122,
+      "height": 1402,
+      "evidence": {
+        "correctShadow": 4,
+        "sharedGeometry": "The same approved alpha image is the question and option 4; runtime CSS brightness(0) creates its exact silhouette."
+      }
+    },
+    {
+      "file": "elephant.png",
+      "url": "/tadazz-show/family-mixup/media/elephant.png",
+      "bytes": 2986588,
+      "sha256": "d9c0b0e1776cd626ba43afc35912f1e5f7382da7ff239b9d1a5ef230b70f4467",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Elephant"
+      }
+    },
+    {
+      "file": "fox.png",
+      "url": "/tadazz-show/family-mixup/media/fox.png",
+      "bytes": 2826099,
+      "sha256": "5523d443ef4a5a4276b8bccb0f04d4bf303d5282be8f526f8c967fdfa5fff162",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Fox"
+      }
+    },
+    {
+      "file": "hidden-ducks.png",
+      "url": "/tadazz-show/family-mixup/media/hidden-ducks.png",
+      "bytes": 90006,
+      "sha256": "0228a20072fe9cb167670ac3d96346c7889733617d8e1d138b5530c4334c89ad",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "count": 9
+      }
+    },
+    {
+      "file": "hidden-ducks.svg",
+      "url": "/tadazz-show/family-mixup/media/hidden-ducks.svg",
+      "bytes": 5914,
+      "sha256": "2330845e462131f32919d6b08d0adb6ede5220b4dd005363115f46feeaba1057",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "count": 9
+      }
+    },
+    {
+      "file": "kangaroo.png",
+      "url": "/tadazz-show/family-mixup/media/kangaroo.png",
+      "bytes": 2452501,
+      "sha256": "882909bc2bab316cbef4ddf6693c34d25aa0d9b04848aaee1a046f17b92ae76b",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Kangaroo"
+      }
+    },
+    {
+      "file": "missing-piece.png",
+      "url": "/tadazz-show/family-mixup/media/missing-piece.png",
+      "bytes": 77757,
+      "sha256": "eac68606364b9cda0c435faee1e19ba34122aece3359e0d2f75d99bced7d0dd9",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "correct": "D",
+        "sharedGeometry": "piece d exact matching hole"
+      }
+    },
+    {
+      "file": "missing-piece.svg",
+      "url": "/tadazz-show/family-mixup/media/missing-piece.svg",
+      "bytes": 1532,
+      "sha256": "dc5488189cfe7e543e7156fc944b2bc6b13adcd7d8880280c08df1a7603d5bca",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "correct": "D",
+        "sharedGeometry": "piece d exact matching hole"
+      }
+    },
+    {
+      "file": "objects-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/objects-observe-poster.png",
+      "bytes": 17705,
+      "sha256": "949202da3a9c64269e6d9f3802711863d4a703750a43d27bdbf92f5f74cdd213",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "objects-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/objects-observe.mp4",
+      "bytes": 79811,
+      "sha256": "5a47335e8a9245543ef8dadf62b00074e8962651d8c6943d213e57cdf603023f",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 8,
+        "sequence": [
+          "Umbrella",
+          "Banana",
+          "Clock",
+          "Shoe",
+          "Balloon",
+          "Key"
+        ],
+        "afterBanana": "Clock"
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 8.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 192
+    },
+    {
+      "file": "octopus.png",
+      "url": "/tadazz-show/family-mixup/media/octopus.png",
+      "bytes": 2849048,
+      "sha256": "42202dda2abdf40be98a6a8852a5cd558fb7bc1cff769b89b8b88525d4316aa2",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Octopus"
+      }
+    },
+    {
+      "file": "penguin.png",
+      "url": "/tadazz-show/family-mixup/media/penguin.png",
+      "bytes": 2270075,
+      "sha256": "f9154088c11aefca8164e42da13f5eb5b8dc87b16e2446c5e19062e6bf98d288",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Penguin"
+      }
+    },
+    {
+      "file": "piece-a.png",
+      "url": "/tadazz-show/family-mixup/media/piece-a.png",
+      "bytes": 37850,
+      "sha256": "7d2e53c05509e83f14ce8c0497b495db271c0929dc6d3c6584339c712af10775",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 550,
+      "height": 510
+    },
+    {
+      "file": "piece-a.svg",
+      "url": "/tadazz-show/family-mixup/media/piece-a.svg",
+      "bytes": 1263,
+      "sha256": "18ef27c4fcf4fbd6b909e38438dcd38c40bb894bec6e90532dba965a1925c3cc",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "piece-b.png",
+      "url": "/tadazz-show/family-mixup/media/piece-b.png",
+      "bytes": 37975,
+      "sha256": "8dc205ed5b0eb7f0b76e3a976916edde1a789cc4f35de7613586189824e5938a",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 550,
+      "height": 510
+    },
+    {
+      "file": "piece-b.svg",
+      "url": "/tadazz-show/family-mixup/media/piece-b.svg",
+      "bytes": 1261,
+      "sha256": "639c51b0ee71e71df74259f414827e0610cb220be4f56a36f4e6f5330aaa51ff",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "piece-c.png",
+      "url": "/tadazz-show/family-mixup/media/piece-c.png",
+      "bytes": 37557,
+      "sha256": "3519e4e5a6c6306e90ae4ee9dab171ba7fb8d832cb2ef27c9bfef32005420f45",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 550,
+      "height": 510
+    },
+    {
+      "file": "piece-c.svg",
+      "url": "/tadazz-show/family-mixup/media/piece-c.svg",
+      "bytes": 1263,
+      "sha256": "a9c6466e3c4ae7cac09376eae6e8bbaa02535bf6ab40ee7a3d2b5cf5b7d955b7",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "piece-d.png",
+      "url": "/tadazz-show/family-mixup/media/piece-d.png",
+      "bytes": 37727,
+      "sha256": "6cc88d6c48f3d0d99519b34f1b4b4d543b6a1f245364a6c7e82a92f7b214aa91",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 550,
+      "height": 510
+    },
+    {
+      "file": "piece-d.svg",
+      "url": "/tadazz-show/family-mixup/media/piece-d.svg",
+      "bytes": 1263,
+      "sha256": "6c482daa6287771fcf8a3cdbb85a9835e57d1ab758c29245b608c5769ae5d35b",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "polar-bear.png",
+      "url": "/tadazz-show/family-mixup/media/polar-bear.png",
+      "bytes": 2376817,
+      "sha256": "d3d43993ceb1fef638321eb54fd57c001b9206b0ceb9ceb2d59a3419a265223a",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Polar bear"
+      }
+    },
+    {
+      "file": "rabbit.png",
+      "url": "/tadazz-show/family-mixup/media/rabbit.png",
+      "bytes": 2749593,
+      "sha256": "d73038398e294979969a71a235f5dfee9c93b2ee8da53ac71e619ccc65e6990d",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Rabbit"
+      }
+    },
+    {
+      "file": "race-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/race-observe-poster.png",
+      "bytes": 25721,
+      "sha256": "dd60a30cc4a7f066007ef3892c4cbf4f733bc91b215724f7b2c18ca8e0628e42",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "race-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/race-observe.mp4",
+      "bytes": 75144,
+      "sha256": "c377cd52f057ec5c541bc03c5a2dc89ba3f78fcc5e463cc5e5eff41a1683fb15",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 7,
+        "endsBeforeFinish": true
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 7.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 168
+    },
+    {
+      "file": "race-reveal-poster.png",
+      "url": "/tadazz-show/family-mixup/media/race-reveal-poster.png",
+      "bytes": 20435,
+      "sha256": "16bf987cb6452776eff604b052cf4606afaa06f49de1f21172f1ea179cbdbef1",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "race-reveal.mp4",
+      "url": "/tadazz-show/family-mixup/media/race-reveal.mp4",
+      "bytes": 51432,
+      "sha256": "f10f941e744f2dd25dc4ae935c34316c75379b2f5a98395d4a6b2802a833f9d5",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 4,
+        "winner": "C",
+        "finishOrder": [
+          "C",
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 4.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 96
+    },
+    {
+      "file": "rebus-man-overboard.png",
+      "url": "/tadazz-show/family-mixup/media/rebus-man-overboard.png",
+      "bytes": 73039,
+      "sha256": "94fd22d7c5486c1aac9928d0addab6eff4aad9d1d5511bc8cded8cae7513ed45",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "answer": "Man overboard"
+      }
+    },
+    {
+      "file": "rebus-man-overboard.svg",
+      "url": "/tadazz-show/family-mixup/media/rebus-man-overboard.svg",
+      "bytes": 1301,
+      "sha256": "b642f197d21a1a20374dc71f00e011d71241c4272bf3eebea1b5e742831946c0",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "answer": "Man overboard"
+      }
+    },
+    {
+      "file": "rotation.png",
+      "url": "/tadazz-show/family-mixup/media/rotation.png",
+      "bytes": 104183,
+      "sha256": "ea48aa38eb5e2a38e4806df3361510f674039c3a4f56fcb3d93a1a48081e414f",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "correct": "A",
+        "transformation": "90 degree rotation of chiral F pentomino; B and D mirrored; C adds a sixth square"
+      }
+    },
+    {
+      "file": "rotation.svg",
+      "url": "/tadazz-show/family-mixup/media/rotation.svg",
+      "bytes": 3180,
+      "sha256": "d2c1fa5d1d3b61400f20c4326015f357bdd44ae514ee7091a80d5170dbad0f80",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "correct": "A",
+        "transformation": "90 degree rotation of chiral F pentomino; B and D mirrored; C adds a sixth square"
+      }
+    },
+    {
+      "file": "shape-circle.png",
+      "url": "/tadazz-show/family-mixup/media/shape-circle.png",
+      "bytes": 31570,
+      "sha256": "b06f73805a6cf523d6f5bfc049e340eb8566d3a8625091b5cd056e9aee1b63d5",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 520,
+      "height": 460
+    },
+    {
+      "file": "shape-circle.svg",
+      "url": "/tadazz-show/family-mixup/media/shape-circle.svg",
+      "bytes": 1069,
+      "sha256": "c23dd20c5a199aa99604c6fb6caa15f5a90293e524442cffb903520bea030c15",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "shape-pattern.png",
+      "url": "/tadazz-show/family-mixup/media/shape-pattern.png",
+      "bytes": 63814,
+      "sha256": "fd5b9704540b8dd0fbd1e0723fee2248fc40cf7c9f2c64369fe1fa1f4b1df5b0",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "sequence": [
+          "circle",
+          "triangle",
+          "circle",
+          "square",
+          "circle",
+          "triangle",
+          "circle"
+        ],
+        "next": "square"
+      }
+    },
+    {
+      "file": "shape-pattern.svg",
+      "url": "/tadazz-show/family-mixup/media/shape-pattern.svg",
+      "bytes": 1520,
+      "sha256": "2463e87fc60c4adf621aed3eb00c8e914e06abee2ff441b992b97388cbbf7815",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "sequence": [
+          "circle",
+          "triangle",
+          "circle",
+          "square",
+          "circle",
+          "triangle",
+          "circle"
+        ],
+        "next": "square"
+      }
+    },
+    {
+      "file": "shape-square.png",
+      "url": "/tadazz-show/family-mixup/media/shape-square.png",
+      "bytes": 27272,
+      "sha256": "3e38574f5834f328e5865dcf487c948987eba23a1a8ec3a13a035b75d06bf7f9",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 520,
+      "height": 460
+    },
+    {
+      "file": "shape-square.svg",
+      "url": "/tadazz-show/family-mixup/media/shape-square.svg",
+      "bytes": 1090,
+      "sha256": "08d77bc76c12f84b4747fc1c9709b242d8b7ee5529536b5533bac10e55564099",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "shape-star.png",
+      "url": "/tadazz-show/family-mixup/media/shape-star.png",
+      "bytes": 31973,
+      "sha256": "d9f3d13e07199a8398cf6826ae9f828bef58674b981b3b7c91c9a5a31e42297c",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 520,
+      "height": 460
+    },
+    {
+      "file": "shape-star.svg",
+      "url": "/tadazz-show/family-mixup/media/shape-star.svg",
+      "bytes": 1193,
+      "sha256": "e8eca04f987f2276c23e777082f0ee0542b3153998246feb51ab08e41beea32f",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "shape-triangle.png",
+      "url": "/tadazz-show/family-mixup/media/shape-triangle.png",
+      "bytes": 29238,
+      "sha256": "03249eea9bc5d64669533037bdd2d974bafc99022bf96f7df2f7f044694a56b7",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 520,
+      "height": 460
+    },
+    {
+      "file": "shape-triangle.svg",
+      "url": "/tadazz-show/family-mixup/media/shape-triangle.svg",
+      "bytes": 1067,
+      "sha256": "973091d2dcd7465c8522eff53deb5a606c17363dea01e6de43abf7416e352da8",
+      "provenance": "Original deterministic code-authored diagram or finite observation film"
+    },
+    {
+      "file": "square-grid.png",
+      "url": "/tadazz-show/family-mixup/media/square-grid.png",
+      "bytes": 52277,
+      "sha256": "961e5d2a68fcdc7be454a78e264ded7326d358468da7050f7813a9b7ce72cb1c",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "grid": [
+          3,
+          3
+        ],
+        "squares": 14,
+        "sizes": {
+          "1x1": 9,
+          "2x2": 4,
+          "3x3": 1
+        }
+      }
+    },
+    {
+      "file": "square-grid.svg",
+      "url": "/tadazz-show/family-mixup/media/square-grid.svg",
+      "bytes": 1220,
+      "sha256": "4d218541c4f7f8a0118b30c74b833c6cc53610d30bdfae1f8947f2e7764b981d",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "grid": [
+          3,
+          3
+        ],
+        "squares": 14,
+        "sizes": {
+          "1x1": 9,
+          "2x2": 4,
+          "3x3": 1
+        }
+      }
+    },
+    {
+      "file": "suitcases.png",
+      "url": "/tadazz-show/family-mixup/media/suitcases.png",
+      "bytes": 168500,
+      "sha256": "af31229ed34611449629cb9624aa9a169a6d9ebd8ae90bd57f1c0cde5550c0c1",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "different": "B",
+        "difference": "orange luggage tag rather than gold"
+      }
+    },
+    {
+      "file": "suitcases.svg",
+      "url": "/tadazz-show/family-mixup/media/suitcases.svg",
+      "bytes": 4251,
+      "sha256": "aacebff49ef9051dd297f132fef812098da894c3dbc4e80afbd964d3966b8d1e",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "different": "B",
+        "difference": "orange luggage tag rather than gold"
+      }
+    },
+    {
+      "file": "toothbrush-full.png",
+      "url": "/tadazz-show/family-mixup/media/toothbrush-full.png",
+      "bytes": 1727275,
+      "sha256": "9f3c98540e880a00466ac6b7095daebdce9cef33223101b1b87814769c21e1cc",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1672,
+      "height": 941,
+      "evidence": {
+        "object": "Manual toothbrush",
+        "matches": "Blue-white-purple bristles in the macro"
+      }
+    },
+    {
+      "file": "toothbrush-macro.png",
+      "url": "/tadazz-show/family-mixup/media/toothbrush-macro.png",
+      "bytes": 1846886,
+      "sha256": "e3e62459f0b338405abd181302f17e5937be13fa58a2f0f8384cb7d675e4b9fe",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1672,
+      "height": 941,
+      "evidence": {
+        "object": "Manual toothbrush bristles",
+        "reveal": "toothbrush-full.png"
+      }
+    },
+    {
+      "file": "treasure-routes.png",
+      "url": "/tadazz-show/family-mixup/media/treasure-routes.png",
+      "bytes": 75760,
+      "sha256": "f7374ecc389a3c72d8469e53cb52dc6c5e448103b1f23c61bfabb3d40d9c6dc3",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "correct": "B"
+      }
+    },
+    {
+      "file": "treasure-routes.svg",
+      "url": "/tadazz-show/family-mixup/media/treasure-routes.svg",
+      "bytes": 3913,
+      "sha256": "090ad91b0d24002f8ec10c98cbeb9b4b0e6a0d4e113b30c553f8aeadb1fa11f0",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "correct": "B"
+      }
+    },
+    {
+      "file": "vault-closed.png",
+      "url": "/tadazz-show/family-mixup/media/vault-closed.png",
+      "bytes": 104405,
+      "sha256": "8fbecbaa88e2352a967f7bbd207950e73fa22491d8b4f595890d931eeb486fad",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720,
+      "evidence": {
+        "solution": "3624",
+        "clues": [
+          "triangle sides",
+          "twice first",
+          "one less than first",
+          "second minus third"
+        ]
+      }
+    },
+    {
+      "file": "vault-closed.svg",
+      "url": "/tadazz-show/family-mixup/media/vault-closed.svg",
+      "bytes": 2567,
+      "sha256": "ebaac8cbf800cc38bdc2e08aa9ea1a1fdb9df9fdd37d6247dc69acacebd7aee2",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "solution": "3624",
+        "clues": [
+          "triangle sides",
+          "twice first",
+          "one less than first",
+          "second minus third"
+        ]
+      }
+    },
+    {
+      "file": "whisk-observe-poster.png",
+      "url": "/tadazz-show/family-mixup/media/whisk-observe-poster.png",
+      "bytes": 25731,
+      "sha256": "991c85a4a090ff27356df2934e1981de0aa4bfad55cd5e2ec8dcc799baa84e86",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "whisk-observe.mp4",
+      "url": "/tadazz-show/family-mixup/media/whisk-observe.mp4",
+      "bytes": 177683,
+      "sha256": "19a6def4fd7cdbab40a8f4230d6a4f5da7270decf0450ad9117ed437c04207dd",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 8,
+        "object": "Kitchen whisk"
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 8.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 192
+    },
+    {
+      "file": "whisk-reveal-poster.png",
+      "url": "/tadazz-show/family-mixup/media/whisk-reveal-poster.png",
+      "bytes": 26666,
+      "sha256": "b03ffb2725cbdd02851f06e975d53ff613733fde1c9c9a62d7a93ef1b6efc542",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "whisk-reveal.mp4",
+      "url": "/tadazz-show/family-mixup/media/whisk-reveal.mp4",
+      "bytes": 40166,
+      "sha256": "4861b01e2ba60147ae4e1c768be8e6a0d0f6b24355c1a5ec61e96cf224ee3f97",
+      "provenance": "Original deterministic code-authored diagram or finite observation film",
+      "evidence": {
+        "seconds": 3,
+        "object": "Kitchen whisk"
+      },
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 3.0,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "24/1",
+      "frames": 72
+    },
+    {
+      "file": "wombat.png",
+      "url": "/tadazz-show/family-mixup/media/wombat.png",
+      "bytes": 3185794,
+      "sha256": "849ab236212013f604ce780049e9ddf41356e6764b19e2548de5025d059f79a4",
+      "provenance": "Imagegen production artwork derived from approved design references",
+      "width": 1254,
+      "height": 1254,
+      "evidence": {
+        "subject": "Wombat"
+      }
+    }
+  ]
+}

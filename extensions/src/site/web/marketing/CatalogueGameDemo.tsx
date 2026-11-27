@@ -21,6 +21,12 @@ import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
 import { useCatalogueAudio } from "./use-catalogue-audio"
 import type { SoundtrackSlotId } from "../../../core/constants"
 import { createQuestionLeadIn } from "../../../presentation/question-lead-in"
+import { CinematicLayerStack } from "../../../presentation/cinematic-layer-stack"
+import { FamilyMixupEvent } from "../../../presentation/family-mixup/FamilyMixupScene"
+import {
+  catalogueAuthoredSequence,
+  catalogueQuestionReplayEntry,
+} from "./catalogue-authored-sequence"
 import {
   CatalogueMobileQuestion,
   useCatalogueMobileControls,
@@ -49,6 +55,7 @@ type Phase =
   | "results"
   | "checkpoint"
   | "interlude"
+  | "media"
   | "finish"
 
 const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
@@ -60,6 +67,7 @@ const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
   results: "results",
   checkpoint: "leaderboard",
   interlude: "roundStart",
+  media: "question",
   finish: "finale",
 }
 
@@ -103,6 +111,20 @@ function CataloguePlayer({
     [show],
   )
   const originalDemo = isOriginalThemeId(demo.metadata.themeId)
+  const familyDemo = demo.metadata.id === "family-mixup"
+  const authoredSequence = useMemo(
+    () => catalogueAuthoredSequence(show.cards),
+    [show],
+  )
+  const [authoredPosition, setAuthoredPosition] = useState(0)
+  const authoredPositionRef = useRef(0)
+  const [authoredEpoch, setAuthoredEpoch] = useState(0)
+  const authoredEpochRef = useRef(0)
+  const completedAuthoredEpochRef = useRef(-1)
+  const [mediaReady, setMediaReady] = useState(false)
+  const [mediaProblem, setMediaProblem] = useState(false)
+  const mediaProblemRef = useRef(false)
+  const nextRef = useRef<() => Promise<void>>(() => Promise.resolve())
   const stage = useRef<TadazzStageHandle>(null)
   const [leadIn] = useState(() => createQuestionLeadIn())
   const phaseRef = useRef<Phase>("intro")
@@ -123,7 +145,7 @@ function CataloguePlayer({
   )
   const question = questions[index]
   const followupScenes = useMemo(() => {
-    if (!originalDemo) {
+    if (!originalDemo || familyDemo) {
       return []
     }
 
@@ -142,9 +164,21 @@ function CataloguePlayer({
         card.kind === "transition" ||
         card.kind === "closing",
     )
-  }, [originalDemo, question.key, show])
-  const currentAuthoredScene =
-    sceneOffset >= 0 ? followupScenes.at(sceneOffset) : undefined
+  }, [originalDemo, familyDemo, question.key, show])
+  const authoredCard = familyDemo
+    ? authoredSequence.at(authoredPosition)?.card
+    : undefined
+  const currentAuthoredScene = familyDemo
+    ? authoredCard?.kind !== "quiz" && authoredCard?.kind !== "survey"
+      ? authoredCard
+      : undefined
+    : sceneOffset >= 0
+      ? followupScenes.at(sceneOffset)
+      : undefined
+  const familyMedia =
+    familyDemo && phase === "media" && currentAuthoredScene?.kind === "media"
+      ? currentAuthoredScene
+      : undefined
   const closingCard = show.cards.find((card) => card.kind === "closing")
   const { playEffect, musicUrl } = useCatalogueAudio({
     enabled: sound,
@@ -152,7 +186,13 @@ function CataloguePlayer({
       phase === "checkpoint" && currentAuthoredScene?.kind === "answerRecap"
         ? "recap"
         : soundtrackByPhase[phase],
-    screenKey: [demo.metadata.id, index, phase].join(":"),
+    screenKey: [
+      demo.metadata.id,
+      index,
+      phase,
+      familyDemo ? currentAuthoredScene?.key : "",
+      familyDemo ? authoredEpoch : "",
+    ].join(":"),
     selection: show.defaults?.showTheme,
     cardAudioCues: question.audioCues,
   })
@@ -234,7 +274,8 @@ function CataloguePlayer({
     setReducedMotion(media.matches)
     const update = () => setReducedMotion(media.matches)
     media.addEventListener("change", update)
-    void stage.current?.showIntro()
+    if (familyDemo) void stage.current?.showCustomScreen()
+    else void stage.current?.showIntro()
 
     return () => {
       mounted.current = false
@@ -273,7 +314,7 @@ function CataloguePlayer({
       question: card.question,
       number: position + 1,
       totalQuestions: questions.length,
-      round: Math.floor(position / (originalDemo ? 2 : 4)) + 1,
+      round: Math.floor(position / (familyDemo ? 8 : originalDemo ? 2 : 4)) + 1,
       note: card.note,
       ...(card.media?.type === "image"
         ? { questionImage: card.media.url }
@@ -284,6 +325,9 @@ function CataloguePlayer({
           ? {
               image: answer.imageUrl,
               alt: answer.alt ?? answer.text,
+              ...(answer.imageTreatment
+                ? { imageTreatment: answer.imageTreatment }
+                : {}),
               display: answer.display === "image" ? "image" : "both",
             }
           : {}),
@@ -395,10 +439,62 @@ function CataloguePlayer({
     setVotes({})
     setIndex(0)
     setSceneOffset(-1)
+    if (familyDemo) return enterAuthoredCard(0)
     transition("intro")
     await stage.current?.showIntro()
   }
+  // Family solo play follows the actual authored sequence. Quiz presentation,
+  // voting, scoring and controls remain owned by this existing native player.
+  const enterAuthoredCard = async (position: number) => {
+    const step = authoredSequence.at(position)
+    if (!step || !mounted.current) return
+    const card = step.card
+    leadIn.cancel()
+    authoredPositionRef.current = position
+    authoredEpochRef.current += 1
+    mediaProblemRef.current = false
+    flushSync(() => {
+      setAuthoredPosition(position)
+      setAuthoredEpoch(authoredEpochRef.current)
+      setMediaReady(false)
+      setMediaProblem(false)
+      setError("")
+      setIndex(step.questionIndex)
+    })
+
+    if (card.kind === "quiz" || card.kind === "survey") {
+      return startQuestion(step.questionIndex)
+    }
+    if (card.kind === "leaderboard") {
+      transition("checkpoint")
+      await stage.current?.showLeaderboard(
+        [{ id: "solo-player", name: t("You"), score }],
+        t(card.title ?? "Your score"),
+      )
+      return
+    }
+
+    transition(
+      card.kind === "opening"
+        ? "intro"
+        : card.kind === "closing"
+          ? "finish"
+          : card.kind === "media"
+            ? "media"
+            : "interlude",
+    )
+    await stage.current?.showCustomScreen()
+  }
   const next = async () => {
+    if (familyDemo) {
+      if (phaseRef.current === "voting") return reveal()
+      if (phaseRef.current === "finish") return restart()
+      // A failed observation is replayed, never silently bypassed into a quiz.
+      if (phaseRef.current === "media" && mediaProblemRef.current) {
+        return enterAuthoredCard(authoredPositionRef.current)
+      }
+      return enterAuthoredCard(authoredPositionRef.current + 1)
+    }
     if (phaseRef.current === "intro") {
       return startQuestion(0)
     }
@@ -448,6 +544,9 @@ function CataloguePlayer({
                         ? {
                             image: answer.imageUrl,
                             alt: answer.alt ?? answer.text,
+                            ...(answer.imageTreatment
+                              ? { imageTreatment: answer.imageTreatment }
+                              : {}),
                           }
                         : {}),
                     },
@@ -508,7 +607,93 @@ function CataloguePlayer({
       })
     }
   }
+  nextRef.current = next
+
+  const completeAuthoredScene = (key: string, epoch: number) => {
+    if (
+      !mounted.current ||
+      busyRef.current ||
+      mediaProblemRef.current ||
+      authoredEpochRef.current !== epoch ||
+      completedAuthoredEpochRef.current === epoch ||
+      authoredSequence.at(authoredPositionRef.current)?.card.key !== key
+    )
+      return
+    completedAuthoredEpochRef.current = epoch
+    run(() => nextRef.current())
+  }
+  const failAuthoredMedia = (key: string, epoch: number) => {
+    if (
+      !mounted.current ||
+      authoredEpochRef.current !== epoch ||
+      authoredSequence.at(authoredPositionRef.current)?.card.key !== key ||
+      phaseRef.current !== "media"
+    )
+      return
+    mediaProblemRef.current = true
+    setMediaProblem(true)
+    setError(t("This clip could not finish. Replay it to continue."))
+  }
+  useEffect(() => {
+    if (!familyDemo || !currentAuthoredScene) return
+    const card = currentAuthoredScene
+    const epoch = authoredEpoch
+    // Opening remains the standard explicit Start gate. Authored round cards
+    // then run for their own duration, before the first question of each round.
+    if (
+      phase === "interlude" &&
+      card.kind === "transition" &&
+      card.advance === "auto"
+    ) {
+      const timer = window.setTimeout(
+        () => completeAuthoredScene(card.key, epoch),
+        Math.max(0, card.durationMs ?? 2500),
+      )
+      return () => window.clearTimeout(timer)
+    }
+    if (phase !== "media" || card.kind !== "media" || mediaProblem) return
+    const timers: number[] = []
+    if (card.mediaType === "image" && mediaReady) {
+      timers.push(
+        window.setTimeout(
+          () => completeAuthoredScene(card.key, epoch),
+          Math.max(0, card.durationMs ?? 3000),
+        ),
+      )
+    }
+    // Genuine video completion is authoritative. This is only a bounded error
+    // watchdog; it must not open a memory question after an unseen/stalled clip.
+    timers.push(
+      window.setTimeout(
+        () => failAuthoredMedia(card.key, epoch),
+        Math.max(
+          card.mediaEndFallbackMs ?? 0,
+          (card.durationMs ?? 8000) + 1500,
+        ),
+      ),
+    )
+    return () => timers.forEach(window.clearTimeout)
+  }, [
+    familyDemo,
+    currentAuthoredScene,
+    phase,
+    authoredEpoch,
+    mediaReady,
+    mediaProblem,
+  ])
+
   const back = async () => {
+    if (familyDemo) {
+      if (index === 0) return restart()
+      const target = ["finish", "checkpoint", "interlude", "media"].includes(
+        phaseRef.current,
+      )
+        ? index
+        : index - 1
+      return enterAuthoredCard(
+        catalogueQuestionReplayEntry(authoredSequence, target),
+      )
+    }
     if (
       phaseRef.current === "finish" ||
       phaseRef.current === "checkpoint" ||
@@ -523,15 +708,17 @@ function CataloguePlayer({
 
     await startQuestion(index - 1)
   }
-  let status = t("Round {{current}} of {{total}}", {
-    current: index + 1,
-    total: questions.length,
-  })
+  let status = familyDemo
+    ? `${t("Round {{current}} of {{total}}", { current: Math.floor(index / 8) + 1, total: 6 })} · ${t("Question {{current}} of {{total}}", { current: index + 1, total: questions.length })}`
+    : t("Round {{current}} of {{total}}", {
+        current: index + 1,
+        total: questions.length,
+      })
 
   if (phase === "intro") {
-    status = t("{{count}} rounds", { count: questions.length })
+    status = t("{{count}} rounds", { count: familyDemo ? 6 : questions.length })
   } else if (
-    (phase === "checkpoint" || phase === "interlude") &&
+    (phase === "checkpoint" || phase === "interlude" || phase === "media") &&
     currentAuthoredScene
   ) {
     status = t(currentAuthoredScene.title ?? "Your score")
@@ -545,7 +732,7 @@ function CataloguePlayer({
 
   if (phase === "intro") {
     nextState = "start"
-  } else if (phase === "finish") {
+  } else if (phase === "finish" || (phase === "media" && mediaProblem)) {
     nextState = "replay"
   }
 
@@ -643,7 +830,10 @@ function CataloguePlayer({
                 next={{
                   state: nextState,
                   disabled:
-                    busy || phase === "transition" || phase === "question",
+                    busy ||
+                    phase === "transition" ||
+                    phase === "question" ||
+                    (phase === "media" && !mediaProblem),
                   onClick: () => run(next),
                   testId: "catalogue-next",
                 }}
@@ -698,6 +888,58 @@ function CataloguePlayer({
           >
             <TadazzV4StageAdapter
               ref={stage}
+              customScreen={
+                familyDemo &&
+                currentAuthoredScene &&
+                ["opening", "transition", "closing"].includes(
+                  currentAuthoredScene.kind,
+                ) ? (
+                  <FamilyMixupEvent
+                    scene={{
+                      ...currentAuthoredScene,
+                      id: currentAuthoredScene.key,
+                    }}
+                  />
+                ) : familyMedia ? (
+                  <div />
+                ) : undefined
+              }
+              overlay={
+                familyMedia ? (
+                  <div
+                    key={`${familyMedia.key}:${authoredEpoch}`}
+                    className="tz-scene-media"
+                    style={{ zIndex: 20 }}
+                    data-testid="catalogue-authored-media"
+                    data-media-state={mediaProblem ? "error" : "playing"}
+                    onErrorCapture={() =>
+                      failAuthoredMedia(familyMedia.key, authoredEpoch)
+                    }
+                    onLoadCapture={() => setMediaReady(true)}
+                    onCanPlayCapture={() => setMediaReady(true)}
+                  >
+                    <CinematicLayerStack
+                      sceneId={familyMedia.key}
+                      sceneKind="media"
+                      epoch={authoredEpoch}
+                      mediaUrl={familyMedia.mediaUrl}
+                      mediaType={familyMedia.mediaType}
+                      mediaFit={familyMedia.mediaFit ?? "contain"}
+                      volume={familyMedia.volume}
+                      loop={false}
+                      muted
+                      endBehavior={familyMedia.endBehavior}
+                      contrastOverlayOpacity={0}
+                      titleSlotVisible={false}
+                      controlledPaused={mediaProblem}
+                      showAutoplayControl={false}
+                      onForegroundMediaEnded={() =>
+                        completeAuthoredScene(familyMedia.key, authoredEpoch)
+                      }
+                    />
+                  </div>
+                ) : undefined
+              }
               labels={{
                 introCaption: originalDemo
                   ? t(demo.metadata.title)

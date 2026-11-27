@@ -20,6 +20,7 @@ export interface NativePreviewPresentation {
     url: string
     alt: string
     display: "image" | "both"
+    imageTreatment?: "silhouette"
   }>
 }
 
@@ -58,6 +59,9 @@ export function previewSteps(
                     image: visual.url,
                     alt: visual.alt,
                     display: visual.display,
+                    ...(visual.imageTreatment
+                      ? { imageTreatment: visual.imageTreatment }
+                      : {}),
                   }
                 : {}),
             }

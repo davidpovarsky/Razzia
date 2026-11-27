@@ -1143,17 +1143,24 @@ export const StudioSceneEditor = () => {
       playMode === "quiz"
     const correctOptions =
       correct && question?.type !== "estimation"
-        ? (question?.solutions ?? []).map((index) => ({
-            answerIndex: index,
-            label: question?.answers[index] ?? "",
-            count: 0,
-            percentage: 0,
-            imageUrl: perQuestion?.answerVisuals?.find(
-              (visual) =>
-                visual.answerIndex === index && visual.display !== "text",
-            )?.url,
-            isCorrect: true,
-          }))
+        ? (question?.solutions ?? []).map((index) => {
+            const visual = perQuestion?.answerVisuals?.find(
+              (item) => item.answerIndex === index && item.display !== "text",
+            )
+
+            return {
+              answerIndex: index,
+              label: question?.answers[index] ?? "",
+              count: 0,
+              percentage: 0,
+              imageUrl: visual?.url,
+              alt: visual?.alt,
+              ...(visual?.imageTreatment
+                ? { imageTreatment: visual.imageTreatment }
+                : {}),
+              isCorrect: true,
+            }
+          })
         : []
 
     return {

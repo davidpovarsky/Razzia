@@ -1,5 +1,6 @@
 // V3 current-frame boundary: no authored source, private notes or future cards.
 import { z } from "zod"
+import { answerImageTreatmentSchema } from "../../core/media.ts"
 import { nativePreviewFrameV1Schema } from "../../core/show-library/native-preview-frame-schema.ts"
 import {
   fullShowInventoryV3Schema,
@@ -100,6 +101,7 @@ export const fullShowPresentationV3Schema = z.strictObject({
         display: z.enum(["image", "both"]),
         url,
         alt: z.string().min(1).max(500),
+        imageTreatment: answerImageTreatmentSchema.optional(),
       }),
     )
     .max(5)
