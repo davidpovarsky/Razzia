@@ -1,5 +1,6 @@
 import { SiteButton } from "../shared/SiteButton"
 import { siteText as t } from "../../locales"
+import i18n from "i18next"
 import { HoverDevTiltCard } from "../../components/HoverDevTiltCard"
 import {
   ArrowRight,
@@ -36,6 +37,12 @@ export const asset = (name: string) =>
 export const catalogue = publicDemoCatalogue
 
 export type Game = PublicDemoMetadata
+
+export function catalogueCountLabel(game: Game) {
+  return game.id === "family-mixup"
+    ? `${game.questionCount} ${i18n.t("extensions:leaderboard.questionsSuffix")}`
+    : t("{{count}} rounds", { count: game.questionCount })
+}
 
 const coverIcons: Record<string, LucideIcon | undefined> = {
   "great-guessoff": Sparkles,
@@ -123,7 +130,7 @@ export function GameCard({
           <p>{t(game.desc)}</p>
           <div className="game-meta">
             <span>{t(game.category)}</span>
-            <span>{t("{{count}} rounds", { count: game.questionCount })}</span>
+            <span>{catalogueCountLabel(game)}</span>
             <span>
               {t("{{range}} min", { range: game.time.replace(" min", "") })}
             </span>

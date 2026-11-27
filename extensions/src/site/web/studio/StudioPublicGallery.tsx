@@ -7,7 +7,7 @@ import { isOriginalThemeId } from "../../../core/show-themes/original-theme-fami
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
 import { InlineGamePreviewBoundary } from "../../components/game-preview/boundary"
 import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
-import { Cover } from "../marketing/Catalogue"
+import { catalogueCountLabel, Cover } from "../marketing/Catalogue"
 import catalogueStyles from "../marketing/catalogue.css?inline"
 import { SiteLink } from "../shared/SiteLink"
 import { SiteButton } from "../shared/SiteButton"
@@ -134,9 +134,7 @@ export function StudioPublicGallery({ search }: { search: string }) {
                   {game.audience.map((item) => (
                     <span key={item}>{t(item)}</span>
                   ))}
-                  <span>
-                    {t("{{count}} rounds", { count: game.questionCount })}
-                  </span>
+                  <span>{catalogueCountLabel(game)}</span>
                 </div>
                 <SiteLink
                   className="btn ghost"

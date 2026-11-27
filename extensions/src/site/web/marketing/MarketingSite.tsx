@@ -1,7 +1,14 @@
 import marketing from "../../../../site-assets/marketing.css?inline"
 import { SiteLink } from "../shared/SiteLink"
 import { presentationControlText } from "../../../platform-ui"
-import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
+import {
+  asset,
+  catalogue,
+  catalogueCountLabel,
+  Cover,
+  GameCard,
+  type Game,
+} from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
 import { ContactForm } from "./ContactForm"
@@ -575,9 +582,7 @@ export function MarketingSite() {
                       })}
                     </span>
                     <span>{t(selected.category)}</span>
-                    <span>
-                      {t("{{count}} rounds", { count: selected.questionCount })}
-                    </span>
+                    <span>{catalogueCountLabel(selected)}</span>
                     <span>{t(selected.themeName)}</span>
                   </div>
                   <p className="product-fineprint">
