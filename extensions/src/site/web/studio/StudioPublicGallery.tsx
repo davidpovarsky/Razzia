@@ -7,7 +7,7 @@ import { isOriginalThemeId } from "../../../core/show-themes/original-theme-fami
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
 import { InlineGamePreviewBoundary } from "../../components/game-preview/boundary"
 import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
-import { Cover } from "../marketing/Catalogue"
+import { catalogueCountLabel, Cover } from "../marketing/Catalogue"
 import catalogueStyles from "../marketing/catalogue.css?inline"
 import { SiteLink } from "../shared/SiteLink"
 import { SiteButton } from "../shared/SiteButton"
@@ -99,7 +99,7 @@ export function StudioPublicGallery({ search }: { search: string }) {
               <Cover game={game} />
             </GamePreviewSurface>
             <div className="site-game-body">
-              <h3>{t(game.title)}</h3>
+              <h3 dir="auto">{t(game.title)}</h3>
               <div className="catalogue-studio-actions">
                 <SiteLink
                   className="btn primary"
@@ -129,21 +129,19 @@ export function StudioPublicGallery({ search }: { search: string }) {
                     "details",
                   )}
                 </summary>
-                <p>{t(game.desc)}</p>
+                <p dir="auto">{t(game.desc)}</p>
                 <div className="catalogue-audiences">
                   {game.audience.map((item) => (
                     <span key={item}>{t(item)}</span>
                   ))}
-                  <span>
-                    {t("{{count}} rounds", { count: game.questionCount })}
-                  </span>
+                  <span>{catalogueCountLabel(game)}</span>
                 </div>
                 <SiteLink
                   className="btn ghost"
                   href={`/?view=product&game=${encodeURIComponent(game.id)}`}
                 >
                   {t("View game")}
-                  <ArrowRight size={15} />
+                  <ArrowRight size={15} className="site-directional-icon" aria-hidden="true" />
                 </SiteLink>
               </details>
             </div>

@@ -38,6 +38,10 @@ export const catalogue = publicDemoCatalogue
 
 export type Game = PublicDemoMetadata
 
+export function catalogueCountLabel(game: Game) {
+  return t("{{count}} questions", { count: game.questionCount })
+}
+
 const coverIcons: Record<string, LucideIcon | undefined> = {
   "great-guessoff": Sparkles,
   crowd: Users,
@@ -91,13 +95,19 @@ export function Cover({ game }: { game: Game }) {
           </div>
         </>
       )}
-      <span className="cover-kicker">{t(game.themeName)}</span>
+      <span className="cover-kicker" dir="auto">
+        {t(game.themeName)}
+      </span>
       {!composedArtwork && (
         <span className="catalogue-cover-brand" aria-hidden="true">
           TADAZZ!
         </span>
       )}
-      <div className="cover-title">{t(game.title)}</div>
+      {!composedArtwork && (
+        <div className="cover-title" dir="auto">
+          {t(game.title)}
+        </div>
+      )}
     </div>
   )
 }
@@ -125,15 +135,15 @@ export function GameCard({
           <Cover game={game} />
         </GamePreviewSurface>
         <div className="game-card-body">
-          <h3>
+          <h3 dir="auto">
             <SiteButton className="catalogue-title-link" onClick={open}>
               {t(game.title)}
             </SiteButton>
           </h3>
-          <p>{t(game.desc)}</p>
+          <p dir="auto">{t(game.desc)}</p>
           <div className="game-meta">
             <span>{t(game.category)}</span>
-            <span>{t("{{count}} questions", { count: game.questionCount })}</span>
+            <span>{catalogueCountLabel(game)}</span>
             <span>
               {t("{{range}} min", { range: game.time.replace(" min", "") })}
             </span>

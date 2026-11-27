@@ -49,7 +49,7 @@ export function NativeQuestionHeading({
         data-testid={titleTestId}
         data-native-question-heading
         className={clsx(
-          "max-w-5xl text-center leading-tight font-bold break-words text-white drop-shadow-lg",
+          "max-w-5xl text-center leading-tight font-bold break-words text-[color:var(--show-theme-foreground,#fff)] drop-shadow-lg",
           (() => {
             if (isUltraCompact) {
               return "text-lg sm:text-xl"

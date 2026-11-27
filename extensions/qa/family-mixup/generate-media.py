@@ -18,8 +18,10 @@ CREAM='#fff8ec'; INK='#17377f'; BLUE='#1745b8'; ORANGE='#f27832'; LILAC='#a99add
 FONT='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 BOLD='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 
+# Inkscape 1.4 drops groups using the SVG2 feDropShadow shorthand.
+# The equivalent SVG1.1 primitives preserve both the shadow and SourceGraphic.
 def svg(body,w=W,h=H):
- return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><defs><linearGradient id="paper" x2="0" y2="1"><stop stop-color="#fffaf1"/><stop offset="1" stop-color="#eee5e4"/></linearGradient><linearGradient id="blue" x2="0.4" y2="1"><stop stop-color="#4276dd"/><stop offset="1" stop-color="#193c97"/></linearGradient><linearGradient id="orange" x2="0.8" y2="1"><stop stop-color="#ffac60"/><stop offset="1" stop-color="#dd5a21"/></linearGradient><linearGradient id="metal" x2="1" y2="1"><stop stop-color="#fff0bd"/><stop offset=".35" stop-color="#c99437"/><stop offset=".65" stop-color="#f4d58c"/><stop offset="1" stop-color="#a16f22"/></linearGradient><radialGradient id="dark"><stop stop-color="#214c9c"/><stop offset="1" stop-color="#0a1d51"/></radialGradient><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#17377f" flood-opacity=".13"/></filter></defs><rect width="100%" height="100%" fill="url(#paper)"/>{body}</svg>'''
+ return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><defs><linearGradient id="paper" x2="0" y2="1"><stop stop-color="#fffaf1"/><stop offset="1" stop-color="#eee5e4"/></linearGradient><linearGradient id="blue" x2="0.4" y2="1"><stop stop-color="#4276dd"/><stop offset="1" stop-color="#193c97"/></linearGradient><linearGradient id="orange" x2="0.8" y2="1"><stop stop-color="#ffac60"/><stop offset="1" stop-color="#dd5a21"/></linearGradient><linearGradient id="metal" x2="1" y2="1"><stop stop-color="#fff0bd"/><stop offset=".35" stop-color="#c99437"/><stop offset=".65" stop-color="#f4d58c"/><stop offset="1" stop-color="#a16f22"/></linearGradient><radialGradient id="dark"><stop stop-color="#214c9c"/><stop offset="1" stop-color="#0a1d51"/></radialGradient><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/><feOffset in="blur" dx="0" dy="10" result="offsetBlur"/><feFlood flood-color="#17377f" flood-opacity=".13" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="100%" height="100%" fill="url(#paper)"/>{body}</svg>'''
 
 def label(x,y,s,size=34,color=INK,anchor='middle',weight=700):
  return f'<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="DejaVu Sans,sans-serif" font-size="{size}" font-weight="{weight}" fill="{color}">{s}</text>'
@@ -52,6 +54,26 @@ def suitcase(x,y,variant=False):
 
 # Static diagrams
 
+def validate_cake_boxes_raster(path):
+ # A readable label alone is insufficient: all four colored box bodies must exist.
+ with Image.open(path) as image:
+  if image.size != (W,H):raise RuntimeError('Cake-box diagram has incorrect dimensions')
+  pixels=np.asarray(image.convert('RGB'),dtype=np.int16)
+ counts=[]
+ for i in range(4):
+  region=pixels[242:454,100+i*300:320+i*300]
+  blue=(region[:,:,2]>region[:,:,0]+40)&(region[:,:,2]>region[:,:,1]+30)
+  count=int(np.count_nonzero(blue));counts.append(count)
+  if count<10000:raise RuntimeError(f'Cake-box diagram is missing visible geometry for box {chr(65+i)}')
+ return counts
+
+def cake_boxes():
+ b=''
+ for i in range(4):
+  x=100+i*300;b+=f'<g filter="url(#shadow)"><rect x="{x}" y="242" width="220" height="212" rx="18" fill="url(#blue)"/><path d="M{x} 275H{x+220} M{x+112} 242V454" stroke="#f4cd79" stroke-width="14"/><rect x="{x+45}" y="319" width="130" height="83" rx="12" fill="#fff8ec"/></g>'+label(x+110,378,chr(65+i),56)
+ save_svg('cake-boxes',b)
+ validate_cake_boxes_raster(OUT/'cake-boxes.png')
+
 def diagrams():
  save_svg('duck-question',f'<ellipse cx="640" cy="622" rx="205" ry="28" fill="#17377f" opacity=".10"/><g transform="translate(375,115) scale(1.8)">{duck_shape()}</g>')
  for i in range(1,5):save_svg(f'duck-shadow-{i}',f'<g transform="translate(130,50) scale(1.35)">{duck_shape(True,i)}</g>',640,560,transparent=True)
@@ -76,10 +98,7 @@ def diagrams():
  # Option C has one extra arm so cannot be a rotation.
  b=b.replace(poly(shape,792,470,42,rot=3,flip=False),poly([(1,0),(3,0),(3,1),(2,1),(2,3),(0,3),(0,1),(1,1)],792,470,42,rot=3))
  save_svg('rotation',b)
- b=''
- for i in range(4):
-  x=100+i*300;b+=f'<g filter="url(#shadow)"><rect x="{x}" y="242" width="220" height="212" rx="18" fill="url(#blue)"/><path d="M{x} 275H{x+220} M{x+112} 242V454" stroke="#f4cd79" stroke-width="14"/><rect x="{x+45}" y="319" width="130" height="83" rx="12" fill="#fff8ec"/></g>'+label(x+110,378,chr(65+i),56)
- save_svg('cake-boxes',b)
+ cake_boxes()
  # Explicit routes never intersect, with B alone reaching treasure.
  routes=[[(110,130),(310,130),(310,220),(480,220),(480,120),(830,120),(830,245)],[(110,290),(220,290),(220,390),(390,390),(390,300),(610,300),(610,200),(720,200),(720,360),(1090,360)],[(110,450),(260,450),(260,530),(520,530),(520,430),(640,430),(640,570),(840,570)],[(110,610),(160,610),(160,665),(970,665),(970,500),(1140,500),(1140,590)]]
  b='<rect x="55" y="55" width="1170" height="635" rx="22" fill="#fbf8f0" stroke="#ded8ca" stroke-width="3"/>'
@@ -386,9 +405,10 @@ def manifest():
  print('manifest',len(assets),flush=True)
 
 if __name__=='__main__':
- ap=argparse.ArgumentParser();ap.add_argument('--diagrams',action='store_true');ap.add_argument('--videos',action='store_true');ap.add_argument('--clip');ap.add_argument('--manifest',action='store_true');a=ap.parse_args()
+ ap=argparse.ArgumentParser();ap.add_argument('--diagrams',action='store_true');ap.add_argument('--diagram',choices=['cake-boxes']);ap.add_argument('--videos',action='store_true');ap.add_argument('--clip');ap.add_argument('--manifest',action='store_true');a=ap.parse_args()
  if a.diagrams:diagrams()
+ if a.diagram:cake_boxes()
  if a.videos:
   for k,(dur,fn) in CLIPS.items():video(k,dur,fn)
  if a.clip:video(a.clip,*CLIPS[a.clip])
- if a.manifest or a.diagrams or a.videos or a.clip:manifest()
+ if a.manifest or a.diagrams or a.diagram or a.videos or a.clip:manifest()

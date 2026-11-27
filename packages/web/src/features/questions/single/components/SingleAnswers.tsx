@@ -1,4 +1,5 @@
 import { useOptionalShowTheme } from "@razzia/extensions/presentation/show-themes/context"
+import { useStageFit } from "@razzia/extensions/presentation/stage-fit"
 import { RAZZIA_THEME_ID } from "@razzia/extensions/core"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
@@ -19,6 +20,7 @@ const SingleAnswers = ({
   animationEpochKey,
 }: AnswerComponentProps) => {
   const theme = useOptionalShowTheme()
+  const { isUltraCompact } = useStageFit()
   const handleSubmit = (key: number) => onSubmit([key])
 
   const hasVisuals = Boolean(
@@ -27,7 +29,12 @@ const SingleAnswers = ({
 
   if (hasVisuals && theme?.definition.id !== RAZZIA_THEME_ID) {
     return (
-      <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-hidden">
+      <div
+        className={clsx(
+          "flex w-full flex-1 flex-col justify-center overflow-hidden",
+          isUltraCompact ? "min-h-max shrink-0" : "min-h-0",
+        )}
+      >
         <PhotoCardGrid
           answers={answers}
           visuals={visuals}

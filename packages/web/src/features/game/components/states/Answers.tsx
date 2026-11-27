@@ -104,7 +104,9 @@ const Answers = ({
   const isPopupMedia = popupMedia.includes(media?.type)
   const showAnswersOnly = viewRole === "player" && answersOnly
   const showMediaInPopup =
-    isVisualPlayerMode && width < MOBILE_BREAKPOINT && isPopupMedia
+    isVisualPlayerMode &&
+    (width < MOBILE_BREAKPOINT || isUltraCompact) &&
+    isPopupMedia
 
   const [sfxPop] = useSound(SFX.ANSWERS.SOUND, {
     volume: 0.1,
@@ -214,7 +216,12 @@ const Answers = ({
           : stageAnimations.questionEntrance
       }
       epoch={animationEpochKey}
-      className="relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
+      className={clsx(
+        "relative flex h-full min-h-0 w-full flex-1 flex-col justify-between",
+        isUltraCompact
+          ? "overflow-x-hidden overflow-y-auto overscroll-contain"
+          : "overflow-hidden",
+      )}
     >
       {/* A retained platform question must not be covered by a second legacy iframe question. */}
       {!hideHeading && (
@@ -330,9 +337,14 @@ const Answers = ({
 
       <div
         className={clsx(
-          "flex min-h-0 flex-col overflow-y-auto overscroll-contain",
+          "flex flex-col",
+          isUltraCompact
+            ? "min-h-max shrink-0"
+            : "min-h-0 overflow-y-auto overscroll-contain",
           {
-            "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
+            "flex-1": showAnswersOnly || Boolean(currentVisuals),
+            "justify-end":
+              !isUltraCompact && (showAnswersOnly || Boolean(currentVisuals)),
           },
         )}
       >

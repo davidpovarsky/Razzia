@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "assetCount": 76,
-  "totalAssetBytes": 32736521,
+  "totalAssetBytes": 32787029,
   "checks": [
     {
       "name": "Every asset hash and size matches manifest",
@@ -28,7 +28,18 @@
     {
       "name": "Breakfast observation re-encoded from approved photographic breakfast.png; full decode,8s,192frames passed",
       "passed": true
+    },
+    {
+      "name": "All four cake-box bodies survive the actual Inkscape export",
+      "passed": true,
+      "bluePixelsPerBox": [
+        31933,
+        32055,
+        31745,
+        32047
+      ],
+      "minimumBluePixelsPerBox": 10000
     }
   ],
-  "visualReview": "Reviewed generated diagram contact sheet (12 boards), nine representative video frames including final car exit, race freeze/reveal, and partial/full whisk; reviewed macro/full toothbrush and new animal portraits. Correct shadow uses the approved duck alpha in runtime CSS. Breakfast observation now uses the approved photograph rather than the earlier deterministic stage; its encoded poster has been reviewed."
+  "visualReview": "Reviewed generated diagram contact sheet (12 boards), nine representative video frames including final car exit, race freeze/reveal, and partial/full whisk; reviewed macro/full toothbrush and new animal portraits. Correct shadow uses the approved duck alpha in runtime CSS. Breakfast observation now uses the approved photograph rather than the earlier deterministic stage; its encoded poster has been reviewed. The four cake-box bodies were subsequently restored and validated through the actual exporter; the labels-only published raster was reproduced byte for byte before the filter correction."
 }

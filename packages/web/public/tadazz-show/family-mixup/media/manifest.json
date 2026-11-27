@@ -84,8 +84,8 @@
     {
       "file": "cake-boxes.png",
       "url": "/tadazz-show/family-mixup/media/cake-boxes.png",
-      "bytes": 56656,
-      "sha256": "ecfcb0b13b0a61f31346a0831c104dd473d7b4a9d3ce6c5ca9f562ace4967300",
+      "bytes": 106903,
+      "sha256": "d1d1ee1f97ab63ac5bff1e9e2a9fbb81e9a462ab33b1deb156cbc9466015d231",
       "provenance": "Original deterministic code-authored diagram or finite observation film",
       "width": 1280,
       "height": 720,
@@ -102,8 +102,8 @@
     {
       "file": "cake-boxes.svg",
       "url": "/tadazz-show/family-mixup/media/cake-boxes.svg",
-      "bytes": 2551,
-      "sha256": "5d2e2c52420deab02b681427b0113f42020d87cee330bbec04bd06330bd015c1",
+      "bytes": 2812,
+      "sha256": "0f83c722b074757d8ed93d16ff2c9245a5b3d3be19d6b6d77d2ffcdc33f0f52f",
       "provenance": "Original deterministic code-authored diagram or finite observation film",
       "evidence": {
         "leftToRight": [

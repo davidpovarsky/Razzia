@@ -12,11 +12,11 @@ const PlayerFinished = ({ data: { rank, subject } }: Props) => {
 
   return (
     <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 px-4">
-      <p className="text-center text-4xl font-bold text-white drop-shadow-lg md:text-5xl">
+      <p className="text-center text-4xl font-bold text-[color:var(--show-theme-foreground,#fff)] drop-shadow-lg md:text-5xl">
         {subject}
       </p>
 
-      <p className="text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
+      <p className="text-center text-3xl font-bold text-[color:var(--show-theme-foreground,#fff)] drop-shadow-lg md:text-4xl">
         {typeof rank === "number"
           ? t("game:rank", { count: rank, ordinal: true })
           : "—"}

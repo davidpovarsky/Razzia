@@ -21,10 +21,10 @@ export function NativeRazziaPlayerResult({
       ) : (
         <CricleXmark className="aspect-square max-h-60 min-h-0 w-full shrink" />
       )}
-      <h2 className="mt-1 text-4xl font-bold text-white drop-shadow-lg">
+      <h2 className="mt-1 text-4xl font-bold text-[color:var(--show-theme-foreground,#fff)] drop-shadow-lg">
         {t(message)}
       </h2>
-      <p className="mt-1 text-xl font-bold text-white drop-shadow-lg">
+      <p className="mt-1 text-xl font-bold text-[color:var(--show-theme-foreground,#fff)] drop-shadow-lg">
         {t("game:resultTop")}
         {t("game:rank", { count: rank, ordinal: true })}
         {aheadOfMe ? `${t("game:resultBehind")}${aheadOfMe}` : ""}

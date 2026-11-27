@@ -856,6 +856,7 @@
   white-space: nowrap;
 }
 .tzv4-stage[data-original-family="family-mixup"] .fm-world .team-score {
+  color: inherit;
   position: static;
   display: flex;
   flex-direction: column;

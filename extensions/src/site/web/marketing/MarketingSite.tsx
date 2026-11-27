@@ -1,6 +1,13 @@
 import marketing from "../../../../site-assets/marketing.css?inline"
 import { SiteLink } from "../shared/SiteLink"
-import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
+import {
+  asset,
+  catalogue,
+  catalogueCountLabel,
+  Cover,
+  GameCard,
+  type Game,
+} from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
 import { ContactForm } from "./ContactForm"
@@ -599,7 +606,7 @@ export function MarketingSite() {
                   aria-hidden="true"
                   size={15}
                 />
-                <strong>{t(selected.title)}</strong>
+                <strong dir="auto">{t(selected.title)}</strong>
               </div>
               <div className="product-grid">
                 <div className="product-preview">
@@ -615,8 +622,10 @@ export function MarketingSite() {
                   </GamePreviewSurface>
                 </div>
                 <div className="product-side">
-                  <h1>{t(selected.title)}</h1>
-                  <p className="description">{t(selected.desc)}</p>
+                  <h1 dir="auto">{t(selected.title)}</h1>
+                  <p className="description" dir="auto">
+                    {t(selected.desc)}
+                  </p>
                   <div className="product-facts">
                     <span>
                       {t("{{range}} min", {
@@ -624,10 +633,8 @@ export function MarketingSite() {
                       })}
                     </span>
                     <span>{t(selected.category)}</span>
-                    <span>
-                      {t("{{count}} questions", { count: selected.questionCount })}
-                    </span>
-                    <span>{t(selected.themeName)}</span>
+                    <span>{catalogueCountLabel(selected)}</span>
+                    <span dir="auto">{t(selected.themeName)}</span>
                   </div>
                   <p className="product-fineprint">
                     {t("English questions · editable in any language")}

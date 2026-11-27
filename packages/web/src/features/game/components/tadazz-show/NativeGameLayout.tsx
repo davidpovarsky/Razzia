@@ -1,4 +1,9 @@
-import { useEffect, type PropsWithChildren, type RefCallback } from "react"
+import {
+  useEffect,
+  type CSSProperties,
+  type PropsWithChildren,
+  type RefCallback,
+} from "react"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
   TADAZZ_PRODUCT_LOGO_URL,
@@ -44,6 +49,11 @@ export function NativeGameFrame({
         envelope={extensionState}
         statusName={statusName}
         ref={onRoot}
+        style={
+          {
+            "--show-theme-foreground": theme.definition.tokens.foreground,
+          } as CSSProperties
+        }
         data-host-presenting={isHostPresenting ? "true" : "false"}
         className="font-display relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden"
         data-testid="tadazz-show"

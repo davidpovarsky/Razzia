@@ -55,6 +55,7 @@ import { AudioCuePlayer } from "../audio-cue-player"
 import { resolveTadazzAudioPolicy } from "../tadazz-audio-policy"
 import type { CueId } from "../../core/constants"
 import { NativeQuestionMedia } from "../tadazz-show/native-question-media"
+import { stageOwnsQuestionImage } from "./question-media-owner"
 import { createPreviewStageContinuity } from "./preview-stage-continuity"
 import { createShowThemeRegistry } from "../../core/show-themes/registry"
 import { PackageApplicationPreviewStage } from "./package-application-stage"
@@ -614,14 +615,13 @@ function NativeApplicationPreviewStage({
     ["question", "answerCards", "voting", "voteLocked"].includes(chapter.phase)
       ? questionCard.media
       : undefined
-  const photoQuestion =
-    questionMedia?.type === "image" &&
-    (!questionCard?.reveal || questionCard.reveal.effect === "none") &&
-    chapter.phase !== "question" &&
-    questionCard?.answers.length === 4 &&
-    questionCard.answers.every((answer) => !answer.imageUrl)
+  const stageOwnsImage = stageOwnsQuestionImage({
+    card: questionCard,
+    phase: chapter.phase,
+    originalFamily,
+  })
   const nativeMedia =
-    questionMedia && !photoQuestion ? (
+    questionMedia && !stageOwnsImage ? (
       <NativeQuestionMedia
         media={questionMedia}
         alt={questionCard?.question ?? ""}

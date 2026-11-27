@@ -1896,7 +1896,7 @@ export const AudioCuePlayer = ({
           <a
             className={
               showControls
-                ? "order-last block w-full min-w-0 px-3 py-1 text-xs text-white/70 hover:text-white"
+                ? "order-last block w-full min-w-0 px-3 py-1 text-xs text-[color:var(--show-theme-foreground,#fff)] opacity-80 hover:opacity-100"
                 : "absolute bottom-2 left-2 z-40 rounded px-2 py-1 text-xs text-white/70 hover:text-white"
             }
             href="/tadazz-show/music/credits.html"
