@@ -8,5 +8,6 @@ LABEL com.tadazz.site.enabled="true"
 COPY web/ /app/web/
 COPY socket/ /app/socket/
 COPY mcp/ /app/mcp/
-# Windows-created tar entries can be 0600; Nginx serves as an unprivileged user.
-RUN chmod -R a+rX /app/web
+# Release staging must normalize web files to runtime-readable modes (0644)
+# and directories to traversable modes (0755) before this overlay is built.
+# A recursive chmod here would copy inherited web files into another image layer.
