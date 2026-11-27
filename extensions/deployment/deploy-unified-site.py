@@ -60,6 +60,16 @@ def probe(url, status=200, expected=None):
     return content
 
 
+def probe_billing_disabled():
+    # Public configuration may include additional readiness/catalog metadata.
+    # The release invariant is an explicit JSON false, never a missing or
+    # merely falsy value, so activation cannot slip through this guard.
+    billing = json.loads(probe("https://tadazz.com/api/billing/config"))
+    if not isinstance(billing, dict) or billing.get("enabled") is not False:
+        raise RuntimeError("Billing must remain explicitly disabled")
+    return billing
+
+
 def wait_health():
     deadline = time.monotonic() + 45
     while time.monotonic() < deadline:
@@ -71,12 +81,28 @@ def wait_health():
     raise RuntimeError("Replacement did not become healthy")
 
 
-def last_game_count():
-    logs = command("docker", "logs", "--tail", "5000", "tadazz")
+def last_game_count(container=None):
+    container = inspect("tadazz") if container is None else container
+    # Include this process lifetime, not a fixed tail that can omit its boot.
+    logs = command("docker", "logs", "--since",
+                   container["State"]["StartedAt"], "tadazz")
     counts = re.findall(r"(?:Total games:|Remaining games:)\s*(\d+)", logs)
     if not counts:
         # An untouched fresh process has no registry until the first game.
-        if "Socket server is running" in logs or "Server is running" in logs:
+        # Both native boot messages must still be present. Registry starts empty;
+        # all native room creations/removals emit the count messages above.
+        # Requiring its initialization plus successful native listen avoids
+        # treating an unknown/truncated log or a failed startup as empty.
+        messages = set(logs.splitlines())
+        native_started = (
+            container["HostConfig"].get("LogConfig") ==
+            {"Type": "json-file", "Config": {}} and {
+                "Game cleanup task started",
+                "Tadazz protected native host listening on loopback",
+            } <= messages
+        )
+        if ("Socket server is running" in logs or
+                "Server is running" in logs or native_started):
             return 0
         raise RuntimeError("Could not establish current game count from logs")
     return int(counts[-1])
@@ -149,7 +175,7 @@ def main():
     gateway = inspect("tadazz-phone-gateway")
     if original["Id"] != args.expected_container or original["Image"] != args.expected_image:
         raise RuntimeError("Production changed since inspection")
-    if not original["State"]["Running"] or last_game_count() != 0:
+    if not original["State"]["Running"] or last_game_count(original) != 0:
         raise RuntimeError("Application not running or active rooms found; no cutover")
     mounts = original["Mounts"]
     if len(mounts) != 1 or mounts[0]["Destination"] != "/app/config":
@@ -162,7 +188,7 @@ def main():
         raise RuntimeError("Image revision differs from approved artifact")
     health_before = probe("https://tadazz.com/api/health", expected={"status": "ok"})
     probe("https://tadazz.com/api/auth/mode", expected={"accountsEnabled": True})
-    probe("https://tadazz.com/api/billing/config", expected={"enabled": False})
+    probe_billing_disabled()
     payload = dict(original["Config"])
     payload["Env"] = pricing_environment(original["Config"]["Env"], args.pricing_environment_file)
     payload["Image"] = image["Id"]
@@ -175,6 +201,12 @@ def main():
               "previousImage": original["Image"], "previousContainer": original["Id"],
               "rollbackContainer": backup_name, "activeGamesBefore": 0,
               "gatewayContainerUnchanged": False, "success": False}
+    # Public probes and image inspection may take time; refresh immediately
+    # before stopping so a newly created room or changed container blocks cutover.
+    latest = inspect("tadazz")
+    if (latest["Id"] != original["Id"] or latest["Image"] != original["Image"] or
+            not latest["State"]["Running"] or last_game_count(latest) != 0):
+        raise RuntimeError("Production identity or active rooms changed; no cutover")
     try:
         docker_api("POST", "/containers/tadazz/stop?t=20")
         stopped = True
@@ -200,7 +232,7 @@ def main():
             raise RuntimeError("Production file payload changed unexpectedly")
         probe("https://tadazz.com/api/health", expected={"status": "ok"})
         probe("https://tadazz.com/api/auth/mode", expected={"accountsEnabled": True})
-        probe("https://tadazz.com/api/billing/config", expected={"enabled": False})
+        probe_billing_disabled()
         for endpoint in ["/api/quizz", "/api/results", "/api/accounts/me",
                          "/api/packages/capabilities"]:
             probe("https://tadazz.com" + endpoint, status=401)

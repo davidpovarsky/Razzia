@@ -138,7 +138,7 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                     onChange={(e) =>
                       handleUpdateTeam(team.id, { color: e.target.value })
                     }
-                    className="border-accent size-8 cursor-pointer rounded border"
+                    className="border-accent size-8 shrink-0 cursor-pointer rounded border"
                     title={tr("teams.teamColor", "Color")}
                   />
                   <input
@@ -147,7 +147,7 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                     onChange={(e) =>
                       handleUpdateTeam(team.id, { name: e.target.value })
                     }
-                    className="focus:ring-primary border-accent bg-background text-foreground flex-1 rounded-lg border p-1.5 text-xs font-bold focus:ring-2 focus:outline-none"
+                    className="focus:ring-primary border-accent bg-background text-foreground min-w-0 flex-1 rounded-lg border p-1.5 text-xs font-bold focus:ring-2 focus:outline-none"
                     placeholder={tr(
                       "teams.teamNumbered",
                       `Team ${idx + 1}`,
@@ -158,7 +158,7 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                       size="sm"
                       type="button"
                       onClick={() => handleRemoveTeam(team.id)}
-                      className="hover:bg-accent rounded-md p-1.5 text-red-500 hover:text-red-700"
+                      className="hover:bg-accent shrink-0 rounded-md p-1.5 text-red-500 hover:text-red-700"
                       title={tr("teams.removeTeam", "Remove Team")}
                       aria-label={tr("teams.removeTeam", "Remove Team")}
                     >

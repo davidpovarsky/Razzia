@@ -53,6 +53,18 @@ export function themeSlotForScene(scene: ShowScene): ShowThemeSlotId {
   return "question"
 }
 
+/** Resolve the stage effect without changing persisted legacy or theme-specific metadata. */
+export function resolveThemeAnimationPreset(
+  preset: string | undefined,
+  theme: ResolvedShowTheme,
+): string {
+  const candidate = preset ?? ""
+
+  return theme.definition.capabilities.animationPresets.includes(candidate)
+    ? candidate
+    : "interlude"
+}
+
 /** Old metadata survives storage, but unadopted legacy effects cannot enter Classic. */
 export function reconcileThemeScene(
   scene: ShowScene,
@@ -62,13 +74,11 @@ export function reconcileThemeScene(
     return scene
   }
 
-  if (
-    theme.definition.capabilities.animationPresets.includes(
-      scene.scene.preset ?? "",
-    )
-  ) {
+  const preset = resolveThemeAnimationPreset(scene.scene.preset, theme)
+
+  if (preset === scene.scene.preset) {
     return scene
   }
 
-  return { ...scene, scene: { ...scene.scene, preset: "interlude" } }
+  return { ...scene, scene: { ...scene.scene, preset } }
 }

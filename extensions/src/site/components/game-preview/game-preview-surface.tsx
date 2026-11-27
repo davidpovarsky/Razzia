@@ -156,12 +156,7 @@ export function GamePreviewSurface({
     return () => window.removeEventListener("pointerdown", outside, true)
   }, [active, controller.close, dismissOnOutside])
 
-  const closePreview = () => {
-    controller.close(false)
-    requestAnimationFrame(() =>
-      controller.triggerRef.current?.focus({ preventScroll: true }),
-    )
-  }
+  const closePreview = () => controller.close()
 
   const snapshot = state.status === "ready" ? state.snapshot : null
   const publishedDemo = session?.source.kind === "published-demo"

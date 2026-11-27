@@ -610,6 +610,8 @@
         "labelPlaceholder": "למשל: סמל הפתיחה, פרץ קונפטי…",
         "asset": "קובץ Lottie",
         "chooseCatalog": "בחירה מהספרייה",
+        "catalogEmpty": "עדיין אין הנפשות Lottie בספרייה. העלו קובץ ‎.json, ‎.lottie או ‎.zip.",
+        "catalogInUse": "{{count}} בשימוש",
         "uploadNew": "העלאה — ‎.json / .lottie / .zip",
         "deleteFile": "מחיקת הקובץ מהספרייה",
         "removeLayer": "הסרה מהמסך",

@@ -259,7 +259,11 @@ export function AccountGateway() {
             />
           </SiteLink>
           <SiteLink className="account-back" href="/">
-            <ArrowLeft size={18} />
+            <ArrowLeft
+              size={18}
+              className="site-directional-icon"
+              aria-hidden="true"
+            />
             {t("Back to website")}
           </SiteLink>
         </header>
@@ -336,7 +340,11 @@ export function AccountGateway() {
                 disabled={busy || available !== true}
               >
                 {t(busy ? "Please wait…" : actions[step])}
-                <ArrowRight size={16} />
+                <ArrowRight
+                  size={16}
+                  className="site-directional-icon"
+                  aria-hidden="true"
+                />
               </SiteButton>
             </form>
             <div className="account-links">

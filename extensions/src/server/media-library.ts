@@ -14,6 +14,7 @@ import {
   type CardMediaReference,
   type InspectableQuizShow,
   type ShowMediaCatalogItem,
+  showMediaCatalogItemSchema,
 } from "../core/index"
 import {
   getSidecarDirectory,
@@ -1651,21 +1652,31 @@ export function associateMediaWithShow(
   quizId: string,
   item: ShowMediaCatalogItem,
 ): ShowMediaCatalogItem[] {
+  // Upload responses also contain transport-only fields such as format and
+  // size. Persist only the catalog contract so a later strict sidecar read
+  // cannot discard the show's revision, timeline or roster.
+  const catalogItem = showMediaCatalogItemSchema.parse({
+    name: item.name,
+    url: item.url,
+    type: item.type,
+    addedAt: item.addedAt,
+    lottieMeta: item.lottieMeta,
+  })
   const existing = readSidecar(getPath, quizId)
 
   if (!existing) {
-    return [item]
+    return [catalogItem]
   }
 
   const currentCatalog = existing.mediaCatalog ? [...existing.mediaCatalog] : []
   const alreadyPresent = currentCatalog.some(
-    (entry) => entry.url === item.url || entry.name === item.name,
+    (entry) => entry.url === catalogItem.url || entry.name === catalogItem.name,
   )
 
   if (!alreadyPresent) {
     currentCatalog.unshift({
-      ...item,
-      addedAt: item.addedAt ?? Date.now(),
+      ...catalogItem,
+      addedAt: catalogItem.addedAt ?? Date.now(),
     })
   }
 

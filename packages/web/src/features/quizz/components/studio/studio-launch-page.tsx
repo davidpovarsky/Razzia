@@ -132,7 +132,7 @@ export const StudioLaunchPage = () => {
   }
 
   return (
-    <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">
+    <div className="bg-muted flex min-w-0 flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
         <div className="border-accent flex items-center gap-3 border-b pb-4">
           <div className="bg-primary/10 text-primary rounded-lg p-2">

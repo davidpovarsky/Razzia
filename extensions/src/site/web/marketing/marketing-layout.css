@@ -1,0 +1,63 @@
+/* Public-page typography and navigation use the current Rubik platform tokens.
+   The archived reference CSS remains unchanged. Show renderers own their type. */
+.tds-scope[data-platform-scope="platform.marketing"] {
+  --marketing-title-tracking: -0.025em;
+  --marketing-heading-tracking: -0.015em;
+}
+
+.tds-scope[data-platform-scope="platform.marketing"]
+  :is(.cinema-title, .h1, .h2, .section-title, .product-side > h1) {
+  letter-spacing: var(--marketing-title-tracking);
+}
+
+.tds-scope[data-platform-scope="platform.marketing"]
+  :is(.route-name, .full-cta h3) {
+  letter-spacing: var(--marketing-heading-tracking);
+}
+
+.tds-scope[data-platform-scope="platform.marketing"] .mobile-nav .btn-primary {
+  grid-column: 1 / -1;
+  background: var(--tds-action);
+  color: var(--tds-action-text);
+  border-color: transparent;
+  white-space: normal;
+  text-align: center;
+}
+
+.tds-scope[data-platform-scope="platform.marketing"]
+  .header-links
+  [aria-current="page"] {
+  color: var(--tds-text);
+}
+
+.tds-scope[data-platform-scope="platform.marketing"]
+  .header-links
+  [aria-current="page"]::after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin: 3px auto -8px;
+  border-radius: 50%;
+  background: var(--tds-action);
+}
+
+.tds-scope[data-platform-scope="platform.marketing"]
+  .catalogue-product-page
+  .product-actions
+  .btn {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+/* The reference layout changes this action group to a column below 370px.
+   A horizontal width basis must not become a fixed vertical button height. */
+@media (max-width: 370px) {
+  .tds-scope[data-platform-scope="platform.marketing"]
+    .catalogue-product-page
+    .product-actions
+    .btn {
+    flex-basis: auto;
+  }
+}

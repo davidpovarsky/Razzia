@@ -1894,7 +1894,11 @@ export const AudioCuePlayer = ({
         audioExtras.soundtrack?.results?.url ===
           "/tadazz-show/music/cutie-patootie.mp3" && (
           <a
-            className="absolute bottom-2 left-2 z-40 rounded px-2 py-1 text-xs text-white/70 hover:text-white"
+            className={
+              showControls
+                ? "order-last block w-full min-w-0 px-3 py-1 text-xs text-white/70 hover:text-white"
+                : "absolute bottom-2 left-2 z-40 rounded px-2 py-1 text-xs text-white/70 hover:text-white"
+            }
             href="/tadazz-show/music/credits.html"
             target="_blank"
             rel="noreferrer"

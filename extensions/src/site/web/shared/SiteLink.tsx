@@ -4,8 +4,9 @@ import type { AnchorHTMLAttributes } from "react"
 /** Keep site navigation in the existing router/cache; native editor/show links reload. */
 export function SiteLink({
   href = "/",
+  exact,
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement>) {
+}: AnchorHTMLAttributes<HTMLAnchorElement> & { exact?: boolean }) {
   const url = new URL(href, window.location.origin)
   const managed =
     url.origin === window.location.origin &&
@@ -23,6 +24,7 @@ export function SiteLink({
       to={url.pathname}
       search={() => Object.fromEntries(url.searchParams)}
       hash={url.hash.slice(1)}
+      activeOptions={exact ? { exact: true, includeSearch: false } : undefined}
       preload="intent"
     />
   )

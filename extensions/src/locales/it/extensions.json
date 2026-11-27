@@ -610,6 +610,8 @@
         "labelPlaceholder": "es. Emblema iniziale, Coriandoli...",
         "asset": "Risorsa Lottie",
         "chooseCatalog": "Scegli dalla libreria",
+        "catalogEmpty": "La libreria non contiene ancora animazioni Lottie. Carica un file .json, .lottie o .zip.",
+        "catalogInUse": "{{count}} in uso",
         "uploadNew": "Carica (.json / .lottie / .zip)",
         "deleteFile": "Elimina file dalla libreria",
         "removeLayer": "Rimuovi dalla scena",

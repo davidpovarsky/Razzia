@@ -5,11 +5,13 @@ export function matchesCatalogueSearch(
   query: string,
   language: (typeof siteLanguages)[number],
 ): boolean {
-  return title
-    .normalize("NFC")
-    .toLocaleUpperCase(language)
-    .normalize("NFC")
-    .includes(
-      query.normalize("NFC").toLocaleUpperCase(language).normalize("NFC"),
-    )
+  const normalize = (value: string) =>
+    value
+      .trim()
+      .replace(/\s+/gu, " ")
+      .normalize("NFC")
+      .toLocaleUpperCase(language)
+      .normalize("NFC")
+
+  return normalize(title).includes(normalize(query))
 }

@@ -2,6 +2,8 @@ import {
   type QuizExtrasV2,
   createDefaultAudioExtras,
   createDefaultRosterExtras,
+  createDefaultQuizExtrasV2,
+  quizExtrasV2Schema,
   createDotLottieArchive,
   computeCanonicalBaseDigest,
   DEFAULT_CUE_URLS,
@@ -18,6 +20,7 @@ import {
   recoverMediaDeleteJournals,
   recoverStartupJournals,
 } from "./media-library"
+import { createHash } from "node:crypto"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
@@ -1412,6 +1415,224 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       ),
     )
     expect(JSON.stringify(restoredMediaShow)).toContain(mediaName)
+  })
+
+  async function createSavedLottieShow() {
+    const showId = "json-lottie-revision-show"
+    const sceneId = "11111111-1111-4111-8111-111111111188"
+    const quizz = {
+      gameMode: "quiz",
+      subject: "Persisted Lottie revision fixture",
+      questions: [
+        {
+          type: "single",
+          question: "Preserve this question",
+          answers: ["A", "B"],
+          solutions: [0],
+          cooldown: 3,
+          time: 15,
+        },
+      ],
+    }
+    const baseFile = getPath("quizz/" + showId + ".json")
+    const app = createExtensionRoutes({
+      getPath,
+      getQuizzById: () => JSON.parse(fs.readFileSync(baseFile, "utf8")),
+      saveQuizz: (data) => {
+        fs.writeFileSync(
+          baseFile,
+          JSON.stringify({ id: showId, ...(data as object) }),
+        )
+        return { id: showId }
+      },
+      updateQuizz: (_id, data) => {
+        fs.writeFileSync(
+          baseFile,
+          JSON.stringify({ id: showId, ...(data as object) }),
+        )
+        return { id: showId }
+      },
+      deleteQuizz: () => fs.rmSync(baseFile),
+      listMedia: () => [],
+    })
+    const extras = createDefaultQuizExtrasV2(
+      "temporary-show",
+      [Q1_ID],
+      computeCanonicalBaseDigest(quizz),
+    )
+    extras.roster = {
+      phoneInviteOnly: true,
+      participants: [
+        {
+          rosterPlayerId: "retained-participant",
+          displayName: "Retained participant",
+          phoneE164: "+12025550103",
+        },
+      ],
+    }
+    extras.scenes[sceneId] = {
+      id: sceneId,
+      kind: "opening",
+      title: "Preserve this authored scene",
+      durationMs: 5000,
+      advance: "auto",
+    }
+    extras.timeline.push({
+      id: T2_ID,
+      kind: "opening",
+      sceneId,
+    })
+    const created = await app.request("/quizzes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quizz, extras }),
+    })
+    expect(created.status).toBe(201)
+
+    for (const expectedRevision of [1, 2, 3]) {
+      const current = readSidecar(getPath, showId)
+      const saved = await app.request("/quizzes/" + showId, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expectedRevision, quizz, extras: current }),
+      })
+      expect(saved.status).toBe(200)
+    }
+
+    const before = readSidecar(getPath, showId)
+    expect(before?.revision).toBe(4)
+    const animation = {
+      v: "5.7.4",
+      fr: 30,
+      ip: 0,
+      op: 60,
+      w: 200,
+      h: 200,
+      layers: [{ ty: 4, nm: "Fixture", ks: {}, shapes: [] }],
+    }
+
+    return { app, showId, quizz, before, animation }
+  }
+
+  it("keeps saved content and revision readable after a JSON Lottie upload and allows the next protected Save", async () => {
+    const { app, showId, quizz, before, animation } =
+      await createSavedLottieShow()
+    const upload = await app.request("/lottie", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "revision-proof.json",
+        quizId: showId,
+        content: animation,
+      }),
+    })
+    expect(upload.status).toBe(201)
+    const uploaded = (await upload.json()) as Record<string, unknown>
+    expect(uploaded.format).toBe("json")
+    expect(uploaded.size).toEqual(expect.any(Number))
+
+    const after = readSidecar(getPath, showId)
+    expect(after).not.toBeNull()
+    expect(after).toEqual({
+      ...before,
+      mediaCatalog: [
+        {
+          name: uploaded.name,
+          url: uploaded.url,
+          type: "lottie",
+          addedAt: uploaded.addedAt,
+          lottieMeta: expect.objectContaining(uploaded.lottieMeta),
+        },
+      ],
+    })
+    const raw = JSON.parse(
+      fs.readFileSync(
+        getPath("extensions/quizzes/" + showId + ".json"),
+        "utf8",
+      ),
+    )
+    expect(raw.mediaCatalog[0]).not.toHaveProperty("format")
+    expect(raw.mediaCatalog[0]).not.toHaveProperty("size")
+    expect(quizExtrasV2Schema.safeParse(raw).success).toBe(true)
+    const fetched = await app.request("/quizzes/" + showId)
+    expect((await fetched.json()).extras).toEqual(after)
+
+    const saved = await app.request("/quizzes/" + showId, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ expectedRevision: 4, quizz, extras: after }),
+    })
+    expect(saved.status).toBe(200)
+    expect(readSidecar(getPath, showId)?.revision).toBe(5)
+    const stale = await app.request("/quizzes/" + showId, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ expectedRevision: 4, quizz, extras: after }),
+    })
+    expect(stale.status).toBe(409)
+  })
+
+  it("recovers historic JSON Lottie transport metadata in memory without rewriting disk or accepting unrelated invalid fields", async () => {
+    const { app, showId, quizz, before, animation } =
+      await createSavedLottieShow()
+    const upload = await app.request("/lottie", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "historic-proof.json", content: animation }),
+    })
+    expect(upload.status).toBe(201)
+    const uploaded = (await upload.json()) as Record<string, unknown>
+    const sidecar = getPath("extensions/quizzes/" + showId + ".json")
+    const historic = { ...before, mediaCatalog: [uploaded] }
+    const rawBytes = JSON.stringify(historic, null, 2)
+    fs.writeFileSync(sidecar, rawBytes)
+    const hash = () =>
+      createHash("sha256").update(fs.readFileSync(sidecar)).digest("hex")
+    const beforeHash = hash()
+    const recovered = readSidecar(getPath, showId)
+    expect(recovered).toEqual({
+      ...before,
+      mediaCatalog: [
+        {
+          name: uploaded.name,
+          url: uploaded.url,
+          type: "lottie",
+          addedAt: uploaded.addedAt,
+          lottieMeta: expect.objectContaining(uploaded.lottieMeta),
+        },
+      ],
+    })
+    expect(hash()).toBe(beforeHash)
+
+    for (const invalid of [
+      { ...historic, unexpectedRootField: true },
+      {
+        ...historic,
+        mediaCatalog: [{ ...uploaded, unexpectedCatalogField: true }],
+      },
+      {
+        ...historic,
+        mediaCatalog: [{ ...uploaded, url: "javascript:alert(1)" }],
+      },
+    ]) {
+      fs.writeFileSync(sidecar, JSON.stringify(invalid))
+      const invalidHash = hash()
+      expect(readSidecar(getPath, showId)).toBeNull()
+      expect(hash()).toBe(invalidHash)
+    }
+
+    fs.writeFileSync(sidecar, rawBytes)
+    const saved = await app.request("/quizzes/" + showId, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ expectedRevision: 4, quizz, extras: recovered }),
+    })
+    expect(saved.status).toBe(200)
+    expect(readSidecar(getPath, showId)).toEqual({ ...recovered, revision: 5 })
+    const committed = JSON.parse(fs.readFileSync(sidecar, "utf8"))
+    expect(quizExtrasV2Schema.safeParse(committed).success).toBe(true)
+    expect(committed.mediaCatalog[0]).not.toHaveProperty("format")
+    expect(committed.mediaCatalog[0]).not.toHaveProperty("size")
   })
   it("Gate 2 & 3: serves self-hosted dotlottie WASM, uploads .lottie/JSON animations, lists lottieAssets in catalog, and enforces reference-safe deletion on overlayAnimations", async () => {
     const showId = "cinematic-lottie-show"

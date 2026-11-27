@@ -67,7 +67,7 @@ export const StudioParticipantsPage = () => {
     t(`extensions:${key}`, { defaultValue: fallback })
 
   return (
-    <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">
+    <div className="bg-muted flex min-w-0 flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
         <div className="border-accent flex flex-col gap-1 border-b pb-4">
           <div className="flex items-center gap-3">

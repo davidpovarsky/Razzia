@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest"
 import { createDefaultShowTheme } from "../../core/show-themes/selection"
 import { resolveShowTheme } from "../../core/show-themes/resolve"
-import { themeSlotForScene, themeSlotForSceneKind } from "./scene"
+import {
+  reconcileThemeScene,
+  resolveThemeAnimationPreset,
+  themeSlotForScene,
+  themeSlotForSceneKind,
+} from "./scene"
+import type { ShowScene } from "../tadazz-show/presentation-scene"
 
 describe("authored scene theme overrides", () => {
   const theme = resolveShowTheme({
@@ -64,3 +70,68 @@ describe("authored scene theme overrides", () => {
     )
   })
 })
+
+describe.each(["tadazz-classic", "razzia-original"])(
+  "%s animation compatibility",
+  (themeId) => {
+    const theme = resolveShowTheme({
+      role: "manager",
+      selection: { ...createDefaultShowTheme(), id: themeId },
+    })
+
+    it.each(["spotlight", "saved-unknown-preset", undefined])(
+      "resolves %s consistently without rewriting saved metadata",
+      (preset) => {
+        const scene: ShowScene = {
+          kind: "scene",
+          key: "legacy-animation",
+          scene: Object.freeze({ kind: "animation", preset }),
+        }
+        const effectivePreset = resolveThemeAnimationPreset(preset, theme)
+        const reconciled = reconcileThemeScene(scene, theme)
+
+        expect(effectivePreset).toBe("interlude")
+        expect(reconciled).toMatchObject({
+          scene: { preset: effectivePreset },
+        })
+        expect(scene.scene.preset).toBe(preset)
+      },
+    )
+
+    it("keeps every supported effect selected and unchanged on the stage", () => {
+      for (const preset of theme.definition.capabilities.animationPresets) {
+        const scene: ShowScene = {
+          kind: "scene",
+          key: "current-animation",
+          scene: { kind: "animation", preset },
+        }
+
+        expect(resolveThemeAnimationPreset(preset, theme)).toBe(preset)
+        expect(reconcileThemeScene(scene, theme)).toBe(scene)
+      }
+    })
+
+    it("preserves an admitted theme-specific preset", () => {
+      const customTheme = {
+        ...theme,
+        definition: {
+          ...theme.definition,
+          capabilities: {
+            ...theme.definition.capabilities,
+            animationPresets: ["partner-animation", "interlude"],
+          },
+        },
+      }
+      const scene: ShowScene = {
+        kind: "scene",
+        key: "custom-animation",
+        scene: { kind: "animation", preset: "partner-animation" },
+      }
+
+      expect(
+        resolveThemeAnimationPreset("partner-animation", customTheme),
+      ).toBe("partner-animation")
+      expect(reconcileThemeScene(scene, customTheme)).toBe(scene)
+    })
+  },
+)

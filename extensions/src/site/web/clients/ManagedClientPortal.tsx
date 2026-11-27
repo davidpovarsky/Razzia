@@ -262,7 +262,11 @@ function ClientCodeEntry({
           disabled={!isManagedClientCode(code) || remaining > 0}
         >
           {t(busy ? "signingIn" : "continue")}
-          <ArrowRight size={18} aria-hidden="true" />
+          <ArrowRight
+            size={18}
+            className="site-directional-icon"
+            aria-hidden="true"
+          />
         </Button>
         {error && <p role="alert">{t(error)}</p>}
         {remaining > 0 && (

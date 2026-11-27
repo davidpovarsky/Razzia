@@ -14,12 +14,12 @@ export function NativeRazziaPlayerResult({
   return (
     <section
       data-testid="native-razzia-player-result"
-      className="anim-show relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center"
+      className="anim-show relative mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-center"
     >
       {correct ? (
-        <CricleCheck className="aspect-square max-h-60 w-full" />
+        <CricleCheck className="aspect-square max-h-60 min-h-0 w-full shrink" />
       ) : (
-        <CricleXmark className="aspect-square max-h-60 w-full" />
+        <CricleXmark className="aspect-square max-h-60 min-h-0 w-full shrink" />
       )}
       <h2 className="mt-1 text-4xl font-bold text-white drop-shadow-lg">
         {t(message)}

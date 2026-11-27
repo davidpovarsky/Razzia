@@ -610,6 +610,8 @@
         "labelPlaceholder": "VD: Biểu trưng mở đầu, Pháo giấy...",
         "asset": "Tệp Lottie",
         "chooseCatalog": "Chọn từ thư viện",
+        "catalogEmpty": "Thư viện chưa có hoạt ảnh Lottie. Hãy tải lên tệp .json, .lottie hoặc .zip.",
+        "catalogInUse": "{{count}} mục đang sử dụng",
         "uploadNew": "Tải lên (.json / .lottie / .zip)",
         "deleteFile": "Xóa khỏi thư viện",
         "removeLayer": "Gỡ khỏi cảnh",

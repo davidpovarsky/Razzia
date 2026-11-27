@@ -50,7 +50,8 @@ export const applicationPackagePreviewSchema = z
     revision: z.number().int().positive(),
     sourceDigest: packageDigestSchema,
     buildDigest: packageDigestSchema,
-    definitions: z.array(showThemeDefinitionSchema).min(1).max(8),
+    // Game-only packages use bundled themes and carry no private definitions.
+    definitions: z.array(showThemeDefinitionSchema).max(8),
     runtimeUrls: z.record(themeIdSchema, runtimeUrl),
     assets: z.array(packagePreviewAssetSchema).max(256),
   })

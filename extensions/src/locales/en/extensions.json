@@ -610,6 +610,8 @@
         "labelPlaceholder": "e.g. Opening Emblem, Confetti Burst...",
         "asset": "Lottie Asset",
         "chooseCatalog": "Choose from Library",
+        "catalogEmpty": "No Lottie animations in the library yet. Upload a .json, .lottie or .zip file.",
+        "catalogInUse": "{{count}} in use",
         "uploadNew": "Upload (.json / .lottie / .zip)",
         "deleteFile": "Delete File from Library",
         "removeLayer": "Remove from Scene",

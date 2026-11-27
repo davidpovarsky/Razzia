@@ -610,6 +610,8 @@
         "labelPlaceholder": "ex. Emblème d'ouverture, Confettis...",
         "asset": "Ressource Lottie",
         "chooseCatalog": "Choisir dans la bibliothèque",
+        "catalogEmpty": "La bibliothèque ne contient pas encore d’animations Lottie. Importez un fichier .json, .lottie ou .zip.",
+        "catalogInUse": "{{count}} en cours d’utilisation",
         "uploadNew": "Importer (.json / .lottie / .zip)",
         "deleteFile": "Supprimer de la bibliothèque",
         "removeLayer": "Retirer de la scène",

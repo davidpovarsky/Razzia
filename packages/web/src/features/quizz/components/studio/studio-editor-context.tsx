@@ -14,8 +14,12 @@ import {
   type TimelineItem,
   type TimelineItemKind,
   isQuizExtrasV2,
+  isLegacyShowRollback,
+  resolveShowTheme,
   upgradeLegacyExtrasToV2,
 } from "@razzia/extensions/core"
+import { resolveThemeAnimationPreset } from "@razzia/extensions/presentation"
+import { useInstalledThemeCatalog } from "./installed-theme-catalog"
 import {
   useQuizzEditor,
   type QuizzFormValues,
@@ -98,6 +102,7 @@ export const useStudioEditor = () => {
 
 export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation()
+  const registry = useInstalledThemeCatalog()
   const {
     quizzId,
     questionIds,
@@ -412,7 +417,16 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           return {
             id: sceneId,
             kind: "animation",
-            preset: "spotlight",
+            preset: isLegacyShowRollback(defaults)
+              ? "spotlight"
+              : resolveThemeAnimationPreset(
+                  "spotlight",
+                  resolveShowTheme({
+                    selection: defaults.showTheme,
+                    role: "manager",
+                    registry,
+                  }),
+                ),
             title: "",
             durationMs: 3000,
             advance: "auto",
@@ -505,7 +519,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           }
       }
     },
-    [getValues, questionIds, t],
+    [defaults, getValues, questionIds, registry, t],
   )
   interface StudioMutationResult {
     nextQuestions: Question[]

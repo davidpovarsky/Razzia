@@ -68,6 +68,116 @@ function packageReceipt() {
 }
 
 describe("private package application preview receipt", () => {
+  it("accepts a game-only package receipt and resolves the same bundled native plan", () => {
+    const receipt = {
+      ...packageReceipt(),
+      definitions: [],
+      runtimeUrls: {},
+      assets: [],
+    }
+    const context = applicationPackagePreviewSchema.parse(receipt)
+    const source = {
+      source: {
+        kind: "account-owned",
+        quizId: "native-package-game",
+        immutableRevision: "d".repeat(64),
+      },
+      show: {
+        ...authoredFixture(3, 2),
+        defaults: {
+          showTheme: { id: classic.id, version: classic.version },
+        },
+      },
+      assets: [],
+    }
+    const preferences = {
+      role: "spectator",
+      locale: "en",
+      reducedMotion: false,
+    }
+    const nativePlan = resolveApplicationPreviewPlan(
+      normalizeApplicationPreviewDraft(source, preferences),
+    )
+    const packagePlan = resolveApplicationPreviewPlan(
+      normalizeApplicationPreviewDraft(
+        { ...source, packageContext: context },
+        preferences,
+      ),
+    )
+
+    expect(context.definitions).toEqual([])
+    expect(context.runtimeUrls).toEqual({})
+    expect(packagePlan).toEqual(nativePlan)
+    const nativePin = getApplicationPreviewManifest().pins.find(
+      (pin) => pin.renderer.id === classic.rendererId,
+    )
+
+    if (nativePin) {
+      expect(packagePlan.resolution.kind).toBe("exact")
+      expect(packagePlan.resolution.pin).toEqual(nativePin)
+      expect(packagePlan.resolution.pin?.rendererBuildSha256).not.toBe(
+        context.buildDigest,
+      )
+    }
+  })
+
+  it("does not admit a custom theme plan when a game-only receipt has no matching definition", () => {
+    const context = applicationPackagePreviewSchema.parse({
+      ...packageReceipt(),
+      definitions: [],
+      runtimeUrls: {},
+      assets: [],
+    })
+    const draft = normalizeApplicationPreviewDraft(
+      {
+        source: {
+          kind: "account-owned",
+          quizId: "missing-custom-theme",
+          immutableRevision: "d".repeat(64),
+        },
+        show: {
+          ...authoredFixture(3, 1),
+          defaults: {
+            showTheme: { id: "private-package-theme", version: "1.0.0" },
+          },
+        },
+        assets: [],
+        packageContext: context,
+      },
+      { role: "spectator", locale: "en", reducedMotion: false },
+    )
+    const plan = resolveApplicationPreviewPlan(draft)
+
+    expect(plan.resolution.kind).toBe("unavailable")
+    expect(plan.resolution.effective).toBeNull()
+    expect(plan.resolution.pin).toBeNull()
+    expect(plan.capabilities.reveal).toBe(false)
+    expect(plan.capabilities.seek).toBe("unavailable")
+    expect(
+      showThemeRegistry.get("private-package-theme", "1.0.0"),
+    ).toBeUndefined()
+  })
+
+  it("keeps digest, unknown-field and runtime binding guards for game-only receipts", () => {
+    const receipt = {
+      ...packageReceipt(),
+      definitions: [],
+      runtimeUrls: {},
+      assets: [],
+    }
+
+    for (const invalid of [
+      { ...receipt, sourceDigest: "invalid" },
+      { ...receipt, buildDigest: "invalid" },
+      { ...receipt, unexpected: true },
+      { ...receipt, runtimeUrls: packageReceipt().runtimeUrls },
+    ]) {
+      expect(applicationPackagePreviewSchema.safeParse(invalid).success).toBe(
+        false,
+      )
+    }
+  })
+
   it("binds exact code and media without registering the theme globally", () => {
     const context = applicationPackagePreviewSchema.parse(packageReceipt())
     const draft = normalizeApplicationPreviewDraft(

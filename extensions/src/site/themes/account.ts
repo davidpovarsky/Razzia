@@ -8,7 +8,7 @@ export const accountStyle = `
 .account-main{padding:30px 22px max(72px,env(safe-area-inset-bottom));flex:1;display:grid;place-items:center;min-width:0}
 .account-card{width:100%;max-width:520px;box-sizing:border-box;border:1px solid rgba(181,127,242,.34);border-radius:28px;padding:clamp(24px,5vw,46px);background:radial-gradient(circle at top right,#381b65 0,#211038 43%,#1a102d 100%);box-shadow:0 24px 70px rgba(0,0,0,.32)}
 .account-kicker{color:#e7ff37;text-transform:uppercase;font-weight:800;letter-spacing:.1em;font-size:11px}
-.account-card h1{font-size:clamp(32px,5vw,50px);font-weight:900;letter-spacing:-.05em;line-height:1.1;margin:14px 0}
+.account-card h1{font-size:clamp(32px,5vw,50px);font-weight:900;letter-spacing:-.025em;line-height:1.1;margin:14px 0}
 .account-lead{font-size:15px;color:#cfc1db;line-height:1.6;margin:0 0 26px}
 .account-fields{display:grid;gap:var(--tds-space-5)}
 .account-submit{width:100%}

@@ -23,3 +23,8 @@
 
   --animate-fade: fade 150ms ease both;
 }
+
+/* Mirror logical navigation only; artwork and media controls keep their orientation. */
+.site-directional-icon:dir(rtl) {
+  transform: scaleX(-1);
+}

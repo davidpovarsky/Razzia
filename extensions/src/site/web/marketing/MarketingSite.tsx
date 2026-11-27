@@ -1,6 +1,5 @@
 import marketing from "../../../../site-assets/marketing.css?inline"
 import { SiteLink } from "../shared/SiteLink"
-import { presentationControlText } from "../../../platform-ui"
 import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
@@ -12,6 +11,7 @@ import { publishedLegalPolicies } from "./legal-policies.public"
 import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
 import { CatalogueGameDemo } from "./CatalogueGameDemo"
 import catalogueStyles from "./catalogue.css?inline"
+import marketingLayoutStyles from "./marketing-layout.css?inline"
 import {
   hasManagerSession,
   siteRequest,
@@ -19,7 +19,7 @@ import {
 } from "../../adapters/client"
 import guessOffStyles from "./great-guessoff.css?inline"
 import { SiteButton } from "../shared/SiteButton"
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useRef } from "react"
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
 import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
 import { previewText } from "../../../presentation/show-library-preview/ui-strings"
@@ -93,6 +93,10 @@ export function MarketingSite() {
   const [installError, setInstallError] = useState("")
   const [search, setSearch] = useState("")
   const [menu, setMenu] = useState(false)
+  const menuTriggerRef = useRef<HTMLButtonElement>(null)
+  const currentNavView = ["product", "preview", "demo"].includes(view)
+    ? "store"
+    : view
   const visibleGames = catalogue.filter(
     (game) =>
       (filter === "All" || game.category === filter) &&
@@ -215,7 +219,12 @@ export function MarketingSite() {
         ["pricing", "Pricing"],
         ["custom", "Custom shows"],
       ].map(([id, label]) => (
-        <SiteButton className="text-btn" key={id} onClick={() => go(id)}>
+        <SiteButton
+          className="text-btn"
+          key={id}
+          onClick={() => go(id)}
+          aria-current={currentNavView === id ? "page" : undefined}
+        >
           {t(label)}
         </SiteButton>
       ))}
@@ -232,13 +241,27 @@ export function MarketingSite() {
     ))
 
   return (
-    <InlineGamePreviewBoundary routeKey={view} provider={previewProvider}>
+    <InlineGamePreviewBoundary
+      enabled
+      routeKey={view}
+      provider={previewProvider}
+    >
       <ReferenceCanvas variant="marketing" styles={marketing}>
         <style>{corrections}</style>
         <style>{sitePlatformStyle}</style>
         <style>{guessOffStyles}</style>
         <style>{catalogueStyles}</style>
-        <header className="site-header">
+        <style>{marketingLayoutStyles}</style>
+        <header
+          className="site-header"
+          onKeyDown={(event) => {
+            if (menu && event.key === "Escape") {
+              event.preventDefault()
+              setMenu(false)
+              menuTriggerRef.current?.focus()
+            }
+          }}
+        >
           <div className="wide header-inner">
             <SiteLink className="brand" href="/">
               <img src={asset("logo")} alt="Tadazz" />
@@ -265,12 +288,18 @@ export function MarketingSite() {
                   </SiteLink>
                   <SiteLink className="btn btn-outline" href="/signup">
                     {t("Sign up")}
-                    <ArrowRight size={14} />
+                    <ArrowRight
+                      className="site-directional-icon"
+                      aria-hidden="true"
+                      size={14}
+                    />
                   </SiteLink>
                 </>
               )}
               <SiteButton
+                ref={menuTriggerRef}
                 className="mobile-menu text-btn"
+                aria-controls="marketing-mobile-nav"
                 aria-label={t("Toggle navigation")}
                 aria-expanded={menu}
                 onClick={() => setMenu(!menu)}
@@ -281,6 +310,7 @@ export function MarketingSite() {
           </div>
           {menu && (
             <nav
+              id="marketing-mobile-nav"
               className="wrap mobile-nav"
               aria-label={t("Mobile navigation")}
             >
@@ -340,7 +370,11 @@ export function MarketingSite() {
                         onClick={() => go("store")}
                       >
                         {t("Explore games")}
-                        <ArrowRight size={15} />
+                        <ArrowRight
+                          className="site-directional-icon"
+                          aria-hidden="true"
+                          size={15}
+                        />
                       </SiteButton>
                     </div>
                   </div>
@@ -423,7 +457,10 @@ export function MarketingSite() {
                         <h3 className="route-name">{t(String(title))}</h3>
                         <p>{t(String(description))}</p>
                         <span className="route-arrow">
-                          <ArrowRight />
+                          <ArrowRight
+                            className="site-directional-icon"
+                            aria-hidden="true"
+                          />
                         </span>
                       </SiteButton>
                     ))}
@@ -436,7 +473,11 @@ export function MarketingSite() {
                     <h2 className="section-title">{t("Find your show.")}</h2>
                     <SiteButton className="link" onClick={() => go("store")}>
                       {t("All games")}
-                      <ArrowRight size={15} />
+                      <ArrowRight
+                        className="site-directional-icon"
+                        aria-hidden="true"
+                        size={15}
+                      />
                     </SiteButton>
                   </div>
                   <p className="note">
@@ -462,7 +503,11 @@ export function MarketingSite() {
                       onClick={() => go("custom")}
                     >
                       {t("Explore custom shows")}
-                      <ArrowRight size={15} />
+                      <ArrowRight
+                        className="site-directional-icon"
+                        aria-hidden="true"
+                        size={15}
+                      />
                     </SiteButton>
                   </div>
                 </div>
@@ -549,7 +594,11 @@ export function MarketingSite() {
                 <SiteButton onClick={() => go("store")}>
                   {t("Games")}
                 </SiteButton>
-                <ArrowRight size={15} />
+                <ArrowRight
+                  className="site-directional-icon"
+                  aria-hidden="true"
+                  size={15}
+                />
                 <strong>{t(selected.title)}</strong>
               </div>
               <div className="product-grid">
@@ -608,7 +657,10 @@ export function MarketingSite() {
                           ? "Adding your game…"
                           : "Use this game",
                       )}
-                      <ArrowRight />
+                      <ArrowRight
+                        className="site-directional-icon"
+                        aria-hidden="true"
+                      />
                     </SiteButton>
                     <SiteButton
                       className="btn btn-outline"
@@ -647,7 +699,6 @@ export function MarketingSite() {
                 <div className="detail-box">
                   <h3>{t("The experience")}</h3>
                   <p>
-                    {t(selected.desc)}{" "}
                     {t(
                       "The host controls the pacing and the big-screen reveal.",
                     )}
@@ -696,9 +747,7 @@ export function MarketingSite() {
                 )}
               </div>
               <details className="catalogue-viewer-details">
-                <summary>
-                  {presentationControlText(language, "details")}
-                </summary>
+                <summary>{t("The experience")}</summary>
                 <p className="prose">
                   {view === "preview"
                     ? demonstration("demo")
@@ -711,7 +760,11 @@ export function MarketingSite() {
                     className="btn btn-outline"
                     onClick={() => open(selected)}
                   >
-                    <ArrowRight size={16} />
+                    <ArrowRight
+                      className="site-directional-icon"
+                      aria-hidden="true"
+                      size={16}
+                    />
                     {t("View game")}
                   </SiteButton>
                   <SiteButton
@@ -731,7 +784,11 @@ export function MarketingSite() {
                     onClick={() => go("store")}
                   >
                     {t("Explore games")}
-                    <ArrowRight size={16} />
+                    <ArrowRight
+                      className="site-directional-icon"
+                      aria-hidden="true"
+                      size={16}
+                    />
                   </SiteButton>
                 </div>
               </details>

@@ -60,6 +60,7 @@ function HostMusicControls(state: AudioControlState) {
         size="sm"
         onClick={state.toggleMute}
         data-testid="host-toggle-audio-mute"
+        aria-label={state.muted ? state.labels.unmute : state.labels.mute}
         aria-pressed={state.muted}
       >
         {state.muted ? (
@@ -67,7 +68,9 @@ function HostMusicControls(state: AudioControlState) {
         ) : (
           <Volume2 className="size-4" />
         )}
-        {state.muted ? state.labels.unmute : state.labels.mute}
+        <span className="max-md:sr-only">
+          {state.muted ? state.labels.unmute : state.labels.mute}
+        </span>
       </Button>
       <label className="flex items-center gap-2 px-2">
         <span className="sr-only">{state.labels.volume}</span>
@@ -91,6 +94,7 @@ function HostMusicControls(state: AudioControlState) {
         size="sm"
         onClick={state.togglePause}
         data-testid="host-toggle-audio-pause"
+        aria-label={state.userPaused ? state.labels.play : state.labels.pause}
         aria-pressed={state.userPaused}
       >
         {state.userPaused ? (
@@ -98,18 +102,20 @@ function HostMusicControls(state: AudioControlState) {
         ) : (
           <Pause className="size-4" />
         )}
-        {state.userPaused ? state.labels.play : state.labels.pause}
+        <span className="max-md:sr-only">
+          {state.userPaused ? state.labels.play : state.labels.pause}
+        </span>
       </Button>
       {state.tracks.length > 0 && (
         <div
-          className="flex max-w-full flex-wrap items-center gap-2"
+          className="flex w-full max-w-full min-w-0 flex-nowrap items-center gap-2 sm:w-auto"
           data-testid="host-music-picker"
         >
           <label htmlFor={trackId} className="flex items-center gap-1.5">
             <Music2 className="size-4" aria-hidden="true" />
-            {musicLabel}
+            <span className="max-md:sr-only">{musicLabel}</span>
           </label>
-          <div className="w-48 max-w-full">
+          <div className="min-w-0 flex-1 sm:w-48 sm:flex-none">
             <Select
               id={trackId}
               aria-label={musicLabel}

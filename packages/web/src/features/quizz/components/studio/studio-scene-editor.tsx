@@ -26,6 +26,7 @@ import {
   hasAuthoredCinematicContent,
   recapPageLimit,
   recapPageSize,
+  resolveThemeAnimationPreset,
 } from "@razzia/extensions/presentation"
 import { EditorPreviewViewport } from "../QuestionEditor/EditorPreviewViewport"
 import { PresentationControls } from "@razzia/extensions/platform-ui"
@@ -409,11 +410,41 @@ export const StudioSceneEditor = () => {
     }
 
     try {
+      // Preview the same effective effect as the room stage. Keep the editor's
+      // stored scene untouched until an author explicitly changes its preset.
+      const previewScenes = isLegacyShowRollback(defaults)
+        ? scenes
+        : Object.fromEntries(
+            Object.entries(scenes).map(([id, candidate]) => [
+              id,
+              candidate.kind === "animation"
+                ? {
+                    ...candidate,
+                    preset: resolveThemeAnimationPreset(
+                      candidate.preset,
+                      resolveShowTheme({
+                        selection: defaults.showTheme,
+                        scope: candidate.themeOverrides,
+                        role: "manager",
+                        registry,
+                      }),
+                    ),
+                  }
+                : candidate,
+            ]),
+          )
+
       return nativeBundleToAuthoredShow(
         {
           quizz: { subject, questions, gameMode },
           extras: isQuizExtrasV2(extras)
-            ? { ...extras, timeline, scenes, defaults, questionIds }
+            ? {
+                ...extras,
+                timeline,
+                scenes: previewScenes,
+                defaults,
+                questionIds,
+              }
             : extras,
         },
         { includePrivateRoster: false },
@@ -430,6 +461,7 @@ export const StudioSceneEditor = () => {
     defaults,
     timeline,
     scenes,
+    registry,
   ])
 
   if (!selectedTimelineItem || selectedTimelineItem.kind === "question") {
@@ -599,7 +631,11 @@ export const StudioSceneEditor = () => {
   }
 
   const animationPreset =
-    scene.kind === "animation" ? scene.preset : "spotlight"
+    scene.kind === "animation"
+      ? isLegacyShowRollback(defaults)
+        ? scene.preset
+        : resolveThemeAnimationPreset(scene.preset, activeTheme)
+      : "spotlight"
   const durationMs = "durationMs" in scene ? scene.durationMs : 5000
   const advanceMode = "advance" in scene ? scene.advance : "auto"
   const mediaUrl = "mediaUrl" in scene ? (scene.mediaUrl ?? "") : ""
@@ -1063,6 +1099,7 @@ export const StudioSceneEditor = () => {
   const authoredKey = `${scene.kind.toUpperCase()}_${String(sceneOrdinal).padStart(2, "0")}`
   const previewScene = {
     ...scene,
+    ...(scene.kind === "animation" ? { preset: animationPreset } : {}),
     ...("mediaUrl" in scene
       ? { muted: true, volume: 0, showControls: false }
       : {}),
@@ -1795,8 +1832,7 @@ export const StudioSceneEditor = () => {
 
               {lottieCatalog.length === 0 ? (
                 <p className="text-muted-foreground text-[11px]">
-                  No Lottie animations in library yet. Upload a .json or .lottie
-                  file.
+                  {t("extensions:studio.scene.overlays.catalogEmpty")}
                 </p>
               ) : (
                 <div className="flex max-h-40 flex-col gap-1 overflow-y-auto">
@@ -1832,7 +1868,14 @@ export const StudioSceneEditor = () => {
                         {typeof item.referenceCount === "number" &&
                           item.referenceCount > 0 && (
                             <span className="text-muted-foreground ml-1.5 text-[10px] font-normal">
-                              ({item.referenceCount} in use)
+                              (
+                              {t(
+                                "extensions:studio.scene.overlays.catalogInUse",
+                                {
+                                  count: item.referenceCount,
+                                },
+                              )}
+                              )
                             </span>
                           )}
                       </Button>
@@ -1917,6 +1960,12 @@ export const StudioSceneEditor = () => {
                 resolvedOverlays.map((ov, idx) => {
                   const isExpanded = expandedOverlayId === ov.id
                   const isSelected = selectedOverlayId === ov.id
+                  const overlayLabel =
+                    ov.label ||
+                    t("extensions:studio.scene.overlays.layerDefaultLabel", {
+                      num: idx + 1,
+                      defaultValue: `Overlay ${idx + 1}`,
+                    })
 
                   return (
                     <div
@@ -1955,21 +2004,17 @@ export const StudioSceneEditor = () => {
                               setExpandedOverlayId(isExpanded ? null : ov.id)
                             }}
                             className="text-foreground flex min-w-0 flex-1 items-center gap-1 text-left text-xs font-bold"
+                            classNameContent="min-w-0 flex-1 justify-start gap-1"
+                            title={overlayLabel}
+                            aria-expanded={isExpanded}
                           >
                             {isExpanded ? (
                               <ChevronDown className="text-muted-foreground size-3.5 shrink-0" />
                             ) : (
                               <ChevronRight className="text-muted-foreground size-3.5 shrink-0" />
                             )}
-                            <span className="truncate">
-                              {ov.label ||
-                                t(
-                                  "extensions:studio.scene.overlays.layerDefaultLabel",
-                                  {
-                                    num: idx + 1,
-                                    defaultValue: `Overlay ${idx + 1}`,
-                                  },
-                                )}
+                            <span className="min-w-0 flex-1 truncate">
+                              {overlayLabel}
                             </span>
                           </Button>
                         </div>
@@ -3321,25 +3366,27 @@ export const StudioSceneEditor = () => {
                 </EditorPreviewViewport>
               )}
             </LiveEditorStagePreview>
-
-            <div className="pointer-events-none absolute start-4 bottom-3 z-10 flex items-center gap-2 text-xs font-semibold text-white/50">
-              <Clock className="size-3.5" />
-              <span>
-                {"durationSeconds" in scene
-                  ? scene.durationSeconds
-                  : Math.round(scene.durationMs / 1000)}{" "}
-                {t("common:seconds")}
-              </span>
-              <span>•</span>
-              <span>
-                {t(
-                  `extensions:studio.scene.advance${{ auto: "Auto", manual: "Manual", onMediaEnd: "OnMediaEnd" }[scene.advance]}`,
-                  scene.advance,
-                )}
-              </span>
-            </div>
           </div>
         </EditorCanvasFrame>
+        <div
+          data-testid="studio-scene-preview-meta"
+          className="border-accent bg-background text-muted-foreground mt-2 flex shrink-0 flex-wrap items-center justify-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-semibold"
+        >
+          <Clock className="size-3.5 shrink-0" aria-hidden="true" />
+          <span>
+            {"durationSeconds" in scene
+              ? scene.durationSeconds
+              : Math.round(scene.durationMs / 1000)}{" "}
+            {t("common:seconds")}
+          </span>
+          <span>•</span>
+          <span>
+            {t(
+              `extensions:studio.scene.advance${{ auto: "Auto", manual: "Manual", onMediaEnd: "OnMediaEnd" }[scene.advance]}`,
+              scene.advance,
+            )}
+          </span>
+        </div>
       </EditorWorkspace>
       <MediaLibrary
         open={mediaPickerOpen}

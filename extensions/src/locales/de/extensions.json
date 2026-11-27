@@ -610,6 +610,8 @@
         "labelPlaceholder": "z. B. Eröffnungsemblem, Konfetti...",
         "asset": "Lottie-Asset",
         "chooseCatalog": "Aus Bibliothek wählen",
+        "catalogEmpty": "Noch keine Lottie-Animationen in der Bibliothek. Lade eine Datei im Format .json, .lottie oder .zip hoch.",
+        "catalogInUse": "{{count}} im Einsatz",
         "uploadNew": "Hochladen (.json / .lottie / .zip)",
         "deleteFile": "Datei aus Bibliothek löschen",
         "removeLayer": "Aus Szene entfernen",

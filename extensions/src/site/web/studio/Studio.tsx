@@ -1,6 +1,6 @@
 import { SiteLink } from "../shared/SiteLink"
 import { SiteButton } from "../shared/SiteButton"
-import { lazy, Suspense, useEffect, useMemo, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react"
 import studio from "../../../../site-assets/studio.css?inline"
 import { StudioLoading } from "./StudioLoading"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
@@ -17,6 +17,7 @@ import {
   Settings2,
   Store,
   Users,
+  X,
 } from "lucide-react"
 import { clearToken, getClientId } from "@razzia/web/lib/session"
 import { socketClient } from "@razzia/web/features/game/contexts/socket-context"
@@ -247,6 +248,66 @@ function StudioWorkspace({ account }: { account: Account }) {
     : "dashboard"
   const [search, setSearch] = useState("")
   const [menu, setMenu] = useState(false)
+  const [compactNavigation, setCompactNavigation] = useState(
+    () => window.matchMedia("(max-width: 760px)").matches,
+  )
+  const navigationRef = useRef<HTMLElement>(null)
+  const navigationToggleRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 760px)")
+    const update = () => {
+      setCompactNavigation(query.matches)
+      if (!query.matches) setMenu(false)
+    }
+    query.addEventListener("change", update)
+    return () => query.removeEventListener("change", update)
+  }, [])
+  useEffect(() => {
+    if (!menu || !compactNavigation) return
+    const panel = navigationRef.current
+    if (!panel) return
+    const focusable = () =>
+      Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          'a[href],button:not([disabled]),[tabindex="0"]',
+        ),
+      ).filter((element) => element.getClientRects().length > 0)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    focusable()[0]?.focus()
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        setMenu(false)
+      } else if (event.key === "Tab") {
+        const controls = focusable()
+        const first = controls[0]
+        const last = controls.at(-1)
+        const active = (panel.getRootNode() as ShadowRoot).activeElement
+        if (event.shiftKey && active === first) {
+          event.preventDefault()
+          last?.focus()
+        } else if (!event.shiftKey && active === last) {
+          event.preventDefault()
+          first?.focus()
+        }
+      }
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+      document.body.style.overflow = previousOverflow
+      const toggle = navigationToggleRef.current
+      if (toggle?.isConnected && toggle.getClientRects().length > 0) {
+        toggle.focus()
+      } else if (panel.isConnected) {
+        const current =
+          panel.querySelector<HTMLElement>('[aria-current="page"]') ??
+          panel.querySelector<HTMLElement>(".side-nav a")
+        current?.focus()
+      }
+    }
+  }, [menu, compactNavigation])
   const [help, setHelp] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
   const [expired, setExpired] = useState(false)
@@ -358,6 +419,8 @@ function StudioWorkspace({ account }: { account: Account }) {
 
   return (
     <InlineGamePreviewBoundary
+      enabled
+      isolate
       routeKey={`${account.id}:${section}`}
       provider={section === "explore" ? publicPreviewProvider : previewProvider}
     >
@@ -369,9 +432,24 @@ function StudioWorkspace({ account }: { account: Account }) {
         </style>
         <div className="workspace">
           <aside
+            id="studio-navigation"
+            ref={navigationRef}
             className={`sidebar ${menu ? "open" : ""}`}
+            role={compactNavigation && menu ? "dialog" : undefined}
+            aria-modal={compactNavigation && menu ? true : undefined}
+            aria-hidden={compactNavigation && !menu ? true : undefined}
+            inert={compactNavigation && !menu}
             aria-label={t("Studio navigation")}
           >
+            {compactNavigation && (
+              <SiteButton
+                className="circle-btn sidebar-close"
+                aria-label={t("Close navigation")}
+                onClick={() => setMenu(false)}
+              >
+                <X size={18} />
+              </SiteButton>
+            )}
             <SiteLink className="side-brand" href="/">
               <img
                 src="/tadazz-design-reference/marketing-logo.webp"
@@ -383,6 +461,7 @@ function StudioWorkspace({ account }: { account: Account }) {
                 <SiteLink
                   key={id}
                   href={studioPath(id)}
+                  exact
                   onClick={() => setMenu(false)}
                   className={`nav-btn ${section === id ? "active" : ""}`}
                   aria-current={section === id ? "page" : undefined}
@@ -410,16 +489,20 @@ function StudioWorkspace({ account }: { account: Account }) {
           {menu && (
             <SiteButton
               className="sidebar-shade"
+              tabIndex={-1}
+              aria-hidden="true"
               aria-label={t("Close navigation")}
               onClick={() => setMenu(false)}
             />
           )}
-          <div className="main">
+          <div className="main" inert={compactNavigation && menu}>
             <header className="topbar">
               <div className="top-left">
                 <SiteButton
+                  ref={navigationToggleRef}
                   className="circle-btn mobile-menu"
                   aria-label={t("Toggle navigation")}
+                  aria-controls="studio-navigation"
                   aria-expanded={menu}
                   onClick={() => setMenu(!menu)}
                 >

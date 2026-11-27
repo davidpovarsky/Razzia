@@ -28,4 +28,17 @@ describe("catalogue search", () => {
     expect(matchesCatalogueSearch("クイズ大会", "クイズ", "ja")).toBe(true)
     expect(matchesCatalogueSearch("クイズ大会", "質問", "ja")).toBe(false)
   })
+
+  it("ignores accidental whitespace around and between search words", () => {
+    expect(
+      matchesCatalogueSearch("Team Together", "  TEAM together  ", "en"),
+    ).toBe(true)
+    expect(
+      matchesCatalogueSearch("Team Together", "TEAM \t\n TOGETHER", "en"),
+    ).toBe(true)
+    expect(
+      matchesCatalogueSearch("Team\u00a0Together", "team together", "en"),
+    ).toBe(true)
+    expect(matchesCatalogueSearch("Team Together", " \t ", "en")).toBe(true)
+  })
 })

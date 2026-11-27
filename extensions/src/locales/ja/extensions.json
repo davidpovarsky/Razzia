@@ -610,6 +610,8 @@
         "labelPlaceholder": "例: オープニングエンブレム、紙吹雪...",
         "asset": "Lottieアセット",
         "chooseCatalog": "ライブラリから選択",
+        "catalogEmpty": "ライブラリにはまだ Lottie アニメーションがありません。.json、.lottie または .zip ファイルをアップロードしてください。",
+        "catalogInUse": "{{count}} 件を使用中",
         "uploadNew": "アップロード (.json / .lottie / .zip)",
         "deleteFile": "ライブラリから完全削除",
         "removeLayer": "シーンから外す",

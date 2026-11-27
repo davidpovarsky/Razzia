@@ -610,6 +610,8 @@
         "labelPlaceholder": "örn. Açılış Amblemi, Konfeti...",
         "asset": "Lottie Dosyası",
         "chooseCatalog": "Kütüphaneden Seç",
+        "catalogEmpty": "Kitaplıkta henüz Lottie animasyonu yok. Bir .json, .lottie veya .zip dosyası yükleyin.",
+        "catalogInUse": "{{count}} kullanımda",
         "uploadNew": "Yükle (.json / .lottie / .zip)",
         "deleteFile": "Kütüphaneden Sil",
         "removeLayer": "Sahneden Kaldır",

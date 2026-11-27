@@ -40,19 +40,19 @@ export function EditorWorkspace({
   const trigger = useRef<HTMLButtonElement | null>(null)
   const [wide, setWide] = useState(false)
   const [active, setActive] = useState<string | null>(defaultPanel ?? null)
-  const docked = new Set<string>()
-
-  if (wide) {
-    for (const side of ["left", "right"] as const) {
-      const panel = panels.find(
-        (item) => item.dock && (item.side ?? "right") === side,
-      )
-
-      if (panel) {
-        docked.add(panel.id)
-      }
-    }
-  }
+  const leftDockedPanelId = panels.find(
+    (panel) => panel.dock && panel.side === "left",
+  )?.id
+  const rightDockedPanelId = panels.find(
+    (panel) => panel.dock && (panel.side ?? "right") === "right",
+  )?.id
+  const docked = new Set<string>(
+    wide
+      ? [leftDockedPanelId, rightDockedPanelId].filter(
+          (panelId): panelId is string => Boolean(panelId),
+        )
+      : [],
+  )
 
   const modalPanel = active && !docked.has(active) ? active : null
 
@@ -63,13 +63,28 @@ export function EditorWorkspace({
       return
     }
 
-    const update = () => setWide(element.clientWidth >= 1100)
+    const update = () => {
+      const nextWide = element.clientWidth >= 1100
+
+      // A docked panel no longer needs a drawer selection. Clearing only that
+      // selection prevents an unsolicited modal when the workspace narrows,
+      // while explicitly opened non-docked drawers stay open across resizes.
+      if (nextWide) {
+        setActive((current) =>
+          current === leftDockedPanelId || current === rightDockedPanelId
+            ? null
+            : current,
+        )
+      }
+
+      setWide(nextWide)
+    }
     update()
     const observer = new ResizeObserver(update)
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [])
+  }, [leftDockedPanelId, rightDockedPanelId])
 
   const close = () => {
     const returnTo =

@@ -24,6 +24,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { useState, type CSSProperties } from "react"
+import { isOriginalThemeId } from "../../../core/show-themes/original-theme-families"
 import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
 import {
   publicDemoCatalogue,
@@ -60,11 +61,13 @@ const coverIcons: Record<string, LucideIcon | undefined> = {
 
 export function Cover({ game }: { game: Game }) {
   const Icon = coverIcons[game.id] ?? Sparkles
+  const composedArtwork = isOriginalThemeId(game.themeId)
 
   return (
     <div
       className="game-cover catalogue-cover"
       data-catalogue-cover={game.id}
+      data-composed-artwork={composedArtwork || undefined}
       style={
         {
           background: game.gradient,
@@ -77,16 +80,23 @@ export function Cover({ game }: { game: Game }) {
         src={game.coverUrl}
         alt=""
         loading="lazy"
+        style={composedArtwork ? { opacity: 1 } : undefined}
       />
-      <div className="catalogue-cover-shade" />
-      <div className="catalogue-cover-orbit" aria-hidden="true" />
-      <div className="catalogue-cover-emblem" aria-hidden="true">
-        <Icon strokeWidth={1.4} />
-      </div>
+      {!composedArtwork && (
+        <>
+          <div className="catalogue-cover-shade" />
+          <div className="catalogue-cover-orbit" aria-hidden="true" />
+          <div className="catalogue-cover-emblem" aria-hidden="true">
+            <Icon strokeWidth={1.4} />
+          </div>
+        </>
+      )}
       <span className="cover-kicker">{t(game.themeName)}</span>
-      <span className="catalogue-cover-brand" aria-hidden="true">
-        TADAZZ!
-      </span>
+      {!composedArtwork && (
+        <span className="catalogue-cover-brand" aria-hidden="true">
+          TADAZZ!
+        </span>
+      )}
       <div className="cover-title">{t(game.title)}</div>
     </div>
   )
@@ -148,7 +158,11 @@ export function GameCard({
               data-catalogue-open={game.id}
             >
               {t("View game")}
-              <ArrowRight size={15} />
+              <ArrowRight
+                className="site-directional-icon"
+                aria-hidden="true"
+                size={15}
+              />
             </SiteButton>
           </div>
         </div>

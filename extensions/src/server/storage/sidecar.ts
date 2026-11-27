@@ -59,6 +59,43 @@ export const sidecarExists = (
   return fs.existsSync(filePath)
 }
 
+/**
+ * Older JSON Lottie uploads copied response metadata into the strict catalog.
+ * Remove only those two known transport fields in memory, then validate the
+ * entire sidecar normally. Reads never rewrite stored bytes or revision state.
+ */
+function withoutUploadTransportMetadata(value: unknown): unknown {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return value
+  }
+
+  const record = value as Record<string, unknown>
+
+  if (!Array.isArray(record.mediaCatalog)) {
+    return value
+  }
+
+  let changed = false
+  const mediaCatalog = record.mediaCatalog.map((entry: unknown) => {
+    if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
+      return entry
+    }
+
+    if (!Object.hasOwn(entry, "format") && !Object.hasOwn(entry, "size")) {
+      return entry
+    }
+
+    const item = { ...(entry as Record<string, unknown>) }
+    delete item.format
+    delete item.size
+    changed = true
+
+    return item
+  })
+
+  return changed ? { ...record, mediaCatalog } : value
+}
+
 export const readSidecar = (
   getPath: (subPath?: string) => string,
   quizId: string,
@@ -83,7 +120,7 @@ export const readSidecar = (
     }
 
     const raw = fs.readFileSync(filePath, "utf-8")
-    const parsed = JSON.parse(raw) as unknown
+    const parsed = withoutUploadTransportMetadata(JSON.parse(raw))
 
     if (
       typeof parsed === "object" &&

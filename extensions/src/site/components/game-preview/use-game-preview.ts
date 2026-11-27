@@ -25,6 +25,7 @@ export function useGamePreview(selection: PreviewSelection, disabled = false) {
   const hostRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const restoreTriggerFocus = useRef(false)
   const ownerRef = useRef<ReturnType<typeof createPreviewSessionOwner> | null>(
     null,
   )
@@ -37,6 +38,7 @@ export function useGamePreview(selection: PreviewSelection, disabled = false) {
   const active = state.status !== "inactive"
 
   useLayoutEffect(() => {
+    restoreTriggerFocus.current = false
     stateRef.current = { status: "inactive" }
     setState(stateRef.current)
     setPending(false)
@@ -88,16 +90,24 @@ export function useGamePreview(selection: PreviewSelection, disabled = false) {
     }
   }, [])
   const close = useCallback((restoreFocus = true) => {
+    restoreTriggerFocus.current = restoreFocus
     ownerRef.current?.close()
-
-    if (restoreFocus && triggerRef.current?.isConnected) {
-      triggerRef.current.focus({ preventScroll: true })
-    }
   }, [])
 
   useLayoutEffect(() => {
     if (active) {
       closeRef.current?.focus({ preventScroll: true })
+
+      return
+    }
+
+    // The inactive commit remounts the trigger and closes the child dialog.
+    if (restoreTriggerFocus.current) {
+      restoreTriggerFocus.current = false
+
+      if (triggerRef.current?.isConnected) {
+        triggerRef.current.focus({ preventScroll: true })
+      }
     }
   }, [active])
 

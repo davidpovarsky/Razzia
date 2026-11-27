@@ -262,7 +262,7 @@ export function GreatGuessOffDemo({ onClose }: { onClose: () => void }) {
       .catch(() => {
         if (mounted.current) {
           setMessage(
-            "The stage could not complete that transition. Please restart the sample.",
+            "The game could not continue. Please restart the sample.",
           )
         }
       })
@@ -346,7 +346,7 @@ export function GreatGuessOffDemo({ onClose }: { onClose: () => void }) {
     // The complete answer set and the authoritative timer enter together.
     void handle.openVoting(VOTING_SECONDS, deadlineRef.current, q).catch(() => {
       if (mounted.current) {
-        setMessage("Unable to start the native voting timer.")
+        setMessage("Unable to start voting. Please try again.")
       }
     })
   }
@@ -546,8 +546,8 @@ export function GreatGuessOffDemo({ onClose }: { onClose: () => void }) {
     voting: `Question ${questionIndex + 1} of 5 · ${secondsLeft}s remaining`,
     locked: `Question ${questionIndex + 1} of 5 · Time's up`,
     results: `Question ${questionIndex + 1} · ${question.kind === "quiz" ? "Correct answer" : "Audience favourite"}`,
-    leaderboard: "Native Tadazz leaderboard · illustrative players",
-    winner: "Native Tadazz finale and winner celebration",
+    leaderboard: "Leaderboard · sample players",
+    winner: "Winner celebration",
     closing: "The Great Guess-off · Final curtain",
   } satisfies Record<Phase, string>
 
@@ -571,7 +571,7 @@ export function GreatGuessOffDemo({ onClose }: { onClose: () => void }) {
       data-ggo-mode={question.kind}
       data-ggo-phase={phase}
       data-audio-url={musicUrl}
-      aria-label="The Great Guess-off · Tadazz native stage"
+      aria-label="The Great Guess-off"
     >
       <style>{nativeStageCss}</style>
       <GameViewer
@@ -648,8 +648,7 @@ export function GreatGuessOffDemo({ onClose }: { onClose: () => void }) {
         details={
           <p className="ggo-native-disclaimer">
             Demo only: survey totals and other players are illustrative, not
-            live audience data. The stage, 20-second countdown, transitions,
-            reveal and winner are Tadazz's original components.
+            live audience data.
           </p>
         }
       >

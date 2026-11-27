@@ -610,6 +610,8 @@
         "labelPlaceholder": "p. ej., Emblema inicial, Confeti...",
         "asset": "Recurso Lottie",
         "chooseCatalog": "Elegir de la biblioteca",
+        "catalogEmpty": "Todavía no hay animaciones Lottie en la biblioteca. Sube un archivo .json, .lottie o .zip.",
+        "catalogInUse": "{{count}} en uso",
         "uploadNew": "Subir (.json / .lottie / .zip)",
         "deleteFile": "Eliminar archivo de la biblioteca",
         "removeLayer": "Quitar de la escena",
