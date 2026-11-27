@@ -36,6 +36,7 @@ MCP_CHALLENGE = ('Bearer resource_metadata="' + ORIGIN +
 HASH = re.compile(r"[a-f0-9]{64}")
 PUBLIC_CATALOGUE_IDS = (
     "great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team",
+    "family-mixup",
     "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
     "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
 )

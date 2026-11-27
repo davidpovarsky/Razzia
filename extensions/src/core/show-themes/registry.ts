@@ -1,5 +1,6 @@
 import { bundledGalleryThemes } from "./bundled-gallery-themes"
 import { bundledOriginalThemes } from "./original-themes"
+import { familyMixupTheme } from "./family-mixup-theme"
 import razziaManifest from "./razzia.manifest.json" with { type: "json" }
 import classicManifest from "./classic.manifest.json" with { type: "json" }
 import {
@@ -57,6 +58,7 @@ export const showThemeRegistry = new ShowThemeRegistry()
 
 showThemeRegistry.register(classicManifest)
 showThemeRegistry.register(razziaManifest)
+showThemeRegistry.register(familyMixupTheme)
 for (const theme of bundledGalleryThemes) {
   showThemeRegistry.register(theme)
 }

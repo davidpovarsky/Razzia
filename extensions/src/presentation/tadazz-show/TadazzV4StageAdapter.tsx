@@ -1,3 +1,5 @@
+import { useOptionalShowTheme } from "../show-themes/context"
+import { FamilyMixupWinner } from "../family-mixup/FamilyMixupScene"
 import {
   forwardRef,
   useCallback,
@@ -115,6 +117,8 @@ export const TadazzV4StageAdapter = forwardRef<
   },
   ref,
 ) {
+  const theme = useOptionalShowTheme()
+  const familyMixup = theme?.definition.id === "family-mixup"
   const stageLabels = useMemo<TadazzStageLabels>(
     () => ({
       ...DEFAULT_TADAZZ_STAGE_LABELS,
@@ -800,53 +804,63 @@ export const TadazzV4StageAdapter = forwardRef<
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
-          {guessOffLook && <GuessOffWinnerDecoration />}
-          <div className="tz-confetti">
-            {confettiKey > 0 &&
-              Array.from(
-                {
-                  length: FINALE.confettiCount,
-                },
-                (_, i) => {
-                  const spec = confettiBit(i)
+          {familyMixup ? (
+            <FamilyMixupWinner
+              name={winner?.name}
+              score={winner?.score}
+              title={winner ? stageLabels.champion : stageLabels.finaleNoWinner}
+            />
+          ) : (
+            <>
+              {guessOffLook && <GuessOffWinnerDecoration />}
+              <div className="tz-confetti">
+                {confettiKey > 0 &&
+                  Array.from(
+                    {
+                      length: FINALE.confettiCount,
+                    },
+                    (_, i) => {
+                      const spec = confettiBit(i)
 
-                  return (
-                    <span
-                      key={`${confettiKey}:${i}`}
-                      className="tz-confetti-bit"
-                      style={{
-                        background: spec.background,
-                        left: spec.left,
-                        width: spec.width,
-                        height: spec.height,
-                      }}
-                      ref={(node) => {
-                        confettiRefs.current[i] = node
-                      }}
-                    />
-                  )
-                },
-              )}
-          </div>
-          <img
-            ref={winLogoRef}
-            className="tz-win-logo"
-            src={TADAZZ_LOGO_URL}
-            alt="TADAZZ!"
-          />
-          <div ref={winHeadlineRef} className="tz-win-headline">
-            {winner ? stageLabels.champion : stageLabels.finaleNoWinner}
-          </div>
-          <div
-            ref={winNameRef}
-            className="tz-win-name"
-            data-testid="tadazz-winner-name"
-          >
-            {winner?.name ?? ""}
-          </div>
-          <div ref={winScoreRef} className="tz-win-score">
-            {winner ? stageLabels.points(winner.score) : ""}
-          </div>
+                      return (
+                        <span
+                          key={`${confettiKey}:${i}`}
+                          className="tz-confetti-bit"
+                          style={{
+                            background: spec.background,
+                            left: spec.left,
+                            width: spec.width,
+                            height: spec.height,
+                          }}
+                          ref={(node) => {
+                            confettiRefs.current[i] = node
+                          }}
+                        />
+                      )
+                    },
+                  )}
+              </div>
+              <img
+                ref={winLogoRef}
+                className="tz-win-logo"
+                src={TADAZZ_LOGO_URL}
+                alt="TADAZZ!"
+              />
+              <div ref={winHeadlineRef} className="tz-win-headline">
+                {winner ? stageLabels.champion : stageLabels.finaleNoWinner}
+              </div>
+              <div
+                ref={winNameRef}
+                className="tz-win-name"
+                data-testid="tadazz-winner-name"
+              >
+                {winner?.name ?? ""}
+              </div>
+              <div ref={winScoreRef} className="tz-win-score">
+                {winner ? stageLabels.points(winner.score) : ""}
+              </div>
+            </>
+          )}
         </div>
       </div>
 

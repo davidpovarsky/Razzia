@@ -9,6 +9,11 @@ const entrances: Record<
   OriginalThemeId,
   { question: string; answer: string; ease: string }
 > = {
+  "family-mixup": {
+    question: "translate3d(0,26px,0)",
+    answer: "translate3d(0,24px,0)",
+    ease: "cubic-bezier(.2,.8,.2,1)",
+  },
   "royal-quiz": {
     question: "translate3d(0,42px,0) scale(.985)",
     answer: "translate3d(0,34px,0) rotateX(-9deg)",
@@ -55,6 +60,7 @@ export const originalThemeSparkColors: Record<
   OriginalThemeId,
   readonly string[]
 > = {
+  "family-mixup": ["#2549c7", "#f58b2b", "#ffd76a"],
   "royal-quiz": ["#efce87", "#fff4d8", "#af874a"],
   "neon-arcade": ["#62f3e6", "#ed7cff", "#719aff"],
   "retro-tv": ["#ffb568", "#f9dfb0", "#8ad0bc"],

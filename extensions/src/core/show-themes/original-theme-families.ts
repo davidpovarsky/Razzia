@@ -8,6 +8,7 @@ export const ORIGINAL_THEME_IDS = [
   "carnival-pop",
   "sports-arena",
   "mystery-noir",
+  "family-mixup",
 ] as const
 
 export type OriginalThemeId = (typeof ORIGINAL_THEME_IDS)[number]

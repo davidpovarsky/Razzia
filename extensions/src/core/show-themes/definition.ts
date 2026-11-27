@@ -177,7 +177,10 @@ export const showThemeDefinitionSchema = z
         ink: color,
       }),
       effects: z.enum(["goldy-canonical-v4", "original-theme-v1"]),
-      contrast: z.literal("light-on-dark-with-selected-outline"),
+      contrast: z.enum([
+        "light-on-dark-with-selected-outline",
+        "dark-on-light-with-selected-outline",
+      ]),
     }),
     slots: z.record(z.enum(SHOW_THEME_SLOTS), slot),
     audioEvents: z.record(z.enum(SHOW_THEME_AUDIO_EVENTS), audioEvent),

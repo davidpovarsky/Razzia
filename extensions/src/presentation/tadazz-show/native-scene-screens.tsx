@@ -1,5 +1,7 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Native recap snapshots may have empty option arrays; preserve existing runtime guards.
 import { useEffect, useState } from "react"
+import { useOptionalShowTheme } from "../show-themes/context"
+import { FamilyMixupEvent } from "../family-mixup/FamilyMixupScene"
 import { useTranslation } from "react-i18next"
 import type { ActiveSceneData } from "../../core/studio-timeline-schema"
 import type { SceneDescriptor } from "./presentation-scene"
@@ -141,6 +143,9 @@ export function TadazzRecapScreen({
 }
 
 export function TadazzSceneTitleScreen({ scene }: { scene: SceneDescriptor }) {
+  const theme = useOptionalShowTheme()
+  if (theme?.definition.id === "family-mixup")
+    return <FamilyMixupEvent scene={scene} />
   return (
     <TadazzMessageScreen
       headline={scene.title}

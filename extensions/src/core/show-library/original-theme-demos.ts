@@ -4,7 +4,7 @@ import type { PublicDemoMetadata } from "./public-demo-catalogue"
 import { poll, quiz, type Round } from "./public-demo-authoring"
 
 /** Original public content. No account data or licensed television formats. */
-export const originalThemeRounds: Record<OriginalThemeId, Round[]> = {
+export const originalThemeRounds: Record<Exclude<OriginalThemeId, "family-mixup">, Round[]> = {
   "royal-quiz": [
     quiz("royal-compass", "A quarter turn is how many degrees?", {
       answers: ["45", "90", "180", "360"],

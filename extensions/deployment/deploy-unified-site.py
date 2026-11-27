@@ -6,6 +6,7 @@ are retained. No data restore is automated, to avoid overwriting customer writes
 """
 
 import argparse
+import datetime as dt
 import hashlib
 import http.client
 import json
@@ -60,6 +61,15 @@ def probe(url, status=200, expected=None):
     return content
 
 
+def probe_disabled_billing():
+    # Published catalog metadata may coexist with disabled checkout. Require the
+    # actual switch to remain a JSON boolean, as in stage-mcp-site.py's smoke.
+    billing = json.loads(probe("https://tadazz.com/api/billing/config"))
+    if not isinstance(billing, dict) or billing.get("enabled") is not False:
+        raise RuntimeError("Billing must remain disabled")
+    return billing
+
+
 def wait_health():
     deadline = time.monotonic() + 45
     while time.monotonic() < deadline:
@@ -71,15 +81,49 @@ def wait_health():
     raise RuntimeError("Replacement did not become healthy")
 
 
-def last_game_count():
-    logs = command("docker", "logs", "--tail", "5000", "tadazz")
-    counts = re.findall(r"(?:Total games:|Remaining games:)\s*(\d+)", logs)
-    if not counts:
-        # An untouched fresh process has no registry until the first game.
-        if "Socket server is running" in logs or "Server is running" in logs:
-            return 0
-        raise RuntimeError("Could not establish current game count from logs")
-    return int(counts[-1])
+def game_count_evidence(original):
+    # Match deploy-mcp-site.py's retained-log proof: use the inspected immutable
+    # container ID, all events since its start, and an actual retained startup.
+    # A quiet registry does not emit a heartbeat, so retain the witness age.
+    started = dt.datetime.fromisoformat(original["State"]["StartedAt"].replace("Z", "+00:00"))
+    if started.tzinfo is None:
+        raise RuntimeError("Container start time has no timezone")
+    logs = command("docker", "logs", "--timestamps", "--since",
+                   original["State"]["StartedAt"], "--tail", "all", original["Id"])
+    startup_retained = False
+    witnesses = []
+    startup_markers = ("Socket server is running", "Server is running",
+                       "Tadazz protected native host listening on loopback")
+    for line in logs.splitlines():
+        timestamp, _, message = line.partition(" ")
+        startup = message == "Server running on port 3001" or any(
+            marker in message for marker in startup_markers)
+        count = re.search(r"(?:Total games:|Remaining games:)\s*(\d+)", message)
+        if not startup and not count:
+            continue
+        try:
+            observed = dt.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise RuntimeError("Registry log timestamp is invalid") from error
+        if observed.tzinfo is None or observed < started:
+            raise RuntimeError("Registry log precedes the inspected container start")
+        if startup:
+            startup_retained = True
+        if count:
+            witnesses.append((int(count.group(1)), timestamp))
+    if not startup_retained:
+        raise RuntimeError("Could not establish current game count: startup log is not retained")
+    if witnesses and witnesses[-1][0] != 0:
+        raise RuntimeError("Active rooms found; no cutover")
+    return {
+        "count": 0,
+        "source": ("complete-retained-container-log-events" if witnesses else
+                   "retained-startup-empty-registry-no-subsequent-game-events"),
+        "lastCountAt": witnesses[-1][1] if witnesses else original["State"]["StartedAt"],
+        "observedAt": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "logBytes": len(logs.encode("utf-8")),
+        "checkStopRaceEliminated": False,
+    }
 
 
 def digest(filename):
@@ -149,8 +193,9 @@ def main():
     gateway = inspect("tadazz-phone-gateway")
     if original["Id"] != args.expected_container or original["Image"] != args.expected_image:
         raise RuntimeError("Production changed since inspection")
-    if not original["State"]["Running"] or last_game_count() != 0:
-        raise RuntimeError("Application not running or active rooms found; no cutover")
+    if not original["State"]["Running"]:
+        raise RuntimeError("Application not running; no cutover")
+    room_evidence = game_count_evidence(original)
     mounts = original["Mounts"]
     if len(mounts) != 1 or mounts[0]["Destination"] != "/app/config":
         raise RuntimeError("Unexpected production mount layout")
@@ -162,7 +207,7 @@ def main():
         raise RuntimeError("Image revision differs from approved artifact")
     health_before = probe("https://tadazz.com/api/health", expected={"status": "ok"})
     probe("https://tadazz.com/api/auth/mode", expected={"accountsEnabled": True})
-    probe("https://tadazz.com/api/billing/config", expected={"enabled": False})
+    probe_disabled_billing()
     payload = dict(original["Config"])
     payload["Env"] = pricing_environment(original["Config"]["Env"], args.pricing_environment_file)
     payload["Image"] = image["Id"]
@@ -173,7 +218,8 @@ def main():
     stopped = renamed = created = False
     report = {"revision": args.revision, "image": image["Id"],
               "previousImage": original["Image"], "previousContainer": original["Id"],
-              "rollbackContainer": backup_name, "activeGamesBefore": 0,
+              "rollbackContainer": backup_name, "activeGamesBefore": room_evidence["count"],
+              "activeGamesEvidence": room_evidence,
               "gatewayContainerUnchanged": False, "success": False}
     try:
         docker_api("POST", "/containers/tadazz/stop?t=20")
@@ -200,7 +246,7 @@ def main():
             raise RuntimeError("Production file payload changed unexpectedly")
         probe("https://tadazz.com/api/health", expected={"status": "ok"})
         probe("https://tadazz.com/api/auth/mode", expected={"accountsEnabled": True})
-        probe("https://tadazz.com/api/billing/config", expected={"enabled": False})
+        probe_disabled_billing()
         for endpoint in ["/api/quizz", "/api/results", "/api/accounts/me",
                          "/api/packages/capabilities"]:
             probe("https://tadazz.com" + endpoint, status=401)

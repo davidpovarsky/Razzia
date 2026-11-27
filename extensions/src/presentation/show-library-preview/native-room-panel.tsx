@@ -1,3 +1,5 @@
+import { useOptionalShowTheme } from "../show-themes/context"
+import { FamilyMixupLobby } from "../family-mixup/FamilyMixupLobby"
 import NativeButton from "../../../../packages/web/src/components/Button"
 import { SeatingPlan } from "../tadazz-v4/reference-story/SeatingPlan"
 import { STORY_ASSETS } from "../tadazz-v4/reference-story/assets"
@@ -181,6 +183,23 @@ export function NativeClassicLobbyPanel({
   // Creating Worlds is a hosted table show: show join code AND the full live
   // 40-representative roster in ONE public screen, without four follow-up pages.
   const representatives = fullShowData?.representatives
+  const theme = useOptionalShowTheme()
+
+  if (
+    theme?.definition.id === "family-mixup" &&
+    join.showWeb &&
+    !representatives?.length
+  ) {
+    return (
+      <FamilyMixupLobby
+        join={join}
+        players={list}
+        isManager={isManager}
+        onKick={onKick}
+        text={text}
+      />
+    )
+  }
 
   if (!join.showWeb && !representatives?.length) {
     const roster = fullShowData?.roster ?? []

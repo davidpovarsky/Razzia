@@ -1,6 +1,11 @@
 import type { TadaShowV1 } from "../show-authoring-schema"
 import { quiz, poll, type Round } from "./public-demo-authoring"
 import {
+  familyMixupRounds,
+  familyMixupDemoDefinition,
+  makeFamilyMixupCards,
+} from "./family-mixup"
+import {
   originalThemeDemoDefinitions,
   originalThemeRounds,
   makeOriginalThemeCards,
@@ -31,6 +36,7 @@ export interface PublicDemo {
 
 const rounds: Record<string, Round[]> = {
   ...originalThemeRounds,
+  "family-mixup": familyMixupRounds,
   "great-guessoff": [
     poll(
       "family-fun",
@@ -661,6 +667,7 @@ const definitions: Definition[] = [
     gradient: "linear-gradient(135deg,#102e35,#27616a 60%,#7b7471)",
     visual: "orb",
   },
+  familyMixupDemoDefinition,
   ...originalThemeDemoDefinitions,
 ]
 
@@ -668,7 +675,9 @@ export const publicDemoCatalogue: readonly PublicDemoMetadata[] = Object.freeze(
   definitions.map((item) => {
     let coverUrl = `/tadazz-show/gallery/${item.id}-backdrop.png`
 
-    if (isOriginalThemeId(item.themeId)) {
+    if (item.themeId === "family-mixup") {
+      coverUrl = "/tadazz-show/family-mixup/poster.webp"
+    } else if (isOriginalThemeId(item.themeId)) {
       coverUrl = `/tadazz-show/originals/${item.themeId}/poster.png`
     } else if (item.id === "great-guessoff") {
       coverUrl = "/tadazz-show/v4/show-stage.webp"
@@ -704,74 +713,77 @@ function makeShow(metadata: PublicDemoMetadata): TadaShowV1 {
     defaults: {
       showTheme: { id: metadata.themeId, version: "1.0.0", overrides: {} },
     },
-    cards: isOriginalThemeId(metadata.themeId)
-      ? makeOriginalThemeCards(metadata, questions)
-      : [
-          {
-            key: "welcome",
-            kind: "opening",
-            title: metadata.title,
-            subtitle:
-              metadata.id === "story"
-                ? "One room. Eight choices. A story made together."
-                : "Choose your answer. Share the moment.",
-            durationMs: 4000,
-            advance: "auto",
-          },
-          ...questions.slice(0, 4),
-          {
-            key: "halfway",
-            kind: "transition",
-            title:
-              metadata.id === "story"
-                ? "The adventure continues"
-                : "Keep the momentum",
-            description:
-              metadata.id === "story"
-                ? "Our hero needs your imagination for the next chapter."
-                : "There is still time for a surprise.",
-            durationMs: 2500,
-            advance: "auto",
-          },
-          ...questions.slice(4),
-          ...(allSurvey
-            ? [
-                {
-                  key: "our-choices",
-                  kind: "answerRecap" as const,
-                  title:
-                    metadata.id === "story"
-                      ? "Our story choices"
-                      : "The room has spoken",
-                  mode: "mostSelected" as const,
-                  maxItemsPerPage: 4,
-                  showCounts: true,
-                  showPercentages: true,
-                  durationMs: 10000,
-                  advance: "manual" as const,
-                },
-              ]
-            : [
-                {
-                  key: "final-scores",
-                  kind: "leaderboard" as const,
-                  title: "Your moment to shine",
-                  durationMs: 6000,
-                  advance: "manual" as const,
-                },
-              ]),
-          {
-            key: "thank-you",
-            kind: "closing",
-            title:
-              metadata.id === "story"
-                ? "Every great story starts together"
-                : "Thanks for playing together!",
-            subtitle: "Keep the laughter. Take the memories.",
-            durationMs: 5000,
-            advance: "manual",
-          },
-        ],
+    cards:
+      metadata.id === "family-mixup"
+        ? makeFamilyMixupCards(metadata, questions)
+        : isOriginalThemeId(metadata.themeId)
+          ? makeOriginalThemeCards(metadata, questions)
+          : [
+              {
+                key: "welcome",
+                kind: "opening",
+                title: metadata.title,
+                subtitle:
+                  metadata.id === "story"
+                    ? "One room. Eight choices. A story made together."
+                    : "Choose your answer. Share the moment.",
+                durationMs: 4000,
+                advance: "auto",
+              },
+              ...questions.slice(0, 4),
+              {
+                key: "halfway",
+                kind: "transition",
+                title:
+                  metadata.id === "story"
+                    ? "The adventure continues"
+                    : "Keep the momentum",
+                description:
+                  metadata.id === "story"
+                    ? "Our hero needs your imagination for the next chapter."
+                    : "There is still time for a surprise.",
+                durationMs: 2500,
+                advance: "auto",
+              },
+              ...questions.slice(4),
+              ...(allSurvey
+                ? [
+                    {
+                      key: "our-choices",
+                      kind: "answerRecap" as const,
+                      title:
+                        metadata.id === "story"
+                          ? "Our story choices"
+                          : "The room has spoken",
+                      mode: "mostSelected" as const,
+                      maxItemsPerPage: 4,
+                      showCounts: true,
+                      showPercentages: true,
+                      durationMs: 10000,
+                      advance: "manual" as const,
+                    },
+                  ]
+                : [
+                    {
+                      key: "final-scores",
+                      kind: "leaderboard" as const,
+                      title: "Your moment to shine",
+                      durationMs: 6000,
+                      advance: "manual" as const,
+                    },
+                  ]),
+              {
+                key: "thank-you",
+                kind: "closing",
+                title:
+                  metadata.id === "story"
+                    ? "Every great story starts together"
+                    : "Thanks for playing together!",
+                subtitle: "Keep the laughter. Take the memories.",
+                durationMs: 5000,
+                advance: "manual",
+              },
+            ],
   }
 }
 

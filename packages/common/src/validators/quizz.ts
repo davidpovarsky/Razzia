@@ -12,6 +12,20 @@ import { multiOptionsValidator } from "@razzia/common/validators/questions/choic
 import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
 import { z } from "zod"
 
+/** Bundled first-party show media has the same origin as uploaded /media files. */
+function isBundledQuestionMedia(url: string): boolean {
+  if (!url.startsWith("/tadazz-show/") || /[\\?#%]/u.test(url)) return false
+  try {
+    const path = decodeURIComponent(url)
+    return (
+      !/[\\?#]/u.test(path) &&
+      !path.split("/").some((part) => part === "." || part === "..")
+    )
+  } catch {
+    return false
+  }
+}
+
 export const questionMediaValidator = z.object({
   type: z
     .enum([MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO, MEDIA_TYPES.AUDIO])
@@ -20,7 +34,9 @@ export const questionMediaValidator = z.object({
     .string("errors:quizz.invalidMediaUrl")
     .refine(
       (url) =>
-        url.startsWith(MEDIA_URL_PREFIX) || z.url().safeParse(url).success,
+        url.startsWith(MEDIA_URL_PREFIX) ||
+        isBundledQuestionMedia(url) ||
+        z.url().safeParse(url).success,
       "errors:quizz.invalidMediaUrl",
     ),
 })
